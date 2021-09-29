@@ -1,0 +1,56 @@
+Package: scCustomize
+Type: Package
+Title: Custom functions for single cell analyses
+Version: 0.5.0.9902
+Date: 2021-09-29
+Authors@R: c(
+    person(given = "Samuel", family = "Marsh", email = "samuel.marsh@childrens.harvard.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3012-6945")),
+    person(given = "Ming", family = "Tang", role = c("ctb"), email = "tangming2005@gmail.com")
+    )
+Description: Custom functions to modify single cell analyses in publically available packages.
+                    Validated with Seurat v3.1.5 & v4.0.0 and requires Seurat > v3.1.3.
+                    Has also been validated with both R3.5.X+ and R4.X.X+.
+URL: https://github.com/samuel-marsh/scCustomize, https://coming_soon_vignette.com 
+BugReports: https://github.com/samuel-marsh/scCustomize/issues
+Depends: Seurat (> 3.1.2)
+Imports: 
+    colorway,
+    cowplot,
+    data.table,
+    dittoSeq,
+    dplyr,
+    ggbeeswarm,
+    ggplot2,
+    ggpubr,
+    ggprism,
+    ggrepel,
+    ggsci,
+    magrittr,
+    Matrix,
+    patchwork,
+    pbapply,
+    purrr,
+    RColorBrewer,
+    remotes (>= 2.4.0),
+    scales,
+    scattermore (>= 0.7), 
+    Seurat (> 3.1.2),
+    stringi,
+    stringr,
+    tidyr,
+    tidyselect,
+    viridis
+Remotes: 
+    hypercompetent/colorway,
+    dtm2451/dittoSeq,
+    csdaw/ggprism
+Suggests:
+    knitr,
+    rmarkdown,
+    DropletUtils
+VignetteBuilder: knitr
+License: GPL (>= 3) | file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

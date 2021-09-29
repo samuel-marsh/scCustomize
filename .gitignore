@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+scCustomize.Rproj
+.DS_Store
+data/*.RDS
+data/filtered_feature_bc_matrix/*.gz
+.DS_Store
