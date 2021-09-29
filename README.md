@@ -4,7 +4,6 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)
 ![version](https://img.shields.io/badge/version-v0.5.0-success?style=flat-square)
 [![license](https://img.shields.io/github/license/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
-  
 [![last_commit](https://img.shields.io/github/last-commit/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/commits) [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/issues)
 [![commit_freq](https://img.shields.io/github/commit-activity/m/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/commits)  
 
