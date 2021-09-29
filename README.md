@@ -1,4 +1,4 @@
-# scCustomize <img src="https://github.com/samuel-marsh/scCustomize/blob/develop/data/scCustomize_Logo.png?raw=true" alt="drawing" width="150" align="right"/>  
+# scCustomize <img src="https://github.com/samuel-marsh/scCustomize/blob/master/data/scCustomize_Logo.png?raw=true" alt="drawing" width="150" align="right"/>  
 
 ![GitHub all releases](https://img.shields.io/github/downloads/samuel-marsh/scCustomize/total?style=flat-square)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)
