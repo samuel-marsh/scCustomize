@@ -17,8 +17,6 @@ assignees: ''
 
 <!-- Please include the output of `sessionInfo()` -->
 
--------------------- DELETE ABOVE THIS LINE BEFORE SUBMITTING --------------------
-
 
 ```r
 # insert reproducible example here
