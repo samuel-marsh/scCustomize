@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Thanks for submitting an issue. 
+<!-- Thanks for submitting an issue.  Please patient and aware that scCustomize is one person team.  I will do my best to respond to all issues in some way by the Friday after they are posted if not sooner.-->
 
 <!-- Briefly describe your problem and what output you expect. If you have a question, please use the analysis question template instead. -->
 
@@ -17,6 +17,17 @@ Thanks for submitting an issue.
 
 <!-- Please include the output of `sessionInfo()` -->
 
+
 ```r
 # insert reproducible example here
 ```
+
+
+<details>
+  <summary> sessionInfo() output</summary>
+  
+```r
+PASTE HERE sessionInfo() output
+```
+  
+</details>
