@@ -4,9 +4,7 @@ Title: Custom functions for single cell analyses
 Version: 0.5.0.9997
 Date: 2021-11-16
 Authors@R: c(
-    person(given = "Samuel", family = "Marsh", email = "samuel.marsh@childrens.harvard.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3012-6945")),
-    person(given = "Ming", family = "Tang", role = c("ctb"), email = "tangming2005@gmail.com"),
-    person(given = 'Velina', family = 'Kozareva', role = c('ctb'))
+    person(given = "Samuel", family = "Marsh", email = "samuel.marsh@childrens.harvard.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3012-6945"))
     )
 Description: Custom functions to modify single cell analyses in publically available packages.
 URL: https://github.com/samuel-marsh/scCustomize, https://coming_soon_vignette.com 
@@ -51,7 +49,7 @@ Suggests:
     Nebulosa,
     rmarkdown
 VignetteBuilder: knitr
-License: GPL (>= 3) | file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
