@@ -45,9 +45,8 @@ scCustomize requires [R](https://www.r-project.org/) version 4.0 or greater. Hig
 scCustomize can be installed from GitHub using either devtools or remotes package:
 
 ## Package Requirements
-scCustomize has two import dependency requirements that need to be updated if already installed (if not installed they will be automatically installed during scCustomize installation).
+scCustomize has one import dependency requirement that needs to be updated if previously installed (if not installed they will be automatically installed during scCustomize installation).
   
-* [SeuratObject](https://cran.r-project.org/web/packages/SeuratObject/index.html) >= v4.0.3.  
 * [colorway](https://github.com/hypercompetent/colorway) >= v0.2.0.
 
 ## Install
@@ -60,7 +59,7 @@ remotes::install_github(repo = "samuel-marsh/scCustomize")
 
 ## Master branch    
 Full releases will be available on the master branch with version scheme vX.X.X.  
-See [NEWS](LINK) file for ChangeLog with additions, changes, and fixes contained in each release.
+See [NEWS/Changelog](https://samuel-marsh.github.io/scCustomize/news/index.html) file for ChangeLog with additions, changes, and fixes contained in each release.
 
 ## Develop branch    
 I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.yyyy.  

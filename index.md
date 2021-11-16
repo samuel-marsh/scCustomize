@@ -13,6 +13,7 @@ date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=fl
 [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/issues)
 [![GitHub all
 releases](https://img.shields.io/github/downloads/samuel-marsh/scCustomize/total?style=flat-square)](https://github.com/samuel-marsh/scCustomize)
+[![DOI](https://zenodo.org/badge/411807769.svg)](https://zenodo.org/badge/latestdoi/411807769)
 
 scCustomize is a collection of functions created and/or curated to aid
 in the visualization and analysis of single-cell data using R.

@@ -118,7 +118,7 @@ scCustomize allows for plotting of highly variable genes with desired number of 
 VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
 # Can remove labels if not desired
 VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, label = FALSE)
-# Reprel labels
+# Repel labels
 VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE)
 # Change the scale of y-axis from linear to log10
 VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE, y_axis_log = TRUE)
@@ -233,7 +233,7 @@ p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microg
 wrap_plots(p1, p2, ncol = 2)
 ```
   
-Othertimes you may actually want to set high na_cutoff value to enable better interpretation of the range of values in particular clusters of interest.
+Other times you may actually want to set high na_cutoff value to enable better interpretation of the range of values in particular clusters of interest.
 ```{r eval=FALSE}
 FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
 FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
@@ -286,7 +286,7 @@ Plot_Density_Joint_Only(seurat_object = marsh_mouse_micro, features = c("Fos", "
 
 
 ### Dual Assay Plotting
-In certain situations returning a plot from two different assays within the same object may be advtangeous.  For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference.  See Cell Bender Functionality vignette for more info.
+In certain situations returning a plot from two different assays within the same object may be advantageous.  For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference.  See Cell Bender Functionality vignette for more info.
 
 ```{r}
 cell_bender_example <- qread("assets/astro_nuc_seq.qs")
