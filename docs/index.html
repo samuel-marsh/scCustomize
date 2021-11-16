@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9998</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -131,7 +131,7 @@
 <div id="installing-sccustomize" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installing-sccustomize" class="anchor"></a>Installing scCustomize</h2>
-<p>Please see <a href="LINK">Installation</a> page for full installation instructions and GitHub branch information.</p>
+<p>Please see <a href="https://samuel-marsh.github.io/scCustomize/articles/Installation.html">Installation</a> page for full installation instructions and GitHub branch information.</p>
 </div>
 <div id="vignettestutorials" class="section level2">
 <h2 class="hasAnchor">
@@ -143,7 +143,7 @@
 <a href="#goalsabout-sccustomize" class="anchor"></a>Goals/About scCustomize</h2>
 <p><strong><em>The goals of scCustomize are to:</em></strong></p>
 <p><strong><em>1. Customize visualizations for both ease of use and more aesthetic visuals.</em></strong><br><strong><em>2. Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.</em></strong></p>
-<p>scCustomize aims to acheive these goals through:</p>
+<p>scCustomize aims to achieve these goals through:</p>
 <ul>
 <li>
 <strong>Customized versions of many commonly used plotting functions (and some custom ones).</strong><br>
@@ -171,7 +171,7 @@ Many plotting functions can be easily automated with loops, apply, purrr etc. Ho
 Functions are aimed at streamlining importing multiple files/samples with single function and/or importing files with “non-standard” file names.
 <ul>
 <li>Iterate import functions to simplify the import process across groups of files/samples.</li>
-<li>Parallelize functions where possible to allow for dramatic speed improvements when import large number of samples simultaenously.</li>
+<li>Parallelize functions where possible to allow for dramatic speed improvements when import large number of samples simultaneously.</li>
 </ul>
 </li>
 <li>
@@ -179,7 +179,7 @@ Functions are aimed at streamlining importing multiple files/samples with single
 Goal is to both speed up and simplify coding and reduce the use of copy/paste of the same lines of code which is more likely to lead to errors in code reproducibility.
 <ul>
 <li>
-<p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitocondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code>Add_Mito_Ribo_Seurat</code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
+<p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code>Add_Mito_Ribo_Seurat</code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Add_Mito_Ribo_Seurat</span>(<span class="at">seurat_object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
 <ul>
 <li>Function already knows the defaults for Human, Mouse, and Marmoset (submit a PR if you would like more species added!).</li>
@@ -215,7 +215,7 @@ Goal is to both speed up and simplify coding and reduce the use of copy/paste of
 </li>
 <li>
 <strong>Provide more informative error messages for many common issues</strong><br>
-Base R error messages resutling from error deep inside Seurat (or other package) function can sometimes be difficult to interpret, especially for userse new to R.
+Base R error messages resulting from error deep inside Seurat (or other package) function can sometimes be difficult to interpret, especially for users new to R.
 <ul>
 <li>scCustomize provides checks/warnings wrapped inside its functions to help and provide more informative error/warning messages. Two examples include:<br>
 </li>

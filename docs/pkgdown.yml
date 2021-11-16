@@ -2,19 +2,19 @@ pandoc: 2.14.0.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  01_Gene_Plotting: 01_Gene_Plotting.html
-  02_QC_Plots: 02_QC_Plots.html
-  03_Sequencing_QC_Plots: 03_Sequencing_QC_Plots.html
-  04_Iterative Plotting: 04_Iterative Plotting.html
-  05_Color_Palettes: 05_Color_Palettes.html
-  06_Read_and_Write_Functions: 06_Read_and_Write_Functions.html
-  07_Cluster_Annotation: 07_Cluster_Annotation.html
-  08_Statistics: 08_Statistics.html
-  09_Helpers_and_Utilities: 09_Helpers_and_Utilities.html
-  10_LIGER_Functions: 10_LIGER_Functions.html
-  11_Cell_Bender_Functions: 11_Cell_Bender_Functions.html
-  12_Misc_Functions: 12_Misc_Functions.html
-  13_Installation: 13_Installation.html
+  Cell_Bender_Functions: Cell_Bender_Functions.html
+  Color_Palettes: Color_Palettes.html
   FAQ: FAQ.html
-last_built: 2021-11-16T21:50Z
+  Gene_Expression_Plotting: Gene_Expression_Plotting.html
+  Helpers_and_Utilities: Helpers_and_Utilities.html
+  Installation: Installation.html
+  Iterative Plotting: Iterative Plotting.html
+  LIGER_Functions: LIGER_Functions.html
+  Markers_and_Cluster_Annotation: Markers_and_Cluster_Annotation.html
+  Misc_Functions: Misc_Functions.html
+  QC_Plots: QC_Plots.html
+  Read_and_Write_Functions: Read_and_Write_Functions.html
+  Sequencing_QC_Plots: Sequencing_QC_Plots.html
+  Statistics: Statistics.html
+last_built: 2021-11-16T22:13Z
 
