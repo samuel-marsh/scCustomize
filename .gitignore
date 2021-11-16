@@ -8,4 +8,4 @@ data/*.RDS
 data/filtered_feature_bc_matrix/*.gz
 .DS_Store
 docs
-^vignettes/assets$
+vignettes/assets
