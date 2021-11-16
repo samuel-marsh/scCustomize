@@ -102,9 +102,6 @@ Is_LIGER <- function(
 }
 
 
-
-
-
 #' Automatically calculate a point size for ggplot2-based scatter plots
 #
 #' It happens to look good
@@ -136,54 +133,6 @@ AutoPointSize_scCustom <- function(data, raster = NULL) {
       yes = 1,
       no = min(1583 / nrow(x = data), 1)
     ))
-  }
-}
-
-
-#' Check for alternate case features
-#
-#' Checks Seurat object for the presence of features with the same spelling but alternate case.
-#'
-#' @param seurat_object Seurat object name.
-#' @param gene_list vector of genes to check.
-#' @param case_check_msg logical. Whether to print message to console if alternate case features are
-#' found in addition to inclusion in returned list.  Default is TRUE.
-#' @param return_features logical. Whether to return vector of alternate case features.  Default is TRUE.
-#'
-#' @return If features found returns vector of found alternate case features and prints message depending on
-#' parameters specified.
-#'
-#' @noRd
-#'
-
-Case_Check <- function(
-  seurat_object,
-  gene_list,
-  case_check_msg = TRUE,
-  return_features = TRUE
-) {
-  # get all features
-  possible_features <- rownames(x = GetAssayData(object = seurat_object))
-
-  upper_bad_features <- str_to_upper(string = gene_list)
-  upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
-
-  sentence_bad_features <- str_to_sentence(string = gene_list)
-  sentence_found_features <- sentence_bad_features[sentence_bad_features %in% possible_features]
-
-  # Combine case check
-  wrong_case_found_features <- c(upper_found_features, sentence_found_features)
-
-  # Additional messages if found.
-  if (length(x = wrong_case_found_features) > 0) {
-    if (case_check_msg) {
-      message("NOTE: However, the following features were found: ",
-              glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE), ".\n",
-              "      Please check intended case of features provided.")
-    }
-    if (return_features) {
-      return(wrong_case_found_features)
-    }
   }
 }
 
