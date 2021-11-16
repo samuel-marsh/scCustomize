@@ -5,3 +5,5 @@
 scCustomize.Rproj
 .DS_Store
 vignettes/assets
+README.Rmd
+index.Rmd
