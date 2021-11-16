@@ -1,0 +1,233 @@
+---
+title: "Statistics Functions"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+vignette: >
+  %\VignetteIndexEntry{Statistics Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+
+
+# Statistics Functions
+scCustomize contains a couple simple helper functions to return metrics of interest.
+
+For this vignette I will be utilizing pbmc3k dataset from the SeuratData package.
+```{r init}
+# Load Packages
+library(tidyverse)
+library(Seurat)
+library(scCustomize)
+library(qs)
+
+# Load example dataset for tutorial
+pbmc <- pbmc3k.SeuratData::pbmc3k.final
+```
+
+```{r include=FALSE}
+# Update pbmc check
+pbmc <- UpdateSeuratObject(pbmc)
+```
+
+Now let's add some extra meta data for use with tutorial
+```{r}
+# Add mito and ribo data
+pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
+
+# Add random sample and group variables
+pbmc$orig.ident <- sample(c("sample1", "sample2", "sample3", "sample4"), size = ncol(pbmc), replace = TRUE)
+pbmc@meta.data$group[pbmc@meta.data$orig.ident == "sample1" | pbmc@meta.data$orig.ident == "sample3"] <- "Group 1"
+pbmc@meta.data$group[pbmc@meta.data$orig.ident == "sample2" | pbmc@meta.data$orig.ident == "sample4"] <- "Group 2"
+
+# Add dummy module score 
+pbmc <- AddModuleScore(object = pbmc, features = list(c("CD3E", "CD4", "THY1", "TCRA")), name = "module_score")
+```
+
+
+## Cells Per Identity
+It can be really helpful to know the number and percentage of cells per identity/cluster during analysis.  
+scCustomize provides the `Cluster_Stats_All_Samples` function to make this easy.
+
+```{r eval=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc)
+
+cluster_stats
+```
+
+```{r echo=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc)
+
+cluster_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+By default `Cluster_Stats_All_Samples` uses "orig.ident" as the group variable but user can specify any `@meta.data` slot variable.
+```{r eval=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = "group")
+
+cluster_stats
+```
+
+```{r echo=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = "group")
+
+cluster_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+
+## Percent of Cells Expressing Feature(s)
+It can also be informative to understand the percent of cells/nuclei that express a given feature or set of features.  
+scCustomize provides the `Percent_Expressing` function^["Internals of this functions were adapted/modified from the internals of `Seurat::DotPlot`] to make this easy.
+```{r eval=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"))
+```
+
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"))
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+
+### Change grouping variable
+By default the function groups expression across `@active.ident` (see above) but user can specify difference variable if desired.
+```{r eval=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group_by = "orig.ident")
+```
+
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group_by = "orig.ident")
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+### Split within groups
+User can also supply a `split_by` variable to quantify expression within group split by meta data variable
+```{r eval=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split_by = "group")
+```
+
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split_by = "group")
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+
+### Set threshold of expression
+Users can also supply a threshold value to quantify percent of cells expressing feature(s) above a certain threshold (be sure to note which slot is being used to quantify expression when setting thresholds).  
+*NOTE: `Percent_Expressing` currently only supports single threshold across all features*
+```{r eval=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), threshold = 2)
+```
+
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), threshold = 2)
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+## Calculate Summary Median Values
+scCustomize contains function `Median_Stats` to quickly calculate the medians for basic QC stats (Genes/, UMIs/, % Mito/Cell).
+  
+### Basic Use
+By default `Median_Stats` will calculate medians for the following meta data columns (if present): "nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo".
+
+```{r eval=FALSE}
+median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident")
+```
+
+```{r echo=FALSE}
+median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident")
+
+median_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+
+### Additional Variables
+In addition to default variables, users can supply their own additional meta data columns to calculate medians using the `median_var` parameter.  
+*NOTE: The meta data column must be in numeric format (e.g., integer, numeric, dbl)*
+
+```{r eval=FALSE}
+median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
+```
+
+```{r echo=FALSE}
+median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
+
+median_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+
+## Plotting Median Data
+scCustomize also contains series of functions for plotting the results of these median calculations:
+  
+* `Plot_Median_Genes`
+* `Plot_Median_UMIs`
+* `Plot_Median_Mito`
+* `Plot_Median_Other`
+
+```{r eval=FALSE}
+Plot_Median_Genes(seurat_object = pbmc)
+
+Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
+
+Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group_by = "group")
+```
+
+```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
+p1 <- Plot_Median_Genes(seurat_object = pbmc)
+
+p2 <- Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
+
+p3 <- Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group_by = "group")
+
+patchwork::wrap_plots(p1, p2, p3, ncol = 3)
+```
+

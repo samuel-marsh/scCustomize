@@ -1,0 +1,90 @@
+---
+title: "Misc Functions"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Misc Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+# Misc Functions  
+scCustomize has a number of other functions which users may find helpful or can adapt for their own uses.
+```{r init}
+# Load Packages
+library(tidyverse)
+library(patchwork)
+library(Seurat)
+library(scCustomize)
+```
+
+
+## Project Organization
+In addition to aiding reproducibility through use of functions and reducing copy-paste errors scCustomize also contains function to aid in project setup which can be highly beneficial.
+
+The function `Setup_scRNAseq_Project` project serves as example for how to setup reproducible project structure just using R (although could be similarly achieved using shell script) but this way makes it very easy to use with RStudio Projects workflow.
+*For more info on RStudio Project-oriented workflow see excellent overviews from [Jennifer Bryan and Jim Hester's: What They Forgot to Teach You About R](https://rstats.wtf/project-oriented-workflow.html) and [RStudio Team](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)*
+
+### Basic use 
+The function is very simple with just simple function call that requires no additional parameters:
+```{r eval=FALSE}
+Setup_scRNAseq_Project()
+```
+
+This function will then create the following directory structure inside the working directory:  
+```
+Working_Directory
+├── 01_scripts
+├── 02_raw_data
+├── 03_meta_data
+├── 04_data_objects
+├── 05_plots
+│   └── 01_QC_plots
+│   └── 02_Round01_plots
+│   └── 03_Round02_plots
+├── 06_cluster_annotation
+├── 07_csv_outputs
+├── 08_final_plots_for_figures
+```
+
+### Optional Parameters
+
+* `custom_dir_file` allows you to supply a delimited file containing desired directory structure instead of default above.
+* `cluster_annotation_path` and `cluster_annotation_file_name` will create a cluster annotation file using `Create_Cluster_Annotation_File` at desired path.
+
+### Adapting Function Yourself
+This function is the basic setup that I use for most projects but everyone has their own style.  Instead of requiring you to call `custom_dir_file` everytime I hope that this function might serve as example that users can modify defaults and implement in their own workflows.  The function code is very simple to modify to any desired structure.
+
+If you do modify for you our own please remember to attribute code to scCustomize package and cite appropriately.
+

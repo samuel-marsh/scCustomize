@@ -1,0 +1,229 @@
+---
+title: "Read & Write Data Functions"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Read & Write Data Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+
+# Import Data Functions
+Seurat and other packages provide excellent tools for importing data however when importing large numbers of samples or samples with non-standard names this process can be cumbersome.  scCustomize provides number of functions to simplify the process of importing many data sets at the same time and speed up the process using parallelization.
+  
+For this tutorial, I will be utilizing several publicly available data sets from NCBI GEO.
+```{r init}
+library(tidyverse)
+library(Seurat)
+library(scCustomize)
+```
+
+
+## Import Data from Single Directory  
+Often when downloading files from NCBI GEO or other repos all of the files are contained in single directory and contain non-standard file names.
+However, functions like `Seurat::Read10X()` expect non-prefixed files (i.e. Cell Ranger outputs).  
+  
+scCustomize has three functions to deal with these situations without need for renaming files.
+  
+### Import 10X Genomics (or 10X-styled) single directory with file prefixes
+The function `Read10X_GEO` can be used to iteratively read all sets of 10X style files within single directory.  
+
+For this example I will be utilizing data from Marsh et al., 2020 ([*bioRxiv*](https://www.biorxiv.org/content/10.1101/2020.12.03.408542v1)), which were downloaded from [NCBI GEO GSE152183](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183)
+```{r eval=FALSE}
+list.files("assets/GSE152183_RAW_Marsh/")
+
+GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
+```
+
+#### `Read10X_GEO` Additional Parameters  
+`Read10X_GEO` also contains several additional optional parameters to streamline the import process.
+  
+* `parallel` and `num_cores` parameters enable use of multiple cores to speed up data import.
+* `sample_list` By default `Read10X_GEO` will import all sets of files found within single directory.  However, if only a subset of files is desired a vector of sample prefixes can be supplied to `sample_list`.
+* `sample_names` By default `Read10X_GEO` names each entry in the returned list (see below) using the file name prefix.  If different names are desired they can be supplied to `sample_names`.
+* Several other parameters from `Seurat::Read10X()`.  See `?Read10X_GEO` for more details.
+
+#### `Read10X_GEO` Import Format
+`Read10X_GEO` will return list of matrices (single modality data) or list of list of matrices (multi-modal data).
+
+```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="assets/"}
+knitr::include_graphics(c("../docs/articles/assets/Read10X_GEO.png","../docs/articles/assets/multimodal.png")) 
+```
+
+
+### Import 10X Genomics H5 Formatted Files single directory with file prefixes  
+There is equivalent function for reading in 10X H5 formatted files `Read10X_h5_GEO`.  
+*NOTE: If files have shared aspect to file name specify this using `shared_suffix` parameter to avoid that being incorporated into names to list entries in returned list.*
+```{r eval=FALSE}
+GEO_10X <- Read10X_h5_GEO(data_dir = "/path/to/data/", shared_suffix = "filtered_feature_bc_matrix")
+```
+
+
+### Import delimited matrices single directory with file prefixes
+Often data is uploaded to NCBI GEO or other repositories with single file (.csv, .tsv, .txt, etc) containing all of the information.
+
+For this example I will be utilizing data from Hammond et al., 2019 ([*Immunity*](https://doi.org/10.1016/j.immuni.2018.11.004)), which were downloaded from [NCBI GEO GSE121654](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121654).  
+  
+`Read_GEO_Delim` uses fread function for automatic detection of file delimiter and fast read times and then converts objects to sparse matrices to save memory
+```{r}
+list.files("assets/GSE121654_RAW_Hammond/")
+```
+
+```{r eval=FALSE}
+# Read in and use file names to name the list
+GEO_Single <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz")
+
+# Read in and use new sample names to name the list
+GEO_Single <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz", sample_names = c("sample01", "sample02", "sample03", "sample04"))
+
+```
+
+```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs with default naming based on file name or providing `sample_names` parameter.*", fig.show='hold', out.width="49%"}
+knitr::include_graphics(c("../docs/articles/assets/delim_default.png","../docs/articles/assets/renamed.png")) 
+```
+
+
+#### `Read_GEO_Delim` additional parameters
+See manual entry for more info [LINK](LINK)
+
+
+## Import Data from Mutliple Directories  
+In addition to those functions for single directories, scCustomize contains functions for when files are contained in multiple sub-directories within shared parent directory.  
+*NOTE: These functions all assume that each sub-directory contains one sample and that sub-directory structure is identical between all samples.*  
+
+### Import 10X Genomics (tsv, mtx)
+Take an abbreviated example directory found below styled as output from Cell Ranger `count`
+
+```
+Parent_Directory
+├── sample_01
+│   └── outs
+│       └── filtered_feature_bc_matrix
+│           └── feature.tsv.gz
+│           └── barcodes.tsv.gz
+│           └── matrix.mtx.gz
+└── sample_02
+    └── outs
+        └── filtered_feature_bc_matrix
+            └── feature.tsv.gz
+            └── barcodes.tsv.gz
+            └── matrix.mtx.gz
+```
+
+```{r eval=FALSE}
+# In this case we can use default_10X = TRUE to tell function where to find the matrix files
+multi_10x <- Read10X_Multi_Directory(base_path = "Parent_Directory/", default_10X = TRUE)
+```
+
+#### Path Inside Sub-Directories
+In order to properly import the data `Read10X_Multi_Directory` needs to know how to navigate the sub-directory structure.  
+  
+* The parameter `default_10X` tells the function that the directory structure matches the standardized output from Cell Ranger (see above).
+* However, it can also accept any unique sub-directory structure using the `secondary_path` parameter as long as structure is the same for all samples (see below).
+
+For instance:
+```
+Parent_Directory
+├── sample_01
+│   └── gex_matrices
+│       └── feature.tsv.gz
+│       └── barcodes.tsv.gz
+│       └── matrix.mtx.gz
+└── sample_02
+    └── gex_matrices
+        └── feature.tsv.gz
+        └── barcodes.tsv.gz
+        └── matrix.mtx.gz
+```
+```{r eval=FALSE}
+# In this case we can use default_10X = FALSE to tell function where to find the matrix files
+multi_10x <- Read10X_Multi_Directory(base_path = "Parent_Directory", default_10X = FALSE, secondary_path = "gex_matrices")
+```
+
+#### Optional Parameters
+`Read10X_Multi_Directory` also contains several additional parameters.  
+
+* `parallel` and `num_cores` to use multiple core processing.
+* `sample_list` By default `Read10X_Multi_Directory` will read in all subdirectories present in parent directory.  However a subset can be specified by passing a vector of sample directory names.
+* `sample_names` As with other functions by default `Read10X_Multi_Directory` will use the subdirectory names within parent directory to name the output list entries.  Alternate names for the list entries can be provided here if desired.  These names will also be used to add cell prefixes if `merge = TRUE` (see below).  
+* `merge` logical (default FALSE).  Whether to combine all samples into single sparse matrix and using `sample_names` to provide sample prefixes.
+
+### Import 10X Genomics (H5 Outputs)
+scCustomize contains function: `Read10X_h5_Multi_Directory` can be used to read 10X Genomics H5 files similarly to `Read10X_Multi_Directory`
+
+#### Cell Bender Outputs
+Importantly `Read10X_h5_Multi_Directory` has also been modified with optional parameters to support the files and format output by Cell Bender.
+```{r eval=FALSE}
+cell_bender <- Read10X_h5_Multi_Directory(base_path = "cellbender_results/", h5_filename = "_out_filtered.h5", cell_bender = TRUE, default_10X = FALSE, parallel = TRUE, num_cores = 8)
+```
+
+
+
+## Merging Sparse Matrices
+Rather than creating and merging Seurat objects it can sometimes be advantageous to simply combine the sparse matrices before creating Seurat object.  
+
+### Basic Use
+```{r eval=FALSE}
+GEO_Single <- list(mat1, mat2, mat3)
+
+GEO_Merged <- Merge_Sparse_Data_All(matrix_list = GEO_Single)
+```
+
+```{r echo=FALSE, fig.align='center', fig.cap="*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*", fig.show='hold', out.width="98%"}
+knitr::include_graphics(c("../docs/articles/assets/geo_merged.png")) 
+```
+
+### Add Barcode Prefix/Suffix  
+`Merge_Sparse_Data_All` contains a number of optional parameters to control modification to the cell barcodes.  
+*NOTE: If any of the barcodes in the input matrix list overlap and no prefixes/suffixes are provided the function will error.*
+  
+* Users can provide a vector of either prefixes or suffixes to`add_cell_ids` to ensure barcodes are unqiue (and make the import to Seurat smoother with samples already labeled).  
+* By default ids are added as barcode prefixes but can be added as suffixes by setting `prefix = FALSE`.  
+* The prefix/suffix delimiter is "_" by default but can be changed using `cell_id_delimiter` parameter.  
+
+## Merge List of Seurat Objects
+To easily merge many Seurat objects contained in a list scCustomize contains simple function.
+```{r eval=FALSE}
+# Merge a list of compatible Seurat objects of any length and add cell prefixes if desired
+Seurat_Merged <- Merge_Seurat_List(list_seurat = list_of_objects, add.cell.ids = (c("cell", "prefixes" "to", "add")))
+```
+
+
+## Write 10X Genomics Formatted H5 file from non-H5 input
+`Create_10X_H5` provides convenient wrapper around `write10xCounts` from DropletUtils package.  Output can then be easily read in using `Seurat::Read10X_h5()` or `liger::createLiger` (which assumes H5 file is formatted as if from Cell Ranger).
+```{r eval=FALSE}
+# Provide file path and specify type of files as either cell ranger triplicate files, matrix, or data.frame
+Create_10X_H5(raw_data_file_path = "/path/matrix.mtx", source_type = "Matrix", save_file_path = "/path/", save_name = "name")
+```
