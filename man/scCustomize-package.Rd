@@ -4,7 +4,7 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: Custom functions for single cell analyses}
+\title{scCustomize: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.}
 \description{
 Custom functions to modify single cell analyses in publically available packages.
 }
@@ -46,5 +46,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Samuel Marsh \email{samuel.marsh@childrens.harvard.edu} (\href{https://orcid.org/0000-0002-3012-6945}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Ming Tang \email{tangming2005@gmail.com} [contributor]
+  \item Velina Kozareva [contributor]
+}
 
 }

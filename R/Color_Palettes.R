@@ -21,8 +21,6 @@ viridis_plasma_dark_high <- viridis(n = 10, option = "C", direction = -1)
 
 #' Viridis Shortcuts
 #'
-#' Quick shortcuts to access viridis palettes
-#'
 #' @import viridis
 #'
 #' @export
@@ -34,8 +32,6 @@ viridis_plasma_dark_high <- viridis(n = 10, option = "C", direction = -1)
 viridis_plasma_light_high <- viridis(n = 10, option = "C", direction = 1)
 
 #' Viridis Shortcuts
-#'
-#' Quick shortcuts to access viridis palettes
 #'
 #' @import viridis
 #'
@@ -49,8 +45,6 @@ viridis_inferno_dark_high <- viridis(n = 10, option = "B", direction = -1)
 
 #' Viridis Shortcuts
 #'
-#' Quick shortcuts to access viridis palettes
-#'
 #' @import viridis
 #'
 #' @export
@@ -62,8 +56,6 @@ viridis_inferno_dark_high <- viridis(n = 10, option = "B", direction = -1)
 viridis_inferno_light_high <- viridis(n = 10, option = "B", direction = 1)
 
 #' Viridis Shortcuts
-#'
-#' Quick shortcuts to access viridis palettes
 #'
 #' @import viridis
 #'
@@ -77,8 +69,6 @@ viridis_magma_dark_high <- viridis(n = 10, option = "A", direction = -1)
 
 #' Viridis Shortcuts
 #'
-#' Quick shortcuts to access viridis palettes
-#'
 #' @import viridis
 #'
 #' @export
@@ -91,8 +81,6 @@ viridis_magma_light_high <- viridis(n = 10, option = "A", direction = 1)
 
 #' Viridis Shortcuts
 #'
-#' Quick shortcuts to access viridis palettes
-#'
 #' @import viridis
 #'
 #' @export
@@ -104,8 +92,6 @@ viridis_magma_light_high <- viridis(n = 10, option = "A", direction = 1)
 viridis_dark_high <- viridis(n = 10, option = "D", direction = -1)
 
 #' Viridis Shortcuts
-#'
-#' Quick shortcuts to access viridis palettes
 #'
 #' @import viridis
 #'

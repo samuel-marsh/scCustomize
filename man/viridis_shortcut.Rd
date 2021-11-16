@@ -50,20 +50,6 @@ A color palette for plotting
 }
 \description{
 Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
-
-Quick shortcuts to access viridis palettes
 }
 \examples{
 \dontrun{
