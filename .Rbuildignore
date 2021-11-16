@@ -7,3 +7,4 @@
 ^vignettes$
 ^index\.md$
 .git
+^inst$
