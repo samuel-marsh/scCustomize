@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = 'Velina', family = 'Kozareva', role = c('ctb'))
     )
 Description: Custom functions to modify single cell analyses in publically available packages.
-URL: https://github.com/samuel-marsh/scCustomize, https://coming_soon_vignette.com 
+URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize
 BugReports: https://github.com/samuel-marsh/scCustomize/issues
 Depends: Seurat (>= 4.0.5)
 Imports: 
