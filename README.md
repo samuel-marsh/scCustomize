@@ -1,10 +1,4 @@
 
-<style>
-p.caption {
-  font-size: 0.8em;
-}
-</style>
-
 # scCustomize <img src="data/scCustomize_Logo.svg" align="right" width="150"/>
 
 ![GitHub all
