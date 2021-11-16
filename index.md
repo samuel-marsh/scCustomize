@@ -19,8 +19,9 @@ in the visualization and analysis of single-cell data using R.
 
 ## Installing scCustomize
 
-Please see [Installation](LINK) page for full installation instructions
-and GitHub branch information.
+Please see
+[Installation](https://samuel-marsh.github.io/scCustomize/articles/Installation.html)
+page for full installation instructions and GitHub branch information.
 
 ## Vignettes/Tutorials
 
@@ -36,7 +37,7 @@ visuals.***
 ***2. Improve speed/reproducibility of common tasks/pieces of code in
 scRNA-seq analysis with a single or group of functions.***
 
-scCustomize aims to acheive these goals through:
+scCustomize aims to achieve these goals through:
 
 -   **Customized versions of many commonly used plotting functions (and
     some custom ones).**  
@@ -73,7 +74,7 @@ scCustomize aims to acheive these goals through:
     -   Iterate import functions to simplify the import process across
         groups of files/samples.
     -   Parallelize functions where possible to allow for dramatic speed
-        improvements when import large number of samples simultaenously.
+        improvements when import large number of samples simultaneously.
 -   **Helper functions to simplify analysis with addition of new default
     parameters or wrapping multiple lines of code into single
     function.**  
@@ -81,7 +82,7 @@ scCustomize aims to acheive these goals through:
     copy/paste of the same lines of code which is more likely to lead to
     errors in code reproducibility.
     -   *Example of adding new parameters:* Adding the percentage of
-        counts aligning to mitocondrial (and/or ribosomal) genes is
+        counts aligning to mitochondrial (and/or ribosomal) genes is
         common early step in analysis. scCustomize provides
         `Add_Mito_Ribo_Seurat` (and LIGER version) to simplify this.
         Basic use requires only one line of code and two parameters.
@@ -124,9 +125,9 @@ scCustomize aims to acheive these goals through:
               slice_max(n = 10, order_by = avg_log2FC) %>%
               column_to_rownames("rownames")
 -   **Provide more informative error messages for many common issues**  
-    Base R error messages resutling from error deep inside Seurat (or
+    Base R error messages resulting from error deep inside Seurat (or
     other package) function can sometimes be difficult to interpret,
-    especially for userse new to R.
+    especially for users new to R.
     -   scCustomize provides checks/warnings wrapped inside its
         functions to help and provide more informative error/warning
         messages. Two examples include:  
