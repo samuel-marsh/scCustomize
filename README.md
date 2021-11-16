@@ -1,5 +1,5 @@
 
-# scCustomize <img src="data/scCustomize_Logo.svg" align="right" width="150"/>
+# scCustomize <img src="man/figures/scCustomize_Logo.svg" align="right" width="150"/>
 
 [![GitHub release (latest by
 date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/releases)
