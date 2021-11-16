@@ -7,12 +7,12 @@ p.caption {
 
 # Getting Stated with scCustomize <img src="data/scCustomize_Logo.svg" align="right" width="150"/>
 
-![version](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)
-\[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize?style=flat-square)
-[![last_commit](https://img.shields.io/github/last-commit/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/commits)
+[![GitHub release (latest by
+date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/releases)
+[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
 [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/issues)
-![GitHub all
-releases](https://img.shields.io/github/downloads/samuel-marsh/scCustomize/total?style=flat-square)
+[![GitHub all
+releases](https://img.shields.io/github/downloads/samuel-marsh/scCustomize/total?style=flat-square)](https://github.com/samuel-marsh/scCustomize)
 
 scCustomize is a collection of functions created and/or curated to aid
 in the visualization and analysis of single-cell data using R.
