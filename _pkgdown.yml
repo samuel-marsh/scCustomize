@@ -13,33 +13,33 @@ navbar:
       menu:
         - text: Plotting Vignettes
         - text: "Plotting #1: Analysis Plots"
-          href: articles/01_Gene_plotting.html
+          href: articles/Gene_Expression_plotting.html
         - text: "Plotting #2: QC Plots"
-          href: articles/02_QC_Plots.html
+          href: articles/QC_Plots.html
         - text: "Plotting #3: Sequencing QC Plots/Analysis"
-          href: articles/03_Sequencing_QC_Plots.html
+          href: articles/Sequencing_QC_Plots.html
         - text: "Plotting #4: Iterative Plotting Functions"
-          href: articles/04_Iterative_Plotting.html
+          href: articles/Iterative_Plotting.html
         - text: "Customized Color Palettes & Themes"
-          href: articles/05_Color_Palettes.html
+          href: articles/Color_Palettes.html
         - text: -------
         - text: Helpers & Utilities
         - text: "Read & Write Data Functions"
-          href: articles/06_Read_and_Write_Functions.html
+          href: articles/Read_and_Write_Functions.html
         - text: "Marker Identification & Cluster Annotation Helpers"
-          href: articles/07_Cluster_Annotation.html
+          href: articles/Cluster_Annotation.html
         - text: "Statistics Functions"
-          href: articles/08_Statistics.html
+          href: articles/Statistics.html
         - text: "General Helpers & Utilities"
-          href: articles/09_Helpers_and_Utilities.html
+          href: articles/Helpers_and_Utilities.html
         - text: "Misc Functions"
-          href: articles/12_Misc_Functions.html
+          href: articles/Misc_Functions.html
         - text: -------
         - text: Other Package Interactivity/Functions
         - text: "LIGER Plotting & Functionality"
-          href: articles/10_LIGER_Functions.html
+          href: articles/LIGER_Functions.html
         - text: "Cell Bender Functionality & Plotting"
-          href: articles/11_Cell_Bender_Functions.html
+          href: articles/Cell_Bender_Functions.html
     - text: "News/Changelog"
       href: news/index.html
     - text: "Reference"

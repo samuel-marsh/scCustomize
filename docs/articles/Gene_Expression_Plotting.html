@@ -52,44 +52,44 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/01_Gene_plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_plotting.html">Plotting #1: Analysis Plots</a>
     </li>
     <li>
-      <a href="../articles/02_QC_Plots.html">Plotting #2: QC Plots</a>
+      <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
     </li>
     <li>
-      <a href="../articles/03_Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
+      <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
-      <a href="../articles/04_Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
     </li>
     <li>
-      <a href="../articles/05_Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
+      <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
-      <a href="../articles/06_Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
+      <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
-      <a href="../articles/07_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
+      <a href="../articles/Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
-      <a href="../articles/08_Statistics.html">Statistics Functions</a>
+      <a href="../articles/Statistics.html">Statistics Functions</a>
     </li>
     <li>
-      <a href="../articles/09_Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
     </li>
     <li>
-      <a href="../articles/12_Misc_Functions.html">Misc Functions</a>
+      <a href="../articles/Misc_Functions.html">Misc Functions</a>
     </li>
     <li class="divider">
     <li class="dropdown-header">Other Package Interactivity/Functions</li>
     <li>
-      <a href="../articles/10_LIGER_Functions.html">LIGER Plotting &amp; Functionality</a>
+      <a href="../articles/LIGER_Functions.html">LIGER Plotting &amp; Functionality</a>
     </li>
     <li>
-      <a href="../articles/11_Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
+      <a href="../articles/Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
     </li>
   </ul>
 </li>
@@ -203,7 +203,7 @@ p.caption {
 <span class="fu"><a href="../reference/VariableFeaturePlot_scCustom.html">VariableFeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, num_features <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
 <span class="co"># Can remove labels if not desired</span>
 <span class="fu"><a href="../reference/VariableFeaturePlot_scCustom.html">VariableFeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, num_features <span class="op">=</span> <span class="fl">20</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co"># Reprel labels</span>
+<span class="co"># Repel labels</span>
 <span class="fu"><a href="../reference/VariableFeaturePlot_scCustom.html">VariableFeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, num_features <span class="op">=</span> <span class="fl">20</span>, repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co"># Change the scale of y-axis from linear to log10</span>
 <span class="fu"><a href="../reference/VariableFeaturePlot_scCustom.html">VariableFeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, num_features <span class="op">=</span> <span class="fl">20</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -285,7 +285,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <code class="sourceCode R"><span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Microglia_Score1"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Microglia_Score1"</span>, na_cutoff <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;"></p>
-<p>Othertimes you may actually want to set high na_cutoff value to enable better interpretation of the range of values in particular clusters of interest.</p>
+<p>Other times you may actually want to set high na_cutoff value to enable better interpretation of the range of values in particular clusters of interest.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="st">"nFeature_RNA"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="st">"nFeature_RNA"</span>, na_cutoff <span class="op">=</span> <span class="fl">6000</span><span class="op">)</span></code></pre></div>
@@ -339,7 +339,7 @@ Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: â
 <div id="dual-assay-plotting" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dual-assay-plotting" class="anchor"></a>Dual Assay Plotting</h3>
-<p>In certain situations returning a plot from two different assays within the same object may be advtangeous. For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference. See Cell Bender Functionality vignette for more info.</p>
+<p>In certain situations returning a plot from two different assays within the same object may be advantageous. For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference. See Cell Bender Functionality vignette for more info.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cell_bender_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html">qread</a></span><span class="op">(</span><span class="st">"assets/astro_nuc_seq.qs"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
