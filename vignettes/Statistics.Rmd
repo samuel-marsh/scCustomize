@@ -15,7 +15,7 @@ p.caption {
   font-size: 0.9em;
 }
 </style>
-
+ 
 ```{r setup, include=FALSE}
 all_times <- list()  # store the time for each chunk
 knitr::knit_hooks$set(time_it = local({
