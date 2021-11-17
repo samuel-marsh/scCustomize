@@ -8,7 +8,7 @@ navbar:
     - text: "Getting Started"
       href: index.html
     - text: "Install"
-      href: articles/13_Installation.html
+      href: articles/Installation.html
     - text: "Vignettes"
       menu:
         - text: Plotting Vignettes
