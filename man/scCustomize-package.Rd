@@ -39,7 +39,7 @@ and therefore needs to be set manually.}
 Useful links:
 \itemize{
   \item \url{https://github.com/samuel-marsh/scCustomize}
-  \item \url{https://coming_soon_vignette.com}
+  \item \url{https://samuel-marsh.github.io/scCustomize}
   \item Report bugs at \url{https://github.com/samuel-marsh/scCustomize/issues}
 }
 
