@@ -4,9 +4,9 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.}
+\title{scCustomize: Custom functions for single cell sequencing analyses.}
 \description{
-Custom functions to modify single cell analyses in publically available packages.
+Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
 }
 \section{Package options}{
 
@@ -40,6 +40,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/samuel-marsh/scCustomize}
   \item \url{https://samuel-marsh.github.io/scCustomize}
+  \item \url{https://doi.org/10.5281/zenodo.5706431}
   \item Report bugs at \url{https://github.com/samuel-marsh/scCustomize/issues}
 }
 

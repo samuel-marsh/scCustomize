@@ -1,6 +1,6 @@
 Package: scCustomize
 Type: Package
-Title: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
+Title: Custom functions for single cell sequencing analyses.
 Version: 0.6.0
 Date: 2021-11-16
 Authors@R: c(
@@ -8,8 +8,8 @@ Authors@R: c(
     person(given = "Ming", family = "Tang", role = c("ctb"), email = "tangming2005@gmail.com"),
     person(given = 'Velina', family = 'Kozareva', role = c('ctb'))
     )
-Description: Custom functions to modify single cell analyses in publically available packages.
-URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize
+Description: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
+URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize, https://doi.org/10.5281/zenodo.5706431
 BugReports: https://github.com/samuel-marsh/scCustomize/issues
 Depends: Seurat (>= 4.0.5)
 Imports: 
