@@ -880,13 +880,13 @@ IL7R
 ##       "IL32"       "LDHB"       "CD3D"       "IL7R"</code></pre>
 </div>
 </div>
-<div id="pairing-extract_top_markers-with-iterate_custom_featureplots" class="section level2">
+<div id="pairing-extract_top_markers-with-iterate_featureplot_sccustom" class="section level2">
 <h2 class="hasAnchor">
-<a href="#pairing-extract_top_markers-with-iterate_custom_featureplots" class="anchor"></a>Pairing <code>Extract_Top_Markers</code> with <code>Iterate_Custom_FeaturePlots</code>
+<a href="#pairing-extract_top_markers-with-iterate_featureplot_sccustom" class="anchor"></a>Pairing <code>Extract_Top_Markers</code> with <code>Iterate_FeaturePlot_scCustom</code>
 </h2>
-<p>The advantage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_Custom_FeaturePlots</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
+<p>The advantage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_FeaturePlot_scCustom</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">Iterate_Custom_FeaturePlots</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">top_5_presto</span>, single_pdf <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">top_5_presto</span>, single_pdf <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="../docs/articles/assets/Iterate_named_plots.png" alt="*Example plot showing the gene name and additional name of the plot.*" width="49%"><p class="caption">
 <em>Example plot showing the gene name and additional name of the plot.</em>

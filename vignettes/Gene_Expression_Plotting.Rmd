@@ -265,6 +265,7 @@ The [Nebulosa package](https://github.com/powellgenomicslab/Nebulosa) provides r
 
 scCustomize provides two functions to extend functionality of these plots and for ease of plotting "joint" density plots.  
 #### Custom color palettes  
+  
 Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: "viridis", "magma", "cividis", "inferno", and "plasma").  `Plot_Density_Custom` changes the default palette to "magma" and also allows for use of any custom gradient.
 ```{r eval=FALSE, fig.height=4, fig.width=13, fig.align='center'}
 Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos")

@@ -321,8 +321,8 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <a href="#density-plots" class="anchor"></a>Density Plots</h3>
 <p>The <a href="https://github.com/powellgenomicslab/Nebulosa">Nebulosa package</a> provides really great functions for plotting gene expression via density plots.</p>
 <p>scCustomize provides two functions to extend functionality of these plots and for ease of plotting “joint” density plots.<br>
-#### Custom color palettes<br>
-Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: “viridis”, “magma”, “cividis”, “inferno”, and “plasma”). <code>Plot_Density_Custom</code> changes the default palette to “magma” and also allows for use of any custom gradient.</p>
+#### Custom color palettes</p>
+<p>Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: “viridis”, “magma”, “cividis”, “inferno”, and “plasma”). <code>Plot_Density_Custom</code> changes the default palette to “magma” and also allows for use of any custom gradient.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span>, custom_palette <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CustomPalette.html">PurpleAndYellow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>

@@ -164,10 +164,10 @@ top_5_presto <- Extract_Top_Markers(marker_dataframe = presto_markers, num_genes
 head(top_5_presto, 10)
 ```
 
-## Pairing `Extract_Top_Markers` with `Iterate_Custom_FeaturePlots`
-The advantage of exporting a named vector from `Extract_Top_Markers` is that `Iterate_Custom_FeaturePlots` can detect the names and either add those to the title of the plot (if `single_pdf = TRUE`) or the file names if `FALSE`.
+## Pairing `Extract_Top_Markers` with `Iterate_FeaturePlot_scCustom`
+The advantage of exporting a named vector from `Extract_Top_Markers` is that `Iterate_FeaturePlot_scCustom` can detect the names and either add those to the title of the plot (if `single_pdf = TRUE`) or the file names if `FALSE`.
 ```{r eval=FALSE}
-Iterate_Custom_FeaturePlots(seurat_object = pbmc, gene_list = top_5_presto, single_pdf = T)
+Iterate_FeaturePlot_scCustom(seurat_object = pbmc, gene_list = top_5_presto, single_pdf = T)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example plot showing the gene name and additional name of the plot.*", fig.show='hold', out.width="49%"}
