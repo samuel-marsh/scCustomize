@@ -66,7 +66,7 @@ The output from Cell Bender is an H5 file that is styled and can be read like 10
 However,`Read10X_h5_Multi_Directory` can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.
 
 ### Cell Bender Output Structure
-The following is typical output directory structure for Cell Bender files with subdirectory labeled with sample name and each file also prefixed with the sample name.
+The following is typical output directory structure for Cell Bender files with sub-directory labeled with sample name and each file also prefixed with the sample name.
 
 ```
 Parent_Directory
@@ -87,7 +87,7 @@ Parent_Directory
 ### Read in H5 outputs  
 All we have to do is adjust the parameters to account for cell bender file names and directory structure.  
 
-* `secondary_path = ""` as the files are directly within the immediate subdirectory
+* `secondary_path = ""` as the files are directly within the immediate sub-directory
 * `default_10X_path = FALSE` because these are not 10X outputs.
 * `h5_filename = "_out.h5"` specifies the shared aspect of file name that is not part of sample name.  (Can also specify "_out_filtered.h5" depending on which file is desired).
 

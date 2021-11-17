@@ -61,7 +61,7 @@
       <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
-      <a href="../articles/Iterative%20Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
     </li>
     <li>
       <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
@@ -626,7 +626,7 @@ sample_6
 <div id="optional-parameters" class="section level4">
 <h4 class="hasAnchor">
 <a href="#optional-parameters" class="anchor"></a>Optional parameters</h4>
-<p>Similarly to the scCustomize functions for reading raw count matrices (See <a href="LINK">LINK</a>) there are a few optional parameters for <code>Read_Metrics_10X</code>.</p>
+<p>Similarly to the scCustomize functions for reading raw count matrices (See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions Vignette</a>) there are a few optional parameters for <code>Read_Metrics_10X</code>.</p>
 <ul>
 <li>
 <code>secondary_path</code>/<code>default_10X</code> tells the function how to navigate from the parent directory (<code>base_path</code>) to the “metrics_summary.csv” files.
@@ -639,9 +639,9 @@ sample_6
 </ul>
 </li>
 <li>
-<code>lib_list</code> if only a subset of libraries are desired then user can supply the names of those libraries (subdirectories) to the <code>lib_list</code> parameter to limit which files are read in. Default is NULL and will read all samples from parent directory.</li>
+<code>lib_list</code> if only a subset of libraries are desired then user can supply the names of those libraries (sub-directories) to the <code>lib_list</code> parameter to limit which files are read in. Default is NULL and will read all samples from parent directory.</li>
 <li>
-<code>lib_names</code> How to name files in output data.frame. Default will use subdirectory names to label the samples. Alternatively can provide a vector a sample/library names to use instead.</li>
+<code>lib_names</code> How to name files in output data.frame. Default will use sub-directory names to label the samples. Alternatively can provide a vector a sample/library names to use instead.</li>
 </ul>
 </div>
 </div>
@@ -762,7 +762,7 @@ B
 <div id="plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h2>
-<p>In total there are 15 Sequencing QC plotting functions. See <a href="LINK_TO_REF_PAGE">LINK_TO_REF_PAGE</a> for full details.</p>
+<p>In total there are 15 Sequencing QC plotting functions. See <a href="https://samuel-marsh.github.io/scCustomize/reference/index.html#section-sequencing-metrics-qc-plots">Reference Manual</a> for full details.</p>
 <p>However, to simplify plotting there are also two wrapper functions which will return patchwork layouts of several of these functions in a single plot.</p>
 <div id="basic-metrics-summary" class="section level3">
 <h3 class="hasAnchor">

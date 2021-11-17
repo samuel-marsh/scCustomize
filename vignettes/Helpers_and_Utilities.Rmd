@@ -58,7 +58,7 @@ pbmc <- UpdateSeuratObject(pbmc)
 ```
 
 ## Add Mitochondrial & Ribosomal Percentages
-As discussed in QC Plotting vignette [LINK](LINK) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
+As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
 ### Seurat Objects: `Add_Mito_Ribo_Seurat`
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, or marmoset data all you need to do is specify the `species` parameter.
@@ -187,7 +187,7 @@ It can often be advantageous to merge raw data before creating analysis objects 
 
 `Merge_Sparse_Data_All` will combine a list of sparse matrices and return single sparse matrix.  Additionally, by specifying the `add_cell_ids` parameter you can specify a prefix to be added to the barcodes from each entry in the list (using "_" as delimiter).
 
-This function can be especially useful when combined with any of the scCustomize's `Read_` data functions which automatically return named lists of matrices and the ability to specify sample `orig.ident` when creating Seurat objects.  See Read & Write Vignette for more info on the data import functions [LINK](LINK).
+This function can be especially useful when combined with any of the scCustomize's `Read_` data functions which automatically return named lists of matrices and the ability to specify sample `orig.ident` when creating Seurat objects.  See [Read & Write Vignette](https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html) for more info on the data import functions.
 ```{r eval=FALSE}
 # Read in data
 GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")

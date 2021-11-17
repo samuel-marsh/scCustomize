@@ -84,7 +84,7 @@ Working_Directory
 * `cluster_annotation_path` and `cluster_annotation_file_name` will create a cluster annotation file using `Create_Cluster_Annotation_File` at desired path.
 
 ### Adapting Function Yourself
-This function is the basic setup that I use for most projects but everyone has their own style.  Instead of requiring you to call `custom_dir_file` everytime I hope that this function might serve as example that users can modify defaults and implement in their own workflows.  The function code is very simple to modify to any desired structure.
+This function is the basic setup that I use for most projects but everyone has their own style.  Instead of requiring you to call `custom_dir_file` every time I hope that this function might serve as example that users can modify defaults and implement in their own workflows.  The function code is very simple to modify to any desired structure.
 
 If you do modify for you our own please remember to attribute code to scCustomize package and cite appropriately.
 

@@ -142,7 +142,7 @@ PC_Plotting(seurat_object = marsh_mouse_micro, dim_number = 2)
 ```
 
 #### Iterate PC Plotting
-This function can be easily enhanced using iterative version `Iterate_PC_Loading_Plots` to return a PDF document that contains plots for all desired PCs within object.  See function manual and Iterative Plotting Vignette [LINK](LINK) for more info.
+This function can be easily enhanced using iterative version `Iterate_PC_Loading_Plots` to return a PDF document that contains plots for all desired PCs within object.  See function manual and [Iterative Plotting Vignette](https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html) for more info.
 
 
 ## Plot Gene Expression in 2D Space (PCA/tSNE/UMAP)
@@ -259,7 +259,8 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", spl
 ```
 
 
-### Density Plots
+### Density Plots  
+
 The [Nebulosa package](https://github.com/powellgenomicslab/Nebulosa) provides really great functions for plotting gene expression via density  plots.
 
 scCustomize provides two functions to extend functionality of these plots and for ease of plotting "joint" density plots.  

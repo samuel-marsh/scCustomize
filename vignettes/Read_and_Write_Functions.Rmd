@@ -176,8 +176,8 @@ multi_10x <- Read10X_Multi_Directory(base_path = "Parent_Directory", default_10X
 `Read10X_Multi_Directory` also contains several additional parameters.  
 
 * `parallel` and `num_cores` to use multiple core processing.
-* `sample_list` By default `Read10X_Multi_Directory` will read in all subdirectories present in parent directory.  However a subset can be specified by passing a vector of sample directory names.
-* `sample_names` As with other functions by default `Read10X_Multi_Directory` will use the subdirectory names within parent directory to name the output list entries.  Alternate names for the list entries can be provided here if desired.  These names will also be used to add cell prefixes if `merge = TRUE` (see below).  
+* `sample_list` By default `Read10X_Multi_Directory` will read in all sub-directories present in parent directory.  However a subset can be specified by passing a vector of sample directory names.
+* `sample_names` As with other functions by default `Read10X_Multi_Directory` will use the sub-directory names within parent directory to name the output list entries.  Alternate names for the list entries can be provided here if desired.  These names will also be used to add cell prefixes if `merge = TRUE` (see below).  
 * `merge` logical (default FALSE).  Whether to combine all samples into single sparse matrix and using `sample_names` to provide sample prefixes.
 
 ### Import 10X Genomics (H5 Outputs)
@@ -209,7 +209,7 @@ knitr::include_graphics(c("../docs/articles/assets/geo_merged.png"))
 `Merge_Sparse_Data_All` contains a number of optional parameters to control modification to the cell barcodes.  
 *NOTE: If any of the barcodes in the input matrix list overlap and no prefixes/suffixes are provided the function will error.*
   
-* Users can provide a vector of either prefixes or suffixes to`add_cell_ids` to ensure barcodes are unqiue (and make the import to Seurat smoother with samples already labeled).  
+* Users can provide a vector of either prefixes or suffixes to`add_cell_ids` to ensure barcodes are unique (and make the import to Seurat smoother with samples already labeled).  
 * By default ids are added as barcode prefixes but can be added as suffixes by setting `prefix = FALSE`.  
 * The prefix/suffix delimiter is "_" by default but can be changed using `cell_id_delimiter` parameter.  
 

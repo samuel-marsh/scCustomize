@@ -61,7 +61,7 @@
       <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
-      <a href="../articles/Iterative%20Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
     </li>
     <li>
       <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
@@ -158,7 +158,7 @@ p.caption {
 <span class="va">marsh_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html">qread</a></span><span class="op">(</span><span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span>
 
 <span class="co"># Convert to liger</span>
-<span class="va">marsh_liger</span> <span class="op">&lt;-</span> <span class="fu">liger</span><span class="fu">::</span><span class="fu">seuratToLiger</span><span class="op">(</span>objects <span class="op">=</span> <span class="va">marsh_micro</span>, combined.seurat <span class="op">=</span> <span class="cn">TRUE</span>, use.idents <span class="op">=</span> <span class="cn">T</span>,
+<span class="va">marsh_liger</span> <span class="op">&lt;-</span> <span class="fu">rliger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rliger/man/seuratToLiger.html">seuratToLiger</a></span><span class="op">(</span>objects <span class="op">=</span> <span class="va">marsh_micro</span>, combined.seurat <span class="op">=</span> <span class="cn">TRUE</span>, use.idents <span class="op">=</span> <span class="cn">T</span>,
     use.tsne <span class="op">=</span> <span class="cn">T</span>, meta.var <span class="op">=</span> <span class="st">"orig.ident"</span>, remove.missing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># Add meta data to LIGER \@cell.data slot</span>
@@ -244,7 +244,7 @@ p.caption {
 <div id="raster-points" class="section level3">
 <h3 class="hasAnchor">
 <a href="#raster-points" class="anchor"></a>Raster Points</h3>
-<p><code>DimPlot_LIGER</code> also supports point<sup>* </sup> rasterization utilizing scattermore package. <sup><sup></sup>Axes, labels, and legends will remain in vector form.</sup></p>
+<p><code>DimPlot_LIGER</code> also supports point rasterization utilizing <a href="https://cran.rstudio.com/web/packages/scattermore/index.html">scattermore package</a>. Axes, labels, and legends will remain in vector form.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, raster <span class="op">=</span> <span class="cn">FALSE</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, raster <span class="op">=</span> <span class="cn">TRUE</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
@@ -291,7 +291,7 @@ p.caption {
 <div id="additional-factor-plot-functionality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#additional-factor-plot-functionality" class="anchor"></a>Additional Factor Plot Functionality</h3>
-<p><code>plotFactors_scCustom</code> has a number of additional parameters that signifcantly expand the visualization options of <code>plotFactors</code>.</p>
+<p><code>plotFactors_scCustom</code> has a number of additional parameters that significantly expand the visualization options of <code>plotFactors</code>.</p>
 <ul>
 <li>
 <code>colors_use_factors</code> can be used to color the datasets in the factor loading plot. Must be vector equal to or greater than number of datasets in object. By default uses the “varibow” palette from <code>DiscretePalette_scCustom</code> instead of default ggplot2 hue palette.<br>
@@ -338,7 +338,7 @@ p.caption {
 <a href="#convert-liger-to-seurat" class="anchor"></a>Convert LIGER to Seurat</h2>
 <p>The liger/rliger package already contains a function <code>seuratToLiger</code> to convert LIGER objects to Seurat Objects. However, during this transfer a few things have issues crop up:</p>
 <ul>
-<li>All meta data ecept the “dataset” column from liger_object@cell.data is lost.</li>
+<li>All meta data except the “dataset” column from liger_object@cell.data is lost.</li>
 <li>Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis</li>
 <li>Seurat assay name not specified</li>
 </ul>
@@ -357,7 +357,7 @@ p.caption {
 <div id="gene-utilities" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gene-utilities" class="anchor"></a>Gene Utilities</h2>
-<p>As discussed in helpers vignette <a href="LINK">LINK</a>, the <code>Gene_Present</code> function can be used to check if list of genes are present in a LIGER object.</p>
+<p>As discussed in <a href="https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html">helpers vignette</a>, the <code>Gene_Present</code> function can be used to check if list of genes are present in a LIGER object.</p>
 <p>By default this will query all datasets in the object to create unified gene list and check input gene list against that list.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gene_input_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Aif1"</span><span class="op">)</span>

@@ -61,7 +61,7 @@
       <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
-      <a href="../articles/Iterative%20Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
     </li>
     <li>
       <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
@@ -144,7 +144,7 @@ p.caption {
 <div id="marker-identification-cluster-annotation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#marker-identification-cluster-annotation" class="anchor"></a>Marker Identification &amp; Cluster Annotation</h1>
-<p>scCustomize has several helper functions to assist with identication of marker genes and annotation of clusters. Load packages &amp; Data</p>
+<p>scCustomize has several helper functions to assist with identification of marker genes and annotation of clusters. Load packages &amp; Data</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load Packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
@@ -867,7 +867,7 @@ IL7R
 <a href="#use-with-non-seurat-data-frames-1" class="anchor"></a>Use with non-Seurat data.frames</h3>
 <p><code>Extract_Top_Markers</code> uses the data.frame output of <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html">Seurat::FindAllMarkers</a></code> by default but can be used with any data.frame by supplying few extra parameters. Let’s use the function on the output from <a href="https://github.com/immunogenomics/presto">presto package</a> and order the results by auc instead of log2FC.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Read in precomputed data.frame results</span>
+<code class="sourceCode R"><span class="co"># Read in pre-computed data.frame results</span>
 <span class="va">presto_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html">qread</a></span><span class="op">(</span><span class="st">"assets/presto_markers.qs"</span><span class="op">)</span>
 
 <span class="co"># Extract top markers</span>
@@ -884,7 +884,7 @@ IL7R
 <h2 class="hasAnchor">
 <a href="#pairing-extract_top_markers-with-iterate_custom_featureplots" class="anchor"></a>Pairing <code>Extract_Top_Markers</code> with <code>Iterate_Custom_FeaturePlots</code>
 </h2>
-<p>The advtanage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_Custom_FeaturePlots</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
+<p>The advantage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_Custom_FeaturePlots</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">Iterate_Custom_FeaturePlots</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">top_5_presto</span>, single_pdf <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
@@ -1013,7 +1013,7 @@ oligo
 <ul>
 <li>One entry for each unique cell type. The entry is named for the cell type and is a vector of the numbered clustered that correspond to that cell type.</li>
 <li>One entry called “new_cluster_idents” containing a vector of idents in order that can be used for renaming clusters either using <code>Rename_Clusters</code> function (see below) or manually.</li>
-<li>One entry containing vector of cell subtypes (if present).
+<li>One entry containing vector of cell sub-types (if present).
 <div class="figure" style="text-align: center">
 <img src="../docs/articles/assets/annotation_info.png" alt="*Example output of `Pull_Cluster_Annotation*" width="831"><p class="caption">
 <em>Example output of `Pull_Cluster_Annotation</em>

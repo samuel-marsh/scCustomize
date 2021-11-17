@@ -8,7 +8,7 @@ articles:
   Gene_Expression_Plotting: Gene_Expression_Plotting.html
   Helpers_and_Utilities: Helpers_and_Utilities.html
   Installation: Installation.html
-  Iterative Plotting: Iterative Plotting.html
+  Iterative_Plotting: Iterative_Plotting.html
   LIGER_Functions: LIGER_Functions.html
   Markers_and_Cluster_Annotation: Markers_and_Cluster_Annotation.html
   Misc_Functions: Misc_Functions.html
@@ -16,5 +16,5 @@ articles:
   Read_and_Write_Functions: Read_and_Write_Functions.html
   Sequencing_QC_Plots: Sequencing_QC_Plots.html
   Statistics: Statistics.html
-last_built: 2021-11-17T13:37Z
+last_built: 2021-11-17T14:40Z
 

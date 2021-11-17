@@ -2,11 +2,9 @@
 # scCustomize <img src="man/figures/scCustomize_Logo.svg" align="right" width="150"/>
 
 [![GitHub release (latest by
-date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/releases)
-[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
-[![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/issues)
-[![GitHub all
-releases](https://img.shields.io/github/downloads/samuel-marsh/scCustomize/total?style=flat-square)](https://github.com/samuel-marsh/scCustomize)
+date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?color=gree)](https://github.com/samuel-marsh/scCustomize/releases)
+[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
+[![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/issues)
 [![DOI](https://zenodo.org/badge/411807769.svg)](https://zenodo.org/badge/latestdoi/411807769)
 
 scCustomize is a collection of functions created and/or curated to aid

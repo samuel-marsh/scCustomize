@@ -19,7 +19,7 @@ navbar:
         - text: "Plotting #3: Sequencing QC Plots/Analysis"
           href: articles/Sequencing_QC_Plots.html
         - text: "Plotting #4: Iterative Plotting Functions"
-          href: articles/Iterative Plotting.html
+          href: articles/Iterative_Plotting.html
         - text: "Customized Color Palettes & Themes"
           href: articles/Color_Palettes.html
         - text: -------

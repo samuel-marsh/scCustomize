@@ -59,7 +59,7 @@ library(qs)
 marsh_micro <- qread("assets/marsh_2020_micro.qs")
 
 # Convert to liger
-marsh_liger <- liger::seuratToLiger(objects = marsh_micro, combined.seurat = TRUE, use.idents = T, use.tsne = T, meta.var = "orig.ident", remove.missing = FALSE)
+marsh_liger <- rliger::seuratToLiger(objects = marsh_micro, combined.seurat = TRUE, use.idents = T, use.tsne = T, meta.var = "orig.ident", remove.missing = FALSE)
 
 # Add meta data to LIGER \@cell.data slot
 marsh_liger@cell.data$Transcription <- marsh_micro@meta.data$Transcription
@@ -152,8 +152,7 @@ wrap_plots(p1, p2, p3, p4, ncol = 2)
 ```
 
 ### Raster Points
-`DimPlot_LIGER` also supports point<sup>\* </sup> rasterization utilizing scattermore package.
-<sup><sup></sup>Axes, labels, and legends will remain in vector form.</sup> 
+`DimPlot_LIGER` also supports point rasterization utilizing [scattermore package](https://cran.rstudio.com/web/packages/scattermore/index.html). Axes, labels, and legends will remain in vector form.</sup> 
 
 ```{r eval=FALSE}
 DimPlot_LIGER(liger_object = marsh_liger, reduction_label = "tSNE", raster = FALSE, label = FALSE)
@@ -205,7 +204,7 @@ wrap_plots(p1, p2, ncol = 2)
 - `raster` whether or not to raster the points in both plots.  Significantly reduced PDF file size and speed of plotting.
 
 ### Additional Factor Plot Functionality
-`plotFactors_scCustom` has a number of additional parameters that signifcantly expand the visualization options of `plotFactors`.  
+`plotFactors_scCustom` has a number of additional parameters that significantly expand the visualization options of `plotFactors`.  
 
 - `colors_use_factors` can be used to color the datasets in the factor loading plot.  Must be vector equal to or greater than number of datasets in object.  By default uses the "varibow" palette from `DiscretePalette_scCustom` instead of default ggplot2 hue palette.  
 - `ggplot_default_colors` parameter can be specified if you would like to return this plot to using the ggplot2/hue palette.
@@ -259,7 +258,7 @@ head(top20_factor6, 5)
 ## Convert LIGER to Seurat  
 The liger/rliger package already contains a function `seuratToLiger` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
   
-* All meta data ecept the "dataset" column from liger_object\@cell.data is lost.
+* All meta data except the "dataset" column from liger_object\@cell.data is lost.
 * Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
 * Seurat assay name not specified
 
@@ -275,7 +274,7 @@ seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UM
 
 
 ## Gene Utilities  
-As discussed in helpers vignette [LINK](LINK), the `Gene_Present` function can be used to check if list of genes are present in a LIGER object.  
+As discussed in [helpers vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html), the `Gene_Present` function can be used to check if list of genes are present in a LIGER object.  
 
 By default this will query all datasets in the object to create unified gene list and check input gene list against that list.
 ```{r}

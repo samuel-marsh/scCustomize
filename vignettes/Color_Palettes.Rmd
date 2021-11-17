@@ -85,7 +85,7 @@ wrap_plots(p1, p2, p3, p4, ncol = 4) + plot_annotation(tag_levels = 'A')
 
 ## Large Discrete Palettes
 ### `DiscretePalette_scCustomize`
-The function `DiscretePalette_scCustomize` is function inspired and modified from `Seurat::DiscretePalette`.  Under the hood most opf the palettes are called using [paletteer package](https://github.com/EmilHvitfeldt/paletteer) to call palettes without adding package dependencies.  The following palettes can be specified:
+The function `DiscretePalette_scCustomize` is function inspired and modified from `Seurat::DiscretePalette`.  Under the hood most of the palettes are called using [paletteer package](https://github.com/EmilHvitfeldt/paletteer) to call palettes without adding package dependencies.  The following palettes can be specified:
 
 * alphabet (24)
 * alphabet2 (24)
@@ -154,9 +154,9 @@ PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "va
 ## Small Discrete Palettes
 Finally scCustomize contains shortcuts for some shorter discrete palettes that can be useful for plotting groups, treatments, genotypes, etc.
 ```{r echo=FALSE, fig.height=1,fig.width=11}
-PalettePlot(palette = JCO_Four()) + ggtitle("4 color palette from ggsci package.")
-PalettePlot(palette = Dark2_Pal()) + ggtitle("8 color Dark2 palette from RColorBrewer package")
-PalettePlot(palette = ColorBlind_Pal()) + ggtitle("8 color modified color blind safe palette")
+PalettePlot(palette = JCO_Four()) + ggtitle("JCO_Four(): 4 color palette from ggsci package.")
+PalettePlot(palette = Dark2_Pal()) + ggtitle("Dark2_Pal(): 8 color Dark2 palette from RColorBrewer package")
+PalettePlot(palette = ColorBlind_Pal()) + ggtitle("ColorBlind_Pal(): 8 color modified color blind safe palette")
 ```
 
 

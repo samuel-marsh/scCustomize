@@ -72,4 +72,4 @@ Remaining parameters for each function are similar or identical to their non-ite
   
     
 ## More Information  
-For more info on each functions and optional parameters check out the manual entry using `?Function_Name` or browsing the reference section [LINK](LINK)
+For more info on each functions and optional parameters check out the manual entry using `?Function_Name` or browsing the [Reference Manual](https://samuel-marsh.github.io/scCustomize/reference/index.html#section-iterative-plotting-functions)

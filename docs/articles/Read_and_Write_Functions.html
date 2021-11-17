@@ -61,7 +61,7 @@
       <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
-      <a href="../articles/Iterative%20Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
     </li>
     <li>
       <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
@@ -280,9 +280,9 @@ p.caption {
 <li>
 <code>parallel</code> and <code>num_cores</code> to use multiple core processing.</li>
 <li>
-<code>sample_list</code> By default <code>Read10X_Multi_Directory</code> will read in all subdirectories present in parent directory. However a subset can be specified by passing a vector of sample directory names.</li>
+<code>sample_list</code> By default <code>Read10X_Multi_Directory</code> will read in all sub-directories present in parent directory. However a subset can be specified by passing a vector of sample directory names.</li>
 <li>
-<code>sample_names</code> As with other functions by default <code>Read10X_Multi_Directory</code> will use the subdirectory names within parent directory to name the output list entries. Alternate names for the list entries can be provided here if desired. These names will also be used to add cell prefixes if <code>merge = TRUE</code> (see below).<br>
+<code>sample_names</code> As with other functions by default <code>Read10X_Multi_Directory</code> will use the sub-directory names within parent directory to name the output list entries. Alternate names for the list entries can be provided here if desired. These names will also be used to add cell prefixes if <code>merge = TRUE</code> (see below).<br>
 </li>
 <li>
 <code>merge</code> logical (default FALSE). Whether to combine all samples into single sparse matrix and using <code>sample_names</code> to provide sample prefixes.</li>
@@ -325,7 +325,7 @@ p.caption {
 <a href="#add-barcode-prefixsuffix" class="anchor"></a>Add Barcode Prefix/Suffix</h3>
 <p><code>Merge_Sparse_Data_All</code> contains a number of optional parameters to control modification to the cell barcodes.<br><em>NOTE: If any of the barcodes in the input matrix list overlap and no prefixes/suffixes are provided the function will error.</em></p>
 <ul>
-<li>Users can provide a vector of either prefixes or suffixes to<code>add_cell_ids</code> to ensure barcodes are unqiue (and make the import to Seurat smoother with samples already labeled).<br>
+<li>Users can provide a vector of either prefixes or suffixes to<code>add_cell_ids</code> to ensure barcodes are unique (and make the import to Seurat smoother with samples already labeled).<br>
 </li>
 <li>By default ids are added as barcode prefixes but can be added as suffixes by setting <code>prefix = FALSE</code>.<br>
 </li>

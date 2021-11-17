@@ -111,7 +111,7 @@ cluster_stats %>%
 
 ## Percent of Cells Expressing Feature(s)
 It can also be informative to understand the percent of cells/nuclei that express a given feature or set of features.  
-scCustomize provides the `Percent_Expressing` function^["Internals of this functions were adapted/modified from the internals of `Seurat::DotPlot`] to make this easy.
+scCustomize provides the `Percent_Expressing` function to return these results.
 ```{r eval=FALSE}
 percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"))
 ```

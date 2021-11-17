@@ -61,7 +61,7 @@
       <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
-      <a href="../articles/Iterative%20Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
     </li>
     <li>
       <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
@@ -160,7 +160,7 @@ p.caption {
 <div id="cell-bender-output-structure" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cell-bender-output-structure" class="anchor"></a>Cell Bender Output Structure</h3>
-<p>The following is typical output directory structure for Cell Bender files with subdirectory labeled with sample name and each file also prefixed with the sample name.</p>
+<p>The following is typical output directory structure for Cell Bender files with sub-directory labeled with sample name and each file also prefixed with the sample name.</p>
 <pre><code>Parent_Directory
 ├── sample_01
 │   └── sample_01_out_cell_barcodes.csv
@@ -181,7 +181,7 @@ p.caption {
 <p>All we have to do is adjust the parameters to account for cell bender file names and directory structure.</p>
 <ul>
 <li>
-<code>secondary_path = ""</code> as the files are directly within the immediate subdirectory</li>
+<code>secondary_path = ""</code> as the files are directly within the immediate sub-directory</li>
 <li>
 <code>default_10X_path = FALSE</code> because these are not 10X outputs.</li>
 <li>

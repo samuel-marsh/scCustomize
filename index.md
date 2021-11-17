@@ -8,11 +8,9 @@ p.caption {
 # scCustomize <img src="man/figures/scCustomize_Logo.svg" align="right" width="150"/>
 
 [![GitHub release (latest by
-date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/releases)
-[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
-[![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize?style=flat-square)](https://github.com/samuel-marsh/scCustomize/issues)
-[![GitHub all
-releases](https://img.shields.io/github/downloads/samuel-marsh/scCustomize/total?style=flat-square)](https://github.com/samuel-marsh/scCustomize)
+date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?color=gree)](https://github.com/samuel-marsh/scCustomize/releases)
+[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
+[![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/issues)
 [![DOI](https://zenodo.org/badge/411807769.svg)](https://zenodo.org/badge/latestdoi/411807769)
 
 scCustomize is a collection of functions created and/or curated to aid
@@ -63,14 +61,17 @@ scCustomize aims to achieve these goals through:
     Many plotting functions can be easily automated with loops, apply,
     purrr etc. However, these can be intimidating to novice user and
     often can be made easier through wrapping into a function.
-    -   scCustomize contains a number of iterative functions contain
-        extra parameters to specify file type, path, name and then
-        render progress bar in console to track progress.
+    -   scCustomize contains a number of [iterative plotting
+        functions](https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html)
+        contain extra parameters to specify file type, path, name and
+        then render progress bar in console to track progress.
     -   Returns either single PDF document or multiple plots of any
         valid file type (e.g., png, tiff, jpeg, pdf, etc).
 -   **Helper functions easily import multiple raw data types**  
-    Functions are aimed at streamlining importing multiple files/samples
-    with single function and/or importing files with “non-standard” file
+    [Imort data
+    functions](https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html)
+    are aimed at streamlining importing multiple files/samples with
+    single function and/or importing files with “non-standard” file
     names.
     -   Iterate import functions to simplify the import process across
         groups of files/samples.

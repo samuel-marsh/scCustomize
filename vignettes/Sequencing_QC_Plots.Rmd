@@ -101,14 +101,14 @@ head(raw_metrics) %>%
 ```
 
 #### Optional parameters
-Similarly to the scCustomize functions for reading raw count matrices (See [LINK](LINK)) there are a few optional parameters for `Read_Metrics_10X`.  
+Similarly to the scCustomize functions for reading raw count matrices (See [Read & Write Data Functions Vignette](https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html)) there are a few optional parameters for `Read_Metrics_10X`.  
 
 * `secondary_path`/`default_10X` tells the function how to navigate from the parent directory (`base_path`) to the "metrics_summary.csv" files.  
     - If the directory specified is directly from Cell Ranger output or has an identical structure (see above; parent/library_name/outs/files) then user can specify `default_10X = TRUE` and function will find required files.
     - If structure is different then user must supply `secondary_path`.  
     - If all files are in one directory simply supply `secondary_path = ""`.  
-* `lib_list` if only a subset of libraries are desired then user can supply the names of those libraries (subdirectories) to the `lib_list` parameter to limit which files are read in.  Default is NULL and will read all samples from parent directory.
-* `lib_names` How to name files in output data.frame.  Default will use subdirectory names to label the samples.  Alternatively can provide a vector a sample/library names to use instead.
+* `lib_list` if only a subset of libraries are desired then user can supply the names of those libraries (sub-directories) to the `lib_list` parameter to limit which files are read in.  Default is NULL and will read all samples from parent directory.
+* `lib_names` How to name files in output data.frame.  Default will use sub-directory names to label the samples.  Alternatively can provide a vector a sample/library names to use instead.
 
 
 ### Add Meta Data
@@ -132,7 +132,7 @@ metrics_final <- right_join(raw_metrics, meta_metrics)
 
 
 ## Plotting
-In total there are 15 Sequencing QC plotting functions.  See [LINK_TO_REF_PAGE](LINK_TO_REF_PAGE) for full details.
+In total there are 15 Sequencing QC plotting functions.  See [Reference Manual](https://samuel-marsh.github.io/scCustomize/reference/index.html#section-sequencing-metrics-qc-plots) for full details.
 
 However, to simplify plotting there are also two wrapper functions which will return patchwork layouts of several of these functions in a single plot.
 

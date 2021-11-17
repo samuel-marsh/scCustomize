@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 
 
 # Marker Identification & Cluster Annotation  
-scCustomize has several helper functions to assist with identication of marker genes and annotation of clusters.
+scCustomize has several helper functions to assist with identification of marker genes and annotation of clusters.
 Load packages & Data
 ```{r init}
 # Load Packages
@@ -156,7 +156,7 @@ head(top_5_df, 10) %>%
 ### Use with non-Seurat data.frames
 `Extract_Top_Markers` uses the data.frame output of `Seurat::FindAllMarkers` by default but can be used with any data.frame by supplying few extra parameters.  Let's use the function on the output from [presto package](https://github.com/immunogenomics/presto) and order the results by auc instead of log2FC.
 ```{r}
-# Read in precomputed data.frame results
+# Read in pre-computed data.frame results
 presto_markers <- qread("assets/presto_markers.qs")
 
 # Extract top markers
@@ -165,7 +165,7 @@ head(top_5_presto, 10)
 ```
 
 ## Pairing `Extract_Top_Markers` with `Iterate_Custom_FeaturePlots`
-The advtanage of exporting a named vector from `Extract_Top_Markers` is that `Iterate_Custom_FeaturePlots` can detect the names and either add those to the title of the plot (if `single_pdf = TRUE`) or the file names if `FALSE`.
+The advantage of exporting a named vector from `Extract_Top_Markers` is that `Iterate_Custom_FeaturePlots` can detect the names and either add those to the title of the plot (if `single_pdf = TRUE`) or the file names if `FALSE`.
 ```{r eval=FALSE}
 Iterate_Custom_FeaturePlots(seurat_object = pbmc, gene_list = top_5_presto, single_pdf = T)
 ```
@@ -205,7 +205,7 @@ The result of `Pull_Cluster_Annotation` is a list that contains:
 
 * One entry for each unique cell type.  The entry is named for the cell type and is a vector of the numbered clustered that correspond to that cell type.
 * One entry called "new_cluster_idents" containing a vector of idents in order that can be used for renaming clusters either using `Rename_Clusters` function (see below) or manually.
-* One entry containing vector of cell subtypes (if present).
+* One entry containing vector of cell sub-types (if present).
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example output of `Pull_Cluster_Annotation*", fig.show='hold'}
 knitr::include_graphics("../docs/articles/assets/annotation_info.png")
 ```
