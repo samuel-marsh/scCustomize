@@ -236,9 +236,13 @@ p.caption {
 <h3 class="hasAnchor">
 <a href="#featureplots" class="anchor"></a>FeaturePlots</h3>
 <p>The default plots from<code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">Seurat::FeaturePlot</a></code> are very good but I find can be enhanced in few ways that scCustomize sets by default.<br>
-Issues with default Seurat settings:<br>
-* Parameter <code>order = FALSE</code> is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells. * Using custom color palette with greater than 2 colors bins the expression by the total number of colors.<br>
-* Non-expressing cells are part of same color scale which can make it difficult to distinguish low expressing cells from non-expressing cells.</p>
+Issues with default Seurat settings:</p>
+<ul>
+<li>Parameter <code>order = FALSE</code> is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells.</li>
+<li>Using custom color palette with greater than 2 colors bins the expression by the total number of colors.<br>
+</li>
+<li>Non-expressing cells are part of same color scale which can make it difficult to distinguish low expressing cells from non-expressing cells.</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Set color palette</span>
 <span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, option <span class="op">=</span> <span class="st">"C"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
@@ -320,13 +324,16 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <h3 class="hasAnchor">
 <a href="#density-plots" class="anchor"></a>Density Plots</h3>
 <p>The <a href="https://github.com/powellgenomicslab/Nebulosa">Nebulosa package</a> provides really great functions for plotting gene expression via density plots.</p>
-<p>scCustomize provides two functions to extend functionality of these plots and for ease of plotting “joint” density plots.<br>
-#### Custom color palettes</p>
+<p>scCustomize provides two functions to extend functionality of these plots and for ease of plotting “joint” density plots.</p>
+<div id="custom-color-palettes" class="section level4">
+<h4 class="hasAnchor">
+<a href="#custom-color-palettes" class="anchor"></a>Custom color palettes</h4>
 <p>Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: “viridis”, “magma”, “cividis”, “inferno”, and “plasma”). <code>Plot_Density_Custom</code> changes the default palette to “magma” and also allows for use of any custom gradient.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span>, custom_palette <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CustomPalette.html">PurpleAndYellow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-20-1.png" width="960" style="display: block; margin: auto;"></p>
+</div>
 <div id="joint-plots" class="section level4">
 <h4 class="hasAnchor">
 <a href="#joint-plots" class="anchor"></a>Joint Plots</h4>

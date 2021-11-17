@@ -151,6 +151,7 @@ scCustomize has few functions that improve on the default plotting options/param
 ### FeaturePlots
 The default plots from`Seurat::FeaturePlot` are very good but I find can be enhanced in few ways that scCustomize sets by default.  
 Issues with default Seurat settings:  
+  
 * Parameter `order = FALSE` is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells.
 * Using custom color palette with greater than 2 colors bins the expression by the total number of colors.  
 * Non-expressing cells are part of same color scale which can make it difficult to distinguish low expressing cells from non-expressing cells.
@@ -264,6 +265,7 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", spl
 The [Nebulosa package](https://github.com/powellgenomicslab/Nebulosa) provides really great functions for plotting gene expression via density  plots.
 
 scCustomize provides two functions to extend functionality of these plots and for ease of plotting "joint" density plots.  
+  
 #### Custom color palettes  
   
 Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: "viridis", "magma", "cividis", "inferno", and "plasma").  `Plot_Density_Custom` changes the default palette to "magma" and also allows for use of any custom gradient.
