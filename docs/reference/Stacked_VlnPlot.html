@@ -182,6 +182,7 @@
   x_lab_rotate <span class='op'>=</span> <span class='cn'>FALSE</span>,
   colors_use <span class='op'>=</span> <span class='cn'>NULL</span>,
   color_seed <span class='op'>=</span> <span class='fl'>123</span>,
+  ggplot_default_colors <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -222,6 +223,11 @@ will use "varibow" with shuffle = TRUE both from <code>DiscretePalette_scCustomi
       <th>color_seed</th>
       <td><p>random seed for the "varibow" palette shuffle if <code>colors_use = NULL</code> and number of
 groups plotted is greater than 36.  Default = 123.</p></td>
+    </tr>
+    <tr>
+      <th>ggplot_default_colors</th>
+      <td><p>logical.  If <code>colors_use = NULL</code>, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.</p></td>
     </tr>
     <tr>
       <th>...</th>
