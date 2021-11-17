@@ -13,7 +13,7 @@ navbar:
       menu:
         - text: Plotting Vignettes
         - text: "Plotting #1: Analysis Plots"
-          href: articles/Gene_Expression_plotting.html
+          href: articles/Gene_Expression_Plotting.html
         - text: "Plotting #2: QC Plots"
           href: articles/QC_Plots.html
         - text: "Plotting #3: Sequencing QC Plots/Analysis"
