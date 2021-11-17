@@ -13,6 +13,7 @@ Stacked_VlnPlot(
   x_lab_rotate = FALSE,
   colors_use = NULL,
   color_seed = 123,
+  ggplot_default_colors = FALSE,
   ...
 )
 }
@@ -35,6 +36,9 @@ will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomi
 
 \item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
 groups plotted is greater than 36.  Default = 123.}
+
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }

@@ -640,6 +640,8 @@ Meta_Highlight_Plot <- function(
 #' @param idents Which classes to include in the plot (default is all).
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -671,6 +673,7 @@ Stacked_VlnPlot <- function(
   x_lab_rotate = FALSE,
   colors_use = NULL,
   color_seed = 123,
+  ggplot_default_colors = FALSE,
   ...
 ) {
   # Check Seurat
