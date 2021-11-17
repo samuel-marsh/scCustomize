@@ -19,7 +19,7 @@ navbar:
         - text: "Plotting #3: Sequencing QC Plots/Analysis"
           href: articles/Sequencing_QC_Plots.html
         - text: "Plotting #4: Iterative Plotting Functions"
-          href: articles/Iterative_Plotting.html
+          href: articles/Iterative Plotting.html
         - text: "Customized Color Palettes & Themes"
           href: articles/Color_Palettes.html
         - text: -------
@@ -27,7 +27,7 @@ navbar:
         - text: "Read & Write Data Functions"
           href: articles/Read_and_Write_Functions.html
         - text: "Marker Identification & Cluster Annotation Helpers"
-          href: articles/Cluster_Annotation.html
+          href: articles/Markers_and_Cluster_Annotation.html
         - text: "Statistics Functions"
           href: articles/Statistics.html
         - text: "General Helpers & Utilities"
