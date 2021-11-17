@@ -699,7 +699,17 @@ Stacked_VlnPlot <- function(
   # Check feature case correct
   Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE, return_features = FALSE)
 
-  # set default plot colors
+  # Set default color palette based on number of levels being plotted
+  if (is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  } else {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+  }
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && ggplot_default_colors) {
+    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+  }
   if (is.null(x = colors_use)) {
     if (ggplot_default_colors) {
       colors_use <- Hue_Pal(num_colors = group_by_length)
