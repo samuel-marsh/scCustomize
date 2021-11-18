@@ -67,7 +67,7 @@ PC_Plotting <- function(
 #' @noRd
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Modified function for use in scCustomtize)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
+#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/.  Solution for re-enabling plot spacing modification by Abdenour ABBAS (comment on original blog post; http://disq.us/p/2b54qh2).
 #' @seealso https://twitter.com/tangming2005
 #'
 
@@ -76,7 +76,7 @@ Modify_VlnPlot <- function(
   features,
   pt.size = 0,
   cols = NULL,
-  plot_margin = unit(c(-0.5, 0, -0.5, 0), "cm"),
+  plot_margin = NULL,
   ...
 ) {
   #remove the x-axis text and tick
