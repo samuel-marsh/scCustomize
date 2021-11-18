@@ -90,7 +90,9 @@ Modify_VlnPlot <- function(
           axis.ticks.x = element_blank(),
           axis.title.y = element_text(size = rel(1), angle = 0),
           axis.text.y = element_text(size = rel(1)),
-          plot.margin = plot_margin)
+          plot.margin = plot_margin,
+          plot.title= element_blank(),
+          axis.title.x = element_blank())
 }
 
 
