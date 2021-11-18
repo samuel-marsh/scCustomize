@@ -965,9 +965,31 @@ Iterate_VlnPlot <- function(
     stop("File type set to non-PDF type but 'single_pdf = TRUE' also selected.  Confirm output desired and re-run function.")
   }
 
-
   # Check whether features are present in object
   gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
+
+  # Set default color palette based on number of levels being plotted
+  if (is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  } else {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+  }
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && ggplot_default_colors) {
+    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+  }
+  if (is.null(x = colors_use)) {
+    if (ggplot_default_colors) {
+      colors_use <- Hue_Pal(num_colors = group_by_length)
+    } else {
+      if (group_by_length <= 36) {
+        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
+      } else {
+        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
+      }
+    }
+  }
 
   # Add one time raster warning
   if (single_pdf && pt.size != 0 && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {
