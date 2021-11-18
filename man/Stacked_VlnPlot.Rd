@@ -14,6 +14,8 @@ Stacked_VlnPlot(
   colors_use = NULL,
   color_seed = 123,
   ggplot_default_colors = FALSE,
+  plot_spacing = 0.15,
+  spacing_unit = "cm",
   ...
 )
 }
@@ -39,6 +41,11 @@ groups plotted is greater than 36.  Default = 123.}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
+
+\item{plot_spacing}{Numerical value specifying the vertical spacing between each plot in the stack.
+Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_unit}.}
+
+\item{spacing_unit}{Unit to use in specifying vertical spacing between plots.  Default is "cm".}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }
