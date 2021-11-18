@@ -22,7 +22,9 @@ Iterate_VlnPlot(
 
 \item{gene_list}{list of genes to plot.}
 
-\item{colors_use}{color scheme to use.}
+\item{colors_use}{color palette to use for plotting.  By default if number of levels plotted is less than
+or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
+both from \code{DiscretePalette_scCustomize}.}
 
 \item{pt.size}{point size for plotting.}
 
