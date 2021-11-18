@@ -1,4 +1,4 @@
-## scCustomize 0.6.1 (2021-XX-XX)
+## scCustomize 0.X.X (2021-XX-XX)
 ### Added
 - Added plot spacing control to `StackedVlnPlot` with parameters `plot_spacing` and `spacing_unit`. ([#6](https://github.com/samuel-marsh/scCustomize/issues/6))
 
