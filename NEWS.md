@@ -4,7 +4,7 @@
 - Added `scCustomize_Palette` function select palette to use (simplify internal code).
 
 ### Changes
-- Change 1
+- Changed citation info to reflect global DOI and not version DOI.
 
 ### Fixes
 - Restore package color palette defaults to `Iterate_VlnPlot`.
