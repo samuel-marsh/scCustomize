@@ -335,9 +335,6 @@ Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCE
 
 # Double the space between plots
 Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE, plot_spacing = 0.3)
-
-# Remove spacing between plots
-Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE)
 ```
 
 

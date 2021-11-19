@@ -4,7 +4,7 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: Custom functions for single cell sequencing visualization & analyses.}
+\title{scCustomize: An R package for custom visualization & analyses of single cell sequencing.}
 \description{
 Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
 }
