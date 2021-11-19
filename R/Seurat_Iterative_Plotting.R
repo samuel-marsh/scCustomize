@@ -890,6 +890,10 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
 #' @param dpi dpi for image saving.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @import ggplot2
@@ -919,6 +923,8 @@ Iterate_VlnPlot <- function(
   file_type = NULL,
   single_pdf = FALSE,
   dpi = 600,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -982,14 +988,9 @@ Iterate_VlnPlot <- function(
     stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(num_colors = group_by_length)
-    } else {
-      if (group_by_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 
