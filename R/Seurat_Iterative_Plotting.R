@@ -881,13 +881,19 @@ Iterate_FeaturePlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param gene_list list of genes to plot.
-#' @param colors_use color scheme to use.
+#' @param colors_use color palette to use for plotting.  By default if number of levels plotted is less than
+#' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
+#' both from `DiscretePalette_scCustomize`.
 #' @param pt.size point size for plotting.
 #' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
 #' @param dpi dpi for image saving.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @import ggplot2
@@ -917,6 +923,8 @@ Iterate_VlnPlot <- function(
   file_type = NULL,
   single_pdf = FALSE,
   dpi = 600,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -965,9 +973,26 @@ Iterate_VlnPlot <- function(
     stop("File type set to non-PDF type but 'single_pdf = TRUE' also selected.  Confirm output desired and re-run function.")
   }
 
-
   # Check whether features are present in object
   gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
+
+  # Set default color palette based on number of levels being plotted
+  if (is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  } else {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+  }
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && ggplot_default_colors) {
+    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+  }
+  if (is.null(x = colors_use)) {
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+  }
 
   # Add one time raster warning
   if (single_pdf && pt.size != 0 && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {

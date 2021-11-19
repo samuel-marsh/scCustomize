@@ -14,6 +14,8 @@ Iterate_VlnPlot(
   file_type = NULL,
   single_pdf = FALSE,
   dpi = 600,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 )
 }
@@ -22,7 +24,9 @@ Iterate_VlnPlot(
 
 \item{gene_list}{list of genes to plot.}
 
-\item{colors_use}{color scheme to use.}
+\item{colors_use}{color palette to use for plotting.  By default if number of levels plotted is less than
+or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
+both from \code{DiscretePalette_scCustomize}.}
 
 \item{pt.size}{point size for plotting.}
 
@@ -33,6 +37,12 @@ Iterate_VlnPlot(
 \item{single_pdf}{saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.}
 
 \item{dpi}{dpi for image saving.}
+
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
+
+\item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
+groups plotted is greater than 36.  Default = 123.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 

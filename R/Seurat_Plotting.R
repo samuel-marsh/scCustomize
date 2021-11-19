@@ -437,14 +437,9 @@ Split_FeatureScatter <- function(
   }
 
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(num_colors = group_by_length)
-    } else {
-      if (group_by_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 
@@ -642,10 +637,14 @@ Meta_Highlight_Plot <- function(
 #' groups plotted is greater than 36.  Default = 123.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param plot_spacing Numerical value specifying the vertical spacing between each plot in the stack.
+#' Default is 0.15 ("cm").  Spacing dependent on unit provided to `spacing_unit`.
+#' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
 #'
+#' @import ggplot2
 #' @import patchwork
 #' @importFrom purrr map map_dbl map2
 #' @importFrom Seurat VlnPlot
@@ -674,6 +673,8 @@ Stacked_VlnPlot <- function(
   colors_use = NULL,
   color_seed = 123,
   ggplot_default_colors = FALSE,
+  plot_spacing = 0.15,
+  spacing_unit = "cm",
   ...
 ) {
   # Check Seurat
@@ -711,19 +712,17 @@ Stacked_VlnPlot <- function(
     stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(num_colors = group_by_length)
-    } else {
-      if (group_by_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 
+  # Setup plot spacing/margin parameter
+  plot_margin <- margin(t = plot_spacing, r = 0, b = plot_spacing, l = 0, unit = spacing_unit)
+
   # Create plots
-  plot_list <- map(all_found_features, function(x) Modify_VlnPlot(seurat_object = seurat_object, features = x, cols = colors_use, group.by = group.by, split.by = split.by, idents = idents, ...))
+  plot_list <- map(all_found_features, function(x) Modify_VlnPlot(seurat_object = seurat_object, features = x, cols = colors_use, group.by = group.by, split.by = split.by, idents = idents, plot_margin = plot_margin, ...))
 
   # Add back x-axis title to bottom plot. patchwork is going to support this?
   # Add ability to rotate the X axis labels to the function call
@@ -934,15 +933,7 @@ DimPlot_scCustom <- function(
 
   # set default plot colors
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(num_colors = group_by_length)
-    } else {
-      if (group_by_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
-    }
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
 
   # Set uniform point size is pt.size = NULL (based on plot with most cells)

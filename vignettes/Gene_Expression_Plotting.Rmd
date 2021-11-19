@@ -316,9 +316,6 @@ human_colors_list <- c("dodgerblue", "navy", "forestgreen", "darkorange2", "dark
 Stacked_VlnPlot(seurat_object = marsh_human_pm, features = gene_list_plot, x_lab_rotate = TRUE, colors_use = human_colors_list)
 ```
 
-#### Adjusting Plot Size
-Please note that even more so than many other plots you will need to adjust the height and width of these plots significantly depending on the number of features and number of identities being plotted.
-
 #### `Stacked_VlnPlot` also supports any additional parameters that are part of `Seurat::VlnPlot`
 For instance splitting plot by meta data feature.
 ```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Example plot adding the `split.by` parameter toview expression by sample and cell type.*"}
@@ -327,6 +324,36 @@ sample_colors <- c("dodgerblue", "forestgreen", "firebrick1")
 # Create Plots
 Stacked_VlnPlot(seurat_object = marsh_human_pm, features = gene_list_plot, x_lab_rotate = TRUE, colors_use = sample_colors, split.by = "orig.ident")
 ```
+
+
+#### Adjust Vertical Plot Spacing  
+Depending on number of genes plotted and user preferences it may be helpful to change the vertical spacing between plots.  This can be done using the `plot_spacing` and `spacing_unit` parameters.
+
+```{r eval=FALSE}
+# Default plot spacing (plot_spacing = 0.15 and spacing_unit = "cm")
+Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE)
+
+# Double the space between plots
+Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE, plot_spacing = 0.3)
+
+# Remove spacing between plots
+Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE)
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=10}
+# Default plot spacing (plot_spacing = 0.15 and spacing_unit = "cm")
+p1 <- Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE)
+
+# Double the space between plots
+p2 <- Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE, plot_spacing = 0.5)
+
+wrap_plots(p1, p2, ncol = 2)
+```
+
+
+#### Adjusting Plot Size
+Please note that even more so than many other plots you will need to adjust the height and width of these plots significantly depending on the number of features and number of identities being plotted.
 
 #### `Stacked_VlnPlot` also supports plotting of object\@meta.data variables (i.e. mito% or module scores).
 ```{r, fig.height=6, fig.width=13, fig.align='center'}
