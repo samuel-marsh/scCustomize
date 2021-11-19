@@ -41,7 +41,7 @@ Iterate_PC_Loading_Plots <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -147,7 +147,7 @@ Iterate_DimPlot_bySample <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -304,7 +304,7 @@ Iterate_Cluster_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -519,7 +519,7 @@ Iterate_Meta_Highlight_Plot <- function(
   Idents(seurat_object) <- meta_data_column
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -732,11 +732,6 @@ Iterate_FeaturePlot_scCustom <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # # Check split.by
-  # if (!is.null(x = split.by)) {
-  #   stop("For iteration of split FeaturePlots please use `Split_FeaturePlot` function.")
-  # }
-
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
 
@@ -748,7 +743,7 @@ Iterate_FeaturePlot_scCustom <- function(
   }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -934,7 +929,7 @@ Iterate_VlnPlot <- function(
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -1122,7 +1117,7 @@ Iterate_Plot_Density_Custom <- function(
   }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
@@ -1318,7 +1313,7 @@ Iterate_Plot_Density_Joint <- function(
   }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-  if (file_path == "") {
+  if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
   }
 
