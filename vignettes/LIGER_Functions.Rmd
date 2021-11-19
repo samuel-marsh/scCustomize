@@ -273,6 +273,10 @@ seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UM
 ```
 
 
+## Add Mitochondrial & Ribosomal Percentages  
+For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vingette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo_LIGER` which is analogous to `Add_Mito_Ribo_Seurat`.
+
+
 ## Gene Utilities  
 As discussed in [helpers vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html), the `Gene_Present` function can be used to check if list of genes are present in a LIGER object.  
 
