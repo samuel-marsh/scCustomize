@@ -71,4 +71,4 @@ remotes::install_github(repo = "samuel-marsh/scCustomize", ref = "develop")
 ```
 
 <sup>\*</sup>*Note: While this branch is typically mostly stable it may contain breaking issues/bugs.*  
-I do try and keep [development ChangeLog](https://github.com/samuel-marsh/scCustomize/blob/develop/News.md) up to date so it's easier to follow changes than reading commit history.
+I do try and keep [development ChangeLog](https://github.com/samuel-marsh/scCustomize/blob/develop/NEWS.md) up to date so it's easier to follow changes than reading commit history.

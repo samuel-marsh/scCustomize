@@ -28,7 +28,7 @@ installing scCustomize please make sure to update to \>= v0.2.0.
 Full releases will be available on the master branch with version scheme
 vX.X.X.  
 See
-[News.md](https://github.com/samuel-marsh/scCustomize/blob/master/News.md)
+[NEWS.md](https://github.com/samuel-marsh/scCustomize/blob/master/NEWS.md)
 file for ChangeLog with additions, changes, and fixes contained in each
 release.
 
@@ -39,7 +39,7 @@ installation command. Version scheme vX.X.X.yyyy.
 <sup>\*</sup>*Note: While this branch is typically mostly stable it may
 contain breaking issues/bugs.*  
 I do try and keep [development
-ChangeLog](https://github.com/samuel-marsh/scCustomize/blob/develop/News.md)
+ChangeLog](https://github.com/samuel-marsh/scCustomize/blob/develop/NEWS.md)
 up to date so it’s easier to follow changes than reading commit history.
 
 ## Vignettes/Tutorials
