@@ -7,7 +7,8 @@
 - Changed citation info to reflect global DOI and not version DOI.
 
 ### Fixes
-- Restore package color palette defaults to `Iterate_VlnPlot`.
+- Restore package color palette defaults to `Iterate_VlnPlot`.  
+- Fix `Iterate_...` function checks for file path parameter if `file_path = NULL`.
   
 ## scCustomize 0.6.0 (2021-11-16)
 ### Added

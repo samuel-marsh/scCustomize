@@ -880,6 +880,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from `DiscretePalette_scCustomize`.
 #' @param pt.size point size for plotting.
+#' @param group.by Name of one or more metadata columns to group (color) plot by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
@@ -913,6 +915,7 @@ Iterate_VlnPlot <- function(
   gene_list,
   colors_use = NULL,
   pt.size = NULL,
+  group.by = NULL,
   file_path = NULL,
   file_name = NULL,
   file_type = NULL,

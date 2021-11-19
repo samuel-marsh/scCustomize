@@ -9,6 +9,7 @@ Iterate_VlnPlot(
   gene_list,
   colors_use = NULL,
   pt.size = NULL,
+  group.by = NULL,
   file_path = NULL,
   file_name = NULL,
   file_type = NULL,
@@ -29,6 +30,9 @@ or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow
 both from \code{DiscretePalette_scCustomize}.}
 
 \item{pt.size}{point size for plotting.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) plot by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{file_name}{name suffix and file extension.}
 

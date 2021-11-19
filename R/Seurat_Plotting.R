@@ -833,7 +833,7 @@ DotPlot_scCustom <- function(
 #' @param pt.size Adjust point size for plotting.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
-#' pass 'ident' to group by identity class.
+#' default is the current active.ident of the object.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.

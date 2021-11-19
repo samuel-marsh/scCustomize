@@ -39,7 +39,7 @@ both from \code{DiscretePalette_scCustomize}.}
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
 \item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
-pass 'ident' to group by identity class.}
+default is the current active.ident of the object.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
 
