@@ -455,14 +455,9 @@ Plot_By_Cluster_LIGER <- function(
   cluster_length <- length(x = unique(x = liger_object@clusters))
 
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(cluster_length)
-    } else {
-      if (cluster_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = cluster_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = cluster_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 
@@ -700,14 +695,9 @@ Plot_By_Meta_LIGER <- function(
   meta_length <- length(x = unique(x = liger_object@cell.data[[group_by]]))
 
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(meta_length)
-    } else {
-      if (meta_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = meta_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = meta_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 

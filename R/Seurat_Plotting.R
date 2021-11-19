@@ -437,14 +437,9 @@ Split_FeatureScatter <- function(
   }
 
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(num_colors = group_by_length)
-    } else {
-      if (group_by_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 
@@ -717,14 +712,9 @@ Stacked_VlnPlot <- function(
     stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
-      colors_use <- Hue_Pal(num_colors = group_by_length)
-    } else {
-      if (group_by_length <= 36) {
-        colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-      } else {
-        colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-      }
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
 
