@@ -39,6 +39,7 @@ Imports:
     SeuratObject (>= 4.0.3),
     stringi,
     stringr,
+    tibble,
     tidyr,
     tidyselect,
     viridis
