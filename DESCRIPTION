@@ -25,6 +25,7 @@ Imports:
     ggprism,
     ggrepel,
     glue,
+    janitor,
     magrittr,
     Matrix,
     paletteer,
