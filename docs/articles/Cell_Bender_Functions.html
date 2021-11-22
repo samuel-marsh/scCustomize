@@ -120,12 +120,13 @@
 
       
 
-      </header><script src="Cell_Bender_Functions_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><script src="Cell_Bender_Functions_files/header-attrs-2.11/header-attrs.js"></script><script src="Cell_Bender_Functions_files/kePrint-0.0.1/kePrint.js"></script><link href="Cell_Bender_Functions_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cell Bender Functionality &amp; Plotting</h1>
             
-            <h4 class="date">Compiled: November 19, 2021</h4>
+            <h4 class="date">Compiled: November 22, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/master/vignettes/Cell_Bender_Functions.Rmd"><code>vignettes/Cell_Bender_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Cell_Bender_Functions.Rmd</code></div>
@@ -233,6 +234,422 @@ p.caption {
     raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, min_features <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
+<div id="prepost-cell-bender-analysis" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prepost-cell-bender-analysis" class="anchor"></a>Pre/Post Cell Bender Analysis</h2>
+<p>It can be very important with tools like Cell Bender to analyze how much the process has effected data on a per cell basis.</p>
+<div id="add-prepost-to-meta-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#add-prepost-to-meta-data" class="anchor"></a>Add Pre/Post to Meta Data</h3>
+<p>scCustomize includes function <code>Add_Cell_Bender_Diff</code> to help with this process. This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns (“nCount_Diff” and “nFeature_Diff”) to the object meta.data.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">astrocytes_cortex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Bender_Diff.html">Add_Cell_Bender_Diff</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">astrocytes_cortex</span>, raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>,
+    cell_bender_assay_name <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">astrocytes_cortex</span><span class="op">@</span><span class="va">meta.data</span>, <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<table class="table table table-bordered table-condensed table-responsive table-striped">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+orig.ident
+</th>
+<th style="text-align:right;">
+nCount_RNA
+</th>
+<th style="text-align:right;">
+nFeature_RNA
+</th>
+<th style="text-align:right;">
+nCount_RAW
+</th>
+<th style="text-align:right;">
+nFeature_RAW
+</th>
+<th style="text-align:right;">
+percent_mito
+</th>
+<th style="text-align:right;">
+percent_ribo
+</th>
+<th style="text-align:right;">
+percent_mito_ribo
+</th>
+<th style="text-align:right;">
+nCount_SCT
+</th>
+<th style="text-align:right;">
+nFeature_SCT
+</th>
+<th style="text-align:left;">
+SCT_snn_res.0.6
+</th>
+<th style="text-align:left;">
+seurat_clusters
+</th>
+<th style="text-align:right;">
+nFeature_Diff
+</th>
+<th style="text-align:right;">
+nCount_Diff
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+WT-2a_AAACCCACACACCAGC-1
+</td>
+<td style="text-align:left;">
+WT-2a
+</td>
+<td style="text-align:right;">
+3207
+</td>
+<td style="text-align:right;">
+1699
+</td>
+<td style="text-align:right;">
+3472
+</td>
+<td style="text-align:right;">
+1852
+</td>
+<td style="text-align:right;">
+0.0311818
+</td>
+<td style="text-align:right;">
+0.0311818
+</td>
+<td style="text-align:right;">
+0.0623636
+</td>
+<td style="text-align:right;">
+3103
+</td>
+<td style="text-align:right;">
+1695
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+153
+</td>
+<td style="text-align:right;">
+265
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT-2a_AAACGAAGTATCGCTA-1
+</td>
+<td style="text-align:left;">
+WT-2a
+</td>
+<td style="text-align:right;">
+2089
+</td>
+<td style="text-align:right;">
+1217
+</td>
+<td style="text-align:right;">
+2326
+</td>
+<td style="text-align:right;">
+1354
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.0478698
+</td>
+<td style="text-align:right;">
+0.0478698
+</td>
+<td style="text-align:right;">
+2468
+</td>
+<td style="text-align:right;">
+1216
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:right;">
+137
+</td>
+<td style="text-align:right;">
+237
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT-2a_AAACGAATCGACCATA-1
+</td>
+<td style="text-align:left;">
+WT-2a
+</td>
+<td style="text-align:right;">
+3327
+</td>
+<td style="text-align:right;">
+1677
+</td>
+<td style="text-align:right;">
+3687
+</td>
+<td style="text-align:right;">
+1882
+</td>
+<td style="text-align:right;">
+0.2103998
+</td>
+<td style="text-align:right;">
+0.4207995
+</td>
+<td style="text-align:right;">
+0.6311993
+</td>
+<td style="text-align:right;">
+3148
+</td>
+<td style="text-align:right;">
+1672
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:right;">
+205
+</td>
+<td style="text-align:right;">
+360
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT-2a_AAACGCTCAAACTCGT-1
+</td>
+<td style="text-align:left;">
+WT-2a
+</td>
+<td style="text-align:right;">
+2221
+</td>
+<td style="text-align:right;">
+1236
+</td>
+<td style="text-align:right;">
+2472
+</td>
+<td style="text-align:right;">
+1378
+</td>
+<td style="text-align:right;">
+0.0900495
+</td>
+<td style="text-align:right;">
+0.1350743
+</td>
+<td style="text-align:right;">
+0.2251238
+</td>
+<td style="text-align:right;">
+2504
+</td>
+<td style="text-align:right;">
+1235
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:right;">
+142
+</td>
+<td style="text-align:right;">
+251
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT-2a_AAACGCTCATGTTACG-1
+</td>
+<td style="text-align:left;">
+WT-2a
+</td>
+<td style="text-align:right;">
+2685
+</td>
+<td style="text-align:right;">
+1518
+</td>
+<td style="text-align:right;">
+2999
+</td>
+<td style="text-align:right;">
+1694
+</td>
+<td style="text-align:right;">
+0.0744879
+</td>
+<td style="text-align:right;">
+0.8193669
+</td>
+<td style="text-align:right;">
+0.8938547
+</td>
+<td style="text-align:right;">
+2720
+</td>
+<td style="text-align:right;">
+1509
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:right;">
+176
+</td>
+<td style="text-align:right;">
+314
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="calculate-per-sample-averages" class="section level3">
+<h3 class="hasAnchor">
+<a href="#calculate-per-sample-averages" class="anchor"></a>Calculate per sample averages</h3>
+<p>We can then use <code>Median_Stats</code> to calculate per sample averages across all cells by supplying the new variables to the <code>median_var</code> parameter.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">astrocytes_cortex</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nCount_Diff"</span>,
+    <span class="st">"nFeature_Diff"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<table class="table table table-bordered table-condensed table-responsive table-striped">
+<thead><tr>
+<th style="text-align:left;">
+orig.ident
+</th>
+<th style="text-align:right;">
+Median_nCount_RNA
+</th>
+<th style="text-align:right;">
+Median_nFeature_RNA
+</th>
+<th style="text-align:right;">
+Median_percent_mito
+</th>
+<th style="text-align:right;">
+Median_percent_ribo
+</th>
+<th style="text-align:right;">
+Median_percent_mito_ribo
+</th>
+<th style="text-align:right;">
+Median_nCount_Diff
+</th>
+<th style="text-align:right;">
+Median_nFeature_Diff
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+WT-2a
+</td>
+<td style="text-align:right;">
+2949.5
+</td>
+<td style="text-align:right;">
+1527.5
+</td>
+<td style="text-align:right;">
+0.0224121
+</td>
+<td style="text-align:right;">
+0.0673027
+</td>
+<td style="text-align:right;">
+0.0948317
+</td>
+<td style="text-align:right;">
+280
+</td>
+<td style="text-align:right;">
+156
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT-6a
+</td>
+<td style="text-align:right;">
+2765.0
+</td>
+<td style="text-align:right;">
+1451.5
+</td>
+<td style="text-align:right;">
+0.0352609
+</td>
+<td style="text-align:right;">
+0.0656276
+</td>
+<td style="text-align:right;">
+0.1065341
+</td>
+<td style="text-align:right;">
+279
+</td>
+<td style="text-align:right;">
+154
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Totals (All Cells)
+</td>
+<td style="text-align:right;">
+2875.0
+</td>
+<td style="text-align:right;">
+1498.5
+</td>
+<td style="text-align:right;">
+0.0293169
+</td>
+<td style="text-align:right;">
+0.0665447
+</td>
+<td style="text-align:right;">
+0.1006627
+</td>
+<td style="text-align:right;">
+279
+</td>
+<td style="text-align:right;">
+156
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="dual-assay-plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dual-assay-plotting" class="anchor"></a>Dual Assay Plotting</h2>
@@ -245,12 +662,12 @@ p.caption {
 <div id="ambient-rna-gene" class="section level4">
 <h4 class="hasAnchor">
 <a href="#ambient-rna-gene" class="anchor"></a>Ambient RNA gene</h4>
-<p>First let’s plot gene that represents ambient RNA as it’s restricted in expression to neurons (synaptic gene). If Cell Bender has worked well we expect that expression of this gene will be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p>First let’s plot gene that represents ambient RNA as it’s restricted in expression to neurons (synaptic gene). If Cell Bender has worked well we expect that expression of this gene will be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="non-ambient-rna-gene" class="section level4">
 <h4 class="hasAnchor">
 <a href="#non-ambient-rna-gene" class="anchor"></a>Non-Ambient RNA gene</h4>
-<p>Now let’s plot normally astrocyte restricted gene. If Cell Bender has worked well we expect that expression of this gene shouldn’t be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"></p>
+<p>Now let’s plot normally astrocyte restricted gene. If Cell Bender has worked well we expect that expression of this gene shouldn’t be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
