@@ -1,3 +1,15 @@
+## scCustomize 0.6.X (2021-XX-XX)
+### Added
+- Addition 1
+
+### Changes
+- Change 1
+
+### Fixes
+- Fixed barcode name duplication checks in `Merge_Sparse_Data_All`. ([#8](https://github.com/samuel-marsh/scCustomize/issues/8))
+- Fixed package imports in DESCRIPTION to avoid installation errors.
+ 
+
 ## scCustomize 0.6.1 (2021-11-19)
 ### Added
 - Added plot spacing control to `StackedVlnPlot` with parameters `plot_spacing` and `spacing_unit`. ([#6](https://github.com/samuel-marsh/scCustomize/issues/6))
