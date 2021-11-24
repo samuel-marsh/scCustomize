@@ -373,18 +373,39 @@ Merge_Sparse_Data_All <- function(
   prefix = TRUE,
   cell_id_delimiter = "_"
 ) {
-  # Check all barcodes are unique
+  # Check all barcodes are unique to begin with
   duplicated_barcodes <- matrix_list %>%
     lapply(colnames) %>%
-    Reduce("intersect",.)
+    unlist() %>%
+    duplicated() %>%
+    any()
 
-  if (length(x = duplicated_barcodes)  > 0 && is.null(x = add_cell_ids)) {
+  if (duplicated_barcodes && is.null(x = add_cell_ids)) {
     stop("There are overlapping cell barcodes present in the input matrices.  Please provide prefixes/suffixes to 'add_cell_ids' parameter to make unique.")
   }
 
   # Check right number of suffix/prefix ids are provided
   if (!is.null(x = add_cell_ids) && length(x = add_cell_ids) != length(x = matrix_list)) {
     stop("The number of prefixes in `add_cell_ids` must be equal to the number of matrices supplied to `matrix_list`.")
+  }
+
+  if (!is.null(x = add_cell_ids)) {
+    # check barcodes will be unique after adding prefixes/suffixes
+    all_names <- lapply(1:length(x = matrix_list), function(i){
+      cell_names <- colnames(matrix_list[[i]])
+    })
+
+    new_names <- lapply(X = 1:length(x = matrix_list), function(x){
+      colnames(matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
+    })
+
+    are_duplicates <- unlist(new_names) %>%
+      duplicated() %>%
+      any()
+
+    if (are_duplicates) {
+      stop("Supplied 'add_cell_ids' will result in overlapping barcodes names.  If provided cell prefixes/suffixes are not unique please change and re-run.")
+    }
   }
 
   # Use summary to convert the sparse matrices into three-column indexes where i are the
