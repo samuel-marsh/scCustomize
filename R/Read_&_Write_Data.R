@@ -1071,7 +1071,7 @@ Read_Metrics_10X <- function(
   }
 
   # Add file path for 10X default directories
-  if (default_10X && !is_null(x = secondary_path)) {
+  if (default_10X && !is.null(x = secondary_path)) {
     stop("If 'default_10X = TRUE' then 'secondary_path' must be NULL.")
   }
   if (default_10X) {
