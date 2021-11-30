@@ -8,6 +8,7 @@
 ### Fixes
 - Fixed barcode name duplication checks in `Merge_Sparse_Data_All`. ([#8](https://github.com/samuel-marsh/scCustomize/issues/8))
 - Fixed package imports in DESCRIPTION to avoid installation errors.
+- Fixed NULL check in `Read_Metrics_10X`.
  
 
 ## scCustomize 0.6.1 (2021-11-19)
