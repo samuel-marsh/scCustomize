@@ -1,5 +1,5 @@
 pandoc: 2.14.0.3
-pkgdown: 1.6.1
+pkgdown: 2.0.0
 pkgdown_sha: ~
 articles:
   Cell_Bender_Functions: Cell_Bender_Functions.html
@@ -16,5 +16,9 @@ articles:
   Read_and_Write_Functions: Read_and_Write_Functions.html
   Sequencing_QC_Plots: Sequencing_QC_Plots.html
   Statistics: Statistics.html
+<<<<<<< HEAD
 last_built: 2021-11-22T13:24Z
+=======
+last_built: 2021-12-01T15:41Z
+>>>>>>> develop
 

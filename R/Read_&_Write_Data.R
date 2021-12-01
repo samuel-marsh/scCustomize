@@ -808,7 +808,7 @@ Read10X_Multi_Directory <- function(
     sample_list <- Pull_Directory_List(base_path = base_path)
   }
   # Add file path for 10X default directories
-  if (default_10X_path && !is_null(x = secondary_path)) {
+  if (default_10X_path && !is.null(x = secondary_path)) {
     stop("If 'default_10X_path = TRUE' then 'secondary_path' must be NULL.")
   }
   if (default_10X_path) {
@@ -942,7 +942,7 @@ Read10X_h5_Multi_Directory <- function(
   }
 
   # Add file path for 10X default directories
-  if (default_10X_path && !is_null(x = secondary_path)) {
+  if (default_10X_path && !is.null(x = secondary_path)) {
     stop("If 'default_10X_path = TRUE' then 'secondary_path' must be NULL.")
   }
   if (default_10X_path) {
@@ -1071,7 +1071,7 @@ Read_Metrics_10X <- function(
   }
 
   # Add file path for 10X default directories
-  if (default_10X && !is_null(x = secondary_path)) {
+  if (default_10X && !is.null(x = secondary_path)) {
     stop("If 'default_10X = TRUE' then 'secondary_path' must be NULL.")
   }
   if (default_10X) {

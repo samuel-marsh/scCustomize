@@ -1,5 +1,6 @@
 ---
 template:
+  bootstrap: 5
   params:
       bootswatch: flatly
 
