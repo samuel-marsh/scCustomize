@@ -1,6 +1,9 @@
 ---
 template:
   bootstrap: 5
+  bslib:
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
   params:
       bootswatch: flatly
 
