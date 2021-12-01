@@ -4,133 +4,101 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="scCustomize">
 <title>Plotting #2: QC Plots • scCustomize</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Plotting #2: QC Plots">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plotting #2: QC Plots">
 <meta property="og:description" content="scCustomize">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">Getting Started</a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">scCustomize</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1.0004</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-2">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../index.html">Getting Started</a>
 </li>
-<li>
-  <a href="../articles/Installation.html">Install</a>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/Installation.html">Install</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="dropdown-header">Plotting Vignettes</li>
-    <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
-    </li>
-    <li>
-      <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
-    </li>
-    <li>
-      <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
-    </li>
-    <li>
-      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Helpers &amp; Utilities</li>
-    <li>
-      <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
-    </li>
-    <li>
-      <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
-    </li>
-    <li>
-      <a href="../articles/Misc_Functions.html">Misc Functions</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Other Package Interactivity/Functions</li>
-    <li>
-      <a href="../articles/LIGER_Functions.html">LIGER Plotting &amp; Functionality</a>
-    </li>
-    <li>
-      <a href="../articles/Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">News/Changelog</a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="../articles/FAQ.html">FAQ</a>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/samuel-marsh/scCustomize/">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+    <h6 class="dropdown-header" data-toc-skip>Plotting Vignettes</h6>
+    <a class="dropdown-item" href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+    <a class="dropdown-item" href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
+    <a class="dropdown-item" href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
+    <a class="dropdown-item" href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+    <a class="dropdown-item" href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Helpers &amp; Utilities</h6>
+    <a class="dropdown-item" href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
+    <a class="dropdown-item" href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
+    <a class="dropdown-item" href="../articles/Statistics.html">Statistics Functions</a>
+    <a class="dropdown-item" href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    <a class="dropdown-item" href="../articles/Misc_Functions.html">Misc Functions</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Other Package Interactivity/Functions</h6>
+    <a class="dropdown-item" href="../articles/LIGER_Functions.html">LIGER Plotting &amp; Functionality</a>
+    <a class="dropdown-item" href="../articles/Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
   </div>
-<!--/.container -->
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">News/Changelog</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/FAQ.html">FAQ</a>
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/samuel-marsh/scCustomize/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
-
-      </header><script src="QC_Plots_files/header-attrs-2.11/header-attrs.js"></script><script src="QC_Plots_files/kePrint-0.0.1/kePrint.js"></script><link href="QC_Plots_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+    
+  </div>
+</nav><div class="container template-article">
+<script src="QC_Plots_files/kePrint-0.0.1/kePrint.js"></script><link href="QC_Plots_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Plotting #2: QC Plots</h1>
+  <main id="main"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Plotting #2: QC Plots</h1>
             
-            <h4 class="date">Compiled: November 19, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 01, 2021</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/master/vignettes/QC_Plots.Rmd"><code>vignettes/QC_Plots.Rmd</code></a></small>
-      <div class="hidden name"><code>QC_Plots.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/QC_Plots.Rmd" class="external-link"><code>vignettes/QC_Plots.Rmd</code></a></small>
+      <div class="d-none name"><code>QC_Plots.Rmd</code></div>
     </div>
 
     
@@ -141,20 +109,20 @@ p.caption {
   font-size: 0.9em;
 }
 </style>
-<div id="qc-plots" class="section level1">
-<h1 class="hasAnchor">
-<a href="#qc-plots" class="anchor"></a>QC Plots</h1>
+<div class="section level1">
+<h1 id="qc-plots">QC Plots<a class="anchor" aria-label="anchor" href="#qc-plots"></a>
+</h1>
 <p>One of the first steps in all scRNA-seq analyses is performing a number of QC checks and plots so that data can be appropriately filtered. scCustomize contains a number of functions that can be used to quickly and easily generate some of the most relevant QC plots.</p>
 <p>For this tutorial, I will be utilizing HCA bone marrow cell data from the SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize">scCustomize</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs">qs</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span>
 
 <span class="co"># Load Example Dataset</span>
-<span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu">hcabm40k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/hcabm40k.SeuratData/man/hcabm40k.html">hcabm40k</a></span>
+<span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu">hcabm40k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/hcabm40k.SeuratData/man/hcabm40k.html" class="external-link">hcabm40k</a></span>
 
 <span class="co"># Add pseudo group variable just for this vignette</span>
 <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM1"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span>
@@ -162,16 +130,16 @@ p.caption {
 
 <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM5"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span>
     <span class="st">"MantonBM6"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM7"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM8"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 2"</span></code></pre></div>
-<div id="add-mitochondrial-and-ribosomal-gene-percentages" class="section level2">
-<h2 class="hasAnchor">
-<a href="#add-mitochondrial-and-ribosomal-gene-percentages" class="anchor"></a>Add Mitochondrial and Ribosomal Gene Percentages</h2>
+<div class="section level2">
+<h2 id="add-mitochondrial-and-ribosomal-gene-percentages">Add Mitochondrial and Ribosomal Gene Percentages<a class="anchor" aria-label="anchor" href="#add-mitochondrial-and-ribosomal-gene-percentages"></a>
+</h2>
 <p>scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot. If you are using mouse, human, or marmoset data all you need to do is specify the <code>species</code> parameter.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># These defaults can be run just by providing accepted species name</span>
 <span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
 <p><em>NOTE: There is analogous function for LIGER objects (see: <code>Add_Mito_Ribo_LIGER</code>) but QC plotting functions currently only support Seurat objects.</em></p>
 To view list of accepted values for default species names simply set <code>list_species_names = TRUE</code>.
-<table class="table table table-bordered table-condensed table-responsive table-striped">
+<table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
 Mouse_Options
@@ -301,8 +269,8 @@ NA
     ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span>
 
 <span class="co"># Using feature name lists</span>
-<span class="va">mito_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span>
-<span class="va">ribo_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span>
+<span class="va">mito_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span>
+<span class="va">ribo_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span>
 <span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>,
     ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span>
 
@@ -310,15 +278,16 @@ NA
 <span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>,
     ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="plotting-qc-metrics" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting-qc-metrics" class="anchor"></a>Plotting QC Metrics</h2>
+<div class="section level2">
+<h2 id="plotting-qc-metrics">Plotting QC Metrics<a class="anchor" aria-label="anchor" href="#plotting-qc-metrics"></a>
+</h2>
 <p>scCustomize has a number of quick QC plotting options for ease of use.<br><em>NOTE: Most scCustomize plotting functions contain <code>...</code> parameter to allow user to supply any of the parameters for the original Seurat function that is being used under the hood.</em></p>
 </div>
-<div id="vlnplot-based-qc-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#vlnplot-based-qc-plots" class="anchor"></a><code>VlnPlot</code>-Based QC Plots</h2>
-<p>scCustomize contains 4 functions which wrap <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html">Seurat::VlnPlot()</a></code>.</p>
+<div class="section level2">
+<h2 id="vlnplot-based-qc-plots">
+<code>VlnPlot</code>-Based QC Plots<a class="anchor" aria-label="anchor" href="#vlnplot-based-qc-plots"></a>
+</h2>
+<p>scCustomize contains 4 functions which wrap <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot()</a></code>.</p>
 <ul>
 <li>
 <code>QC_Plots_Genes</code> Plots genes per cell/nucleus.</li>
@@ -341,11 +310,11 @@ NA
 <span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span><span class="op">)</span>
 <span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_Mito.html">QC_Plots_Mito</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, high_cutoff <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p><img src="QC_Plots_files/figure-html/unnamed-chunk-7-1.png" width="1248"></p>
-<div id="additional-parameters" class="section level3">
-<h3 class="hasAnchor">
-<a href="#additional-parameters" class="anchor"></a>Additional parameters</h3>
+<div class="section level3">
+<h3 id="additional-parameters">Additional parameters<a class="anchor" aria-label="anchor" href="#additional-parameters"></a>
+</h3>
 <p>In addition to being able to supply Seurat parameters with <code>...</code> these plots like many others in scCustomize contain other additional parameters to customize plot output without need for post-plot ggplot2 modifications</p>
 <ul>
 <li>
@@ -362,7 +331,7 @@ NA
 <span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0.1</span>,
     y_axis_log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="QC_Plots_files/figure-html/unnamed-chunk-8-1.png" alt="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*" width="1248"><p class="caption">
 <em>Setting <code>y_axis_log</code> can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.</em>
@@ -370,10 +339,11 @@ NA
 </div>
 </div>
 </div>
-<div id="featurescatter-based-qc-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#featurescatter-based-qc-plots" class="anchor"></a><code>FeatureScatter</code>-Based QC Plots</h2>
-<p>scCustomize contains 3 functions which wrap <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html">Seurat::FeatureScatter()</a></code> with added visualization of potential cutoff thresholds and some additional functionality:</p>
+<div class="section level2">
+<h2 id="featurescatter-based-qc-plots">
+<code>FeatureScatter</code>-Based QC Plots<a class="anchor" aria-label="anchor" href="#featurescatter-based-qc-plots"></a>
+</h2>
+<p>scCustomize contains 3 functions which wrap <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter()</a></code> with added visualization of potential cutoff thresholds and some additional functionality:</p>
 <ul>
 <li>
 <code>QC_Plot_UMIvsGene</code> Plots genes vs UMIs per cell/nucleus</li>
@@ -383,9 +353,9 @@ NA
 <li>
 <code>QC_Plot_UMIvsFeature</code> Plots UMIs vs. “feature” per cell/nucleus. Using parameter <code>feature1</code> to allow plotting of any applicable named feature in object@meta.data slot.</li>
 </ul>
-<div id="newmodified-functionality" class="section level3">
-<h3 class="hasAnchor">
-<a href="#newmodified-functionality" class="anchor"></a>New/Modified functionality</h3>
+<div class="section level3">
+<h3 id="newmodified-functionality">New/Modified functionality<a class="anchor" aria-label="anchor" href="#newmodified-functionality"></a>
+</h3>
 <ul>
 <li>Better default color palettes</li>
 <li>
@@ -401,9 +371,9 @@ NA
     high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, high_cutoff_feature <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></code></pre></div>
 <p><img src="QC_Plots_files/figure-html/unnamed-chunk-10-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
-<div id="color-data-by-continuous-meta-data-variable" class="section level3">
-<h3 class="hasAnchor">
-<a href="#color-data-by-continuous-meta-data-variable" class="anchor"></a>Color data by continuous meta data variable</h3>
+<div class="section level3">
+<h3 id="color-data-by-continuous-meta-data-variable">Color data by continuous meta data variable<a class="anchor" aria-label="anchor" href="#color-data-by-continuous-meta-data-variable"></a>
+</h3>
 <p><code>QC_Plot_UMIvsGene</code> contains the ability to color points by continuous meta data variables.<br>
 This can be used to plot % of mito reads in addition to UMI vs. Gene comparisons</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -417,9 +387,9 @@ This can be used to plot % of mito reads in addition to UMI vs. Gene comparison
 </p>
 </div>
 </div>
-<div id="combination-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#combination-plots" class="anchor"></a>Combination Plots</h3>
+<div class="section level3">
+<h3 id="combination-plots">Combination Plots<a class="anchor" aria-label="anchor" href="#combination-plots"></a>
+</h3>
 <p>If you are interested in viewing <code>QC_Plot_UMIvsGene</code> both by discrete grouping variable and by continuous variable without writing function twice you can use <code>combination = TRUE</code> and plot output will contain both plots.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">800</span>,
@@ -431,17 +401,17 @@ This can be used to plot % of mito reads in addition to UMI vs. Gene comparison
 </div>
 </div>
 </div>
-<div id="analyze-median-qc-values-per-samplelibrary" class="section level2">
-<h2 class="hasAnchor">
-<a href="#analyze-median-qc-values-per-samplelibrary" class="anchor"></a>Analyze Median QC Values per Sample/Library</h2>
+<div class="section level2">
+<h2 id="analyze-median-qc-values-per-samplelibrary">Analyze Median QC Values per Sample/Library<a class="anchor" aria-label="anchor" href="#analyze-median-qc-values-per-samplelibrary"></a>
+</h2>
 <p>scCustomize also contains a few helpful functions for returning and plotting the median values for these metrics on per sample/library basis.</p>
-<div id="calculate-median-values-return-data-frame" class="section level3">
-<h3 class="hasAnchor">
-<a href="#calculate-median-values-return-data-frame" class="anchor"></a>Calculate Median Values &amp; Return data.frame</h3>
+<div class="section level3">
+<h3 id="calculate-median-values-return-data-frame">Calculate Median Values &amp; Return data.frame<a class="anchor" aria-label="anchor" href="#calculate-median-values-return-data-frame"></a>
+</h3>
 <p>scCustomize contains function <code>Median_Stats</code> to quickly calculate the medians for basic QC stats (Genes/, UMIs/, %Mito/Cell, etc) and return a data.frame.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></code></pre></div>
-<table class="table table table-bordered table-condensed table-responsive table-striped">
+<table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
 orig.ident
@@ -649,9 +619,9 @@ Totals (All Cells)
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"meta_data_column_name"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="plotting-median-values" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-median-values" class="anchor"></a>Plotting Median Values</h3>
+<div class="section level3">
+<h3 id="plotting-median-values">Plotting Median Values<a class="anchor" aria-label="anchor" href="#plotting-median-values"></a>
+</h3>
 <p>scCustomize also contains a few functions to plot some of these median value calculations, which can be used on their own without need to return data.frame first.</p>
 <ul>
 <li>
@@ -677,40 +647,37 @@ Totals (All Cells)
 <span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, median_var <span class="op">=</span> <span class="st">"percent_ribo"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></code></pre></div>
 <p><img src="QC_Plots_files/figure-html/unnamed-chunk-18-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
-<div id="plot-number-of-cellsnuclei-per-sample" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plot-number-of-cellsnuclei-per-sample" class="anchor"></a>Plot Number of Cells/Nuclei per Sample</h3>
+<div class="section level3">
+<h3 id="plot-number-of-cellsnuclei-per-sample">Plot Number of Cells/Nuclei per Sample<a class="anchor" aria-label="anchor" href="#plot-number-of-cellsnuclei-per-sample"></a>
+</h3>
 <p>scCustomize also contains plotting function to plot the number of cells or nuclei per sample.</p>
 <p>Since the HCA Bone Marrow dataset has exactly the same number of cells per sample we will use the microglia object from the Analysis Plots vignette.</p>
 <p><img src="QC_Plots_files/figure-html/unnamed-chunk-20-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Samuel Marsh.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Samuel Marsh.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
 
+  
 
   </body>
 </html>

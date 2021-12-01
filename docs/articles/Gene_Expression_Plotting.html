@@ -4,132 +4,101 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="scCustomize">
 <title>Plotting #1: Analysis Plots • scCustomize</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Plotting #1: Analysis Plots">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plotting #1: Analysis Plots">
 <meta property="og:description" content="scCustomize">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.1</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">Getting Started</a>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">scCustomize</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1.0004</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-2">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../index.html">Getting Started</a>
 </li>
-<li>
-  <a href="../articles/Installation.html">Install</a>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/Installation.html">Install</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Vignettes
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="dropdown-header">Plotting Vignettes</li>
-    <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
-    </li>
-    <li>
-      <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
-    </li>
-    <li>
-      <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
-    </li>
-    <li>
-      <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Helpers &amp; Utilities</li>
-    <li>
-      <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
-    </li>
-    <li>
-      <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
-    </li>
-    <li>
-      <a href="../articles/Misc_Functions.html">Misc Functions</a>
-    </li>
-    <li class="divider">
-    <li class="dropdown-header">Other Package Interactivity/Functions</li>
-    <li>
-      <a href="../articles/LIGER_Functions.html">LIGER Plotting &amp; Functionality</a>
-    </li>
-    <li>
-      <a href="../articles/Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">News/Changelog</a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="../articles/FAQ.html">FAQ</a>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/samuel-marsh/scCustomize/">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+    <h6 class="dropdown-header" data-toc-skip>Plotting Vignettes</h6>
+    <a class="dropdown-item" href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+    <a class="dropdown-item" href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
+    <a class="dropdown-item" href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
+    <a class="dropdown-item" href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+    <a class="dropdown-item" href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Helpers &amp; Utilities</h6>
+    <a class="dropdown-item" href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
+    <a class="dropdown-item" href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
+    <a class="dropdown-item" href="../articles/Statistics.html">Statistics Functions</a>
+    <a class="dropdown-item" href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    <a class="dropdown-item" href="../articles/Misc_Functions.html">Misc Functions</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Other Package Interactivity/Functions</h6>
+    <a class="dropdown-item" href="../articles/LIGER_Functions.html">LIGER Plotting &amp; Functionality</a>
+    <a class="dropdown-item" href="../articles/Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
   </div>
-<!--/.container -->
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">News/Changelog</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../articles/FAQ.html">FAQ</a>
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/samuel-marsh/scCustomize/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
+    
+  </div>
+</nav><div class="container template-article">
 
-      </header><script src="Gene_Expression_Plotting_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Plotting #1: Analysis Plots</h1>
+<div class="row">
+  <main id="main"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Plotting #1: Analysis Plots</h1>
             
-            <h4 class="date">Compiled: November 19, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 01, 2021</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/master/vignettes/Gene_Expression_Plotting.Rmd"><code>vignettes/Gene_Expression_Plotting.Rmd</code></a></small>
-      <div class="hidden name"><code>Gene_Expression_Plotting.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Gene_Expression_Plotting.Rmd" class="external-link"><code>vignettes/Gene_Expression_Plotting.Rmd</code></a></small>
+      <div class="d-none name"><code>Gene_Expression_Plotting.Rmd</code></div>
     </div>
 
     
@@ -140,35 +109,35 @@ p.caption {
   font-size: 0.9em;
 }
 </style>
-<div id="customizing-plots-for-enhancedsimplified-visualization" class="section level1">
-<h1 class="hasAnchor">
-<a href="#customizing-plots-for-enhancedsimplified-visualization" class="anchor"></a>Customizing Plots for Enhanced/Simplified Visualization</h1>
+<div class="section level1">
+<h1 id="customizing-plots-for-enhancedsimplified-visualization">Customizing Plots for Enhanced/Simplified Visualization<a class="anchor" aria-label="anchor" href="#customizing-plots-for-enhancedsimplified-visualization"></a>
+</h1>
 <p>While the default plots from Seurat and other packages are often very good they are often modified from their original outputs after plotting. scCustomize seeks to simplify this process and enhance some of the default visualizations.</p>
 <p>Even simple things like adding the same two ggplot2 themeing options to every plot can be simplified for end user (and enhance reproducibility and code errors) by wrapping them inside a new function.</p>
-<p>For this tutorial, I will be utilizing microglia data from Marsh et al., 2020 (<a href="https://www.biorxiv.org/content/10.1101/2020.12.03.408542v1"><em>bioRxiv</em></a>) the mouse microglia (Figure 1) referred to as <code>marsh_mouse_micro</code> and the human post-mortem snRNA-seq (Figure 3) referred to as <code>marsh_human_pm</code> in addition to the pbmc3k dataset from SeuratData package.</p>
+<p>For this tutorial, I will be utilizing microglia data from Marsh et al., 2020 (<a href="https://www.biorxiv.org/content/10.1101/2020.12.03.408542v1" class="external-link"><em>bioRxiv</em></a>) the mouse microglia (Figure 1) referred to as <code>marsh_mouse_micro</code> and the human post-mortem snRNA-seq (Figure 3) referred to as <code>marsh_human_pm</code> in addition to the pbmc3k dataset from SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sjmgarnier.github.io/viridis/">viridis</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat">Seurat</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize">scCustomize</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs">qs</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sjmgarnier.github.io/viridis/" class="external-link">viridis</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span>
 
 <span class="co"># Load bioRxiv datasets</span>
-<span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span>
-<span class="va">marsh_human_pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_human_pm.qs"</span><span class="op">)</span>
+<span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span>
+<span class="va">marsh_human_pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_human_pm.qs"</span><span class="op">)</span>
 
 <span class="co"># Load pbmc dataset</span>
-<span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html">pbmc3k.final</a></span></code></pre></div>
+<span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></code></pre></div>
 <p>We’ll add some random meta data variables to pbmc data form use in this vignette</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pbmc</span><span class="op">$</span><span class="va">sample_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>, <span class="st">"sample4"</span>, <span class="st">"sample5"</span>, <span class="st">"sample6"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="va">pbmc</span><span class="op">$</span><span class="va">sample_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>, <span class="st">"sample4"</span>, <span class="st">"sample5"</span>, <span class="st">"sample6"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,
     replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">pbmc</span><span class="op">$</span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Treatment1"</span>, <span class="st">"Treatment"</span>, <span class="st">"Treatment3"</span>, <span class="st">"Treatment4"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,
+<span class="va">pbmc</span><span class="op">$</span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Treatment1"</span>, <span class="st">"Treatment"</span>, <span class="st">"Treatment3"</span>, <span class="st">"Treatment4"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,
     replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<div id="general-notes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#general-notes" class="anchor"></a>General Notes</h2>
+<div class="section level2">
+<h2 id="general-notes">General Notes<a class="anchor" aria-label="anchor" href="#general-notes"></a>
+</h2>
 <ul>
 <li>Parameter names
 <ul>
@@ -191,12 +160,12 @@ p.caption {
 </li>
 </ul>
 </div>
-<div id="plotting-highly-variable-genes-pc-loadings" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting-highly-variable-genes-pc-loadings" class="anchor"></a>Plotting Highly Variable Genes &amp; PC Loadings</h2>
-<div id="plotting-highly-variable-genes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-highly-variable-genes" class="anchor"></a>Plotting highly variable genes</h3>
+<div class="section level2">
+<h2 id="plotting-highly-variable-genes-pc-loadings">Plotting Highly Variable Genes &amp; PC Loadings<a class="anchor" aria-label="anchor" href="#plotting-highly-variable-genes-pc-loadings"></a>
+</h2>
+<div class="section level3">
+<h3 id="plotting-highly-variable-genes">Plotting highly variable genes<a class="anchor" aria-label="anchor" href="#plotting-highly-variable-genes"></a>
+</h3>
 <p>scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function. <code>VariableFeaturePlot_scCustom</code> also contains several additional parameters for customizing visualization.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default scCustomize plot</span>
@@ -214,28 +183,28 @@ p.caption {
 </p>
 </div>
 </div>
-<div id="plotting-pc-heatmaps-and-loadings-" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-pc-heatmaps-and-loadings-" class="anchor"></a>Plotting PC heatmaps and loadings.</h3>
+<div class="section level3">
+<h3 id="plotting-pc-heatmaps-and-loadings-">Plotting PC heatmaps and loadings.<a class="anchor" aria-label="anchor" href="#plotting-pc-heatmaps-and-loadings-"></a>
+</h3>
 <p>For ease in evaluating PCA results scCustomize provides function <code>PC_Plotting</code> which returns both PC heatmap and Feature Loading plot in single patchwork layout.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/PC_Plotting.html">PC_Plotting</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, dim_number <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;"></p>
-<div id="iterate-pc-plotting" class="section level4">
-<h4 class="hasAnchor">
-<a href="#iterate-pc-plotting" class="anchor"></a>Iterate PC Plotting</h4>
-<p>This function can be easily enhanced using iterative version <code>Iterate_PC_Loading_Plots</code> to return a PDF document that contains plots for all desired PCs within object. See function manual and <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html">Iterative Plotting Vignette</a> for more info.</p>
+<div class="section level4">
+<h4 id="iterate-pc-plotting">Iterate PC Plotting<a class="anchor" aria-label="anchor" href="#iterate-pc-plotting"></a>
+</h4>
+<p>This function can be easily enhanced using iterative version <code>Iterate_PC_Loading_Plots</code> to return a PDF document that contains plots for all desired PCs within object. See function manual and <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html" class="external-link">Iterative Plotting Vignette</a> for more info.</p>
 </div>
 </div>
 </div>
-<div id="plot-gene-expression-in-2d-space-pcatsneumap" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plot-gene-expression-in-2d-space-pcatsneumap" class="anchor"></a>Plot Gene Expression in 2D Space (PCA/tSNE/UMAP)</h2>
+<div class="section level2">
+<h2 id="plot-gene-expression-in-2d-space-pcatsneumap">Plot Gene Expression in 2D Space (PCA/tSNE/UMAP)<a class="anchor" aria-label="anchor" href="#plot-gene-expression-in-2d-space-pcatsneumap"></a>
+</h2>
 <p>scCustomize has few functions that improve on the default plotting options/parameters from Seurat and other packages.</p>
-<div id="featureplots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#featureplots" class="anchor"></a>FeaturePlots</h3>
-<p>The default plots from<code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">Seurat::FeaturePlot</a></code> are very good but I find can be enhanced in few ways that scCustomize sets by default.<br>
+<div class="section level3">
+<h3 id="featureplots">FeaturePlots<a class="anchor" aria-label="anchor" href="#featureplots"></a>
+</h3>
+<p>The default plots from<code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">Seurat::FeaturePlot</a></code> are very good but I find can be enhanced in few ways that scCustomize sets by default.<br>
 Issues with default Seurat settings:</p>
 <ul>
 <li>Parameter <code>order = FALSE</code> is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells.</li>
@@ -245,24 +214,24 @@ Issues with default Seurat settings:</p>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Set color palette</span>
-<span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, option <span class="op">=</span> <span class="st">"C"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, option <span class="op">=</span> <span class="st">"C"</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>
 
 <span class="co"># Create Plots</span>
-<span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span><span class="op">)</span>
-<span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span>, order <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span>, cols <span class="op">=</span> <span class="va">pal</span>, order <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span><span class="op">)</span>
+<span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span>, order <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span>, cols <span class="op">=</span> <span class="va">pal</span>, order <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-8-1.png" alt="*`FeaturePlot()` non-ideal results: **A.** default `order = FALSE` compared to **B.** `order = TRUE`, **C.** expression binning when attempting to set custom gradient using `cols` parameter.*" width="1248"><p class="caption">
-<em><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot()</a></code> non-ideal results: <strong>A.</strong> default <code>order = FALSE</code> compared to <strong>B.</strong> <code>order = TRUE</code>, <strong>C.</strong> expression binning when attempting to set custom gradient using <code>cols</code> parameter.</em>
+<em><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot()</a></code> non-ideal results: <strong>A.</strong> default <code>order = FALSE</code> compared to <strong>B.</strong> <code>order = TRUE</code>, <strong>C.</strong> expression binning when attempting to set custom gradient using <code>cols</code> parameter.</em>
 </p>
 </div>
-<div id="featureplot_sccustom-solves-these-issues" class="section level4">
-<h4 class="hasAnchor">
-<a href="#featureplot_sccustom-solves-these-issues" class="anchor"></a><strong><code>FeaturePlot_scCustom</code> solves these issues</strong>
+<div class="section level4">
+<h4 id="featureplot_sccustom-solves-these-issues">
+<strong><code>FeaturePlot_scCustom</code> solves these issues</strong><a class="anchor" aria-label="anchor" href="#featureplot_sccustom-solves-these-issues"></a>
 </h4>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Set color palette</span>
-<span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, option <span class="op">=</span> <span class="st">"D"</span><span class="op">)</span>
+<span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, option <span class="op">=</span> <span class="st">"D"</span><span class="op">)</span>
 
 <span class="co"># Create Plots</span>
 <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Jun"</span>, order <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
@@ -279,9 +248,9 @@ Issues with default Seurat settings:</p>
 <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="st">"P2RY12"</span>, order <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-12-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
-<div id="plotting-non-expressing-cells-as-background-" class="section level4">
-<h4 class="hasAnchor">
-<a href="#plotting-non-expressing-cells-as-background-" class="anchor"></a>Plotting non-expressing cells as background.</h4>
+<div class="section level4">
+<h4 id="plotting-non-expressing-cells-as-background-">Plotting non-expressing cells as background.<a class="anchor" aria-label="anchor" href="#plotting-non-expressing-cells-as-background-"></a>
+</h4>
 <p>As you can see above <code>FeaturePlot_scCustom</code> has the ability to plot non-expressing cells in outside of color scale used for expressing cells. However it is critical that users pay attention to the <strong><em>correctly setting the <code>na_cutoff</code> parameter</em></strong> in <code>FeaturePlot_scCustom</code>.<br>
 scCustomize contains a parameter called <code>na_cutoff</code> which tells the function which values to plot as background. By default this is set to value that means background is treated as 0 or below. Depending on what feature, assay, or value you are interested in this parameter should be modified appropriately.</p>
 <p>For instance if plotting module score which contains negative values you will probably want to remove the cutoff value entirely to avoid misconstruing results.</p>
@@ -296,18 +265,18 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-16-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div id="split-feature-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#split-feature-plots" class="anchor"></a>Split Feature Plots</h3>
-<p><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">Seurat::FeaturePlot</a></code> has additional issues when splitting by object@meta.data variable.</p>
+<div class="section level3">
+<h3 id="split-feature-plots">Split Feature Plots<a class="anchor" aria-label="anchor" href="#split-feature-plots"></a>
+</h3>
+<p><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">Seurat::FeaturePlot</a></code> has additional issues when splitting by object@meta.data variable.</p>
 <ul>
 <li>Specifying the number of columns in output is no longer possible which makes viewing plots from objects with large numbers of variables difficult.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"P2ry12"</span>, split.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"P2ry12"</span>, split.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-17-1.png" alt="*`FeaturePlot()` when using `split.by` outputs with the number of columns equal to the number of levels in meta.data column.*" width="1248"><p class="caption">
-<em><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html">FeaturePlot()</a></code> when using <code>split.by</code> outputs with the number of columns equal to the number of levels in meta.data column.</em>
+<em><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">FeaturePlot()</a></code> when using <code>split.by</code> outputs with the number of columns equal to the number of levels in meta.data column.</em>
 </p>
 </div>
 <p><strong>FeaturePlot_scCustom solves this issue and allows for setting the number of columns in FeaturePlots</strong></p>
@@ -320,63 +289,63 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </p>
 </div>
 </div>
-<div id="density-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#density-plots" class="anchor"></a>Density Plots</h3>
-<p>The <a href="https://github.com/powellgenomicslab/Nebulosa">Nebulosa package</a> provides really great functions for plotting gene expression via density plots.</p>
+<div class="section level3">
+<h3 id="density-plots">Density Plots<a class="anchor" aria-label="anchor" href="#density-plots"></a>
+</h3>
+<p>The <a href="https://github.com/powellgenomicslab/Nebulosa" class="external-link">Nebulosa package</a> provides really great functions for plotting gene expression via density plots.</p>
 <p>scCustomize provides two functions to extend functionality of these plots and for ease of plotting “joint” density plots.</p>
-<div id="custom-color-palettes" class="section level4">
-<h4 class="hasAnchor">
-<a href="#custom-color-palettes" class="anchor"></a>Custom color palettes</h4>
+<div class="section level4">
+<h4 id="custom-color-palettes">Custom color palettes<a class="anchor" aria-label="anchor" href="#custom-color-palettes"></a>
+</h4>
 <p>Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: “viridis”, “magma”, “cividis”, “inferno”, and “plasma”). <code>Plot_Density_Custom</code> changes the default palette to “magma” and also allows for use of any custom gradient.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span>, custom_palette <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CustomPalette.html">PurpleAndYellow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span>, custom_palette <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CustomPalette.html" class="external-link">PurpleAndYellow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-20-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
-<div id="joint-plots" class="section level4">
-<h4 class="hasAnchor">
-<a href="#joint-plots" class="anchor"></a>Joint Plots</h4>
+<div class="section level4">
+<h4 id="joint-plots">Joint Plots<a class="anchor" aria-label="anchor" href="#joint-plots"></a>
+</h4>
 <p>Often user may only want to return the “Joint” density plot when providing multiple features. <code>Plot_Density_Joint_Only</code> simplifies this requiring only single function and only returns the joint plot for the features provided.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Joint_Only.html">Plot_Density_Joint_Only</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Fos"</span>, <span class="st">"Jun"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Joint_Only.html">Plot_Density_Joint_Only</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fos"</span>, <span class="st">"Jun"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-21-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div id="dual-assay-plotting" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dual-assay-plotting" class="anchor"></a>Dual Assay Plotting</h3>
+<div class="section level3">
+<h3 id="dual-assay-plotting">Dual Assay Plotting<a class="anchor" aria-label="anchor" href="#dual-assay-plotting"></a>
+</h3>
 <p>In certain situations returning a plot from two different assays within the same object may be advantageous. For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference. See Cell Bender Functionality vignette for more info.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cell_bender_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html">qread</a></span><span class="op">(</span><span class="st">"assets/astro_nuc_seq.qs"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">cell_bender_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"assets/astro_nuc_seq.qs"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/FeaturePlot_DualAssay.html">FeaturePlot_DualAssay</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">cell_bender_example</span>, features <span class="op">=</span> <span class="st">"Syt1"</span>, assay1 <span class="op">=</span> <span class="st">"RAW"</span>, assay2 <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-23-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div id="non-2d-gene-expression-plots-violin-dot-etc" class="section level2">
-<h2 class="hasAnchor">
-<a href="#non-2d-gene-expression-plots-violin-dot-etc" class="anchor"></a>Non-2D Gene Expression Plots (Violin, Dot, etc)</h2>
-<div id="stacked-violin-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#stacked-violin-plots" class="anchor"></a>Stacked Violin Plots</h3>
-<p>Often plotting many genes simultaneously using Violin plots is desired. scCustomize provides <code>Stacked_VlnPlot</code> for a more aesthetic stacked violin plot compared to stacked plots that can be made using default <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html">Seurat::VlnPlot</a></code>.<br><em>The original version of this function was written by Ming Tang and <a href="https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/">posted on his blog</a>. Function is included with permission and authorship.</em></p>
+<div class="section level2">
+<h2 id="non-2d-gene-expression-plots-violin-dot-etc">Non-2D Gene Expression Plots (Violin, Dot, etc)<a class="anchor" aria-label="anchor" href="#non-2d-gene-expression-plots-violin-dot-etc"></a>
+</h2>
+<div class="section level3">
+<h3 id="stacked-violin-plots">Stacked Violin Plots<a class="anchor" aria-label="anchor" href="#stacked-violin-plots"></a>
+</h3>
+<p>Often plotting many genes simultaneously using Violin plots is desired. scCustomize provides <code>Stacked_VlnPlot</code> for a more aesthetic stacked violin plot compared to stacked plots that can be made using default <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot</a></code>.<br><em>The original version of this function was written by Ming Tang and <a href="https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/" class="external-link">posted on his blog</a>. Function is included with permission and authorship.</em></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gene_list_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SLC17A7"</span>, <span class="st">"GAD2"</span>, <span class="st">"AQP4"</span>, <span class="st">"MYT1"</span>, <span class="st">"COL1A2"</span>, <span class="st">"CLDN5"</span>, <span class="st">"OPALIN"</span>, <span class="st">"CX3CR1"</span>, <span class="st">"CD3E"</span><span class="op">)</span>
-<span class="va">human_colors_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dodgerblue"</span>, <span class="st">"navy"</span>, <span class="st">"forestgreen"</span>, <span class="st">"darkorange2"</span>, <span class="st">"darkorchid3"</span>, <span class="st">"orchid"</span>,
+<code class="sourceCode R"><span class="va">gene_list_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SLC17A7"</span>, <span class="st">"GAD2"</span>, <span class="st">"AQP4"</span>, <span class="st">"MYT1"</span>, <span class="st">"COL1A2"</span>, <span class="st">"CLDN5"</span>, <span class="st">"OPALIN"</span>, <span class="st">"CX3CR1"</span>, <span class="st">"CD3E"</span><span class="op">)</span>
+<span class="va">human_colors_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dodgerblue"</span>, <span class="st">"navy"</span>, <span class="st">"forestgreen"</span>, <span class="st">"darkorange2"</span>, <span class="st">"darkorchid3"</span>, <span class="st">"orchid"</span>,
     <span class="st">"orange"</span>, <span class="st">"gold"</span>, <span class="st">"gray"</span><span class="op">)</span>
 
 <span class="co"># Create Plots</span>
 <span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="va">gene_list_plot</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
     colors_use <span class="op">=</span> <span class="va">human_colors_list</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-24-1.png" width="960" style="display: block; margin: auto;"></p>
-<div id="stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot" class="section level4">
-<h4 class="hasAnchor">
-<a href="#stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot" class="anchor"></a><code>Stacked_VlnPlot</code> also supports any additional parameters that are part of <code>Seurat::VlnPlot</code>
+<div class="section level4">
+<h4 id="stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot">
+<code>Stacked_VlnPlot</code> also supports any additional parameters that are part of <code>Seurat::VlnPlot</code><a class="anchor" aria-label="anchor" href="#stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot"></a>
 </h4>
 <p>For instance splitting plot by meta data feature.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dodgerblue"</span>, <span class="st">"forestgreen"</span>, <span class="st">"firebrick1"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">sample_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dodgerblue"</span>, <span class="st">"forestgreen"</span>, <span class="st">"firebrick1"</span><span class="op">)</span>
 
 <span class="co"># Create Plots</span>
 <span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="va">gene_list_plot</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -387,45 +356,47 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </p>
 </div>
 </div>
-<div id="adjust-vertical-plot-spacing" class="section level4">
-<h4 class="hasAnchor">
-<a href="#adjust-vertical-plot-spacing" class="anchor"></a>Adjust Vertical Plot Spacing</h4>
+<div class="section level4">
+<h4 id="adjust-vertical-plot-spacing">Adjust Vertical Plot Spacing<a class="anchor" aria-label="anchor" href="#adjust-vertical-plot-spacing"></a>
+</h4>
 <p>Depending on number of genes plotted and user preferences it may be helpful to change the vertical spacing between plots. This can be done using the <code>plot_spacing</code> and <code>spacing_unit</code> parameters.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default plot spacing (plot_spacing = 0.15 and spacing_unit = 'cm')</span>
-<span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD14"</span>, <span class="st">"MS4A1"</span>, <span class="st">"FCER1A"</span>, <span class="st">"PPBP"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD14"</span>, <span class="st">"MS4A1"</span>, <span class="st">"FCER1A"</span>, <span class="st">"PPBP"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># Double the space between plots</span>
-<span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD14"</span>, <span class="st">"MS4A1"</span>, <span class="st">"FCER1A"</span>, <span class="st">"PPBP"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
+<span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD14"</span>, <span class="st">"MS4A1"</span>, <span class="st">"FCER1A"</span>, <span class="st">"PPBP"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
     plot_spacing <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-27-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
-<div id="adjusting-plot-size" class="section level4">
-<h4 class="hasAnchor">
-<a href="#adjusting-plot-size" class="anchor"></a>Adjusting Plot Size</h4>
+<div class="section level4">
+<h4 id="adjusting-plot-size">Adjusting Plot Size<a class="anchor" aria-label="anchor" href="#adjusting-plot-size"></a>
+</h4>
 <p>Please note that even more so than many other plots you will need to adjust the height and width of these plots significantly depending on the number of features and number of identities being plotted.</p>
 </div>
-<div id="stacked_vlnplot-also-supports-plotting-of-objectmeta-data-variables-i-e--mito-or-module-scores-" class="section level4">
-<h4 class="hasAnchor">
-<a href="#stacked_vlnplot-also-supports-plotting-of-objectmeta-data-variables-i-e--mito-or-module-scores-" class="anchor"></a><code>Stacked_VlnPlot</code> also supports plotting of object@meta.data variables (i.e. mito% or module scores).</h4>
+<div class="section level4">
+<h4 id="stacked_vlnplot-also-supports-plotting-of-objectmeta-data-variables-i-e--mito-or-module-scores-">
+<code>Stacked_VlnPlot</code> also supports plotting of object@meta.data variables (i.e. mito% or module scores).<a class="anchor" aria-label="anchor" href="#stacked_vlnplot-also-supports-plotting-of-objectmeta-data-variables-i-e--mito-or-module-scores-"></a>
+</h4>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"percent_mito"</span>, <span class="st">"percent_ribo"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
+<code class="sourceCode R"><span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"percent_mito"</span>, <span class="st">"percent_ribo"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
     colors_use <span class="op">=</span> <span class="va">human_colors_list</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-28-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div id="custom-dotplots-" class="section level3">
-<h3 class="hasAnchor">
-<a href="#custom-dotplots-" class="anchor"></a>Custom DotPlots.</h3>
+<div class="section level3">
+<h3 id="custom-dotplots-">Custom DotPlots.<a class="anchor" aria-label="anchor" href="#custom-dotplots-"></a>
+</h3>
 <p>Seurat’s <code>DotPlot</code> function is really good but lacks the ability to provide custom color gradient of more than 2 colors.</p>
-<div id="dotplot_sccustom-allows-for-plotting-with-custom-gradients-" class="section level4">
-<h4 class="hasAnchor">
-<a href="#dotplot_sccustom-allows-for-plotting-with-custom-gradients-" class="anchor"></a><code>DotPlot_scCustom</code> allows for plotting with custom gradients.</h4>
+<div class="section level4">
+<h4 id="dotplot_sccustom-allows-for-plotting-with-custom-gradients-">
+<code>DotPlot_scCustom</code> allows for plotting with custom gradients.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-allows-for-plotting-with-custom-gradients-"></a>
+</h4>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">micro_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Trem2"</span>, <span class="st">"Tmem119"</span>, <span class="st">"Cx3cr1"</span>, <span class="st">"Hexb"</span>, <span class="st">"Tgfbr1"</span>, <span class="st">"Sparc"</span>, <span class="st">"P2ry13"</span>,
+<code class="sourceCode R"><span class="va">micro_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Trem2"</span>, <span class="st">"Tmem119"</span>, <span class="st">"Cx3cr1"</span>, <span class="st">"Hexb"</span>, <span class="st">"Tgfbr1"</span>, <span class="st">"Sparc"</span>, <span class="st">"P2ry13"</span>,
     <span class="st">"Olfml3"</span>, <span class="st">"Adgrg1"</span>, <span class="st">"C1qa"</span>, <span class="st">"C1qb"</span>, <span class="st">"C1qc"</span>, <span class="st">"Csf1r"</span>, <span class="st">"Fcgr3"</span>, <span class="st">"Ly86"</span>, <span class="st">"Laptm5"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html">DotPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, cols <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span><span class="op">)</span>
+<span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, cols <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span><span class="op">)</span>
 <span class="fu"><a href="../reference/DotPlot_scCustom.html">DotPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-30-1.png" alt="***A.** Default `DotPlot` only takes the first few colors when a gradient is provided.  **B.** `DotPlot_scCustom` allows for use of gradients in full while maintaining visualization.*" width="1248"><p class="caption">
@@ -433,9 +404,10 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </p>
 </div>
 </div>
-<div id="dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-" class="section level4">
-<h4 class="hasAnchor">
-<a href="#dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-" class="anchor"></a><code>DotPlot_scCustom</code> also contains additional parameters for easy manipulations of axes for better plotting.</h4>
+<div class="section level4">
+<h4 id="dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-">
+<code>DotPlot_scCustom</code> also contains additional parameters for easy manipulations of axes for better plotting.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-"></a>
+</h4>
 <p>These allow for:</p>
 <ul>
 <li>
@@ -461,11 +433,11 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </div>
 </div>
 </div>
-<div id="split_featurescatter" class="section level3">
-<h3 class="hasAnchor">
-<a href="#split_featurescatter" class="anchor"></a><code>Split_FeatureScatter</code>
+<div class="section level3">
+<h3 id="split_featurescatter">
+<code>Split_FeatureScatter</code><a class="anchor" aria-label="anchor" href="#split_featurescatter"></a>
 </h3>
-<p>This is simple function to add functionality that <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html">Seurat::FeatureScatter</a></code> lacks.</p>
+<p>This is simple function to add functionality that <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter</a></code> lacks.</p>
 <p><code>FeatureScatter</code> plots can be very useful when comparing between two genes/features or comparing module scores. However, Seurat’s implementation lacks the ability to split the plot by a meta data variable.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create Plots</span>
@@ -479,17 +451,17 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </div>
 </div>
 </div>
-<div id="plot-meta-data-in-2d-space-pcatsneumap" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plot-meta-data-in-2d-space-pcatsneumap" class="anchor"></a>Plot Meta Data in 2D Space (PCA/tSNE/UMAP)</h2>
+<div class="section level2">
+<h2 id="plot-meta-data-in-2d-space-pcatsneumap">Plot Meta Data in 2D Space (PCA/tSNE/UMAP)<a class="anchor" aria-label="anchor" href="#plot-meta-data-in-2d-space-pcatsneumap"></a>
+</h2>
 <p>scCustomize has a few functions that improve on the default plotting options available in Seurat</p>
-<div id="dimplots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dimplots" class="anchor"></a>DimPlots</h3>
-<p>The scCustomize function <code>DimPlot_scCustom</code> is a slightly modified version of <code><a href="https://satijalab.org/seurat/reference/DimPlot.html">Seurat::DimPlot</a></code> with some different default settings and parameter options.</p>
-<div id="new-default-color-palettes" class="section level4">
-<h4 class="hasAnchor">
-<a href="#new-default-color-palettes" class="anchor"></a>New default color palettes</h4>
+<div class="section level3">
+<h3 id="dimplots">DimPlots<a class="anchor" aria-label="anchor" href="#dimplots"></a>
+</h3>
+<p>The scCustomize function <code>DimPlot_scCustom</code> is a slightly modified version of <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot</a></code> with some different default settings and parameter options.</p>
+<div class="section level4">
+<h4 id="new-default-color-palettes">New default color palettes<a class="anchor" aria-label="anchor" href="#new-default-color-palettes"></a>
+</h4>
 <p>The default ggplot2 hue palette becomes very hard to distinguish between at even a moderate number of clusters for a scRNA-seq experiment. scCustomize’s function <code>DimPlot_scCustom</code> sets new default color palettes:</p>
 <ul>
 <li>If less than or equal to 36 groups plotted then the “polychrome” palette will be used.</li>
@@ -498,7 +470,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </ul>
 <p>To best demonstrate rationale for this I’m going to use over-clustered version of the <code>marsh_mouse_micro</code> object.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_over</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_over</span><span class="op">)</span>
 <span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_over</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-36-1.png" alt="*`DimPlot_scCustom` also sets `label = TRUE` if `group.by = NULL` by default.*" width="1248"><p class="caption">
@@ -506,13 +478,13 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </p>
 </div>
 </div>
-<div id="shuffle-points" class="section level4">
-<h4 class="hasAnchor">
-<a href="#shuffle-points" class="anchor"></a>Shuffle Points</h4>
+<div class="section level4">
+<h4 id="shuffle-points">Shuffle Points<a class="anchor" aria-label="anchor" href="#shuffle-points"></a>
+</h4>
 <p>By default Seurat’s <code>DimPlot</code> plots each group on top of the next which can make plots harder to interpret. <code>DimPlot_scCustom</code> sets <code>shuffle = TRUE</code> by default as I believe this setting is more often the visualization that provides the most clarity.</p>
 <p>Here is example when plotting by donor in the human dataset to determine how well the dataset integration worked.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_human_pm</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_human_pm</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-38-1.png" alt="***A.** Cannot tell how well integrated the samples are due to plotting one on top of the other.  **B.** Default plot using scCustomize `DimPlot_scCustom`.*" width="1248"><p class="caption">
@@ -520,13 +492,13 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </p>
 </div>
 </div>
-<div id="split-dimplots" class="section level4">
-<h4 class="hasAnchor">
-<a href="#split-dimplots" class="anchor"></a>Split DimPlots</h4>
-<p>When plotting a split plot <code><a href="https://satijalab.org/seurat/reference/DimPlot.html">Seurat::DimPlot</a></code> simplifies the axes by implementing shared axes depending on the number of columns specified.</p>
+<div class="section level4">
+<h4 id="split-dimplots">Split DimPlots<a class="anchor" aria-label="anchor" href="#split-dimplots"></a>
+</h4>
+<p>When plotting a split plot <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot</a></code> simplifies the axes by implementing shared axes depending on the number of columns specified.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span>
-<span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"sample_id"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span>
+<span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"sample_id"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-40-1.png" alt="***A.** The default Seurat split.by looks ok when plots are all present on single row.  **B.** However, the visualization isn't so good when you starting wrapping plots into multiple rows.*" width="1248"><p class="caption">
 <em><strong>A.</strong> The default Seurat split.by looks ok when plots are all present on single row. <strong>B.</strong> However, the visualization isn’t so good when you starting wrapping plots into multiple rows.</em>
@@ -546,9 +518,9 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-43-1.png" width="1248"></p>
 </div>
 </div>
-<div id="highlight-clusters" class="section level3">
-<h3 class="hasAnchor">
-<a href="#highlight-clusters" class="anchor"></a>Highlight Cluster(s)</h3>
+<div class="section level3">
+<h3 id="highlight-clusters">Highlight Cluster(s)<a class="anchor" aria-label="anchor" href="#highlight-clusters"></a>
+</h3>
 <p>Even with optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.<br>
 scCustomize provides easy of use function <code>Cluster_Highlight_Plot</code> to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.<br><em>NOTE: While named <code>Cluster_Highlight_Plot</code> this function will simply pull from seurat_object@active.ident slot which may or may not be cluster results depending on user settings. For creating highlight plots of meta data variables see next section on <code>Meta_Highlight_Plot</code>.</em></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -563,18 +535,18 @@ scCustomize provides easy of use function <code>Cluster_Highlight_Plot</code> to
 </p>
 </div>
 </div>
-<div id="highlight-meta-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#highlight-meta-data" class="anchor"></a>Highlight Meta Data</h3>
+<div class="section level3">
+<h3 id="highlight-meta-data">Highlight Meta Data<a class="anchor" aria-label="anchor" href="#highlight-meta-data"></a>
+</h3>
 <p>scCustomize also contains an analogous function <code>Meta_Highlight_Plot</code> that allows for quick highlight plots of any valid @meta.data variable. Meta data variables must be one of class(): “factor”, “character”, or “logical” to be highlighted.<br><em>Numeric variables representing things like “batch” can be converted using <code>as.character</code> or <code>as.factor</code> first to allow for plotting.</em></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription_Method"</span>,
     meta_data_highlight <span class="op">=</span> <span class="st">"ENZYMATIC_NONE"</span>, highlight_color <span class="op">=</span> <span class="st">"firebrick"</span>, background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-46-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
-<div id="dimplot-layout-plots" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dimplot-layout-plots" class="anchor"></a>DimPlot Layout Plots</h3>
+<div class="section level3">
+<h3 id="dimplot-layout-plots">DimPlot Layout Plots<a class="anchor" aria-label="anchor" href="#dimplot-layout-plots"></a>
+</h3>
 <p>Sometimes can be beneficial to create layouts where there is no grouping variable and plots are simply colored by the split variable.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/DimPlot_All_Samples.html">DimPlot_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, meta_data_column <span class="op">=</span> <span class="st">"sample_id"</span>, num_col <span class="op">=</span> <span class="fl">3</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
@@ -586,36 +558,33 @@ scCustomize provides easy of use function <code>Cluster_Highlight_Plot</code> to
 <p>Can unique color each plot by providing a vector of colors instead of single value</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/DimPlot_All_Samples.html">DimPlot_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription"</span>, num_col <span class="op">=</span> <span class="fl">2</span>,
-    pt.size <span class="op">=</span> <span class="fl">0.5</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"firebrick3"</span>, <span class="st">"dodgerblue3"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    pt.size <span class="op">=</span> <span class="fl">0.5</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"firebrick3"</span>, <span class="st">"dodgerblue3"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-48-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Samuel Marsh.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Samuel Marsh.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
 
+  
 
   </body>
 </html>
