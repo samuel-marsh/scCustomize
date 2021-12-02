@@ -48,7 +48,7 @@ scCustomize simplifies this process by allowing for the creation of many plots i
 ## Iterative functions available are:  
 
 * `Iterate_PC_Loading_Plots`: Plots PC Heatmap and Top Loading Genes for specified number of PCs.
-* `Iterate_FeaturePlot_scCustom`: `FeaturePlot_scCustom` for all genes in gene list.  See [Marker Identification Vignette](LINK) for special use case with named vector gene lists.
+* `Iterate_FeaturePlot_scCustom`: `FeaturePlot_scCustom` for all genes in gene list.  See [Marker Identification Vignette](https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1) for special use case with named vector gene lists.
 * `Iterate_VlnPlot`: Plots `VlnPlot` for all genes in gene list.
 * `Iterate_Plot_Density_Custom` Plots single gene density plots for all genes in gene list.
 * `Iterate_Plot_Density_Joint` Plots the joint density plots for all vectors of genes from a list of vectors.
