@@ -1,4 +1,5 @@
----
+url: https://samuel-marsh.github.io/scCustomize/
+
 template:
   params:
       bootswatch: flatly
@@ -120,4 +121,3 @@ reference:
 
 deploy:
   install_metadata: true
----
