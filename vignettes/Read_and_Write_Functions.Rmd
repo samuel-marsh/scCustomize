@@ -217,7 +217,7 @@ knitr::include_graphics(c("../man/figures/assets/geo_merged.png"))
 To easily merge many Seurat objects contained in a list scCustomize contains simple function.
 ```{r eval=FALSE}
 # Merge a list of compatible Seurat objects of any length and add cell prefixes if desired
-Seurat_Merged <- Merge_Seurat_List(list_seurat = list_of_objects, add.cell.ids = (c("cell", "prefixes" "to", "add")))
+Seurat_Merged <- Merge_Seurat_List(list_seurat = list_of_objects, add.cell.ids = (c("cell", "prefixes", "to", "add")))
 ```
 
 

@@ -51,8 +51,10 @@ Suggests:
     DropletUtils,
     knitr,
     Nebulosa,
+    rliger,
     rmarkdown,
-    tidyverse
+    tidyverse, 
+    qs
 VignetteBuilder: knitr, rmarkdown
 License: GPL (>= 3) | file LICENSE
 Encoding: UTF-8
