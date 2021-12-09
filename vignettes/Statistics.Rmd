@@ -40,7 +40,7 @@ knitr::opts_chunk$set(
 
 
 
-# Statistics Functions
+# Statistics Functions  
 scCustomize contains a couple simple helper functions to return metrics of interest.
 
 For this vignette I will be utilizing pbmc3k dataset from the SeuratData package.
