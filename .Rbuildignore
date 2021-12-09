@@ -8,3 +8,4 @@
 ^index\.md$
 .git
 ^inst$
+^\.github$
