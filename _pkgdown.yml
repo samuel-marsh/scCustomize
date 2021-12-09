@@ -4,6 +4,14 @@ template:
   params:
       bootswatch: flatly
 
+home:
+  sidebar:
+    structure: [links, license, custom, authors, dev]
+    components:
+      custom:
+        title: Citation
+        text: "[Citing scCustomize](https://samuel-marsh.github.io/scCustomize/articles/FAQ.html)"
+
 navbar:
   left:
     - text: "Getting Started"
