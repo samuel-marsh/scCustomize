@@ -30,9 +30,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Remove vignettes dir
-              run: rm -rf 'vignettes/'
-              shell: bash
 
       - uses: r-lib/actions/setup-pandoc@v1
 
