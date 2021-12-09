@@ -84,8 +84,8 @@ wrap_plots(p1, p2, p3, p4, ncol = 4) + plot_annotation(tag_levels = 'A')
 
 
 ## Large Discrete Palettes
-### `DiscretePalette_scCustomize`
-The function `DiscretePalette_scCustomize` is function inspired and modified from `Seurat::DiscretePalette`.  Under the hood most of the palettes are called using [paletteer package](https://github.com/EmilHvitfeldt/paletteer) to call palettes without adding package dependencies.  The following palettes can be specified:
+### `DiscretePalette_scCustomize()`
+The function `DiscretePalette_scCustomize` is function inspired and modified from `Seurat::DiscretePalette()`.  Under the hood most of the palettes are called using [paletteer package](https://github.com/EmilHvitfeldt/paletteer) to call palettes without adding package dependencies.  The following palettes can be specified:
 
 * alphabet (24)
 * alphabet2 (24)
@@ -111,7 +111,7 @@ DimPlot_scCustom(seurat_object = pbmc)
 
 
 ### Visualize Palettes
-To visualize these or any other palettes you can use the `PalettePlot` function.
+To visualize these or any other palettes you can use the `PalettePlot()` function.
 ```{r eval=FALSE}
 PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 26, palette = "alphabet"))
 
@@ -166,10 +166,10 @@ ggplot2 themeing works absolutely great but can also be simplified by wrapping c
 scCustomize contains a few customized themes and ggplot2 helpers that simplify post plot themeing/alterations.  
 *NOTE: These functions can be used with any ggplot2 plot and are not limited to modifying scCustomize plots.*  
 
-* `UnRotate_X` Undo x-axis label rotation
-* `Move_Legend` Select new location to move legend
-* `Blank_Theme` Removes all axis labels and axes from plot
-* `theme_ggprism_mod` Modified version of `ggprism::theme_prism`
+* `UnRotate_X()` Undo x-axis label rotation
+* `Move_Legend()` Select new location to move legend
+* `Blank_Theme()` Removes all axis labels and axes from plot
+* `theme_ggprism_mod()` Modified version of `ggprism::theme_prism()`
 
 
 ## Suggestions/Enhancements?

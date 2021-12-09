@@ -10,6 +10,12 @@ date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?color=gr
 scCustomize is a collection of functions created and/or curated to aid
 in the visualization and analysis of single-cell data using R.
 
+## Vignettes/Tutorials
+
+See accompanying [scCustomize
+website](https://samuel-marsh.github.io/scCustomize/) for detailed
+tutorials of all aspects of scCustomize functionality.
+
 ## Installing scCustomize
 
 scCustomize can be installed from GitHub using either devtools or
@@ -41,12 +47,6 @@ contain breaking issues/bugs.*
 I do try and keep [development
 ChangeLog](https://github.com/samuel-marsh/scCustomize/blob/develop/NEWS.md)
 up to date so it’s easier to follow changes than reading commit history.
-
-## Vignettes/Tutorials
-
-See accompanying [scCustomize
-website](https://samuel-marsh.github.io/scCustomize/) for detailed
-tutorials of all aspects of scCustomize functionality.
 
 ## Bug Reports/New Features
 

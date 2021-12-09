@@ -87,7 +87,7 @@ Parent_Directory
 ### Read Data
 We can read all metrics files within a given parent directory using the `Read_Metrics_10X` function.
 ```{r eval=FALSE}
-raw_metrics <- Read_Mestrics_10X(base_path = "path/to/parent/directory/", default_10X = TRUE)
+raw_metrics <- Read_Metrics_10X(base_path = "path/to/parent/directory/", default_10X = TRUE)
 
 head(raw_metrics)
 ```

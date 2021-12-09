@@ -208,10 +208,10 @@ median_stats %>%
 ## Plotting Median Data
 scCustomize also contains series of functions for plotting the results of these median calculations:
   
-* `Plot_Median_Genes`
-* `Plot_Median_UMIs`
-* `Plot_Median_Mito`
-* `Plot_Median_Other`
+* `Plot_Median_Genes()`
+* `Plot_Median_UMIs()`
+* `Plot_Median_Mito()`
+* `Plot_Median_Other()`
 
 ```{r eval=FALSE}
 Plot_Median_Genes(seurat_object = pbmc)

@@ -51,12 +51,12 @@ scCustomize aims to achieve these goals through:
         `plot + scale_color_continuous(...) + ggtitle(...) + theme(plot.title = element_text(...), legend.position = ...) + guides(...)`  
     -   Creating new plotting functions either: 1. as wrapper around
         Seurat function with parameters already specified (e.g.,
-        `QC_Plot_Genes`) or 2. create new plots (e.g.,
-        `Seq_QC_Plot_Reads_per_Cell` or `Plot_Median_Genes`) or 3. both
-        (e.g., `QC_Plot_UMIvsGene(..., combination = TRUE)`).  
+        `QC_Plot_Genes()`) or 2. create new plots (e.g.,
+        `Seq_QC_Plot_Reads_per_Cell()` or `Plot_Median_Genes()`) or 3.
+        both (e.g., `QC_Plot_UMIvsGene(..., combination = TRUE)`).  
     -   Adding additional parameters to existing plots inside new
         function (e.g., high and low cutoff parameters in
-        `QC_Plot_UMIvsGene`)
+        `QC_Plot_UMIvsGene()`)
 -   **Easy iterative plotting functionality.**  
     Many plotting functions can be easily automated with loops, apply,
     purrr etc. However, these can be intimidating to novice user and
@@ -68,7 +68,7 @@ scCustomize aims to achieve these goals through:
     -   Returns either single PDF document or multiple plots of any
         valid file type (e.g., png, tiff, jpeg, pdf, etc).
 -   **Helper functions easily import multiple raw data types**  
-    [Imort data
+    [Import data
     functions](https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html)
     are aimed at streamlining importing multiple files/samples with
     single function and/or importing files with “non-standard” file
@@ -86,7 +86,7 @@ scCustomize aims to achieve these goals through:
     -   *Example of adding new parameters:* Adding the percentage of
         counts aligning to mitochondrial (and/or ribosomal) genes is
         common early step in analysis. scCustomize provides
-        `Add_Mito_Ribo_Seurat` (and LIGER version) to simplify this.
+        `Add_Mito_Ribo_Seurat()` (and LIGER version) to simplify this.
         Basic use requires only one line of code and two parameters.
 
             Add_Mito_Ribo_Seurat(seurat_object = obj_name, species = "Human") 
@@ -97,8 +97,8 @@ scCustomize aims to achieve these goals through:
 
     -   *Example of wrapping many lines to one:* Extracting the top 10
         (or 15, 20, 25, etc) genes per identity after running
-        `FindAllMarkers` is very common and scCustomize provides
-        `Extract_Top_Markers` function to simplify process.  
+        `FindAllMarkers()` is very common and scCustomize provides
+        `Extract_Top_Markers()` function to simplify process.  
         *Using scCustomize function:*
 
             markers_df <- FindAllMarkers(object = obj_name)
@@ -133,10 +133,10 @@ scCustomize aims to achieve these goals through:
     -   scCustomize provides checks/warnings wrapped inside its
         functions to help and provide more informative error/warning
         messages. Two examples include:  
-    -   `Add_Mito_Ribo_Seurat` will warn you if no mitochondrial or
+    -   `Add_Mito_Ribo_Seurat()` will warn you if no mitochondrial or
         ribosomal features are found and won’t create new metadata
         column.  
-    -   `Rename_Clusters` will check and make sure the right number of
+    -   `Rename_Clusters()` will check and make sure the right number of
         unique new names are provided and provide one of two error
         messages if not before attempting to rename the object idents.
 

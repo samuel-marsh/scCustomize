@@ -57,10 +57,10 @@ pbmc <- pbmc3k.SeuratData::pbmc3k.final
 
 ## Helper functions available are:
 
-* `Extract_Top_Markers`: Extract either a filtered data.frame or vector of gene IDs (with option to export named vector) containing top N markers from data.frame.
-* `Create_Cluster_Annotation_File`: Create simple csv file for use in annotating clusters.
-* `Pull_Cluster_Annotation`: Pull cluster annotation information quickly from data.frame/tibble or annotation csv file.
-* `Rename_Clusters`: Wrapper function to easily rename clusters.
+* `Extract_Top_Markers()`: Extract either a filtered data.frame or vector of gene IDs (with option to export named vector) containing top N markers from data.frame.
+* `Create_Cluster_Annotation_File()`: Create simple csv file for use in annotating clusters.
+* `Pull_Cluster_Annotation()`: Pull cluster annotation information quickly from data.frame/tibble or annotation csv file.
+* `Rename_Clusters()`: Wrapper function to easily rename clusters.
 
 
 We will use pbmc3K dataset from SeuratData package as example for this vignette.  
@@ -71,7 +71,7 @@ pbmc <- UpdateSeuratObject(pbmc)
 ```
 
 ## Percent Difference in Expression
-If we run `FindAllMarkers` like normal, this is the output.
+If we run `FindAllMarkers()` like normal, this is the output.
 ```{r}
 # Run basic FindAllMarkers DE test
 all_markers <- FindAllMarkers(object = pbmc, verbose = F)
@@ -89,9 +89,9 @@ head(all_markers, 5) %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
 ```
 
-While `Seurat::FindAllMarkers`returns the percent of cells in identity 1 (pct.1) and identity 2 (pct.2) that express a marker it can be helpful to view the difference in these two measures in addition to the values alone.  
+While `Seurat::FindAllMarkers()`returns the percent of cells in identity 1 (pct.1) and identity 2 (pct.2) that express a marker it can be helpful to view the difference in these two measures in addition to the values alone.  
   
-scCustomize contains helper function: `Add_Pct_Diff` to add the percent difference between two clusters.  `Add_Pct_Diff` can be used with any output from Seurat, SeuratWrappers, or other DE tests and can be piped with the function itself.
+scCustomize contains helper function: `Add_Pct_Diff()` to add the percent difference between two clusters.  `Add_Pct_Diff` can be used with any output from Seurat, SeuratWrappers, or other DE tests and can be piped with the function itself.
 
 ### Use `Add_Pct_Diff` piped with the marker function.
 ```{r}
@@ -154,7 +154,7 @@ head(top_5_df, 10) %>%
 
 
 ### Use with non-Seurat data.frames
-`Extract_Top_Markers` uses the data.frame output of `Seurat::FindAllMarkers` by default but can be used with any data.frame by supplying few extra parameters.  Let's use the function on the output from [presto package](https://github.com/immunogenomics/presto) and order the results by auc instead of log2FC.
+`Extract_Top_Markers` uses the data.frame output of `Seurat::FindAllMarkers()` by default but can be used with any data.frame by supplying few extra parameters.  Let's use the function on the output from [presto package](https://github.com/immunogenomics/presto) and order the results by auc instead of log2FC.
 ```{r}
 # Read in pre-computed data.frame results
 presto_markers <- qread("assets/presto_markers.qs")
@@ -164,7 +164,7 @@ top_5_presto <- Extract_Top_Markers(marker_dataframe = presto_markers, num_genes
 head(top_5_presto, 10)
 ```
 
-## Pairing `Extract_Top_Markers` with `Iterate_FeaturePlot_scCustom`
+## Pairing `Extract_Top_Markers` with `Iterate_FeaturePlot_scCustom()`
 The advantage of exporting a named vector from `Extract_Top_Markers` is that `Iterate_FeaturePlot_scCustom` can detect the names and either add those to the title of the plot (if `single_pdf = TRUE`) or the file names if `FALSE`.
 ```{r eval=FALSE}
 Iterate_FeaturePlot_scCustom(seurat_object = pbmc, gene_list = top_5_presto, single_pdf = T)

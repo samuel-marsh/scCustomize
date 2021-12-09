@@ -103,10 +103,10 @@ scCustomize has a number of quick QC plotting options for ease of use.
 ## `VlnPlot`-Based QC Plots  
 scCustomize contains 4 functions which wrap `Seurat::VlnPlot()`.  
 
-* `QC_Plots_Genes` Plots genes per cell/nucleus.
-* `QC_Plots_UMIs` Plots UMIs per cell/nucleus.  
-* `QC_Plots_Mito` Plots mito% (named "percent_mito") per cell/nucleus.
-* `QC_Plots_Feature` Plots "feature" per cell/nucleus.  Using parameter `feature` to allow plotting of any applicable named feature in object\@meta.data slot. 
+* `QC_Plots_Genes()` Plots genes per cell/nucleus.
+* `QC_Plots_UMIs()` Plots UMIs per cell/nucleus.  
+* `QC_Plots_Mito()` Plots mito% (named "percent_mito") per cell/nucleus.
+* `QC_Plots_Feature()` Plots "feature" per cell/nucleus.  Using parameter `feature` to allow plotting of any applicable named feature in object\@meta.data slot. 
 
 scCustomize functions have the added benefit of:  
 
@@ -155,9 +155,9 @@ wrap_plots(p1, p2, ncol = 2)
 ## `FeatureScatter`-Based QC Plots  
 scCustomize contains 3 functions which wrap `Seurat::FeatureScatter()` with added visualization of potential cutoff thresholds and some additional functionality:  
 
-* `QC_Plot_UMIvsGene` Plots genes vs UMIs per cell/nucleus
-* `QC_Plot_GenevsFeature` Plots Genes vs. "feature" per cell/nucleus.  Using parameter `feature1` to allow plotting of any applicable named feature in object\@meta.data slot.   
-* `QC_Plot_UMIvsFeature` Plots UMIs vs. "feature" per cell/nucleus.  Using parameter `feature1` to allow plotting of any applicable named feature in object\@meta.data slot. 
+* `QC_Plot_UMIvsGene()` Plots genes vs UMIs per cell/nucleus
+* `QC_Plot_GenevsFeature()` Plots Genes vs. "feature" per cell/nucleus.  Using parameter `feature1` to allow plotting of any applicable named feature in object\@meta.data slot.   
+* `QC_Plot_UMIvsFeature()` Plots UMIs vs. "feature" per cell/nucleus.  Using parameter `feature1` to allow plotting of any applicable named feature in object\@meta.data slot. 
 
 ### New/Modified functionality  
 
@@ -228,10 +228,10 @@ median_stats <- Median_Stats(seurat_object = hca_bm, group_by_var = "orig.ident"
 ### Plotting Median Values
 scCustomize also contains a few functions to plot some of these median value calculations, which can be used on their own without need to return data.frame first.
 
-* `Plot_Median_Genes`  
-* `Plot_Median_UMIs`  
-* `Plot_Median_Mito`  
-* `Plot_Median_Other`  
+* `Plot_Median_Genes()`  
+* `Plot_Median_UMIs()`  
+* `Plot_Median_Mito()`  
+* `Plot_Median_Other()`  
   - *Used to plot any other numeric variable present in object meta.data slot.*
 ```{r eval=FALSE}
 Plot_Median_Genes(seurat_object = hca_bm, group_by = "group")

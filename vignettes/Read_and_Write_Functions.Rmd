@@ -222,7 +222,7 @@ Seurat_Merged <- Merge_Seurat_List(list_seurat = list_of_objects, add.cell.ids =
 
 
 ## Write 10X Genomics Formatted H5 file from non-H5 input
-`Create_10X_H5` provides convenient wrapper around `write10xCounts` from DropletUtils package.  Output can then be easily read in using `Seurat::Read10X_h5()` or `liger::createLiger` (which assumes H5 file is formatted as if from Cell Ranger).
+`Create_10X_H5` provides convenient wrapper around `write10xCounts()` from DropletUtils package.  Output can then be easily read in using `Seurat::Read10X_h5()` or LIGER's `createLiger()` (which assumes H5 file is formatted as if from Cell Ranger).
 ```{r eval=FALSE}
 # Provide file path and specify type of files as either cell ranger triplicate files, matrix, or data.frame
 Create_10X_H5(raw_data_file_path = "/path/matrix.mtx", source_type = "Matrix", save_file_path = "/path/", save_name = "name")

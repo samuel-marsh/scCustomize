@@ -61,9 +61,9 @@ astrocytes_cortex <- qread("assets/astro_nuc_seq.qs")
 
 
 ## Importing Cell Bender H5 Outputs  
-The output from Cell Bender is an H5 file that is styled and can be read like 10X Genomics H5 file.  However, `Seurat::Read10X_h5` assumes that the file contains no name prefix.
+The output from Cell Bender is an H5 file that is styled and can be read like 10X Genomics H5 file.  However, `Seurat::Read10X_h5()` assumes that the file contains no name prefix.
 
-However,`Read10X_h5_Multi_Directory` can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.
+However,`Read10X_h5_Multi_Directory()` can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.
 
 ### Cell Bender Output Structure
 The following is typical output directory structure for Cell Bender files with sub-directory labeled with sample name and each file also prefixed with the sample name.
@@ -102,7 +102,7 @@ cell_bender_seurat <- CreateSeuratObject(counts = cell_bender_merged, names.fiel
 ```
 
 ## Creating Dual Assay Objects  
-Sometimes it can be helpful to create object that contains both the cell ranger values and cell bender values (we'll come to why below).  scCustomize contains a helper function `Create_CellBender_Merged_Seurat` to handle object creation in one quick step.
+Sometimes it can be helpful to create object that contains both the cell ranger values and cell bender values (we'll come to why below).  scCustomize contains a helper function `Create_CellBender_Merged_Seurat()` to handle object creation in one quick step.
 
 For this function we assume that we will use the cell calling algorithm of Cell Ranger with the modified counts for Cell Bender.  
 
@@ -120,7 +120,7 @@ dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_ben
 ```
 
 ### Optional Parameters
-Users can specify any additional parameters normally passed to `Seurat::CreateSeuratObject` when using this function.
+Users can specify any additional parameters normally passed to `Seurat::CreateSeuratObject()` when using this function.
 ```{r eval=FALSE}
 dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_bender_merged, raw_counts_matrix = cell_ranger_merged, raw_assay_name = "RAW", min_cells = 5, min_features = 200)
 ```
@@ -129,7 +129,7 @@ dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_ben
 It can be very important with tools like Cell Bender to analyze how much the process has effected data on a per cell basis.
 
 ### Add Pre/Post to Meta Data
-scCustomize includes function `Add_Cell_Bender_Diff` to help with this process.  This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns ("nCount_Diff" and "nFeature_Diff") to the object meta.data.
+scCustomize includes function `Add_Cell_Bender_Diff()` to help with this process.  This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns ("nCount_Diff" and "nFeature_Diff") to the object meta.data.
 
 ```{r eval=FALSE}
 astrocytes_cortex <- Add_Cell_Bender_Diff(seurat_object = astrocytes_cortex, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
@@ -146,7 +146,7 @@ head(astrocytes_cortex@meta.data, 5) %>%
 ```
 
 ### Calculate per sample averages  
-We can then use `Median_Stats` to calculate per sample averages across all cells by supplying the new variables to the `median_var` parameter.
+We can then use `Median_Stats()` to calculate per sample averages across all cells by supplying the new variables to the `median_var` parameter.
 
 ```{r eval=FALSE}
 median_stats <- Median_Stats(seurat_object = astrocytes_cortex, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
@@ -161,7 +161,7 @@ median_stats %>%
 ```
 
 ## Dual Assay Plotting
-For Cell Bender especially, but also potentially for other assays as well, it can be helpful during analysis to plot the corrected and uncorrected counts for given feature.  scCustomize contains function `FeaturePlot_DualAssay` to make easy.
+For Cell Bender especially, but also potentially for other assays as well, it can be helpful during analysis to plot the corrected and uncorrected counts for given feature.  scCustomize contains function `FeaturePlot_DualAssay()` to make easy.
 
 Users just need to supply the names of the two assays to plot and the features.
 *NOTE: Make sure both assays have been normalized before plotting.  The function will attempt to check and make sure both assays have been normalized but has not been tested in all scenarios.*

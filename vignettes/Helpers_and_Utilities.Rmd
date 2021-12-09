@@ -60,7 +60,7 @@ pbmc <- UpdateSeuratObject(pbmc)
 ## Add Mitochondrial & Ribosomal Percentages
 As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
-### Seurat Objects: `Add_Mito_Ribo_Seurat`
+### Seurat Objects: `Add_Mito_Ribo_Seurat()`
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, or marmoset data all you need to do is specify the `species` parameter.
 ```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
@@ -116,7 +116,7 @@ pbmc <- UpdateSeuratObject(object = pbmc)
 pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "other", mito_pattern = "^MT-", ribo_pattern = "BAD_PATTERN")
 ```
 
-`Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
+`Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER()` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
 ```{r include=FALSE}
 pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(object = pbmc)
@@ -129,7 +129,7 @@ pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
 
 
 
-### LIGER Objects: `Add_Mito_Ribo_LIGER`
+### LIGER Objects: `Add_Mito_Ribo_LIGER()`
 scCustomize also contains identical function for use with LIGER objects.  `Add_Mito_Ribo_LIGER` contains equivalent parameters and capabilities as `Add_Mito_Ribo_Seurat`
 ```{r eval=FALSE}
 liger_obj <- Add_Mito_Ribo_Seurat(seurat_object = liger_obj, species = "human")
@@ -139,7 +139,7 @@ liger_obj <- Add_Mito_Ribo_Seurat(seurat_object = liger_obj, species = "human")
 ## Check for Features/Genes
 scCustomize also makes forward-facing a number of utilities that are used internally in functions but may also have utility on their own.
 
-### `Gene_Present` to check for features.
+### `Gene_Present()` to check for features.
 `Gene_Present` is fairly basic function to check if feature exists in data.  It can be used with Seurat or LIGER objects as well as generic data formats (Matrix, data.frame, tibble).
 
 In addition to some warning messages `Gene_Present` returns a list with 3 entries when run:  
@@ -183,9 +183,9 @@ check_symbols <- UpdateSymbolList(symbols = genes_present[[2]], verbose = TRUE)
 ## Merging Data/Objects
 
 ### Merging raw data
-It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later.  scCustomize features a modified version of the internal LIGER function `MergeSparseDataAll`.
+It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later.  scCustomize features a modified version of the internal LIGER function `MergeSparseDataAll()`.
 
-`Merge_Sparse_Data_All` will combine a list of sparse matrices and return single sparse matrix.  Additionally, by specifying the `add_cell_ids` parameter you can specify a prefix to be added to the barcodes from each entry in the list (using "_" as delimiter).
+`Merge_Sparse_Data_All()` will combine a list of sparse matrices and return single sparse matrix.  Additionally, by specifying the `add_cell_ids` parameter you can specify a prefix to be added to the barcodes from each entry in the list (using "_" as delimiter).
 
 This function can be especially useful when combined with any of the scCustomize's `Read_` data functions which automatically return named lists of matrices and the ability to specify sample `orig.ident` when creating Seurat objects.  See [Read & Write Vignette](https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html) for more info on the data import functions.
 ```{r eval=FALSE}
@@ -202,7 +202,7 @@ GEO_10X_Seurat <- Seurat::CreateSeuratObject(counts = GEO_10X_merged, names.fiel
 ### Merging List of Seurat Objects
 Sometimes it can be advantageous to create a list of multiple Seurat Objects in order to run similar pipeline on all objects in loop.  
 
-To facilitate ease in merging such lists into single object scCustomize contains simple wrapper `Merge_Seurat_List` that uses `purrr::reduce` to merge all objects in list into single combined object
+To facilitate ease in merging such lists into single object scCustomize contains simple wrapper `Merge_Seurat_List` that uses `purrr::reduce()` to merge all objects in list into single combined object
 ```{r eval=FALSE}
 list_of_objects <- list(obj1, obj2, obj2, ..., obj10)
 
@@ -294,9 +294,9 @@ data_mod <- Replace_Suffix(data = raw_data, current_suffix = "-1", new_suffix = 
 ### Change Prefix/Suffix Delimiters
 scCustomize has 3 functions to facilitate changing the type of delimiters present in cell barcodes.  
 
-* `Change_Delim_Prefix` Change just the suffix delimiter.
-* `Change_Delim_Suffix` Change just the prefix delimiter.
-* `Change_Delim_All` Change all delimiters.
+* `Change_Delim_Prefix()` Change just the suffix delimiter.
+* `Change_Delim_Suffix()` Change just the prefix delimiter.
+* `Change_Delim_All()` Change all delimiters.
 
 These functions all take identical inputs and can be applied to either single matrix/data.frames or lists of matrices/data.frames.
 

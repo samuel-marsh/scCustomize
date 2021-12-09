@@ -112,7 +112,7 @@ mouse_colors <- marsh_mouse_micro@misc$exp17_micro_colors
 ## Plotting Highly Variable Genes & PC Loadings
 
 ### Plotting highly variable genes 
-scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function.  `VariableFeaturePlot_scCustom` also contains several additional parameters for customizing visualization.
+scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function.  `VariableFeaturePlot_scCustom()` also contains several additional parameters for customizing visualization.
 ```{r eval=FALSE}
 # Default scCustomize plot
 VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
@@ -136,20 +136,20 @@ wrap_plots(p1, p2, p3, p4) + plot_annotation(tag_levels = "A")
 
 
 ### Plotting PC heatmaps and loadings.
-For ease in evaluating PCA results scCustomize provides function `PC_Plotting` which returns both PC heatmap and Feature Loading plot in single patchwork layout.
+For ease in evaluating PCA results scCustomize provides function `PC_Plotting()` which returns both PC heatmap and Feature Loading plot in single patchwork layout.
 ```{r fig.height=8, fig.width=9, fig.align='center'}
 PC_Plotting(seurat_object = marsh_mouse_micro, dim_number = 2)
 ```
 
 #### Iterate PC Plotting
-This function can be easily enhanced using iterative version `Iterate_PC_Loading_Plots` to return a PDF document that contains plots for all desired PCs within object.  See function manual and [Iterative Plotting Vignette](https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html) for more info.
+This function can be easily enhanced using iterative version `Iterate_PC_Loading_Plots()` to return a PDF document that contains plots for all desired PCs within object.  See function manual and [Iterative Plotting Vignette](https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html) for more info.
 
 
 ## Plot Gene Expression in 2D Space (PCA/tSNE/UMAP)
 scCustomize has few functions that improve on the default plotting options/parameters from Seurat and other packages.
 
 ### FeaturePlots
-The default plots from`Seurat::FeaturePlot` are very good but I find can be enhanced in few ways that scCustomize sets by default.  
+The default plots from`Seurat::FeaturePlot()` are very good but I find can be enhanced in few ways that scCustomize sets by default.  
 Issues with default Seurat settings:  
   
 * Parameter `order = FALSE` is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells.
@@ -219,7 +219,7 @@ wrap_plots(p1, p2, ncol = 2)
 ```
 
 #### Plotting non-expressing cells as background. 
-As you can see above `FeaturePlot_scCustom` has the ability to plot non-expressing cells in outside of color scale used for expressing cells.  However it is critical that users pay attention to the ***correctly setting the `na_cutoff` parameter*** in `FeaturePlot_scCustom`.  
+As you can see above `FeaturePlot_scCustom()` has the ability to plot non-expressing cells in outside of color scale used for expressing cells.  However it is critical that users pay attention to the ***correctly setting the `na_cutoff` parameter*** in `FeaturePlot_scCustom`.  
 scCustomize contains a parameter called `na_cutoff` which tells the function which values to plot as background.  By default this is set to value that means background is treated as 0 or below.  Depending on what feature, assay, or value you are interested in this parameter should be modified appropriately.
 
 For instance if plotting module score which contains negative values you will probably want to remove the cutoff value entirely to avoid misconstruing results.
@@ -247,7 +247,7 @@ wrap_plots(p1, p2, ncol = 2)
 ```
 
 ### Split Feature Plots
-`Seurat::FeaturePlot` has additional issues when splitting by object\@meta.data variable.
+`Seurat::FeaturePlot()` has additional issues when splitting by object\@meta.data variable.
 
 * Specifying the number of columns in output is no longer possible which makes viewing plots from objects with large numbers of variables difficult.
 ```{r, fig.height=4, fig.width=13, fig.cap="*`FeaturePlot()` when using `split.by` outputs with the number of columns equal to the number of levels in meta.data column.*", fig.align='center'}
@@ -268,7 +268,7 @@ scCustomize provides two functions to extend functionality of these plots and fo
   
 #### Custom color palettes  
   
-Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: "viridis", "magma", "cividis", "inferno", and "plasma").  `Plot_Density_Custom` changes the default palette to "magma" and also allows for use of any custom gradient.
+Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: "viridis", "magma", "cividis", "inferno", and "plasma").  `Plot_Density_Custom()` changes the default palette to "magma" and also allows for use of any custom gradient.
 ```{r eval=FALSE, fig.height=4, fig.width=13, fig.align='center'}
 Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos")
 Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos", custom_palette = PurpleAndYellow())
@@ -283,7 +283,7 @@ wrap_plots(p1, p2, ncol = 2)
 
 
 #### Joint Plots
-Often user may only want to return the "Joint" density plot when providing multiple features.  `Plot_Density_Joint_Only` simplifies this requiring only single function and only returns the joint plot for the features provided.
+Often user may only want to return the "Joint" density plot when providing multiple features.  `Plot_Density_Joint_Only()` simplifies this requiring only single function and only returns the joint plot for the features provided.
 ```{r, fig.height=4, fig.width=6, fig.align='center'}
 Plot_Density_Joint_Only(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun"))
 ```
@@ -305,7 +305,7 @@ FeaturePlot_DualAssay(seurat_object = cell_bender_example, features = "Syt1", as
 ## Non-2D Gene Expression Plots (Violin, Dot, etc)
 
 ### Stacked Violin Plots
-Often plotting many genes simultaneously using Violin plots is desired.  scCustomize provides `Stacked_VlnPlot` for a more aesthetic stacked violin plot compared to stacked plots that can be made using default `Seurat::VlnPlot`.  
+Often plotting many genes simultaneously using Violin plots is desired.  scCustomize provides `Stacked_VlnPlot()` for a more aesthetic stacked violin plot compared to stacked plots that can be made using default `Seurat::VlnPlot()`.  
 *The original version of this function was written by  Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/).  Function is included with permission and authorship.*
 ```{r, fig.height=10, fig.width=10, fig.align='center'}
 
@@ -316,7 +316,7 @@ human_colors_list <- c("dodgerblue", "navy", "forestgreen", "darkorange2", "dark
 Stacked_VlnPlot(seurat_object = marsh_human_pm, features = gene_list_plot, x_lab_rotate = TRUE, colors_use = human_colors_list)
 ```
 
-#### `Stacked_VlnPlot` also supports any additional parameters that are part of `Seurat::VlnPlot`
+#### `Stacked_VlnPlot` also supports any additional parameters that are part of `Seurat::VlnPlot()`
 For instance splitting plot by meta data feature.
 ```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Example plot adding the `split.by` parameter toview expression by sample and cell type.*"}
 sample_colors <- c("dodgerblue", "forestgreen", "firebrick1")
@@ -358,9 +358,9 @@ Stacked_VlnPlot(seurat_object = marsh_human_pm, features = c("percent_mito", "pe
 ```
 
 ### Custom DotPlots.
-Seurat's `DotPlot` function is really good but lacks the ability to provide custom color gradient of more than 2 colors.
+Seurat's `DotPlot()` function is really good but lacks the ability to provide custom color gradient of more than 2 colors.
 
-#### `DotPlot_scCustom` allows for plotting with custom gradients.
+#### `DotPlot_scCustom()` allows for plotting with custom gradients.
 ```{r eval=FALSE}
 micro_genes <- c("P2ry12", "Fcrls", "Trem2", "Tmem119", "Cx3cr1", "Hexb", "Tgfbr1", "Sparc", "P2ry13", "Olfml3", "Adgrg1", "C1qa", "C1qb", "C1qc", "Csf1r", "Fcgr3", "Ly86", "Laptm5")
 
@@ -375,7 +375,7 @@ p2 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes
 wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
 ```
 
-#### `DotPlot_scCustom` also contains additional parameters for easy manipulations of axes for better plotting.
+#### `DotPlot_scCustom()` also contains additional parameters for easy manipulations of axes for better plotting.
 These allow for:  
 
 * `x_lab_rotate` rotating x-axis text Default is FALSE.
@@ -401,10 +401,10 @@ wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
 
-### `Split_FeatureScatter` 
-This is simple function to add functionality that `Seurat::FeatureScatter` lacks.  
+### `Split_FeatureScatter()` 
+This is simple function to add functionality that `Seurat::FeatureScatter()` lacks.  
 
-`FeatureScatter` plots can be very useful when comparing between two genes/features or comparing module scores.  However, Seurat's implementation lacks the ability to split the plot by a meta data variable.
+`FeatureScatter()` plots can be very useful when comparing between two genes/features or comparing module scores.  However, Seurat's implementation lacks the ability to split the plot by a meta data variable.
 
 ```{r, fig.height=10, fig.width=13, fig.cap="*`Split_FeatureScatter()` solves this issue and allows for splitting of `FeatureScatter` plots by meta variable.*", fig.align='center'}
 # Create Plots
@@ -415,7 +415,7 @@ Split_FeatureScatter(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1"
 scCustomize has a few functions that improve on the default plotting options available in Seurat
 
 ### DimPlots
-The scCustomize function `DimPlot_scCustom` is a slightly modified version of `Seurat::DimPlot` with some different default settings and parameter options.
+The scCustomize function `DimPlot_scCustom()` is a slightly modified version of `Seurat::DimPlot()` with some different default settings and parameter options.
 
 #### New default color palettes
 The default ggplot2 hue palette becomes very hard to distinguish between at even a moderate number of clusters for a scRNA-seq experiment.  scCustomize's function `DimPlot_scCustom` sets new default color palettes:  
@@ -446,7 +446,7 @@ wrap_plots(p1, p2, ncol = 2)
 ```
 
 #### Shuffle Points
-By default Seurat's `DimPlot` plots each group on top of the next which can make plots harder to interpret.  `DimPlot_scCustom` sets `shuffle = TRUE` by default as I believe this setting is more often the visualization that provides the most clarity.
+By default Seurat's `DimPlot()` plots each group on top of the next which can make plots harder to interpret.  `DimPlot_scCustom` sets `shuffle = TRUE` by default as I believe this setting is more often the visualization that provides the most clarity.
 
 Here is example when plotting by donor in the human dataset to determine how well the dataset integration worked.
 ```{r eval=FALSE}
@@ -462,7 +462,7 @@ wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
 #### Split DimPlots
-When plotting a split plot `Seurat::DimPlot` simplifies the axes by implementing shared axes depending on the number of columns specified.
+When plotting a split plot `Seurat::DimPlot()` simplifies the axes by implementing shared axes depending on the number of columns specified.
 ```{r eval=FALSE}
 DimPlot(object = pbmc, split.by = "treatment")
 DimPlot(object = pbmc, split.by = "sample_id", ncol = 4)
@@ -491,7 +491,7 @@ DimPlot_scCustom(seurat_object = pbmc, split.by = "treatment", num_columns = 4, 
 
 ### Highlight Cluster(s)
 Even with optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.  
-scCustomize provides easy of use function `Cluster_Highlight_Plot` to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.  
+scCustomize provides easy of use function `Cluster_Highlight_Plot()` to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.  
 *NOTE: While named `Cluster_Highlight_Plot` this function will simply pull from seurat_object\@active.ident slot which may or may not be cluster results depending on user settings.  For creating highlight plots of meta data variables see next section on `Meta_Highlight_Plot`.*
 
 ```{r eval=FALSE}
@@ -510,7 +510,7 @@ wrap_plots(p1, p2, ncol = 2)
 
 
 ### Highlight Meta Data
-scCustomize also contains an analogous function `Meta_Highlight_Plot` that allows for quick highlight plots of any valid \@meta.data variable.  Meta data variables must be one of class(): "factor", "character", or "logical" to be highlighted.  
+scCustomize also contains an analogous function `Meta_Highlight_Plot()` that allows for quick highlight plots of any valid \@meta.data variable.  Meta data variables must be one of class(): "factor", "character", or "logical" to be highlighted.  
 *Numeric variables representing things like "batch" can be converted using `as.character` or `as.factor` first to allow for plotting.*
 
 ```{r, fig.height=4, fig.width=6, fig.align='center'}
