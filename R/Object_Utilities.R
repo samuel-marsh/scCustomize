@@ -4,7 +4,7 @@
 #'
 #' @param seurat_object object name.
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset (name or abbreviation)
-#'  provided the function will automatically provided mito_pattern and ribo_pattern values.
+#' provided the function will automatically provided mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
