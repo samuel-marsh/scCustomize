@@ -98,8 +98,8 @@ scCustomize aims to achieve these goals through:
 
     -   *Example of wrapping many lines to one:* Extracting the top 10
         (or 15, 20, 25, etc) genes per identity after running
-        `FindAllMarkers()` is very common and scCustomize provides
-        `Extract_Top_Markers()` function to simplify process.  
+        `Seurat::FindAllMarkers()` is very common and scCustomize
+        provides `Extract_Top_Markers()` function to simplify process.  
         *Using scCustomize function:*
 
             markers_df <- FindAllMarkers(object = obj_name)

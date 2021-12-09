@@ -52,7 +52,7 @@ Suggests:
     knitr,
     Nebulosa,
     rmarkdown
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 License: GPL (>= 3) | file LICENSE
 Encoding: UTF-8
 LazyData: true
