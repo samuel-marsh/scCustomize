@@ -47,13 +47,17 @@ While the default Seurat and ggplot2 plots work well they can often be enhanced 
 library(tidyverse)
 library(patchwork)
 library(scCustomize)
-
-pbmc <- pbmc3k.SeuratData::pbmc3k.final
-
 ```
 
 
 ```{r include=FALSE}
+
+remotes::install_github('satijalab/seurat-data')
+
+SeuratData::InstallData("pbmc3k")
+
+pbmc <- pbmc3k.SeuratData::pbmc3k.final
+
 pbmc <- UpdateSeuratObject(pbmc)
 ```
 
