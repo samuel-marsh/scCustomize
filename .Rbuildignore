@@ -5,6 +5,7 @@
 ^docs$
 ^pkgdown$
 ^vignettes$
+vignettes/
 ^index\.md$
 .git
 ^inst$
