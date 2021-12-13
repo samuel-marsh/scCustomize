@@ -9,4 +9,4 @@
 .git
 ^inst$
 ^\.github$
-vignettes/Read_and_Write_Functions.Rmd.orig
+vignettes/*.orig$
