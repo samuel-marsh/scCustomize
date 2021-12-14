@@ -1,6 +1,6 @@
 ---
 title: "Read & Write Data Functions"
-date: 'Compiled: December 13, 2021'
+date: 'Compiled: December 14, 2021'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable

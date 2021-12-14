@@ -1,6 +1,6 @@
 ---
 title: "Plotting #2: QC Plots"
-date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+date: 'Compiled: December 14, 2021'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable
@@ -18,33 +18,14 @@ p.caption {
 </style>
  
 
-```{r setup, include=FALSE}
-all_times <- list()  # store the time for each chunk
-knitr::knit_hooks$set(time_it = local({
-  now <- NULL
-  function(before, options) {
-    if (before) {
-      now <<- Sys.time()
-    } else {
-      res <- difftime(Sys.time(), now, units = "secs")
-      all_times[[options$label]] <<- res
-    }
-  }
-}))
-knitr::opts_chunk$set(
-  tidy = TRUE,
-  tidy.opts = list(width.cutoff = 95),
-  message = FALSE,
-  warning = FALSE,
-  time_it = TRUE
-)
-```
+
 
 # QC Plots
 One of the first steps in all scRNA-seq analyses is performing a number of QC checks and plots so that data can be appropriately filtered.  scCustomize contains a number of functions that can be used to quickly and easily generate some of the most relevant QC plots.
 
 For this tutorial, I will be utilizing HCA bone marrow cell data from the SeuratData package.
-```{r init}
+
+```r
 library(tidyverse)
 library(patchwork)
 library(Seurat)
@@ -55,45 +36,99 @@ library(qs)
 hca_bm <- hcabm40k.SeuratData::hcabm40k
 
 # Add pseudo group variable just for this vignette
-hca_bm@meta.data$group[hca_bm@meta.data$orig.ident == "MantonBM1" | hca_bm@meta.data$orig.ident == "MantonBM2" | hca_bm@meta.data$orig.ident == "MantonBM3" | hca_bm@meta.data$orig.ident == "MantonBM4"] <- "Group 1"
+hca_bm@meta.data$group[hca_bm@meta.data$orig.ident == "MantonBM1" | hca_bm@meta.data$orig.ident ==
+    "MantonBM2" | hca_bm@meta.data$orig.ident == "MantonBM3" | hca_bm@meta.data$orig.ident == "MantonBM4"] <- "Group 1"
 
-hca_bm@meta.data$group[hca_bm@meta.data$orig.ident == "MantonBM5" | hca_bm@meta.data$orig.ident == "MantonBM6" | hca_bm@meta.data$orig.ident == "MantonBM7" | hca_bm@meta.data$orig.ident == "MantonBM8"] <- "Group 2"
-
+hca_bm@meta.data$group[hca_bm@meta.data$orig.ident == "MantonBM5" | hca_bm@meta.data$orig.ident ==
+    "MantonBM6" | hca_bm@meta.data$orig.ident == "MantonBM7" | hca_bm@meta.data$orig.ident == "MantonBM8"] <- "Group 2"
 ```
 
 
-```{r include=FALSE}
-accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
-```
+
 
 ## Add Mitochondrial and Ribosomal Gene Percentages
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot.  If you are using mouse, human, or marmoset data all you need to do is specify the `species` parameter.
-```{r}
+
+```r
 # These defaults can be run just by providing accepted species name
 hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human")
 ```
 *NOTE: There is analogous function for LIGER objects (see: `Add_Mito_Ribo_LIGER`) but QC plotting functions currently only support Seurat objects.*
 
 To view list of accepted values for default species names simply set `list_species_names = TRUE`.
-```{r echo=FALSE}
-accepted_names %>%
-  kableExtra::kbl() %>%
-  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
-```
+<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Mouse_Options </th>
+   <th style="text-align:left;"> Human_Options </th>
+   <th style="text-align:left;"> Marmoset_Options </th>
+   <th style="text-align:left;"> Zebrafish_Options </th>
+   <th style="text-align:left;"> Rat_Options </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Mouse </td>
+   <td style="text-align:left;"> Human </td>
+   <td style="text-align:left;"> Marmoset </td>
+   <td style="text-align:left;"> Zebrafish </td>
+   <td style="text-align:left;"> Rat </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mouse </td>
+   <td style="text-align:left;"> human </td>
+   <td style="text-align:left;"> marmoset </td>
+   <td style="text-align:left;"> zebrafish </td>
+   <td style="text-align:left;"> rat </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Ms </td>
+   <td style="text-align:left;"> Hu </td>
+   <td style="text-align:left;"> CJ </td>
+   <td style="text-align:left;"> DR </td>
+   <td style="text-align:left;"> RN </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ms </td>
+   <td style="text-align:left;"> hu </td>
+   <td style="text-align:left;"> Cj </td>
+   <td style="text-align:left;"> Dr </td>
+   <td style="text-align:left;"> Rn </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mm </td>
+   <td style="text-align:left;"> Hs </td>
+   <td style="text-align:left;"> cj </td>
+   <td style="text-align:left;"> dr </td>
+   <td style="text-align:left;"> rn </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> mm </td>
+   <td style="text-align:left;"> hs </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+</tbody>
+</table>
 
 However custom prefixes can be used for non-human/mouse/marmoset species with different annotations. Simply specify `species = other` and supply feature lists or regex patterns for your species of interest.  
 *NOTE: If desired please submit issue on GitHub for additional default species.  Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.*
-```{r eval=FALSE}
+
+```r
 # Using gene name patterns
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_pattern = "regexp_pattern", ribo_pattern = "regexp_pattern")
+hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_pattern = "regexp_pattern",
+    ribo_pattern = "regexp_pattern")
 
 # Using feature name lists
 mito_gene_list <- c("gene1", "gene2", "etc")
 ribo_gene_list <- c("gene1", "gene2", "etc")
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
+hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_features = mito_gene_list,
+    ribo_features = ribo_gene_list)
 
 # Using combination of gene lists and gene name patterns
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
+hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", mito_features = mito_gene_list,
+    ribo_pattern = "regexp_pattern")
 ```
 
 ## Plotting QC Metrics
@@ -114,23 +149,22 @@ scCustomize functions have the added benefit of:
 * Added high/low cutoff parameters to allow for easy visualization of potential cutoff thresholds.
 
 
-```{r eval=FALSE}
-# All functions contain 
+
+```r
+# All functions contain
 p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20)
 ```
 
-```{r echo=FALSE}
-# All functions contain 
-p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500, pt.size = 0.1)
-p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1)
-p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20, pt.size = 0.1)
-```
 
-```{r, fig.height=7, fig.width=13}
+
+
+```r
 wrap_plots(p1, p2, p3, ncol = 3)
 ```
+
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
 
 ### Additional parameters  
 In addition to being able to supply Seurat parameters with `...` these plots like many others in scCustomize contain other additional parameters to customize plot output without need for post-plot ggplot2 modifications  
@@ -141,13 +175,16 @@ In addition to being able to supply Seurat parameters with `...` these plots lik
 * `y_axis_log`: Should y-axis in linear or log10 scale.
 
 
-```{r, fig.height=5, fig.width=13, fig.align='center', fig.cap="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*"}
+
+```r
 p1 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1)
-p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1, y_axis_log = TRUE)
+p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1,
+    y_axis_log = TRUE)
 
 wrap_plots(p1, p2, ncol = 2)
-
 ```
+
+<img src="figure/unnamed-chunk-8-1.png" title="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*" alt="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*" style="display: block; margin: auto;" />
 
 
 
@@ -166,61 +203,143 @@ scCustomize contains 3 functions which wrap `Seurat::FeatureScatter()` with adde
 * Ability to set & visualize potential cutoff thresholds (similar to VlnPlot based QC Plots above)
 * Report potential post filtering correlation in addition to whole dataset correlation when using `QC_Plot_UMIvsGene` (based on values provided to high and low cutoff parameters)
 
-```{r eval=FALSE}
-# All functions contain 
-QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 800, high_cutoff_gene = 5500, low_cutoff_UMI = 500, high_cutoff_UMI = 50000)
-QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_feature = 20)
+
+```r
+# All functions contain
+QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 800, high_cutoff_gene = 5500, low_cutoff_UMI = 500,
+    high_cutoff_UMI = 50000)
+QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800,
+    high_cutoff_gene = 5500, high_cutoff_feature = 20)
 ```
 
-```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
-# All functions contain 
-p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 400, high_cutoff_gene = 5500, low_cutoff_UMI = 1200, high_cutoff_UMI = 45000, x_axis_label = "UMIs per Cell")
-p2 <- QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_feature = 20)
-
-wrap_plots(p1, p2, ncol = 2)
-```
+<img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
 
 
 ### Color data by continuous meta data variable  
 `QC_Plot_UMIvsGene` contains the ability to color points by continuous meta data variables.  
 This can be used to plot % of mito reads in addition to UMI vs. Gene comparisons
-```{r eval=FALSE}
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
+
+```r
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800,
+    high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800,
+    high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
 ```
 
-```{r echo=FALSE, fig.height=7, fig.width=13, fig.cap="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*", fig.align='center'}
-p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
-p2 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
-
-wrap_plots(p1, p2, ncol = 2)
-```
+<img src="figure/unnamed-chunk-12-1.png" title="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*" alt="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*" style="display: block; margin: auto;" />
 
 ### Combination Plots
 If you are interested in viewing `QC_Plot_UMIvsGene` both by discrete grouping variable and by continuous variable without writing function twice you can use `combination = TRUE` and plot output will contain both plots.
-```{r, fig.height=7, fig.width=13, fig.cap="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*", fig.align='center'}
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20, combination = TRUE)
+
+```r
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800,
+    high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20, combination = TRUE)
 ```
+
+<img src="figure/unnamed-chunk-13-1.png" title="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*" alt="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*" style="display: block; margin: auto;" />
 
 ## Analyze Median QC Values per Sample/Library
 scCustomize also contains a few helpful functions for returning and plotting the median values for these metrics on per sample/library basis.
 
 ### Calculate Median Values & Return data.frame
 scCustomize contains function `Median_Stats` to quickly calculate the medians for basic QC stats (Genes/, UMIs/, %Mito/Cell, etc) and return a data.frame.
-```{r}
+
+```r
 median_stats <- Median_Stats(seurat_object = hca_bm, group_by_var = "orig.ident")
 ```
 
 
-```{r echo=FALSE}
-median_stats %>%
-  kableExtra::kbl() %>%
-  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
-```
+<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> orig.ident </th>
+   <th style="text-align:right;"> Median_nCount_RNA </th>
+   <th style="text-align:right;"> Median_nFeature_RNA </th>
+   <th style="text-align:right;"> Median_percent_mito </th>
+   <th style="text-align:right;"> Median_percent_ribo </th>
+   <th style="text-align:right;"> Median_percent_mito_ribo </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> MantonBM1 </td>
+   <td style="text-align:right;"> 2634.5 </td>
+   <td style="text-align:right;"> 807 </td>
+   <td style="text-align:right;"> 3.928074 </td>
+   <td style="text-align:right;"> 42.04921 </td>
+   <td style="text-align:right;"> 46.43790 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM2 </td>
+   <td style="text-align:right;"> 2462.5 </td>
+   <td style="text-align:right;"> 783 </td>
+   <td style="text-align:right;"> 3.556994 </td>
+   <td style="text-align:right;"> 42.96184 </td>
+   <td style="text-align:right;"> 46.87269 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM3 </td>
+   <td style="text-align:right;"> 2617.0 </td>
+   <td style="text-align:right;"> 769 </td>
+   <td style="text-align:right;"> 3.301410 </td>
+   <td style="text-align:right;"> 40.65558 </td>
+   <td style="text-align:right;"> 44.10722 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM4 </td>
+   <td style="text-align:right;"> 2264.0 </td>
+   <td style="text-align:right;"> 780 </td>
+   <td style="text-align:right;"> 3.384891 </td>
+   <td style="text-align:right;"> 33.73245 </td>
+   <td style="text-align:right;"> 37.96850 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM5 </td>
+   <td style="text-align:right;"> 2677.0 </td>
+   <td style="text-align:right;"> 741 </td>
+   <td style="text-align:right;"> 3.265677 </td>
+   <td style="text-align:right;"> 41.55203 </td>
+   <td style="text-align:right;"> 45.33713 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM6 </td>
+   <td style="text-align:right;"> 2677.0 </td>
+   <td style="text-align:right;"> 835 </td>
+   <td style="text-align:right;"> 3.202053 </td>
+   <td style="text-align:right;"> 43.07874 </td>
+   <td style="text-align:right;"> 46.70119 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM7 </td>
+   <td style="text-align:right;"> 2429.0 </td>
+   <td style="text-align:right;"> 732 </td>
+   <td style="text-align:right;"> 3.216184 </td>
+   <td style="text-align:right;"> 44.68831 </td>
+   <td style="text-align:right;"> 48.20765 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MantonBM8 </td>
+   <td style="text-align:right;"> 2453.0 </td>
+   <td style="text-align:right;"> 701 </td>
+   <td style="text-align:right;"> 3.697331 </td>
+   <td style="text-align:right;"> 44.97911 </td>
+   <td style="text-align:right;"> 48.96420 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Totals (All Cells) </td>
+   <td style="text-align:right;"> 2524.0 </td>
+   <td style="text-align:right;"> 769 </td>
+   <td style="text-align:right;"> 3.447040 </td>
+   <td style="text-align:right;"> 41.53183 </td>
+   <td style="text-align:right;"> 45.40989 </td>
+  </tr>
+</tbody>
+</table>
 
 
 The `Median_Stats` function has some column names stored by default but will also calculate medians for additional meta.data columns using the optional `median_var` parameter
-```{r eval=FALSE}
+
+```r
 median_stats <- Median_Stats(seurat_object = hca_bm, group_by_var = "orig.ident", median_var = "meta_data_column_name")
 ```
 
@@ -233,7 +352,8 @@ scCustomize also contains a few functions to plot some of these median value cal
 * `Plot_Median_Mito()`  
 * `Plot_Median_Other()`  
   - *Used to plot any other numeric variable present in object meta.data slot.*
-```{r eval=FALSE}
+
+```r
 Plot_Median_Genes(seurat_object = hca_bm, group_by = "group")
 Plot_Median_UMIs(seurat_object = hca_bm, group_by = "group")
 Plot_Median_Mito(seurat_object = hca_bm, group_by = "group")
@@ -241,26 +361,15 @@ Plot_Median_Other(seurat_object = hca_bm, median_var = "percent_ribo", group_by 
 ```
 
 
-```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=13}
-p1 <- Plot_Median_Genes(seurat_object = hca_bm, group_by = "group")
-p2 <- Plot_Median_UMIs(seurat_object = hca_bm, group_by = "group")
-p3 <- Plot_Median_Mito(seurat_object = hca_bm, group_by = "group")
-p4 <- Plot_Median_Other(seurat_object = hca_bm, median_var = "percent_ribo", group_by = "group")
-
-wrap_plots(p1, p2, p3, p4, ncol = 2)
-```
+<img src="figure/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" style="display: block; margin: auto;" />
 
 ### Plot Number of Cells/Nuclei per Sample
 scCustomize also contains plotting function to plot the number of cells or nuclei per sample.
 
 Since the HCA Bone Marrow dataset has exactly the same number of cells per sample we will use the microglia object from the Analysis Plots vignette.
 
-```{r include=FALSE}
-marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
-```
 
 
-```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=6}
-Plot_Cells_per_Sample(seurat_object = marsh_mouse_micro, group_by = "Transcription_Method")
-```
+
+<img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
 

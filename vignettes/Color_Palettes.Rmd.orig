@@ -1,6 +1,6 @@
 ---
 title: "Customized Color Palettes & Themes"
-date: 'Compiled: December 14, 2021'
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable
@@ -17,13 +17,32 @@ p.caption {
 }
 </style>
  
-
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
 
 ## Choosing Color Palettes and Themes
 While the default Seurat and ggplot2 plots work well they can often be enhanced by customizing color palettes and theming options used.  To simplify/streamline this process for end users scCustomize contains a number of shortcut or helper functions for quick access to color palettes and themes that are frequently used.
 
-
-```r
+```{r init}
 # Load Packages
 library(tidyverse)
 library(patchwork)
@@ -33,7 +52,9 @@ pbmc <- pbmc3k.SeuratData::pbmc3k.final
 ```
 
 
-
+```{r include=FALSE}
+pbmc <- UpdateSeuratObject(pbmc)
+```
 
 
 ## Continuous Palettes
@@ -49,11 +70,16 @@ scCustomize has a number of quick helpers for access to palettes from viridis pa
 * viridis_light_high
 
 
+```{r include=FALSE}
+p1 <- FeaturePlot(object = pbmc, features = "CD3E", order = T)
+p2 <- FeaturePlot_scCustom(seurat_object = pbmc, features = "CD3E", order = T)
+p3 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_magma_dark_high, features = "CD3E", order = T)
+p4 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_light_high, features = "CD3E", order = T)
+```
 
-
-<img src="figure/unnamed-chunk-3-1.png" title="*These palettes provided better contrast for continuous palettes.
- In scCustomize the default is `viridis_plasma_dark_high`*" alt="*These palettes provided better contrast for continuous palettes.
- In scCustomize the default is `viridis_plasma_dark_high`*" style="display: block; margin: auto;" />
+```{r echo=FALSE, fig.align='center', fig.cap="*These palettes provided better contrast for continuous palettes.\n In scCustomize the default is `viridis_plasma_dark_high`*", fig.dim=c(10, 2.5)}
+wrap_plots(p1, p2, p3, p4, ncol = 4) + plot_annotation(tag_levels = 'A')
+```
 
 
 ## Large Discrete Palettes
@@ -69,8 +95,7 @@ The function `DiscretePalette_scCustomize` is function inspired and modified fro
 * varibow (Dynamic)
 
 ### Palettes can either be saved to global environment as variable or called directly within other functions:
-
-```r
+```{r eval=FALSE}
 # Save as variable to global environment
 polychrome_pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
 
@@ -79,44 +104,59 @@ DimPlot(object = obj_name, cols = DiscretePalette_scCustomize(num_colors = 26, p
 ```
 
 ### The "polychrome" palette is the new default for plots with <36 levels and "varibow" when more than 36 levels
-
-```r
+```{r fig.align='center'}
 DimPlot_scCustom(seurat_object = pbmc)
 ```
-
-<img src="figure/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" style="display: block; margin: auto;" />
 
 
 ### Visualize Palettes
 To visualize these or any other palettes you can use the `PalettePlot()` function.
-
-```r
+```{r eval=FALSE}
 PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 26, palette = "alphabet"))
 
 PalettePlot(palette = c("color1", "color2", ...)
+
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-2.png)![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-3.png)![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-4.png)![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-5.png)![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-6.png)![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-7.png)
+```{r echo=FALSE, fig.height=1,fig.width=11}
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 26, palette = "alphabet")) + ggtitle("alphabet (26 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 26, palette = "alphabet2")) + ggtitle("alphabet2 (26 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 32, palette = "glasbey")) + ggtitle("glasbey (32 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")) + ggtitle("polychrome (36 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 24, palette = "stepped")) + ggtitle("stepped (24 colors")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 40, palette = "ditto_seq")) + ggtitle("ditto_seq (40 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 50, palette = "varibow")) + ggtitle("varibow (50 color version)")
+```
 
 ### Dynamic Palettes
 Among the discrete palettes provide the "varibow" palette is actually a dynamic palette whose colors will adjust across the rainbow according to `num_colors` provided:
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-2.png)![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-3.png)![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-4.png)
+```{r echo=FALSE, fig.height=1,fig.width=11}
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 10, palette = "varibow")) + ggtitle("varibow (10 color version)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 20, palette = "varibow")) + ggtitle("varibow (20 color version)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "varibow")) + ggtitle("varibow (30 color version)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 40, palette = "varibow")) + ggtitle("varibow (40 color version)")
+```
 
 ### Shuffle Palettes
 Sometimes it can be helpful to use different order for the discrete palettes depending on the end plot generated (This can be especially true with "varibow" sometimes).  `DiscretePalette_scCustomize` has optional parameter that will randomly shuffle the returned palette (see `shuffle_pal` and `seed` parameter to allow for reproducible shuffling.)
-
-```r
+```{r eval=FALSE}
 PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "varibow")) + ggtitle("varibow (normal)")
-PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "varibow"), shuffle_pal = TRUE) +
-    ggtitle("varibow (shuffled)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "varibow"), shuffle_pal = TRUE) + ggtitle("varibow (shuffled)")
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png)![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-2.png)
+```{r echo=FALSE, fig.height=1,fig.width=11}
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "varibow")) + ggtitle("varibow (normal)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "varibow", shuffle_pal = TRUE)) + ggtitle("varibow (shuffled)")
+```
 
 
 ## Small Discrete Palettes
 Finally scCustomize contains shortcuts for some shorter discrete palettes that can be useful for plotting groups, treatments, genotypes, etc.
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png)![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-2.png)![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-3.png)
+```{r echo=FALSE, fig.height=1,fig.width=11}
+PalettePlot(palette = JCO_Four()) + ggtitle("JCO_Four(): 4 color palette from ggsci package.")
+PalettePlot(palette = Dark2_Pal()) + ggtitle("Dark2_Pal(): 8 color Dark2 palette from RColorBrewer package")
+PalettePlot(palette = ColorBlind_Pal()) + ggtitle("ColorBlind_Pal(): 8 color modified color blind safe palette")
+```
 
 
 ## Plotting Themes & Helpers

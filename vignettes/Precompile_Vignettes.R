@@ -1,6 +1,10 @@
-# Precompiled vignettes that depend on SeuratData Package or other data
+# Code to pre-compile vignettes locally
 
-library(knitr)
+all_files <- list.files("vignettes", full.names = T)
+vignette_files <- grep(pattern = "*.orig", x = all_files, value = T)
+rmd_names <- gsub(pattern = ".orig", replacement = "", x = vignette_files)
 
-knitr::knit("vignettes/Read_and_Write_Functions.Rmd.orig", output = "vignettes/Read_and_Write_Functions.Rmd")
-knitr::knit("vignettes/Sequencing_QC_Plots.Rmd.orig", output = "vignettes/Sequencing_QC_Plots.Rmd")
+
+for (i in vignette_files) {
+  knitr::knit(i, output = gsub(pattern = ".orig", replacement = "", x = i))
+}
