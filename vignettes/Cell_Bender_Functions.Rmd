@@ -1,6 +1,6 @@
 ---
 title: "Cell Bender Functionality & Plotting"
-date: 'Compiled: December 14, 2021'
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable
@@ -17,15 +17,34 @@ p.caption {
 }
 </style>
  
-
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
 
 # Cell Bender Functionality
 Cell Bender is software for elimination of technical artifacts in scRNA-seq/snRNA-seq that uses deep generative model for unsupervised removal of ambient RNA and chimeric PCR artifacts.  You can find out more info about Cell Bender from the [bioRxiv Preprint](https://www.biorxiv.org/content/10.1101/791699v1), [GitHub Repo](https://github.com/broadinstitute/CellBender), and [Documentation](https://cellbender.readthedocs.io/en/latest/).  
   
 Following completion of Cell Bender scCustomize contains a couple of functions that may be helpful when creating and visualizing data in Seurat.
 
-
-```r
+```{r init}
 library(tidyverse)
 library(patchwork)
 library(viridis)
@@ -35,7 +54,10 @@ library(qs)
 ```
   
 
-
+```{r include=FALSE}
+# Read in example Cell Bender Dual Assay Object.
+astrocytes_cortex <- qread("assets/astro_nuc_seq.qs")
+```
 
 
 ## Importing Cell Bender H5 Outputs  
@@ -69,17 +91,13 @@ All we have to do is adjust the parameters to account for cell bender file names
 * `default_10X_path = FALSE` because these are not 10X outputs.
 * `h5_filename = "_out.h5"` specifies the shared aspect of file name that is not part of sample name.  (Can also specify "_out_filtered.h5" depending on which file is desired).
 
-
-```r
-cell_bender_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_bender/", secondary_path = "",
-    default_10X_path = FALSE, h5_filename = "_out.h5", cell_bender = TRUE, merge = TRUE, sample_names = c("WT1",
-        "WT2"), parallel = TRUE, num_cores = 2)
+```{r eval=FALSE}
+cell_bender_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_bender/", secondary_path = "", default_10X_path = FALSE, h5_filename = "_out.h5", cell_bender = TRUE, merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
 ```
 
 ### These matrices can then be used to create Seurat objects as desired (can also be used to create other analysis objects)  
 
-
-```r
+```{r eval=FALSE}
 cell_bender_seurat <- CreateSeuratObject(counts = cell_bender_merged, names.field = 1, names.delim = "_")
 ```
 
@@ -89,31 +107,22 @@ Sometimes it can be helpful to create object that contains both the cell ranger 
 For this function we assume that we will use the cell calling algorithm of Cell Ranger with the modified counts for Cell Bender.  
 
 ### Read in both sets of data
+```{r eval=FALSE}
+cell_bender_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_bender/", secondary_path = "", default_10X_path = FALSE, h5_filename = "_out.h5", cell_bender = TRUE, merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
 
-```r
-cell_bender_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_bender/", secondary_path = "",
-    default_10X_path = FALSE, h5_filename = "_out.h5", cell_bender = TRUE, merge = TRUE, sample_names = c("WT1",
-        "WT2"), parallel = TRUE, num_cores = 2)
-
-cell_ranger_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_ranger/", default_10X_path = TRUE,
-    h5_filename = "filtered_feature_bc_matrix.h5", cell_bender = F, merge = TRUE, sample_names = c("WT1",
-        "WT2"), parallel = TRUE, num_cores = 2)
+cell_ranger_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_ranger/", default_10X_path = TRUE, h5_filename = "filtered_feature_bc_matrix.h5", cell_bender = F, merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
 ```
 
 ### Create Dual Assay Seurat Object
 To run the function the user simply needs to provide the names of the two matrices and a name for assay containing the Cell Ranger counts (by default this is named "RAW").
-
-```r
-dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_bender_merged, raw_counts_matrix = cell_ranger_merged,
-    raw_assay_name = "RAW")
+```{r eval=FALSE}
+dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_bender_merged, raw_counts_matrix = cell_ranger_merged, raw_assay_name = "RAW")
 ```
 
 ### Optional Parameters
 Users can specify any additional parameters normally passed to `Seurat::CreateSeuratObject()` when using this function.
-
-```r
-dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_bender_merged, raw_counts_matrix = cell_ranger_merged,
-    raw_assay_name = "RAW", min_cells = 5, min_features = 200)
+```{r eval=FALSE}
+dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_bender_merged, raw_counts_matrix = cell_ranger_merged, raw_assay_name = "RAW", min_cells = 5, min_features = 200)
 ```
 
 ## Pre/Post Cell Bender Analysis  
@@ -122,178 +131,34 @@ It can be very important with tools like Cell Bender to analyze how much the pro
 ### Add Pre/Post to Meta Data
 scCustomize includes function `Add_Cell_Bender_Diff()` to help with this process.  This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns ("nCount_Diff" and "nFeature_Diff") to the object meta.data.
 
-
-```r
-astrocytes_cortex <- Add_Cell_Bender_Diff(seurat_object = astrocytes_cortex, raw_assay_name = "RAW",
-    cell_bender_assay_name = "RNA")
+```{r eval=FALSE}
+astrocytes_cortex <- Add_Cell_Bender_Diff(seurat_object = astrocytes_cortex, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
 
 head(astrocytes_cortex@meta.data, 5)
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:left;"> orig.ident </th>
-   <th style="text-align:right;"> nCount_RNA </th>
-   <th style="text-align:right;"> nFeature_RNA </th>
-   <th style="text-align:right;"> nCount_RAW </th>
-   <th style="text-align:right;"> nFeature_RAW </th>
-   <th style="text-align:right;"> percent_mito </th>
-   <th style="text-align:right;"> percent_ribo </th>
-   <th style="text-align:right;"> percent_mito_ribo </th>
-   <th style="text-align:right;"> nCount_SCT </th>
-   <th style="text-align:right;"> nFeature_SCT </th>
-   <th style="text-align:left;"> SCT_snn_res.0.6 </th>
-   <th style="text-align:left;"> seurat_clusters </th>
-   <th style="text-align:right;"> nFeature_Diff </th>
-   <th style="text-align:right;"> nCount_Diff </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> WT-2a_AAACCCACACACCAGC-1 </td>
-   <td style="text-align:left;"> WT-2a </td>
-   <td style="text-align:right;"> 3207 </td>
-   <td style="text-align:right;"> 1699 </td>
-   <td style="text-align:right;"> 3472 </td>
-   <td style="text-align:right;"> 1852 </td>
-   <td style="text-align:right;"> 0.0311818 </td>
-   <td style="text-align:right;"> 0.0311818 </td>
-   <td style="text-align:right;"> 0.0623636 </td>
-   <td style="text-align:right;"> 3103 </td>
-   <td style="text-align:right;"> 1695 </td>
-   <td style="text-align:left;"> 2 </td>
-   <td style="text-align:left;"> 2 </td>
-   <td style="text-align:right;"> 153 </td>
-   <td style="text-align:right;"> 265 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> WT-2a_AAACGAAGTATCGCTA-1 </td>
-   <td style="text-align:left;"> WT-2a </td>
-   <td style="text-align:right;"> 2089 </td>
-   <td style="text-align:right;"> 1217 </td>
-   <td style="text-align:right;"> 2326 </td>
-   <td style="text-align:right;"> 1354 </td>
-   <td style="text-align:right;"> 0.0000000 </td>
-   <td style="text-align:right;"> 0.0478698 </td>
-   <td style="text-align:right;"> 0.0478698 </td>
-   <td style="text-align:right;"> 2468 </td>
-   <td style="text-align:right;"> 1216 </td>
-   <td style="text-align:left;"> 2 </td>
-   <td style="text-align:left;"> 2 </td>
-   <td style="text-align:right;"> 137 </td>
-   <td style="text-align:right;"> 237 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> WT-2a_AAACGAATCGACCATA-1 </td>
-   <td style="text-align:left;"> WT-2a </td>
-   <td style="text-align:right;"> 3327 </td>
-   <td style="text-align:right;"> 1677 </td>
-   <td style="text-align:right;"> 3687 </td>
-   <td style="text-align:right;"> 1882 </td>
-   <td style="text-align:right;"> 0.2103998 </td>
-   <td style="text-align:right;"> 0.4207995 </td>
-   <td style="text-align:right;"> 0.6311993 </td>
-   <td style="text-align:right;"> 3148 </td>
-   <td style="text-align:right;"> 1672 </td>
-   <td style="text-align:left;"> 4 </td>
-   <td style="text-align:left;"> 4 </td>
-   <td style="text-align:right;"> 205 </td>
-   <td style="text-align:right;"> 360 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> WT-2a_AAACGCTCAAACTCGT-1 </td>
-   <td style="text-align:left;"> WT-2a </td>
-   <td style="text-align:right;"> 2221 </td>
-   <td style="text-align:right;"> 1236 </td>
-   <td style="text-align:right;"> 2472 </td>
-   <td style="text-align:right;"> 1378 </td>
-   <td style="text-align:right;"> 0.0900495 </td>
-   <td style="text-align:right;"> 0.1350743 </td>
-   <td style="text-align:right;"> 0.2251238 </td>
-   <td style="text-align:right;"> 2504 </td>
-   <td style="text-align:right;"> 1235 </td>
-   <td style="text-align:left;"> 4 </td>
-   <td style="text-align:left;"> 4 </td>
-   <td style="text-align:right;"> 142 </td>
-   <td style="text-align:right;"> 251 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> WT-2a_AAACGCTCATGTTACG-1 </td>
-   <td style="text-align:left;"> WT-2a </td>
-   <td style="text-align:right;"> 2685 </td>
-   <td style="text-align:right;"> 1518 </td>
-   <td style="text-align:right;"> 2999 </td>
-   <td style="text-align:right;"> 1694 </td>
-   <td style="text-align:right;"> 0.0744879 </td>
-   <td style="text-align:right;"> 0.8193669 </td>
-   <td style="text-align:right;"> 0.8938547 </td>
-   <td style="text-align:right;"> 2720 </td>
-   <td style="text-align:right;"> 1509 </td>
-   <td style="text-align:left;"> 4 </td>
-   <td style="text-align:left;"> 4 </td>
-   <td style="text-align:right;"> 176 </td>
-   <td style="text-align:right;"> 314 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+astrocytes_cortex <- Add_Cell_Bender_Diff(seurat_object = astrocytes_cortex, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+
+head(astrocytes_cortex@meta.data, 5) %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 ### Calculate per sample averages  
 We can then use `Median_Stats()` to calculate per sample averages across all cells by supplying the new variables to the `median_var` parameter.
 
-
-```r
-median_stats <- Median_Stats(seurat_object = astrocytes_cortex, group_by_var = "orig.ident", median_var = c("nCount_Diff",
-    "nFeature_Diff"))
+```{r eval=FALSE}
+median_stats <- Median_Stats(seurat_object = astrocytes_cortex, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> orig.ident </th>
-   <th style="text-align:right;"> Median_nCount_RNA </th>
-   <th style="text-align:right;"> Median_nFeature_RNA </th>
-   <th style="text-align:right;"> Median_percent_mito </th>
-   <th style="text-align:right;"> Median_percent_ribo </th>
-   <th style="text-align:right;"> Median_percent_mito_ribo </th>
-   <th style="text-align:right;"> Median_nCount_Diff </th>
-   <th style="text-align:right;"> Median_nFeature_Diff </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> WT-2a </td>
-   <td style="text-align:right;"> 2949.5 </td>
-   <td style="text-align:right;"> 1527.5 </td>
-   <td style="text-align:right;"> 0.0224121 </td>
-   <td style="text-align:right;"> 0.0673027 </td>
-   <td style="text-align:right;"> 0.0948317 </td>
-   <td style="text-align:right;"> 280 </td>
-   <td style="text-align:right;"> 156 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> WT-6a </td>
-   <td style="text-align:right;"> 2765.0 </td>
-   <td style="text-align:right;"> 1451.5 </td>
-   <td style="text-align:right;"> 0.0352609 </td>
-   <td style="text-align:right;"> 0.0656276 </td>
-   <td style="text-align:right;"> 0.1065341 </td>
-   <td style="text-align:right;"> 279 </td>
-   <td style="text-align:right;"> 154 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Totals (All Cells) </td>
-   <td style="text-align:right;"> 2875.0 </td>
-   <td style="text-align:right;"> 1498.5 </td>
-   <td style="text-align:right;"> 0.0293169 </td>
-   <td style="text-align:right;"> 0.0665447 </td>
-   <td style="text-align:right;"> 0.1006627 </td>
-   <td style="text-align:right;"> 279 </td>
-   <td style="text-align:right;"> 156 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+median_stats <- Median_Stats(seurat_object = astrocytes_cortex, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
+
+median_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 ## Dual Assay Plotting
 For Cell Bender especially, but also potentially for other assays as well, it can be helpful during analysis to plot the corrected and uncorrected counts for given feature.  scCustomize contains function `FeaturePlot_DualAssay()` to make easy.
@@ -306,8 +171,12 @@ For this example I'm using unpublished single nucleus RNA dataset from mouse cor
 
 #### Ambient RNA gene
 First let's plot gene that represents ambient RNA as it's restricted in expression to neurons (synaptic gene).  If Cell Bender has worked well we expect that expression of this gene will be very different between the two assays.
-<img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
+```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+FeaturePlot_DualAssay(seurat_object = astrocytes_cortex, features = "Syt1", assay1 = "RNA", assay2 = "RAW")
+```
 
 #### Non-Ambient RNA gene
 Now let's plot normally astrocyte restricted gene.  If Cell Bender has worked well we expect that expression of this gene shouldn't be very different between the two assays.
-<img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
+```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+FeaturePlot_DualAssay(seurat_object = astrocytes_cortex, features = "Gja1", assay1 = "RNA", assay2 = "RAW")
+```

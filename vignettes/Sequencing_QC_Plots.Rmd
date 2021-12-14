@@ -1,6 +1,6 @@
 ---
 title: "Plotting #3: Sequencing QC Plots/Analysis"
-date: 'Compiled: December 14, 2021'
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable
@@ -17,22 +17,44 @@ p.caption {
 }
 </style>
  
-
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
 
 # Plotting Sequencing/Alignment Metrics
 In addition to other QC metrics previously discussed it can also be helpful to plot the metrics generated during alignment of sequencing data to see if there are differences that might arise as result of sequencing differences as opposed to biological differences.
   
 For this tutorial, I will be utilizing de-identified example data from my own experience but I will walk through process for using your own data.
 
-
-```r
+```{r init}
 library(tidyverse)
 library(Seurat)
 library(scCustomize)
 library(qs)
 ```
 
-
+```{r include=FALSE}
+raw_metrics <- qread("assets/seq_metrics_dataframe_RAW.qs")
+meta_metrics <- qread("assets/seq_metrics_dataframe_meta.qs")
+```
 
 
 ## Loading Data  
@@ -64,8 +86,7 @@ Parent_Directory
 
 ### Read Data
 We can read all metrics files within a given parent directory using the `Read_Metrics_10X` function.
-
-```r
+```{r eval=FALSE}
 raw_metrics <- Read_Metrics_10X(base_path = "path/to/parent/directory/", default_10X = TRUE)
 
 head(raw_metrics)
@@ -73,166 +94,11 @@ head(raw_metrics)
 
 The result of this function will be a data.frame with one row per library.
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> sample_id </th>
-   <th style="text-align:right;"> Estimated_Number_of_Cells </th>
-   <th style="text-align:right;"> Mean_Reads_per_Cell </th>
-   <th style="text-align:right;"> Median_Genes_per_Cell </th>
-   <th style="text-align:right;"> Number_of_Reads </th>
-   <th style="text-align:left;"> Valid_Barcodes </th>
-   <th style="text-align:left;"> Sequencing_Saturation </th>
-   <th style="text-align:left;"> Q30_Bases_in_Barcode </th>
-   <th style="text-align:left;"> Q30_Bases_in_RNA_Read </th>
-   <th style="text-align:left;"> Q30_Bases_in_UMI </th>
-   <th style="text-align:left;"> Reads_Mapped_to_Genome </th>
-   <th style="text-align:left;"> Reads_Mapped_Confidently_to_Genome </th>
-   <th style="text-align:left;"> Reads_Mapped_Confidently_to_Intergenic_Regions </th>
-   <th style="text-align:left;"> Reads_Mapped_Confidently_to_Intronic_Regions </th>
-   <th style="text-align:left;"> Reads_Mapped_Confidently_to_Exonic_Regions </th>
-   <th style="text-align:left;"> Reads_Mapped_Confidently_to_Transcriptome </th>
-   <th style="text-align:left;"> Reads_Mapped_Antisense_to_Gene </th>
-   <th style="text-align:left;"> Fraction_Reads_in_Cells </th>
-   <th style="text-align:right;"> Total_Genes_Detected </th>
-   <th style="text-align:right;"> Median_UMI_Counts_per_Cell </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> sample_1 </td>
-   <td style="text-align:right;"> 2526 </td>
-   <td style="text-align:right;"> 193933 </td>
-   <td style="text-align:right;"> 724 </td>
-   <td style="text-align:right;"> 489875507 </td>
-   <td style="text-align:left;"> 96.3% </td>
-   <td style="text-align:left;"> 89.8% </td>
-   <td style="text-align:left;"> 96.0% </td>
-   <td style="text-align:left;"> 94.2% </td>
-   <td style="text-align:left;"> 95.7% </td>
-   <td style="text-align:left;"> 95.9% </td>
-   <td style="text-align:left;"> 86.5% </td>
-   <td style="text-align:left;"> 5.2% </td>
-   <td style="text-align:left;"> 21.7% </td>
-   <td style="text-align:left;"> 59.5% </td>
-   <td style="text-align:left;"> 56.1% </td>
-   <td style="text-align:left;"> 2.3% </td>
-   <td style="text-align:left;"> 60.1% </td>
-   <td style="text-align:right;"> 21105 </td>
-   <td style="text-align:right;"> 1840 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_2 </td>
-   <td style="text-align:right;"> 2642 </td>
-   <td style="text-align:right;"> 179146 </td>
-   <td style="text-align:right;"> 986 </td>
-   <td style="text-align:right;"> 473302676 </td>
-   <td style="text-align:left;"> 97.7% </td>
-   <td style="text-align:left;"> 88.3% </td>
-   <td style="text-align:left;"> 95.9% </td>
-   <td style="text-align:left;"> 94.3% </td>
-   <td style="text-align:left;"> 95.6% </td>
-   <td style="text-align:left;"> 95.8% </td>
-   <td style="text-align:left;"> 88.7% </td>
-   <td style="text-align:left;"> 4.6% </td>
-   <td style="text-align:left;"> 18.4% </td>
-   <td style="text-align:left;"> 65.7% </td>
-   <td style="text-align:left;"> 63.0% </td>
-   <td style="text-align:left;"> 1.7% </td>
-   <td style="text-align:left;"> 56.7% </td>
-   <td style="text-align:right;"> 21321 </td>
-   <td style="text-align:right;"> 3394 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_3 </td>
-   <td style="text-align:right;"> 7337 </td>
-   <td style="text-align:right;"> 79420 </td>
-   <td style="text-align:right;"> 2454 </td>
-   <td style="text-align:right;"> 582707755 </td>
-   <td style="text-align:left;"> 93.5% </td>
-   <td style="text-align:left;"> 72.3% </td>
-   <td style="text-align:left;"> 96.5% </td>
-   <td style="text-align:left;"> 94.8% </td>
-   <td style="text-align:left;"> 96.2% </td>
-   <td style="text-align:left;"> 95.5% </td>
-   <td style="text-align:left;"> 90.8% </td>
-   <td style="text-align:left;"> 7.1% </td>
-   <td style="text-align:left;"> 20.1% </td>
-   <td style="text-align:left;"> 63.7% </td>
-   <td style="text-align:left;"> 58.3% </td>
-   <td style="text-align:left;"> 4.3% </td>
-   <td style="text-align:left;"> 72.5% </td>
-   <td style="text-align:right;"> 23556 </td>
-   <td style="text-align:right;"> 6685 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_4 </td>
-   <td style="text-align:right;"> 2352 </td>
-   <td style="text-align:right;"> 165755 </td>
-   <td style="text-align:right;"> 722 </td>
-   <td style="text-align:right;"> 389854975 </td>
-   <td style="text-align:left;"> 97.0% </td>
-   <td style="text-align:left;"> 86.9% </td>
-   <td style="text-align:left;"> 96.0% </td>
-   <td style="text-align:left;"> 94.1% </td>
-   <td style="text-align:left;"> 95.6% </td>
-   <td style="text-align:left;"> 95.0% </td>
-   <td style="text-align:left;"> 84.0% </td>
-   <td style="text-align:left;"> 4.8% </td>
-   <td style="text-align:left;"> 20.3% </td>
-   <td style="text-align:left;"> 58.9% </td>
-   <td style="text-align:left;"> 55.7% </td>
-   <td style="text-align:left;"> 2.2% </td>
-   <td style="text-align:left;"> 66.4% </td>
-   <td style="text-align:right;"> 21141 </td>
-   <td style="text-align:right;"> 2360 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_5 </td>
-   <td style="text-align:right;"> 3697 </td>
-   <td style="text-align:right;"> 152621 </td>
-   <td style="text-align:right;"> 794 </td>
-   <td style="text-align:right;"> 564238318 </td>
-   <td style="text-align:left;"> 97.7% </td>
-   <td style="text-align:left;"> 89.2% </td>
-   <td style="text-align:left;"> 96.0% </td>
-   <td style="text-align:left;"> 94.3% </td>
-   <td style="text-align:left;"> 95.7% </td>
-   <td style="text-align:left;"> 96.3% </td>
-   <td style="text-align:left;"> 85.7% </td>
-   <td style="text-align:left;"> 3.8% </td>
-   <td style="text-align:left;"> 20.9% </td>
-   <td style="text-align:left;"> 61.0% </td>
-   <td style="text-align:left;"> 58.1% </td>
-   <td style="text-align:left;"> 1.9% </td>
-   <td style="text-align:left;"> 66.3% </td>
-   <td style="text-align:right;"> 21764 </td>
-   <td style="text-align:right;"> 2224 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_6 </td>
-   <td style="text-align:right;"> 5043 </td>
-   <td style="text-align:right;"> 101180 </td>
-   <td style="text-align:right;"> 1126 </td>
-   <td style="text-align:right;"> 510250215 </td>
-   <td style="text-align:left;"> 94.5% </td>
-   <td style="text-align:left;"> 74.6% </td>
-   <td style="text-align:left;"> 96.4% </td>
-   <td style="text-align:left;"> 94.8% </td>
-   <td style="text-align:left;"> 96.0% </td>
-   <td style="text-align:left;"> 96.1% </td>
-   <td style="text-align:left;"> 81.9% </td>
-   <td style="text-align:left;"> 5.1% </td>
-   <td style="text-align:left;"> 15.8% </td>
-   <td style="text-align:left;"> 61.0% </td>
-   <td style="text-align:left;"> 56.5% </td>
-   <td style="text-align:left;"> 3.5% </td>
-   <td style="text-align:left;"> 78.5% </td>
-   <td style="text-align:right;"> 22565 </td>
-   <td style="text-align:right;"> 8792 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+head(raw_metrics) %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
 
 #### Optional parameters
 Similarly to the scCustomize functions for reading raw count matrices (See [Read & Write Data Functions Vignette](https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html)) there are a few optional parameters for `Read_Metrics_10X`.  
@@ -249,68 +115,19 @@ Similarly to the scCustomize functions for reading raw count matrices (See [Read
 In order to make the resulting plots more meaningful we need to added corresponding sample level meta data.  
 *NOTE: Make sure that one column in your meta data data.frame matches the "sample_id" column to metrics data.frame so that they are properly joined.*
 
-
-```r
+```{r eval=FALSE}
 head(meta_metrics)
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> sample_id </th>
-   <th style="text-align:left;"> Seq_Batch </th>
-   <th style="text-align:right;"> Exp_Batch </th>
-   <th style="text-align:left;"> Full_Batch </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> sample_1 </td>
-   <td style="text-align:left;"> A </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> 1_A </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_2 </td>
-   <td style="text-align:left;"> A </td>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> 2_A </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_3 </td>
-   <td style="text-align:left;"> B </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> 3_B </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_4 </td>
-   <td style="text-align:left;"> A </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:left;"> 1_A </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_5 </td>
-   <td style="text-align:left;"> A </td>
-   <td style="text-align:right;"> 2 </td>
-   <td style="text-align:left;"> 2_A </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample_6 </td>
-   <td style="text-align:left;"> B </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:left;"> 3_B </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+head(meta_metrics) %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
 
 Now we join the two data.frames before plotting.
-
-```r
+```{r message=TRUE}
 metrics_final <- right_join(raw_metrics, meta_metrics)
-```
-
-```
-## Joining, by = "sample_id"
 ```
 
 
@@ -321,28 +138,19 @@ However, to simplify plotting there are also two wrapper functions which will re
 
 ### Basic Metrics Summary
 A set of basic metrics can be plotted using `Seq_QC_Plot_Basic_Combined`
-
-```r
+```{r, fig.height=9, fig.width=13}
 Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch")
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
-
 ### Alignment Metrics Summary
 A set of alignment-based metrics can be plotted using `Seq_QC_Plot_Alignment_Combined`
-
-```r
+```{r, fig.height=9, fig.width=13}
 Seq_QC_Plot_Alignment_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch")
 ```
-
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
 
 ### Basic Statistics
 All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means`.  
 ***NOTE: See function help pages and ggpubr for more info to make sure the right test is being used for your data.***
-
-```r
+```{r, fig.height=9, fig.width=13}
 Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch", significance = T)
 ```
-
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)

@@ -1,6 +1,6 @@
 ---
 title: "Statistics Functions"
-date: 'Compiled: December 14, 2021'
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 theme: united
 vignette: >
@@ -16,7 +16,27 @@ p.caption {
 }
 </style>
  
-
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
 
 
 
@@ -24,8 +44,7 @@ p.caption {
 scCustomize contains a couple simple helper functions to return metrics of interest.
 
 For this vignette I will be utilizing pbmc3k dataset from the SeuratData package.
-
-```r
+```{r init}
 # Load Packages
 library(tidyverse)
 library(Seurat)
@@ -36,11 +55,13 @@ library(qs)
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
 ```
 
-
+```{r include=FALSE}
+# Update pbmc check
+pbmc <- UpdateSeuratObject(pbmc)
+```
 
 Now let's add some extra meta data for use with tutorial
-
-```r
+```{r}
 # Add mito and ribo data
 pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
 
@@ -49,7 +70,7 @@ pbmc$orig.ident <- sample(c("sample1", "sample2", "sample3", "sample4"), size = 
 pbmc@meta.data$group[pbmc@meta.data$orig.ident == "sample1" | pbmc@meta.data$orig.ident == "sample3"] <- "Group 1"
 pbmc@meta.data$group[pbmc@meta.data$orig.ident == "sample2" | pbmc@meta.data$orig.ident == "sample4"] <- "Group 2"
 
-# Add dummy module score
+# Add dummy module score 
 pbmc <- AddModuleScore(object = pbmc, features = list(c("CD3E", "CD4", "THY1", "TCRA")), name = "module_score")
 ```
 
@@ -58,493 +79,95 @@ pbmc <- AddModuleScore(object = pbmc, features = list(c("CD3E", "CD4", "THY1", "
 It can be really helpful to know the number and percentage of cells per identity/cluster during analysis.  
 scCustomize provides the `Cluster_Stats_All_Samples` function to make this easy.
 
-
-```r
+```{r eval=FALSE}
 cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc)
 
 cluster_stats
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Cluster </th>
-   <th style="text-align:right;"> Number </th>
-   <th style="text-align:right;"> Freq </th>
-   <th style="text-align:right;"> sample1 </th>
-   <th style="text-align:right;"> sample2 </th>
-   <th style="text-align:right;"> sample3 </th>
-   <th style="text-align:right;"> sample4 </th>
-   <th style="text-align:right;"> sample1_% </th>
-   <th style="text-align:right;"> sample2_% </th>
-   <th style="text-align:right;"> sample3_% </th>
-   <th style="text-align:right;"> sample4_% </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Naive CD4 T </td>
-   <td style="text-align:right;"> 697 </td>
-   <td style="text-align:right;"> 26.4215315 </td>
-   <td style="text-align:right;"> 168 </td>
-   <td style="text-align:right;"> 182 </td>
-   <td style="text-align:right;"> 172 </td>
-   <td style="text-align:right;"> 175 </td>
-   <td style="text-align:right;"> 24.8888889 </td>
-   <td style="text-align:right;"> 27.4924471 </td>
-   <td style="text-align:right;"> 27.831715 </td>
-   <td style="text-align:right;"> 25.6222548 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Memory CD4 T </td>
-   <td style="text-align:right;"> 483 </td>
-   <td style="text-align:right;"> 18.3093252 </td>
-   <td style="text-align:right;"> 140 </td>
-   <td style="text-align:right;"> 124 </td>
-   <td style="text-align:right;"> 100 </td>
-   <td style="text-align:right;"> 119 </td>
-   <td style="text-align:right;"> 20.7407407 </td>
-   <td style="text-align:right;"> 18.7311178 </td>
-   <td style="text-align:right;"> 16.181230 </td>
-   <td style="text-align:right;"> 17.4231332 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD14+ Mono </td>
-   <td style="text-align:right;"> 480 </td>
-   <td style="text-align:right;"> 18.1956027 </td>
-   <td style="text-align:right;"> 132 </td>
-   <td style="text-align:right;"> 114 </td>
-   <td style="text-align:right;"> 110 </td>
-   <td style="text-align:right;"> 124 </td>
-   <td style="text-align:right;"> 19.5555556 </td>
-   <td style="text-align:right;"> 17.2205438 </td>
-   <td style="text-align:right;"> 17.799353 </td>
-   <td style="text-align:right;"> 18.1551977 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> B </td>
-   <td style="text-align:right;"> 344 </td>
-   <td style="text-align:right;"> 13.0401820 </td>
-   <td style="text-align:right;"> 80 </td>
-   <td style="text-align:right;"> 85 </td>
-   <td style="text-align:right;"> 90 </td>
-   <td style="text-align:right;"> 89 </td>
-   <td style="text-align:right;"> 11.8518519 </td>
-   <td style="text-align:right;"> 12.8398792 </td>
-   <td style="text-align:right;"> 14.563107 </td>
-   <td style="text-align:right;"> 13.0307467 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD8 T </td>
-   <td style="text-align:right;"> 271 </td>
-   <td style="text-align:right;"> 10.2729340 </td>
-   <td style="text-align:right;"> 66 </td>
-   <td style="text-align:right;"> 69 </td>
-   <td style="text-align:right;"> 61 </td>
-   <td style="text-align:right;"> 75 </td>
-   <td style="text-align:right;"> 9.7777778 </td>
-   <td style="text-align:right;"> 10.4229607 </td>
-   <td style="text-align:right;"> 9.870550 </td>
-   <td style="text-align:right;"> 10.9809663 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> FCGR3A+ Mono </td>
-   <td style="text-align:right;"> 162 </td>
-   <td style="text-align:right;"> 6.1410159 </td>
-   <td style="text-align:right;"> 48 </td>
-   <td style="text-align:right;"> 35 </td>
-   <td style="text-align:right;"> 40 </td>
-   <td style="text-align:right;"> 39 </td>
-   <td style="text-align:right;"> 7.1111111 </td>
-   <td style="text-align:right;"> 5.2870091 </td>
-   <td style="text-align:right;"> 6.472492 </td>
-   <td style="text-align:right;"> 5.7101025 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NK </td>
-   <td style="text-align:right;"> 155 </td>
-   <td style="text-align:right;"> 5.8756634 </td>
-   <td style="text-align:right;"> 37 </td>
-   <td style="text-align:right;"> 41 </td>
-   <td style="text-align:right;"> 31 </td>
-   <td style="text-align:right;"> 46 </td>
-   <td style="text-align:right;"> 5.4814815 </td>
-   <td style="text-align:right;"> 6.1933535 </td>
-   <td style="text-align:right;"> 5.016181 </td>
-   <td style="text-align:right;"> 6.7349927 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> DC </td>
-   <td style="text-align:right;"> 32 </td>
-   <td style="text-align:right;"> 1.2130402 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 9 </td>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:right;"> 13 </td>
-   <td style="text-align:right;"> 0.4444444 </td>
-   <td style="text-align:right;"> 1.3595166 </td>
-   <td style="text-align:right;"> 1.132686 </td>
-   <td style="text-align:right;"> 1.9033675 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Platelet </td>
-   <td style="text-align:right;"> 14 </td>
-   <td style="text-align:right;"> 0.5307051 </td>
-   <td style="text-align:right;"> 1 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 7 </td>
-   <td style="text-align:right;"> 3 </td>
-   <td style="text-align:right;"> 0.1481481 </td>
-   <td style="text-align:right;"> 0.4531722 </td>
-   <td style="text-align:right;"> 1.132686 </td>
-   <td style="text-align:right;"> 0.4392387 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Total </td>
-   <td style="text-align:right;"> 2638 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-   <td style="text-align:right;"> 675 </td>
-   <td style="text-align:right;"> 662 </td>
-   <td style="text-align:right;"> 618 </td>
-   <td style="text-align:right;"> 683 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-   <td style="text-align:right;"> 100.000000 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc)
+
+cluster_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
 
 By default `Cluster_Stats_All_Samples` uses "orig.ident" as the group variable but user can specify any `@meta.data` slot variable.
-
-```r
+```{r eval=FALSE}
 cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = "group")
 
 cluster_stats
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Cluster </th>
-   <th style="text-align:right;"> Number </th>
-   <th style="text-align:right;"> Freq </th>
-   <th style="text-align:right;"> Group 1 </th>
-   <th style="text-align:right;"> Group 2 </th>
-   <th style="text-align:right;"> Group 1_% </th>
-   <th style="text-align:right;"> Group 2_% </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Naive CD4 T </td>
-   <td style="text-align:right;"> 697 </td>
-   <td style="text-align:right;"> 26.4215315 </td>
-   <td style="text-align:right;"> 340 </td>
-   <td style="text-align:right;"> 357 </td>
-   <td style="text-align:right;"> 26.2954370 </td>
-   <td style="text-align:right;"> 26.5427509 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Memory CD4 T </td>
-   <td style="text-align:right;"> 483 </td>
-   <td style="text-align:right;"> 18.3093252 </td>
-   <td style="text-align:right;"> 240 </td>
-   <td style="text-align:right;"> 243 </td>
-   <td style="text-align:right;"> 18.5614849 </td>
-   <td style="text-align:right;"> 18.0669145 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD14+ Mono </td>
-   <td style="text-align:right;"> 480 </td>
-   <td style="text-align:right;"> 18.1956027 </td>
-   <td style="text-align:right;"> 242 </td>
-   <td style="text-align:right;"> 238 </td>
-   <td style="text-align:right;"> 18.7161640 </td>
-   <td style="text-align:right;"> 17.6951673 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> B </td>
-   <td style="text-align:right;"> 344 </td>
-   <td style="text-align:right;"> 13.0401820 </td>
-   <td style="text-align:right;"> 170 </td>
-   <td style="text-align:right;"> 174 </td>
-   <td style="text-align:right;"> 13.1477185 </td>
-   <td style="text-align:right;"> 12.9368030 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD8 T </td>
-   <td style="text-align:right;"> 271 </td>
-   <td style="text-align:right;"> 10.2729340 </td>
-   <td style="text-align:right;"> 127 </td>
-   <td style="text-align:right;"> 144 </td>
-   <td style="text-align:right;"> 9.8221191 </td>
-   <td style="text-align:right;"> 10.7063197 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> FCGR3A+ Mono </td>
-   <td style="text-align:right;"> 162 </td>
-   <td style="text-align:right;"> 6.1410159 </td>
-   <td style="text-align:right;"> 88 </td>
-   <td style="text-align:right;"> 74 </td>
-   <td style="text-align:right;"> 6.8058778 </td>
-   <td style="text-align:right;"> 5.5018587 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> NK </td>
-   <td style="text-align:right;"> 155 </td>
-   <td style="text-align:right;"> 5.8756634 </td>
-   <td style="text-align:right;"> 68 </td>
-   <td style="text-align:right;"> 87 </td>
-   <td style="text-align:right;"> 5.2590874 </td>
-   <td style="text-align:right;"> 6.4684015 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> DC </td>
-   <td style="text-align:right;"> 32 </td>
-   <td style="text-align:right;"> 1.2130402 </td>
-   <td style="text-align:right;"> 10 </td>
-   <td style="text-align:right;"> 22 </td>
-   <td style="text-align:right;"> 0.7733952 </td>
-   <td style="text-align:right;"> 1.6356877 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Platelet </td>
-   <td style="text-align:right;"> 14 </td>
-   <td style="text-align:right;"> 0.5307051 </td>
-   <td style="text-align:right;"> 8 </td>
-   <td style="text-align:right;"> 6 </td>
-   <td style="text-align:right;"> 0.6187162 </td>
-   <td style="text-align:right;"> 0.4460967 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Total </td>
-   <td style="text-align:right;"> 2638 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-   <td style="text-align:right;"> 1293 </td>
-   <td style="text-align:right;"> 1345 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-   <td style="text-align:right;"> 100.0000000 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = "group")
+
+cluster_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 
 ## Percent of Cells Expressing Feature(s)
 It can also be informative to understand the percent of cells/nuclei that express a given feature or set of features.  
 scCustomize provides the `Percent_Expressing` function to return these results.
-
-```r
+```{r eval=FALSE}
 percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"))
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Naive.CD4.T </th>
-   <th style="text-align:right;"> Memory.CD4.T </th>
-   <th style="text-align:right;"> CD14..Mono </th>
-   <th style="text-align:right;"> B </th>
-   <th style="text-align:right;"> CD8.T </th>
-   <th style="text-align:right;"> FCGR3A..Mono </th>
-   <th style="text-align:right;"> NK </th>
-   <th style="text-align:right;"> DC </th>
-   <th style="text-align:right;"> Platelet </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> CD4 </td>
-   <td style="text-align:right;"> 6.743185 </td>
-   <td style="text-align:right;"> 15.942029 </td>
-   <td style="text-align:right;"> 24.375 </td>
-   <td style="text-align:right;"> 1.453488 </td>
-   <td style="text-align:right;"> 2.583026 </td>
-   <td style="text-align:right;"> 27.160494 </td>
-   <td style="text-align:right;"> 0.6451613 </td>
-   <td style="text-align:right;"> 34.375 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD8A </td>
-   <td style="text-align:right;"> 13.342898 </td>
-   <td style="text-align:right;"> 8.902691 </td>
-   <td style="text-align:right;"> 1.875 </td>
-   <td style="text-align:right;"> 2.616279 </td>
-   <td style="text-align:right;"> 50.553505 </td>
-   <td style="text-align:right;"> 3.703704 </td>
-   <td style="text-align:right;"> 8.3870968 </td>
-   <td style="text-align:right;"> 3.125 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"))
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 
 ### Change grouping variable
 By default the function groups expression across `@active.ident` (see above) but user can specify difference variable if desired.
-
-```r
+```{r eval=FALSE}
 percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group_by = "orig.ident")
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> sample3 </th>
-   <th style="text-align:right;"> sample2 </th>
-   <th style="text-align:right;"> sample4 </th>
-   <th style="text-align:right;"> sample1 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> CD4 </td>
-   <td style="text-align:right;"> 12.45955 </td>
-   <td style="text-align:right;"> 8.610272 </td>
-   <td style="text-align:right;"> 11.85944 </td>
-   <td style="text-align:right;"> 13.92593 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD8A </td>
-   <td style="text-align:right;"> 12.62136 </td>
-   <td style="text-align:right;"> 10.422961 </td>
-   <td style="text-align:right;"> 12.29868 </td>
-   <td style="text-align:right;"> 11.85185 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group_by = "orig.ident")
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 ### Split within groups
 User can also supply a `split_by` variable to quantify expression within group split by meta data variable
-
-```r
+```{r eval=FALSE}
 percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split_by = "group")
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Naive.CD4.T_Group.1 </th>
-   <th style="text-align:right;"> Naive.CD4.T_Group.2 </th>
-   <th style="text-align:right;"> Memory.CD4.T_Group.1 </th>
-   <th style="text-align:right;"> Memory.CD4.T_Group.2 </th>
-   <th style="text-align:right;"> CD14..Mono_Group.1 </th>
-   <th style="text-align:right;"> CD14..Mono_Group.2 </th>
-   <th style="text-align:right;"> B_Group.1 </th>
-   <th style="text-align:right;"> B_Group.2 </th>
-   <th style="text-align:right;"> CD8.T_Group.1 </th>
-   <th style="text-align:right;"> CD8.T_Group.2 </th>
-   <th style="text-align:right;"> FCGR3A..Mono_Group.1 </th>
-   <th style="text-align:right;"> FCGR3A..Mono_Group.2 </th>
-   <th style="text-align:right;"> NK_Group.2 </th>
-   <th style="text-align:right;"> NK_Group.1 </th>
-   <th style="text-align:right;"> DC_Group.1 </th>
-   <th style="text-align:right;"> DC_Group.2 </th>
-   <th style="text-align:right;"> Platelet_Group.1 </th>
-   <th style="text-align:right;"> Platelet_Group.2 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> CD4 </td>
-   <td style="text-align:right;"> 9.411765 </td>
-   <td style="text-align:right;"> 4.201681 </td>
-   <td style="text-align:right;"> 18.33333 </td>
-   <td style="text-align:right;"> 13.580247 </td>
-   <td style="text-align:right;"> 24.380165 </td>
-   <td style="text-align:right;"> 24.36975 </td>
-   <td style="text-align:right;"> 1.764706 </td>
-   <td style="text-align:right;"> 1.149425 </td>
-   <td style="text-align:right;"> 3.149606 </td>
-   <td style="text-align:right;"> 2.083333 </td>
-   <td style="text-align:right;"> 27.272727 </td>
-   <td style="text-align:right;"> 27.027027 </td>
-   <td style="text-align:right;"> 1.149425 </td>
-   <td style="text-align:right;"> 0.00000 </td>
-   <td style="text-align:right;"> 50 </td>
-   <td style="text-align:right;"> 27.27273 </td>
-   <td style="text-align:right;"> 0 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD8A </td>
-   <td style="text-align:right;"> 12.058824 </td>
-   <td style="text-align:right;"> 14.565826 </td>
-   <td style="text-align:right;"> 11.25000 </td>
-   <td style="text-align:right;"> 6.584362 </td>
-   <td style="text-align:right;"> 1.652893 </td>
-   <td style="text-align:right;"> 2.10084 </td>
-   <td style="text-align:right;"> 2.352941 </td>
-   <td style="text-align:right;"> 2.873563 </td>
-   <td style="text-align:right;"> 53.543307 </td>
-   <td style="text-align:right;"> 47.916667 </td>
-   <td style="text-align:right;"> 5.681818 </td>
-   <td style="text-align:right;"> 1.351351 </td>
-   <td style="text-align:right;"> 5.747126 </td>
-   <td style="text-align:right;"> 11.76471 </td>
-   <td style="text-align:right;"> 10 </td>
-   <td style="text-align:right;"> 0.00000 </td>
-   <td style="text-align:right;"> 0 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split_by = "group")
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 
 ### Set threshold of expression
 Users can also supply a threshold value to quantify percent of cells expressing feature(s) above a certain threshold (be sure to note which slot is being used to quantify expression when setting thresholds).  
 *NOTE: `Percent_Expressing` currently only supports single threshold across all features*
-
-```r
+```{r eval=FALSE}
 percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), threshold = 2)
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;">   </th>
-   <th style="text-align:right;"> Naive.CD4.T </th>
-   <th style="text-align:right;"> Memory.CD4.T </th>
-   <th style="text-align:right;"> CD14..Mono </th>
-   <th style="text-align:right;"> B </th>
-   <th style="text-align:right;"> CD8.T </th>
-   <th style="text-align:right;"> FCGR3A..Mono </th>
-   <th style="text-align:right;"> NK </th>
-   <th style="text-align:right;"> DC </th>
-   <th style="text-align:right;"> Platelet </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> CD4 </td>
-   <td style="text-align:right;"> 1.147776 </td>
-   <td style="text-align:right;"> 0.621118 </td>
-   <td style="text-align:right;"> 5.8333333 </td>
-   <td style="text-align:right;"> 0.5813953 </td>
-   <td style="text-align:right;"> 0.3690037 </td>
-   <td style="text-align:right;"> 1.851852 </td>
-   <td style="text-align:right;"> 0.000000 </td>
-   <td style="text-align:right;"> 3.125 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> CD8A </td>
-   <td style="text-align:right;"> 6.456241 </td>
-   <td style="text-align:right;"> 2.070393 </td>
-   <td style="text-align:right;"> 0.2083333 </td>
-   <td style="text-align:right;"> 0.8720930 </td>
-   <td style="text-align:right;"> 24.7232472 </td>
-   <td style="text-align:right;"> 0.000000 </td>
-   <td style="text-align:right;"> 3.225807 </td>
-   <td style="text-align:right;"> 0.000 </td>
-   <td style="text-align:right;"> 0 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), threshold = 2)
+
+percent_express %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 ## Calculate Summary Median Values
 scCustomize contains function `Median_Stats` to quickly calculate the medians for basic QC stats (Genes/, UMIs/, % Mito/Cell).
@@ -552,136 +175,34 @@ scCustomize contains function `Median_Stats` to quickly calculate the medians fo
 ### Basic Use
 By default `Median_Stats` will calculate medians for the following meta data columns (if present): "nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo".
 
-
-```r
+```{r eval=FALSE}
 median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident")
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> orig.ident </th>
-   <th style="text-align:right;"> Median_nCount_RNA </th>
-   <th style="text-align:right;"> Median_nFeature_RNA </th>
-   <th style="text-align:right;"> Median_percent_mito </th>
-   <th style="text-align:right;"> Median_percent_ribo </th>
-   <th style="text-align:right;"> Median_percent_mito_ribo </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> sample1 </td>
-   <td style="text-align:right;"> 2214.0 </td>
-   <td style="text-align:right;"> 820.0 </td>
-   <td style="text-align:right;"> 1.993958 </td>
-   <td style="text-align:right;"> 36.78161 </td>
-   <td style="text-align:right;"> 39.02439 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample2 </td>
-   <td style="text-align:right;"> 2208.0 </td>
-   <td style="text-align:right;"> 813.5 </td>
-   <td style="text-align:right;"> 2.009031 </td>
-   <td style="text-align:right;"> 37.29588 </td>
-   <td style="text-align:right;"> 39.24818 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample3 </td>
-   <td style="text-align:right;"> 2172.5 </td>
-   <td style="text-align:right;"> 811.5 </td>
-   <td style="text-align:right;"> 1.991032 </td>
-   <td style="text-align:right;"> 36.90724 </td>
-   <td style="text-align:right;"> 39.04442 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample4 </td>
-   <td style="text-align:right;"> 2243.0 </td>
-   <td style="text-align:right;"> 827.0 </td>
-   <td style="text-align:right;"> 2.021316 </td>
-   <td style="text-align:right;"> 36.61909 </td>
-   <td style="text-align:right;"> 38.75969 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Totals (All Cells) </td>
-   <td style="text-align:right;"> 2213.0 </td>
-   <td style="text-align:right;"> 819.0 </td>
-   <td style="text-align:right;"> 2.010702 </td>
-   <td style="text-align:right;"> 36.92524 </td>
-   <td style="text-align:right;"> 39.03276 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident")
+
+median_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 
 ### Additional Variables
 In addition to default variables, users can supply their own additional meta data columns to calculate medians using the `median_var` parameter.  
 *NOTE: The meta data column must be in numeric format (e.g., integer, numeric, dbl)*
 
-
-```r
+```{r eval=FALSE}
 median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
 ```
 
-<table class="table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> orig.ident </th>
-   <th style="text-align:right;"> Median_nCount_RNA </th>
-   <th style="text-align:right;"> Median_nFeature_RNA </th>
-   <th style="text-align:right;"> Median_percent_mito </th>
-   <th style="text-align:right;"> Median_percent_ribo </th>
-   <th style="text-align:right;"> Median_percent_mito_ribo </th>
-   <th style="text-align:right;"> Median_module_score1 </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> sample1 </td>
-   <td style="text-align:right;"> 2214.0 </td>
-   <td style="text-align:right;"> 820.0 </td>
-   <td style="text-align:right;"> 1.993958 </td>
-   <td style="text-align:right;"> 36.78161 </td>
-   <td style="text-align:right;"> 39.02439 </td>
-   <td style="text-align:right;"> -0.0377513 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample2 </td>
-   <td style="text-align:right;"> 2208.0 </td>
-   <td style="text-align:right;"> 813.5 </td>
-   <td style="text-align:right;"> 2.009031 </td>
-   <td style="text-align:right;"> 37.29588 </td>
-   <td style="text-align:right;"> 39.24818 </td>
-   <td style="text-align:right;"> -0.1193764 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample3 </td>
-   <td style="text-align:right;"> 2172.5 </td>
-   <td style="text-align:right;"> 811.5 </td>
-   <td style="text-align:right;"> 1.991032 </td>
-   <td style="text-align:right;"> 36.90724 </td>
-   <td style="text-align:right;"> 39.04442 </td>
-   <td style="text-align:right;"> -0.0729008 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> sample4 </td>
-   <td style="text-align:right;"> 2243.0 </td>
-   <td style="text-align:right;"> 827.0 </td>
-   <td style="text-align:right;"> 2.021316 </td>
-   <td style="text-align:right;"> 36.61909 </td>
-   <td style="text-align:right;"> 38.75969 </td>
-   <td style="text-align:right;"> -0.1320305 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Totals (All Cells) </td>
-   <td style="text-align:right;"> 2213.0 </td>
-   <td style="text-align:right;"> 819.0 </td>
-   <td style="text-align:right;"> 2.010702 </td>
-   <td style="text-align:right;"> 36.92524 </td>
-   <td style="text-align:right;"> 39.03276 </td>
-   <td style="text-align:right;"> -0.0922378 </td>
-  </tr>
-</tbody>
-</table>
+```{r echo=FALSE}
+median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
+
+median_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
 
 
 ## Plotting Median Data
@@ -692,8 +213,7 @@ scCustomize also contains series of functions for plotting the results of these 
 * `Plot_Median_Mito()`
 * `Plot_Median_Other()`
 
-
-```r
+```{r eval=FALSE}
 Plot_Median_Genes(seurat_object = pbmc)
 
 Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
@@ -701,5 +221,13 @@ Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
 Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group_by = "group")
 ```
 
-<img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
+```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
+p1 <- Plot_Median_Genes(seurat_object = pbmc)
+
+p2 <- Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
+
+p3 <- Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group_by = "group")
+
+patchwork::wrap_plots(p1, p2, p3, ncol = 3)
+```
 
