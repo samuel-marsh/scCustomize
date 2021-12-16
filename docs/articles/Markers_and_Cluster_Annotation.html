@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Marker Identification &amp; Cluster Annotation Helpers</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Markers_and_Cluster_Annotation.Rmd" class="external-link"><code>vignettes/Markers_and_Cluster_Annotation.Rmd</code></a></small>
       <div class="hidden name"><code>Markers_and_Cluster_Annotation.Rmd</code></div>
@@ -163,20 +163,20 @@ p.caption {
 </h2>
 <ul>
 <li>
-<code>Extract_Top_Markers</code>: Extract either a filtered data.frame or vector of gene IDs (with option to export named vector) containing top N markers from data.frame.</li>
+<code><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code>: Extract either a filtered data.frame or vector of gene IDs (with option to export named vector) containing top N markers from data.frame.</li>
 <li>
-<code>Create_Cluster_Annotation_File</code>: Create simple csv file for use in annotating clusters.</li>
+<code><a href="../reference/Create_Cluster_Annotation_File.html">Create_Cluster_Annotation_File()</a></code>: Create simple csv file for use in annotating clusters.</li>
 <li>
-<code>Pull_Cluster_Annotation</code>: Pull cluster annotation information quickly from data.frame/tibble or annotation csv file.</li>
+<code><a href="../reference/Pull_Cluster_Annotation.html">Pull_Cluster_Annotation()</a></code>: Pull cluster annotation information quickly from data.frame/tibble or annotation csv file.</li>
 <li>
-<code>Rename_Clusters</code>: Wrapper function to easily rename clusters.</li>
+<code><a href="../reference/Rename_Clusters.html">Rename_Clusters()</a></code>: Wrapper function to easily rename clusters.</li>
 </ul>
 <p>We will use pbmc3K dataset from SeuratData package as example for this vignette.</p>
 </div>
 <div class="section level2">
 <h2 id="percent-difference-in-expression">Percent Difference in Expression<a class="anchor" aria-label="anchor" href="#percent-difference-in-expression"></a>
 </h2>
-<p>If we run <code>FindAllMarkers</code> like normal, this is the output.</p>
+<p>If we run <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers()</a></code> like normal, this is the output.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Run basic FindAllMarkers DE test</span>
 <span class="va">all_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
@@ -344,8 +344,8 @@ PRKCQ-AS1
 </tr>
 </tbody>
 </table>
-<p>While <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers</a></code>returns the percent of cells in identity 1 (pct.1) and identity 2 (pct.2) that express a marker it can be helpful to view the difference in these two measures in addition to the values alone.</p>
-<p>scCustomize contains helper function: <code>Add_Pct_Diff</code> to add the percent difference between two clusters. <code>Add_Pct_Diff</code> can be used with any output from Seurat, SeuratWrappers, or other DE tests and can be piped with the function itself.</p>
+<p>While <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code>returns the percent of cells in identity 1 (pct.1) and identity 2 (pct.2) that express a marker it can be helpful to view the difference in these two measures in addition to the values alone.</p>
+<p>scCustomize contains helper function: <code><a href="../reference/Add_Pct_Diff.html">Add_Pct_Diff()</a></code> to add the percent difference between two clusters. <code>Add_Pct_Diff</code> can be used with any output from Seurat, SeuratWrappers, or other DE tests and can be piped with the function itself.</p>
 <div class="section level3">
 <h3 id="use-add_pct_diff-piped-with-the-marker-function-">Use <code>Add_Pct_Diff</code> piped with the marker function.<a class="anchor" aria-label="anchor" href="#use-add_pct_diff-piped-with-the-marker-function-"></a>
 </h3>
@@ -869,7 +869,7 @@ IL7R
 <div class="section level3">
 <h3 id="use-with-non-seurat-data-frames-1">Use with non-Seurat data.frames<a class="anchor" aria-label="anchor" href="#use-with-non-seurat-data-frames-1"></a>
 </h3>
-<p><code>Extract_Top_Markers</code> uses the data.frame output of <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers</a></code> by default but can be used with any data.frame by supplying few extra parameters. Let’s use the function on the output from <a href="https://github.com/immunogenomics/presto" class="external-link">presto package</a> and order the results by auc instead of log2FC.</p>
+<p><code>Extract_Top_Markers</code> uses the data.frame output of <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code> by default but can be used with any data.frame by supplying few extra parameters. Let’s use the function on the output from <a href="https://github.com/immunogenomics/presto" class="external-link">presto package</a> and order the results by auc instead of log2FC.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read in pre-computed data.frame results</span>
 <span class="va">presto_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"assets/presto_markers.qs"</span><span class="op">)</span>
@@ -885,7 +885,7 @@ IL7R
 </div>
 </div>
 <div class="section level2">
-<h2 id="pairing-extract_top_markers-with-iterate_featureplot_sccustom">Pairing <code>Extract_Top_Markers</code> with <code>Iterate_FeaturePlot_scCustom</code><a class="anchor" aria-label="anchor" href="#pairing-extract_top_markers-with-iterate_featureplot_sccustom"></a>
+<h2 id="pairing-extract_top_markers-with-iterate_featureplot_sccustom">Pairing <code>Extract_Top_Markers</code> with <code>Iterate_FeaturePlot_scCustom()</code><a class="anchor" aria-label="anchor" href="#pairing-extract_top_markers-with-iterate_featureplot_sccustom"></a>
 </h2>
 <p>The advantage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_FeaturePlot_scCustom</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -1060,7 +1060,7 @@ oligo
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

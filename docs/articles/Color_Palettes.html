@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Customized Color Palettes &amp; Themes</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Color_Palettes.Rmd" class="external-link"><code>vignettes/Color_Palettes.Rmd</code></a></small>
       <div class="hidden name"><code>Color_Palettes.Rmd</code></div>
@@ -182,9 +182,9 @@ p.caption {
 </h2>
 <div class="section level3">
 <h3 id="discretepalette_sccustomize">
-<code>DiscretePalette_scCustomize</code><a class="anchor" aria-label="anchor" href="#discretepalette_sccustomize"></a>
+<code>DiscretePalette_scCustomize()</code><a class="anchor" aria-label="anchor" href="#discretepalette_sccustomize"></a>
 </h3>
-<p>The function <code>DiscretePalette_scCustomize</code> is function inspired and modified from <code><a href="https://satijalab.org/seurat/reference/DiscretePalette.html" class="external-link">Seurat::DiscretePalette</a></code>. Under the hood most of the palettes are called using <a href="https://github.com/EmilHvitfeldt/paletteer" class="external-link">paletteer package</a> to call palettes without adding package dependencies. The following palettes can be specified:</p>
+<p>The function <code>DiscretePalette_scCustomize</code> is function inspired and modified from <code><a href="https://satijalab.org/seurat/reference/DiscretePalette.html" class="external-link">Seurat::DiscretePalette()</a></code>. Under the hood most of the palettes are called using <a href="https://github.com/EmilHvitfeldt/paletteer" class="external-link">paletteer package</a> to call palettes without adding package dependencies. The following palettes can be specified:</p>
 <ul>
 <li>alphabet (24)</li>
 <li>alphabet2 (24)</li>
@@ -215,7 +215,7 @@ p.caption {
 <div class="section level3">
 <h3 id="visualize-palettes">Visualize Palettes<a class="anchor" aria-label="anchor" href="#visualize-palettes"></a>
 </h3>
-<p>To visualize these or any other palettes you can use the <code>PalettePlot</code> function.</p>
+<p>To visualize these or any other palettes you can use the <code><a href="../reference/PalettePlot.html">PalettePlot()</a></code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PalettePlot</span>(<span class="at">palette =</span> <span class="fu">DiscretePalette_scCustomize</span>(<span class="at">num_colors =</span> <span class="dv">26</span>, <span class="at">palette =</span> <span class="st">"alphabet"</span>))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">PalettePlot</span>(<span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"color1"</span>, <span class="st">"color2"</span>, ...)</span></code></pre></div>
@@ -249,13 +249,13 @@ p.caption {
 <p>scCustomize contains a few customized themes and ggplot2 helpers that simplify post plot themeing/alterations.<br><em>NOTE: These functions can be used with any ggplot2 plot and are not limited to modifying scCustomize plots.</em></p>
 <ul>
 <li>
-<code>UnRotate_X</code> Undo x-axis label rotation</li>
+<code><a href="../reference/UnRotate_X.html">UnRotate_X()</a></code> Undo x-axis label rotation</li>
 <li>
-<code>Move_Legend</code> Select new location to move legend</li>
+<code><a href="../reference/Move_Legend.html">Move_Legend()</a></code> Select new location to move legend</li>
 <li>
-<code>Blank_Theme</code> Removes all axis labels and axes from plot</li>
+<code><a href="../reference/Blank_Theme.html">Blank_Theme()</a></code> Removes all axis labels and axes from plot</li>
 <li>
-<code>theme_ggprism_mod</code> Modified version of <code><a href="https://csdaw.github.io/ggprism/reference/theme_prism.html" class="external-link">ggprism::theme_prism</a></code>
+<code><a href="../reference/theme_ggprism_mod.html">theme_ggprism_mod()</a></code> Modified version of <code><a href="https://csdaw.github.io/ggprism/reference/theme_prism.html" class="external-link">ggprism::theme_prism()</a></code>
 </li>
 </ul>
 </div>
@@ -283,7 +283,7 @@ p.caption {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

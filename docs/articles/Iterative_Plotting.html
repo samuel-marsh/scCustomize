@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #4: Iterative Plotting Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Iterative_Plotting.Rmd" class="external-link"><code>vignettes/Iterative_Plotting.Rmd</code></a></small>
       <div class="hidden name"><code>Iterative_Plotting.Rmd</code></div>
@@ -154,27 +154,27 @@ p.caption {
 </h2>
 <ul>
 <li>
-<code>Iterate_PC_Loading_Plots</code>: Plots PC Heatmap and Top Loading Genes for specified number of PCs.</li>
+<code><a href="../reference/Iterate_PC_Loading_Plots.html">Iterate_PC_Loading_Plots()</a></code>: Plots PC Heatmap and Top Loading Genes for specified number of PCs.</li>
 <li>
-<code>Iterate_FeaturePlot_scCustom</code>: <code>FeaturePlot_scCustom</code> for all genes in gene list. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1" class="external-link">Marker Identification Vignette</a> for special use case with named vector gene lists.</li>
+<code><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom()</a></code>: <code><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom()</a></code> for all genes in gene list. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1">Marker Identification Vignette</a> for special use case with named vector gene lists.</li>
 <li>
-<code>Iterate_VlnPlot</code>: Plots <code>VlnPlot</code> for all genes in gene list.</li>
+<code><a href="../reference/Iterate_VlnPlot.html">Iterate_VlnPlot()</a></code>: Plots <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">VlnPlot()</a></code> for all genes in gene list.</li>
 <li>
-<code>Iterate_Plot_Density_Custom</code> Plots single gene density plots for all genes in gene list.</li>
+<code><a href="../reference/Iterate_Plot_Density_Custom.html">Iterate_Plot_Density_Custom()</a></code> Plots single gene density plots for all genes in gene list.</li>
 <li>
-<code>Iterate_Plot_Density_Joint</code> Plots the joint density plots for all vectors of genes from a list of vectors.</li>
+<code><a href="../reference/Iterate_Plot_Density_Joint.html">Iterate_Plot_Density_Joint()</a></code> Plots the joint density plots for all vectors of genes from a list of vectors.</li>
 <li>
-<code>Iterate_DimPlot_bySample</code>: Plots <code>DimPlot</code> one sample at a time.</li>
+<code><a href="../reference/Iterate_DimPlot_bySample.html">Iterate_DimPlot_bySample()</a></code>: Plots <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot()</a></code> one sample at a time.</li>
 <li>
-<code>Iterate_Cluster_Highlight_Plot</code>: Plots <code>Cluster_Highlight_Plot</code> for all clusters in given object.</li>
+<code><a href="../reference/Iterate_Cluster_Highlight_Plot.html">Iterate_Cluster_Highlight_Plot()</a></code>: Plots <code><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot()</a></code> for all clusters in given object.</li>
 <li>
-<code>Iterate_Meta_Highlight_Plot</code> Plots <code>Meta_Highlight_Plot</code> for all levels within given meta data column.</li>
+<code><a href="../reference/Iterate_Meta_Highlight_Plot.html">Iterate_Meta_Highlight_Plot()</a></code> Plots <code><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot()</a></code> for all levels within given meta data column.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="required-parameters">Required Parameters<a class="anchor" aria-label="anchor" href="#required-parameters"></a>
 </h2>
-<p>Most functions that begin with <code>Iterate_</code> have shared parameters that are used to dictate file location, file name, and file type. *The exception is <code>Iterate_PC_Loading_Plots</code> which is slightly different (see manual entry for more info.)</p>
+<p>Most functions that begin with <code>Iterate_</code> have shared parameters that are used to dictate file location, file name, and file type. *The exception is <code><a href="../reference/Iterate_PC_Loading_Plots.html">Iterate_PC_Loading_Plots()</a></code> which is slightly different (see manual entry for more info.)</p>
 <ul>
 <li>
 <code>file_path</code>: path to directory to save file (can also include file prefix if desired)</li>
@@ -191,8 +191,8 @@ p.caption {
 <div class="section level2">
 <h2 id="added-functionality">Added functionality<a class="anchor" aria-label="anchor" href="#added-functionality"></a>
 </h2>
-<p><code>Iterate_FeaturePlot_scCustom</code> has an additional helpful feature when the list of features provided is named. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1" class="external-link">Marker Identification &amp; Cluster Annotation Vignette</a>.</p>
-<p>When provided with named vector such as the output from <code>Extract_Top_Markers</code> then <code>Iterate_FeaturePlot_scCustom</code> can detect the names and add them either to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
+<p><code><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom()</a></code> has an additional helpful feature when the list of features provided is named. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1">Marker Identification &amp; Cluster Annotation Vignette</a>.</p>
+<p>When provided with named vector such as the output from <code><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code> then <code><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom()</a></code> can detect the names and add them either to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">top_5_presto</span>, single_pdf <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
@@ -209,7 +209,7 @@ p.caption {
 <div class="section level2">
 <h2 id="more-information">More Information<a class="anchor" aria-label="anchor" href="#more-information"></a>
 </h2>
-<p>For more info on each functions and optional parameters check out the manual entry using <code>?Function_Name</code> or browsing the <a href="https://samuel-marsh.github.io/scCustomize/reference/index.html#section-iterative-plotting-functions" class="external-link">Reference Manual</a></p>
+<p>For more info on each functions and optional parameters check out the manual entry using <code>?Function_Name</code> or browsing the <a href="https://samuel-marsh.github.io/scCustomize/reference/index.html#section-iterative-plotting-functions">Reference Manual</a></p>
 </div>
 </div>
   </div>
@@ -231,7 +231,7 @@ p.caption {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

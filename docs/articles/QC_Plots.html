@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #2: QC Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/QC_Plots.Rmd" class="external-link"><code>vignettes/QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>QC_Plots.Rmd</code></div>
@@ -326,14 +326,14 @@ NA
 <p>scCustomize contains 4 functions which wrap <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot()</a></code>.</p>
 <ul>
 <li>
-<code>QC_Plots_Genes</code> Plots genes per cell/nucleus.</li>
+<code><a href="../reference/QC_Plots_Genes.html">QC_Plots_Genes()</a></code> Plots genes per cell/nucleus.</li>
 <li>
-<code>QC_Plots_UMIs</code> Plots UMIs per cell/nucleus.<br>
+<code><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs()</a></code> Plots UMIs per cell/nucleus.<br>
 </li>
 <li>
-<code>QC_Plots_Mito</code> Plots mito% (named “percent_mito”) per cell/nucleus.</li>
+<code><a href="../reference/QC_Plots_Mito.html">QC_Plots_Mito()</a></code> Plots mito% (named “percent_mito”) per cell/nucleus.</li>
 <li>
-<code>QC_Plots_Feature</code> Plots “feature” per cell/nucleus. Using parameter <code>feature</code> to allow plotting of any applicable named feature in object@meta.data slot.</li>
+<code><a href="../reference/QC_Plots_Feature.html">QC_Plots_Feature()</a></code> Plots “feature” per cell/nucleus. Using parameter <code>feature</code> to allow plotting of any applicable named feature in object@meta.data slot.</li>
 </ul>
 <p>scCustomize functions have the added benefit of:</p>
 <ul>
@@ -382,12 +382,12 @@ NA
 <p>scCustomize contains 3 functions which wrap <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter()</a></code> with added visualization of potential cutoff thresholds and some additional functionality:</p>
 <ul>
 <li>
-<code>QC_Plot_UMIvsGene</code> Plots genes vs UMIs per cell/nucleus</li>
+<code><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene()</a></code> Plots genes vs UMIs per cell/nucleus</li>
 <li>
-<code>QC_Plot_GenevsFeature</code> Plots Genes vs. “feature” per cell/nucleus. Using parameter <code>feature1</code> to allow plotting of any applicable named feature in object@meta.data slot.<br>
+<code><a href="../reference/QC_Plot_GenevsFeature.html">QC_Plot_GenevsFeature()</a></code> Plots Genes vs. “feature” per cell/nucleus. Using parameter <code>feature1</code> to allow plotting of any applicable named feature in object@meta.data slot.<br>
 </li>
 <li>
-<code>QC_Plot_UMIvsFeature</code> Plots UMIs vs. “feature” per cell/nucleus. Using parameter <code>feature1</code> to allow plotting of any applicable named feature in object@meta.data slot.</li>
+<code><a href="../reference/QC_Plot_UMIvsFeature.html">QC_Plot_UMIvsFeature()</a></code> Plots UMIs vs. “feature” per cell/nucleus. Using parameter <code>feature1</code> to allow plotting of any applicable named feature in object@meta.data slot.</li>
 </ul>
 <div class="section level3">
 <h3 id="newmodified-functionality">New/Modified functionality<a class="anchor" aria-label="anchor" href="#newmodified-functionality"></a>
@@ -661,16 +661,16 @@ Totals (All Cells)
 <p>scCustomize also contains a few functions to plot some of these median value calculations, which can be used on their own without need to return data.frame first.</p>
 <ul>
 <li>
-<code>Plot_Median_Genes</code><br>
+<code><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes()</a></code><br>
 </li>
 <li>
-<code>Plot_Median_UMIs</code><br>
+<code><a href="../reference/Plot_Median_UMIs.html">Plot_Median_UMIs()</a></code><br>
 </li>
 <li>
-<code>Plot_Median_Mito</code><br>
+<code><a href="../reference/Plot_Median_Mito.html">Plot_Median_Mito()</a></code><br>
 </li>
 <li>
-<code>Plot_Median_Other</code>
+<code><a href="../reference/Plot_Median_Other.html">Plot_Median_Other()</a></code>
 <ul>
 <li><em>Used to plot any other numeric variable present in object meta.data slot.</em></li>
 </ul>
@@ -711,7 +711,7 @@ Totals (All Cells)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

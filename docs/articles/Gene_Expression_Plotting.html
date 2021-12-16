@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #1: Analysis Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Gene_Expression_Plotting.Rmd" class="external-link"><code>vignettes/Gene_Expression_Plotting.Rmd</code></a></small>
       <div class="hidden name"><code>Gene_Expression_Plotting.Rmd</code></div>
@@ -201,7 +201,7 @@ p.caption {
 <div class="section level3">
 <h3 id="plotting-highly-variable-genes">Plotting highly variable genes<a class="anchor" aria-label="anchor" href="#plotting-highly-variable-genes"></a>
 </h3>
-<p>scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function. <code>VariableFeaturePlot_scCustom</code> also contains several additional parameters for customizing visualization.</p>
+<p>scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function. <code><a href="../reference/VariableFeaturePlot_scCustom.html">VariableFeaturePlot_scCustom()</a></code> also contains several additional parameters for customizing visualization.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Default scCustomize plot</span>
 <span class="fu"><a href="../reference/VariableFeaturePlot_scCustom.html">VariableFeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, num_features <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
@@ -221,14 +221,14 @@ p.caption {
 <div class="section level3">
 <h3 id="plotting-pc-heatmaps-and-loadings-">Plotting PC heatmaps and loadings.<a class="anchor" aria-label="anchor" href="#plotting-pc-heatmaps-and-loadings-"></a>
 </h3>
-<p>For ease in evaluating PCA results scCustomize provides function <code>PC_Plotting</code> which returns both PC heatmap and Feature Loading plot in single patchwork layout.</p>
+<p>For ease in evaluating PCA results scCustomize provides function <code><a href="../reference/PC_Plotting.html">PC_Plotting()</a></code> which returns both PC heatmap and Feature Loading plot in single patchwork layout.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/PC_Plotting.html">PC_Plotting</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, dim_number <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="iterate-pc-plotting">Iterate PC Plotting<a class="anchor" aria-label="anchor" href="#iterate-pc-plotting"></a>
 </h4>
-<p>This function can be easily enhanced using iterative version <code>Iterate_PC_Loading_Plots</code> to return a PDF document that contains plots for all desired PCs within object. See function manual and <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html" class="external-link">Iterative Plotting Vignette</a> for more info.</p>
+<p>This function can be easily enhanced using iterative version <code><a href="../reference/Iterate_PC_Loading_Plots.html">Iterate_PC_Loading_Plots()</a></code> to return a PDF document that contains plots for all desired PCs within object. See function manual and <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html">Iterative Plotting Vignette</a> for more info.</p>
 </div>
 </div>
 </div>
@@ -239,7 +239,7 @@ p.caption {
 <div class="section level3">
 <h3 id="featureplots">FeaturePlots<a class="anchor" aria-label="anchor" href="#featureplots"></a>
 </h3>
-<p>The default plots from<code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">Seurat::FeaturePlot</a></code> are very good but I find can be enhanced in few ways that scCustomize sets by default.<br>
+<p>The default plots from<code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">Seurat::FeaturePlot()</a></code> are very good but I find can be enhanced in few ways that scCustomize sets by default.<br>
 Issues with default Seurat settings:</p>
 <ul>
 <li>Parameter <code>order = FALSE</code> is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells.</li>
@@ -286,7 +286,7 @@ Issues with default Seurat settings:</p>
 <div class="section level4">
 <h4 id="plotting-non-expressing-cells-as-background-">Plotting non-expressing cells as background.<a class="anchor" aria-label="anchor" href="#plotting-non-expressing-cells-as-background-"></a>
 </h4>
-<p>As you can see above <code>FeaturePlot_scCustom</code> has the ability to plot non-expressing cells in outside of color scale used for expressing cells. However it is critical that users pay attention to the <strong><em>correctly setting the <code>na_cutoff</code> parameter</em></strong> in <code>FeaturePlot_scCustom</code>.<br>
+<p>As you can see above <code><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom()</a></code> has the ability to plot non-expressing cells in outside of color scale used for expressing cells. However it is critical that users pay attention to the <strong><em>correctly setting the <code>na_cutoff</code> parameter</em></strong> in <code>FeaturePlot_scCustom</code>.<br>
 scCustomize contains a parameter called <code>na_cutoff</code> which tells the function which values to plot as background. By default this is set to value that means background is treated as 0 or below. Depending on what feature, assay, or value you are interested in this parameter should be modified appropriately.</p>
 <p>For instance if plotting module score which contains negative values you will probably want to remove the cutoff value entirely to avoid misconstruing results.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -303,7 +303,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level3">
 <h3 id="split-feature-plots">Split Feature Plots<a class="anchor" aria-label="anchor" href="#split-feature-plots"></a>
 </h3>
-<p><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">Seurat::FeaturePlot</a></code> has additional issues when splitting by object@meta.data variable.</p>
+<p><code><a href="https://satijalab.org/seurat/reference/FeaturePlot.html" class="external-link">Seurat::FeaturePlot()</a></code> has additional issues when splitting by object@meta.data variable.</p>
 <ul>
 <li>Specifying the number of columns in output is no longer possible which makes viewing plots from objects with large numbers of variables difficult.</li>
 </ul>
@@ -332,7 +332,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level4">
 <h4 id="custom-color-palettes">Custom color palettes<a class="anchor" aria-label="anchor" href="#custom-color-palettes"></a>
 </h4>
-<p>Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: “viridis”, “magma”, “cividis”, “inferno”, and “plasma”). <code>Plot_Density_Custom</code> changes the default palette to “magma” and also allows for use of any custom gradient.</p>
+<p>Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: “viridis”, “magma”, “cividis”, “inferno”, and “plasma”). <code><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom()</a></code> changes the default palette to “magma” and also allows for use of any custom gradient.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"Fos"</span>, custom_palette <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CustomPalette.html" class="external-link">PurpleAndYellow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -341,7 +341,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level4">
 <h4 id="joint-plots">Joint Plots<a class="anchor" aria-label="anchor" href="#joint-plots"></a>
 </h4>
-<p>Often user may only want to return the “Joint” density plot when providing multiple features. <code>Plot_Density_Joint_Only</code> simplifies this requiring only single function and only returns the joint plot for the features provided.</p>
+<p>Often user may only want to return the “Joint” density plot when providing multiple features. <code><a href="../reference/Plot_Density_Joint_Only.html">Plot_Density_Joint_Only()</a></code> simplifies this requiring only single function and only returns the joint plot for the features provided.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Density_Joint_Only.html">Plot_Density_Joint_Only</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fos"</span>, <span class="st">"Jun"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-21-1.png" width="576" style="display: block; margin: auto;"></p>
@@ -364,7 +364,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level3">
 <h3 id="stacked-violin-plots">Stacked Violin Plots<a class="anchor" aria-label="anchor" href="#stacked-violin-plots"></a>
 </h3>
-<p>Often plotting many genes simultaneously using Violin plots is desired. scCustomize provides <code>Stacked_VlnPlot</code> for a more aesthetic stacked violin plot compared to stacked plots that can be made using default <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot</a></code>.<br><em>The original version of this function was written by Ming Tang and <a href="https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/" class="external-link">posted on his blog</a>. Function is included with permission and authorship.</em></p>
+<p>Often plotting many genes simultaneously using Violin plots is desired. scCustomize provides <code><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot()</a></code> for a more aesthetic stacked violin plot compared to stacked plots that can be made using default <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot()</a></code>.<br><em>The original version of this function was written by Ming Tang and <a href="https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/" class="external-link">posted on his blog</a>. Function is included with permission and authorship.</em></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gene_list_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SLC17A7"</span>, <span class="st">"GAD2"</span>, <span class="st">"AQP4"</span>, <span class="st">"MYT1"</span>, <span class="st">"COL1A2"</span>, <span class="st">"CLDN5"</span>, <span class="st">"OPALIN"</span>, <span class="st">"CX3CR1"</span>, <span class="st">"CD3E"</span><span class="op">)</span>
 <span class="va">human_colors_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dodgerblue"</span>, <span class="st">"navy"</span>, <span class="st">"forestgreen"</span>, <span class="st">"darkorange2"</span>, <span class="st">"darkorchid3"</span>, <span class="st">"orchid"</span>,
@@ -376,7 +376,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-24-1.png" width="960" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot">
-<code>Stacked_VlnPlot</code> also supports any additional parameters that are part of <code>Seurat::VlnPlot</code><a class="anchor" aria-label="anchor" href="#stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot"></a>
+<code>Stacked_VlnPlot</code> also supports any additional parameters that are part of <code>Seurat::VlnPlot()</code><a class="anchor" aria-label="anchor" href="#stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot"></a>
 </h4>
 <p>For instance splitting plot by meta data feature.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -422,10 +422,10 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level3">
 <h3 id="custom-dotplots-">Custom DotPlots.<a class="anchor" aria-label="anchor" href="#custom-dotplots-"></a>
 </h3>
-<p>Seurat’s <code>DotPlot</code> function is really good but lacks the ability to provide custom color gradient of more than 2 colors.</p>
+<p>Seurat’s <code><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot()</a></code> function is really good but lacks the ability to provide custom color gradient of more than 2 colors.</p>
 <div class="section level4">
 <h4 id="dotplot_sccustom-allows-for-plotting-with-custom-gradients-">
-<code>DotPlot_scCustom</code> allows for plotting with custom gradients.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-allows-for-plotting-with-custom-gradients-"></a>
+<code>DotPlot_scCustom()</code> allows for plotting with custom gradients.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-allows-for-plotting-with-custom-gradients-"></a>
 </h4>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">micro_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Trem2"</span>, <span class="st">"Tmem119"</span>, <span class="st">"Cx3cr1"</span>, <span class="st">"Hexb"</span>, <span class="st">"Tgfbr1"</span>, <span class="st">"Sparc"</span>, <span class="st">"P2ry13"</span>,
@@ -441,7 +441,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </div>
 <div class="section level4">
 <h4 id="dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-">
-<code>DotPlot_scCustom</code> also contains additional parameters for easy manipulations of axes for better plotting.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-"></a>
+<code>DotPlot_scCustom()</code> also contains additional parameters for easy manipulations of axes for better plotting.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-also-contains-additional-parameters-for-easy-manipulations-of-axes-for-better-plotting-"></a>
 </h4>
 <p>These allow for:</p>
 <ul>
@@ -470,10 +470,10 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 </div>
 <div class="section level3">
 <h3 id="split_featurescatter">
-<code>Split_FeatureScatter</code><a class="anchor" aria-label="anchor" href="#split_featurescatter"></a>
+<code>Split_FeatureScatter()</code><a class="anchor" aria-label="anchor" href="#split_featurescatter"></a>
 </h3>
-<p>This is simple function to add functionality that <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter</a></code> lacks.</p>
-<p><code>FeatureScatter</code> plots can be very useful when comparing between two genes/features or comparing module scores. However, Seurat’s implementation lacks the ability to split the plot by a meta data variable.</p>
+<p>This is simple function to add functionality that <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter()</a></code> lacks.</p>
+<p><code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">FeatureScatter()</a></code> plots can be very useful when comparing between two genes/features or comparing module scores. However, Seurat’s implementation lacks the ability to split the plot by a meta data variable.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create Plots</span>
 <span class="fu"><a href="../reference/Split_FeatureScatter.html">Split_FeatureScatter</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, feature1 <span class="op">=</span> <span class="st">"exAM_Score1"</span>, feature2 <span class="op">=</span> <span class="st">"Microglia_Score1"</span>,
@@ -493,7 +493,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level3">
 <h3 id="dimplots">DimPlots<a class="anchor" aria-label="anchor" href="#dimplots"></a>
 </h3>
-<p>The scCustomize function <code>DimPlot_scCustom</code> is a slightly modified version of <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot</a></code> with some different default settings and parameter options.</p>
+<p>The scCustomize function <code><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom()</a></code> is a slightly modified version of <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot()</a></code> with some different default settings and parameter options.</p>
 <div class="section level4">
 <h4 id="new-default-color-palettes">New default color palettes<a class="anchor" aria-label="anchor" href="#new-default-color-palettes"></a>
 </h4>
@@ -516,7 +516,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level4">
 <h4 id="shuffle-points">Shuffle Points<a class="anchor" aria-label="anchor" href="#shuffle-points"></a>
 </h4>
-<p>By default Seurat’s <code>DimPlot</code> plots each group on top of the next which can make plots harder to interpret. <code>DimPlot_scCustom</code> sets <code>shuffle = TRUE</code> by default as I believe this setting is more often the visualization that provides the most clarity.</p>
+<p>By default Seurat’s <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot()</a></code> plots each group on top of the next which can make plots harder to interpret. <code>DimPlot_scCustom</code> sets <code>shuffle = TRUE</code> by default as I believe this setting is more often the visualization that provides the most clarity.</p>
 <p>Here is example when plotting by donor in the human dataset to determine how well the dataset integration worked.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_human_pm</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span>
@@ -530,7 +530,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <div class="section level4">
 <h4 id="split-dimplots">Split DimPlots<a class="anchor" aria-label="anchor" href="#split-dimplots"></a>
 </h4>
-<p>When plotting a split plot <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot</a></code> simplifies the axes by implementing shared axes depending on the number of columns specified.</p>
+<p>When plotting a split plot <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot()</a></code> simplifies the axes by implementing shared axes depending on the number of columns specified.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span>
 <span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"sample_id"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
@@ -557,7 +557,7 @@ scCustomize contains a parameter called <code>na_cutoff</code> which tells the f
 <h3 id="highlight-clusters">Highlight Cluster(s)<a class="anchor" aria-label="anchor" href="#highlight-clusters"></a>
 </h3>
 <p>Even with optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.<br>
-scCustomize provides easy of use function <code>Cluster_Highlight_Plot</code> to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.<br><em>NOTE: While named <code>Cluster_Highlight_Plot</code> this function will simply pull from seurat_object@active.ident slot which may or may not be cluster results depending on user settings. For creating highlight plots of meta data variables see next section on <code>Meta_Highlight_Plot</code>.</em></p>
+scCustomize provides easy of use function <code><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot()</a></code> to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.<br><em>NOTE: While named <code>Cluster_Highlight_Plot</code> this function will simply pull from seurat_object@active.ident slot which may or may not be cluster results depending on user settings. For creating highlight plots of meta data variables see next section on <code>Meta_Highlight_Plot</code>.</em></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_over</span>, cluster_name <span class="op">=</span> <span class="st">"7"</span>, highlight_color <span class="op">=</span> <span class="st">"navy"</span>,
     background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span>
@@ -573,7 +573,7 @@ scCustomize provides easy of use function <code>Cluster_Highlight_Plot</code> to
 <div class="section level3">
 <h3 id="highlight-meta-data">Highlight Meta Data<a class="anchor" aria-label="anchor" href="#highlight-meta-data"></a>
 </h3>
-<p>scCustomize also contains an analogous function <code>Meta_Highlight_Plot</code> that allows for quick highlight plots of any valid @meta.data variable. Meta data variables must be one of class(): “factor”, “character”, or “logical” to be highlighted.<br><em>Numeric variables representing things like “batch” can be converted using <code>as.character</code> or <code>as.factor</code> first to allow for plotting.</em></p>
+<p>scCustomize also contains an analogous function <code><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot()</a></code> that allows for quick highlight plots of any valid @meta.data variable. Meta data variables must be one of class(): “factor”, “character”, or “logical” to be highlighted.<br><em>Numeric variables representing things like “batch” can be converted using <code>as.character</code> or <code>as.factor</code> first to allow for plotting.</em></p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription_Method"</span>,
     meta_data_highlight <span class="op">=</span> <span class="st">"ENZYMATIC_NONE"</span>, highlight_color <span class="op">=</span> <span class="st">"firebrick"</span>, background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></code></pre></div>
@@ -617,7 +617,7 @@ scCustomize provides easy of use function <code>Cluster_Highlight_Plot</code> to
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

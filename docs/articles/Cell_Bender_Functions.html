@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cell Bender Functionality &amp; Plotting</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Cell_Bender_Functions.Rmd" class="external-link"><code>vignettes/Cell_Bender_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Cell_Bender_Functions.Rmd</code></div>
@@ -160,8 +160,8 @@ p.caption {
 <div class="section level2">
 <h2 id="importing-cell-bender-h5-outputs">Importing Cell Bender H5 Outputs<a class="anchor" aria-label="anchor" href="#importing-cell-bender-h5-outputs"></a>
 </h2>
-<p>The output from Cell Bender is an H5 file that is styled and can be read like 10X Genomics H5 file. However, <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5</a></code> assumes that the file contains no name prefix.</p>
-<p>However,<code>Read10X_h5_Multi_Directory</code> can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.</p>
+<p>The output from Cell Bender is an H5 file that is styled and can be read like 10X Genomics H5 file. However, <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5()</a></code> assumes that the file contains no name prefix.</p>
+<p>However,<code><a href="../reference/Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory()</a></code> can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.</p>
 <div class="section level3">
 <h3 id="cell-bender-output-structure">Cell Bender Output Structure<a class="anchor" aria-label="anchor" href="#cell-bender-output-structure"></a>
 </h3>
@@ -207,7 +207,7 @@ p.caption {
 <div class="section level2">
 <h2 id="creating-dual-assay-objects">Creating Dual Assay Objects<a class="anchor" aria-label="anchor" href="#creating-dual-assay-objects"></a>
 </h2>
-<p>Sometimes it can be helpful to create object that contains both the cell ranger values and cell bender values (we’ll come to why below). scCustomize contains a helper function <code>Create_CellBender_Merged_Seurat</code> to handle object creation in one quick step.</p>
+<p>Sometimes it can be helpful to create object that contains both the cell ranger values and cell bender values (we’ll come to why below). scCustomize contains a helper function <code><a href="../reference/Create_CellBender_Merged_Seurat.html">Create_CellBender_Merged_Seurat()</a></code> to handle object creation in one quick step.</p>
 <p>For this function we assume that we will use the cell calling algorithm of Cell Ranger with the modified counts for Cell Bender.</p>
 <div class="section level3">
 <h3 id="read-in-both-sets-of-data">Read in both sets of data<a class="anchor" aria-label="anchor" href="#read-in-both-sets-of-data"></a>
@@ -232,7 +232,7 @@ p.caption {
 <div class="section level3">
 <h3 id="optional-parameters">Optional Parameters<a class="anchor" aria-label="anchor" href="#optional-parameters"></a>
 </h3>
-<p>Users can specify any additional parameters normally passed to <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">Seurat::CreateSeuratObject</a></code> when using this function.</p>
+<p>Users can specify any additional parameters normally passed to <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">Seurat::CreateSeuratObject()</a></code> when using this function.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dual_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Create_CellBender_Merged_Seurat.html">Create_CellBender_Merged_Seurat</a></span><span class="op">(</span>raw_cell_bender_matrix <span class="op">=</span> <span class="va">cell_bender_merged</span>, raw_counts_matrix <span class="op">=</span> <span class="va">cell_ranger_merged</span>,
     raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, min_features <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
@@ -245,7 +245,7 @@ p.caption {
 <div class="section level3">
 <h3 id="add-prepost-to-meta-data">Add Pre/Post to Meta Data<a class="anchor" aria-label="anchor" href="#add-prepost-to-meta-data"></a>
 </h3>
-<p>scCustomize includes function <code>Add_Cell_Bender_Diff</code> to help with this process. This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns (“nCount_Diff” and “nFeature_Diff”) to the object meta.data.</p>
+<p>scCustomize includes function <code><a href="../reference/Add_Cell_Bender_Diff.html">Add_Cell_Bender_Diff()</a></code> to help with this process. This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns (“nCount_Diff” and “nFeature_Diff”) to the object meta.data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">astrocytes_cortex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Bender_Diff.html">Add_Cell_Bender_Diff</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">astrocytes_cortex</span>, raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>,
     cell_bender_assay_name <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span>
@@ -540,7 +540,7 @@ WT-2a
 <div class="section level3">
 <h3 id="calculate-per-sample-averages">Calculate per sample averages<a class="anchor" aria-label="anchor" href="#calculate-per-sample-averages"></a>
 </h3>
-<p>We can then use <code>Median_Stats</code> to calculate per sample averages across all cells by supplying the new variables to the <code>median_var</code> parameter.</p>
+<p>We can then use <code><a href="../reference/Median_Stats.html">Median_Stats()</a></code> to calculate per sample averages across all cells by supplying the new variables to the <code>median_var</code> parameter.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">astrocytes_cortex</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nCount_Diff"</span>,
     <span class="st">"nFeature_Diff"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -657,7 +657,7 @@ Totals (All Cells)
 <div class="section level2">
 <h2 id="dual-assay-plotting">Dual Assay Plotting<a class="anchor" aria-label="anchor" href="#dual-assay-plotting"></a>
 </h2>
-<p>For Cell Bender especially, but also potentially for other assays as well, it can be helpful during analysis to plot the corrected and uncorrected counts for given feature. scCustomize contains function <code>FeaturePlot_DualAssay</code> to make easy.</p>
+<p>For Cell Bender especially, but also potentially for other assays as well, it can be helpful during analysis to plot the corrected and uncorrected counts for given feature. scCustomize contains function <code><a href="../reference/FeaturePlot_DualAssay.html">FeaturePlot_DualAssay()</a></code> to make easy.</p>
 <p>Users just need to supply the names of the two assays to plot and the features. <em>NOTE: Make sure both assays have been normalized before plotting. The function will attempt to check and make sure both assays have been normalized but has not been tested in all scenarios.</em></p>
 <div class="section level3">
 <h3 id="example-plotting">Example Plotting<a class="anchor" aria-label="anchor" href="#example-plotting"></a>
@@ -695,7 +695,7 @@ Totals (All Cells)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

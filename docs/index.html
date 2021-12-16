@@ -134,7 +134,7 @@
 <div class="section level2">
 <h2 id="installing-sccustomize">Installing scCustomize<a class="anchor" aria-label="anchor" href="#installing-sccustomize"></a>
 </h2>
-<p>Please see <a href="https://samuel-marsh.github.io/scCustomize/articles/Installation.html" class="external-link">Installation</a> page for full installation instructions and GitHub branch information.</p>
+<p>Please see <a href="https://samuel-marsh.github.io/scCustomize/articles/Installation.html">Installation</a> page for full installation instructions and GitHub branch information.</p>
 </div>
 <div class="section level2">
 <h2 id="vignettestutorials">Vignettes/Tutorials<a class="anchor" aria-label="anchor" href="#vignettestutorials"></a>
@@ -156,21 +156,21 @@ To create greater flexibility in visualization and more aesthetic visuals by:
 </li>
 <li>Wrapping commonly used ggplot2 post-plot themeing into function call. No more copy/paste of the same theme elements for every plot over and over (e.g., <code>plot + scale_color_continuous(...) + ggtitle(...) + theme(plot.title = element_text(...), legend.position = ...) + guides(...)</code><br>
 </li>
-<li>Creating new plotting functions either: 1. as wrapper around Seurat function with parameters already specified (e.g., <code>QC_Plot_Genes</code>) or 2. create new plots (e.g., <code>Seq_QC_Plot_Reads_per_Cell</code> or <code>Plot_Median_Genes</code>) or 3. both (e.g., <code>QC_Plot_UMIvsGene(..., combination = TRUE)</code>).<br>
+<li>Creating new plotting functions either: 1. as wrapper around Seurat function with parameters already specified (e.g., <code>QC_Plot_Genes()</code>) or 2. create new plots (e.g., <code><a href="reference/Seq_QC_Plot_Reads_per_Cell.html">Seq_QC_Plot_Reads_per_Cell()</a></code> or <code><a href="reference/Plot_Median_Genes.html">Plot_Median_Genes()</a></code>) or 3. both (e.g., <code>QC_Plot_UMIvsGene(..., combination = TRUE)</code>).<br>
 </li>
-<li>Adding additional parameters to existing plots inside new function (e.g., high and low cutoff parameters in <code>QC_Plot_UMIvsGene</code>)</li>
+<li>Adding additional parameters to existing plots inside new function (e.g., high and low cutoff parameters in <code><a href="reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene()</a></code>)</li>
 </ul>
 </li>
 <li>
 <strong>Easy iterative plotting functionality.</strong><br>
 Many plotting functions can be easily automated with loops, apply, purrr etc. However, these can be intimidating to novice user and often can be made easier through wrapping into a function.
 <ul>
-<li>scCustomize contains a number of <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html" class="external-link">iterative plotting functions</a> contain extra parameters to specify file type, path, name and then render progress bar in console to track progress.</li>
+<li>scCustomize contains a number of <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html">iterative plotting functions</a> contain extra parameters to specify file type, path, name and then render progress bar in console to track progress.</li>
 <li>Returns either single PDF document or multiple plots of any valid file type (e.g., png, tiff, jpeg, pdf, etc).</li>
 </ul>
 </li>
 <li>
-<strong>Helper functions easily import multiple raw data types</strong><br><a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html" class="external-link">Imort data functions</a> are aimed at streamlining importing multiple files/samples with single function and/or importing files with “non-standard” file names.
+<strong>Helper functions easily import multiple raw data types</strong><br><a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Import data functions</a> are aimed at streamlining importing multiple files/samples with single function and/or importing files with “non-standard” file names.
 <ul>
 <li>Iterate import functions to simplify the import process across groups of files/samples.</li>
 <li>Parallelize functions where possible to allow for dramatic speed improvements when import large number of samples simultaneously.</li>
@@ -181,14 +181,14 @@ Many plotting functions can be easily automated with loops, apply, purrr etc. Ho
 Goal is to both speed up and simplify coding and reduce the use of copy/paste of the same lines of code which is more likely to lead to errors in code reproducibility.
 <ul>
 <li>
-<p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code>Add_Mito_Ribo_Seurat</code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
+<p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Add_Mito_Ribo_Seurat</span>(<span class="at">seurat_object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
 <ul>
 <li>Function already knows the defaults for Human, Mouse, and Marmoset (submit a PR if you would like more species added!).</li>
 </ul>
 </li>
 <li>
-<p><em>Example of wrapping many lines to one:</em> Extracting the top 10 (or 15, 20, 25, etc) genes per identity after running <code>FindAllMarkers</code> is very common and scCustomize provides <code>Extract_Top_Markers</code> function to simplify process.<br><em>Using scCustomize function:</em></p>
+<p><em>Example of wrapping many lines to one:</em> Extracting the top 10 (or 15, 20, 25, etc) genes per identity after running <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code> is very common and scCustomize provides <code><a href="reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code> function to simplify process.<br><em>Using scCustomize function:</em></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>markers_df <span class="ot">&lt;-</span> <span class="fu">FindAllMarkers</span>(<span class="at">object =</span> obj_name)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Get vector/string</span></span>
@@ -222,10 +222,10 @@ Base R error messages resulting from error deep inside Seurat (or other package)
 <li>scCustomize provides checks/warnings wrapped inside its functions to help and provide more informative error/warning messages. Two examples include:<br>
 </li>
 <li>
-<code>Add_Mito_Ribo_Seurat</code> will warn you if no mitochondrial or ribosomal features are found and won’t create new metadata column.<br>
+<code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> will warn you if no mitochondrial or ribosomal features are found and won’t create new metadata column.<br>
 </li>
 <li>
-<code>Rename_Clusters</code> will check and make sure the right number of unique new names are provided and provide one of two error messages if not before attempting to rename the object idents.</li>
+<code><a href="reference/Rename_Clusters.html">Rename_Clusters()</a></code> will check and make sure the right number of unique new names are provided and provide one of two error messages if not before attempting to rename the object idents.</li>
 </ul>
 </li>
 </ul>
@@ -282,11 +282,10 @@ If users are interested in adapting functions (or creating separate functions) t
 </ul>
 </div>
 
-
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing scCustomize</a></li>
+<li><p><a href="https://samuel-marsh.github.io/scCustomize/articles/FAQ.html">Citing scCustomize</a></p></li>
 </ul>
 </div>
 
@@ -302,6 +301,7 @@ If users are interested in adapting functions (or creating separate functions) t
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/samuel-marsh/scCustomize/releases" class="external-link"><img src="https://img.shields.io/github/v/release/samuel-marsh/scCustomize?color=gree" alt="GitHub release (latest by date)"></a></li>
+<li><a href="https://github.com/samuel-marsh/scCustomize/actions" class="external-link"><img src="https://github.com/samuel-marsh/scCustomize/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE" class="external-link"><img src="https://img.shields.io/github/license/samuel-marsh/scCustomize" alt="license"></a></li>
 <li><a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link"><img src="https://img.shields.io/github/issues/samuel-marsh/scCustomize" alt="issues"></a></li>
 <li><a href="https://zenodo.org/badge/latestdoi/411807769" class="external-link"><img src="https://zenodo.org/badge/411807769.svg" alt="DOI"></a></li>
@@ -319,7 +319,7 @@ If users are interested in adapting functions (or creating separate functions) t
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

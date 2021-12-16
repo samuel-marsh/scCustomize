@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Read &amp; Write Data Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Read_and_Write_Functions.Rmd" class="external-link"><code>vignettes/Read_and_Write_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Read_and_Write_Functions.Rmd</code></div>
@@ -343,13 +343,15 @@ p.caption {
 <h2 id="merge-list-of-seurat-objects">Merge List of Seurat Objects<a class="anchor" aria-label="anchor" href="#merge-list-of-seurat-objects"></a>
 </h2>
 <p>To easily merge many Seurat objects contained in a list scCustomize contains simple function.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge a list of compatible Seurat objects of any length and add cell prefixes if desired</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Seurat_Merged <span class="ot">&lt;-</span> <span class="fu">Merge_Seurat_List</span>(<span class="at">list_seurat =</span> list_of_objects, <span class="at">add.cell.ids =</span> (<span class="fu">c</span>(<span class="st">"cell"</span>, <span class="st">"prefixes"</span> <span class="st">"to"</span>, <span class="st">"add"</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Merge a list of compatible Seurat objects of any length and add cell prefixes if desired</span>
+<span class="va">Seurat_Merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Seurat_List.html">Merge_Seurat_List</a></span><span class="op">(</span>list_seurat <span class="op">=</span> <span class="va">list_of_objects</span>, add.cell.ids <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cell"</span>, <span class="st">"prefixes"</span>,
+    <span class="st">"to"</span>, <span class="st">"add"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="write-10x-genomics-formatted-h5-file-from-non-h5-input">Write 10X Genomics Formatted H5 file from non-H5 input<a class="anchor" aria-label="anchor" href="#write-10x-genomics-formatted-h5-file-from-non-h5-input"></a>
 </h2>
-<p><code>Create_10X_H5</code> provides convenient wrapper around <code>write10xCounts</code> from DropletUtils package. Output can then be easily read in using <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5()</a></code> or <code>liger::createLiger</code> (which assumes H5 file is formatted as if from Cell Ranger).</p>
+<p><code>Create_10X_H5</code> provides convenient wrapper around <code>write10xCounts()</code> from DropletUtils package. Output can then be easily read in using <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5()</a></code> or LIGER’s <code><a href="https://rdrr.io/pkg/rliger/man/createLiger.html" class="external-link">createLiger()</a></code> (which assumes H5 file is formatted as if from Cell Ranger).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Provide file path and specify type of files as either cell ranger triplicate files, matrix,</span>
 <span class="co"># or data.frame</span>
@@ -376,7 +378,7 @@ p.caption {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

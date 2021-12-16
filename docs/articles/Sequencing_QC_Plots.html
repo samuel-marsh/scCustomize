@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #3: Sequencing QC Plots/Analysis</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Sequencing_QC_Plots.Rmd" class="external-link"><code>vignettes/Sequencing_QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>Sequencing_QC_Plots.Rmd</code></div>
@@ -185,7 +185,7 @@ These functions currently only work with data from 10X Genomics processed via Ce
 </h3>
 <p>We can read all metrics files within a given parent directory using the <code>Read_Metrics_10X</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">raw_metrics</span> <span class="op">&lt;-</span> <span class="fu">Read_Mestrics_10X</span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"path/to/parent/directory/"</span>, default_10X <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">raw_metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_Metrics_10X.html">Read_Metrics_10X</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"path/to/parent/directory/"</span>, default_10X <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">raw_metrics</span><span class="op">)</span></code></pre></div>
 <p>The result of this function will be a data.frame with one row per library.</p>
@@ -630,7 +630,7 @@ sample_6
 <div class="section level4">
 <h4 id="optional-parameters">Optional parameters<a class="anchor" aria-label="anchor" href="#optional-parameters"></a>
 </h4>
-<p>Similarly to the scCustomize functions for reading raw count matrices (See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html" class="external-link">Read &amp; Write Data Functions Vignette</a>) there are a few optional parameters for <code>Read_Metrics_10X</code>.</p>
+<p>Similarly to the scCustomize functions for reading raw count matrices (See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions Vignette</a>) there are a few optional parameters for <code>Read_Metrics_10X</code>.</p>
 <ul>
 <li>
 <code>secondary_path</code>/<code>default_10X</code> tells the function how to navigate from the parent directory (<code>base_path</code>) to the “metrics_summary.csv” files.
@@ -766,7 +766,7 @@ B
 <div class="section level2">
 <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h2>
-<p>In total there are 15 Sequencing QC plotting functions. See <a href="https://samuel-marsh.github.io/scCustomize/reference/index.html#section-sequencing-metrics-qc-plots" class="external-link">Reference Manual</a> for full details.</p>
+<p>In total there are 15 Sequencing QC plotting functions. See <a href="https://samuel-marsh.github.io/scCustomize/reference/index.html#section-sequencing-metrics-qc-plots">Reference Manual</a> for full details.</p>
 <p>However, to simplify plotting there are also two wrapper functions which will return patchwork layouts of several of these functions in a single plot.</p>
 <div class="section level3">
 <h3 id="basic-metrics-summary">Basic Metrics Summary<a class="anchor" aria-label="anchor" href="#basic-metrics-summary"></a>
@@ -813,7 +813,7 @@ B
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

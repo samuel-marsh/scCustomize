@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>General Helpers &amp; Utilities</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 02, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Helpers_and_Utilities.Rmd" class="external-link"><code>vignettes/Helpers_and_Utilities.Rmd</code></a></small>
       <div class="hidden name"><code>Helpers_and_Utilities.Rmd</code></div>
@@ -160,9 +160,9 @@ p.caption {
 <div class="section level2">
 <h2 id="add-mitochondrial-ribosomal-percentages">Add Mitochondrial &amp; Ribosomal Percentages<a class="anchor" aria-label="anchor" href="#add-mitochondrial-ribosomal-percentages"></a>
 </h2>
-<p>As discussed in <a href="https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html" class="external-link">QC Plotting vignette</a> one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.</p>
+<p>As discussed in <a href="https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html">QC Plotting vignette</a> one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.</p>
 <div class="section level3">
-<h3 id="seurat-objects-add_mito_ribo_seurat">Seurat Objects: <code>Add_Mito_Ribo_Seurat</code><a class="anchor" aria-label="anchor" href="#seurat-objects-add_mito_ribo_seurat"></a>
+<h3 id="seurat-objects-add_mito_ribo_seurat">Seurat Objects: <code>Add_Mito_Ribo_Seurat()</code><a class="anchor" aria-label="anchor" href="#seurat-objects-add_mito_ribo_seurat"></a>
 </h3>
 <p>scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot. If you are using mouse, human, or marmoset data all you need to do is specify the <code>species</code> parameter.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -348,7 +348,7 @@ NA
 <pre><code><span class="co">## Warning in Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "other", : No</span>
 <span class="co">## Ribo features found in provided object using pattern/feature list provided. No</span>
 <span class="co">## column will be added to meta.data</span></code></pre>
-<p><code>Add_Mito_Ribo_Seurat</code> and <code>Add_Mito_Ribo_LIGER</code> will also return warnings if columns are already present in <code>@meta.data</code> slot and prompt you to provide override if you want to run the function.</p>
+<p><code>Add_Mito_Ribo_Seurat</code> and <code><a href="../reference/Add_Mito_Ribo_LIGER.html">Add_Mito_Ribo_LIGER()</a></code> will also return warnings if columns are already present in <code>@meta.data</code> slot and prompt you to provide override if you want to run the function.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## Error in Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human"): Columns with percent_mito and/or percent_ribo already present</span>
@@ -356,7 +356,7 @@ NA
 <span class="co">##   *To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*.</span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="liger-objects-add_mito_ribo_liger">LIGER Objects: <code>Add_Mito_Ribo_LIGER</code><a class="anchor" aria-label="anchor" href="#liger-objects-add_mito_ribo_liger"></a>
+<h3 id="liger-objects-add_mito_ribo_liger">LIGER Objects: <code>Add_Mito_Ribo_LIGER()</code><a class="anchor" aria-label="anchor" href="#liger-objects-add_mito_ribo_liger"></a>
 </h3>
 <p>scCustomize also contains identical function for use with LIGER objects. <code>Add_Mito_Ribo_LIGER</code> contains equivalent parameters and capabilities as <code>Add_Mito_Ribo_Seurat</code></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -369,7 +369,7 @@ NA
 <p>scCustomize also makes forward-facing a number of utilities that are used internally in functions but may also have utility on their own.</p>
 <div class="section level3">
 <h3 id="gene_present-to-check-for-features-">
-<code>Gene_Present</code> to check for features.<a class="anchor" aria-label="anchor" href="#gene_present-to-check-for-features-"></a>
+<code>Gene_Present()</code> to check for features.<a class="anchor" aria-label="anchor" href="#gene_present-to-check-for-features-"></a>
 </h3>
 <p><code>Gene_Present</code> is fairly basic function to check if feature exists in data. It can be used with Seurat or LIGER objects as well as generic data formats (Matrix, data.frame, tibble).</p>
 <p>In addition to some warning messages <code>Gene_Present</code> returns a list with 3 entries when run:</p>
@@ -444,9 +444,9 @@ NA
 <div class="section level3">
 <h3 id="merging-raw-data">Merging raw data<a class="anchor" aria-label="anchor" href="#merging-raw-data"></a>
 </h3>
-<p>It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later. scCustomize features a modified version of the internal LIGER function <code>MergeSparseDataAll</code>.</p>
-<p><code>Merge_Sparse_Data_All</code> will combine a list of sparse matrices and return single sparse matrix. Additionally, by specifying the <code>add_cell_ids</code> parameter you can specify a prefix to be added to the barcodes from each entry in the list (using “_” as delimiter).</p>
-<p>This function can be especially useful when combined with any of the scCustomize’s <code>Read_</code> data functions which automatically return named lists of matrices and the ability to specify sample <code>orig.ident</code> when creating Seurat objects. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html" class="external-link">Read &amp; Write Vignette</a> for more info on the data import functions.</p>
+<p>It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later. scCustomize features a modified version of the internal LIGER function <code>MergeSparseDataAll()</code>.</p>
+<p><code><a href="../reference/Merge_Sparse_Data_All.html">Merge_Sparse_Data_All()</a></code> will combine a list of sparse matrices and return single sparse matrix. Additionally, by specifying the <code>add_cell_ids</code> parameter you can specify a prefix to be added to the barcodes from each entry in the list (using “_” as delimiter).</p>
+<p>This function can be especially useful when combined with any of the scCustomize’s <code>Read_</code> data functions which automatically return named lists of matrices and the ability to specify sample <code>orig.ident</code> when creating Seurat objects. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Read &amp; Write Vignette</a> for more info on the data import functions.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read in data</span>
 <span class="va">GEO_10X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_GEO.html">Read10X_GEO</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/GSE152183_RAW_Marsh/"</span><span class="op">)</span>
@@ -462,7 +462,7 @@ NA
 <h3 id="merging-list-of-seurat-objects">Merging List of Seurat Objects<a class="anchor" aria-label="anchor" href="#merging-list-of-seurat-objects"></a>
 </h3>
 <p>Sometimes it can be advantageous to create a list of multiple Seurat Objects in order to run similar pipeline on all objects in loop.</p>
-<p>To facilitate ease in merging such lists into single object scCustomize contains simple wrapper <code>Merge_Seurat_List</code> that uses <code><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">purrr::reduce</a></code> to merge all objects in list into single combined object</p>
+<p>To facilitate ease in merging such lists into single object scCustomize contains simple wrapper <code>Merge_Seurat_List</code> that uses <code><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">purrr::reduce()</a></code> to merge all objects in list into single combined object</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">list_of_objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">obj1</span>, <span class="va">obj2</span>, <span class="va">obj2</span>, <span class="va">...</span>, <span class="va">obj10</span><span class="op">)</span>
 
@@ -561,11 +561,11 @@ To make it easier to remember function call in this situation scCustomize contai
 <p>scCustomize has 3 functions to facilitate changing the type of delimiters present in cell barcodes.</p>
 <ul>
 <li>
-<code>Change_Delim_Prefix</code> Change just the suffix delimiter.</li>
+<code><a href="../reference/Change_Delim_Prefix.html">Change_Delim_Prefix()</a></code> Change just the suffix delimiter.</li>
 <li>
-<code>Change_Delim_Suffix</code> Change just the prefix delimiter.</li>
+<code><a href="../reference/Change_Delim_Suffix.html">Change_Delim_Suffix()</a></code> Change just the prefix delimiter.</li>
 <li>
-<code>Change_Delim_All</code> Change all delimiters.</li>
+<code><a href="../reference/Change_Delim_All.html">Change_Delim_All()</a></code> Change all delimiters.</li>
 </ul>
 <p>These functions all take identical inputs and can be applied to either single matrix/data.frames or lists of matrices/data.frames.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -596,7 +596,7 @@ To make it easier to remember function call in this situation scCustomize contai
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
