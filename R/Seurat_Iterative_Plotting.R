@@ -116,6 +116,7 @@ Iterate_PC_Loading_Plots <- function(
 #' @import ggplot2
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat DimPlot
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -272,6 +273,7 @@ Iterate_DimPlot_bySample <- function(
 #' @import ggplot2
 #' @importFrom pbapply pbmapply pboptions
 #' @importFrom Seurat DimPlot
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -466,6 +468,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' @importFrom forcats fct_relevel
 #' @importFrom pbapply pbmapply pboptions
 #' @importFrom Seurat DimPlot
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -692,6 +695,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @import ggplot2
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat FeaturePlot
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -1067,6 +1071,7 @@ Iterate_VlnPlot <- function(
 #'
 #' @import ggplot2
 #' @importFrom pbapply pblapply pboptions
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -1258,6 +1263,7 @@ Iterate_Plot_Density_Custom <- function(
 #' @import ggplot2
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom purrr discard keep
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'

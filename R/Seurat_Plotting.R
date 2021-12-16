@@ -24,6 +24,7 @@
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom Seurat FeaturePlot
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -860,6 +861,7 @@ DotPlot_scCustom <- function(
 #'
 #' @import patchwork
 #' @importFrom Seurat DimPlot
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -1020,6 +1022,7 @@ DimPlot_scCustom <- function(
 #'
 #' @import patchwork
 #' @importFrom Seurat DimPlot
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
