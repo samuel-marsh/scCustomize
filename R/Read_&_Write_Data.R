@@ -1098,7 +1098,8 @@ Read_Metrics_10X <- function(
 
     raw_data <- read.csv(file = paste0(file_path, "metrics_summary.csv"), stringsAsFactors = F)
     # Change format of numeric columns to due commas in data csv output.
-    raw_data[,c(1:4, 18:19)] <- lapply(raw_data[,c(1:4, 18:19)],function(x){as.numeric(gsub(",", "", x))})
+    column_numbers <- grep(pattern = ",", x = raw_data[1, ])
+    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
     return(raw_data)
   })
 
