@@ -1,3 +1,9 @@
+# scCustomize 0.6.X (202X-XX-XX)  
+## Fixes
+- Fixed `Read_Metrics_10X` errors that occured due to differing outputs depending on Cell Ranger version or type of assay.
+- Added direct `importFrom` for `DefaultDimReduc` from SeuratObject to avoid potential errors.
+ 
+
 # scCustomize 0.6.2 (2021-12-01)  
 ## Fixes
 - Fixed barcode name duplication checks in `Merge_Sparse_Data_All`. ([#8](https://github.com/samuel-marsh/scCustomize/issues/8))
