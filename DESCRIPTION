@@ -11,7 +11,7 @@ Authors@R: c(
 Description: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
 URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize, https://doi.org/10.5281/zenodo.5706431
 BugReports: https://github.com/samuel-marsh/scCustomize/issues
-Depends: Seurat (>= 4.0.5)
+Depends: Seurat (>= 4.0.6)
 Imports: 
     colorway,
     cowplot,
