@@ -743,6 +743,9 @@ VlnPlot_scCustom <- function(
 #' @param plot_spacing Numerical value specifying the vertical spacing between each plot in the stack.
 #' Default is 0.15 ("cm").  Spacing dependent on unit provided to `spacing_unit`.
 #' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
+#' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with rendering so many points in vector form.  Alteratively, see `raster` parameter.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -778,6 +781,8 @@ Stacked_VlnPlot <- function(
   ggplot_default_colors = FALSE,
   plot_spacing = 0.15,
   spacing_unit = "cm",
+  pt.size = NULL,
+  raster = NULL,
   ...
 ) {
   # Check Seurat
@@ -803,6 +808,20 @@ Stacked_VlnPlot <- function(
   # Check feature case correct
   Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE, return_features = FALSE)
 
+  # set pt.size (default is no points)
+  if (is.null(x = pt.size)) {
+    pt.size <- 0
+  }
+
+  # Set rasterization
+  num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
+
+  if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
+    raster <- TRUE
+    message("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+            "\nTo plot in vector form set `raster=FALSE`")
+  }
+
   # Set default color palette based on number of levels being plotted
   if (is.null(x = group.by)) {
     group_by_length <- length(x = unique(x = seurat_object@active.ident))
@@ -825,7 +844,7 @@ Stacked_VlnPlot <- function(
   plot_margin <- margin(t = plot_spacing, r = 0, b = plot_spacing, l = 0, unit = spacing_unit)
 
   # Create plots
-  plot_list <- map(all_found_features, function(x) Modify_VlnPlot(seurat_object = seurat_object, features = x, cols = colors_use, group.by = group.by, split.by = split.by, idents = idents, plot_margin = plot_margin, ...))
+  plot_list <- map(all_found_features, function(x) Modify_VlnPlot(seurat_object = seurat_object, features = x, cols = colors_use, group.by = group.by, split.by = split.by, idents = idents, plot_margin = plot_margin, pt.size = pt.size, raster = raster, ...))
 
   # Add back x-axis title to bottom plot. patchwork is going to support this?
   # Add ability to rotate the X axis labels to the function call
