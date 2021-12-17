@@ -1,3 +1,15 @@
+# scCustomize 0.6.X (202X-XX-XX)  
+## Added
+- Added `VlnPlot_scCustom` function.
+
+## Changed
+- Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in `VlnPlot`.
+
+## Fixes
+- Fixed `Read_Metrics_10X` errors that occured due to differing outputs depending on Cell Ranger version or type of assay.
+- Added direct `importFrom` for `DefaultDimReduc` from SeuratObject to avoid potential errors.
+ 
+
 # scCustomize 0.6.3 (2021-12-16)  
 ## Fixes
 - Fixed `Read_Metrics_10X` errors that occured due to differing outputs depending on Cell Ranger version or type of assay.
