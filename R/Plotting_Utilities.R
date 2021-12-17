@@ -74,14 +74,15 @@ PC_Plotting <- function(
 Modify_VlnPlot <- function(
   seurat_object,
   features,
-  pt.size = 0,
+  pt.size = NULL,
   cols = NULL,
   plot_margin = NULL,
+  raster = NULL,
   ...
 ) {
   #remove the x-axis text and tick
   #plot_margin to adjust the white space between each plot.
-  VlnPlot(seurat_object, features = features, pt.size = pt.size, cols = cols, ...)  +
+  VlnPlot(seurat_object, features = features, pt.size = pt.size, cols = cols, raster = raster, ...)  +
     xlab("") +
     ylab(features) +
     ggtitle("") +
