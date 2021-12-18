@@ -357,6 +357,43 @@ Please note that even more so than many other plots you will need to adjust the 
 Stacked_VlnPlot(seurat_object = marsh_human_pm, features = c("percent_mito", "percent_ribo"), x_lab_rotate = TRUE, colors_use = human_colors_list)
 ```
 
+#### Point Size and Rasterization
+By default `Stacked_VlnPlot` sets the `pt.size` parameter to 0 to accelerate plotting/rendering which slow down dramatically depending on size of dataset and number of features plotted.
+
+If points are still desired then plotting/rendering can be sped up by using the `raster` parameter.  By default raster will be set to `TRUE` if `pt.size > 0` and `number of cells x number of features > 100,000`.
+
+### Custom VlnPlots
+In addition to `Stacked_VlnPlot` scCustomize also features a modified version of Seurat's `VlnPlot()`.
+
+#### `VlnPlot_scCustom` provides unified color palette plotting
+```{r eval=FALSE}
+VlnPlot(object = pbmc, features = "PTPRC")
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC")
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** Default `VlnPlot` with ggplot2 default color scheme.  **B.** `VlnPlot_scCustom` shares color palette choice with other scCustomize functions.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot(object = pbmc, features = "PTPRC")
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC")
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+#### Support for Rasterization
+Seurat `VlnPlot()` supports rasterization but does not alter it's plotting behavior by default.  Both `Stacked_VlnPlot` and `VlnPlot_scCustom` have a built in check to automatically rasterize the points if the: `number of cells x number of features > 100,000` to accelerate plotting when vector plots are not necessary.
+
+Rasterization can also be manually turned on or off using the `raster` parameter
+```{r eval=FALSE}
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = FALSE)
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** `raster = FALSE`.  **B.** `raster = TRUE`.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = FALSE)
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
 ### Custom DotPlots.
 Seurat's `DotPlot()` function is really good but lacks the ability to provide custom color gradient of more than 2 colors.
 
