@@ -1,6 +1,7 @@
 # scCustomize 0.6.X (202X-XX-XX)  
 ## Added
 - Added `VlnPlot_scCustom` function.
+- Added raster support to `Stacked_VlnPlot`
 
 ## Changed
 - Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in `VlnPlot`.
