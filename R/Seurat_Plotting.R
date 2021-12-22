@@ -743,7 +743,8 @@ VlnPlot_scCustom <- function(
 #' @param plot_spacing Numerical value specifying the vertical spacing between each plot in the stack.
 #' Default is 0.15 ("cm").  Spacing dependent on unit provided to `spacing_unit`.
 #' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
-#' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with rendering so many points in vector form.  Alteratively, see `raster` parameter.
+#' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with
+#' rendering so many points in vector form.  Alteratively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
