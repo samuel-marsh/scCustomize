@@ -12,7 +12,8 @@ Extract_Top_Markers(
   gene_column = "gene",
   gene_rownames_to_column = FALSE,
   data_frame = FALSE,
-  named_vector = TRUE
+  named_vector = TRUE,
+  make_unique = FALSE
 )
 }
 \arguments{
@@ -26,17 +27,20 @@ Extract_Top_Markers(
 \item{rank_by}{column name of \code{marker_dataframe} to rank data by when selecting \code{num_genes} per \code{group_by}.
 Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.}
 
-\item{gene_column}{column name of \code{marker_dataframe} that contains the gene IDs..  Default is "gene"
+\item{gene_column}{column name of \code{marker_dataframe} that contains the gene IDs.  Default is "gene"
 based on \code{\link[Seurat]{FindAllMarkers}}.}
 
 \item{gene_rownames_to_column}{logical. Whether gene IDs are stored in rownames and should be moved to
 column.  Default is FALSE.}
 
-\item{data_frame}{Logical, whether or not to return filtered datadrame of the original \code{markers_dataframe} or
+\item{data_frame}{Logical, whether or not to return filtered data.frame of the original \code{markers_dataframe} or
 to return a vector of gene IDs.  Default is FALSE.}
 
 \item{named_vector}{Logical, whether or not to name the vector of gene names that is returned by the function.
 If \code{TRUE} will name the vector using the column provided to \code{group_by}.  Default is TRUE.}
+
+\item{make_unique}{Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
+Not applicable when \code{data_frame = TRUE} or \code{named_vector = TRUE}.}
 }
 \value{
 filtered data.frame, vector, or named vector containing gene IDs.
