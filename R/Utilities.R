@@ -857,14 +857,16 @@ Add_Pct_Diff <- function(
 #'  \code{\link[Seurat]{FindAllMarkers}}.
 #' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group_by`.
 #' Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.
-#' @param gene_column column name of `marker_dataframe` that contains the gene IDs..  Default is "gene"
+#' @param gene_column column name of `marker_dataframe` that contains the gene IDs.  Default is "gene"
 #' based on \code{\link[Seurat]{FindAllMarkers}}.
 #' @param gene_rownames_to_column logical. Whether gene IDs are stored in rownames and should be moved to
 #' column.  Default is FALSE.
-#' @param data_frame Logical, whether or not to return filtered datadrame of the original `markers_dataframe` or
+#' @param data_frame Logical, whether or not to return filtered data.frame of the original `markers_dataframe` or
 #' to return a vector of gene IDs.  Default is FALSE.
 #' @param named_vector Logical, whether or not to name the vector of gene names that is returned by the function.
 #' If `TRUE` will name the vector using the column provided to `group_by`.  Default is TRUE.
+#' @param make_unique Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
+#' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
 #' @importFrom dplyr group_by slice_max
 #' @importFrom magrittr "%>%"
@@ -891,7 +893,8 @@ Extract_Top_Markers <- function(
   gene_column = "gene",
   gene_rownames_to_column = FALSE,
   data_frame = FALSE,
-  named_vector = TRUE
+  named_vector = TRUE,
+  make_unique = FALSE
 ) {
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
@@ -939,14 +942,23 @@ Extract_Top_Markers <- function(
   gene_list <- filtered_markers[[gene_column]]
 
   # should gene list be named
+  # check naming
+  if (named_vector && is.null(x = group_by)) {
+    warning("Cannot return named vector if `group_by` is NULL.\n",
+            "  Returning unnamed vector.")
+  }
+
   if (named_vector && !is.null(x = group_by)) {
+    if (make_unique) {
+      stop("Cannot return unique list if 'named_vector = TRUE'.")
+    }
     names(gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
   }
 
-  if (named_vector && is.null(x = group_by)) {
-    warning("Cannot return named vector if `group_by` is NULL.\n",
-            "  Returning unamed vector.")
+  # make unique
+  if (make_unique) {
+    gene_list <- unique(x = gene_list)
   }
 
   return(gene_list)
