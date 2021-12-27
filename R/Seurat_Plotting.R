@@ -945,6 +945,296 @@ DotPlot_scCustom <- function(
 }
 
 
+#' Clustered DotPlot
+#'
+#' Clustered DotPlots using ComplexHeatmap
+#'
+#' @param seurat_object Seurat object name.
+#' @param features Features to plot.
+#' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
+#' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
+#' Default is -2.5.
+#' @param exp_color_middle What scaled expression value to use for the middle of the provided `colors_use_exp`.
+#' By default will be set to value in middle of `exp_color_min` and `exp_color_max`.
+#' @param exp_color_max Minimum scaled average expression threshold (everything smaller will be set to this).
+#' Default is 2.5.
+#' @param print_exp_quantiles Whether to print the quantiles of expression data in addition to plots.
+#' Default is FALSE.  NOTE: These values will be altered by choices of `exp_color_min` and `exp_color_min`
+#' if there are values below or above those cutoffs, respectively.
+#' @param colors_use_idents specify color palette to used for identity labels.  By default if
+#' number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
+#' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
+#' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
+#' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
+#' @param k Value to use for k-means clustering on rows.  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
+#' From `ComplexHeatmap::Heatmap()`: Apply k-means clustering on rows. If the value is larger than 1, the
+#' heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
+#' clustering is still applied with parameters above.
+#' @param row_km_repeats Number of k-means runs to get a consensus k-means clustering. Note if row_km_repeats
+#' is set to more than one, the final number of groups might be smaller than row_km, but this might
+#' mean the original row_km is not a good choice.  Default is 1000.
+#' @param column_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
+#' Default is 100.
+#' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
+#' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
+#' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
+#' Based on: https://stackoverflow.com/a/15376462/15568251.
+#' @param elbow_kmax The maximum value of k to use for `plot_km_elbow`.  Suggest setting larger value so the
+#' true shape of plot can be observed.  Default is 20.
+#' @param assay Name of assay to use, defaults to the active assay.
+#' @param group.by Group (color) cells in different ways (for example, orig.ident).
+#' @param idents Which classes to include in the plot (default is all).
+#' @param scale Logical, determine whether the data is scaled.  Default is TRUE.
+#' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
+#' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
+#' dendrogram and children dendrograms.  Default is TRUE.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param seed Sets seed for reproducible plotting.
+#'
+#' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
+#'
+#' @import ggplot2
+#' @importFrom circlize colorRamp2
+#' @importFrom dplyr select
+#' @importFrom grid grid.circle grid.rect gpar
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat DotPlot
+#' @importFrom tidyr pivot_wider
+#'
+#' @export
+#'
+#' @concept seurat_plotting
+#'
+#' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
+#' @references https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/
+#' @seealso https://twitter.com/tangming2005
+#'
+#' @examples
+#' \dontrun{
+#' Clustered_DotPlot(seurat_object = object, features = gene_list)
+#' }
+#'
+
+Clustered_DotPlot <- function(
+  seurat_object,
+  features,
+  colors_use_exp = viridis_plasma_dark_high,
+  exp_color_min = -2.5,
+  exp_color_middle = NULL,
+  exp_color_max = 2.5,
+  print_exp_quantiles = FALSE,
+  colors_use_idents = NULL,
+  x_lab_rotate = TRUE,
+  k = 1,
+  row_km_repeats = 1000,
+  column_km_repeats = 1000,
+  raster = FALSE,
+  plot_km_elbow = TRUE,
+  elbow_kmax = 20,
+  assay = NULL,
+  group.by = NULL,
+  idents = NULL,
+  scale = TRUE,
+  show_parent_dend_line = TRUE,
+  ggplot_default_colors = FALSE,
+  seed = 123
+) {
+  # Check for packages
+  ComplexHeatmap_check <- PackageCheck("ComplexHeatmap", error = FALSE)
+  if (!ComplexHeatmap_check[1]) {
+    stop(
+      "Please install the ComplexHeatmap package to use Clustered_DotPlot",
+      "\nThis can be accomplished with the following commands: ",
+      "\n----------------------------------------",
+      "\ninstall.packages('BiocManager')",
+      "\nBiocManager::install('ComplexHeatmap')",
+      "\n----------------------------------------",
+      call. = FALSE
+    )
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Get DotPlot data
+  seurat_plot <- DotPlot(object = seurat_object, features = features, assay = assay, group.by = group.by, scale = scale, idents = idents)
+
+  data <- seurat_plot$data
+
+  # Get expression data
+  exp_mat<- data %>%
+    select(-pct.exp, -avg.exp) %>%
+    pivot_wider(names_from = id, values_from = avg.exp.scaled) %>%
+    as.data.frame()
+
+  row.names(x = exp_mat) <- exp_mat$features.plot
+
+  # Check NAs if idents
+  if (!is.null(x = idents)) {
+    excluded_features <- exp_mat[rowSums(is.na(x = exp_mat)) > 0,] %>%
+      rownames()
+    warning("The following features were removed as there is no scaled expression present in subset (`idents`) of object provided: ", glue_collapse_scCustom(input_string = excluded_features, and = TRUE), ".")
+
+    # Remove rows with NAs
+    exp_mat <- exp_mat[rowSums(is.na(exp_mat)) == 0,]
+  }
+
+  exp_mat <- exp_mat[,-1] %>%
+    as.matrix()
+
+  # Get percent expressed data
+  percent_mat <- data %>%
+    select(-avg.exp, -avg.exp.scaled) %>%
+    pivot_wider(names_from = id, values_from = pct.exp) %>%
+    as.data.frame()
+
+  row.names(x = percent_mat) <- percent_mat$features.plot
+  percent_mat <- percent_mat[,-1] %>%
+    as.matrix()
+
+  # print quantiles
+  if (print_exp_quantiles) {
+    message("Quantiles of gene expression data are:")
+    print(quantile(exp_mat, c(0.1, 0.5, 0.9, 0.99)))
+  }
+
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Set default color palette based on number of levels being plotted
+  if (is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  } else {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+  }
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use_idents) && ggplot_default_colors) {
+    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+  }
+  if (is.null(x = colors_use_idents)) {
+    # set default plot colors
+    if (is.null(x = colors_use_idents)) {
+      colors_use_idents <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+  }
+
+  # Pull Annotation and change colors to ComplexHeatmap compatible format
+  Identity <- colnames(exp_mat)
+
+  identity_colors <- DiscretePalette_scCustomize(num_colors = length(Identity), palette = "polychrome", shuffle_pal = F)
+  names(identity_colors) <- Identity
+  identity_colors_list <- list(Identity = identity_colors)
+
+  # Create identity annotation
+  column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
+                                                 col =  identity_colors_list,
+                                                 na_col = "grey",
+                                                 name = "Identity"
+  )
+
+  # Create expression color scale
+  if (is.null(x = colors_use_exp)) {
+    colors_use_exp <- viridis::plasma(n = 20, direction = -1)
+  }
+
+  if (is.null(x = exp_color_middle)) {
+    exp_color_middle <- Middle_Number(min = exp_color_min, max = exp_color_max)
+  }
+
+  palette_length <- length(colors_use_exp)
+  palette_middle <- Middle_Number(min = 0, max = palette_length)
+
+  # Create palette
+  col_fun = colorRamp2(c(exp_color_min, exp_color_middle, exp_color_max), colors_use_exp[c(1,palette_middle, palette_length)])
+
+  # Calculate and plot Elbow
+  if (plot_km_elbow) {
+    km_elbow_plot <- kMeans_Elbow(data = exp_mat, k_max = elbow_kmax)
+  }
+
+  # prep heatmap
+  if (raster) {
+    layer_fun = function(j, i, x, y, w, h, fill) {
+      grid.rect(x = x, y = y, width = w, height = h,
+                      gp = gpar(col = NA, fill = NA))
+      grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
+                        gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+    }
+  } else {
+    cell_fun = function(j, i, x, y, w, h, fill) {
+      grid.rect(x = x, y = y, width = w, height = h,
+                      gp = gpar(col = NA, fill = NA))
+      grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
+                        gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+    }
+  }
+
+  # Create legend for point size
+  lgd_list = list(
+    ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
+                           graphics = list(
+                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
+                                                                    gp = gpar(fill = "black")),
+                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.5) * unit(2, "mm"),
+                                                                    gp = gpar(fill = "black")),
+                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
+                                                                    gp = gpar(fill = "black")),
+                             function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
+                                                                    gp = gpar(fill = "black")))
+    )
+  )
+
+  # Set x label roration
+  if (is.numeric(x = x_lab_rotate)) {
+    x_lab_rotate <- x_lab_rotate
+  } else if (isTRUE(x = x_lab_rotate)) {
+    x_lab_rotate <- 45
+  } else {
+    x_lab_rotate <- 0
+  }
+
+  # Create Plot
+  set.seed(seed = seed)
+  if (raster) {
+    cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
+                                                heatmap_legend_param=list(title="Expression"),
+                                                col=col_fun,
+                                                rect_gp = gpar(type = "none"),
+                                                layer_fun = layer_fun,
+                                                row_names_gp = gpar(fontsize = 5),
+                                                row_km = k,
+                                                row_km_repeats = row_km_repeats,
+                                                border = "black",
+                                                top_annotation = column_ha,
+                                                column_km_repeats = column_km_repeats,
+                                                show_parent_dend_line = show_parent_dend_line,
+                                                column_names_rot = x_lab_rotate)
+  } else {
+    cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
+                                                heatmap_legend_param=list(title="Expression"),
+                                                col=col_fun,
+                                                rect_gp = gpar(type = "none"),
+                                                cell_fun = cell_fun,
+                                                row_names_gp = gpar(fontsize = 5),
+                                                row_km = k,
+                                                row_km_repeats = row_km_repeats,
+                                                border = "black",
+                                                top_annotation = column_ha,
+                                                column_km_repeats = column_km_repeats,
+                                                show_parent_dend_line = show_parent_dend_line,
+                                                column_names_rot = x_lab_rotate)
+  }
+
+  # Add pt.size legend & return plots
+  if (plot_km_elbow) {
+    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list)))
+  }
+  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
+}
+
+
 #' DimPlot with modified default settings
 #'
 #' Creates DimPlot with some of the settings modified from their Seurat defaults (colors_use, shuffle, label).
