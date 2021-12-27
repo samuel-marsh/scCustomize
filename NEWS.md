@@ -3,6 +3,7 @@
 - Added `VlnPlot_scCustom` function.
 - Added raster support to `Stacked_VlnPlot`
 - Added `make_unique` parameter to `Extract_Top_Markers` function.
+- Added `Clustered_DotPlot` function.
 
 ## Changed
 - Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in `VlnPlot`.
