@@ -99,7 +99,7 @@ Modify_VlnPlot <- function(
 
 #' Sum Squared Error Elbow Plot
 #'
-#' Sum Squared Error Elbow Plot as method of estimating optimal k value.
+#' Sum Squared Error Elbow Plot as method of estimating optimal k value for k-means clustering.
 #'
 #' @param data Expression data.
 #' @param k_max Maximum number of k values to test.
