@@ -61,8 +61,8 @@ PC_Plotting <- function(
 #'
 #' @return A modified violin plot
 #'
-#' @importFrom Seurat VlnPlot
 #' @import ggplot2
+#' @importFrom Seurat VlnPlot
 #'
 #' @noRd
 #'
@@ -94,6 +94,59 @@ Modify_VlnPlot <- function(
           plot.margin = plot_margin,
           plot.title= element_blank(),
           axis.title.x = element_blank())
+}
+
+
+#' Sum Squared Error Elbow Plot
+#'
+#' Sum Squared Error Elbow Plot as method of estimating optimal k value.
+#'
+#' @param data Expression data.
+#' @param k_max Maximum number of k values to test.
+#' @param plot_title Title of the plot.
+#' @param cutoff_value Value to use for adding dashed line visualizing choice of k.
+#'
+#' @return A ggplot2 object.
+#'
+#' @import ggplot2
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble rownames_to_column
+#'
+#' @noRd
+#'
+#' @references Code to calculate wss values from: https://stackoverflow.com/a/15376462/15568251
+#'
+
+kMeans_Elbow <- function(
+  data,
+  k_max = 15,
+  plot_title = "Sum of Squared Error (SSE) Plot",
+  cutoff_value = NULL
+) {
+  # Calculate the within squares
+  # code from @Ben https://stackoverflow.com/a/15376462/15568251
+  wss <- (nrow(data)-1)*sum(apply(data,2,var))
+  for (i in 2:k_max) wss[i] <- sum(kmeans(data,
+                                          centers=i)$withinss)
+
+  # Reformat for ggplot2 plotting
+  plot_data <- data.frame(wss) %>%
+    rownames_to_column("k")
+
+  plot_data$k <- as.numeric(plot_data$k)
+
+  # Plot data
+  plot <- ggplot(data = plot_data, mapping = aes(y = wss, x = k)) +
+    geom_point() +
+    geom_path() +
+    scale_x_continuous(n.breaks = k_max) +
+    theme_ggprism_mod() +
+    xlab("k (Number of Clusters)") +
+    ylab("Within groups sum of squares") +
+    ggtitle(plot_title) +
+    geom_vline(xintercept = cutoff_value, linetype = "dashed", color = "red")
+
+  return(plot)
 }
 
 
