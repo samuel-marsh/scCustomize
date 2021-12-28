@@ -1134,11 +1134,7 @@ Clustered_DotPlot <- function(
                                                  name = "Identity"
   )
 
-  # Create expression color scale
-  if (is.null(x = colors_use_exp)) {
-    colors_use_exp <- viridis::plasma(n = 20, direction = -1)
-  }
-
+  # Set middle of color scale if not specified
   if (is.null(x = exp_color_middle)) {
     exp_color_middle <- Middle_Number(min = exp_color_min, max = exp_color_max)
   }
