@@ -12,21 +12,21 @@
 \alias{viridis_light_high}
 \title{Viridis Shortcuts}
 \format{
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 
-An object of class \code{character} of length 10.
+An object of class \code{character} of length 30.
 }
 \usage{
 viridis_plasma_dark_high
