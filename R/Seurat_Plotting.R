@@ -996,7 +996,7 @@ DotPlot_scCustom <- function(
 #'
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
-#' @importFrom dplyr select
+#' @importFrom dplyr filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat DotPlot
@@ -1072,12 +1072,17 @@ Clustered_DotPlot <- function(
 
   # Check NAs if idents
   if (!is.null(x = idents)) {
+    # Find NA features and print warning
     excluded_features <- exp_mat[rowSums(is.na(x = exp_mat)) > 0,] %>%
       rownames()
     warning("The following features were removed as there is no scaled expression present in subset (`idents`) of object provided: ", glue_collapse_scCustom(input_string = excluded_features, and = TRUE), ".")
 
+    # Extract good features
+    good_features <- rownames(exp_mat)
+
     # Remove rows with NAs
-    exp_mat <- exp_mat[rowSums(is.na(exp_mat)) == 0,]
+    exp_mat <- exp_mat %>%
+      filter(features.plot %in% good_features)
   }
 
   exp_mat <- exp_mat[,-1] %>%
@@ -1090,6 +1095,13 @@ Clustered_DotPlot <- function(
     as.data.frame()
 
   row.names(x = percent_mat) <- percent_mat$features.plot
+
+  # Subset dataframe for NAs if idents so that exp_mat and percent_mat match
+  if (!is.null(x = idents)) {
+    percent_mat <- percent_mat %>%
+      filter(features.plot %in% good_features)
+  }
+
   percent_mat <- percent_mat[,-1] %>%
     as.matrix()
 
