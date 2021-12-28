@@ -23,7 +23,6 @@ Clustered_DotPlot(
   assay = NULL,
   group.by = NULL,
   idents = NULL,
-  scale = TRUE,
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
   seed = 123
@@ -82,8 +81,6 @@ true shape of plot can be observed.  Default is 20.}
 \item{group.by}{Group (color) cells in different ways (for example, orig.ident).}
 
 \item{idents}{Which classes to include in the plot (default is all).}
-
-\item{scale}{Logical, determine whether the data is scaled.  Default is TRUE.}
 
 \item{show_parent_dend_line}{Logical, Sets parameter of same name in \code{ComplexHeatmap::Heatmap()}.
 From \code{ComplexHeatmap::Heatmap()}: When heatmap is split, whether to add a dashed line to mark parent
