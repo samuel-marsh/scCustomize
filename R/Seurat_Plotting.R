@@ -984,7 +984,6 @@ DotPlot_scCustom <- function(
 #' @param assay Name of assay to use, defaults to the active assay.
 #' @param group.by Group (color) cells in different ways (for example, orig.ident).
 #' @param idents Which classes to include in the plot (default is all).
-#' @param scale Logical, determine whether the data is scaled.  Default is TRUE.
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
@@ -1035,7 +1034,6 @@ Clustered_DotPlot <- function(
   assay = NULL,
   group.by = NULL,
   idents = NULL,
-  scale = TRUE,
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
   seed = 123
@@ -1058,7 +1056,7 @@ Clustered_DotPlot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Get DotPlot data
-  seurat_plot <- DotPlot(object = seurat_object, features = features, assay = assay, group.by = group.by, scale = scale, idents = idents)
+  seurat_plot <- DotPlot(object = seurat_object, features = features, assay = assay, group.by = group.by, scale = TRUE, idents = idents)
 
   data <- seurat_plot$data
 
