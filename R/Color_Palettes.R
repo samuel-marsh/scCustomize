@@ -17,7 +17,7 @@
 #' }
 #'
 
-viridis_plasma_dark_high <- viridis(n = 10, option = "C", direction = -1)
+viridis_plasma_dark_high <- viridis(n = 30, option = "C", direction = -1)
 
 #' Viridis Shortcuts
 #'
@@ -29,7 +29,7 @@ viridis_plasma_dark_high <- viridis(n = 10, option = "C", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_plasma_light_high <- viridis(n = 10, option = "C", direction = 1)
+viridis_plasma_light_high <- viridis(n = 30, option = "C", direction = 1)
 
 #' Viridis Shortcuts
 #'
@@ -41,7 +41,7 @@ viridis_plasma_light_high <- viridis(n = 10, option = "C", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_inferno_dark_high <- viridis(n = 10, option = "B", direction = -1)
+viridis_inferno_dark_high <- viridis(n = 30, option = "B", direction = -1)
 
 #' Viridis Shortcuts
 #'
@@ -53,7 +53,7 @@ viridis_inferno_dark_high <- viridis(n = 10, option = "B", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_inferno_light_high <- viridis(n = 10, option = "B", direction = 1)
+viridis_inferno_light_high <- viridis(n = 30, option = "B", direction = 1)
 
 #' Viridis Shortcuts
 #'
@@ -65,7 +65,7 @@ viridis_inferno_light_high <- viridis(n = 10, option = "B", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_magma_dark_high <- viridis(n = 10, option = "A", direction = -1)
+viridis_magma_dark_high <- viridis(n = 30, option = "A", direction = -1)
 
 #' Viridis Shortcuts
 #'
@@ -77,7 +77,7 @@ viridis_magma_dark_high <- viridis(n = 10, option = "A", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_magma_light_high <- viridis(n = 10, option = "A", direction = 1)
+viridis_magma_light_high <- viridis(n = 30, option = "A", direction = 1)
 
 #' Viridis Shortcuts
 #'
@@ -89,7 +89,7 @@ viridis_magma_light_high <- viridis(n = 10, option = "A", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_dark_high <- viridis(n = 10, option = "D", direction = -1)
+viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
 
 #' Viridis Shortcuts
 #'
@@ -101,7 +101,7 @@ viridis_dark_high <- viridis(n = 10, option = "D", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_light_high <- viridis(n = 10, option = "D", direction = 1)
+viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 
 
 #' Discrete colour palettes from the pals package
