@@ -975,6 +975,7 @@ DotPlot_scCustom <- function(
 #' mean the original row_km is not a good choice.  Default is 1000.
 #' @param column_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
 #' Default is 100.
+#' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1029,6 +1030,7 @@ Clustered_DotPlot <- function(
   k = 1,
   row_km_repeats = 1000,
   column_km_repeats = 1000,
+  row_label_size = 8,
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -1233,7 +1235,7 @@ Clustered_DotPlot <- function(
                                                 col=col_fun,
                                                 rect_gp = gpar(type = "none"),
                                                 layer_fun = layer_fun,
-                                                row_names_gp = gpar(fontsize = 5),
+                                                row_names_gp = gpar(fontsize = row_label_size),
                                                 row_km = k,
                                                 row_km_repeats = row_km_repeats,
                                                 border = "black",
@@ -1247,7 +1249,7 @@ Clustered_DotPlot <- function(
                                                 col=col_fun,
                                                 rect_gp = gpar(type = "none"),
                                                 cell_fun = cell_fun,
-                                                row_names_gp = gpar(fontsize = 5),
+                                                row_names_gp = gpar(fontsize = row_label_size),
                                                 row_km = k,
                                                 row_km_repeats = row_km_repeats,
                                                 border = "black",
