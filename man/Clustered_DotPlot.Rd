@@ -17,6 +17,7 @@ Clustered_DotPlot(
   k = 1,
   row_km_repeats = 1000,
   column_km_repeats = 1000,
+  row_label_size = 8,
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -66,6 +67,8 @@ mean the original row_km is not a good choice.  Default is 1000.}
 
 \item{column_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
 Default is 100.}
+
+\item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
 \item{raster}{Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.}
 
