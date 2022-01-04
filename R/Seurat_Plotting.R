@@ -980,7 +980,8 @@ DotPlot_scCustom <- function(
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
 #' Based on: https://stackoverflow.com/a/15376462/15568251.
 #' @param elbow_kmax The maximum value of k to use for `plot_km_elbow`.  Suggest setting larger value so the
-#' true shape of plot can be observed.  Default is 20.
+#' true shape of plot can be observed.  Value must be 1 less than number of features provided.  If NULL parameter
+#' will be set dependent on length of feature list up to `elbow_kmax = 20`.
 #' @param assay Name of assay to use, defaults to the active assay.
 #' @param group.by Group (color) cells in different ways (for example, orig.ident).
 #' @param idents Which classes to include in the plot (default is all).
@@ -1030,7 +1031,7 @@ Clustered_DotPlot <- function(
   column_km_repeats = 1000,
   raster = FALSE,
   plot_km_elbow = TRUE,
-  elbow_kmax = 20,
+  elbow_kmax = NULL,
   assay = NULL,
   group.by = NULL,
   idents = NULL,
@@ -1164,6 +1165,22 @@ Clustered_DotPlot <- function(
 
   # Calculate and plot Elbow
   if (plot_km_elbow) {
+    # if elbow_kmax not NULL check it is usable
+    if (elbow_kmax > (nrow(x = exp_data) - 1)) {
+      elbow_kmax <- nrow(x = exp_data) - 1
+      warning("The value provided for 'elbow_kmax' is too large.  Changing to (length(x = features)-1): ", elbow_kmax)
+    }
+
+    # if elbow_kmax is NULL set value based on input feature list
+    if (is.null(x = elbow_kmax)) {
+      # set to (length(x = features)-1) if less than 21 features OR to 20 if greater than 21 features
+      if (nrow(x = exp_data) > 21) {
+        elbow_kmax <- 20
+      } else {
+        elbow_kmax <- nrow(x = exp_data) - 1
+      }
+    }
+
     km_elbow_plot <- kMeans_Elbow(data = exp_mat, k_max = elbow_kmax)
   }
 
