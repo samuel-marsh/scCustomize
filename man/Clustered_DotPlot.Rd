@@ -19,7 +19,7 @@ Clustered_DotPlot(
   column_km_repeats = 1000,
   raster = FALSE,
   plot_km_elbow = TRUE,
-  elbow_kmax = 20,
+  elbow_kmax = NULL,
   assay = NULL,
   group.by = NULL,
   idents = NULL,
@@ -74,7 +74,8 @@ Estimating elbow of this plot is one way to determine "optimal" value for \code{
 Based on: https://stackoverflow.com/a/15376462/15568251.}
 
 \item{elbow_kmax}{The maximum value of k to use for \code{plot_km_elbow}.  Suggest setting larger value so the
-true shape of plot can be observed.  Default is 20.}
+true shape of plot can be observed.  Value must be 1 less than number of features provided.  If NULL parameter
+will be set dependent on length of feature list up to \code{elbow_kmax = 20}.}
 
 \item{assay}{Name of assay to use, defaults to the active assay.}
 
