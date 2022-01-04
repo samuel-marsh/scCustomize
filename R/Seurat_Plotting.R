@@ -1066,7 +1066,7 @@ Clustered_DotPlot <- function(
   }
 
   # Get DotPlot data
-  seurat_plot <- DotPlot(object = seurat_object, features = features, assay = assay, group.by = group.by, scale = TRUE, idents = idents)
+  seurat_plot <- DotPlot(object = seurat_object, features = features_unique, assay = assay, group.by = group.by, scale = TRUE, idents = idents)
 
   data <- seurat_plot$data
 
