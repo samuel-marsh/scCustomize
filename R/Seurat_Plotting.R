@@ -1071,7 +1071,7 @@ Clustered_DotPlot <- function(
   data <- seurat_plot$data
 
   # Get expression data
-  exp_mat<- data %>%
+  exp_mat <- data %>%
     select(-pct.exp, -avg.exp) %>%
     pivot_wider(names_from = id, values_from = avg.exp.scaled) %>%
     as.data.frame()
