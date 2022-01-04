@@ -1062,7 +1062,7 @@ Clustered_DotPlot <- function(
   features_unique <- unique(x = features)
 
   if (length(x = features_unique) != length(x = features)) {
-    paste0("Feature list contains duplicate values, making unique.")
+    warning("Feature list contains duplicate values, making unique.")
   }
 
   # Get DotPlot data
