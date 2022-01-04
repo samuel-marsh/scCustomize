@@ -1055,6 +1055,13 @@ Clustered_DotPlot <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Check unique features
+  features_unique <- unique(x = features)
+
+  if (length(x = features_unique) != length(x = features)) {
+    paste0("Feature list contains duplicate values, making unique.")
+  }
+
   # Get DotPlot data
   seurat_plot <- DotPlot(object = seurat_object, features = features, assay = assay, group.by = group.by, scale = TRUE, idents = idents)
 
