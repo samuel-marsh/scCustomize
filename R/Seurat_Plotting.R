@@ -1166,18 +1166,18 @@ Clustered_DotPlot <- function(
   # Calculate and plot Elbow
   if (plot_km_elbow) {
     # if elbow_kmax not NULL check it is usable
-    if (elbow_kmax > (nrow(x = exp_data) - 1)) {
-      elbow_kmax <- nrow(x = exp_data) - 1
+    if (elbow_kmax > (nrow(x = exp_mat) - 1)) {
+      elbow_kmax <- nrow(x = exp_mat) - 1
       warning("The value provided for 'elbow_kmax' is too large.  Changing to (length(x = features)-1): ", elbow_kmax)
     }
 
     # if elbow_kmax is NULL set value based on input feature list
     if (is.null(x = elbow_kmax)) {
       # set to (length(x = features)-1) if less than 21 features OR to 20 if greater than 21 features
-      if (nrow(x = exp_data) > 21) {
+      if (nrow(x = exp_mat) > 21) {
         elbow_kmax <- 20
       } else {
-        elbow_kmax <- nrow(x = exp_data) - 1
+        elbow_kmax <- nrow(x = exp_mat) - 1
       }
     }
 
