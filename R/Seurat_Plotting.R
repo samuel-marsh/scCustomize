@@ -1021,9 +1021,9 @@ Clustered_DotPlot <- function(
   seurat_object,
   features,
   colors_use_exp = viridis_plasma_dark_high,
-  exp_color_min = -2.5,
+  exp_color_min = -2,
   exp_color_middle = NULL,
-  exp_color_max = 2.5,
+  exp_color_max = 2,
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
@@ -1062,11 +1062,16 @@ Clustered_DotPlot <- function(
   features_unique <- unique(x = features)
 
   if (length(x = features_unique) != length(x = features)) {
-    warning("Feature list contains duplicate values, making unique.")
+    warning("Feature list contains duplicates, making unique.")
+  }
+
+  # Check exp min/max set correctly
+  if (!exp_color_min < exp_color_max) {
+    stop("The value for 'exp_color_min': ", exp_color_min, ", must be less than the value for 'exp_color_max': ", exp_color_max, ".")
   }
 
   # Get DotPlot data
-  seurat_plot <- DotPlot(object = seurat_object, features = features_unique, assay = assay, group.by = group.by, scale = TRUE, idents = idents)
+  seurat_plot <- DotPlot(object = seurat_object, features = features_unique, assay = assay, group.by = group.by, scale = TRUE, idents = idents, col.min = NULL, col.max = NULL)
 
   data <- seurat_plot$data
 
