@@ -953,11 +953,11 @@ DotPlot_scCustom <- function(
 #' @param features Features to plot.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
-#' Default is -2.5.
+#' Default is -2.
 #' @param exp_color_middle What scaled expression value to use for the middle of the provided `colors_use_exp`.
 #' By default will be set to value in middle of `exp_color_min` and `exp_color_max`.
 #' @param exp_color_max Minimum scaled average expression threshold (everything smaller will be set to this).
-#' Default is 2.5.
+#' Default is 2.
 #' @param print_exp_quantiles Whether to print the quantiles of expression data in addition to plots.
 #' Default is FALSE.  NOTE: These values will be altered by choices of `exp_color_min` and `exp_color_min`
 #' if there are values below or above those cutoffs, respectively.

@@ -8,9 +8,9 @@ Clustered_DotPlot(
   seurat_object,
   features,
   colors_use_exp = viridis_plasma_dark_high,
-  exp_color_min = -2.5,
+  exp_color_min = -2,
   exp_color_middle = NULL,
-  exp_color_max = 2.5,
+  exp_color_max = 2,
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
@@ -37,13 +37,13 @@ Clustered_DotPlot(
 \item{colors_use_exp}{Color palette to use for plotting expression scale.  Default is \code{viridis::plasma(n = 20, direction = -1)}.}
 
 \item{exp_color_min}{Minimum scaled average expression threshold (everything smaller will be set to this).
-Default is -2.5.}
+Default is -2.}
 
 \item{exp_color_middle}{What scaled expression value to use for the middle of the provided \code{colors_use_exp}.
 By default will be set to value in middle of \code{exp_color_min} and \code{exp_color_max}.}
 
 \item{exp_color_max}{Minimum scaled average expression threshold (everything smaller will be set to this).
-Default is 2.5.}
+Default is 2.}
 
 \item{print_exp_quantiles}{Whether to print the quantiles of expression data in addition to plots.
 Default is FALSE.  NOTE: These values will be altered by choices of \code{exp_color_min} and \code{exp_color_min}
