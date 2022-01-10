@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>General Helpers &amp; Utilities</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: January 10, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Helpers_and_Utilities.Rmd" class="external-link"><code>vignettes/Helpers_and_Utilities.Rmd</code></a></small>
       <div class="hidden name"><code>Helpers_and_Utilities.Rmd</code></div>
@@ -164,7 +164,7 @@ p.caption {
 <div class="section level3">
 <h3 id="seurat-objects-add_mito_ribo_seurat">Seurat Objects: <code>Add_Mito_Ribo_Seurat()</code><a class="anchor" aria-label="anchor" href="#seurat-objects-add_mito_ribo_seurat"></a>
 </h3>
-<p>scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot. If you are using mouse, human, or marmoset data all you need to do is specify the <code>species</code> parameter.</p>
+<p>scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot. If you are using mouse, human, marmoset, zebrafish, rat, or drosophila data all you need to do is specify the <code>species</code> parameter.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># These defaults can be run just by providing accepted species name</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></code></pre></div>
@@ -190,6 +190,9 @@ Zebrafish_Options
 <th style="text-align:left;">
 Rat_Options
 </th>
+<th style="text-align:left;">
+Drosophila_Options
+</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -211,6 +214,9 @@ Zebrafish
 <td style="text-align:left;">
 Rat
 </td>
+<td style="text-align:left;">
+Drosophila
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -230,6 +236,9 @@ zebrafish
 </td>
 <td style="text-align:left;">
 rat
+</td>
+<td style="text-align:left;">
+drosophila
 </td>
 </tr>
 <tr>
@@ -251,6 +260,9 @@ DR
 <td style="text-align:left;">
 RN
 </td>
+<td style="text-align:left;">
+DM
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -270,6 +282,9 @@ Dr
 </td>
 <td style="text-align:left;">
 Rn
+</td>
+<td style="text-align:left;">
+Dm
 </td>
 </tr>
 <tr>
@@ -291,6 +306,9 @@ dr
 <td style="text-align:left;">
 rn
 </td>
+<td style="text-align:left;">
+dm
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -311,13 +329,16 @@ NA
 <td style="text-align:left;">
 NA
 </td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
 </tbody>
 </table>
 <div class="section level4">
 <h4 id="non-default-species">Non-default species<a class="anchor" aria-label="anchor" href="#non-default-species"></a>
 </h4>
-<p>However custom prefixes can be used for non-human/mouse/marmoset species with different annotations. Simply specify <code>species = other</code> and supply feature lists or regex patterns for your species of interest. <em>NOTE: If desired please submit issue on GitHub for additional default species. Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.</em></p>
+<p>However custom prefixes can be used for non-human/mouse/marmoset/rat/zebrafish/drosophila species with different annotations. Simply specify <code>species = other</code> and supply feature lists or regex patterns for your species of interest. <em>NOTE: If desired please submit issue on GitHub for additional default species. Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Using gene name patterns</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span>,

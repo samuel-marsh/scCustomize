@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Marker Identification &amp; Cluster Annotation Helpers</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 16, 2021</h4>
+            <h4 data-toc-skip class="date">Compiled: January 10, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Markers_and_Cluster_Annotation.Rmd" class="external-link"><code>vignettes/Markers_and_Cluster_Annotation.Rmd</code></a></small>
       <div class="hidden name"><code>Markers_and_Cluster_Annotation.Rmd</code></div>
@@ -883,12 +883,31 @@ IL7R
 <span class="co">## Memory CD4 T Memory CD4 T Memory CD4 T Memory CD4 T </span>
 <span class="co">##       "IL32"       "LDHB"       "CD3D"       "IL7R"</span></code></pre>
 </div>
+<div class="section level3">
+<h3 id="unique-vectors">Unique Vectors<a class="anchor" aria-label="anchor" href="#unique-vectors"></a>
+</h3>
+<p>When returning an unnamed vector you may want to return a unique list without any duplicate features. This is often true when supplying a list of features to plotting function like <code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap()</a></code> or <code>Cluster_DotPlot()</code>. You can do this by setting parameter <code>make_unique = TRUE</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Default parameters</span>
+<span class="va">top_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">5</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span>,
+    named_vector <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">top_5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] TRUE</span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Set `make_unique = TRUE`</span>
+<span class="va">top_5_unique</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">5</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span>,
+    named_vector <span class="op">=</span> <span class="cn">FALSE</span>, make_unique <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">top_5_unique</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] FALSE</span></code></pre>
+</div>
 </div>
 <div class="section level2">
 <h2 id="pairing-extract_top_markers-with-iterate_featureplot_sccustom">Pairing <code>Extract_Top_Markers</code> with <code>Iterate_FeaturePlot_scCustom()</code><a class="anchor" aria-label="anchor" href="#pairing-extract_top_markers-with-iterate_featureplot_sccustom"></a>
 </h2>
 <p>The advantage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_FeaturePlot_scCustom</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">top_5_presto</span>, single_pdf <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="../reference/figures/assets/Iterate_named_plots.png" alt="*Example plot showing the gene name and additional name of the plot.*" width="49%"><p class="caption">
@@ -900,7 +919,7 @@ IL7R
 <h2 id="create-simple-annotation-files">Create simple annotation files<a class="anchor" aria-label="anchor" href="#create-simple-annotation-files"></a>
 </h2>
 <p>Now for a simple helper we can use <code>Create_Cluster_Annotation_File</code> to create simple csv file to use for annotation.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Create_Cluster_Annotation_File.html">Create_Cluster_Annotation_File</a></span><span class="op">(</span>file_path <span class="op">=</span> <span class="st">"data/"</span>, file_name <span class="op">=</span> <span class="st">"ExpXX_Round01_Annotation"</span><span class="op">)</span></code></pre></div>
 <p>Here is an example that has already been filled out (using Excel, Numbers, or other editor program).</p>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -1006,7 +1025,7 @@ oligo
 <h2 id="extract-annotation-information">Extract annotation information<a class="anchor" aria-label="anchor" href="#extract-annotation-information"></a>
 </h2>
 <p>There is also complementary function to pull information back out of the this (or other) csv files or data.frames regarding clustering annotation.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">annotation_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pull_Cluster_Annotation.html">Pull_Cluster_Annotation</a></span><span class="op">(</span>annotation <span class="op">=</span> <span class="st">"assets/ExpXX_Round01_Annotation_Completed.csv"</span><span class="op">)</span></code></pre></div>
 <p>By default the function expects data.frame or file in same format as <code>Create_Cluster_Annotation_File</code> but has optional parameters that can be adjusted to file/data.frame with different column headers (see <code>cluster_name_col</code> and <code>cell_type_col</code>).</p>
 <div class="section level3">
@@ -1031,7 +1050,7 @@ oligo
 <h2 id="renaming-clusters">Renaming Clusters<a class="anchor" aria-label="anchor" href="#renaming-clusters"></a>
 </h2>
 <p>Finally can use <code>Rename_Clusters</code> to easily rename and set active.ident in Seurat Object. This is simple wrapper around Seurat commands but adds additional checks/warnings and is simple one-liner.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">obj_renamed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Rename_Clusters.html">Rename_Clusters</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, new_idents <span class="op">=</span> <span class="va">annotation_info</span><span class="op">$</span><span class="va">new_cluster_idents</span><span class="op">)</span></code></pre></div>
 <p><code>Rename_Clusters</code> can take input from either <code>Pull_Cluster_Annotation</code> “new_cluster_idents” or any correctly ordered vector of new idents.</p>
 <ul>

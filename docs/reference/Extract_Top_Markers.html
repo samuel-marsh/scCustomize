@@ -18,7 +18,7 @@ or similar analysis."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -120,7 +120,8 @@ or similar analysis.</p>
   gene_column <span class="op">=</span> <span class="st">"gene"</span>,
   gene_rownames_to_column <span class="op">=</span> <span class="cn">FALSE</span>,
   data_frame <span class="op">=</span> <span class="cn">FALSE</span>,
-  named_vector <span class="op">=</span> <span class="cn">TRUE</span>
+  named_vector <span class="op">=</span> <span class="cn">TRUE</span>,
+  make_unique <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -137,17 +138,20 @@ or similar analysis.</p>
 <dd><p>column name of <code>marker_dataframe</code> to rank data by when selecting <code>num_genes</code> per <code>group_by</code>.
 Default is "avg_log2FC" based on <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code>.</p></dd>
 <dt>gene_column</dt>
-<dd><p>column name of <code>marker_dataframe</code> that contains the gene IDs..  Default is "gene"
+<dd><p>column name of <code>marker_dataframe</code> that contains the gene IDs.  Default is "gene"
 based on <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code>.</p></dd>
 <dt>gene_rownames_to_column</dt>
 <dd><p>logical. Whether gene IDs are stored in rownames and should be moved to
 column.  Default is FALSE.</p></dd>
 <dt>data_frame</dt>
-<dd><p>Logical, whether or not to return filtered datadrame of the original <code>markers_dataframe</code> or
+<dd><p>Logical, whether or not to return filtered data.frame of the original <code>markers_dataframe</code> or
 to return a vector of gene IDs.  Default is FALSE.</p></dd>
 <dt>named_vector</dt>
 <dd><p>Logical, whether or not to name the vector of gene names that is returned by the function.
 If <code>TRUE</code> will name the vector using the column provided to <code>group_by</code>.  Default is TRUE.</p></dd>
+<dt>make_unique</dt>
+<dd><p>Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
+Not applicable when <code>data_frame = TRUE</code> or <code>named_vector = TRUE</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

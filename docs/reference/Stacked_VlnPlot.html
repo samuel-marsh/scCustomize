@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -122,6 +122,8 @@
   ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,
   plot_spacing <span class="op">=</span> <span class="fl">0.15</span>,
   spacing_unit <span class="op">=</span> <span class="st">"cm"</span>,
+  pt.size <span class="op">=</span> <span class="cn">NULL</span>,
+  raster <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -155,6 +157,12 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 Default is 0.15 ("cm").  Spacing dependent on unit provided to <code>spacing_unit</code>.</p></dd>
 <dt>spacing_unit</dt>
 <dd><p>Unit to use in specifying vertical spacing between plots.  Default is "cm".</p></dd>
+<dt>pt.size</dt>
+<dd><p>Adjust point size for plotting.  Default for <code>StackedVlnPlot</code> is 0 to avoid issues with
+rendering so many points in vector form.  Alteratively, see <code>raster</code> parameter.</p></dd>
+<dt>raster</dt>
+<dd><p>Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 100,000 total points plotted (# Cells x # of features).</p></dd>
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">VlnPlot</a></code>.</p></dd>
 </dl></div>

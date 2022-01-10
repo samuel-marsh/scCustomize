@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -104,6 +104,29 @@
       <small>Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.7.0" id="sccustomize-070-2022-01-10">scCustomize 0.7.0 (2022-01-10)<a class="anchor" aria-label="anchor" href="#sccustomize-070-2022-01-10"></a></h2>
+<div class="section level3">
+<h3 id="added-0-7-0">Added<a class="anchor" aria-label="anchor" href="#added-0-7-0"></a></h3>
+<ul><li>Added <code>VlnPlot_scCustom</code> function.</li>
+<li>Added raster support to <code>Stacked_VlnPlot</code>
+</li>
+<li>Added <code>make_unique</code> parameter to <code>Extract_Top_Markers</code> function.</li>
+<li>Added <code>Clustered_DotPlot</code> function.</li>
+<li>Added Drosophila Melanogaster as default species option in <code>Add_Mito_Ribo_Seurat</code> and <code>Add_Mito_Ribo_LIGER</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-0-7-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-7-0"></a></h3>
+<ul><li>Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in <code>VlnPlot</code>.</li>
+<li>viridis color palette shortcuts now contain palettes with 30 colors (increased from 10).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-0-7-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-7-0"></a></h3>
+<ul><li>Fixed <code>Read_Metrics_10X</code> errors that occurred due to differing outputs depending on Cell Ranger version or type of assay.</li>
+<li>Added direct <code>importFrom</code> for <code>DefaultDimReduc</code> from SeuratObject package to avoid potential errors.</li>
+<li>Fixed typos/styling in function documentation.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.3" id="sccustomize-063-2021-12-16">scCustomize 0.6.3 (2021-12-16)<a class="anchor" aria-label="anchor" href="#sccustomize-063-2021-12-16"></a></h2>
 <div class="section level3">

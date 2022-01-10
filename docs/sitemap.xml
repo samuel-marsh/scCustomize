@@ -94,6 +94,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Cluster_Stats_All_Samples.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Clustered_DotPlot.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ColorBlind_Pal.html</loc>
   </url>
   <url>
@@ -356,6 +359,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/VariableFeaturePlot_scCustom.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/VlnPlot_scCustom.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/index.html</loc>

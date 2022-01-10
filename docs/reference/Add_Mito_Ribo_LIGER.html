@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
       </span>
     </div>
 
@@ -130,8 +130,9 @@
     <dl><dt>liger_object</dt>
 <dd><p>LIGER object name.</p></dd>
 <dt>species</dt>
-<dd><p>Species of origin for given Seurat Object.  If mouse, human, marmoset (name or abbreviation)
-provided the function will automatically provided mito_pattern and ribo_pattern values.</p></dd>
+<dd><p>Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
+drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
+ribo_pattern values.</p></dd>
 <dt>mito_name</dt>
 <dd><p>name to use for the new meta.data column containing percent mitochondrial counts.
 Default is "percent_mito".</p></dd>
@@ -159,7 +160,7 @@ function will abort if columns with any one of the names provided to <code>mito_
 is present in meta.data slot.</p></dd>
 <dt>list_species_names</dt>
 <dd><p>returns list of all accepted values to use for default species names which
-contain internal regex/feature lists (human, mouse, marmoset, zebrafish, and rat).  Default is FALSE.</p></dd>
+contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, and drosophila).  Default is FALSE.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
