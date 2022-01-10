@@ -171,7 +171,7 @@ When returning an unnamed vector you may want to return a unique list without an
 # Default parameters
 top_5 <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, rank_by = "avg_log2FC", named_vector = FALSE)
 
-any(duplicated(x = top5))
+any(duplicated(x = top_5))
 
 # Set `make_unique = TRUE`
 top_5_unique <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, rank_by = "avg_log2FC", named_vector = FALSE, make_unique = TRUE)

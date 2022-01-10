@@ -480,15 +480,15 @@ plots[[2]]
 
 #### Clustered_DotPlot() k-means Clustering Optional Parameters
   
-*Determining Optimal k Value*  
+**Determining Optimal k Value**  
 There are many methods that can be used to aid in determining an optimal value for k in k-means clustering.  One of the simplest is to the look at the elbow in sum of squares error plot.  By default `Clustered_DotPlot` will return this plot when using the function.  However, it can be turned off by setting `plot_km_elbow = FALSE`.
 ```{r echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
 plots[[1]]
 ```
 
 The number of k values plotted must be 1 less than number of features.  Default is to plot 20 values but users can customize number of k values plotted using `elbow_kmax` parameter.
-
-*Consensus k-means Clustering*
+  
+**Consensus k-means Clustering**  
 By default `Clustered_DotPlot` uses consensus k-means clustering with 1000 repeats for both the columns and rows.  However, user can reduce or increase these values as desired by supplying new value to either or both of `row_km_repeats`/`column_km_repeats`
 
 #### Clustered_DotPlot() Expression Scale Optional Parameters
