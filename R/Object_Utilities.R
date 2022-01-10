@@ -3,8 +3,9 @@
 #' Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
 #'
 #' @param seurat_object object name.
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or drosophila (name or abbreviation)
-#' provided the function will automatically provided mito_pattern and ribo_pattern values.
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
+#' drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
+#' ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
@@ -131,7 +132,6 @@ Add_Mito_Ribo_Seurat <- function(
     mito_pattern <- "^Mt-"
     ribo_pattern <- "^Rp[sl]"
   }
-
   if (species %in% drosophila_options) {
     mito_pattern <- "^mt:"
     ribo_pattern <- "^Rp[SL]"
