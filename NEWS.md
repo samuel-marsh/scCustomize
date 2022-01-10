@@ -1,3 +1,21 @@
+# scCustomize 0.7.0 (2022-01-10)  
+## Added
+- Added `VlnPlot_scCustom` function.
+- Added raster support to `Stacked_VlnPlot`
+- Added `make_unique` parameter to `Extract_Top_Markers` function.
+- Added `Clustered_DotPlot` function.
+- Added Drosophila Melanogaster as default species option in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.
+
+## Changed
+- Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in `VlnPlot`.
+- viridis color palette shortcuts now contain palettes with 30 colors (increased from 10).
+
+## Fixes
+- Fixed `Read_Metrics_10X` errors that occurred due to differing outputs depending on Cell Ranger version or type of assay.
+- Added direct `importFrom` for `DefaultDimReduc` from SeuratObject package to avoid potential errors.
+- Fixed typos/styling in function documentation.
+ 
+
 # scCustomize 0.6.3 (2021-12-16)  
 ## Fixes
 - Fixed `Read_Metrics_10X` errors that occured due to differing outputs depending on Cell Ranger version or type of assay.

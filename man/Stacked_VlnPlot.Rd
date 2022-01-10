@@ -16,6 +16,8 @@ Stacked_VlnPlot(
   ggplot_default_colors = FALSE,
   plot_spacing = 0.15,
   spacing_unit = "cm",
+  pt.size = NULL,
+  raster = NULL,
   ...
 )
 }
@@ -46,6 +48,12 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_unit}.}
 
 \item{spacing_unit}{Unit to use in specifying vertical spacing between plots.  Default is "cm".}
+
+\item{pt.size}{Adjust point size for plotting.  Default for \code{StackedVlnPlot} is 0 to avoid issues with
+rendering so many points in vector form.  Alteratively, see \code{raster} parameter.}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 100,000 total points plotted (# Cells x # of features).}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }

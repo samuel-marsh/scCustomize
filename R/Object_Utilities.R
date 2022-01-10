@@ -3,8 +3,9 @@
 #' Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
 #'
 #' @param seurat_object object name.
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset (name or abbreviation)
-#' provided the function will automatically provided mito_pattern and ribo_pattern values.
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
+#' drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
+#' ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
@@ -24,7 +25,7 @@
 #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
 #' `mito_ribo_name` is present in meta.data slot.
 #' @param list_species_names returns list of all accepted values to use for default species names which
-#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, and rat).  Default is FALSE.
+#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, and drosophila).  Default is FALSE.
 #'
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
@@ -63,7 +64,8 @@ Add_Mito_Ribo_Seurat <- function(
     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA)
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA)
   )
 
   # Return list of accepted default species name options
@@ -101,9 +103,10 @@ Add_Mito_Ribo_Seurat <- function(
   marmoset_options <- accepted_names$Marmoset_Options
   zebrafish_options <- accepted_names$Zebrafish_Options
   rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
 
   # Assign mito/ribo pattern to stored species
-  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
+  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
     warning("Pattern expressions for included species are set by default.
   Supplied `mito_pattern` and `ribo_pattern` will be disregarded.
             To override defaults please supply a feature list for mito and/or ribo genes or set species to 'other'.")
@@ -128,6 +131,10 @@ Add_Mito_Ribo_Seurat <- function(
   if (species %in% rat_options) {
     mito_pattern <- "^Mt-"
     ribo_pattern <- "^Rp[sl]"
+  }
+  if (species %in% drosophila_options) {
+    mito_pattern <- "^mt:"
+    ribo_pattern <- "^Rp[SL]"
   }
 
   # Check that values are provided for mito and ribo

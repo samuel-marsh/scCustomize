@@ -306,7 +306,7 @@ FeaturePlot_DualAssay(seurat_object = cell_bender_example, features = "Syt1", as
 
 ### Stacked Violin Plots
 Often plotting many genes simultaneously using Violin plots is desired.  scCustomize provides `Stacked_VlnPlot()` for a more aesthetic stacked violin plot compared to stacked plots that can be made using default `Seurat::VlnPlot()`.  
-*The original version of this function was written by  Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/).  Function is included with permission and authorship.*
+*The original version of this function was written by Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/).  Function is included with permission and authorship.*
 ```{r, fig.height=10, fig.width=10, fig.align='center'}
 
 gene_list_plot <- c("SLC17A7", "GAD2", "AQP4", "MYT1", "COL1A2", "CLDN5", "OPALIN", "CX3CR1", "CD3E")
@@ -357,7 +357,44 @@ Please note that even more so than many other plots you will need to adjust the 
 Stacked_VlnPlot(seurat_object = marsh_human_pm, features = c("percent_mito", "percent_ribo"), x_lab_rotate = TRUE, colors_use = human_colors_list)
 ```
 
-### Custom DotPlots.
+#### Point Size and Rasterization
+By default `Stacked_VlnPlot` sets the `pt.size` parameter to 0 to accelerate plotting/rendering which slow down dramatically depending on size of dataset and number of features plotted.
+
+If points are still desired then plotting/rendering can be sped up by using the `raster` parameter.  By default raster will be set to `TRUE` if `pt.size > 0` and `number of cells x number of features > 100,000`.
+
+### Custom VlnPlots
+In addition to `Stacked_VlnPlot` scCustomize also features a modified version of Seurat's `VlnPlot()`.
+
+#### `VlnPlot_scCustom` provides unified color palette plotting
+```{r eval=FALSE}
+VlnPlot(object = pbmc, features = "PTPRC")
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC")
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** Default `VlnPlot` with ggplot2 default color scheme.  **B.** `VlnPlot_scCustom` shares color palette choice with other scCustomize functions.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot(object = pbmc, features = "PTPRC")
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC")
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+#### Support for Rasterization
+Seurat `VlnPlot()` supports rasterization but does not alter it's plotting behavior by default.  Both `Stacked_VlnPlot` and `VlnPlot_scCustom` have a built in check to automatically rasterize the points if the: `number of cells x number of features > 100,000` to accelerate plotting when vector plots are not necessary.
+
+Rasterization can also be manually turned on or off using the `raster` parameter
+```{r eval=FALSE}
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = FALSE)
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** `raster = FALSE`.  **B.** `raster = TRUE`.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = FALSE)
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+### Custom DotPlots
 Seurat's `DotPlot()` function is really good but lacks the ability to provide custom color gradient of more than 2 colors.
 
 #### `DotPlot_scCustom()` allows for plotting with custom gradients.
@@ -400,6 +437,97 @@ p4 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes
 wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
+### Clustered DotPlots
+For a more advanced take on the `DotPlot` scCustomize contains a separate function `Clustered_DotPlot()`.  This function allows for clustering of both gene expression patterns and identities in the final plot.
+*The original version of this function was written by Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/).  Function is included with permission, authorship, and assistance.*
+
+```{r eval=FALSE}
+all_markers <- FindAllMarkers(object = pbmc)
+
+top5_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, named_vector = FALSE, make_unique = TRUE)
+
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers)
+```
+
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+all_markers <- FindAllMarkers(object = pbmc)
+
+top5_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, named_vector = FALSE, make_unique = TRUE)
+
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots[[2]]
+```
+
+
+#### Cluster Plot on Gene Expression Patterns
+By default `Clustered_DotPlot` performs k-means clustering with k value set to 1.  However, users can change this value to enable better visualization of expression patterns.
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 9)
+```
+
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots[[2]]
+```
+
+#### Clustered_DotPlot() k-means Clustering Optional Parameters
+  
+*Determining Optimal k Value*  
+There are many methods that can be used to aid in determining an optimal value for k in k-means clustering.  One of the simplest is to the look at the elbow in sum of squares error plot.  By default `Clustered_DotPlot` will return this plot when using the function.  However, it can be turned off by setting `plot_km_elbow = FALSE`.
+```{r echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
+plots[[1]]
+```
+
+The number of k values plotted must be 1 less than number of features.  Default is to plot 20 values but users can customize number of k values plotted using `elbow_kmax` parameter.
+
+*Consensus k-means Clustering*
+By default `Clustered_DotPlot` uses consensus k-means clustering with 1000 repeats for both the columns and rows.  However, user can reduce or increase these values as desired by supplying new value to either or both of `row_km_repeats`/`column_km_repeats`
+
+#### Clustered_DotPlot() Expression Scale Optional Parameters
+There are a number of optional parameters that can be modified by user depending on the desired resulting plot.
+
+- `colors_use_exp` to provide custom color scale
+- `exp_color_min`/`exp_color_max` can be used to clip the min and max values on the expression scale.
+- `print_exp_quantiles` can be set to TRUE to print the expression quantiles to aid in setting new `exp_color_min`/`exp_color_max`.
+- `exp_color_middle` can be used to change what value is used for the middle of the color scale.  By default is set to the middle of `exp_color_min`/`exp_color_max` but can be modified if a skewed visualization is desired.
+
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, print_exp_quantiles = T)
+```
+
+```{r eval=FALSE}
+Quantiles of gene expression data are:
+       10%        50%        90%        99% 
+-0.6555988 -0.3595223  1.7742718  2.6666597
+```
+
+Here we can adjust the expression clipping based on the range of the data in this specific dataset and list of features and change the color scale to use `Seurat::PurpleAndYellow()`
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots[[2]]
+```
+
+#### Clustered_DotPlot() Other Optional Parameters
+  
+- `colors_use_idents` Colors to use for the identities (columns) plotted.  
+- `x_lab_rotate` Logical or Integer.  Default is TRUE (45 degree column label rotation).  FALSE (0 degree rotation).  Integer for custom text rotation value.  
+- `row_label_size` Change size of row text (gene symbols).  
+- `raster` Whether to rasterize the plot (faster and smaller file size). Default is FALSE.  
 
 ### `Split_FeatureScatter()` 
 This is simple function to add functionality that `Seurat::FeatureScatter()` lacks.  

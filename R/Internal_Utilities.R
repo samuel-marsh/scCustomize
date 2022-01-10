@@ -256,3 +256,28 @@ glue_collapse_scCustom <- function(
 PercentAbove_Seurat <- function(x, threshold) {
   return((length(x = x[x > threshold]) / length(x = x))*100)
 }
+
+
+#' Calculate the middle value between two numbers
+#'
+#' @param min Lower value.
+#' @param max Higher value.
+#'
+#' @return Returns number in middle of two provided values.
+#'
+#' @references Code to calculate middle value from: adapted from: https://stackoverflow.com/a/54147509/15568251.
+#' Renamed and wrapped into function by Samuel Marsh.
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Middle_Number <- function(
+  min,
+  max
+) {
+  min_max <- c(min, max)
+  middle <- min_max[-length(min_max)] + diff(min_max) / 2
+  return(middle)
+}
