@@ -276,7 +276,7 @@ PercentAbove_Seurat <- function(x, threshold) {
 Middle_Number <- function(
   min,
   max
-){
+) {
   min_max <- c(min, max)
   middle <- min_max[-length(min_max)] + diff(min_max) / 2
   return(middle)
