@@ -4,6 +4,7 @@
 - Added raster support to `Stacked_VlnPlot`
 - Added `make_unique` parameter to `Extract_Top_Markers` function.
 - Added `Clustered_DotPlot` function.
+- Added Drosophila Melanogaster as default species option in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.
 
 ## Changed
 - Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in `VlnPlot`.
