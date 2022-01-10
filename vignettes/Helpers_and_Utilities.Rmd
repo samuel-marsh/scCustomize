@@ -61,7 +61,7 @@ pbmc <- UpdateSeuratObject(pbmc)
 As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
 ### Seurat Objects: `Add_Mito_Ribo_Seurat()`
-scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, or marmoset data all you need to do is specify the `species` parameter.
+scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, or drosophila data all you need to do is specify the `species` parameter.
 ```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
 pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
@@ -83,7 +83,7 @@ accepted_names %>%
 ```
 
 #### Non-default species
-However custom prefixes can be used for non-human/mouse/marmoset species with different annotations. Simply specify `species = other` and supply feature lists or regex patterns for your species of interest. 
+However custom prefixes can be used for non-human/mouse/marmoset/rat/zebrafish/drosophila species with different annotations. Simply specify `species = other` and supply feature lists or regex patterns for your species of interest. 
 *NOTE: If desired please submit issue on GitHub for additional default species.  Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.*
 ```{r eval=FALSE}
 # Using gene name patterns
