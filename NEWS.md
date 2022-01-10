@@ -8,6 +8,7 @@
 
 ## Changed
 - Now requires Seurat v4.0.6 (instead of v4.0.5) to support ability to rasterize points in `VlnPlot`.
+- viridis color palette shortcuts now contain palettes with 30 colors (increased from 10).
 
 ## Fixes
 - Fixed `Read_Metrics_10X` errors that occurred due to differing outputs depending on Cell Ranger version or type of assay.
