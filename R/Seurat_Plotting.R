@@ -474,7 +474,7 @@ Split_FeatureScatter <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
-#' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
 #'

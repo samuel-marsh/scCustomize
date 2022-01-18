@@ -28,7 +28,7 @@ Cluster_Highlight_Plot(
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
 
-\item{...}{Extra parameters passed to\code{\link[Seurat]{DimPlot}}.}
+\item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
 }
 \value{
 A ggplot object
