@@ -26,10 +26,6 @@ remotes package. For more detailed instructions see
 
     remotes::install_github(repo = "samuel-marsh/scCustomize")
 
-If you had previously installed
-[colorway](https://github.com/hypercompetent/colorway) package prior to
-installing scCustomize please make sure to update to \>= v0.2.0.
-
 **Master branch**  
 Full releases will be available on the master branch with version scheme
 vX.X.X.  
