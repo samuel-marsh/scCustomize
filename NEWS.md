@@ -1,3 +1,15 @@
+# scCustomize 0.7.X (2022-XX-XX)  
+## Added
+- Added `mito_name` parameter to `QC_Plots_Mito` to allow for custom specification of meta data column with mitochondrial information.
+
+## Changed
+- `QC_Plot_*` functions now use `VlnPlot_scCustom` internally to unify color scheme and rasterization parameters.
+
+## Fixes
+- Fixed DESCRIPTION file to specify colorway version upon installation (#25).
+- Typo/styling fixes.
+ 
+
 # scCustomize 0.7.0 (2022-01-10)  
 ## Added
 - Added `VlnPlot_scCustom` function.
