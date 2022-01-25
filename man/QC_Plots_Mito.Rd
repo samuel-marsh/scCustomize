@@ -6,6 +6,7 @@
 \usage{
 QC_Plots_Mito(
   seurat_object,
+  mito_name = "percent_mito",
   plot_title = "Mito Gene \% per Cell/Nucleus",
   x_axis_label = NULL,
   y_axis_label = NULL,
@@ -15,11 +16,17 @@ QC_Plots_Mito(
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 )
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
+
+\item{mito_name}{The column name containing percent mitochondrial counts information.  Default value is
+"percent_mito" which is default value created when using \code{Add_Mito_Ribo_Seurat()}.}
 
 \item{plot_title}{Plot Title.}
 
@@ -38,6 +45,15 @@ QC_Plots_Mito(
 \item{x_lab_rotate}{Rotate x-axis labels 45 degrees (Default is TRUE).}
 
 \item{y_axis_log}{logical. Whether to change y axis to log10 scale (Default is FALSE).}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 100,000 total points plotted (# Cells x # of features).}
+
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
+
+\item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
+groups plotted is greater than 36.  Default = 123.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }
