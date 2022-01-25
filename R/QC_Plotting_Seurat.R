@@ -16,6 +16,12 @@
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -44,6 +50,9 @@ QC_Plots_Genes <- function(
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -52,7 +61,7 @@ QC_Plots_Genes <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot(object = seurat_object, features = "nFeature_RNA", cols = colors_use, pt.size = pt.size, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -87,6 +96,12 @@ QC_Plots_Genes <- function(
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -115,6 +130,9 @@ QC_Plots_UMIs <- function(
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -123,7 +141,7 @@ QC_Plots_UMIs <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot(object = seurat_object, features = "nCount_RNA", pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -149,6 +167,8 @@ QC_Plots_UMIs <- function(
 #' #' Custom VlnPlot for initial QC checks including lines for thresholding
 #'
 #' @param seurat_object Seurat object name.
+#' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
+#' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
 #' @param plot_title Plot Title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -158,6 +178,12 @@ QC_Plots_UMIs <- function(
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -177,6 +203,7 @@ QC_Plots_UMIs <- function(
 
 QC_Plots_Mito <- function(
   seurat_object,
+  mito_name = "percent_mito",
   plot_title = "Mito Gene % per Cell/Nucleus",
   x_axis_label = NULL,
   y_axis_label = NULL,
@@ -186,6 +213,9 @@ QC_Plots_Mito <- function(
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -194,7 +224,7 @@ QC_Plots_Mito <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot(object = seurat_object, features = "percent_mito", pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = high_cutoff, linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -230,6 +260,12 @@ QC_Plots_Mito <- function(
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -260,6 +296,9 @@ QC_Plots_Feature <- function(
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
