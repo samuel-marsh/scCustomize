@@ -14,7 +14,7 @@ BugReports: https://github.com/samuel-marsh/scCustomize/issues
 Depends: Seurat (>= 4.0.6)
 Imports: 
     circlize,
-    colorway,
+    colorway (>= 0.2.0),
     cowplot,
     data.table,
     dittoSeq,
