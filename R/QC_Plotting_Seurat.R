@@ -225,7 +225,7 @@ QC_Plots_Mito <- function(
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
-    geom_hline(yintercept = high_cutoff, linetype = "dashed", color = "red") +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
