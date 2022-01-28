@@ -331,6 +331,96 @@ QC_Plots_Feature <- function(
 }
 
 
+#' QC Plots Genes, UMIs, & % Mito
+#'
+#' Custom VlnPlot for initial QC checks including lines for thresholding
+#'
+#' @param seurat_object Seurat object name.
+#' @param feature_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param UMI_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param mito_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
+#' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
+#' @param pt.size Point size for plotting
+#' @param colors_use vector of colors to use for plot.
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
+#' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import ggplot2
+#' @importFrom Seurat VlnPlot
+#' @importFrom patchwork wrap_plots
+#'
+#' @export
+#'
+#' @concept object_qc_plotting
+#'
+#' @examples
+#' \dontrun{
+#' QC_Plots_Combined_Vln(seurat_object = object)
+#' }
+#'
+
+QC_Plots_Combined_Vln <- function(
+  seurat_object,
+  feature_cutoffs = NULL,
+  UMI_cutoffs = NULL,
+  mito_cutoffs = NULL,
+  mito_name = "percent_mito",
+  pt.size = NULL,
+  colors_use = NULL,
+  x_lab_rotate = TRUE,
+  y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
+  ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Add pt.size check
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+
+  # Setup cutoff values
+  if (length(x = feature_cutoffs) > 2 || length(x = UMI_cutoffs) > 2 || length(x = mito_cutoffs) > 2) {
+    stop("Length of each cutoff vector cannot be greater than 2.")
+  }
+
+  if (length(x = feature_cutoffs) == 1) {
+    feature_cutoffs <- c(NULL, feature_cutoffs)
+  }
+
+  if (length(x = UMI_cutoffs) == 1) {
+    UMI_cutoffs <- c(NULL, UMI_cutoffs)
+  }
+
+  if (length(x = mito_cutoffs) == 1) {
+    mito_cutoffs <- c(NULL, mito_cutoffs)
+  }
+
+  # Create Individual Plots
+  feature_plot <- QC_Plots_Genes(seurat_object = pbmc, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+  UMI_plot <- QC_Plots_UMIs(seurat_object = pbmc, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+  mito_plot <- QC_Plots_Mito(seurat_object = pbmc, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+  # wrap plots
+  plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
+
+  return(plots)
+}
+
+
 #' QC Plots Genes vs UMIs
 #'
 #' Custom FeatureScatter for initial QC checks including lines for thresholding
