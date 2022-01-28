@@ -7,6 +7,7 @@
 
 ## Fixes
 - Fixed DESCRIPTION file to specify colorway version upon installation (#25).
+- Fixed bug preventing `low_cutoff` from plotting via `QC_Plots_Mito`.
 - Typo/styling fixes.
  
 
