@@ -107,6 +107,7 @@ scCustomize contains 4 functions which wrap `Seurat::VlnPlot()`.
 * `QC_Plots_UMIs()` Plots UMIs per cell/nucleus.  
 * `QC_Plots_Mito()` Plots mito% (named "percent_mito") per cell/nucleus.
 * `QC_Plots_Feature()` Plots "feature" per cell/nucleus.  Using parameter `feature` to allow plotting of any applicable named feature in object\@meta.data slot. 
+* `QC_Plots_Combined_Vln()` Returns patchwork plot of `QC_Plots_Genes()`, `QC_Plots_UMIs()`, & `QC_Plots_Mito()`.
 
 scCustomize functions have the added benefit of:  
 
@@ -149,7 +150,12 @@ wrap_plots(p1, p2, ncol = 2)
 
 ```
 
+### Combined Plotting Function
+As a shortcut you can return single patchwork plot of the 3 main QC Plots (Genes, UMIs, %Mito) by using single function, `QC_Plots_Combined_Vln()`.
 
+```{r, fig.height=7, fig.width=13}
+QC_Plots_Combined_Vln(seurat_object = hca_bm, feature_cutoffs = c(800, 5500), UMI_cutoffs = c(1200, 45000), mito_cutoffs = 20, pt.size = 0.1)
+```
 
 
 ## `FeatureScatter`-Based QC Plots  
