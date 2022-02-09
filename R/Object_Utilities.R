@@ -468,7 +468,7 @@ Rename_Clusters <- function(
   # Check equivalent lengths
   if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
     stop("Length of `new_idents` must be equal to the number of active.idents in Seurat Object.
-         `new_idents` length: ", length(x = new_idents), "Object@active.idents length: ", length(levels(x = seurat_object)), ".")
+         `new_idents` length: ", length(x = new_idents), ", Object@active.idents length: ", length(levels(x = seurat_object)), ".")
   }
 
   # Name the new idents vector
