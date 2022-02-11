@@ -153,9 +153,23 @@ PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 30, palette = "va
 ## Small Discrete Palettes
 Finally scCustomize contains shortcuts for some shorter discrete palettes that can be useful for plotting groups, treatments, genotypes, etc.
 ```{r echo=FALSE, fig.height=1,fig.width=11}
+PalettePlot(palette = NavyAndOrange()) + ggtitle("NavyAndOrange(): 2 color palette.")
 PalettePlot(palette = JCO_Four()) + ggtitle("JCO_Four(): 4 color palette from ggsci package.")
 PalettePlot(palette = Dark2_Pal()) + ggtitle("Dark2_Pal(): 8 color Dark2 palette from RColorBrewer package")
 PalettePlot(palette = ColorBlind_Pal()) + ggtitle("ColorBlind_Pal(): 8 color modified color blind safe palette")
+```
+
+## scCustomize Color Palette Defaults
+To provide better visualizations using default parameters scCustomize sets a series of defaults for plots with discrete palettes using `scCustomize_Palette()` function.
+
+* If only two identities are being plotted will use: `NavyAndOrange()`
+* If greater than 2 identities but less than or equal to 36 will use: `DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")`
+* If greater than 36 identities will use dynamic varibow palette: `DiscretePalette_scCustomize(num_colors = 50, palette = "varibow", shuffle_pal = TRUE)`
+
+```{r echo=FALSE, fig.height=1,fig.width=11}
+PalettePlot(palette = NavyAndOrange()) + ggtitle("NavyAndOrange() (2 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")) + ggtitle("polychrome (36 colors)")
+PalettePlot(palette = DiscretePalette_scCustomize(num_colors = 50, palette = "varibow", shuffle_pal = TRUE)) + ggtitle("varibow (50 color version)")
 ```
 
 
