@@ -448,9 +448,12 @@ ColorBlind_Pal <- function(
 #'
 #' Function to return package default discrete palettes depending on number of groups plotted.
 #'
-#' @param num_groups number of groups to be plotted. If `ggplot_default_colors = FALSE` the by default
-#' if number of levels plotted is less than or equal to 36 it will use "polychrome" and
-#' if greater than 36 will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
+#' @param num_groups number of groups to be plotted. If `ggplot_default_colors = FALSE` then by default:
+#' \itemize{
+#'       \item If number of levels plotted equal to 2 then colors will be `NavyAndOrange()`.
+#'       \itemIf If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from `DiscretePalette_scCustomize`.
+#'       \item If greater than 36 will use "varibow" with shuffle = TRUE from `DiscretePalette_scCustomize`.
+#'       }
 #' @param ggplot_default_colors logical.  Whether to use default ggplot hue palette or not.
 #' @param color_seed random seed to use for shuffling the "varibow" palette.
 #'
@@ -475,9 +478,13 @@ scCustomize_Palette <- function(
   if (ggplot_default_colors) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
-    if (num_groups <= 36) {
+    if (num_groups == 2) {
+      colors_use <- NavyAndOrange()
+    }
+    if (num_groups > 2 && num_groups <= 36) {
       colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-    } else {
+    }
+    if (num_groups > 36) {
       colors_use <- DiscretePalette_scCustomize(num_colors = num_groups, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
     }
   }
