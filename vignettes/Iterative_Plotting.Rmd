@@ -49,7 +49,7 @@ scCustomize simplifies this process by allowing for the creation of many plots i
 
 * `Iterate_PC_Loading_Plots()`: Plots PC Heatmap and Top Loading Genes for specified number of PCs.
 * `Iterate_FeaturePlot_scCustom()`: `FeaturePlot_scCustom()` for all genes in gene list.  See [Marker Identification Vignette](https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1) for special use case with named vector gene lists.
-* `Iterate_VlnPlot()`: Plots `VlnPlot()` for all genes in gene list.
+* `Iterate_VlnPlot_scCustom()`: Plots `VlnPlot_scCustom()` for all genes in gene list.
 * `Iterate_Plot_Density_Custom()` Plots single gene density plots for all genes in gene list.
 * `Iterate_Plot_Density_Joint()` Plots the joint density plots for all vectors of genes from a list of vectors.
 * `Iterate_DimPlot_bySample()`: Plots `DimPlot()` one sample at a time.
@@ -64,7 +64,7 @@ Most functions that begin with `Iterate_` have shared parameters that are used t
 * `file_name`: file name (if saving as single file) or suffix to add to file name (if saving individual files the meta data variable or gene will be part of file name automatically)
 * `file_type`: accepts one of following options: ".pdf", ".png", ".tiff", ".jpeg", ".svg".
 * `single_pdf`: logical. Whether or not to save all plots to single PDF file vs. one file per variable/gene.
-* `dpi`: Dots per inch (only relevant for non vector based file formats).
+* `dpi`: Dots per inch (only relevant for non-vector based file formats).
   
 ## Added functionality  
 `Iterate_FeaturePlot_scCustom()` has an additional helpful feature when the list of features provided is named.  See [Marker Identification & Cluster Annotation Vignette](https://samuel-marsh.github.io/scCustomize/articles/Markers_and_Cluster_Annotation.html#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc-1).
