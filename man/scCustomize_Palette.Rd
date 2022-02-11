@@ -7,9 +7,12 @@
 scCustomize_Palette(num_groups, ggplot_default_colors, color_seed = 123)
 }
 \arguments{
-\item{num_groups}{number of groups to be plotted. If \code{ggplot_default_colors = FALSE} the by default
-if number of levels plotted is less than or equal to 36 it will use "polychrome" and
-if greater than 36 will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomize}.}
+\item{num_groups}{number of groups to be plotted. If \code{ggplot_default_colors = FALSE} then by default:
+\itemize{
+\item If number of levels plotted equal to 2 then colors will be \code{NavyAndOrange()}.
+\itemIf If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from \code{DiscretePalette_scCustomize}.
+\item If greater than 36 will use "varibow" with shuffle = TRUE from \code{DiscretePalette_scCustomize}.
+}}
 
 \item{ggplot_default_colors}{logical.  Whether to use default ggplot hue palette or not.}
 
