@@ -874,7 +874,7 @@ Iterate_FeaturePlot_scCustom <- function(
 }
 
 
-#' Iterative Plotting of Gene Lists using VlnPlots
+#' Iterative Plotting of Gene Lists using VlnPlot_scCustom
 #'
 #' Create and Save plots for Gene list with Single Command
 #'
@@ -912,12 +912,12 @@ Iterate_FeaturePlot_scCustom <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_VlnPlot(seurat_object = object, gene_list = DEG_list, colors = color_list, file_path = "plots/",
+#' Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list, file_path = "plots/",
 #' file_name = "_vln", file_type = ".jpg", dpi = 600)
 #' }
 #'
 
-Iterate_VlnPlot <- function(
+Iterate_VlnPlot_scCustom <- function(
   seurat_object,
   gene_list,
   colors_use = NULL,
