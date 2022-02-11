@@ -10,10 +10,12 @@ Iterate_VlnPlot(
   colors_use = NULL,
   pt.size = NULL,
   group.by = NULL,
+  split.by = NULL,
   file_path = NULL,
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  raster = NULL,
   dpi = 600,
   ggplot_default_colors = FALSE,
   color_seed = 123,
@@ -34,11 +36,16 @@ both from \code{DiscretePalette_scCustomize}.}
 \item{group.by}{Name of one or more metadata columns to group (color) plot by (for example, orig.ident);
 default is the current active.ident of the object.}
 
+\item{split.by}{Feature to split plots by (i.e. "orig.ident").}
+
 \item{file_name}{name suffix and file extension.}
 
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
 
 \item{single_pdf}{saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 100,000 total points plotted (# Cells x # of features).}
 
 \item{dpi}{dpi for image saving.}
 
