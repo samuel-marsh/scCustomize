@@ -1,8 +1,8 @@
 Package: scCustomize
 Type: Package
 Title: An R package for custom visualization & analyses of single cell sequencing.
-Version: 0.7.0.0008
-Date: 2022-02-14
+Version: 0.7.0.0009
+Date: 2022-02-16
 Authors@R: c(
     person(given = "Samuel", family = "Marsh", email = "samuel.marsh@childrens.harvard.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3012-6945")),
     person(given = "Ming", family = "Tang", role = c("ctb"), email = "tangming2005@gmail.com"),
@@ -14,6 +14,7 @@ BugReports: https://github.com/samuel-marsh/scCustomize/issues
 Depends: Seurat (>= 4.0.6)
 Imports: 
     circlize,
+    cli (>= 3.2.0),
     colorway (>= 0.2.0),
     cowplot,
     data.table,
@@ -36,6 +37,7 @@ Imports:
     pbapply,
     purrr,
     remotes (>= 2.4.0),
+    rlang (>= 1.0.1),
     scales,
     scattermore (>= 0.7), 
     Seurat (>= 4.0.5),
