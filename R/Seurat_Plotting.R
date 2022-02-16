@@ -21,6 +21,7 @@
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom Seurat FeaturePlot
@@ -76,12 +77,15 @@ FeaturePlot_scCustom <- function(
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
-      stop("The number of columns specified is greater than the number of meta data variables.  ", paste0('"', split.by, '"', " only contains ", split.by_length, " variables.  "), "Please adjust `num_columns` to be less than or equal to", ": ", paste(split.by_length), ".")
+      cli_abort(c("The number of columns specified is greater than the number of meta data variables.",
+                  "*" = "{split.by} only contains {split.by_length} variables.",
+                  "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
+      )
     }
   }
 
   if (any(features %in% colnames(x = seurat_object@meta.data))) {
-    warning("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.")
+    cli_warn("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.")
   }
 
   # Add raster check for scCustomize
