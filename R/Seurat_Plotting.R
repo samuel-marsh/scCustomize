@@ -21,9 +21,9 @@
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @import patchwork
-#' @import rlang
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -77,16 +77,15 @@ FeaturePlot_scCustom <- function(
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
-      abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+      cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
                         "*" = "{split.by} only contains {split.by_length} variables.",
-                        "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}."),
-            use_cli_format = TRUE
+                        "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
       )
     }
   }
 
   if (any(features %in% colnames(x = seurat_object@meta.data))) {
-    warn("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.", use_cli_format = TRUE)
+    cli_warn("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.")
   }
 
   # Add raster check for scCustomize
@@ -212,9 +211,9 @@ FeaturePlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @import patchwork
-#' @import cli
 #' @importFrom Seurat FeaturePlot
 #'
 #' @export
@@ -256,9 +255,8 @@ FeaturePlot_DualAssay <- function(
 
   # Raw normalize check
   if (!paste0("NormalizeData.", assay1) %in% commands) {
-    abort(message = c("Assay 1: {assay1} has not been normalized.",
-                      "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."),
-          use_cli_format = TRUE)
+    cli_abort(message = c("Assay 1: '{assay1}' has not been normalized.",
+                          "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."))
   }
 
   # Cell Bender normalize check
@@ -279,7 +277,7 @@ FeaturePlot_DualAssay <- function(
   }
 
   if (num_columns > 2 && num_features > 1) {
-    warn("When plotting more than one feature `num_columns` refers to patchwork columns and must either be 1 (vertical) or 2 (horizontal).", use_cli_format = TRUE)
+    cli_warn("When plotting more than one feature `num_columns` refers to patchwork columns and must either be 1 (vertical) or 2 (horizontal).")
   }
 
   # Change assay and plot raw
