@@ -264,8 +264,7 @@ FeaturePlot_DualAssay <- function(
   # Cell Bender normalize check
   if (!paste0("NormalizeData.", assay2) %in% commands) {
     cli_abort(message = c("Assay 2: {assay2} has not been normalized.",
-                      "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."),
-          use_cli_format = TRUE)
+                      "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."))
   }
 
   # Set columns if single feature
