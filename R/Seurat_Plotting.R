@@ -21,9 +21,9 @@
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @import rlang
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -77,9 +77,10 @@ FeaturePlot_scCustom <- function(
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
-      cli_abort(c("The number of columns specified is greater than the number of meta data variables.",
-                  "*" = "{split.by} only contains {split.by_length} variables.",
-                  "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
+      abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                        "*" = "{split.by} only contains {split.by_length} variables.",
+                        "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}."),
+            use_cli_format = TRUE
       )
     }
   }
