@@ -214,7 +214,6 @@ FeaturePlot_scCustom <- function(
 #'
 #' @import ggplot2
 #' @import patchwork
-#' @import rlang
 #' @import cli
 #' @importFrom Seurat FeaturePlot
 #'
@@ -264,7 +263,7 @@ FeaturePlot_DualAssay <- function(
 
   # Cell Bender normalize check
   if (!paste0("NormalizeData.", assay2) %in% commands) {
-    abort(message = c("Assay 2: {assay2} has not been normalized.",
+    cli_abort(message = c("Assay 2: {assay2} has not been normalized.",
                       "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."),
           use_cli_format = TRUE)
   }
