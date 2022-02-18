@@ -86,7 +86,7 @@ FeaturePlot_scCustom <- function(
   }
 
   if (any(features %in% colnames(x = seurat_object@meta.data))) {
-    cli_warn("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.")
+    warn("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.", use_cli_format = TRUE)
   }
 
   # Add raster check for scCustomize
@@ -255,12 +255,16 @@ FeaturePlot_DualAssay <- function(
 
   # Raw normalize check
   if (!paste0("NormalizeData.", assay1) %in% commands) {
-    stop("Assay 1: ", assay1, " has not been normalized.  Please run `NormalizeData` on this assay before proceeding to visualization.")
+    abort(message = c("Assay 1: {assay1} has not been normalized.",
+                      "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."),
+          use_cli_format = TRUE)
   }
 
   # Cell Bender normalize check
   if (!paste0("NormalizeData.", assay2) %in% commands) {
-    stop("Assay 2: ", assay2, " has not been normalized.  Please run `NormalizeData` on this assay before proceeding to visualization.")
+    abort(message = c("Assay 2: {assay2} has not been normalized.",
+                      "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."),
+          use_cli_format = TRUE)
   }
 
   # Set columns if single feature
@@ -275,7 +279,7 @@ FeaturePlot_DualAssay <- function(
   }
 
   if (num_columns > 2 && num_features > 1) {
-    warning("When plotting more than one feature `num_columns` refers to patchwork columns and must either be 1 (vertical) or 2 (horizontal).")
+    warn("When plotting more than one feature `num_columns` refers to patchwork columns and must either be 1 (vertical) or 2 (horizontal).", use_cli_format = TRUE)
   }
 
   # Change assay and plot raw
