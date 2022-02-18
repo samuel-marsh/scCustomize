@@ -214,6 +214,7 @@ FeaturePlot_scCustom <- function(
 #'
 #' @import ggplot2
 #' @import patchwork
+#' @import rlang
 #' @importFrom Seurat FeaturePlot
 #'
 #' @export
