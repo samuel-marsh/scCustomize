@@ -61,11 +61,6 @@ FeaturePlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
-  # Check num_columns and split.by with feature length
-  # if (!is.null(x = num_columns) && !is.null(x = split.by) && length(x = features) > 1) {
-  #   stop("'num_columns' parameter cannot currently be used with split.by if number of features plotted is greater than 1.")
-  # }
-
   # Get length of meta data feature
   if (!is.null(x = split.by)) {
     split.by_length <- length(unique(seurat_object@meta.data[[split.by]]))
