@@ -3,9 +3,9 @@
 #' Add Mito, Ribo, percentages to meta.data slot of LIGER Object
 #'
 #' @param liger_object LIGER object name.
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
-#' drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
-#' ribo_pattern values.
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' generate mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
@@ -24,7 +24,8 @@
 #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or `mito_ribo_name`
 #' is present in meta.data slot.
 #' @param list_species_names returns list of all accepted values to use for default species names which
-#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, and drosophila).  Default is FALSE.
+#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
+#' rhesus macaque).  Default is FALSE.
 #'
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
@@ -62,7 +63,8 @@ Add_Mito_Ribo_LIGER <- function(
     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA)
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "mmulatta", NA, NA)
   )
 
   # Return list of accepted default species name options
@@ -98,6 +100,7 @@ Add_Mito_Ribo_LIGER <- function(
   zebrafish_options <- accepted_names$Zebrafish_Options
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
 
   # Assign mito/ribo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
@@ -115,7 +118,7 @@ Add_Mito_Ribo_LIGER <- function(
     mito_pattern <- "^MT-"
     ribo_pattern <- "^RP[SL]"
   }
-  if (species %in% marmoset_options) {
+  if (species %in% c(marmoset_options, macaque_options)) {
     mito_features <- c("ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND4L", "ND5", "ND6")
     ribo_pattern <- "^RP[SL]"
   }
