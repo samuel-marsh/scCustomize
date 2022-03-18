@@ -21,9 +21,9 @@ Add_Mito_Ribo_LIGER(
 \arguments{
 \item{liger_object}{LIGER object name.}
 
-\item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
-drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
-ribo_pattern values.}
+\item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+generate mito_pattern and ribo_pattern values.}
 
 \item{mito_name}{name to use for the new meta.data column containing percent mitochondrial counts.
 Default is "percent_mito".}
@@ -51,7 +51,8 @@ function will abort if columns with any one of the names provided to \code{mito_
 is present in meta.data slot.}
 
 \item{list_species_names}{returns list of all accepted values to use for default species names which
-contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, and drosophila).  Default is FALSE.}
+contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
+rhesus macaque).  Default is FALSE.}
 }
 \value{
 A LIGER Object
