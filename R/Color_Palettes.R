@@ -104,11 +104,9 @@ viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
 viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 
 
-#' Discrete colour palettes from the pals package
+#' Discrete color palettes
 #'
-#' These are included here because pals depends on a number of compiled
-#' packages, and this can lead to increases in run time for Travis,
-#' and generally should be avoided when possible.
+#' Helper function to return a number of discrete color palettes.
 #'
 #' @param num_colors Number of colors to be generated.
 #' @param palette Options are
