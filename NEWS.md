@@ -3,8 +3,8 @@
 - Added `mito_name` parameter to `QC_Plots_Mito` to allow for custom specification of meta data column name that contains mitochondrial information.
 - Added `QC_Plots_Combined_Vln()` function to return patchwork layout of 3 QC plots.
 - Added Rhesus Macaque (macaca mulatta) to the accepted species for `Add_Mito_Ribo_Seurat()` and `Add_Mito_Ribo_LIGER()` ([#28](https://github.com/samuel-marsh/scCustomize/issues/28)).
-- Vignettes/Website updated with new function examples.
 - Added `alpha_exp` and `alpha_na_exp` parameters to `FeaturePlot_scCustom` and other functions to allow for control of color scale transparency ([#21](https://github.com/samuel-marsh/scCustomize/issues/21)).
+- Vignettes/Website updated with new function examples.  
 
 ## Changed
 - **BREAKING CHANGE** Function name for iterative `VlnPlot` has been changed to `Iterate_VlnPlot_scCustom` to reflect that it now uses `VlnPlot_scCustom` to generate plots. 
