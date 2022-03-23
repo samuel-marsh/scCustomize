@@ -13,6 +13,7 @@
 ## Fixes
 - Fixed DESCRIPTION file to specify colorway version upon installation ([#25](https://github.com/samuel-marsh/scCustomize/pull/25)).
 - Fixed bug preventing `low_cutoff` from plotting via `QC_Plots_Mito`.
+- Fix bug in `Clustered_DotPlot` that prevented setting identity colors ([#29](https://github.com/samuel-marsh/scCustomize/issues/29)).
 - Typo/styling fixes.
  
 
