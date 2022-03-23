@@ -24,6 +24,7 @@
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom scales alpha
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -51,6 +52,8 @@ FeaturePlot_scCustom <- function(
   split.by = NULL,
   num_columns = NULL,
   slot = "data",
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 ) {
   # Check Seurat
@@ -110,6 +113,15 @@ FeaturePlot_scCustom <- function(
 
   # Extract default reduction
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
+
+  # Add alpha to color scales
+  if (!is.null(x = alpha_exp)) {
+    colors_use <- alpha(colors_use, alpha_exp)
+  }
+
+  if (!is.null(x = alpha_na_exp)) {
+    na_color <- alpha(na_color, alpha_exp)
+  }
 
   # plot no split
   if (is.null(x = split.by)) {
