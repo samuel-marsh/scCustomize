@@ -17,6 +17,8 @@ FeaturePlot_scCustom(
   split.by = NULL,
   num_columns = NULL,
   slot = "data",
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 )
 }
@@ -26,6 +28,8 @@ FeaturePlot_scCustom(
 \item{features}{Feature(s) to plot.}
 
 \item{colors_use}{list of colors or color palette to use.}
+
+\item{na_color}{color to use for points below lower limit.}
 
 \item{order}{whether to move positive cells to the top (default = TRUE).}
 
@@ -46,9 +50,13 @@ greater than 200,000 cells.}
 
 \item{slot}{Which slot to pull expression data from?  Default is "data".}
 
-\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
+\item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
+value between 0-1.}
 
-\item{na_value}{color to use for points below lower limit.}
+\item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
+value between 0-1.}
+
+\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 }
 \value{
 A ggplot object

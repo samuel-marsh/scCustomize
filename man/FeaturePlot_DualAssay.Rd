@@ -18,6 +18,8 @@ FeaturePlot_DualAssay(
   raster = NULL,
   slot = "data",
   num_columns = NULL,
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 )
 }
@@ -31,6 +33,8 @@ FeaturePlot_DualAssay(
 \item{assay2}{name of assay two  Default is "RNA" as featured in \code{\link{Create_CellBender_Merged_Seurat}}}
 
 \item{colors_use}{list of colors or color palette to use.}
+
+\item{na_color}{color to use for points below lower limit.}
 
 \item{order}{whether to move positive cells to the top (default = TRUE).}
 
@@ -49,9 +53,13 @@ greater than 200,000 cells.}
 dictates the number of columns in overall layout (\code{num_columns = 1} means stacked layout & \code{num_columns = 2}
 means adjacent layout).}
 
-\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
+\item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
+value between 0-1.}
 
-\item{na_value}{color to use for points below lower limit.}
+\item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
+value between 0-1.}
+
+\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 }
 \value{
 A ggplot object
