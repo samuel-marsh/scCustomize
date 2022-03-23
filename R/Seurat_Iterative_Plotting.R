@@ -690,6 +690,10 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
+#' value between 0-1.
+#' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
+#' value between 0-1.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
 #' @import ggplot2
@@ -727,6 +731,8 @@ Iterate_FeaturePlot_scCustom <- function(
   pt.size = NULL,
   reduction = NULL,
   raster = NULL,
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 ) {
   # temp turn off message call from FeaturePlot_scCustomize
@@ -797,7 +803,7 @@ Iterate_FeaturePlot_scCustom <- function(
   if (return_plots) {
     message("Generating plots")
     pboptions(char = "=")
-    all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, ...)})
+    all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)})
     return(all_plots)
   }
 
@@ -805,7 +811,7 @@ Iterate_FeaturePlot_scCustom <- function(
   if (single_pdf == TRUE) {
     message("Generating plots")
     pboptions(char = "=")
-    all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, ...)})
+    all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
     message("Saving plots to file")
     # save plots with cluster annotation
     if (!is.null(x = names(x = gene_list)) && is.null(x = split.by)) {
@@ -834,7 +840,7 @@ Iterate_FeaturePlot_scCustom <- function(
       message("Generating plots and saving plots to file")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
-        FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, ...)
+        FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
         if (!is.null(x = names(x = gene_list))) {
           suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi))
         } else {
@@ -848,7 +854,7 @@ Iterate_FeaturePlot_scCustom <- function(
       message("Generating plots and saving plots to file")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
-        FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, ...)
+        FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
         if (!is.null(x = names(x = gene_list))) {
           suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
         } else {

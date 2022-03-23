@@ -5,7 +5,7 @@
 #' @param seurat_object Seurat object name.
 #' @param features Feature(s) to plot.
 #' @param colors_use list of colors or color palette to use.
-#' @param na_value color to use for points below lower limit.
+#' @param na_color color to use for points below lower limit.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param pt.size Adjust point size for plotting.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
@@ -17,6 +17,10 @@
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param num_columns Number of columns in plot layout.
 #' @param slot Which slot to pull expression data from?  Default is "data".
+#' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
+#' value between 0-1.
+#' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
+#' value between 0-1.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
 #' @return A ggplot object
@@ -203,7 +207,7 @@ FeaturePlot_scCustom <- function(
 #' @param assay1 name of assay one.  Default is "RAW" as featured in \code{\link{Create_CellBender_Merged_Seurat}}
 #' @param assay2 name of assay two  Default is "RNA" as featured in \code{\link{Create_CellBender_Merged_Seurat}}
 #' @param colors_use list of colors or color palette to use.
-#' @param na_value color to use for points below lower limit.
+#' @param na_color color to use for points below lower limit.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param pt.size Adjust point size for plotting.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
@@ -214,6 +218,10 @@ FeaturePlot_scCustom <- function(
 #' @param num_columns Number of columns in plot layout.  If number of features > 1 then `num_columns`
 #' dictates the number of columns in overall layout (`num_columns = 1` means stacked layout & `num_columns = 2`
 #' means adjacent layout).
+#' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
+#' value between 0-1.
+#' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
+#' value between 0-1.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
 #' @return A ggplot object
@@ -248,6 +256,8 @@ FeaturePlot_DualAssay <- function(
   raster = NULL,
   slot = "data",
   num_columns = NULL,
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 ) {
   # Check assays present
@@ -290,12 +300,12 @@ FeaturePlot_DualAssay <- function(
   # Change assay and plot raw
   DefaultAssay(seurat_object) <- assay1
 
-  plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, ...) & labs(color = assay1)
+  plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...) & labs(color = assay1)
 
   # Change to cell bender and plot
   DefaultAssay(seurat_object) <- assay2
 
-  plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, ...) & labs(color = assay2)
+  plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...) & labs(color = assay2)
 
   # Assemble plots & return plots
   plots <- wrap_plots(plot_raw, plot_cell_bender, ncol = num_columns)
