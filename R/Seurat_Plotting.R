@@ -1148,7 +1148,7 @@ Clustered_DotPlot <- function(
   # Pull Annotation and change colors to ComplexHeatmap compatible format
   Identity <- colnames(exp_mat)
 
-  identity_colors <- DiscretePalette_scCustomize(num_colors = length(Identity), palette = "polychrome", shuffle_pal = F)
+  identity_colors <- colors_use_idents
   names(identity_colors) <- Identity
   identity_colors_list <- list(Identity = identity_colors)
 
