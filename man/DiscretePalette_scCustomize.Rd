@@ -2,7 +2,7 @@
 % Please edit documentation in R/Color_Palettes.R
 \name{DiscretePalette_scCustomize}
 \alias{DiscretePalette_scCustomize}
-\title{Discrete colour palettes from the pals package}
+\title{Discrete color palettes}
 \usage{
 DiscretePalette_scCustomize(
   num_colors,
@@ -27,9 +27,7 @@ that is normally an ordered palette.}
 A vector of colors
 }
 \description{
-These are included here because pals depends on a number of compiled
-packages, and this can lead to increases in run time for Travis,
-and generally should be avoided when possible.
+Helper function to return a number of discrete color palettes.
 }
 \references{
 This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
