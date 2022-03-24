@@ -1165,11 +1165,10 @@ Clustered_DotPlot <- function(
   if (is.null(x = colors_use_idents)) {
     # set default plot colors
     colors_use_idents <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-
-    # Reduce color length list due to naming requirement
-    colors_use_idents <- colors_use_idents[1:group_by_length]
-
   }
+
+  # Reduce color length list due to naming requirement
+  colors_use_idents <- colors_use_idents[1:group_by_length]
 
   # Pull Annotation and change colors to ComplexHeatmap compatible format
   Identity <- colnames(exp_mat)
