@@ -181,10 +181,11 @@ DiscretePalette_scCustomize <- function(
   }
   if (shuffle_pal) {
     set.seed(seed = seed)
-    sample(palette_out[1:num_colors])
+    palette_out <- sample(palette_out[1:num_colors])
   } else {
-    palette_out[1:num_colors]
+    palette_out <- palette_out[1:num_colors]
   }
+  return(palette_out)
 }
 
 
