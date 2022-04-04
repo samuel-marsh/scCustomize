@@ -174,7 +174,10 @@ DiscretePalette_scCustomize <- function(
   }
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
-    warning("Not enough colors in specified palette.  ", '"', palette, '"', " only has ", length(x = palette_out), " colors.")
+    cli_warn(message = c("Not enough colors in specified palette.",
+                          "*" = "{palette} only contains {length(x = palette_out)} colors.",
+                          "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
+    )
   }
   if (shuffle_pal) {
     set.seed(seed = seed)
