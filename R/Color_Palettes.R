@@ -174,7 +174,7 @@ DiscretePalette_scCustomize <- function(
   }
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
-    cli_warn(message = c("Not enough colors in specified palette.",
+    cli_abort(message = c("Not enough colors in specified palette.",
                           "*" = "{palette} only contains {length(x = palette_out)} colors.",
                           "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
     )
