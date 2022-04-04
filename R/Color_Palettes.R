@@ -168,7 +168,7 @@ DiscretePalette_scCustomize <- function(
     varibow = varibow(n_colors = num_colors)
   )
   if (is.null(x = palette)) {
-    cli_warn(message = c("Must specify a palette to return colors.",
+    cli_abort(message = c("Must specify a palette to return colors.",
                           "i" = "`palette` options are: {names(palette_list)}")
     )
   }
