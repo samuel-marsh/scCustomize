@@ -1170,6 +1170,11 @@ Clustered_DotPlot <- function(
   # Reduce color length list due to naming requirement
   colors_use_idents <- colors_use_idents[1:group_by_length]
 
+  # Modify if class = "colors"
+  if (class(x = colors_use_idents) == "colors") {
+    colors_use_idents <- as.character(colors_use_idents)
+  }
+
   # Pull Annotation and change colors to ComplexHeatmap compatible format
   Identity <- colnames(exp_mat)
 
