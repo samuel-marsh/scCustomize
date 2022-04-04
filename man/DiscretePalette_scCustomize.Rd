@@ -40,10 +40,13 @@ palette references/citations):
 \itemize{
 \item alphabet, alphabet2, glasbey, polychrome, and stepped.
 }
-}
 \item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
 \itemize{
 \item dittoColors.
+}
+\item colorway \url{https://github.com/hypercompetent/colorway}
+\itemize{
+\item varibow
 }
 }
 

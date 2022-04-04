@@ -134,10 +134,13 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #'     \itemize{
 #'       \item alphabet, alphabet2, glasbey, polychrome, and stepped.
 #'       }
-#' }
 #'   \item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
 #'     \itemize{
 #'       \item dittoColors.
+#'       }
+#'   \item colorway \url{https://github.com/hypercompetent/colorway}
+#'     \itemize{
+#'       \item varibow
 #'       }
 #' }
 #'
