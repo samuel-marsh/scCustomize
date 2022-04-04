@@ -489,7 +489,7 @@ scCustomize_Palette <- function(
       colors_use <- NavyAndOrange()
     }
     if (num_groups > 2 && num_groups <= 36) {
-      colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
+      colors_use <- DiscretePalette_scCustomize(num_colors = num_groups, palette = "polychrome")
     }
     if (num_groups > 36) {
       colors_use <- DiscretePalette_scCustomize(num_colors = num_groups, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
