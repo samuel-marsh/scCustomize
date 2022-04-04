@@ -111,11 +111,11 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #' @param num_colors Number of colors to be generated.
 #' @param palette Options are
 #' "alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".
-#' Can be omitted and the function will use the one based on the requested n.
 #' @param shuffle_pal randomly shuffle the outputted palette.  Most useful for `varibow` palette as
 #' that is normally an ordered palette.
 #' @param seed random seed for the palette shuffle.  Default = 123.
 #'
+#' @import cli
 #' @importFrom colorway varibow
 #' @importFrom dittoSeq dittoColors
 #' @importFrom paletteer paletteer_d
@@ -127,12 +127,17 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #' provide simplified access to color palettes from many different R package sources while
 #' minimizing scCustomize current and future dependencies.
 #'
-#' The following packages & palettes are called by paletteer (see individual packages for
+#' The following packages & palettes are called by this function (see individual packages for
 #' palette references/citations):
 #' \enumerate{
-#'   \item pals \url{https://cran.r-project.org/web/packages/pals/index.html}
+#'   \item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
 #'     \itemize{
 #'       \item alphabet, alphabet2, glasbey, polychrome, and stepped.
+#'       }
+#' }
+#'   \item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
+#'     \itemize{
+#'       \item dittoColors.
 #'       }
 #' }
 #'
@@ -160,11 +165,9 @@ DiscretePalette_scCustomize <- function(
     varibow = varibow(n_colors = num_colors)
   )
   if (is.null(x = palette)) {
-    if (num_colors <= 66) {
-      palette <- "polychrome"
-    } else {
-      palette <- "varibow"
-    }
+    cli_warn(message = c("Must specify a palette to return colors.",
+                          "i" = "`palette` options are: {names(palette_list)}")
+    )
   }
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {

@@ -15,8 +15,7 @@ DiscretePalette_scCustomize(
 \item{num_colors}{Number of colors to be generated.}
 
 \item{palette}{Options are
-"alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".
-Can be omitted and the function will use the one based on the requested n.}
+"alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".}
 
 \item{shuffle_pal}{randomly shuffle the outputted palette.  Most useful for \code{varibow} palette as
 that is normally an ordered palette.}
@@ -34,12 +33,17 @@ This function uses the paletteer package (https://github.com/EmilHvitfeldt/palet
 provide simplified access to color palettes from many different R package sources while
 minimizing scCustomize current and future dependencies.
 
-The following packages & palettes are called by paletteer (see individual packages for
+The following packages & palettes are called by this function (see individual packages for
 palette references/citations):
 \enumerate{
-\item pals \url{https://cran.r-project.org/web/packages/pals/index.html}
+\item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
 \itemize{
 \item alphabet, alphabet2, glasbey, polychrome, and stepped.
+}
+}
+\item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
+\itemize{
+\item dittoColors.
 }
 }
 
