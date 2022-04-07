@@ -21,6 +21,8 @@
 #' value between 0-1.
 #' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
 #' value between 0-1.
+#' @param combine Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
+#' If FALSE, return a list of ggplot objects.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
 #' @return A ggplot object
@@ -58,6 +60,7 @@ FeaturePlot_scCustom <- function(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  combine = TRUE,
   ...
 ) {
   # Check Seurat
@@ -127,10 +130,20 @@ FeaturePlot_scCustom <- function(
     na_color <- alpha(na_color, alpha_exp)
   }
 
-  # plot no split
-  if (is.null(x = split.by)) {
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+  # plot no split & combined
+  if (is.null(x = split.by) && combine) {
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
   }
+
+  # plot no split & combined
+  if (is.null(x = split.by) && !combine) {
+    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, ...))
+
+    plot <- lapply(1:length(x = plot_list), function(i) {
+      p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    })
+  }
+
 
   # plotting split with single feature (allows column number setting)
   if (!is.null(x = split.by) && length(x = features) == 1) {
