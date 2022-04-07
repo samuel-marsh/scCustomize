@@ -19,6 +19,7 @@ FeaturePlot_scCustom(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  combine = TRUE,
   ...
 )
 }
@@ -55,6 +56,9 @@ value between 0-1.}
 
 \item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
 value between 0-1.}
+
+\item{combine}{Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
+If FALSE, return a list of ggplot objects.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 }
