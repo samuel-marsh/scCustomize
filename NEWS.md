@@ -9,7 +9,7 @@
 ## Changed
 - **BREAKING CHANGE** Function name for iterative `VlnPlot` has been changed to `Iterate_VlnPlot_scCustom` to reflect that it now uses `VlnPlot_scCustom` to generate plots. 
 - `QC_Plot_*` functions now use `VlnPlot_scCustom` internally to unify color scheme and rasterization parameters.
-- Moved information, warning, and error messages to rlang/cli framework for clarity and style.
+- Have begub to move information, warning, and error messages to rlang/cli framework for clarity and style.
 
 ## Fixes
 - Fixed DESCRIPTION file to specify colorway version upon installation ([#25](https://github.com/samuel-marsh/scCustomize/pull/25)).
