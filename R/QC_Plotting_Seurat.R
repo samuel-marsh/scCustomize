@@ -920,7 +920,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1040,7 +1040,7 @@ Seq_QC_Plot_Number_Cells <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1160,7 +1160,7 @@ Seq_QC_Plot_Genes <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1270,7 +1270,7 @@ Seq_QC_Plot_UMIs <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1380,7 +1380,7 @@ Seq_QC_Plot_Total_Genes <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1491,7 +1491,7 @@ Seq_QC_Plot_Saturation <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1608,7 +1608,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1725,7 +1725,7 @@ Seq_QC_Plot_Transcriptome <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1841,7 +1841,7 @@ Seq_QC_Plot_Genome <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -1957,7 +1957,7 @@ Seq_QC_Plot_Intergenic <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -2073,7 +2073,7 @@ Seq_QC_Plot_Intronic <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -2189,7 +2189,7 @@ Seq_QC_Plot_Exonic <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
@@ -2305,7 +2305,7 @@ Seq_QC_Plot_Antisense <- function(
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
     } else {
       colors_use <- colors_use
