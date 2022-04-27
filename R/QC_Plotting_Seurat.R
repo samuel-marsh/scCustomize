@@ -913,7 +913,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1033,7 +1033,7 @@ Seq_QC_Plot_Number_Cells <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1153,7 +1153,7 @@ Seq_QC_Plot_Genes <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1263,7 +1263,7 @@ Seq_QC_Plot_UMIs <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1373,7 +1373,7 @@ Seq_QC_Plot_Total_Genes <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1484,7 +1484,7 @@ Seq_QC_Plot_Saturation <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1601,7 +1601,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1718,7 +1718,7 @@ Seq_QC_Plot_Transcriptome <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1834,7 +1834,7 @@ Seq_QC_Plot_Genome <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -1950,7 +1950,7 @@ Seq_QC_Plot_Intergenic <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -2066,7 +2066,7 @@ Seq_QC_Plot_Intronic <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -2182,7 +2182,7 @@ Seq_QC_Plot_Exonic <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
@@ -2298,7 +2298,7 @@ Seq_QC_Plot_Antisense <- function(
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use) && plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
