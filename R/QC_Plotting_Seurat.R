@@ -902,9 +902,12 @@ Seq_QC_Plot_Reads_per_Cell <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1019,9 +1022,12 @@ Seq_QC_Plot_Number_Cells <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1136,9 +1142,12 @@ Seq_QC_Plot_Genes <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1243,9 +1252,12 @@ Seq_QC_Plot_UMIs <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1350,9 +1362,12 @@ Seq_QC_Plot_Total_Genes <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1458,9 +1473,12 @@ Seq_QC_Plot_Saturation <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1572,9 +1590,12 @@ Seq_QC_Plot_Reads_in_Cells <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1686,9 +1707,12 @@ Seq_QC_Plot_Transcriptome <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1799,9 +1823,12 @@ Seq_QC_Plot_Genome <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -1912,9 +1939,12 @@ Seq_QC_Plot_Intergenic <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -2025,9 +2055,12 @@ Seq_QC_Plot_Intronic <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -2138,9 +2171,12 @@ Seq_QC_Plot_Exonic <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
@@ -2251,9 +2287,12 @@ Seq_QC_Plot_Antisense <- function(
     stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
