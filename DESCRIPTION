@@ -1,7 +1,7 @@
 Package: scCustomize
 Type: Package
 Title: An R package for custom visualization & analyses of single cell sequencing.
-Version: 0.7.0.9901
+Version: 0.7.0.9902
 Date: 2022-04-27
 Authors@R: c(
     person(given = "Samuel", family = "Marsh", email = "samuel.marsh@childrens.harvard.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3012-6945")),
