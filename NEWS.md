@@ -16,6 +16,7 @@
 - Fixed bug preventing `low_cutoff` from plotting via `QC_Plots_Mito`.
 - Fixed bug in `Clustered_DotPlot` that prevented setting identity colors ([#29](https://github.com/samuel-marsh/scCustomize/issues/29)).
 - Fixed bug in `FeaturePlot_scCustom` that returned NULL when setting `combine = FALSE` ([#31](https://github.com/samuel-marsh/scCustomize/issues/31)).
+- Fixed bug in `Seq_QC_Plot_*` functions which resulted in groups being plotted out of order when specifying `plot_by` parameter.
 - Typo/styling fixes.
  
 
