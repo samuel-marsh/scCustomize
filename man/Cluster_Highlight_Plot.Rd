@@ -17,9 +17,9 @@ Cluster_Highlight_Plot(
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{cluster_name}{Name (or number) identity of cluster to be highlighted.}
+\item{cluster_name}{Name(s) (or number(s)) identity of cluster to be highlighted.}
 
-\item{highlight_color}{Color to highlight cells (default "navy").}
+\item{highlight_color}{Color(s) to highlight cells (default "navy").}
 
 \item{background_color}{non-highlighted cell colors.}
 
