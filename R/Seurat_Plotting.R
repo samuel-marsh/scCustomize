@@ -521,6 +521,9 @@ Split_FeatureScatter <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
 #' @importFrom Seurat DimPlot
 #'
 #' @export
@@ -549,12 +552,29 @@ Cluster_Highlight_Plot <- function(
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
 
+  # Perform Idents check and report errors when when length(cluster_name) > 1
+  if (length(x = cluster_name) > 1) {
+    idents_list <- levels(x = Idents(object = seurat_object))
+
+    good_idents <- cluster_name[cluster_name %in% idents_list]
+    bad_idents <- cluster_name[!cluster_name %in% idents_list]
+
+    if (length(x = bad_idents) > 0) {
+      cli_warn("The following 'cluster_name(s)' were not found the active.idents slot: {bad_idents}")
+    }
+  }
+
   # pull cells to highlight in plot
   cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
 
   # set point size
   if (is.null(x = pt.size)) {
     pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_to_highlight)), raster = raster)
+  }
+
+  # Adjust colors if needed when length(cluster_name) > 1
+  if (length(x = highlight_color) == 1 && length(x = cluster_name) > 1) {
+    highlight_color <- rep(x = highlight_color, length(x = cluster_name))
   }
 
   # plot
@@ -567,6 +587,9 @@ Cluster_Highlight_Plot <- function(
           order = TRUE,
           raster = raster,
           ...)
+
+  # Edit plot legend
+  plot <- suppressMessages(plot + scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
   return(plot)
 }
