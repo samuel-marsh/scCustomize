@@ -511,8 +511,8 @@ Split_FeatureScatter <- function(
 #' Create Plot with cluster of interest highlighted
 #'
 #' @param seurat_object Seurat object name.
-#' @param cluster_name Name (or number) identity of cluster to be highlighted.
-#' @param highlight_color Color to highlight cells (default "navy").
+#' @param cluster_name Name(s) (or number(s)) identity of cluster to be highlighted.
+#' @param highlight_color Color(s) to highlight cells (default "navy").
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
