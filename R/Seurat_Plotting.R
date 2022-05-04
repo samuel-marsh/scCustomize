@@ -351,6 +351,7 @@ FeaturePlot_DualAssay <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom magrittr "%>%"
@@ -387,7 +388,7 @@ Split_FeatureScatter <- function(
 
   # split.by present
   if (is.null(x = split.by)) {
-    stop("No value supplied to `split.by`.")
+    cli_abort(message = "No value supplied to `split.by`.")
   }
 
   # Set columna and row lengths
@@ -401,18 +402,23 @@ Split_FeatureScatter <- function(
 
   # Check column and row compatibility
   if (num_columns > split.by_length) {
-    stop("The number of columns specified is greater than the number of meta data variables.  ", paste0('"', split.by, '"', " only contains ", split.by_length, " variables.  "), "Please adjust `num_columns` to be less than or equal to", ": ", paste(split.by_length), ".")
+    cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                          "*" = "'{split.by}' only contains {split.by_length} variables.",
+                          "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
+    )
   }
 
   if (split.by %in% colnames(seurat_object@meta.data) == FALSE) {
-    stop("The meta data variable: ", '"', split.by, '"', " could not be found in object@meta.data.")
+    cli_abort(message = c("The meta data variable: '{split.by}' could not be found in object@meta.data.",
+                          "i" = "Please check the spelling and column names of meta.data slot.")
+    )
   }
 
   # Check features are present
   possible_features <- c(rownames(seurat_object), colnames(seurat_object@meta.data))
   check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
   if (length(x = check_features) > 0) {
-    stop("Feature: ", '"', check_features, '"', " is not present in Seurat object.")
+    cli_abort(message = "The following feature(s) were not present in Seurat object: '{check_features}'")
   }
 
   # Extract min/maxes of features
