@@ -564,7 +564,7 @@ Cluster_Highlight_Plot <- function(
     bad_idents <- cluster_name[!cluster_name %in% idents_list]
 
     if (length(x = bad_idents) > 0) {
-      cli_warn("The following 'cluster_name(s)' were not found the active.idents slot: '{bad_idents}'")
+      cli_warn("The following 'cluster_name(s)' were not found the active.idents slot: {bad_idents}")
     }
   }
 
