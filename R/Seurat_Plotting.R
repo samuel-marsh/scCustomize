@@ -517,6 +517,9 @@ Split_FeatureScatter <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+#' individual plots in layout.  Default is FALSE.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
@@ -524,7 +527,6 @@ Split_FeatureScatter <- function(
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
-#' @importFrom Seurat DimPlot
 #'
 #' @export
 #'
@@ -544,6 +546,8 @@ Cluster_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  split.by = NULL,
+  split_seurat = FALSE,
   ...
 ) {
   # Check Seurat
@@ -578,7 +582,7 @@ Cluster_Highlight_Plot <- function(
   }
 
   # plot
-  plot <- DimPlot(object = seurat_object,
+  plot <- DimPlot_scCustom(seurat_object = seurat_object,
           cells.highlight = cells_to_highlight,
           cols.highlight = highlight_color,
           cols = background_color,
