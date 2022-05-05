@@ -590,6 +590,8 @@ Cluster_Highlight_Plot <- function(
           pt.size = pt.size,
           order = TRUE,
           raster = raster,
+          split.by = split.by,
+          split_seurat = split_seurat,
           ...)
 
   # Edit plot legend
