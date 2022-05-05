@@ -595,7 +595,7 @@ Cluster_Highlight_Plot <- function(
           ...)
 
   # Edit plot legend
-  plot <- suppressMessages(plot + scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
   return(plot)
 }
