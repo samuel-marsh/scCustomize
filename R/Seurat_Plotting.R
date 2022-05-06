@@ -654,7 +654,7 @@ Meta_Highlight_Plot <- function(
 
   # stop if none found
   if (length(x = meta_data_column) == 0) {
-    cli_abort(message = "The following 'meta_data_column' was not found in object meta.data slot: '{meta_data_column}', {class(meta_data_column}.")
+    cli_abort(message = "The following 'meta_data_column' was not found in object meta.data slot: '{meta_data_column}'.")
   }
 
   # Check that meta data is factor or character
