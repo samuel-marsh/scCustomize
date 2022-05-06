@@ -251,7 +251,7 @@ Meta_Present <- function(
     if (abort) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
-                              "i" = "The following @meta.data columns were not found: {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}")
+                              "i" = "The following @meta.data columns were not found: {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}"), call = parent.frame()
         )
       }
     }
