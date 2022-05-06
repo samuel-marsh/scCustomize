@@ -693,7 +693,7 @@ Meta_Highlight_Plot <- function(
   plot <- DimPlot_scCustom(seurat_object = seurat_object,
           cells.highlight = cells_to_highlight,
           cols.highlight = highlight_color,
-          cols = background_color,
+          colors_use = background_color,
           sizes.highlight = pt.size,
           pt.size = pt.size,
           order = TRUE,
