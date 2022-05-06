@@ -613,11 +613,15 @@ Cluster_Highlight_Plot <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+#' individual plots in layout.  Default is FALSE.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
 #'
-#' @importFrom Seurat DimPlot
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
 #'
 #' @export
 #'
@@ -638,6 +642,8 @@ Meta_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  split.by = NULL,
+  split_seurat = FALSE,
   ...
 ) {
   # Check Seurat
@@ -678,8 +684,13 @@ Meta_Highlight_Plot <- function(
     pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_to_highlight)), raster = raster)
   }
 
+  # Adjust colors if needed when length(meta_data_highlight) > 1
+  if (length(x = highlight_color) == 1 && length(x = meta_data_highlight) > 1) {
+    highlight_color <- rep(x = highlight_color, length(x = meta_data_highlight))
+  }
+
   # plot
-  plot <- DimPlot(object = seurat_object,
+  plot <- DimPlot_scCustom(object = seurat_object,
           cells.highlight = cells_to_highlight,
           cols.highlight = highlight_color,
           cols = background_color,
@@ -687,7 +698,12 @@ Meta_Highlight_Plot <- function(
           pt.size = pt.size,
           order = TRUE,
           raster = raster,
+          split.by = split.by,
+          split_seurat = split_seurat,
           ...)
+
+  # Update legend and return plot
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
   return(plot)
 }
