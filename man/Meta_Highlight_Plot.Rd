@@ -12,6 +12,8 @@ Meta_Highlight_Plot(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  split.by = NULL,
+  split_seurat = FALSE,
   ...
 )
 }
@@ -30,6 +32,9 @@ Meta_Highlight_Plot(
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+individual plots in layout.  Default is FALSE.}
 
 \item{...}{Extra parameters passed to\code{\link[Seurat]{DimPlot}}.}
 }
