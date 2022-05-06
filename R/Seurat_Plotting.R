@@ -650,32 +650,32 @@ Meta_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check meta data
-  meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
 
   # stop if none found
-  if (length(x = meta_data_column) == 0) {
+  if (length(x = good_meta_data_column) == 0) {
     cli_abort(message = "The following 'meta_data_column' was not found in object meta.data slot: {meta_data_column}.")
   }
 
   # Check that meta data is factor or character
   accepted_meta_types <- c("factor", "character", "logical")
 
-  if (!class(x = seurat_object@meta.data[[meta_data_column]]) %in% accepted_meta_types) {
-    stop("The 'meta_data_column': ", meta_data_column, " is of class: ", '"', class(x = seurat_object@meta.data[[meta_data_column]]), '"', " only meta data variables of classes: factor, character, or logical can be used with Meta_Highlight_Plot().")
+  if (!class(x = seurat_object@meta.data[[good_meta_data_column]]) %in% accepted_meta_types) {
+    stop("The 'good_meta_data_column': ", good_meta_data_column, " is of class: ", '"', class(x = seurat_object@meta.data[[good_meta_data_column]]), '"', " only meta data variables of classes: factor, character, or logical can be used with Meta_Highlight_Plot().")
   }
 
   # Check meta_data_highlight
-  meta_var_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
+  meta_var_list <- as.character(unique(seurat_object@meta.data[, good_meta_data_column]))
 
   if (!meta_data_highlight %in% meta_var_list) {
-    stop("The 'meta_data_highlight': ", meta_data_highlight, " was not found in the meta.data column: ", meta_data_column, ".")
+    stop("The 'meta_data_highlight': ", meta_data_highlight, " was not found in the meta.data column: ", good_meta_data_column, ".")
   }
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
 
   # Change default ident and pull cells to highlight in plot
-  Idents(seurat_object) <- meta_data_column
+  Idents(seurat_object) <- good_meta_data_column
 
   cells_to_highlight <- CellsByIdentities(seurat_object, idents = meta_data_highlight)
 
