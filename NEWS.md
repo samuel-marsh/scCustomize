@@ -4,11 +4,13 @@
 - Added `QC_Plots_Combined_Vln()` function to return patchwork layout of 3 QC plots.
 - Added Rhesus Macaque (macaca mulatta) to the accepted species for `Add_Mito_Ribo_Seurat()` and `Add_Mito_Ribo_LIGER()` ([#28](https://github.com/samuel-marsh/scCustomize/issues/28)).
 - Added `alpha_exp` and `alpha_na_exp` parameters to `FeaturePlot_scCustom` and other functions to allow for control of color scale transparency ([#21](https://github.com/samuel-marsh/scCustomize/issues/21)).
+- `*_Highlight_Plot` functions can now plot multiple variables simultaneously using either one color for all variables or one color per variable ([#34](https://github.com/samuel-marsh/scCustomize/issues/34)).
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
 - **BREAKING CHANGE** Function name for iterative `VlnPlot` has been changed to `Iterate_VlnPlot_scCustom` to reflect that it now uses `VlnPlot_scCustom` to generate plots. 
 - `QC_Plot_*` functions now use `VlnPlot_scCustom` internally to unify color scheme and rasterization parameters.
+- `*_Highlight_Plot` functions no longer display "Unselected" in plot legend and use `DimPlot_scCustom` to generate plots ([#34](https://github.com/samuel-marsh/scCustomize/issues/34)).
 - Have begun to move information, warning, and error messages to rlang/cli framework for clarity and style.
 
 ## Fixes
