@@ -218,6 +218,8 @@ Case_Check <- function(
 #'
 #' @return vector of meta data columns that are present
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept helper_util
@@ -248,8 +250,9 @@ Meta_Present <- function(
 
     if (abort) {
       if (length(x = found_meta) < 1) {
-        stop("No meta data columns found.  The following @meta.data columns were not found",
-             ": ", glue_collapse_scCustom(input_string = bad_meta, and = TRUE))
+        cli_abort(message = c("No meta data columns found.",
+                              "i" = "The following @meta.data columns were not found: {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}")
+        )
       }
     }
 
