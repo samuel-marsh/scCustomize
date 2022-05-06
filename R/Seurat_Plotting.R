@@ -654,7 +654,9 @@ Meta_Highlight_Plot <- function(
 
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
-    cli_abort(message = "The following 'meta_data_column' was not found in object meta.data slot: {meta_data_column}.")
+    cli_abort(message = c("No 'meta_data_column' was not found.",
+              "i" = "No column found in object meta.data named: {meta_data_column}.")
+    )
   }
 
   # Check that meta data is factor or character
@@ -667,8 +669,22 @@ Meta_Highlight_Plot <- function(
   # Check meta_data_highlight
   meta_var_list <- as.character(unique(seurat_object@meta.data[, good_meta_data_column]))
 
-  if (!meta_data_highlight %in% meta_var_list) {
-    stop("The 'meta_data_highlight': ", meta_data_highlight, " was not found in the meta.data column: ", good_meta_data_column, ".")
+  # Check good and bad highlight values
+  bad_meta_highlight <- meta_var_list[!meta_var_list %in% meta_data_highlight]
+  found_meta_highlight <- meta_var_list[meta_var_list %in% meta_data_highlight]
+
+  # Abort if no meta_data_highlight found
+  if (length(x = found_meta_highlight) == 0) {
+    cli_abort(message = c("No 'meta_data_highlight' value(s) were not found.",
+                          "i" = "The following 'meta_data_highlight' variables were not found in {good_meta_data_column}: {bad_meta_highlight}")
+    )
+  }
+
+  # warn if some meta_data_highlight not found
+  if (length(x = found_meta_highlight) != length(x = meta_data_highlight)) {
+    cli_warn(message = c("Some 'meta_data_highlight' value(s) were not found.",
+                          "i" = "The following 'meta_data_highlight' variables were not found in {good_meta_data_column} and were omitted: {bad_meta_highlight}")
+    )
   }
 
   # Add raster check for scCustomize
@@ -677,7 +693,7 @@ Meta_Highlight_Plot <- function(
   # Change default ident and pull cells to highlight in plot
   Idents(seurat_object) <- good_meta_data_column
 
-  cells_to_highlight <- CellsByIdentities(seurat_object, idents = meta_data_highlight)
+  cells_to_highlight <- CellsByIdentities(seurat_object, idents = found_meta_highlight)
 
   # set point size
   if (is.null(x = pt.size)) {
@@ -685,8 +701,8 @@ Meta_Highlight_Plot <- function(
   }
 
   # Adjust colors if needed when length(meta_data_highlight) > 1
-  if (length(x = highlight_color) == 1 && length(x = meta_data_highlight) > 1) {
-    highlight_color <- rep(x = highlight_color, length(x = meta_data_highlight))
+  if (length(x = highlight_color) == 1 && length(x = found_meta_highlight) > 1) {
+    highlight_color <- rep(x = highlight_color, length(x = found_meta_highlight))
   }
 
   # plot
