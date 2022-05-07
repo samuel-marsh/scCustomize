@@ -517,6 +517,7 @@ Split_FeatureScatter <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param label Whether to label the highlighted cluster(s).  Default is FALSE.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
@@ -546,6 +547,7 @@ Cluster_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
   ...
@@ -592,6 +594,7 @@ Cluster_Highlight_Plot <- function(
           raster = raster,
           split.by = split.by,
           split_seurat = split_seurat,
+          label = label,
           ...)
 
   # Edit plot legend
@@ -613,6 +616,7 @@ Cluster_Highlight_Plot <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param label Whether to label the highlighted meta data variable(s).  Default is FALSE.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
@@ -642,6 +646,7 @@ Meta_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
   ...
@@ -716,6 +721,7 @@ Meta_Highlight_Plot <- function(
           raster = raster,
           split.by = split.by,
           split_seurat = split_seurat,
+          label = label,
           ...)
 
   # Update legend and return plot
