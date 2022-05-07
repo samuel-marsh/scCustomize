@@ -11,6 +11,7 @@ Cluster_Highlight_Plot(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
   ...
@@ -29,6 +30,8 @@ Cluster_Highlight_Plot(
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{label}{Whether to label the highlighted cluster(s).  Default is FALSE.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
 
