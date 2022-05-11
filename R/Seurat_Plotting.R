@@ -863,6 +863,7 @@ VlnPlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom purrr map map_dbl map2
@@ -931,8 +932,9 @@ Stacked_VlnPlot <- function(
 
   if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
-    message("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
-            "\nTo plot in vector form set `raster=FALSE`")
+    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+                           "i" = "To plot in vector form set `raster=FALSE`")
+    )
   }
 
   # Set default color palette based on number of levels being plotted
@@ -944,7 +946,7 @@ Stacked_VlnPlot <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
   if (is.null(x = colors_use)) {
     # set default plot colors
@@ -1248,7 +1250,7 @@ Clustered_DotPlot <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use_idents) && ggplot_default_colors) {
-    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
   if (is.null(x = colors_use_idents)) {
     # set default plot colors
@@ -1497,7 +1499,7 @@ DimPlot_scCustom <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
 
   # set default plot colors
