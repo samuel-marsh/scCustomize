@@ -1428,6 +1428,7 @@ Clustered_DotPlot <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import patchwork
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
