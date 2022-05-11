@@ -11,6 +11,8 @@
 - **BREAKING CHANGE** Function name for iterative `VlnPlot` has been changed to `Iterate_VlnPlot_scCustom` to reflect that it now uses `VlnPlot_scCustom` to generate plots. 
 - `QC_Plot_*` functions now use `VlnPlot_scCustom` internally to unify color scheme and rasterization parameters.
 - `*_Highlight_Plot` functions no longer display "Unselected" in plot legend and use `DimPlot_scCustom` to generate plots ([#34](https://github.com/samuel-marsh/scCustomize/issues/34)).
+- Updated Marsh et al., 2022 citation in vignettes.
+- Update vignettes with new features/functions.
 - Have begun to move information, warning, and error messages to rlang/cli framework for clarity and style.
 
 ## Fixes
