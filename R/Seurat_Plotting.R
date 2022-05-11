@@ -756,6 +756,7 @@ Meta_Highlight_Plot <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import patchwork
 #' @importFrom Seurat VlnPlot
 #'
@@ -799,8 +800,9 @@ VlnPlot_scCustom <- function(
 
   if (length(x = num_cells) * length(x = features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
-    message("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
-            "\nTo plot in vector form set `raster=FALSE`")
+    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+                           "i" = "To plot in vector form set `raster=FALSE`")
+    )
   } else {
     raster <- raster %||% (length(x = colnames(x = seurat_object)) > 100000)
   }
@@ -814,7 +816,7 @@ VlnPlot_scCustom <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
   if (is.null(x = colors_use)) {
     # set default plot colors
