@@ -68,7 +68,7 @@ Yes, though not extensively.  Currently the package is primarily centered around
 * **If users are interested in adapting functions (or creating separate functions) to provide comparable functionality with SCE or other object formats I would be happy to add them.  See above for more info on PRs.**
 
 ### *Installation Issues*  
-Please see [Installation](LINK) page for more detailed installation instructions.  If the issue persists please submit [GitHub issue](https://github.com/samuel-marsh/scCustomize/issues).
+Please see [Installation](https://samuel-marsh.github.io/scCustomize/articles/Installation.html) page for more detailed installation instructions.  If the issue persists please submit [GitHub issue](https://github.com/samuel-marsh/scCustomize/issues).
 
 
 

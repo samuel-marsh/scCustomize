@@ -60,7 +60,7 @@ scCustomize has three functions to deal with these situations without need for r
 ### Import 10X Genomics (or 10X-styled) single directory with file prefixes
 The function `Read10X_GEO` can be used to iteratively read all sets of 10X style files within single directory.  
 
-For this example I will be utilizing data from Marsh et al., 2020 ([*bioRxiv*](https://www.biorxiv.org/content/10.1101/2020.12.03.408542v1)), which were downloaded from [NCBI GEO GSE152183](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183)
+For this example I will be utilizing data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)), which were downloaded from [NCBI GEO GSE152183](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183)
 ```{r eval=FALSE}
 list.files("../man/figures/assets/GSE152183_RAW_Marsh/")
 
