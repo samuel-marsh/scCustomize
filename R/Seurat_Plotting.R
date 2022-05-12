@@ -915,8 +915,9 @@ Stacked_VlnPlot <- function(
   if (length(x = all_not_found_features) > 0) {
     op <- options(warn = 1)
     on.exit(options(op))
-    warning("The following features were omitted as they were not found",
-            ": ", glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE))
+    cli_warn(message = c("The following features were omitted as they were not found:",
+                         "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
   }
 
   # Check feature case correct
