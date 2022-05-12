@@ -204,6 +204,8 @@ DiscretePalette_scCustomize <- function(
 #' See RColorBrewer for more info on palettes
 #' \url{https://CRAN.R-project.org/package=RColorBrewer}
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept palettes
@@ -215,10 +217,12 @@ Single_Color_Palette <- function(pal_color,
 ) {
   # Check number of colors available
   if (is.null(x = num_colors)) {
-    stop("No value provided to `num_colors`.")
+    cli_abort(message = "No value provided to `num_colors`.")
   }
   if (num_colors > 7 || num_colors < 1) {
-    stop("Value provided to `num_colors` (", num_colors, ") is greater than maximum number allowed (7).")
+    cli_abort(message = c("Not enough colors.",
+                          "i" = "Value provided to `num_colors` ({num_colors}) is greater than maximum number allowed (7).")
+    )
   }
 
   # Modified single palettes
@@ -249,8 +253,9 @@ Single_Color_Palette <- function(pal_color,
     )
   )
   if (!pal_color %in% names(brewer_single_modified)) {
-    stop("Palette name not found.  Please select one of following palette options:
-         'reds', 'blues', 'greens', 'purples', or 'grays'")
+    cli_abort(message = c("Paleete name not found.",
+                          "i" = "Palette name not found.  Please select one of following palette options: 'reds', 'blues', 'greens', 'purples', or 'grays'")
+    )
   }
   set.seed(seed = seed_use)
   pal_use <- brewer_single_modified[[pal_color]]
