@@ -609,11 +609,6 @@ Liger_to_Seurat <- function(
                           "i" = "In order to retain proper labels in Seurat object please set `reduction_label` to 'tSNE', 'UMAP', etc."))
   }
 
-  if (!requireNamespace("Seurat", quietly = TRUE)) {
-    stop("Package \"Seurat\" needed for this function to work. Please install it.",
-         call. = FALSE
-    )
-  }
   # get Seurat version
   maj_version <- packageVersion('Seurat')$major
   if (class(liger_object@raw.data[[1]])[1] != 'dgCMatrix') {
