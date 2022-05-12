@@ -1208,7 +1208,7 @@ Clustered_DotPlot <- function(
       rownames()
     cli_warn(message = c("Some scaled data missing.",
                          "*" = "The following features were removed as there is no scaled expression present in subset (`idents`) of object provided:",
-                         "i" = "{glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}")
+                         "i" = "{glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}.")
     )
 
     # Extract good features
@@ -1241,7 +1241,7 @@ Clustered_DotPlot <- function(
 
   # print quantiles
   if (print_exp_quantiles) {
-    message("Quantiles of gene expression data are:")
+    cli_inform(message = "Quantiles of gene expression data are:")
     print(quantile(exp_mat, c(0.1, 0.5, 0.9, 0.99)))
   }
 
@@ -1302,7 +1302,9 @@ Clustered_DotPlot <- function(
     # if elbow_kmax not NULL check it is usable
     if (!is.null(x = elbow_kmax) && elbow_kmax > (nrow(x = exp_mat) - 1)) {
       elbow_kmax <- nrow(x = exp_mat) - 1
-      warning("The value provided for 'elbow_kmax' is too large.  Changing to (length(x = features)-1): ", elbow_kmax)
+      cli_warn(message = c("The value provided for 'elbow_kmax' is too large.",
+                           "i" = "Changing to (length(x = features)-1): {elbow_kmax}")
+      )
     }
 
     # if elbow_kmax is NULL set value based on input feature list
