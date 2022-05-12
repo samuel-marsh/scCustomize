@@ -577,6 +577,7 @@ Merge_Seurat_List <- function(
 #' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
 #' PR to liger GitHub.
 #'
+#' @import cli
 #' @import Matrix
 #' @importFrom dplyr pull select
 #' @importFrom methods new
@@ -602,9 +603,10 @@ Liger_to_Seurat <- function(
   seurat_assay = "RNA"
 ) {
   if (is.null(x = reduction_label)) {
-    stop("`reduction_label` parameter was not set.  LIGER objects do not store name of dimensionality
-         reduction technique used.  In order to retain proper labels in Seurat object please set
-         `reduction_label` to", '"', "tSNE", '"', ", ", '"', "UMAP", '"', " etc.")
+    cli_abort(message = c("`reduction_label` parameter was not set.",
+                          "*" = " LIGER objects do not store name of dimensionality
+         reduction technique used.",
+                          "i" = "In order to retain proper labels in Seurat object please set `reduction_label` to 'tSNE', 'UMAP', etc."))
   }
 
   if (!requireNamespace("Seurat", quietly = TRUE)) {
