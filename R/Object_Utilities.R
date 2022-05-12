@@ -461,6 +461,8 @@ Store_Palette_Seurat <- function(
 #'
 #' @return Seurat Object with new identities placed in active.ident slot.
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept object_util
@@ -482,8 +484,9 @@ Rename_Clusters <- function(
 
   # Check equivalent lengths
   if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
-    stop("Length of `new_idents` must be equal to the number of active.idents in Seurat Object.
-         `new_idents` length: ", length(x = new_idents), ", Object@active.idents length: ", length(levels(x = seurat_object)), ".")
+    cli_abort(message = c("Length of `new_idents` must be equal to the number of active.idents in Seurat Object.",
+                          "i" = "`new_idents` length: '{length(x = new_idents)}' Object@active.idents length: '{length(levels(x = seurat_object))}'.")
+    )
   }
 
   # Name the new idents vector
@@ -492,8 +495,9 @@ Rename_Clusters <- function(
   }
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
-    stop("The number of unique names for `new idents is not equal to number of active.idents.
-         names(new_idents) length: ", length(x = unique(x = names(x = new_idents))), " Object@active.idents length: ", length(levels(x = seurat_object)), ".")
+    cli_abort(message = c("The number of unique names for `new idents is not equal to number of active.idents.",
+                          "i" = "names(new_idents) length: {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}.")
+    )
   }
 
   # Rename meta column for old ident information if desired
