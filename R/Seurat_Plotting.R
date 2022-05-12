@@ -1599,6 +1599,7 @@ DimPlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import patchwork
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -1631,7 +1632,9 @@ DimPlot_All_Samples <- function(
 
   # Check meta data column exists
   if (meta_data_column %in% colnames(seurat_object@meta.data) == FALSE) {
-    stop("The meta data variable: ", '"', meta_data_column, '"', " could not be found in object@meta.data.")
+    cli_abort(message = c("Meta data variable not found.",
+                          "i" = "The `meta_data_column`: {meta_data_column}, could not be found in object@meta.data.")
+    )
   }
 
   # Add raster check for scCustomize
@@ -1670,7 +1673,9 @@ DimPlot_All_Samples <- function(
   if (length(x = colors_use) == 1) {
     colors_use <- rep(x = colors_use, num_plots)
   } else if (length(x = colors_use) != num_plots) {
-    stop("Length of `colors_use` (", length(x = colors_use), ") does not equal number of plots (", num_plots, ").")
+    cli_abort(message = c("Not enough colors provided.",
+                          "i" = "Length of `colors_use` ({length(x = colors_use)}) does not equal number of plots ({num_plots}).")
+    )
   }
 
   # Plots
