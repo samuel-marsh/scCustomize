@@ -270,6 +270,7 @@ Single_Color_Palette <- function(pal_color,
 #'
 #' @param palette a vector of colors (either named colors of hex codes).
 #'
+#' @import cli
 #' @import ggplot2
 #'
 #' @return Plot of all colors in supplied palette/vector
@@ -291,7 +292,7 @@ Single_Color_Palette <- function(pal_color,
 PalettePlot <- function(palette = NULL) {
   # Check palette
   if (is.null(x = palette)) {
-    stop("No value provided to `palette` parameter.")
+    cli_abort(message = "No value provided to `palette` parameter.")
   }
 
   # Generate data frame for plotting
