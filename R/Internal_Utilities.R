@@ -68,6 +68,8 @@ stop_quietly <- function() {
 #'
 #' @param seurat_object Seurat object name.
 #'
+#' @import cli
+#'
 #' @return stops function without error message
 #'
 #' @noRd
@@ -77,7 +79,7 @@ Is_Seurat <- function(
   seurat_object
 ) {
   if (class(x = seurat_object)[[1]] != "Seurat") {
-    stop("'seurat_object' provided is not an object of class: Seurat.")
+    cli_abort(message = "'seurat_object' provided is not an object of class: Seurat.")
   }
 }
 
