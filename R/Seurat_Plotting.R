@@ -1110,6 +1110,7 @@ DotPlot_scCustom <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr filter select
@@ -1177,12 +1178,14 @@ Clustered_DotPlot <- function(
   features_unique <- unique(x = features)
 
   if (length(x = features_unique) != length(x = features)) {
-    warning("Feature list contains duplicates, making unique.")
+    cli_warn("Feature list contains duplicates, making unique.")
   }
 
   # Check exp min/max set correctly
   if (!exp_color_min < exp_color_max) {
-    stop("The value for 'exp_color_min': ", exp_color_min, ", must be less than the value for 'exp_color_max': ", exp_color_max, ".")
+    cli_abort(message = c("Expression color min/max values are not compatible.",
+                          "i" = "The value for 'exp_color_min': {exp_color_min} must be less than the value for 'exp_color_max': {exp_color_max}.")
+    )
   }
 
   # Get DotPlot data
@@ -1203,7 +1206,10 @@ Clustered_DotPlot <- function(
     # Find NA features and print warning
     excluded_features <- exp_mat[rowSums(is.na(x = exp_mat)) > 0,] %>%
       rownames()
-    warning("The following features were removed as there is no scaled expression present in subset (`idents`) of object provided: ", glue_collapse_scCustom(input_string = excluded_features, and = TRUE), ".")
+    cli_warn(message = c("Some scaled data missing.",
+                         "*" = "The following features were removed as there is no scaled expression present in subset (`idents`) of object provided:",
+                         "i" = "{glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}")
+    )
 
     # Extract good features
     good_features <- rownames(exp_mat)
