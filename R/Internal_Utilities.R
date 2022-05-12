@@ -90,6 +90,8 @@ Is_Seurat <- function(
 #'
 #' @param liger_object liger object name.
 #'
+#' @import cli
+#'
 #' @return stops function without error message
 #'
 #' @noRd
@@ -99,7 +101,7 @@ Is_LIGER <- function(
   liger_object
 ) {
   if (class(x = liger_object)[[1]] != "liger") {
-    stop("'liger_object' provided is not an object of class: liger")
+    cli_abort(message = "'liger_object' provided is not an object of class: liger")
   }
 }
 
