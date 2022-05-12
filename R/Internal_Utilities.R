@@ -150,6 +150,8 @@ AutoPointSize_scCustom <- function(data, raster = NULL) {
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object.
 #'
+#' @import cli
+#'
 #' @return List of found vs not found assays.
 #'
 #' @noRd
@@ -172,13 +174,14 @@ Assay_Present <- function(
     bad_assays <- assay_list[!assay_list %in% possible_assays]
     found_assays <- assay_list[assay_list %in% possible_assays]
     if (length(x = found_assays) == 0) {
-      stop("No requested assays found.")
+      cli_abort(message = "No requested assays found.")
     }
 
     # Return message of assays not found
     if (length(x = bad_assays) > 0 && omit_warn) {
-      warning("The following assays were omitted as they were not found",
-              ": ", glue_collapse_scCustom(input_string = bad_assays, and = TRUE))
+      cli_warn(message = c("The following assays were omitted as they were not found:",
+                           "i" = "{glue_collapse_scCustom(input_string = bad_assays, and = TRUE)}.")
+      )
     }
 
     # Combine into list and return
@@ -191,7 +194,7 @@ Assay_Present <- function(
 
   # Print all found message if TRUE
   if (print_msg) {
-    message("All assays present.")
+    cli_inform(message = "All assays present.")
   }
 
   # Return full input gene list.
