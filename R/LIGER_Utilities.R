@@ -27,6 +27,7 @@
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
+#' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -272,6 +273,8 @@ Meta_Present_LIGER <- function(
 #'
 #' @return A LIGER Object
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept liger_object_util
@@ -292,7 +295,9 @@ Top_Genes_Factor <- function(
 
   # check number of factors present
   if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
-    stop("'liger_factor' provided: ", '"', liger_factor, '"', " not found in provided 'liger_object'.  'liger_object' only contains ", dim(x = liger_object@W)[[1]], " factors.")
+    cli_abort(message = c("'liger_factor' provided: {liger_factor} not found",
+                          "i" = "'liger_object' only contains {dim(x = liger_object@W)[[1]]} factors.")
+    )
   }
 
   # Extract genes
