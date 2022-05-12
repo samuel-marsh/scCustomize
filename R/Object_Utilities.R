@@ -28,6 +28,7 @@
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
+#' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
@@ -213,6 +214,7 @@ Add_Mito_Ribo_Seurat <- function(
 #' rownames (to be compatible with `Seurat::AddMetaData`).  Default is FALSE.
 #' @param barcodes_colname name of barcodes column in meta_data.  Required if `barcodes_to_rownames = TRUE`.
 #'
+#' @import cli
 #' @importFrom dplyr select
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
@@ -250,7 +252,7 @@ Meta_Remove_Seurat <- function(
   if (barcodes_to_rownames) {
     # Check barcodes colname exists
     if (!barcodes_colname %in% colnames(x = meta_data)) {
-      stop("barcodes_colname: ", '"', barcodes_colname, '"', " was not present in the column names of meta_data data.frame provided.")
+      cli_abort(message = "`barcodes_colname`: '{barcodes_colname}' was not present in the column names of meta_data data.frame provided.")
     }
     # Move barcodes to rownames
     meta_data_filtered <- meta_data_filtered %>%
