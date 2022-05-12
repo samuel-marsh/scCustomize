@@ -79,18 +79,20 @@ Add_Mito_Ribo_LIGER <- function(
   # Overwrite check
   if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
     if (!overwrite) {
-      stop("Columns with ", mito_name," and/or ", ribo_name, " already present\n",
-           "  in cell.data slot.\n",
-           "  *To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*.")
+      cli_abort(message = c("Columns with {mito_name} and/or {ribo_name} already present in cell.data slot.",
+                            "i" = "*To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*")
+      )
     }
-    message("Columns with ", mito_name," and/or ", ribo_name, " already present\n",
-            "  in cell.data slot\n",
-            "  Overwriting those columns as overwrite = TRUE.")
+    cli_inform(message = c("Columns with {mito_name} and/or {ribo_name} already present in cell.data slot.",
+                           "i" = "Overwriting those columns as overwrite = TRUE.")
+    )
   }
 
   # Checks species
   if (is.null(x = species)) {
-    stop("No species name or abbreivation was provided to `species` parameter.  If not using default species please set `species = other`.")
+    cli_abort(message = c("No species name or abbreivation was provided to `species` parameter.",
+                          "i" = "If not using default species please set `species = other`.")
+    )
   }
 
   # Species Spelling Options
@@ -104,9 +106,10 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Assign mito/ribo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
-    warning("Pattern expressions for included species (Human & Mouse) are set by default.
-  Supplied `mito_pattern` and `ribo_pattern` will be disregarded.
-            To override defaults please supply a feature list for mito and/or ribo genes.")
+    cli_warn(message = c("Pattern expressions for included species (Human & Mouse) are set by default.",
+                         "*" = "Supplied `mito_pattern` and `ribo_pattern` will be disregarded.",
+                         "i" = "To override defaults please supply a feature list for mito and/or ribo genes.")
+    )
   }
 
   # default patterns or features
@@ -137,7 +140,8 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Check that values are provided for mito and ribo
   if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_pattern)) {
-    stop("No features or patterns provided for mito/ribo genes.  Please provide a default species name or pattern/features.")
+    cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
+                          "i" = "Please provide a default species name or pattern/features."))
   }
 
   # get features from patterns
@@ -152,13 +156,19 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Check length of mito and ribo features found in object
   if (length_mito_features < 1 && length_ribo_features < 1) {
-    stop("No Mito or Ribo features found in provided object using patterns/feature list provided.  Please check pattern/feature list and/or gene names in object.")
+    cli_abort(message = c("No Mito or Ribo features found in object using patterns/feature list provided.",
+                          "i" = "Please check pattern/feature list and/or gene names in object.")
+    )
   }
   if (length_mito_features < 1) {
-    warning("No Mito features found in provided object using pattern/feature list provided.  No column will be added to meta.data")
+    cli_warn(message = c("No Mito features found in object using pattern/feature list provided.",
+                         "i" = "No column will be added to meta.data.")
+    )
   }
   if (length_ribo_features < 1) {
-    warning("No Ribo features found in provided object using pattern/feature list provided.  No column will be added to meta.data")
+    cli_warn(message = c("No Ribo features found in object using pattern/feature list provided.",
+                         "i" = "No column will be added to meta.data.")
+    )
   }
 
   # Add mito and ribo percent
