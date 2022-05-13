@@ -1579,6 +1579,10 @@ DimPlot_scCustom <- function(
                 legend.position = "right") +
           xlim(x_axis) +
           ylim(y_axis)
+
+        # Normalize the colors across all plots
+        plot <- suppressMessages(plot + scale_color_manual(values = colors_overall))
+
         if (!is.null(x = group.by)) {
           plot <- plot + labs(color=group.by)
         } else {
@@ -1587,7 +1591,7 @@ DimPlot_scCustom <- function(
       })
 
       # Wrap Plots into single output
-      wrap_plots(plots, ncol = num_columns) & scale_color_manual(values = colors_overall) + plot_layout(guides = 'collect')
+      wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
     }
   }
 }
