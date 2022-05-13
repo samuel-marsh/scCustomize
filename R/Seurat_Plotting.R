@@ -1438,6 +1438,7 @@ Clustered_DotPlot <- function(
 #' @return A ggplot object
 #'
 #' @import cli
+#' @import ggplot2
 #' @import patchwork
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -1559,6 +1560,17 @@ DimPlot_scCustom <- function(
       cell_names <- lapply(split_by_list, function(x) {
         row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
 
+      # Unify colors across plots
+      if (is.null(x = group.by)) {
+        levels_overall <- levels(x = Idents(object = seurat_object))
+      } else {
+        levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+      }
+
+      colors_overall <- colors_use
+
+      names(colors_overall) <- levels_overall
+
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
         plot <- DimPlot(object = seurat_object, cells = cell_names[[x]], group.by = group.by, cols = colors_use, reduction = reduction, pt.size = pt.size, raster = raster, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, dims = dims, label.box = label.box, ...) +
@@ -1575,7 +1587,7 @@ DimPlot_scCustom <- function(
       })
 
       # Wrap Plots into single output
-      wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+      wrap_plots(plots, ncol = num_columns) & scale_color_manual(values = colors_overall) + plot_layout(guides = 'collect')
     }
   }
 }
