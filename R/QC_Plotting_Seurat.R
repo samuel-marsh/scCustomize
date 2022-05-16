@@ -999,6 +999,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1023,7 +1024,7 @@ Seq_QC_Plot_Number_Cells <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1045,7 +1046,9 @@ Seq_QC_Plot_Number_Cells <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1119,6 +1122,7 @@ Seq_QC_Plot_Number_Cells <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1143,7 +1147,7 @@ Seq_QC_Plot_Genes <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1165,7 +1169,9 @@ Seq_QC_Plot_Genes <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1229,6 +1235,7 @@ Seq_QC_Plot_Genes <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1253,7 +1260,7 @@ Seq_QC_Plot_UMIs <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1275,7 +1282,9 @@ Seq_QC_Plot_UMIs <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1339,6 +1348,7 @@ Seq_QC_Plot_UMIs <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1363,7 +1373,7 @@ Seq_QC_Plot_Total_Genes <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1385,7 +1395,9 @@ Seq_QC_Plot_Total_Genes <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1449,6 +1461,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1474,7 +1487,7 @@ Seq_QC_Plot_Saturation <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1496,7 +1509,9 @@ Seq_QC_Plot_Saturation <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1566,6 +1581,7 @@ Seq_QC_Plot_Saturation <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1591,7 +1607,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1613,7 +1629,9 @@ Seq_QC_Plot_Reads_in_Cells <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1683,6 +1701,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1708,7 +1727,7 @@ Seq_QC_Plot_Transcriptome <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1730,7 +1749,9 @@ Seq_QC_Plot_Transcriptome <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1799,6 +1820,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1824,7 +1846,7 @@ Seq_QC_Plot_Genome <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1846,7 +1868,9 @@ Seq_QC_Plot_Genome <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1915,6 +1939,7 @@ Seq_QC_Plot_Genome <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1940,7 +1965,7 @@ Seq_QC_Plot_Intergenic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1962,7 +1987,9 @@ Seq_QC_Plot_Intergenic <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -2031,6 +2058,7 @@ Seq_QC_Plot_Intergenic <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -2056,7 +2084,7 @@ Seq_QC_Plot_Intronic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -2078,7 +2106,9 @@ Seq_QC_Plot_Intronic <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -2147,6 +2177,7 @@ Seq_QC_Plot_Intronic <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -2172,7 +2203,7 @@ Seq_QC_Plot_Exonic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -2194,7 +2225,9 @@ Seq_QC_Plot_Exonic <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -2263,6 +2296,7 @@ Seq_QC_Plot_Exonic <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -2288,7 +2322,7 @@ Seq_QC_Plot_Antisense <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -2310,7 +2344,9 @@ Seq_QC_Plot_Antisense <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
