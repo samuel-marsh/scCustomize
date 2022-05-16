@@ -33,7 +33,7 @@ Cluster_Stats_All_Samples <- function(
   # Check on meta data column
   possible_meta_col <- colnames(seurat_object@meta.data)
   if (!group_by_var %in% possible_meta_col) {
-    stop(paste0('"', group_by_var, '"', " was not found in meta.data slot of Seurat Object."))
+    cli_abort(message = "'{group_by_var}' was not found in meta.data slot of Seurat Object.")
   }
 
   # Extract total percents
