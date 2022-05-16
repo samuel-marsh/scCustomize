@@ -876,6 +876,7 @@ QC_Plot_UMIvsFeature <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -900,7 +901,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -922,7 +923,9 @@ Seq_QC_Plot_Reads_per_Cell <- function(
     }
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -965,7 +968,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
