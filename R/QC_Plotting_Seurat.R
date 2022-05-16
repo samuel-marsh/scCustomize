@@ -355,6 +355,7 @@ QC_Plots_Feature <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom Seurat VlnPlot
 #' @importFrom patchwork wrap_plots
@@ -392,7 +393,7 @@ QC_Plots_Combined_Vln <- function(
 
   # Setup cutoff values
   if (length(x = feature_cutoffs) > 2 || length(x = UMI_cutoffs) > 2 || length(x = mito_cutoffs) > 2) {
-    stop("Length of each cutoff vector cannot be greater than 2.")
+    cli_abort(message = "Length of each cutoff vector cannot be greater than 2.")
   }
 
   if (length(x = feature_cutoffs) == 1) {
@@ -542,7 +543,7 @@ QC_Plot_UMIvsGene <- function(
   if (!is.null(x = meta_gradient_name)) {
     meta_names <- colnames(featurescatter_data)
     if (meta_gradient_name %in% meta_names == FALSE) {
-      stop("The meta data variable ", meta_gradient_name, " could not be found in object@metadata.")
+      cli_abort(message = "The meta data variable '{meta_gradient_name}' could not be found in object@metadata.")
     }
   }
 
