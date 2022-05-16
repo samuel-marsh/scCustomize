@@ -1150,7 +1150,7 @@ Pull_Cluster_Annotation <- function(
 #' @param cluster_annotation_path: path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
 #' @param cluster_annotation_file_name name to use for annotation file if created (optional).
 #'
-#'
+#' @import cli
 #' @importFrom data.table fread
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
@@ -1190,7 +1190,7 @@ Setup_scRNAseq_Project <- function(
   } else {
     # Check custom paths file exists
     if (!file.exists(custom_dir_file)) {
-      stop("`custom_dir_file` not found.  Please check file path and name provided.")
+      cli_abort(message = "`custom_dir_file` not found.  Please check file path and name provided.")
     }
 
     # Read file and create directory list
