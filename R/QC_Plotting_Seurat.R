@@ -1091,7 +1091,7 @@ Seq_QC_Plot_Number_Cells <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1204,7 +1204,7 @@ Seq_QC_Plot_Genes <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1317,7 +1317,7 @@ Seq_QC_Plot_UMIs <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1430,7 +1430,7 @@ Seq_QC_Plot_Total_Genes <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1550,7 +1550,7 @@ Seq_QC_Plot_Saturation <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1670,7 +1670,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1789,7 +1789,7 @@ Seq_QC_Plot_Transcriptome <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1908,7 +1908,7 @@ Seq_QC_Plot_Genome <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -2027,7 +2027,7 @@ Seq_QC_Plot_Intergenic <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -2146,7 +2146,7 @@ Seq_QC_Plot_Intronic <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -2265,7 +2265,7 @@ Seq_QC_Plot_Exonic <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -2384,7 +2384,7 @@ Seq_QC_Plot_Antisense <- function(
 
   if (significance) {
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
