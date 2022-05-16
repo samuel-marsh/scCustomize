@@ -131,7 +131,7 @@ Percent_Expressing <- function(
   if (!is.null(x = group_by)) {
     possible_groups <- colnames(seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
-      stop(paste0("Grouping variable: ", '"', group_by, '"', " was not found in Seurat Object"))
+      cli_abort("Grouping variable '{group_by}' was not found in Seurat Object.")
     }
   }
 
@@ -139,7 +139,7 @@ Percent_Expressing <- function(
   if (!is.null(x = split_by)) {
     possible_groups <- colnames(seurat_object@meta.data)
     if (!split_by %in% possible_groups) {
-      stop(paste0("Splitting variable: ", '"', split_by, '"', " was not found in Seurat Object"))
+      cli_abort("Splitting variable '{split_by}' was not found in Seurat Object.")
     }
   }
 
