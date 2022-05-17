@@ -1550,13 +1550,17 @@ DimPlot_scCustom <- function(
     plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
     if (figure_plot) {
 
+      # pull axis labels
+      x_lab_reduc <- plot$labels$x
+      y_lab_reduc <- plot$labels$y
+
       plot <- plot & NoAxes()
 
       axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
         geom_point() +
         xlim(c(0, 10)) + ylim(c(0, 10)) +
         theme_classic() +
-        ylab("UMAP 2") + xlab("UMAP 1") +
+        ylab(y_lab_reduc) + xlab(x_lab_reduc) +
         theme(plot.background = element_rect(fill = "transparent", colour = NA),
               panel.background = element_rect(fill = "transparent"),
               axis.text.x = element_blank(),
@@ -1584,13 +1588,17 @@ DimPlot_scCustom <- function(
       plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
       if (figure_plot) {
 
+        # pull axis labels
+        x_lab_reduc <- plot$labels$x
+        y_lab_reduc <- plot$labels$y
+
         plot <- plot & NoAxes()
 
         axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
           geom_point() +
           xlim(c(0, 10)) + ylim(c(0, 10)) +
           theme_classic() +
-          ylab("UMAP 2") + xlab("UMAP 1") +
+          ylab(y_lab_reduc) + xlab(x_lab_reduc) +
           theme(plot.background = element_rect(fill = "transparent", colour = NA),
                 panel.background = element_rect(fill = "transparent"),
                 axis.text.x = element_blank(),
