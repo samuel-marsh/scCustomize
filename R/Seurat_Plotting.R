@@ -1416,6 +1416,8 @@ Clustered_DotPlot <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting axes labels.  (Default is FALSE).
+#' Requires `split_seurat = TRUE`.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
@@ -1464,6 +1466,7 @@ DimPlot_scCustom <- function(
   group.by = NULL,
   split.by = NULL,
   split_seurat = FALSE,
+  figure_plot = FALSE,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -1501,6 +1504,16 @@ DimPlot_scCustom <- function(
 
   label <- label %||% (is.null(x = group.by))
 
+  # if split.by is null set split_seurat to TRUE
+  if (is.null(x = split.by)) {
+    split_seurat <- TRUE
+  }
+
+  # figure_plot check
+  if (figure_plot && !split_seurat) {
+    stop("'figure_plot' can only be TRUE is split_seurat is FALSE.")
+  }
+
   # Set default color palette based on number of levels being plotted
   if (is.null(x = group.by)) {
     group_by_length <- length(x = unique(x = seurat_object@active.ident))
@@ -1533,11 +1546,70 @@ DimPlot_scCustom <- function(
 
   # Plot
   if (is.null(x = split.by)) {
-    DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
+    plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
+    if (figure_plot) {
+
+      plot <- plot & NoAxes()
+
+      axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
+        geom_point() +
+        xlim(c(0, 10)) + ylim(c(0, 10)) +
+        theme_classic() +
+        ylab("UMAP 2") + xlab("UMAP 1") +
+        theme(plot.background = element_rect(fill = "transparent", colour = NA),
+              panel.background = element_rect(fill = "transparent"),
+              axis.text.x = element_blank(),
+              axis.text.y = element_blank(),
+              axis.ticks = element_blank(),
+              axis.line = element_line(
+                arrow = arrow(angle = 15, length = unit(.5, "cm"), type = "closed")
+              )
+        )
+
+      figure_layout <- c(
+        area(t = 1, l = 2, b = 11, r = 11),
+        area(t = 10, l = 1, b = 12, r = 2))
+
+      plot_figure <- plot + axis_plot +
+        plot_layout(design = figure_layout)
+      return(plot_figure)
+    } else {
+      return(plot)
+    }
+
   } else {
     if (split_seurat) {
       # Plot Seurat Splitting
-      DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      if (figure_plot) {
+
+        plot <- plot & NoAxes()
+
+        axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
+          geom_point() +
+          xlim(c(0, 10)) + ylim(c(0, 10)) +
+          theme_classic() +
+          ylab("UMAP 2") + xlab("UMAP 1") +
+          theme(plot.background = element_rect(fill = "transparent", colour = NA),
+                panel.background = element_rect(fill = "transparent"),
+                axis.text.x = element_blank(),
+                axis.text.y = element_blank(),
+                axis.ticks = element_blank(),
+                axis.line = element_line(
+                  arrow = arrow(angle = 15, length = unit(.5, "cm"), type = "closed")
+                )
+          )
+
+        figure_layout <- c(
+          area(t = 1, l = 2, b = 11, r = 11),
+          area(t = 10, l = 1, b = 12, r = 2))
+
+        plot_figure <- plot + axis_plot +
+          plot_layout(design = figure_layout)
+        return(plot_figure)
+      } else {
+        return(plot)
+      }
     } else {
       if (is.null(x = group.by)) {
         group_by_vars <- as.character(unique(x = seurat_object@active.ident))
