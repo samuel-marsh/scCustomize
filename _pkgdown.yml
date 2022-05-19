@@ -21,7 +21,7 @@ navbar:
     - text: "Vignettes"
       menu:
         - text: Plotting Vignettes
-        - text: "Plotting #1: Analysis Plots"
+        - text: "Plotting #1: General Analysis Plots"
           href: articles/Gene_Expression_Plotting.html
         - text: "Plotting #2: QC Plots"
           href: articles/QC_Plots.html
