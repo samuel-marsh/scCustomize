@@ -617,6 +617,18 @@ Can also return to the default Seurat method of splitting plots while maintainin
 DimPlot_scCustom(seurat_object = pbmc, split.by = "treatment", num_columns = 4, repel = TRUE, split_seurat = TRUE)
 ```
 
+
+#### Figure Plotting
+Some times when creating plots for figures it is desirable to remove the axes from the plot and simply add an axis legend.  To do this with `DimPlot_scCustom` simply set `figure_plot = TRUE`.
+```{r eval=FALSE}
+DimPlot_scCustom(seurat_object = pbmc, figure_plot = TRUE)
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=6}
+DimPlot_scCustom(seurat_object = pbmc, figure_plot = TRUE)
+```
+
+
 ### Highlight Cluster(s)
 Even with an optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.  
 scCustomize provides easy of use function `Cluster_Highlight_Plot()` to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.  
