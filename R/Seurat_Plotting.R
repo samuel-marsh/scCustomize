@@ -1422,8 +1422,8 @@ Clustered_DotPlot <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
-#' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting axes labels.  (Default is FALSE).
-#' Requires `split_seurat = TRUE`.
+#' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
+#' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
