@@ -409,7 +409,7 @@ Store_Misc_Info_Seurat <- function(
     # Add data
     seurat_object@misc[[data_name]] <- data_to_store
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}")
+                           "i" = "{names(x = seurat_object@misc)}")
     )
     return(seurat_object)
   }
