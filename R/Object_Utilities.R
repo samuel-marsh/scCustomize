@@ -342,6 +342,8 @@ Add_Cell_Bender_Diff <- function(
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept object_util
@@ -361,23 +363,25 @@ Store_Misc_Info_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # Check length of data
-  if (length(x = data_to_store) != 1 && class(x = data_to_store) != "list") {
-    stop("'data_to_store' must be either single vector/string or a single list of items.")
-  }
+  # Commenting our for now.  Not sure why you would need this check...
+  # # Check length of data
+  # if (length(x = data_to_store) != 1 && class(x = data_to_store) != "list") {
+  #   stop("'data_to_store' must be either single vector/string or a single list of items.")
+  # }
 
   # Check class of data
   if (class(x = data_to_store) == "list") {
     if (list_as_list) {
       # Check length of name
       if (length(x = data_name) != 1) {
-        stop("The lengths of 'data_to_store' (", length(x = data_to_store), ") and 'data_name' (", length(x = data_name), ") must be equal.")
+        cli_abort(message = "When storing as list the length 'data_name' must be 1.")
       }
 
       # Add data
       seurat_object@misc[[data_name]] <- data_to_store
-      message("Seurat Object now contains the following items in @misc slot: ",
-              "\n", paste(shQuote(names(x = seurat_object@misc)), collapse=", "))
+      cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
+                             "i" = "{paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}")
+      )
       return(seurat_object)
     }
 
@@ -385,26 +389,28 @@ Store_Misc_Info_Seurat <- function(
     data_list_length <- length(x = data_to_store)
 
     if (length(x = data_name) != data_list_length) {
-      stop("The lengths of 'data_to_store' (", data_list_length, ") and 'data_name' (", length(x = data_name), ") must be equal.")
+      cli_abort(message = "The lengths of 'data_to_store' ({data_list_length}) and 'data_name' ({length(x = data_name)}) must be equal.")
     }
 
     # Add data
     for (i in 1:data_list_length) {
       seurat_object@misc[[data_name[i]]] <- data_to_store[[i]]
     }
-    message("Seurat Object now contains the following items in @misc slot: ",
-            "\n", paste(shQuote(names(x = seurat_object@misc)), collapse=", "))
+    cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
+                           "i" = "{paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}")
+    )
     return(seurat_object)
   } else {
     # Check length of name
     if (length(x = data_name) != 1) {
-      stop("The lengths of 'data_to_store' (", length(x = data_to_store), ") and 'data_name' (", length(x = data_name), ") must be equal.")
+      cli_abort(message = "When storing a string/vector the length 'data_name' must be 1.")
     }
 
     # Add data
     seurat_object@misc[[data_name]] <- data_to_store
-    message("Seurat Object now contains the following items in @misc slot: ",
-            "\n", paste(shQuote(names(x = seurat_object@misc)), collapse=", "))
+    cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
+                           "i" = "{paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}")
+    )
     return(seurat_object)
   }
 }
