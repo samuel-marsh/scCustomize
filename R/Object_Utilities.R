@@ -370,7 +370,7 @@ Store_Misc_Info_Seurat <- function(
   misc_present <- names(x = seurat_object@misc)
   if (data_name %in% misc_present) {
     if (!overwrite) {
-      cli_abort(message = c("Items named {data_name} already present in @misc slot.",
+      cli_abort(message = c("Item(s) named: {data_name} already present in @misc slot.",
                             "i" = "*To run function and overwrite items set parameter `overwrite = TRUE` or change 'data_name'*")
       )
     } else {
