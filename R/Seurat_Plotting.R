@@ -790,10 +790,13 @@ VlnPlot_scCustom <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # Cehck split valid
+  # Check split valid
   if (!is.null(x = split.by)) {
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
+
+  # set size if NULL
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Add raster check for scCustomize
   num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
@@ -830,9 +833,6 @@ VlnPlot_scCustom <- function(
       colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
   }
-
-  # set size if NULL
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Plot
   plot <- VlnPlot(object = seurat_object, features = features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster)
