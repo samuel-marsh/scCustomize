@@ -47,8 +47,8 @@ default is the current active.ident of the object.}
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
 
-\item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting axes labels.  (Default is FALSE).
-Requires \code{split_seurat = TRUE}.}
+\item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting
+axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
 
 \item{shuffle}{logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 plots if points of interest are being buried. (Default is TRUE).}
