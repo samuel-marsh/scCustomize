@@ -339,6 +339,8 @@ Add_Cell_Bender_Diff <- function(
 #' of data items being stored.
 #' @param list_as_list logical.  If `data_to_store` is a list, this dictates whether to store in `@misc` slot
 #' as list (TRUE) or whether to store each entry in the list separately (FALSE).  Default is FALSE.
+#' @param overwrite Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
+#' that function will abort if item with `data_name` is present in misc slot.
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
 #'
@@ -358,10 +360,25 @@ Store_Misc_Info_Seurat <- function(
   seurat_object,
   data_to_store,
   data_name,
-  list_as_list = FALSE
+  list_as_list = FALSE,
+  overwrite = FALSE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Check if name already present
+  misc_present <- names(x = seurat_object@misc)
+  if (data_name %in% misc_present) {
+    if (!overwrite) {
+      cli_abort(message = c("Items named {data_name} already present in @misc slot.",
+                            "i" = "*To run function and overwrite items set parameter `overwrite = TRUE` or change 'data_name'*")
+      )
+    } else {
+      cli_inform(message = c("Items named {data_name} already present in @misc slot.",
+                             "i" = "Overwriting those items as overwrite = TRUE.")
+      )
+    }
+  }
 
   # Commenting our for now.  Not sure why you would need this check...
   # # Check length of data
@@ -428,6 +445,8 @@ Store_Misc_Info_Seurat <- function(
 #' of data items being stored.
 #' @param list_as_list logical.  If `data_to_store` is a list, this dictates whether to store in `@misc` slot
 #' as list (TRUE) or whether to store each entry in the list separately (FALSE).  Default is FALSE.
+#' @param overwrite Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
+#' that function will abort if item with `data_name` is present in misc slot.
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
 #'
@@ -445,12 +464,13 @@ Store_Palette_Seurat <- function(
   seurat_object,
   palette,
   palette_name,
-  list_as_list = FALSE
+  list_as_list = FALSE,
+  overwrite = FALSE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list)
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite)
   return(seurat_object)
 }
 
