@@ -798,13 +798,19 @@ VlnPlot_scCustom <- function(
   # Add raster check for scCustomize
   num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
 
-  if (length(x = num_cells) * length(x = features) > 100000 && is.null(x = raster) && pt.size != 0) {
-    raster <- TRUE
-    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
-                           "i" = "To plot in vector form set `raster=FALSE`")
-    )
-  } else {
-    raster <- raster %||% (length(x = colnames(x = seurat_object)) > 100000)
+  if (is.null(x = raster)) {
+    if (pt.size == 0) {
+      raster <- FALSE
+    } else {
+      if (length(x = num_cells) * length(x = features) > 100000 && pt.size != 0) {
+        raster <- TRUE
+        cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+                               "i" = "To plot in vector form set `raster=FALSE`")
+        )
+      } else {
+        raster <- FALSE
+      }
+    }
   }
 
   # Set default color palette based on number of levels being plotted
