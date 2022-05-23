@@ -408,8 +408,9 @@ Store_Misc_Info_Seurat <- function(
 
     # Add data
     seurat_object@misc[[data_name]] <- data_to_store
+    misc_names <- names(x = seurat_object@misc)
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{names(x = seurat_object@misc)}")
+                           "i" = "{glue_collapse_scCustom(input_string = misc, and = TRUE)}")
     )
     return(seurat_object)
   }
