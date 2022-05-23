@@ -24,6 +24,7 @@
 - Fixed bug in `Seq_QC_Plot_*` functions which resulted in groups being plotted out of order when specifying `plot_by` parameter.
 - Fixed bug in `Seq_QC_Plot_*` functions that created color palette error when color palettes were not being used.
 - Fixed bug in `DimPlot_scCustom` that caused mismatch of colors between plots when using `split.by` if one of the plots was missing 1 or more of the `group.by` levels ([#37](https://github.com/samuel-marsh/scCustomize/issues/37)).
+- Fixed bug in `VlnPlot_scCustom` that caused raster warning messages to be displayed twice ([#42](https://github.com/samuel-marsh/scCustomize/issues/42)).
 - Typo/styling fixes.
  
 
