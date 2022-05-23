@@ -52,6 +52,7 @@ Other contributors:
 \itemize{
   \item Ming Tang \email{tangming2005@gmail.com} [contributor]
   \item Velina Kozareva [contributor]
+  \item Tim Stuart \email{tstuart@nygenome.org} (\href{https://orcid.org/0000-0002-3044-0897}{ORCID}) [contributor]
 }
 
 }
