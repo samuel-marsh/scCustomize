@@ -91,9 +91,9 @@ scCustomize aims to achieve these goals through:
 
             Add_Mito_Ribo_Seurat(seurat_object = obj_name, species = "Human") 
 
-        -   Function already knows the defaults for Human, Mouse, and
-            Marmoset (submit a PR if you would like more species
-            added!).  
+        -   Function already knows the defaults for Human, Mouse, Rat,
+            Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit
+            a PR if you would like more species added!).  
 
     -   *Example of wrapping many lines to one:* Extracting the top 10
         (or 15, 20, 25, etc) genes per identity after running
