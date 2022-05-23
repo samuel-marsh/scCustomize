@@ -43,7 +43,7 @@ scCustomize aims to achieve these goals through:
     To create greater flexibility in visualization and more aesthetic
     visuals by:
     -   Altering default parameters for more intuitive plots (or at
-        least I believe plots). For instance:
+        least I believe more intuitive). For instance:
         `FeaturePlot(..., order = TRUE)`.  
     -   Wrapping commonly used ggplot2 post-plot themeing into function
         call. No more copy/paste of the same theme elements for every
