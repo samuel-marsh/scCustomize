@@ -1678,7 +1678,8 @@ DimPlot_scCustom <- function(
       })
 
       # Wrap Plots into single output
-      wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+      plots <- wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+      return(plots)
     }
   }
 }
