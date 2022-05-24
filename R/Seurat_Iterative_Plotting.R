@@ -67,10 +67,6 @@ Iterate_PC_Loading_Plots <- function(
   if (dims_plot > num_pc_present) {
     stop("The number of PCs specified to `dims_plot` (", dims_plot, ") is greater than number of PCs present in Seurat Object (", num_pc_present, ").")
   }
-  # Check file path is valid
-  if (!dir.exists(paths = file_path)) {
-    stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
-  }
 
   dims_list <- 1:dims_plot
   # Create list of all plots
