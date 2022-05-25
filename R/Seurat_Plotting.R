@@ -1040,9 +1040,9 @@ DotPlot_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check features and meta to determine which features present
-  features_list <<- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+  features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
 
-  meta_list <<- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  meta_list <- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
 
   all_not_found_features <- meta_list[[2]]
 
