@@ -917,6 +917,14 @@ Stacked_VlnPlot <- function(
 
   all_found_features <- c(features_list[[1]], meta_list[[1]])
 
+  # Stop if no features found
+  if (length(x = all_found_features) < 1) {
+    cli_abort(message = c("No features were found.",
+                          "*" = "The following are not present in object:",
+                          "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
   # Return message of features not found
   if (length(x = all_not_found_features) > 0) {
     op <- options(warn = 1)
