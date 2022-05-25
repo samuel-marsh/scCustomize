@@ -1031,11 +1031,37 @@ DotPlot_scCustom <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # Check Genes
-  features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = TRUE, print_msg = FALSE, case_check_msg = TRUE)[[1]]
+  # Check features and meta to determine which features present
+  features_list <<- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+
+  meta_list <<- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+
+  all_not_found_features <- meta_list[[2]]
+
+  all_found_features <- c(features_list[[1]], meta_list[[1]])
+
+  # Stop if no features found
+  if (length(x = all_found_features) < 1) {
+    cli_abort(message = c("No features were found.",
+                               "*" = "The following are not present in object:",
+                               "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
+  # Return message of features not found
+  if (length(x = all_not_found_features) > 0) {
+    op <- options(warn = 1)
+    on.exit(options(op))
+    cli_warn(message = c("The following features were omitted as they were not found:",
+                              "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
+  # Check feature case correct
+  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE, return_features = FALSE)
 
   # Plot
-  plot <- suppressMessages(DotPlot(object = seurat_object, features = features_list, ...) +
+  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, ...) +
                              scale_color_gradientn(colors = colors_use)
   )
   # Modify plot
