@@ -631,8 +631,7 @@ Liger_to_Seurat <- function(
 ) {
   if (is.null(x = reduction_label)) {
     cli_abort(message = c("`reduction_label` parameter was not set.",
-                          "*" = " LIGER objects do not store name of dimensionality
-         reduction technique used.",
+                          "*" = " LIGER objects do not store name of dimensionality reduction technique used.",
                           "i" = "In order to retain proper labels in Seurat object please set `reduction_label` to 'tSNE', 'UMAP', etc."))
   }
 
