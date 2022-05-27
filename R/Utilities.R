@@ -1242,6 +1242,8 @@ Setup_scRNAseq_Project <- function(
 #' @param folder_file_path folder to be copied to GCP bucket.
 #' @param gcp_bucket_path GCP bucket path to copy to files.
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept organization_util
@@ -1258,7 +1260,9 @@ Copy_To_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    stop("Target directory ", '"', folder_file_path, '"', " does not exist.  Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
+                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    )
   }
 
   # Copy files
@@ -1272,6 +1276,8 @@ Copy_To_GCP <- function(
 #'
 #' @param folder_file_path folder to be copied to GCP bucket.
 #' @param gcp_bucket_path GCP bucket path to copy to files.
+#'
+#' @import cli
 #'
 #' @export
 #'
@@ -1289,7 +1295,9 @@ Copy_From_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    stop("Target directory ", '"', folder_file_path, '"', " does not exist.  Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
+                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    )
   }
 
   # Copy files
