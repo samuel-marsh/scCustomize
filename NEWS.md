@@ -26,7 +26,7 @@
 - Fixed bug in `VlnPlot_scCustom` that caused raster warning messages to be displayed twice ([#42](https://github.com/samuel-marsh/scCustomize/issues/42)).
 - Fixed bug in `Iterate_PC_Loading_Plots` that caused error when specifying current directory with `file_path = NULL` or `file_path = ""`
 - Fixed bug in `DotPlot_scCustom` that prevented plotting of features in meta.data slot ([#44](https://github.com/samuel-marsh/scCustomize/issues/44)).
-- Fixed error messaging in `Stacked_VlnPlot` when no supplied features were present.
+- Fixed error messaging/reporting in `Stacked_VlnPlot` when no supplied features were present.
 - Typo/styling fixes.
  
 
