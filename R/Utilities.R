@@ -876,6 +876,7 @@ Add_Pct_Diff <- function(
 #' @param make_unique Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 #' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
+#' @import cli
 #' @importFrom dplyr group_by slice_max
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -906,19 +907,21 @@ Extract_Top_Markers <- function(
 ) {
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
-    stop("`rank_by`: ", '"', rank_by, '"',  " not found in column names of `marker_dataframe`.")
+    cli_abort(message = "`rank_by`: '{rank_by}' not found in column names of `marker_dataframe`.")
   }
 
   # Check grouping factor in marker data.frame
   if (!is.null(x = group_by)) {
     if (!group_by %in% colnames(x = marker_dataframe)) {
-      stop("`group_by`: ", '"', group_by, '"',  " not found in column names of `marker_dataframe`.")
+      cli_abort(message = "`group_by`: '{group_by}' not found in column names of `marker_dataframe`.")
     }
   }
 
   # Check gene column is present
   if (!gene_column %in% colnames(x = marker_dataframe) && !gene_rownames_to_column) {
-    stop("`gene_column`: ", '"', gene_column, '"',  " not found in column names of `marker_dataframe`.  Set `gene_rownames_to_column` to move genes from rownames to column.")
+    cli_abort(message = c("`gene_column`: '{gene_column}' not found in column names of `marker_dataframe.",
+                          "i" = "Set `gene_rownames_to_column` to move genes from rownames to column.")
+    )
   }
 
 
@@ -952,13 +955,14 @@ Extract_Top_Markers <- function(
   # should gene list be named
   # check naming
   if (named_vector && is.null(x = group_by)) {
-    warning("Cannot return named vector if `group_by` is NULL.\n",
-            "  Returning unnamed vector.")
+    cli_warn(message = c("Cannot return named vector if `group_by` is NULL.",
+                         "i" = "Returning unnamed vector.")
+    )
   }
 
   if (named_vector && !is.null(x = group_by)) {
     if (make_unique) {
-      stop("Cannot return unique list if 'named_vector = TRUE'.")
+      cli_abort(message = "Cannot return unique list if 'named_vector = TRUE'.")
     }
     names(gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
