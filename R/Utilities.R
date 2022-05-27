@@ -808,6 +808,7 @@ Change_Delim_All <- function(
 #' @param overwrite logical.  If the `marker_dataframe` already contains column named "pct_diff" whether to
 #'  overwrite or return error message.  Default is FALSE.
 #'
+#' @import cli
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #'
@@ -835,11 +836,15 @@ Add_Pct_Diff <- function(
 ) {
   # Check if percent difference exists already
   if ("pct_diff" %in% colnames(marker_dataframe)) {
+    df_name <- deparse(expr = substitute(expr = marker_dataframe))
     if (!overwrite) {
-      stop("'pct_diff' column already present in `marker_dataframe: ", '"', deparse(expr = substitute(expr = marker_dataframe)), '"', ". To overwrite previous results set `overwrite = TRUE`.")
+      cli_abort(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+                            "i" = "To overwrite previous results set `overwrite = TRUE`.")
+      )
     } else {
-      message("'pct_diff' column already present in `marker_dataframe: ", '"', deparse(expr = substitute(expr = marker_dataframe)), '"',
-      "  Overwriting column as overwrite = TRUE.")
+      cli_inform(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+                            "i" = "Overwriting column as overwrite = TRUE.")
+      )
     }
   }
   # Add percentage difference
