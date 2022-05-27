@@ -1220,7 +1220,7 @@ Setup_scRNAseq_Project <- function(
     if (!dir.exists(dir_path)){
       dir.create(dir_path)
     } else {
-      warning("the directory ", dir_path, " aleady exists.  No new directory created.")
+      cli_warn(message = "The directory {dir_path} aleady exists.  No new directory created.")
     }
   })
 
@@ -1231,7 +1231,7 @@ Setup_scRNAseq_Project <- function(
   }
 
   # Print completion message
-  print("scRNA-seq R project setup complete.")
+  cli_inform(message = "scRNA-seq R project setup complete.")
 }
 
 
