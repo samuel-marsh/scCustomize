@@ -985,6 +985,8 @@ Extract_Top_Markers <- function(
 #' @param file_name name to use for annotation file.  Function automatically adds file type ".csv" suffix.
 #' Default is "cluster_annotation".
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept marker_annotation_util
@@ -1007,16 +1009,20 @@ Create_Cluster_Annotation_File <- function(
   }
   # Check directory path is exists
   if (!dir.exists(paths = dir_path)) {
-    stop("Target directory ", '"', dir_path, '"', " does not exist.  Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory '{dir_path}' does not exist.",
+                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    )
   }
   # Confirm no files with same name in the same directory path.
   full_path <- file.path(dir_path, paste0(file_name, ".csv"))
   if (file.exists(full_path)) {
-    stop("File with name ", file_name, " already exists in directory directory.  Please supply a different file_name.")
+    cli_abort(message = c("File with name {file_name} already exists in directory directory.",
+                          "i" = "Please supply a different file_name.")
+    )
   }
   # Save `Cluster_Annotation_Tibble`
   write.csv(Cluster_Annotation_Tibble(), full_path, row.names = F)
-  message("Cluster annotation file created in: ", dir_path, ".")
+  cli_inform("Cluster annotation file created in: {dir_path}.")
 }
 
 
