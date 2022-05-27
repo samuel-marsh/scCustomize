@@ -1090,6 +1090,7 @@ Cluster_Annotation_Tibble <- function(
 #' @return a list of named vectors for every cell type in the `cell_type_col` column of the annotation table and
 #' vectors new cluster names (for use with `Rename_Clusters` function or manual identity renaming).
 #'
+#' @import cli
 #' @importFrom dplyr filter pull
 #' @importFrom magrittr "%>%"
 #'
@@ -1116,7 +1117,7 @@ Pull_Cluster_Annotation <- function(
 ) {
   # Check that annotation is in environment or a file that exists.
   if (!exists(x = deparse(expr = substitute(expr = annotation))) && !file.exists(annotation)) {
-    stop("No file or environmental variable: ", '"', annotation, '"', " exists.")
+    cli_abort(message = "No file or environmental variable: {annotation} exists.")
   }
   # Read or specify annotation table
   if (exists(x = deparse(expr = substitute(expr = annotation)))) {
