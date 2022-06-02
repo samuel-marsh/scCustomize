@@ -27,6 +27,7 @@
 - Fixed bug in `Iterate_PC_Loading_Plots` that caused error when specifying current directory with `file_path = NULL` or `file_path = ""`
 - Fixed bug in `DotPlot_scCustom` that prevented plotting of features in meta.data slot ([#44](https://github.com/samuel-marsh/scCustomize/issues/44)).
 - Fixed error messaging/reporting in `Stacked_VlnPlot` when no supplied features were present.
+- Fixed bug in `plotFactors_scCustom` that was ignoring provided file name.
 - Typo/styling fixes.
  
 
