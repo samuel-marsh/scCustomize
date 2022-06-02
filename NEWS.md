@@ -28,6 +28,7 @@
 - Fixed bug in `DotPlot_scCustom` that prevented plotting of features in meta.data slot ([#44](https://github.com/samuel-marsh/scCustomize/issues/44)).
 - Fixed error messaging/reporting in `Stacked_VlnPlot` when no supplied features were present.
 - Fixed bug in `plotFactors_scCustom` that was ignoring provided file name.
+- Fixed bug in `plotFactors_scCustom` that caused progress to only display progress up to 50% even when it was fully complete.
 - Typo/styling fixes.
  
 
