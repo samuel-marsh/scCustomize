@@ -116,7 +116,7 @@ knitr::include_graphics(c("../man/figures/assets/delim_default.png","../man/figu
 
 
 #### `Read_GEO_Delim` additional parameters
-See manual entry for more info [LINK](LINK)
+See [manual entry](https://samuel-marsh.github.io/scCustomize/reference/Read_GEO_Delim.html) for more info.
 
 
 ## Import Data from Mutliple Directories  
