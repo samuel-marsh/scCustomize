@@ -759,6 +759,7 @@ Meta_Highlight_Plot <- function(
 #' @import cli
 #' @import patchwork
 #' @importFrom Seurat VlnPlot
+#' @importFrom forcats fct_reorder
 #'
 #' @export
 #'
@@ -832,6 +833,25 @@ VlnPlot_scCustom <- function(
     if (is.null(x = colors_use)) {
       colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
     }
+  }
+
+  if (reorder_value) {
+    if (length(x = features) > 1) {
+      cli_abort("`reorder_value` currently only works when plotting single feature.")
+    }
+    if (is.null(x = group.by)) {
+      group_var <- "ident"
+    } else {
+      group_var <- group.by
+    }
+    plot_data <- FetchData(object = seurat_object, vars = c("nFeature_RNA", group_var))
+
+    # pre name the colors
+    names(colors_use) <- levels(plot_data$ident)
+
+    new_order <- levels(x = fct_reorder(plot_data[[group_var]], plot_data$nFeature_RNA, reorder_func, .desc = reorder_desc))
+
+    Idents(seurat_object) <- factor(x = Idents(seurat_object), levels = new_order)
   }
 
   # Plot
