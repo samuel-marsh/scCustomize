@@ -1146,7 +1146,9 @@ DotPlot_scCustom <- function(
 #' dendrogram and children dendrograms.  Default is TRUE.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
-#' @param seed Sets seed for reproducible plotting.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param seed Sets seed for reproducible plotting (ComplexHeatmap plot).
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
@@ -1195,6 +1197,7 @@ Clustered_DotPlot <- function(
   idents = NULL,
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
+  color_seed = 123,
   seed = 123
 ) {
   # Check for packages
