@@ -29,6 +29,7 @@
 - Fixed error messaging/reporting in `Stacked_VlnPlot` when no supplied features were present.
 - Fixed bug in `plotFactors_scCustom` that was ignoring provided file name.
 - Fixed bug in `plotFactors_scCustom` that caused progress to only display progress up to 50% even when it was fully complete.
+- Fixed bug in `Clustered_DotPlot` that resulted in error related to color palettes if number of clusters was greater than 36 ([#49](https://github.com/samuel-marsh/scCustomize/issues/49)).
 - Typo/styling fixes.
  
 
