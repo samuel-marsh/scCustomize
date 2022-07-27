@@ -847,13 +847,14 @@ VlnPlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
-#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE).
-#' @param colors_use specify color palette to used in \code{\link[Seurat]{VlnPlot}}.  By default if
-#' number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
-#' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param group.by Group (color) cells in different ways (for example, orig.ident).
 #' @param split.by A variable to split the violin plots by,
 #' @param idents Which classes to include in the plot (default is all).
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE).
+#' @param plot_legend logical.  Adds plot legend containing `idents` to the returned plot.
+#' @param colors_use specify color palette to used in \code{\link[Seurat]{VlnPlot}}.  By default if
+#' number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
+#' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
