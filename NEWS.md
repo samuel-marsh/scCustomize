@@ -6,6 +6,7 @@
 - Added `alpha_exp` and `alpha_na_exp` parameters to `FeaturePlot_scCustom` to allow for control of color scale transparency ([#21](https://github.com/samuel-marsh/scCustomize/issues/21)).
 - `*_Highlight_Plot` functions can now plot multiple variables simultaneously using either one color for all variables or one color per variable ([#34](https://github.com/samuel-marsh/scCustomize/issues/34)).
 - Added parameter `figure_plot` to `DimPlot_scCustom()`.  This removes axes and axes labels and adds axis legend on left bottom corner of plot ([#40](https://github.com/samuel-marsh/scCustomize/issues/40)).
+- Added parameter `plot_legend` to `Stacked_VlnPlot`.  This solves issue with returning only one shared legend across all features being plotted ([#48](https://github.com/samuel-marsh/scCustomize/issues/48)).
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
