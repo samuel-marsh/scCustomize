@@ -896,6 +896,7 @@ Stacked_VlnPlot <- function(
   split.by = NULL,
   idents = NULL,
   x_lab_rotate = FALSE,
+  plot_legend = FALSE,
   colors_use = NULL,
   color_seed = 123,
   ggplot_default_colors = FALSE,
@@ -991,7 +992,17 @@ Stacked_VlnPlot <- function(
                                        scale_y_continuous(breaks = c(y)) +
                                        expand_limits(y = y)))
 
-  wrap_plots(plotlist = plot_list, ncol = 1)
+  # Create final plot patchwork to return
+  plot_return <- wrap_plots(plotlist = plot_list, ncol = 1)
+
+  # add single legend
+  if (plot_legend) {
+    plot_return <- plot_return & theme(legend.position = "right")
+    plot_return <- plot_return + plot_layout(guides = 'collect')
+  }
+
+  # return plot
+  return(plot_return)
 }
 
 
