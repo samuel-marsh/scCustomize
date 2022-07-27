@@ -591,7 +591,7 @@ Plot_Cells_per_Sample <- function(
 
   # Check grouping variable is present
   if (is.null(x = group_by)) {
-    cli_abort(message = "Must provided meta data variable to `group_by` in order to plot data.")
+    cli_abort(message = "Must provide meta data variable to `group_by` in order to plot data.")
   }
 
   # Check group by is valid
