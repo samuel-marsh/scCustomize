@@ -238,12 +238,14 @@ Add_Cell_Complexity_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Add assay warning message
   if (assay != "RNA") {
     cli_warn(message = "Assay is set to value other than 'RNA'. This should only be done in rare instances.  See documentation for more info (`?Add_Cell_Complexity_Seurat`).",
              .frequency = "once",
              .frequency_id = "assay_warn")
   }
 
+  # Check columns for overwrite
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
     if (!overwrite) {
       stop("Columns with ", meta_col_name, " already present in meta.data slot.\n",
