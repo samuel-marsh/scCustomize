@@ -204,6 +204,60 @@ Add_Mito_Ribo_Seurat <- function(
 }
 
 
+#' Add Cell Complexity Value
+#'
+#' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
+#'
+#' @param seurat_object object name.
+#' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
+#' @param assay assay to use in calculation.  Default is "RNA".  *Note* This should only be changed if
+#' storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#'
+#' @return A Seurat Object
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
+#' }
+#'
+
+Add_Cell_Complexity_Seurat <- function(
+  seurat_object,
+  meta_col_name = "log10GenesPerUMI",
+  assay = "RNA",
+  overwrite = FALSE
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
+    if (!overwrite) {
+      stop("Columns with ", meta_col_name, " already present in meta.data slot.\n",
+           "  *To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+    }
+    message("Columns with ",meta_col_name, " already present in meta.data slot\n",
+            "  Overwriting those columns as overwrite = TRUE.")
+  }
+
+  # variable names
+  feature_name <- paste0("nFeature_", assay)
+  count_name <- paste0("nCount_", assay)
+
+  # Add score
+  seurat_object[[meta_col_name]] <- log10(seurat_object[[feature_name]]) / log10(seurat_object[[count_name]])
+
+  #return object
+  return(seurat_object)
+}
+
+
+
 #' Remove meta data columns containing Seurat Defaults
 #'
 #' Remove any columns from new meta_data data.frame in preparation for adding back to Seurat Object
