@@ -201,6 +201,55 @@ Add_Mito_Ribo_LIGER <- function(
 }
 
 
+#' Add Cell Complexity Value
+#'
+#' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
+#'
+#' @param liger_object object name.
+#' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#'
+#' @return A LIGER Object
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
+#' }
+#'
+
+Add_Cell_Complexity_LIGER <- function(
+  liger_object,
+  meta_col_name = "log10GenesPerUMI",
+  overwrite = FALSE
+) {
+  # Check Seurat
+  Is_LIGER(liger_object = liger_object)
+
+  # Check columns for overwrite
+  if (meta_col_name %in% colnames(x = liger_object@cell.data)) {
+    if (!overwrite) {
+      stop("Columns with ", meta_col_name, " already present in cell.data slot.\n",
+           "  *To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+    }
+    message("Columns with ",meta_col_name, " already present in cell.data slot\n",
+            "  Overwriting those columns as overwrite = TRUE.")
+  }
+
+  # Add score
+  liger_object@cell.data[ , meta_col_name] <- log10(liger_object@cell.data$nGene) / log10(liger_object@cell.data$nUMI)
+
+  #return object
+  return(liger_object)
+}
+
+
+
+
 #' Check if meta data are present
 #'
 #' Check if meta data columns are present in object and return vector of found columns  Return warning
