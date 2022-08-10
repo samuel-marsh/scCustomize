@@ -215,6 +215,8 @@ Add_Mito_Ribo_Seurat <- function(
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
+#' @import cli
+#'
 #' @return A Seurat Object
 #'
 #' @export
@@ -236,6 +238,11 @@ Add_Cell_Complexity_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  if (assay != "RNA") {
+    cli_warn(message = "Assay is set to value other than 'RNA'. This should only be done in rare instances.  See documentation for more info (`?Add_Cell_Complexity_Seurat`).",
+                  .frequency = "once")
+  }
+
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
     if (!overwrite) {
       stop("Columns with ", meta_col_name, " already present in meta.data slot.\n",
@@ -255,7 +262,6 @@ Add_Cell_Complexity_Seurat <- function(
   #return object
   return(seurat_object)
 }
-
 
 
 #' Remove meta data columns containing Seurat Defaults
