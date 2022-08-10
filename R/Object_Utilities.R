@@ -240,7 +240,8 @@ Add_Cell_Complexity_Seurat <- function(
 
   if (assay != "RNA") {
     cli_warn(message = "Assay is set to value other than 'RNA'. This should only be done in rare instances.  See documentation for more info (`?Add_Cell_Complexity_Seurat`).",
-                  .frequency = "once")
+             .frequency = "once",
+             .frequency_id = "assay_warn")
   }
 
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
