@@ -11,6 +11,7 @@ Stacked_VlnPlot(
   split.by = NULL,
   idents = NULL,
   x_lab_rotate = FALSE,
+  plot_legend = FALSE,
   colors_use = NULL,
   color_seed = 123,
   ggplot_default_colors = FALSE,
@@ -33,6 +34,8 @@ Stacked_VlnPlot(
 \item{idents}{Which classes to include in the plot (default is all).}
 
 \item{x_lab_rotate}{Rotate x-axis labels 45 degrees (Default is FALSE).}
+
+\item{plot_legend}{logical.  Adds plot legend containing \code{idents} to the returned plot.}
 
 \item{colors_use}{specify color palette to used in \code{\link[Seurat]{VlnPlot}}.  By default if
 number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
