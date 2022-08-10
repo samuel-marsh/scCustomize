@@ -176,13 +176,13 @@ Add_Mito_Ribo_LIGER <- function(
   if (length_mito_features > 0) {
     percent_mito <- unlist(lapply(liger_object@raw.data, function(x) {
       (Matrix::colSums(x[mito_features, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data$percent_mito <- percent_mito
+    liger_object@cell.data[ , mito_name] <- percent_mito
   }
 
   if (length_ribo_features > 0){
     percent_ribo <- unlist(lapply(liger_object@raw.data, function(x) {
       (Matrix::colSums(x[ribo_features, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data$percent_ribo <- percent_ribo
+    liger_object@cell.data[ , ribo_name] <- percent_ribo
   }
 
   # Create combined mito ribo column if both present
@@ -193,7 +193,7 @@ Add_Mito_Ribo_LIGER <- function(
     object_meta <- object_meta %>%
       mutate(percent_mito_ribo = percent_mito + percent_ribo)
 
-    liger_object@cell.data$percent_mito_ribo <- object_meta$percent_mito_ribo
+    liger_object@cell.data[ , mito_ribo_name] <- object_meta$percent_mito_ribo
   }
 
   # return object
