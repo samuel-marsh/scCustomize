@@ -96,6 +96,15 @@ hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_f
 hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
 ```
 
+## Add Cell Complexity/Novelty QC Metric
+scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
+```{r}
+# These defaults can be run just by providing accepted species name
+hca_bm <- Add_Cell_Complexity_Seurat(seurat_object = hca_bm)
+```
+*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER`) but QC plotting functions currently only support Seurat objects.*
+
+
 ## Plotting QC Metrics
 scCustomize has a number of quick QC plotting options for ease of use.  
 *NOTE: Most scCustomize plotting functions contain `...` parameter to allow user to supply any of the parameters for the original Seurat function that is being used under the hood.*
