@@ -827,11 +827,10 @@ VlnPlot_scCustom <- function(
   if (!is.null(x = colors_use) && ggplot_default_colors) {
     cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
   }
+
+  # set default plot colors
   if (is.null(x = colors_use)) {
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
 
   # Plot
