@@ -8,6 +8,7 @@
 - Added parameter `figure_plot` to `DimPlot_scCustom()`.  This removes axes and axes labels and adds axis legend on left bottom corner of plot ([#40](https://github.com/samuel-marsh/scCustomize/issues/40)).
 - Added parameter `plot_legend` to `Stacked_VlnPlot`.  This solves issue with returning only one shared legend across all features being plotted ([#48](https://github.com/samuel-marsh/scCustomize/issues/48)).
 - Added `Add_Cell_Complexity_Seurat` and `Add_Cell_Complexity_LIGER` functions to add cell QC complexity/novelty metric (log10(Genes) / log10(UMIs)).  
+- Added `Read_CellBender_Mat_v3` to enable easy reading of new CellBender output files.
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
