@@ -1025,6 +1025,87 @@ Read10X_h5_Multi_Directory <- function(
 }
 
 
+#' Load CellBender (v3+) h5 corrected matrices
+#'
+#' Extract sparse matrix with corrected counts from CellBender h5 output file.
+#'
+#' @param file_name Path to h5 file.
+#' @param use.names Label row names with feature names rather than ID numbers (default TRUE).
+#' @param unique.features Make feature names unique (default TRUE).
+#'
+#' @return sparse matrix
+#'
+#' @references Code used in function has been modified from `Seurat::Read10X_h5` function of
+#' Seurat package (https://github.com/satijalab/seurat) (Licence: GPL-3).
+#'
+#' @import cli
+#' @import Matrix
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' mat <- Read_CellBender_Mat_v3(file_name = "/SampleA_out_filtered.h5")
+#' }
+#'
+
+Read_CellBender_Mat_v3 <- function(
+  file_name,
+  use.names = TRUE,
+  unique.features = TRUE
+) {
+  # Check hdf5r installed
+  if (!requireNamespace('hdf5r', quietly = TRUE)) {
+    cli_abort(message = c("Please install hdf5r to read HDF5 files",
+                          "i" = "`install.packages('hdf5r')`")
+    )
+  }
+  # Check file
+  if (!file.exists(file_name)) {
+    stop("File not found")
+  }
+
+  if (use.names) {
+    feature_slot <- 'features/name'
+  } else {
+    feature_slot <- 'features/id'
+  }
+
+  # Read file
+  infile <- hdf5r::H5File$new(filename = file_name, mode = "r")
+
+  counts <- infile[["matrix/data"]]
+  indices <- infile[["matrix/indices"]]
+  indptr <- infile[["matrix/indptr"]]
+  shp <- infile[["matrix/shape"]]
+  features <- infile[[paste0("matrix/", feature_slot)]][]
+  barcodes <- infile[["matrix/barcodes"]]
+
+
+  sparse.mat <- sparseMatrix(
+    i = indices[] + 1,
+    p = indptr[],
+    x = as.numeric(x = counts[]),
+    dims = shp[],
+    repr = "T"
+  )
+
+  if (unique.features) {
+    features <- make.unique(names = features)
+  }
+
+  rownames(x = sparse.mat) <- features
+  colnames(x = sparse.mat) <- barcodes[]
+  sparse.mat <- as(object = sparse.mat, Class = "dgCMatrix")
+
+  infile$close_all()
+
+  return(sparse.mat)
+}
+
+
 #' Read Overall Statistics from 10X Cell Ranger Count
 #'
 #' Get data.frame with all metrics from the Cell Ranger count analysis (present in web_summary.html)
