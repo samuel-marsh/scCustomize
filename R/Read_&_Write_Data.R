@@ -1051,7 +1051,7 @@ Read10X_h5_Multi_Directory <- function(
 #' }
 #'
 
-Read_CellBender_Mat_v3 <- function(
+Read_CellBender_h5_Mat <- function(
   file_name,
   use.names = TRUE,
   unique.features = TRUE
