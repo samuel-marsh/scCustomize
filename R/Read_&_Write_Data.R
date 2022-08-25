@@ -146,41 +146,8 @@ Create_CellBender_Merged_Seurat <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### READ DATA ####################
+#################### READ 10X DATA ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-#' Pull Directory List
-#'
-#' Enables easy listing of all sub-directories for use as input library lists in Read10X multi functions.
-#'
-#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
-#'
-#' @return A vector of sub-directories within `base_path`.
-#'
-#' @export
-#'
-#' @concept read_&_write
-#'
-#' @examples
-#' \dontrun{
-#' data_dir <- 'path/to/data/directory'
-#' library_list <- Pull_Directory_List(base_path = data_dir)
-#' }
-#'
-
-Pull_Directory_List <- function(
-  base_path
-) {
-  # Confirm directory exists
-  if (dir.exists(paths = base_path) == FALSE) {
-    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
-  }
-
-  # Pull sub-directory list
-  dir_list <- list.dirs(path = base_path, full.names = F, recursive = F)
-  return(dir_list)
-}
 
 
 #' Load in NCBI GEO data from 10X
@@ -595,157 +562,6 @@ Read10X_h5_GEO <- function(
 }
 
 
-#' Load in NCBI GEO data formatted as single file per sample
-#'
-#' Can read delimited file types (i.e. csv, tsv, txt)
-#'
-#' @param data_dir Directory containing the files.
-#' @param file_suffix The file suffix of the individual files.  Must be the same across all files being
-#' imported.  This is used to detect files to import and their GEO IDs.
-#' @param move_genes_rownames logical.  Whether gene IDs are present in first column or in row names of
-#' delimited file.  If TRUE will move the first column to row names before creating final matrix.
-#' Default is TRUE.
-#' @param sample_list a vector of samples within directory to read in (can be either with or
-#' without `file_suffix` see `full_names`).  If NULL will read in all subdirectories.
-#' @param full_names logical (default FALSE).  Whether or not the `sample_list` vector includes the file suffix.
-#' If `FALSE` the function will add suffix based on `file_suffix` parameter.
-#' @param sample_names a set of sample names to use for each sample entry in returned list.
-#' If `NULL` will set names to the directory name of each sample.
-#' @param barcode_suffix_period Is the barcode suffix a period and should it be changed to "-".  Default (FALSE;
-#' barcodes will be left identical to their format in input files.).  If TRUE "." in barcode suffix will
-#' be changed to "-".
-#' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
-#' Only possible on Linux based systems.
-#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
-#'
-#' @return List of gene x cell matrices in list format named by sample name.
-#'
-#' @import Matrix
-#' @import parallel
-#' @import pbapply
-#' @importFrom data.table fread
-#' @importFrom magrittr "%>%"
-#' @importFrom tibble rownames_to_column column_to_rownames
-#' @importFrom utils read.delim
-#' @importFrom utils txtProgressBar setTxtProgressBar
-#'
-#' @export
-#'
-#' @concept read_&_write
-#'
-#' @examples
-#' \dontrun{
-#' data_dir <- 'path/to/data/directory'
-#' expression_matrices <- Read_GEO_Delim(data_dir = data_dir)
-#' }
-#'
-
-Read_GEO_Delim <- function(
-  data_dir,
-  file_suffix,
-  move_genes_rownames = TRUE,
-  sample_list = NULL,
-  full_names = FALSE,
-  sample_names = NULL,
-  barcode_suffix_period = FALSE,
-  parallel = FALSE,
-  num_cores = NULL
-) {
-  # Create list of all files in directory
-  possible_file_list <- list.files(path = data_dir, pattern = file_suffix, full.names = FALSE)
-
-  # Check files found
-  if (is.null(x = possible_file_list)) {
-    stop("No files found.  Check that `data_dir` and `file_suffix` are correct.")
-  }
-
-  # Set all files to be used if sample_list is NULL
-  if (is.null(sample_list)) {
-    file_list <- possible_file_list
-  }
-
-  # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
-    stop("If 'parallel = TRUE' then 'num_cores' must be specified.")
-  }
-
-  # Read in subset of files
-  if (!is.null(x = sample_list)) {
-    # Add suffix
-    if (full_names) {
-      file_list <- sample_list
-    } else {
-      file_list <- paste0(sample_list, file_suffix)
-    }
-    file_list <- file_list
-
-    if (any(!file_list %in% possible_file_list)) {
-      bad_file_list <- file_list[!file_list %in% possible_file_list]
-      file_list <- file_list[file_list %in% possible_file_list]
-      if (length(x = file_list) == 0) {
-        stop("No requested files found. Check that 'data_dir' and file_suffix' are correct \n
-             and `full_names` parameter is accurate.")
-      }
-      warning("The following files were not imported as they were not found in specified directory",
-              ": ", glue_collapse_scCustom(input_string = bad_file_list, and = TRUE))
-    }
-  }
-
-  # Get sample names
-  if (is.null(x = sample_names)) {
-    sample_names <- gsub(pattern = file_suffix, x = file_list, replacement = "")
-  } else {
-    sample_names <- sample_names
-  }
-
-  # Read in files
-  message("Reading gene expression files from directory")
-  pboptions(char = "=")
-  if (parallel) {
-    message("NOTE: Progress bars not currently supported for parallel processing.\n",
-            "NOTE: Parallel processing will not report informative error messages.  If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n")
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
-      dge_loc <- file.path(data_dir, file_list[i])
-      data <- fread(file = dge_loc, data.table = F)
-      if (move_genes_rownames) {
-        first_col_name <- colnames(data[1])
-        data <- data %>%
-          column_to_rownames(first_col_name)
-      }
-      if (barcode_suffix_period) {
-        colnames(data) <- gsub("\\.", "-", colnames(data))
-      }
-      data_sparse <- as(data, "Matrix")
-      return(data_sparse)
-    })
-  } else {
-    raw_data_list <- pblapply(1:length(x = file_list), function(i) {
-      dge_loc <- file.path(data_dir, file_list[i])
-      data <- fread(file = dge_loc, data.table = F)
-      if (move_genes_rownames) {
-        first_col_name <- colnames(data[1])
-        data <- data %>%
-          column_to_rownames(first_col_name)
-      }
-      # Check all columns numeric
-      col_data_numeric <- sapply(data, is.numeric)
-      if (!all(col_data_numeric)) {
-        stop("One or more columns in the file: ", '"', dge_loc, '"', " contains non-numeric data.  Please check original file and/or that parameter `move_genes_rownames` is set appropriately.")
-      }
-      if (barcode_suffix_period) {
-        colnames(data) <- gsub("\\.", "-", colnames(data))
-      }
-      data_sparse <- as(data, "Matrix")
-      return(data_sparse)
-    })
-  }
-
-  # Name the items in list
-  names(raw_data_list) <- sample_names
-  return(raw_data_list)
-}
-
-
 #' Load 10X count matrices from multiple directories
 #'
 #' Enables easy loading of sparse data matrices provided by 10X genomics that are present in multiple
@@ -1025,6 +841,167 @@ Read10X_h5_Multi_Directory <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### READ DELIM DATA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Load in NCBI GEO data formatted as single file per sample
+#'
+#' Can read delimited file types (i.e. csv, tsv, txt)
+#'
+#' @param data_dir Directory containing the files.
+#' @param file_suffix The file suffix of the individual files.  Must be the same across all files being
+#' imported.  This is used to detect files to import and their GEO IDs.
+#' @param move_genes_rownames logical.  Whether gene IDs are present in first column or in row names of
+#' delimited file.  If TRUE will move the first column to row names before creating final matrix.
+#' Default is TRUE.
+#' @param sample_list a vector of samples within directory to read in (can be either with or
+#' without `file_suffix` see `full_names`).  If NULL will read in all subdirectories.
+#' @param full_names logical (default FALSE).  Whether or not the `sample_list` vector includes the file suffix.
+#' If `FALSE` the function will add suffix based on `file_suffix` parameter.
+#' @param sample_names a set of sample names to use for each sample entry in returned list.
+#' If `NULL` will set names to the directory name of each sample.
+#' @param barcode_suffix_period Is the barcode suffix a period and should it be changed to "-".  Default (FALSE;
+#' barcodes will be left identical to their format in input files.).  If TRUE "." in barcode suffix will
+#' be changed to "-".
+#' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
+#' Only possible on Linux based systems.
+#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#'
+#' @return List of gene x cell matrices in list format named by sample name.
+#'
+#' @import Matrix
+#' @import parallel
+#' @import pbapply
+#' @importFrom data.table fread
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble rownames_to_column column_to_rownames
+#' @importFrom utils read.delim
+#' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' data_dir <- 'path/to/data/directory'
+#' expression_matrices <- Read_GEO_Delim(data_dir = data_dir)
+#' }
+#'
+
+Read_GEO_Delim <- function(
+  data_dir,
+  file_suffix,
+  move_genes_rownames = TRUE,
+  sample_list = NULL,
+  full_names = FALSE,
+  sample_names = NULL,
+  barcode_suffix_period = FALSE,
+  parallel = FALSE,
+  num_cores = NULL
+) {
+  # Create list of all files in directory
+  possible_file_list <- list.files(path = data_dir, pattern = file_suffix, full.names = FALSE)
+
+  # Check files found
+  if (is.null(x = possible_file_list)) {
+    stop("No files found.  Check that `data_dir` and `file_suffix` are correct.")
+  }
+
+  # Set all files to be used if sample_list is NULL
+  if (is.null(sample_list)) {
+    file_list <- possible_file_list
+  }
+
+  # Confirm num_cores specified
+  if (parallel && is.null(x = num_cores)) {
+    stop("If 'parallel = TRUE' then 'num_cores' must be specified.")
+  }
+
+  # Read in subset of files
+  if (!is.null(x = sample_list)) {
+    # Add suffix
+    if (full_names) {
+      file_list <- sample_list
+    } else {
+      file_list <- paste0(sample_list, file_suffix)
+    }
+    file_list <- file_list
+
+    if (any(!file_list %in% possible_file_list)) {
+      bad_file_list <- file_list[!file_list %in% possible_file_list]
+      file_list <- file_list[file_list %in% possible_file_list]
+      if (length(x = file_list) == 0) {
+        stop("No requested files found. Check that 'data_dir' and file_suffix' are correct \n
+             and `full_names` parameter is accurate.")
+      }
+      warning("The following files were not imported as they were not found in specified directory",
+              ": ", glue_collapse_scCustom(input_string = bad_file_list, and = TRUE))
+    }
+  }
+
+  # Get sample names
+  if (is.null(x = sample_names)) {
+    sample_names <- gsub(pattern = file_suffix, x = file_list, replacement = "")
+  } else {
+    sample_names <- sample_names
+  }
+
+  # Read in files
+  message("Reading gene expression files from directory")
+  pboptions(char = "=")
+  if (parallel) {
+    message("NOTE: Progress bars not currently supported for parallel processing.\n",
+            "NOTE: Parallel processing will not report informative error messages.  If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n")
+    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
+      dge_loc <- file.path(data_dir, file_list[i])
+      data <- fread(file = dge_loc, data.table = F)
+      if (move_genes_rownames) {
+        first_col_name <- colnames(data[1])
+        data <- data %>%
+          column_to_rownames(first_col_name)
+      }
+      if (barcode_suffix_period) {
+        colnames(data) <- gsub("\\.", "-", colnames(data))
+      }
+      data_sparse <- as(data, "Matrix")
+      return(data_sparse)
+    })
+  } else {
+    raw_data_list <- pblapply(1:length(x = file_list), function(i) {
+      dge_loc <- file.path(data_dir, file_list[i])
+      data <- fread(file = dge_loc, data.table = F)
+      if (move_genes_rownames) {
+        first_col_name <- colnames(data[1])
+        data <- data %>%
+          column_to_rownames(first_col_name)
+      }
+      # Check all columns numeric
+      col_data_numeric <- sapply(data, is.numeric)
+      if (!all(col_data_numeric)) {
+        stop("One or more columns in the file: ", '"', dge_loc, '"', " contains non-numeric data.  Please check original file and/or that parameter `move_genes_rownames` is set appropriately.")
+      }
+      if (barcode_suffix_period) {
+        colnames(data) <- gsub("\\.", "-", colnames(data))
+      }
+      data_sparse <- as(data, "Matrix")
+      return(data_sparse)
+    })
+  }
+
+  # Name the items in list
+  names(raw_data_list) <- sample_names
+  return(raw_data_list)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### READ CellBender DATA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Load CellBender (v3+) h5 corrected matrices
 #'
 #' Extract sparse matrix with corrected counts from CellBender h5 output file.
@@ -1064,7 +1041,7 @@ Read_CellBender_h5_Mat <- function(
   }
   # Check file
   if (!file.exists(file_name)) {
-    stop("File not found")
+    cli_abort(message = "File: {file_name} not found.")
   }
 
   if (use.names) {
@@ -1104,6 +1081,11 @@ Read_CellBender_h5_Mat <- function(
 
   return(sparse.mat)
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### READ OTHER DATA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Read Overall Statistics from 10X Cell Ranger Count
@@ -1198,4 +1180,42 @@ Read_Metrics_10X <- function(
   colnames(full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
 
   return(full_data)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### READ Utilities ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Pull Directory List
+#'
+#' Enables easy listing of all sub-directories for use as input library lists in Read10X multi functions.
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#'
+#' @return A vector of sub-directories within `base_path`.
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' data_dir <- 'path/to/data/directory'
+#' library_list <- Pull_Directory_List(base_path = data_dir)
+#' }
+#'
+
+Pull_Directory_List <- function(
+  base_path
+) {
+  # Confirm directory exists
+  if (dir.exists(paths = base_path) == FALSE) {
+    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+  }
+
+  # Pull sub-directory list
+  dir_list <- list.dirs(path = base_path, full.names = F, recursive = F)
+  return(dir_list)
 }
