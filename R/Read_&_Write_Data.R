@@ -1002,7 +1002,7 @@ Read_GEO_Delim <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-#' Load CellBender (v3+) h5 corrected matrices
+#' Load CellBender h5 matrices (corrected)
 #'
 #' Extract sparse matrix with corrected counts from CellBender h5 output file.
 #'
@@ -1024,7 +1024,7 @@ Read_GEO_Delim <- function(
 #'
 #' @examples
 #' \dontrun{
-#' mat <- Read_CellBender_Mat_v3(file_name = "/SampleA_out_filtered.h5")
+#' mat <- Read_CellBender_h5_Mat(file_name = "/SampleA_out_filtered.h5")
 #' }
 #'
 
@@ -1081,6 +1081,156 @@ Read_CellBender_h5_Mat <- function(
 
   return(sparse.mat)
 }
+
+
+#' Load CellBender h5 matrices (corrected) from multiple directories
+#'
+#' Extract sparse matrix with corrected counts from CellBender h5 output file across multiple sample
+#' subdirectories.
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count matrix files for each sample.
+#' @param filtered_h5
+#' @param custom_name
+#' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
+#' read in subdirectories in parent directory.
+#' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
+#' set names to the subdirectory name of each sample.
+#' @param replace_suffix logical (default FALSE).  Whether or not to replace the barcode suffixes of matrices
+#' using \code{\link{Replace_Suffix}}.
+#' @param new_suffix_list a vector of new suffixes to replace existing suffixes if `replace_suffix = TRUE`.
+#' See \code{\link{Replace_Suffix}} for more information.  To remove all suffixes set `new_suffix_list = ""`.
+#' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
+#' @param num_cores how many cores to use for parallel processing.
+#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
+#' list of matrices.  Will use the `sample_names` parameter to add prefix to cell barcodes.
+#' @param ... Extra parameters passed to \code{\link[scCustomize]{Read_CellBender_h5_Mat}}.
+#'
+#' @return list of sparse matrices
+#'
+#' @import cli
+#' @import parallel
+#' @import pbapply
+#' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' base_path <- 'path/to/data/directory'
+#' mat <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
+#' }
+#'
+
+Read_CellBender_h5_Multi_Directory <- function(
+  base_path,
+  secondary_path = NULL,
+  filtered_h5 = TRUE,
+  custom_name = NULL,
+  sample_list = NULL,
+  sample_names = NULL,
+  replace_suffix = FALSE,
+  new_suffix_list = NULL,
+  parallel = FALSE,
+  num_cores = NULL,
+  merge = FALSE,
+  ...
+) {
+  # Confirm num_cores specified
+  if (parallel && is.null(x = num_cores)) {
+    stop("If 'parallel = TRUE' then 'num_cores' must be specified.")
+  }
+  # Confirm directory exists
+  if (dir.exists(paths = base_path) == FALSE) {
+    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+  }
+  # Detect libraries if sample_list is NULL
+  if (is.null(x = sample_list)) {
+    sample_list <- Pull_Directory_List(base_path = base_path)
+  }
+
+  # Add file suffix
+  if (!is.null(x = custom_name)) {
+    file_suffix <- custom_name
+
+    # check suffix
+    file_ext <- grep(x = file_suffix, pattern = ".h5$")
+    if (length(x = file_ext) == 0) {
+      cli_abort(message = "'custom_name' must end with file extension '.h5'.")
+    }
+  } else if (filtered_h5) {
+    file_suffix <- "_out_filtered.h5"
+  } else {
+    file_suffix <- "_out.h5"
+  }
+
+  # Check if full directory path exists
+  for (i in 1:length(x = sample_list)) {
+    full_directory_path <- file.path(base_path, sample_list[i], secondary_path)
+    if (dir.exists(paths = full_directory_path) == FALSE) {
+      stop(paste0("Full Directory does not exist: ", full_directory_path, " was not found."))
+    }
+  }
+
+  # read data
+  message("Reading gene expression files.")
+  if (parallel) {
+    message("NOTE: Progress bars not currently supported for parallel processing.\n",
+            "NOTE: Parallel processing will not report informative error messages.  If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n")
+    # *** Here is where the swap of mclapply or pbmclapply is occuring ***
+    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
+      # Create file path
+      file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
+
+      # read and return data
+      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, ...)
+      return(raw_data)
+    })
+  } else {
+    raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
+      # Create file path
+      file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
+
+      # read and return data
+      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, ...)
+      return(raw_data)
+    })
+  }
+  # Name the list items
+  if (is.null(x = sample_names)) {
+    names(raw_data_list) <- sample_list
+  } else {
+    names(raw_data_list) <- sample_names
+  }
+
+  # Replace Suffixes
+  if (replace_suffix) {
+    if (is.null(x = new_suffix_list)) {
+      stop("No values provided to `new_suffix_list` but `replace_suffix = TRUE`.")
+    }
+
+    current_suffix_list <- sapply(1:length(raw_data_list), function(x) {
+      unique(str_extract(string = colnames(x = raw_data_list[[x]]), pattern = "-.$"))
+    })
+
+    if (length(x = new_suffix_list) != 1 & length(x = new_suffix_list) != length(x = current_suffix_list)) {
+      stop("`new_suffix_list` must be either single value or list of values equal to the number of samples.  Number of samples is: ", length(current_suffix_list), " and number of new_suffixes provided is:", length(x = new_suffix_list), ".")
+    }
+
+    raw_data_list <- Replace_Suffix(data = raw_data_list, current_suffix = current_suffix_list, new_suffix = new_suffix_list)
+  }
+
+  # Merge data
+  if (merge) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    return(raw_data_merged)
+  }
+  return(raw_data_list)
+}
+
+
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
