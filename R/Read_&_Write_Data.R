@@ -1090,8 +1090,8 @@ Read_CellBender_h5_Mat <- function(
 #'
 #' @param base_path path to the parent directory which contains all of the subdirectories of interest.
 #' @param secondary_path path from the parent directory to count matrix files for each sample.
-#' @param filtered_h5
-#' @param custom_name
+#' @param filtered_h5 BLANK
+#' @param custom_name BLANK
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
