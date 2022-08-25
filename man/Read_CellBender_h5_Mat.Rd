@@ -2,7 +2,7 @@
 % Please edit documentation in R/Read_&_Write_Data.R
 \name{Read_CellBender_h5_Mat}
 \alias{Read_CellBender_h5_Mat}
-\title{Load CellBender (v3+) h5 corrected matrices}
+\title{Load CellBender h5 matrices (corrected)}
 \usage{
 Read_CellBender_h5_Mat(file_name, use.names = TRUE, unique.features = TRUE)
 }
@@ -21,7 +21,7 @@ Extract sparse matrix with corrected counts from CellBender h5 output file.
 }
 \examples{
 \dontrun{
-mat <- Read_CellBender_Mat_v3(file_name = "/SampleA_out_filtered.h5")
+mat <- Read_CellBender_h5_Mat(file_name = "/SampleA_out_filtered.h5")
 }
 
 }
