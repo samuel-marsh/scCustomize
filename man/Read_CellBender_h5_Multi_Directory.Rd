@@ -59,7 +59,7 @@ subdirectories.
 \examples{
 \dontrun{
 base_path <- 'path/to/data/directory'
-mat <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
+mat_list <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
 }
 
 }

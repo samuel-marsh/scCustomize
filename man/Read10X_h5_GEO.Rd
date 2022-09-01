@@ -15,8 +15,7 @@ Read10X_h5_GEO(
 )
 }
 \arguments{
-\item{data_dir}{Directory containing the matrix.mtx, genes.tsv (or features.tsv), and barcodes.tsv
-files provided by 10X.}
+\item{data_dir}{Directory containing the .h5 files provided by 10X.}
 
 \item{sample_list}{A vector of file prefixes/names if specific samples are desired.  Default is \code{NULL} and
 will load all samples in given directory.}
