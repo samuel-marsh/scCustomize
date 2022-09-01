@@ -34,6 +34,7 @@
 - Fixed bug in `plotFactors_scCustom` that caused progress to only display progress up to 50% even when it was fully complete.
 - Fixed bug in `Clustered_DotPlot` that resulted in error related to color palettes if number of clusters was greater than 36 ([#49](https://github.com/samuel-marsh/scCustomize/issues/49)).
 - Fixed bug in `Add_Mito_Ribo_LIGER` that resulted custom column names (e.g. `mito_name = "pct.mt"`) being disregarded and also therefore issue with `overwrite` parameter. ([#51](https://github.com/samuel-marsh/scCustomize/issues/51)).
+- Fixed bug in `Store_Misc_Info_Seurat` that prevented function from working.
 - Typo/styling fixes.
  
 
