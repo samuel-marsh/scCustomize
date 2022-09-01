@@ -511,7 +511,7 @@ Read10X_h5_GEO <- function(
     stop("Directory provided does not exist")
   }
   if (length(x = data_dir) > 1) {
-    stop("Read10X_GEO only supports reading from single data directory at a time.")
+    stop("Read10X_h5_GEO only supports reading from single data directory at a time.")
   }
 
   # Confirm num_cores specified
