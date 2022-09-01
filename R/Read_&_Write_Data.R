@@ -541,12 +541,12 @@ Read10X_h5_GEO <- function(
             "NOTE: Parallel processing will not report informative error messages.  If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n")
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".h5"))
-      data <- Read10X_h5(filename = h5_loc)
+      data <- Read10X_h5(filename = h5_loc, ...)
     })
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".h5"))
-      data <- Read10X_h5(filename = h5_loc)
+      data <- Read10X_h5(filename = h5_loc, ...)
     })
   }
 
