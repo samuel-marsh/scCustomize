@@ -466,8 +466,7 @@ Read10X_GEO <- function(
 #' Enables easy loading of HDF5 data matrices provided by 10X genomics. That have file prefixes added to
 #' them by NCBI GEO or other repos or programs (i.e. Cell Bender)
 #'
-#' @param data_dir Directory containing the matrix.mtx, genes.tsv (or features.tsv), and barcodes.tsv
-#' files provided by 10X.
+#' @param data_dir Directory containing the .h5 files provided by 10X.
 #' @param sample_list A vector of file prefixes/names if specific samples are desired.  Default is `NULL` and
 #' will load all samples in given directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL`
@@ -1120,7 +1119,7 @@ Read_CellBender_h5_Mat <- function(
 #' @examples
 #' \dontrun{
 #' base_path <- 'path/to/data/directory'
-#' mat <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
+#' mat_list <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
 #' }
 #'
 
@@ -1236,11 +1235,11 @@ Read_CellBender_h5_Multi_Directory <- function(
 #' Extract sparse matrix with corrected counts from CellBender h5 output file across multiple samples
 #' within the same directory.
 #'
-
+#' @param data_dir Directory containing the .h5 files output by CellBender.
 #' @param filtered_h5 BLANK
 #' @param custom_name BLANK
-#' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
-#' read in subdirectories in parent directory.
+#' @param sample_list a vector of sample names if only specific samples are desired.  If `NULL` will
+#' read in all files within `data_dir` directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
 #' set names to the subdirectory name of each sample.
 #' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
@@ -1261,9 +1260,10 @@ Read_CellBender_h5_Multi_Directory <- function(
 #' @examples
 #' \dontrun{
 #' base_path <- 'path/to/data/directory'
-#' mat <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
+#' mat_list <- Read_CellBender_h5_Multi_File(data_dir = base_path)
 #' }
 #'
+
 Read_CellBender_h5_Multi_File <- function(
   data_dir = NULL,
   filtered_h5 = TRUE,
