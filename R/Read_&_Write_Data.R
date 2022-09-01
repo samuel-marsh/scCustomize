@@ -1231,6 +1231,113 @@ Read_CellBender_h5_Multi_Directory <- function(
 }
 
 
+#' Load CellBender h5 matrices (corrected) from multiple files
+#'
+#' Extract sparse matrix with corrected counts from CellBender h5 output file across multiple samples
+#' within the same directory.
+#'
+
+#' @param filtered_h5 BLANK
+#' @param custom_name BLANK
+#' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
+#' read in subdirectories in parent directory.
+#' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
+#' set names to the subdirectory name of each sample.
+#' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
+#' @param num_cores how many cores to use for parallel processing.
+#' @param ... Extra parameters passed to \code{\link[scCustomize]{Read_CellBender_h5_Mat}}.
+#'
+#' @return list of sparse matrices
+#'
+#' @import cli
+#' @import parallel
+#' @import pbapply
+#' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' base_path <- 'path/to/data/directory'
+#' mat <- Read_CellBender_h5_Multi_Directory(base_path = base_path)
+#' }
+#'
+Read_CellBender_h5_Multi_File <- function(
+  data_dir = NULL,
+  filtered_h5 = TRUE,
+  custom_name = NULL,
+  sample_list = NULL,
+  sample_names = NULL,
+  parallel = FALSE,
+  num_cores = NULL,
+  ...
+) {
+  if (!dir.exists(paths = data_dir)) {
+    stop("Directory provided does not exist")
+  }
+  if (length(x = data_dir) > 1) {
+    stop("Read_CellBender_h5_Multi_File only supports reading from single data directory at a time.")
+  }
+
+  # Confirm num_cores specified
+  if (parallel && is.null(x = num_cores)) {
+    stop("If 'parallel = TRUE' then 'num_cores' must be specified.")
+  }
+
+  # Add file suffix
+  if (!is.null(x = custom_name)) {
+    file_suffix <- custom_name
+
+    # check suffix
+    file_ext <- grep(x = file_suffix, pattern = ".h5$")
+    if (length(x = file_ext) == 0) {
+      cli_abort(message = "'custom_name' must end with file extension '.h5'.")
+    }
+  } else if (filtered_h5) {
+    file_suffix <- "_out_filtered.h5"
+  } else {
+    file_suffix <- "_out.h5"
+  }
+
+  file.list <- list.files(path = data_dir, pattern = file_suffix, full.names = FALSE)
+  # Remove "barcodes.tsv.gz" file suffix
+  if (is.null(x = sample_list)) {
+    sample_list <- gsub(pattern = file_suffix, x = file.list, replacement = "")
+  }
+
+  # Check sample_names length is ok
+  if (!is.null(x = sample_names) && length(x = sample_names) != length(x = sample_list)) {
+    stop("Length of `sample_names` must be equal to number of samples.")
+  }
+
+  message("Reading Cell Bender H5 files from directory")
+  pboptions(char = "=")
+  if (parallel) {
+    message("NOTE: Progress bars not currently supported for parallel processing.\n",
+            "NOTE: Parallel processing will not report informative error messages.  If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n")
+    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
+      h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
+      data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
+    })
+  } else {
+    raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
+      h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
+      data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
+    })
+  }
+
+  # Name the matrices
+  if (is.null(x = sample_names)) {
+    names(raw_data_list) <- sample_list
+  } else {
+    names(raw_data_list) <- sample_names
+  }
+
+  # return object
+  return(raw_data_list)
+}
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
