@@ -17,6 +17,7 @@
 #'
 #' @import cli
 #' @import ggplot2
+#' @import patchwork
 # #' @importFrom Nebulosa plot_density
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -79,7 +80,7 @@ Plot_Density_Custom <- function(
                                       ...)
 
   if (!is.null(x = custom_palette)) {
-    suppressMessages(plot_list <- plot_list + scale_color_gradientn(colors = custom_palette))
+    suppressMessages(plot_list <- plot_list & scale_color_gradientn(colors = custom_palette))
     return(plot_list)
   }
 
