@@ -36,6 +36,7 @@
 - Fixed bug in `Add_Mito_Ribo_LIGER` that resulted custom column names (e.g. `mito_name = "pct.mt"`) being disregarded and also therefore issue with `overwrite` parameter. ([#51](https://github.com/samuel-marsh/scCustomize/issues/51)).
 - Fixed bug in `Store_Misc_Info_Seurat` that prevented function from working.
 - Fixed bug in `Plot_Density_Custom` when supplying `custom_palette` and multiple features. ([#51](https://github.com/samuel-marsh/scCustomize/issues/53)).
+- Fixed bug in `Clustered_DotPlot` so that legend with identities is displayed by factor level of Seurat object idents ([#55](https://github.com/samuel-marsh/scCustomize/issues/53))..
 - Typo/styling fixes.
  
 
