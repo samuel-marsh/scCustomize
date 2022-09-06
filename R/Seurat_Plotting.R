@@ -1337,7 +1337,8 @@ Clustered_DotPlot <- function(
   column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
                                                  col =  identity_colors_list,
                                                  na_col = "grey",
-                                                 name = "Identity"
+                                                 name = "Identity",
+                                                 show_legend = FALSE
   )
 
   # Set middle of color scale if not specified
@@ -1393,6 +1394,7 @@ Clustered_DotPlot <- function(
 
   # Create legend for point size
   lgd_list = list(
+    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]])),
     ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
