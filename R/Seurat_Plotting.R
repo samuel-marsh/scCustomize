@@ -462,7 +462,7 @@ Split_FeatureScatter <- function(
     plot_cor <- TRUE
     cor_data <- FetchData(object = seurat_object, vars = c("nCount_RNA", "nFeature_RNA", split.by))
 
-    cor_values <- lapply(1:length(x = meta_sample_list_test), function(i) {
+    cor_values <- lapply(1:length(x = meta_sample_list), function(i) {
       cor_data_filtered <- cor_data %>%
         filter(.data[[split.by]] == meta_sample_list[[i]])
       round(x = cor(x = cor_data_filtered[, "nCount_RNA"], y = cor_data_filtered[, "nFeature_RNA"]), digits = 2)
