@@ -1,4 +1,4 @@
-# scCustomize 0.8.0 (2022-06-XX)  
+# scCustomize 0.8.0 (2022-09-XX)  
 ## Added
 - Added `mito_name` parameter to `QC_Plots_Mito` to allow for custom specification of meta data column name that contains mitochondrial information.
 - Added `QC_Plots_Combined_Vln()` function to return patchwork layout of 3 QC plots.
