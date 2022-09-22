@@ -1805,7 +1805,11 @@ DimPlot_All_Samples <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract meta_data_column list of values
-  meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
+  if (class(x = seurat_object@meta.data[, meta_data_column]) == "factor") {
+    meta_sample_list <- levels(x = seurat_object@meta.data[, meta_data_column])
+  } else {
+    meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
+  }
 
   # Extract cell names per meta data list of values
   cell_names <- lapply(meta_sample_list, function(x) {
