@@ -24,9 +24,10 @@ Read_CellBender_h5_Multi_Directory(
 
 \item{secondary_path}{path from the parent directory to count matrix files for each sample.}
 
-\item{filtered_h5}{BLANK}
+\item{filtered_h5}{logical (default TRUE).  Will set the shared file name suffix \code{custom_name} is NULL.}
 
-\item{custom_name}{BLANK}
+\item{custom_name}{if file name was customized in CellBender then this parameter should contain the portion
+of file name that is shared across all samples.  Must included the ".h5" extension as well.}
 
 \item{sample_list}{a vector of sample directory names if only specific samples are desired.  If \code{NULL} will
 read in subdirectories in parent directory.}
