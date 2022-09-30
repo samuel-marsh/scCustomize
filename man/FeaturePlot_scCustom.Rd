@@ -14,6 +14,7 @@ FeaturePlot_scCustom(
   reduction = NULL,
   na_cutoff = 1e-09,
   raster = NULL,
+  raster.dpi = c(512, 512),
   split.by = NULL,
   num_columns = NULL,
   slot = "data",
@@ -44,6 +45,9 @@ color scale and zero/negative values as NA.  To plot all values using color pale
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
 
 \item{split.by}{Variable in \verb{@meta.data} to split the plot by.}
 
