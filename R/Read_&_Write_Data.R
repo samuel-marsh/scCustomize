@@ -1166,6 +1166,11 @@ Read_CellBender_h5_Multi_Directory <- function(
     file_suffix <- "_out.h5"
   }
 
+  # Edit secondary path if NULL
+  if (is.null(x = secondary_path)) {
+    secondary_path <- ""
+  }
+
   # Check if full directory path exists
   for (i in 1:length(x = sample_list)) {
     full_directory_path <- file.path(base_path, sample_list[i], secondary_path)
