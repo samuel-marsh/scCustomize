@@ -14,6 +14,7 @@ VlnPlot_scCustom(
   idents = NULL,
   num_columns = NULL,
   raster = NULL,
+  add.noise = TRUE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   ...
@@ -41,6 +42,8 @@ default is the current active.ident of the object.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 total points plotted (# Cells x # of features).}
+
+\item{add.noise}{logical, determine if adding a small noise for plotting (Default is TRUE).}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}

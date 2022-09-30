@@ -19,6 +19,7 @@ Stacked_VlnPlot(
   spacing_unit = "cm",
   pt.size = NULL,
   raster = NULL,
+  add.noise = TRUE,
   ...
 )
 }
@@ -57,6 +58,8 @@ rendering so many points in vector form.  Alteratively, see \code{raster} parame
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 total points plotted (# Cells x # of features).}
+
+\item{add.noise}{logical, determine if adding a small noise for plotting (Default is TRUE).}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }
