@@ -996,7 +996,7 @@ Stacked_VlnPlot <- function(
   plot_margin <- margin(t = plot_spacing, r = 0, b = plot_spacing, l = 0, unit = spacing_unit)
 
   # Create plots
-  plot_list <- map(all_found_features, function(x) Modify_VlnPlot(seurat_object = seurat_object, features = x, cols = colors_use, group.by = group.by, split.by = split.by, idents = idents, plot_margin = plot_margin, pt.size = pt.size, raster = raster, ...))
+  plot_list <- map(all_found_features, function(x) Modify_VlnPlot(seurat_object = seurat_object, features = x, cols = colors_use, group.by = group.by, split.by = split.by, idents = idents, plot_margin = plot_margin, pt.size = pt.size, raster = raster, add.noise = add.noise, ...))
 
   # Add back x-axis title to bottom plot. patchwork is going to support this?
   # Add ability to rotate the X axis labels to the function call
