@@ -40,7 +40,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/samuel-marsh/scCustomize}
   \item \url{https://samuel-marsh.github.io/scCustomize}
-  \item \url{https://doi.org/10.5281/zenodo.5706431}
+  \item \doi{10.5281/zenodo.5706431}
   \item Report bugs at \url{https://github.com/samuel-marsh/scCustomize/issues}
 }
 
