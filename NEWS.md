@@ -11,6 +11,7 @@
 - Added 3 new CellBender functions `Read_CellBender_h5_Mat`, `Read_CellBender_h5_Multi_Directory`, `Read_CellBender_h5_Multi_File` to enable easy reading of new CellBender output files.
 - Added `raster.dpi` parameter from Seurat to all `DimPlot` `FeaturePlot` or `FeatureScatter` based functions.  
 - Added `add.noise` parameter from Seurat to `VlnPlot_scCustom` `Stacked_VlnPlot` functions.  
+- Added `group.by` as default listed parameter to added to all`VlnPlot` based `QC_Plot_*`.  
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
