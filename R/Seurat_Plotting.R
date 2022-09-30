@@ -349,6 +349,8 @@ FeaturePlot_DualAssay <- function(
 #' @param num_columns number of columns in final layout plot.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -385,6 +387,7 @@ Split_FeatureScatter <- function(
   title_size = 15,
   num_columns = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123,
   ...
@@ -495,7 +498,7 @@ Split_FeatureScatter <- function(
 
   # Plots
   plots <- lapply(1:length(x = meta_sample_list), function(j) {
-    plot <- FeatureScatter(seurat_object, feature1 = feature1, feature2 = feature2, cells = cell_names[[j]], group.by = group.by, cols = colors_use, pt.size = pt.size, raster = raster, ...) +
+    plot <- FeatureScatter(seurat_object, feature1 = feature1, feature2 = feature2, cells = cell_names[[j]], group.by = group.by, cols = colors_use, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, ...) +
       theme(plot.title = element_text(hjust = 0.5, size = title_size),
             legend.position = "right") +
       xlim(min_feature1, max_feature1) +
