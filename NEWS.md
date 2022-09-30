@@ -12,6 +12,7 @@
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
+- **DEPENDENCY CHANGE** The required version of Seurat has been changed due to errors caused by updates to Matrix package and handling of sparse matrices.  To avoid errors version requirement for Seurat has been updated to 4.2.0. 
 - **BREAKING CHANGE** Function name for iterative `VlnPlot` has been changed to `Iterate_VlnPlot_scCustom` to reflect that it now uses `VlnPlot_scCustom` to generate plots. 
 - `QC_Plot_*` functions now use `VlnPlot_scCustom` internally to unify color scheme and rasterization parameters.
 - `*_Highlight_Plot` functions no longer display "Unselected" in plot legend and uses `DimPlot_scCustom` to generate plots ([#34](https://github.com/samuel-marsh/scCustomize/issues/34)).
@@ -39,6 +40,7 @@
 - Fixed bug in `Clustered_DotPlot` so that legend with identities is displayed by factor level of Seurat object idents ([#55](https://github.com/samuel-marsh/scCustomize/issues/55)).
 - Fixed bug in `Split_FeatureScatter` to remove test code that prevented function from working properly ([#57](https://github.com/samuel-marsh/scCustomize/issues/57)).
 - Fixed bug in `DimPlot_All_Samples` that ignored factor order when plotting groups.
+- Fixed error due to deprecation of functions in Matrix package v1.5-0+ ([#61](https://github.com/samuel-marsh/scCustomize/issues/61)).
 - Typo/styling fixes.
  
 
