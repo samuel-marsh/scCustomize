@@ -1074,7 +1074,7 @@ Read_CellBender_h5_Mat <- function(
 
   rownames(x = sparse.mat) <- features
   colnames(x = sparse.mat) <- barcodes[]
-  sparse.mat <- as(object = sparse.mat, Class = "dgCMatrix")
+  sparse.mat <- as.sparse(x = sparse.mat)
 
   infile$close_all()
 
