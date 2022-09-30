@@ -14,6 +14,7 @@ DimPlot_All_Samples(
   reduction = NULL,
   dims = c(1, 2),
   raster = NULL,
+  raster.dpi = c(512, 512),
   ...
 )
 }
@@ -36,6 +37,9 @@ DimPlot_All_Samples(
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
 }

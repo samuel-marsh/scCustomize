@@ -12,6 +12,7 @@ Meta_Highlight_Plot(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
@@ -33,6 +34,9 @@ Meta_Highlight_Plot(
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
 
 \item{label}{Whether to label the highlighted meta data variable(s).  Default is FALSE.}
 
