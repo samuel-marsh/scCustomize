@@ -8,6 +8,8 @@
 #'
 #' @param seurat_object Seurat object name.
 #' @param plot_title Plot Title.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
@@ -42,6 +44,7 @@
 QC_Plots_Genes <- function(
   seurat_object,
   plot_title = "Genes Per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   low_cutoff = NULL,
@@ -61,7 +64,7 @@ QC_Plots_Genes <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -88,6 +91,8 @@ QC_Plots_Genes <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param plot_title Plot Title.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
@@ -122,6 +127,7 @@ QC_Plots_Genes <- function(
 QC_Plots_UMIs <- function(
   seurat_object,
   plot_title = "UMIs per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   low_cutoff = NULL,
@@ -141,7 +147,7 @@ QC_Plots_UMIs <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -170,6 +176,8 @@ QC_Plots_UMIs <- function(
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
 #' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
 #' @param plot_title Plot Title.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
@@ -205,6 +213,7 @@ QC_Plots_Mito <- function(
   seurat_object,
   mito_name = "percent_mito",
   plot_title = "Mito Gene % per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   low_cutoff = NULL,
@@ -224,7 +233,7 @@ QC_Plots_Mito <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -251,6 +260,8 @@ QC_Plots_Mito <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param feature Feature from Meta Data to plot.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param plot_title Plot Title.
@@ -287,6 +298,7 @@ QC_Plots_Mito <- function(
 QC_Plots_Feature <- function(
   seurat_object,
   feature,
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   plot_title = NULL,
@@ -310,7 +322,7 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
-  plot <- VlnPlot(object = seurat_object, features = feature, pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot(object = seurat_object, features = feature, group.by = group.by, pt.size = pt.size, cols = colors_use, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -336,6 +348,8 @@ QC_Plots_Feature <- function(
 #' Custom VlnPlot for initial QC checks including lines for thresholding
 #'
 #' @param seurat_object Seurat object name.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param feature_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
 #' @param UMI_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
 #' @param mito_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
@@ -372,6 +386,7 @@ QC_Plots_Feature <- function(
 
 QC_Plots_Combined_Vln <- function(
   seurat_object,
+  group.by = NULL,
   feature_cutoffs = NULL,
   UMI_cutoffs = NULL,
   mito_cutoffs = NULL,
@@ -409,11 +424,11 @@ QC_Plots_Combined_Vln <- function(
   }
 
   # Create Individual Plots
-  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
 
-  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
 
-  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
 
   # wrap plots
   plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
