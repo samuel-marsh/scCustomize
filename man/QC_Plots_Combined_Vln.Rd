@@ -6,6 +6,7 @@
 \usage{
 QC_Plots_Combined_Vln(
   seurat_object,
+  group.by = NULL,
   feature_cutoffs = NULL,
   UMI_cutoffs = NULL,
   mito_cutoffs = NULL,
@@ -22,6 +23,9 @@ QC_Plots_Combined_Vln(
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{feature_cutoffs}{Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.}
 

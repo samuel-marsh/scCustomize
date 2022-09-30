@@ -7,6 +7,7 @@
 QC_Plots_Feature(
   seurat_object,
   feature,
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   plot_title = NULL,
@@ -26,6 +27,9 @@ QC_Plots_Feature(
 \item{seurat_object}{Seurat object name.}
 
 \item{feature}{Feature from Meta Data to plot.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{x_axis_label}{Label for x axis.}
 

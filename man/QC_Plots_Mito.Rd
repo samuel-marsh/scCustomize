@@ -8,6 +8,7 @@ QC_Plots_Mito(
   seurat_object,
   mito_name = "percent_mito",
   plot_title = "Mito Gene \% per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   low_cutoff = NULL,
@@ -29,6 +30,9 @@ QC_Plots_Mito(
 "percent_mito" which is default value created when using \code{Add_Mito_Ribo_Seurat()}.}
 
 \item{plot_title}{Plot Title.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{x_axis_label}{Label for x axis.}
 

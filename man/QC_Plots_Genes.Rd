@@ -7,6 +7,7 @@
 QC_Plots_Genes(
   seurat_object,
   plot_title = "Genes Per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   low_cutoff = NULL,
@@ -25,6 +26,9 @@ QC_Plots_Genes(
 \item{seurat_object}{Seurat object name.}
 
 \item{plot_title}{Plot Title.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{x_axis_label}{Label for x axis.}
 
