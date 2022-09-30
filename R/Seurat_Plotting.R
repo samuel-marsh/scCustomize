@@ -1503,6 +1503,8 @@ Clustered_DotPlot <- function(
 #' @param repel Repel labels.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -1550,6 +1552,7 @@ DimPlot_scCustom <- function(
   dims = c(1, 2),
   repel = FALSE,
   raster = NULL,
+  raster.dpi = c(512, 512),
   num_columns = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
@@ -1620,7 +1623,7 @@ DimPlot_scCustom <- function(
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
+    plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
     if (figure_plot) {
 
       # pull axis labels
@@ -1658,7 +1661,7 @@ DimPlot_scCustom <- function(
   } else {
     if (split_seurat) {
       # Plot Seurat Splitting
-      plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
       if (figure_plot) {
 
         # pull axis labels
@@ -1727,7 +1730,7 @@ DimPlot_scCustom <- function(
 
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
-        plot <- DimPlot(object = seurat_object, cells = cell_names[[x]], group.by = group.by, cols = colors_use, reduction = reduction, pt.size = pt.size, raster = raster, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, dims = dims, label.box = label.box, ...) +
+        plot <- DimPlot(object = seurat_object, cells = cell_names[[x]], group.by = group.by, cols = colors_use, reduction = reduction, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, dims = dims, label.box = label.box, ...) +
           ggtitle(paste(split_by_list[[x]])) +
           theme(plot.title = element_text(hjust = 0.5),
                 legend.position = "right") +
