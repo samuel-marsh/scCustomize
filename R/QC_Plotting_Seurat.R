@@ -612,7 +612,7 @@ QC_Plot_UMIvsGene <- function(
   }
   # Plot by identity
   if (is.null(x = meta_gradient_name) && combination == FALSE) {
-    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
       xlab(x_axis_label) +
@@ -623,7 +623,7 @@ QC_Plot_UMIvsGene <- function(
 
   if (combination) {
     # Plot by identity
-    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
       xlab(x_axis_label) +
@@ -754,7 +754,7 @@ QC_Plot_GenevsFeature <- function(
   }
 
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nFeature_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nFeature_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red") +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue") +
     xlab(x_axis_label) +
@@ -857,7 +857,7 @@ QC_Plot_UMIvsFeature <- function(
   }
 
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nCount_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nCount_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red") +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue") +
     xlab(x_axis_label) +
