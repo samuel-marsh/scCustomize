@@ -629,6 +629,8 @@ Cluster_Highlight_Plot <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param label Whether to label the highlighted meta data variable(s).  Default is FALSE.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
@@ -659,6 +661,7 @@ Meta_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
@@ -732,6 +735,7 @@ Meta_Highlight_Plot <- function(
           pt.size = pt.size,
           order = TRUE,
           raster = raster,
+          raster.dpi = raster.dpi,
           split.by = split.by,
           split_seurat = split_seurat,
           label = label,
