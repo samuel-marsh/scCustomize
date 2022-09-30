@@ -1769,6 +1769,8 @@ DimPlot_scCustom <- function(
 #' @param dims Which dimensions to plot.  Defaults to c(1,2) if not specified.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
@@ -1799,6 +1801,7 @@ DimPlot_All_Samples <- function(
   reduction = NULL,
   dims = c(1, 2),
   raster = NULL,
+  raster.dpi = c(512, 512),
   ...
 ) {
   # Check Seurat
@@ -1858,7 +1861,7 @@ DimPlot_All_Samples <- function(
 
   # Plots
   plots <- lapply(1:length(x = meta_sample_list), function(x) {
-    plot <- DimPlot(seurat_object, cells = cell_names[[x]], group.by = meta_data_column, cols = colors_use[[x]], reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+    plot <- DimPlot(seurat_object, cells = cell_names[[x]], group.by = meta_data_column, cols = colors_use[[x]], reduction = reduction, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, ...) +
       ggtitle(paste(meta_sample_list[[x]])) +
       theme(plot.title = element_text(hjust = 0.5, size = title_size),
             legend.position = "none") +
