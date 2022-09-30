@@ -764,6 +764,7 @@ Meta_Highlight_Plot <- function(
 #' @param idents Which classes to include in the plot (default is all).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -800,6 +801,7 @@ VlnPlot_scCustom <- function(
   idents = NULL,
   num_columns = NULL,
   raster = NULL,
+  add.noise = TRUE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   ...
@@ -851,7 +853,7 @@ VlnPlot_scCustom <- function(
   }
 
   # Plot
-  plot <- VlnPlot(object = seurat_object, features = features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster)
+  plot <- VlnPlot(object = seurat_object, features = features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster, add.noise = add.noise)
 
   return(plot)
 }
@@ -882,6 +884,7 @@ VlnPlot_scCustom <- function(
 #' rendering so many points in vector form.  Alteratively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -921,6 +924,7 @@ Stacked_VlnPlot <- function(
   spacing_unit = "cm",
   pt.size = NULL,
   raster = NULL,
+  add.noise = TRUE,
   ...
 ) {
   # Check Seurat
