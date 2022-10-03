@@ -9,7 +9,7 @@ QC_Plots_UMIs(
   plot_title = "UMIs per Cell/Nucleus",
   group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "UMIs",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,

@@ -9,7 +9,7 @@ QC_Plots_Genes(
   plot_title = "Genes Per Cell/Nucleus",
   group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "Features",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,

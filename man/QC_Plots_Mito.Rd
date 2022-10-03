@@ -10,7 +10,7 @@ QC_Plots_Mito(
   plot_title = "Mito Gene \% per Cell/Nucleus",
   group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "\% Mitochondrial Gene Counts",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
