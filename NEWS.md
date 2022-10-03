@@ -43,7 +43,7 @@
 - Fixed bug in `Plot_Density_Custom` when supplying `custom_palette` and multiple features. ([#51](https://github.com/samuel-marsh/scCustomize/issues/53)).
 - Fixed bug in `Clustered_DotPlot` so that legend with identities is displayed by factor level of Seurat object idents ([#55](https://github.com/samuel-marsh/scCustomize/issues/55)).
 - Fixed bug in `Split_FeatureScatter` to remove test code that prevented function from working properly ([#57](https://github.com/samuel-marsh/scCustomize/issues/57)).
-- Fixed bug in `DimPlot_All_Samples` that ignored factor order when plotting groups.
+- Fixed bug in `DimPlot_All_Samples`, `Split_FeatureScatter`, and `DimPlot_scCustom` that ignored factor order when plotting groups.
 - Fixed error due to deprecation of functions in Matrix package v1.5-0+ ([#61](https://github.com/samuel-marsh/scCustomize/issues/61)).
 - Typo/styling fixes.
  
