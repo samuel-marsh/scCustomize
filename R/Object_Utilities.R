@@ -355,6 +355,7 @@ Meta_Remove_Seurat <- function(
 #' @param raw_assay_name name of the assay containing the raw data.
 #' @param cell_bender_assay_name name of the assay containing the Cell Bender'ed data.
 #'
+#' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #'
 #' @return Seurat object with 2 new columns in the meta.data slot.
