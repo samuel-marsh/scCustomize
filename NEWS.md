@@ -12,6 +12,7 @@
 - Added `raster.dpi` parameter from Seurat to all `DimPlot` `FeaturePlot` or `FeatureScatter` based functions.  
 - Added `add.noise` parameter from Seurat to `VlnPlot_scCustom` `Stacked_VlnPlot` functions.  
 - Added `group.by` as default listed parameter to added to all`VlnPlot` based `QC_Plot_*`.  
+- Added `ensembl_ids` parameter for `Add_Mito_Ribo_*` functions.  If `ensembl_ids = TRUE` functions will retrieve stored ensembl IDs representing mitochondrial and ribosomal genes for accepted default species.  
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
