@@ -1720,7 +1720,12 @@ DimPlot_scCustom <- function(
                   max(reduc_coordinates[, 2]))
 
       # Extract cell names per meta data list of values
-      split_by_list <- as.character(unique(x = seurat_object@meta.data[[split.by]]))
+      # Extract split.by list of values
+      if (class(x = seurat_object@meta.data[, split.by]) == "factor") {
+        split_by_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
+      } else {
+        split_by_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+      }
 
       cell_names <- lapply(split_by_list, function(x) {
         row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
