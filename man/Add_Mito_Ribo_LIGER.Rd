@@ -14,6 +14,7 @@ Add_Mito_Ribo_LIGER(
   ribo_pattern = NULL,
   mito_features = NULL,
   ribo_features = NULL,
+  ensembl_ids = FALSE,
   overwrite = FALSE,
   list_species_names = FALSE
 )
@@ -45,6 +46,9 @@ Will override regex pattern if both are present (including default saved regex p
 
 \item{ribo_features}{A list of ribosomal gene names to be used instead of using regex pattern.
 Will override regex pattern if both are present (including default saved regex patterns).}
+
+\item{ensembl_ids}{logical, whether feature names in the object are gene names or
+ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
 
 \item{overwrite}{Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 function will abort if columns with any one of the names provided to \code{mito_name} \code{ribo_name} or \code{mito_ribo_name}
