@@ -343,6 +343,68 @@ QC_Plots_Feature <- function(
 }
 
 
+#' QC Plots Cell "Complexity"
+#'
+#' Custom VlnPlot for initial QC checks including lines for thresholding
+#'
+#' @param seurat_object Seurat object name.
+#' @param feature Feature from Meta Data to plot.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
+#' @param y_axis_label Label for y axis.
+#' @param x_axis_label Label for x axis.
+#' @param plot_title Plot Title.
+#' @param low_cutoff Plot line a potential low threshold for filtering.
+#' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param pt.size Point size for plotting
+#' @param colors_use vector of colors to use for plot.
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
+#' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import ggplot2
+#' @importFrom Seurat VlnPlot
+#'
+#' @export
+#'
+#' @concept object_qc_plotting
+#'
+#' @examples
+#' \dontrun{
+#' QC_Plots_Complexity(seurat_object = object)
+#' }
+#'
+
+QC_Plots_Complexity <- function(
+  seurat_object,
+  feature = "log10GenesPerUMI",
+  group.by = NULL,
+  x_axis_label = NULL,
+  y_axis_label = NULL,
+  plot_title = NULL,
+  low_cutoff = NULL,
+  high_cutoff = NULL,
+  pt.size = NULL,
+  colors_use = NULL,
+  x_lab_rotate = TRUE,
+  y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
+  ...
+) {
+  QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = "Cell Complexity (log10GenesPerUMI)", low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+}
+
+
 #' QC Plots Genes, UMIs, & % Mito
 #'
 #' Custom VlnPlot for initial QC checks including lines for thresholding
