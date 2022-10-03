@@ -16,10 +16,12 @@
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
 #' (will set automatically if species is mouse, human, or marmoset).
-#' @param mito_features A list of mitochrondial gene names to be used instead of using regex pattern.
+#' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
@@ -56,6 +58,7 @@ Add_Mito_Ribo_Seurat <- function(
   ribo_pattern = NULL,
   mito_features = NULL,
   ribo_features = NULL,
+  ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE,
   list_species_names = FALSE
@@ -111,6 +114,13 @@ Add_Mito_Ribo_Seurat <- function(
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
 
+  # Check ensembl vs patterns
+  if (ensembl_ids && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
+    cli_warn(message = c("When using a default species and setting `ensembl_ids = TRUE` provided patterns or features are ignored.",
+                         "*" = "Supplied `mito_pattern`,`ribo_pattern`, `mito_features`,`ribo_features` will be disregarded.")
+    )
+  }
+
   # Assign mito/ribo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
     cli_warn(message = c("Pattern expressions for included species (Human & Mouse) are set by default.",
@@ -148,6 +158,12 @@ Add_Mito_Ribo_Seurat <- function(
   if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_pattern)) {
     cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
                           "i" = "Please provide a default species name or pattern/features."))
+  }
+
+  # Retrieve ensembl ids if TRUE
+  if (ensembl_ids) {
+    mito_features <- Retrieve_Ensembl_Mito(species = species)
+    ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
 
   mito_features <- mito_features %||% grep(pattern = mito_pattern, x = rownames(x = seurat_object[[assay]]), value = TRUE)
