@@ -179,11 +179,11 @@ Add_Mito_Ribo_Seurat <- function(
   # Add mito and ribo columns
   if (length_mito_features > 0) {
     good_mito <- mito_features[mito_features %in% rownames(x = seurat_object)]
-    seurat_object[["percent_mito"]] <- PercentageFeatureSet(object = seurat_object, features = mito_features, assay = assay)
+    seurat_object[["percent_mito"]] <- PercentageFeatureSet(object = seurat_object, features = good_mito, assay = assay)
   }
   if (length_ribo_features > 0) {
     good_ribo <- ribo_features[ribo_features %in% rownames(x = seurat_object)]
-    seurat_object[["percent_ribo"]] <- PercentageFeatureSet(object = seurat_object, features = ribo_features, assay = assay)
+    seurat_object[["percent_ribo"]] <- PercentageFeatureSet(object = seurat_object, features = good_ribo, assay = assay)
   }
 
   # Create combined mito ribo column if both present
