@@ -446,7 +446,11 @@ Split_FeatureScatter <- function(
   }
 
   # Extract split.by list of values
-  meta_sample_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+  if (class(x = seurat_object@meta.data[, split.by]) == "factor") {
+    meta_sample_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
+  } else {
+    meta_sample_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+  }
 
   # Extract cell names per meta data list of values
   cell_names <- lapply(meta_sample_list, function(x) {
