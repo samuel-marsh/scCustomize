@@ -388,8 +388,8 @@ QC_Plots_Complexity <- function(
   feature = "log10GenesPerUMI",
   group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
-  plot_title = NULL,
+  y_axis_label = "log10(Genes) / log10(UMIs)",
+  plot_title = "Cell Complexity",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
@@ -401,7 +401,7 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
-  QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = "Cell Complexity (log10GenesPerUMI)", low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
 }
 
 
