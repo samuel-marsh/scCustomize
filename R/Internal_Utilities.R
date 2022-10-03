@@ -288,3 +288,132 @@ Middle_Number <- function(
   middle <- min_max[-length(min_max)] + diff(min_max) / 2
   return(middle)
 }
+
+
+#' Ensembl Mito IDs
+#'
+#' Retrieves Ensembl IDs for mitochondrial genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Mito <- function(
+  species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% marmoset_options) {
+    cli::cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
+  }
+
+  if (species %in% mouse_options) {
+    mito_ensembl <- ensembl_mito_id$Mus_musculus_mito_ensembl
+  }
+  if (species %in% human_options) {
+    mito_ensembl <- ensembl_mito_id$Homo_sapiens_mito_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    mito_ensembl <- ensembl_mito_id$Danio_rerio_mito_ensembl
+  }
+  if (species %in% rat_options) {
+    mito_ensembl <- ensembl_mito_id$Rattus_norvegicus_mito_ensembl
+  }
+  if (species %in% drosophila_options) {
+    mito_ensembl <- ensembl_mito_id$Drosophila_melanogaster_mito_ensembl
+  }
+  if (species %in% macaque_options) {
+    mito_ensembl <- ensembl_mito_id$Macaca_mulatta_mito_ensembl
+  }
+
+  return(mito_ensembl)
+}
+
+
+#' Ensembl Ribo IDs
+#'
+#' Retrieves Ensembl IDs for ribsomal genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Ribo <- function(
+  species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% mouse_options) {
+    ribo_ensembl <- ensembl_ribo_id$Mus_musculus_ribo_ensembl
+  }
+  if (species %in% human_options) {
+    ribo_ensembl <- ensembl_ribo_id$Homo_sapiens_ribo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    ribo_ensembl <- ensembl_ribo_id$Callithrix_jacchus_ribo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    ribo_ensembl <- ensembl_ribo_id$Danio_rerio_ribo_ensembl
+  }
+  if (species %in% rat_options) {
+    ribo_ensembl <- ensembl_ribo_id$Rattus_norvegicus_ribo_ensembl
+  }
+  if (species %in% drosophila_options) {
+    ribo_ensembl <- ensembl_ribo_id$Drosophila_melanogaster_ribo_ensembl
+  }
+  if (species %in% macaque_options) {
+    ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
+  }
+
+  return(ribo_ensembl)
+}
