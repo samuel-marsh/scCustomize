@@ -13,6 +13,7 @@
 #'
 #' }
 #' @concept data
+#' @noRd
 #'
 "ensembl_mito_id"
 
@@ -30,9 +31,9 @@
 #'   \item{Rattus_norvegicus_ribo_ensembl}{Ensembl IDs for rat ribosomal genes}
 #'   \item{Drosophila_melanogaster_ribo_ensembl}{Ensembl IDs for fly ribosomal genes}
 #'   \item{Macaca_mulatta_ribo_ensembl}{Ensembl IDs for macaque ribosomal genes}
-
 #'
 #' }
 #' @concept data
+#' @noRd
 #'
 "ensembl_ribo_id"
