@@ -425,6 +425,8 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 #' @importFrom ggplot2 theme
 #'
+#' @references Shortcut from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
+#'
 #' @keywords internal
 #'
 #' @noRd
