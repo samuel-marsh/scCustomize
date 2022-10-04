@@ -20,6 +20,7 @@ FeaturePlot_scCustom(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  label_feature_yaxis = FALSE,
   combine = TRUE,
   ...
 )
@@ -60,6 +61,10 @@ value between 0-1.}
 
 \item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
 value between 0-1.}
+
+\item{label_feature_yaxis}{logical, whether to place feature labels on secondary y-axis as opposed to
+above legend key.  Default is FALSE.  When setting \code{label_feature_yaxis = TRUE} the number of columns
+in plot output will automatically be set to the number of levels in \verb{split.by'}}
 
 \item{combine}{Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
 If FALSE, return a list of ggplot objects.}
