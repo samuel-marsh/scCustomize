@@ -425,7 +425,7 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 #' @importFrom ggplot2 theme
 #'
-#' @references Shortcut from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
+#' @references Shortcut slightly modified from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
 #'
 #' @keywords internal
 #'
@@ -447,7 +447,8 @@ No_Right <- function() {
     axis.title.y.right = element_text(
       face = "bold",
       size = 14,
-      margin = margin(r = 7)
+      margin = margin(r = 7),
+      angle = 270
     )
   )
   return(no.right)
