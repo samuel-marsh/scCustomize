@@ -23,6 +23,9 @@
 #' value between 0-1.
 #' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
 #' value between 0-1.
+#' @param label_feature_yaxis logical, whether to place feature labels on secondary y-axis as opposed to
+#' above legend key.  Default is FALSE.  When setting `label_feature_yaxis = TRUE` the number of columns
+#' in plot output will automatically be set to the number of levels in `split.by'`
 #' @param combine Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
 #' If FALSE, return a list of ggplot objects.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
@@ -63,6 +66,7 @@ FeaturePlot_scCustom <- function(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  label_feature_yaxis = FALSE,
   combine = TRUE,
   ...
 ) {
@@ -75,11 +79,25 @@ FeaturePlot_scCustom <- function(
   }
 
   # Get length of meta data feature
+  if (is.null(x = split.by) && label_feature_yaxis) {
+    cli_abort(message = "Setting `label_feature_yaxis = TRUE` is only supported when also setting `split.by`.")
+  }
+
   if (!is.null(x = split.by)) {
     split.by_length <- length(unique(seurat_object@meta.data[[split.by]]))
+
+    if (!is.null(x = num_columns) && label_feature_yaxis) {
+
+      cli_warn(message = c("Setting number of columns is not permitted if `label_feature_yaxis = TRUE`",
+                           "i" = "Number of columns be automatically set to number of levels in `split.by` ({split.by_length}).")
+      )
+      num_columns <- split.by_length
+    }
+
     if (is.null(x = num_columns)) {
       num_columns <- split.by_length
     }
+
     # Calculate number of rows for selected number of columns
     num_rows <- ceiling(split.by_length/num_columns)
 
@@ -161,7 +179,13 @@ FeaturePlot_scCustom <- function(
 
     plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
-    plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+    if (label_feature_yaxis) {
+      plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      plot <- plot & theme(legend.title=element_blank())
+      plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = features))) + No_Right()
+    } else {
+      plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+    }
   }
 
   # plotting split multiple features
@@ -178,7 +202,13 @@ FeaturePlot_scCustom <- function(
 
       single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
-      single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      if (label_feature_yaxis) {
+        single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
+        single_plot <- single_plot & theme(legend.title=element_blank())
+        single_plot <- suppressMessages(single_plot + scale_y_continuous(sec.axis = dup_axis(name = features[i]))) + No_Right()
+      } else {
+        single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      }
     })
     plot <- wrap_plots(plot_list) + plot_layout(ncol = 1)
   }
