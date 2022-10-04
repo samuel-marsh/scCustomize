@@ -417,3 +417,37 @@ Retrieve_Ensembl_Ribo <- function(
 
   return(ribo_ensembl)
 }
+
+
+#' Remove Right Y Axis
+#'
+#' Shortcut for removing right y axis from ggplot2 object
+#'
+#' @importFrom ggplot2 theme
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' # Generate a plot without axes, labels, or grid lines
+#' library(ggplot2)
+#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' p + No_Right()
+#' }
+
+No_Right <- function() {
+  no.right <- theme(
+    axis.line.y.right = element_blank(),
+    axis.ticks.y.right = element_blank(),
+    axis.text.y.right = element_blank(),
+    axis.title.y.right = element_text(
+      face = "bold",
+      size = 14,
+      margin = margin(r = 7)
+    )
+  )
+  return(no.right)
+}
+
