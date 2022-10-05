@@ -296,6 +296,13 @@ plotFactors_scCustom <- function(
     }
 
     # Check if file name provided
+    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
+    if (length(x = file_ext) == 0) {
+      file_name <- file_name
+    } else {
+      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, fixed = TRUE, ignore.case = TRUE)
+    }
+
     if (is.null(x = file_name)) {
       cli_abort(message = c("No file name provided.",
                             "i" = "Please provide a file name using `file_name`.")
