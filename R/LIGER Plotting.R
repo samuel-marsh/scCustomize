@@ -282,16 +282,17 @@ plotFactors_scCustom <- function(
 
   # if returning and saving
   if (save_plots) {
-    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-    if (file_path == "") {
-      file_path <- NULL
-    }
 
     # Check file path is valid
-    if (!is.null(x = file_path)) {
+    if (!is.null(x = file_path) && file_path != "") {
       if (!dir.exists(paths = file_path)) {
         cli_abort(message = "Provided `file_path`: '{file_path}' does not exist.")
       }
+    }
+
+    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+    if (is.null(x = file_path)) {
+      file_path <- ""
     }
 
     # Check if file name provided
@@ -478,7 +479,7 @@ plotFactors_scCustom <- function(
   # save plots
   if (save_plots) {
     cli_inform(message = "\nSaving plots to file")
-    pdf(paste(file_name, ".pdf", sep=""))
+    pdf(paste(file_path, file_name, ".pdf", sep=""))
     pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
     for (i in 1:k) {
       if (plot_dimreduc) {
