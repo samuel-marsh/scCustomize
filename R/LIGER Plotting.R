@@ -300,7 +300,7 @@ plotFactors_scCustom <- function(
     if (length(x = file_ext) == 0) {
       file_name <- file_name
     } else {
-      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, fixed = TRUE, ignore.case = TRUE)
+      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
     }
 
     if (is.null(x = file_name)) {
@@ -487,7 +487,6 @@ plotFactors_scCustom <- function(
   if (save_plots) {
     cli_inform(message = "\nSaving plots to file")
     pdf(paste(file_path, file_name, ",pdf", sep=""))
-    #pdf(file.path(file_path, file_name, ".pdf"))
     pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
     for (i in 1:k) {
       if (plot_dimreduc) {
