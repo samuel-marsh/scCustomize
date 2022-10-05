@@ -486,7 +486,8 @@ plotFactors_scCustom <- function(
   # save plots
   if (save_plots) {
     cli_inform(message = "\nSaving plots to file")
-    pdf(file.path(file_path, file_name, ".pdf"))
+    pdf(paste(file_path, file_name, ",pdf", sep=""))
+    #pdf(file.path(file_path, file_name, ".pdf"))
     pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
     for (i in 1:k) {
       if (plot_dimreduc) {
