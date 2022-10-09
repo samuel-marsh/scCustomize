@@ -347,6 +347,155 @@ Meta_Remove_Seurat <- function(
 }
 
 
+#' Add Sample Level Meta Data
+#'
+#' Add meta data from ample level data.frame/tibble to cell level seurat `@meta.data` slot
+#'
+#' @param seurat_object object name.
+#' @param meta_data data.frame/tibble containing meta data or path to file to read.  Must be formatted as
+#' either data.frame or tibble.
+#' @param join_by_seurat name of the column in `seurat_object@meta.data` that contains matching
+#' variables to `join_by_meta` in `meta_data.`
+#' @param join_by_meta name of the column in `meta_data` that contains matching
+#' variables to `join_by_seurat` in `seurat_object@meta.data`.
+#' @param na_ok logical, is it ok to add NA values to `seurat_object@meta.data`.  Default is FALSE.
+#' Be very careful if setting TRUE because if there is error in join operation it may result in all
+#' `@meta.data` values being replaced with NA.
+#' @param overwrite logical, if there are shared columns between `seurat_object@meta.data` and `meta_data`
+#' should the current `seurat_object@meta.data` columns be overwritten.  Default is FALSE.  This parameter
+#' excludes values provided to `join_by_seurat` and `join_by_meta`.
+#'
+#' @import cli
+#' @importFrom data.table fread
+#' @importFrom dplyr select left_join
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames rownames_to_column
+#' @importFrom tidyselect all_of
+#'
+#' @return Seurat object with new `@meta.data` columns
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' # meta_data present in environment
+#' sample_level_meta <- data.frame(...)
+#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta, join_by_seurat = "orig.ident",
+#' join_by_meta = "sample_ID")
+#'
+#' # from meta data file
+#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv", join_by_seurat = "orig.ident",
+#' join_by_meta = "sample_ID")
+#' }
+#'
+
+Add_Sample_Meta <- function(
+  seurat_object,
+  meta_data,
+  join_by_seurat,
+  join_by_meta,
+  na_ok = FALSE,
+  overwrite = FALSE
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check variable vs. file path
+  if (isTRUE(x = exists(x = deparse(expr = substitute(expr = meta_data))))) {
+    meta_data <- meta_data
+  } else {
+    if (file.exists(meta_data)) {
+      meta_data <- fread(file = meta_data, data.table = FALSE)
+    } else {
+      cli_abort(message = c("Could not find `meta_data` {deparse(expr = substitute(expr = meta_data))}.",
+                            "*" = "If providing environmental variable please check `meta_data` name.",
+                            "i" = "If providing path to file please check path is correct.")
+      )
+    }
+  }
+
+  # Check meta data structure
+  if (!class(meta_data)[1] %in% c("tbl_df", "data.frame")) {
+    cli_abort(message = c("`meta_data` not in correct format",
+                          "*" = "`meta_data` must be a data.frame or tibble.",
+                          "i" = "Change format and re-run function.")
+    )
+  }
+
+  # Check NA in meta data
+  if (anyNA(x = meta_data)) {
+    cli_abort(message = c("`meta_data` contains NA values.",
+                          "i" = "If you would like NA values added to Seurat meta data please set `na_ok = TRUE`.")
+    )
+  }
+
+  # Check join variables exist
+  if (!join_by_seurat %in% colnames(x = seurat_object@meta.data)) {
+    cli_abort(message = "The column {join_by_seurat} was not found in object @meta.data slot."
+    )
+  }
+
+  if (!join_by_meta %in% colnames(x = meta_data)) {
+    cli_abort(message = "The column {join_by_meta} was not found in supplied `meta_data`."
+    )
+  }
+
+  # Check if any duplicate column names
+  dup_columns <- colnames(x = meta_data)[colnames(x = meta_data) %in% colnames(x = seurat_object@meta.data)]
+
+  if (length(x = dup_columns) > 0) {
+    dup_columns <- dup_columns[!dup_columns %in% c(join_by_seurat, join_by_meta)]
+
+    if (any(dup_columns %in% colnames(x = seurat_object@meta.data)) && !overwrite) {
+      cli_abort(message = c(" Duplicate `meta_data contains column names in object @meta.data.",
+                            "i" = "`meta_data` and object@meta.data both contain columns: {scCustomize:::glue_collapse_scCustom(input_string = dup_columns)}.",
+                            "*" = "To overwrite existing object @meta.data columns with those in `meta_data` set `overwrite = TRUE`.")
+      )
+    }
+  }
+
+  # Pull meta data
+  meta_seurat <- seurat_object@meta.data %>%
+    rownames_to_column("barcodes")
+
+  # remove
+  if (overwrite) {
+    meta_seurat <- meta_seurat %>%
+      select(-all_of(x = dup_columns))
+  } else {
+    meta_seurat <- meta_seurat
+  }
+
+  # join
+  meta_merged <- left_join(x = meta_seurat, y = meta_data, by = setNames(join_by_meta, join_by_seurat))
+
+  # Remove existing Seurat meta
+  if (length(x = dup_columns) > 0 && overwrite) {
+    meta_merged <- meta_merged %>%
+      column_to_rownames("barcodes")
+  } else {
+    meta_merged <- Meta_Remove_Seurat(meta_data = meta_merged, seurat_object = seurat_object) %>%
+      column_to_rownames("barcodes")
+  }
+
+  # check NA
+  if (anyNA(x = meta_merged) && !na_ok) {
+    cli_abort(message = c("NAs found in new seurat meta.data.",
+                          "*" = "No new meta data added to Seurat object.",
+                          "i" = "Check to make sure all levels of joining factors are present in both sets of meta data.")
+    )
+  }
+
+  # Add meta data
+  seurat_object <- AddMetaData(object = seurat_object, metadata = meta_merged)
+
+  # Return object
+  return(seurat_object)
+}
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
