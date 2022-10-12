@@ -257,8 +257,8 @@ Add_Cell_Complexity_LIGER <- function(
                             "i" = "*To run function and overwrite column, set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
       )
     }
-    cli_inform(message = c("Columns with '{meta_col_name}' already present in cell.data slot",
-                           "i" = "Overwriting those columns as overwrite = TRUE.")
+    cli_inform(message = c("Column '{meta_col_name}' already present in cell.data slot",
+                           "i" = "Overwriting those columns as `overwrite = TRUE`.")
     )
   }
 
