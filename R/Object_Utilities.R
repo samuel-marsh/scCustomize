@@ -266,11 +266,13 @@ Add_Cell_Complexity_Seurat <- function(
   # Check columns for overwrite
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
     if (!overwrite) {
-      stop("Columns with ", meta_col_name, " already present in meta.data slot.\n",
-           "  *To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+      cli_abort(message = c("Column '{meta_col_name}' already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column, set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+      )
     }
-    message("Columns with ",meta_col_name, " already present in meta.data slot\n",
-            "  Overwriting those columns as overwrite = TRUE.")
+    cli_inform(message = c("Columns with '{meta_col_name}' already present in meta.data slot",
+                           "i" = "Overwriting those columns as overwrite = TRUE.")
+    )
   }
 
   # variable names
