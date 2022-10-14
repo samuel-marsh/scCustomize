@@ -97,7 +97,7 @@ hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", mito_f
 ```
 
 #### Use of Ensembl IDs
-scCustomize contains built in list of ensembl IDs that correspond to mitochondrial and ribosomal genes for all default species.  If your object using ensembl IDs as features names then simply change `ensembl_ids` parameter.
+scCustomize contains built in list of ensembl IDs that correspond to mitochondrial and ribosomal genes for all default species.  If your object using ensembl IDs as features names then simply add `ensembl_ids` parameter.
 ```{r eval=FALSE}
 # Using gene name patterns
 hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", ensembl_ids = TRUE)
