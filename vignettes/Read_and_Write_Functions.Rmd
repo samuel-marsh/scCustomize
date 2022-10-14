@@ -102,18 +102,32 @@ GEO_10X <- Read10X_h5_GEO(data_dir = "/path/to/data/", shared_suffix = "filtered
 ```
 
 
+### Import CellBender H5 Files from single directory  
+Importing CellBender h5 files from single directory can be done using `Read_CellBender_h5_Multi_File()`, which functions very similar to `Read10X_h5_GEO`.
+Here is example directory/file setup:
+```
+Parent_Directory
+├── Exp_Name
+│   └── Cell_Bender_Results
+│       └── SampleA_CB_out_filtered.h5
+│       └── SampleB_CB_out_filtered.h5
+│       └── SampleC_CB_out_filtered.h5
+```
+
+```{r eval=FALSE}
+Multi_CB <- Read_CellBender_h5_Multi_File(data_dir = "Exp_Name/Cell_Bender_Results/", custom_name = "_CB_out_filtered.h5")
+```
+
+
 ### Import delimited matrices single directory with file prefixes
 Often data is uploaded to NCBI GEO or other repositories with single file (.csv, .tsv, .txt, etc) containing all of the information.
 
 For this example I will be utilizing data from Hammond et al., 2019 ([*Immunity*](https://doi.org/10.1016/j.immuni.2018.11.004)), which were downloaded from [NCBI GEO GSE121654](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121654).  
   
 `Read_GEO_Delim` uses fread function for automatic detection of file delimiter and fast read times and then converts objects to sparse matrices to save memory
-```{r}
-list.files("../man/figures/assets/GSE121654_RAW_Hammond/")
-```
 
 ```{r eval=FALSE}
-# Read in and use file names to name the list
+# Read in and use file names to name the list (default)
 GEO_Single <- Read_GEO_Delim(data_dir = "../man/figures/assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz")
 
 # Read in and use new sample names to name the list
@@ -193,6 +207,9 @@ multi_10x <- Read10X_Multi_Directory(base_path = "Parent_Directory", default_10X
 
 ### Import 10X Genomics (H5 Outputs)
 scCustomize contains function: `Read10X_h5_Multi_Directory` can be used to read 10X Genomics H5 files similarly to `Read10X_Multi_Directory`
+
+### Import CellBender h5 Outputs
+scCustomize also contains function `Read_CellBender_h5_Multi_Directory()` which can be used to read CellBender outputs in multiple sub-directories similar to `Read10X_h5_Multi_Directory` using the same type of parameters as `Read_CellBender_h5_Multi_File`
 
 
 ## Merging Sparse Matrices
