@@ -50,8 +50,19 @@ library(Seurat)
 library(scCustomize)
 ```
 
+## Import Single Data File
+While most single cell packages have support for 10X and other commercial formats sometimes additional functions are required.
 
-## Import Data from Single Directory  
+### Import CellBender h5 File
+CellBender is tool for the removal of ambient RNA ([GitHub](https://github.com/broadinstitute/CellBender), [Preprint](https://doi.org/10.1101/791699)).  Starting with CellBender v3 the output file is styled like Cell Ranger h5 files it also contains some additional information.  This causes `Seurat::Read10X_h5()` to to fail when trying to import data.  
+
+scCustomize has new function to read both new and old CellBender output files.
+```{r eval=FALSE}
+cell_bender_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered.h5")
+```
+
+
+## Import Mutliple Data Files from Single Directory  
 Often when downloading files from NCBI GEO or other repos all of the files are contained in single directory and contain non-standard file names.
 However, functions like `Seurat::Read10X()` expect non-prefixed files (i.e. Cell Ranger outputs).  
   
@@ -119,7 +130,7 @@ knitr::include_graphics(c("../man/figures/assets/delim_default.png","../man/figu
 See [manual entry](https://samuel-marsh.github.io/scCustomize/reference/Read_GEO_Delim.html) for more info.
 
 
-## Import Data from Mutliple Directories  
+## Import Multiple Files from Mutliple Directories  
 In addition to those functions for single directories, scCustomize contains functions for when files are contained in multiple sub-directories within shared parent directory.  
 *NOTE: These functions all assume that each sub-directory contains one sample and that sub-directory structure is identical between all samples.*  
 
