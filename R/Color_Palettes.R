@@ -117,7 +117,6 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #'
 #' @import cli
 #' @importFrom colorway varibow
-#' @importFrom dittoSeq dittoColors
 #' @importFrom paletteer paletteer_d
 #'
 #' @return A vector of colors
@@ -158,20 +157,51 @@ DiscretePalette_scCustomize <- function(
   shuffle_pal = FALSE,
   seed = 123
 ) {
-  palette_list <- list(
-    alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
-    alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
-    glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
-    polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
-    stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
-    ditto_seq =  dittoColors(reps = 1, get.names = FALSE),
-    varibow = varibow(n_colors = num_colors)
-  )
   if (is.null(x = palette)) {
     cli_abort(message = c("Must specify a palette to return colors.",
                           "i" = "`palette` options are: {names(palette_list)}")
     )
   }
+
+  # dittoseq check
+  if (palette == "ditto_seq") {
+    dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
+    if (!dittoseq_check[1]) {
+      stop(
+        "Please install the dittoSeq package to `palette = 'ditto_seq'`",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('BiocManager')",
+        "\nBiocManager::install('dittoSeq')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    } else {
+      palette_list <- list(
+        alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
+        alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
+        glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
+        polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
+        stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
+        ditto_seq =  dittoSeq::dittoColors(reps = 1, get.names = FALSE),
+        varibow = varibow(n_colors = num_colors)
+      )
+    }
+  } else {
+    palette_list <- list(
+      alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
+      alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
+      glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
+      polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
+      stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
+      varibow = varibow(n_colors = num_colors)
+    )
+  }
+
+
+
+
+
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
     cli_abort(message = c("Not enough colors in specified palette.",
