@@ -260,6 +260,21 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", spl
 ```
 
 
+### Change the transparnecy of points
+`FeaturePlot_scCustom` also allows for customization of the transpaency (alpha) of both the points of expressing cells and non-expressing cells using optional parameters.
+```{r eval=FALSE}
+FeaturePlot_scCustom(object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=10, fig.cap="* **A.** default plot compared to **B.** plot with alpha of expressing cells adjusted `alpha_exp = 0.75`.*", fig.align='center'}
+
+# Create Plots
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun")
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
+wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
+```
+
+
 ### Density Plots  
 
 The [Nebulosa package](https://github.com/powellgenomicslab/Nebulosa) provides really great functions for plotting gene expression via density  plots.
