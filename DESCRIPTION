@@ -20,7 +20,6 @@ Imports:
     colorway (>= 0.2.0),
     cowplot,
     data.table,
-    dittoSeq,
     dplyr,
     forcats,
     ggbeeswarm,
@@ -52,10 +51,10 @@ Imports:
     viridis
 Remotes: 
     hypercompetent/colorway,
-    dtm2451/dittoSeq,
     csdaw/ggprism
 Suggests:
     ComplexHeatmap,
+    dittoSeq,
     DropletUtils,
     hdf5r,
     knitr,
