@@ -1242,7 +1242,7 @@ Read_CellBender_h5_Multi_Directory <- function(
 #' within the same directory.
 #'
 #' @param data_dir Directory containing the .h5 files output by CellBender.
-#' @param filtered_h5 logical (default TRUE).  Will set the shared file name suffix `custom_name` is NULL.
+#' @param filtered_h5 logical (default TRUE).  Will set the shared file name suffix if `custom_name` is NULL.
 #' @param custom_name if file name was customized in CellBender then this parameter should contain the portion
 #' of file name that is shared across all samples.  Must included the ".h5" extension as well.
 #' @param sample_list a vector of sample names if only specific samples are desired.  If `NULL` will
