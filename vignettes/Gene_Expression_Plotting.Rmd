@@ -228,7 +228,7 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Sc
 FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1", na_cutoff = NA)
 ```
 
-```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
 p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1")
 p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1", na_cutoff = NA)
 wrap_plots(p1, p2, ncol = 2)
@@ -240,7 +240,7 @@ FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
 FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
 ```
 
-```{r echo=FALSE, fig.height=4, fig.width=13, fig.align='center'}
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
 p1 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
 p2 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
 wrap_plots(p1, p2, ncol = 2)
@@ -266,11 +266,11 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", spl
 FeaturePlot_scCustom(object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
 ```
 
-```{r echo=FALSE, fig.height=4, fig.width=10, fig.cap="* **A.** default plot compared to **B.** plot with alpha of expressing cells adjusted `alpha_exp = 0.75`.*", fig.align='center'}
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="*Example comparing **A.** default `FeaturePlot_scCustom` vs. **B.** plot with alpha of expressing cells adjusted `alpha_exp = 0.55`.*", fig.align='center'}
 
 # Create Plots
-p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun")
-p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", pt.size = 1)
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", pt.size = 1, alpha_exp = 0.55)
 wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
