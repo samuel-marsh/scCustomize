@@ -1626,7 +1626,7 @@ DimPlot_scCustom <- function(
 
   # figure_plot check
   if (figure_plot && !split_seurat) {
-    stop("'figure_plot' can only be TRUE is split_seurat is FALSE.")
+    cli_abort(message = "'figure_plot' can only be TRUE if split_seurat is FALSE.")
   }
 
   # Set default color palette based on number of levels being plotted
