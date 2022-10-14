@@ -20,6 +20,7 @@
 
 ## Changed
 - **DEPENDENCY CHANGE** The required version of Seurat has been changed due to errors caused by updates to Matrix package and handling of sparse matrices.  To avoid errors version requirement for Seurat has been updated to 4.2.0. 
+- **DEPENDENCY CHANGE** The dittoSeq package has been moved to Suggests to aid package installation. To catch errors a `PackageCheck` warning has been added where needed.  
 - **BREAKING CHANGE** Function name for iterative `VlnPlot` has been changed to `Iterate_VlnPlot_scCustom` to reflect that it now uses `VlnPlot_scCustom` to generate plots. 
 - `QC_Plot_*` functions now use `VlnPlot_scCustom` internally to unify color scheme and rasterization parameters.
 - `*_Highlight_Plot` functions no longer display "Unselected" in plot legend and uses `DimPlot_scCustom` to generate plots ([#34](https://github.com/samuel-marsh/scCustomize/issues/34)).
