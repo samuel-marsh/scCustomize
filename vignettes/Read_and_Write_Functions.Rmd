@@ -183,13 +183,6 @@ multi_10x <- Read10X_Multi_Directory(base_path = "Parent_Directory", default_10X
 ### Import 10X Genomics (H5 Outputs)
 scCustomize contains function: `Read10X_h5_Multi_Directory` can be used to read 10X Genomics H5 files similarly to `Read10X_Multi_Directory`
 
-#### Cell Bender Outputs
-Importantly `Read10X_h5_Multi_Directory` has also been modified with optional parameters to support the files and format output by Cell Bender.
-```{r eval=FALSE}
-cell_bender <- Read10X_h5_Multi_Directory(base_path = "cellbender_results/", h5_filename = "_out_filtered.h5", cell_bender = TRUE, default_10X = FALSE, parallel = TRUE, num_cores = 8)
-```
-
-
 
 ## Merging Sparse Matrices
 Rather than creating and merging Seurat objects it can sometimes be advantageous to simply combine the sparse matrices before creating Seurat object.  
