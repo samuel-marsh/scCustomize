@@ -142,7 +142,9 @@ FeaturePlot_scCustom <- function(
   }
 
   if (any(features %in% colnames(x = seurat_object@meta.data))) {
-    cli_warn("Some of the plotted features are from meta.data slot.  Please check that `na_cutoff` param is being set appropriately for those features.")
+    cli_warn(message = c("Some of the plotted features are from meta.data slot.",
+                         "*" = "Please check that `na_cutoff` param is being set appropriately for those features.")
+    )
   }
 
   # Add raster check for scCustomize
