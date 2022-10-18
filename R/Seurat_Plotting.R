@@ -96,6 +96,15 @@ FeaturePlot_scCustom <- function(
       )
     }
 
+    # Return message of features not found
+    if (length(x = all_not_found_features) > 0) {
+      op <- options(warn = 1)
+      on.exit(options(op))
+      cli_warn(message = c("The following features were omitted as they were not found:",
+                           "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+      )
+    }
+
     # set to features to match remainder code
     features <- all_found_features
   }
