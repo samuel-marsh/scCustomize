@@ -78,6 +78,28 @@ FeaturePlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
+  # Check features and meta to determine which features present to plot to avoid error in split plots
+  if (!is.null(x = split.by)) {
+    features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+
+    meta_list <- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+
+    all_not_found_features <- meta_list[[2]]
+
+    all_found_features <- c(features_list[[1]], meta_list[[1]])
+
+    # Stop if no features found
+    if (length(x = all_found_features) < 1) {
+      cli_abort(message = c("No features were found.",
+                            "*" = "The following are not present in object:",
+                            "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+      )
+    }
+
+    # set to features to match remainder code
+    features <- all_found_features
+  }
+
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
     cli_abort(message = "Setting `label_feature_yaxis = TRUE` is only supported when also setting `split.by`.")
