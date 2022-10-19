@@ -338,6 +338,69 @@ Meta_Numeric <- function(
 }
 
 
+#' Check Matrix Validity
+#'
+#' Native implementation of SeuratObjects CheckMatrix but with modified warning messages.
+#'
+#' @param object A matrix
+#' @param checks Type of checks to perform, choose one or more from:
+#' \itemize{
+#'  \item \dQuote{\code{infinite}}: Emit a warning if any value is infinite
+#'  \item \dQuote{\code{logical}}: Emit a warning if any value is a logical
+#'  \item \dQuote{\code{integer}}: Emit a warning if any value is \emph{not}
+#'   an integer
+#'  \item \dQuote{\code{na}}: Emit a warning if any value is an \code{NA}
+#'   or \code{NaN}
+#' }
+#'
+#' @return Emits warnings for each test and invisibly returns \code{NULL}
+#'
+#' @import cli
+#'
+#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject (https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650) (License: MIT).
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' mat <- Read10X(...)
+#' CheckMatrix_scCustom(object = mat)
+#' }
+#'
+
+CheckMatrix_scCustom <- function(
+  object,
+  checks = c('infinite', 'logical', 'integer', 'na'),
+  ...
+) {
+  checks <- match.arg(arg = checks, several.ok = TRUE)
+  x <- slot(object = object, name = 'x')
+  for (i in checks) {
+    switch(
+      EXPR = i,
+      'infinite' = if (any(is.infinite(x = x))) {
+        cli_warn(message = "Input matrix contains infinite values")
+      },
+      'logical' = if (any(is.logical(x = x))) {
+        cli_warn(message = "Input matrix contains logical values")
+      },
+      'integer' = if (!all(round(x = x) == x, na.rm = TRUE)) {
+        cli_warn(message = c("Input matrix contains non-integer values.",
+                             "*" = "Data may represent normalized or scaled values.",
+                             "i" = "Take into account when performing analysis.")
+        )
+      },
+      'na' = if (anyNA(x = x)) {
+        cli_warn(message = "Input matrix contains NA/NaN values")
+      },
+    )
+  }
+  return(invisible(x = NULL))
+}
+
+
 #' Merge a list of Sparse Matrices
 #'
 #' Enables easy merge of a list of sparse matrices
