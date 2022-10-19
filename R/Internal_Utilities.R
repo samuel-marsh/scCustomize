@@ -453,4 +453,3 @@ No_Right <- function() {
   )
   return(no.right)
 }
-
