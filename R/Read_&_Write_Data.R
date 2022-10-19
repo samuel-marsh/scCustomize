@@ -992,6 +992,13 @@ Read_GEO_Delim <- function(
 
   # Name the items in list
   names(raw_data_list) <- sample_names
+
+  # Check matrices
+  for (i in 1:length(x = raw_data_list)) {
+    CheckMatrix_scCustom(object = raw_data_list[[i]])
+  }
+
+  # return list
   return(raw_data_list)
 }
 
