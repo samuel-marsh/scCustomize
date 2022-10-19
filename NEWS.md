@@ -15,7 +15,8 @@
 - Added `group.by` as default listed parameter to added to all`VlnPlot` based `QC_Plot_*`.  
 - Added `ensembl_ids` parameter for `Add_Mito_Ribo_*` functions.  If `ensembl_ids = TRUE` functions will retrieve stored ensembl IDs representing mitochondrial and ribosomal genes for accepted default species.  
 - Added parameter `label_feature_yaxis` to `FeaturePlot_scCustom`.  Allows for plotting of feature names on secondary y-axis when using `split.by` ([#60](https://github.com/samuel-marsh/scCustomize/issues/60)).  
-- Added `Add_Sample_Meta` function for addition of sample-level meta data to cell-level `@meta.data` slot of Seurat objects.
+- Added `Add_Sample_Meta` function for addition of sample-level meta data to cell-level `@meta.data` slot of Seurat objects.  
+- Added a matrix check in `Read_GEO_Delim` to check for issues with imported matrices.  Check is modified version of `SeuratObject::CheckMatrix` called `CheckMatrix_scCustom()`.  Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.  
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
