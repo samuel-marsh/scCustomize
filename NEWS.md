@@ -18,6 +18,7 @@
 - Added `Add_Sample_Meta` function for addition of sample-level meta data to cell-level `@meta.data` slot of Seurat objects.  
 - Added a matrix check in `Read_GEO_Delim` to check for issues with imported matrices.  Check is modified version of `SeuratObject::CheckMatrix` called `CheckMatrix_scCustom()`.  Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.  
 - `QC_Plot_UMIvsGene` will now returned filtered correlation value that takes into account `meta_gradient_name` if provided in addition to nFeature_RNA and nCount_RNA.
+- Added new function `Variable_Features_ALL_LIGER` which allows for detection/selection of variable genes from entire LIGER object instead of iterating by dataset.
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
