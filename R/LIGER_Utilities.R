@@ -901,7 +901,6 @@ Plot_By_Meta_LIGER <- function(
 #' @return A LIGER Object with variable genes in correct slot.
 #'
 #' @import cli
-#' @import rliger
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
 #' which is called by this function after creating new temporary object/dataset.
@@ -933,7 +932,7 @@ Variable_Features_LIGER <- function(
 
   cli_inform(message = "Creating temporary object with combined data.")
 
-  temp_liger <- createLiger(raw.data = list("dataset" = Merge_Sparse_Data_All(raw_data)), remove.missing = FALSE)
+  temp_liger <- rliger::createLiger(raw.data = list("dataset" = Merge_Sparse_Data_All(raw_data)), remove.missing = FALSE)
 
   rm(raw_data)
   gc()
@@ -941,7 +940,7 @@ Variable_Features_LIGER <- function(
   cli_inform(message = "Normalizing and identifying variable features.")
 
   temp_liger <- rliger::normalize(temp_liger)
-  temp_liger <- selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
+  temp_liger <- rliger::selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
   var_genes <- temp_liger@var.genes
 
   rm(temp_liger)
