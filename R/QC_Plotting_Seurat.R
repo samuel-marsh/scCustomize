@@ -654,8 +654,13 @@ QC_Plot_UMIvsGene <- function(
   # Calculate Correlation for all data
   plot_cor_full <- round(x = cor(x = featurescatter_data_sort[, "nCount_RNA"], y = featurescatter_data_sort[, "nFeature_RNA"]), digits = 2)
 
-  featurescatter_data_sort_filter <- featurescatter_data_sort %>%
-    filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene)
+  if (is.null(x = meta_gradient_name)) {
+    featurescatter_data_sort_filter <<- featurescatter_data_sort %>%
+      filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene)
+  } else {
+    featurescatter_data_sort_filter <<- featurescatter_data_sort %>%
+      filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene & .data[[meta_gradient_name]] < meta_gradient_low_cutoff)
+  }
 
   # Calculate correlation based on cutoffs
   plot_cor_filtered <- round(x = cor(x = featurescatter_data_sort_filter[, "nCount_RNA"], y = featurescatter_data_sort_filter[, "nFeature_RNA"]), digits = 2)
