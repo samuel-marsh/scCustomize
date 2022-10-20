@@ -912,11 +912,11 @@ Plot_By_Meta_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' liger_obj <- Variable_Features_LIGER(liger_object = liger_obj, num_genes = 2000)
+#' liger_obj <- Variable_Features_ALL_LIGER(liger_object = liger_obj, num_genes = 2000)
 #' }
 #'
 
-Variable_Features_LIGER <- function(
+Variable_Features_ALL_LIGER <- function(
   liger_object,
   num_genes = NULL,
   var.thresh = 0.3,
