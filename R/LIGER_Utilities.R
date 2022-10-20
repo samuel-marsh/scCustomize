@@ -877,3 +877,76 @@ Plot_By_Meta_LIGER <- function(
     return(p1)
   }
 }
+
+
+#' Perform variable gene selection over whole dataset
+#'
+#' Performs variable gene selection for LIGER object across the entire object instead of by
+#' dataset and then taking union.
+#'
+#' @param liger_object LIGER object name.
+#' @param num_genes Number of genes to find. Optimizes the value of `var.thresh`  to get
+#' this number of genes, (Default is NULL).
+#' @param var.thresh Variance threshold. Main threshold used to identify variable genes.
+#' Genes with expression variance greater than threshold (relative to mean) are selected.
+#' (higher threshold -> fewer selected genes).
+#' @param alpha.thresh Alpha threshold. Controls upper bound for expected mean gene
+#' expression (lower threshold -> higher upper bound). (default 0.99)
+#' @param tol Tolerance to use for optimization if num.genes values passed in (default 0.0001).
+#' @param do.plot Display log plot of gene variance vs. gene expression. Selected genes are
+#' plotted in green. (Default FALSE)
+#' @param pt.size Point size for plot.
+#' @param chunk size of chunks in hdf5 file. (Default 1000)
+#'
+#' @return A LIGER Object with variable genes in correct slot.
+#'
+#' @import cli
+#' @import rliger
+#'
+#' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
+#' which is called by this function after creating new temporary object/dataset.
+#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' liger_obj <- Variable_Features_LIGER(liger_object = liger_obj, num_genes = 2000)
+#' }
+#'
+
+Variable_Features_LIGER <- function(
+  liger_object,
+  num_genes = NULL,
+  var.thresh = 0.3,
+  alpha.thresh = 0.99,
+  tol = 0.0001,
+  do.plot = FALSE,
+  cex.use = 0.3,
+  chunk=1000
+) {
+  Is_LIGER(liger_object = liger_object)
+
+  raw_data <- liger_object@raw.data
+
+  cli_inform(message = "Creating temporary object with combined data.")
+
+  temp_liger <- createLiger(raw.data = list("dataset" = Merge_Sparse_Data_All(raw_data)), remove.missing = FALSE)
+
+  rm(raw_data)
+  gc()
+
+  cli_inform(message = "Normalizing and identifying variable features.")
+
+  temp_liger <- rliger::normalize(temp_liger)
+  temp_liger <- selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
+  var_genes <- temp_liger@var.genes
+
+  rm(temp_liger)
+  gc()
+
+  liger_object@var.genes <- var_genes
+  return(liger_object)
+}
