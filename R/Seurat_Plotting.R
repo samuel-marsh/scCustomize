@@ -463,6 +463,13 @@ Split_FeatureScatter <- function(
     cli_abort(message = "No value supplied to `split.by`.")
   }
 
+  # Check split.by is valid
+  if (split.by %in% colnames(seurat_object@meta.data) == FALSE) {
+    cli_abort(message = c("The meta data variable: '{split.by}' could not be found in object@meta.data.",
+                          "i" = "Please check the spelling and column names of meta.data slot.")
+    )
+  }
+
   # Set columna and row lengths
   split.by_length <- length(unique(seurat_object@meta.data[[split.by]]))
 
@@ -477,12 +484,6 @@ Split_FeatureScatter <- function(
     cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
                           "*" = "'{split.by}' only contains {split.by_length} variables.",
                           "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
-    )
-  }
-
-  if (split.by %in% colnames(seurat_object@meta.data) == FALSE) {
-    cli_abort(message = c("The meta data variable: '{split.by}' could not be found in object@meta.data.",
-                          "i" = "Please check the spelling and column names of meta.data slot.")
     )
   }
 
@@ -522,7 +523,7 @@ Split_FeatureScatter <- function(
   # raster check
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
 
-  # Set uniform poist size is pt.size = NULL (based on plot with most cells)
+  # Set uniform point size is pt.size = NULL (based on plot with most cells)
   if (is.null(x = pt.size)) {
     # cells per meta data
     cells_by_meta <- data.frame(table(seurat_object@meta.data[, split.by]))
