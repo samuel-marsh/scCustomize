@@ -17,6 +17,7 @@
 - Added parameter `label_feature_yaxis` to `FeaturePlot_scCustom`.  Allows for plotting of feature names on secondary y-axis when using `split.by` ([#60](https://github.com/samuel-marsh/scCustomize/issues/60)).  
 - Added `Add_Sample_Meta` function for addition of sample-level meta data to cell-level `@meta.data` slot of Seurat objects.  
 - Added a matrix check in `Read_GEO_Delim` to check for issues with imported matrices.  Check is modified version of `SeuratObject::CheckMatrix` called `CheckMatrix_scCustom()`.  Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.  
+- `QC_Plot_UMIvsGene` will now returned filtered correlation value that takes into account `meta_gradient_name` if provided in addition to nFeature_RNA and nCount_RNA.
 - Vignettes/Website updated with new function examples.  
 
 ## Changed
