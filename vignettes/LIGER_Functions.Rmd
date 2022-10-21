@@ -277,6 +277,21 @@ seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UM
 For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vingette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo_LIGER` which is analogous to `Add_Mito_Ribo_Seurat`.
 
 
+## Variable Gene Selection  
+By default when selecting highly variable genes in LIGER using `rliger::selectGenes()` LIGER performs gene selection across all datasets in the object and then can either take the union or intersection of those lists (default is union).  However, sometimes for analysis you may want to select highly variable genes from all data combined.  
+
+scCustomize provides the function `Variable_Features_ALL_LIGER()` that will do just that and returns the variable genes list to the `@var.genes` slot of original LIGER object.  
+*NOTE: This function creates a temporary LIGER object by merging all of the matrices present in original object and then running variable gene selection.  Therefore, while running the function it will use significant memory resources (equivalent to size of original object).*  
+
+```{r eval=FALSE}
+# Select highly variable genes based on threshold
+marsh_liger <- Variable_Features_ALL_LIGER(liger_object = marsh_liger, var.thresh = 0.3)
+
+# Select based on specific number of variable genes
+marsh_liger <- Variable_Features_ALL_LIGER(liger_object = marsh_liger, num_genes = 2000)
+```
+
+
 ## Gene Utilities  
 As discussed in [helpers vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html), the `Gene_Present()` function can be used to check if list of genes are present in a LIGER object.  
 
