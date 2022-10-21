@@ -39,7 +39,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Interavtivity with LIGER Objects
+# Interactivity with LIGER Objects
 While the majority of scCustomize's current functionality is with Seurat Objects there are a few functions for working with LIGER objects too.
 
 For this tutorial, I will be utilizing microglia data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) which I have converted to LIGER object.
