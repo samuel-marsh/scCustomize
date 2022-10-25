@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
   <a href="articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -54,7 +54,7 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -145,14 +145,13 @@
 <h2 id="goalsabout-sccustomize">Goals/About scCustomize<a class="anchor" aria-label="anchor" href="#goalsabout-sccustomize"></a>
 </h2>
 <p><strong><em>The goals of scCustomize are to:</em></strong></p>
-<p><strong><em>1. Customize visualizations for both ease of use and more aesthetic visuals.</em></strong><br><strong><em>2. Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.</em></strong></p>
+<p><strong><em>1. Customize visualizations for aid in ease of use and create more aesthetic visuals.</em></strong><br><strong><em>2. Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.</em></strong></p>
 <p>scCustomize aims to achieve these goals through:</p>
 <ul>
 <li>
 <strong>Customized versions of many commonly used plotting functions (and some custom ones).</strong><br>
-To create greater flexibility in visualization and more aesthetic visuals by:
-<ul>
-<li>Altering default parameters for more intuitive plots (or at least I believe plots). For instance: <code>FeaturePlot(..., order = TRUE)</code>.<br>
+To create greater flexibility in visualization and more aesthetic visuals by:<ul>
+<li>Altering default parameters for more intuitive plots (or at least I believe more intuitive). For instance: <code>FeaturePlot(..., order = TRUE)</code>.<br>
 </li>
 <li>Wrapping commonly used ggplot2 post-plot themeing into function call. No more copy/paste of the same theme elements for every plot over and over (e.g., <code>plot + scale_color_continuous(...) + ggtitle(...) + theme(plot.title = element_text(...), legend.position = ...) + guides(...)</code><br>
 </li>
@@ -163,29 +162,25 @@ To create greater flexibility in visualization and more aesthetic visuals by:
 </li>
 <li>
 <strong>Easy iterative plotting functionality.</strong><br>
-Many plotting functions can be easily automated with loops, apply, purrr etc. However, these can be intimidating to novice user and often can be made easier through wrapping into a function.
-<ul>
-<li>scCustomize contains a number of <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html">iterative plotting functions</a> contain extra parameters to specify file type, path, name and then render progress bar in console to track progress.</li>
+Many plotting functions can be easily automated with loops, apply, purrr etc. However, these can be intimidating to novice user and often can be made easier through wrapping into a function.<ul>
+<li>scCustomize contains a number of <a href="https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html">iterative plotting functions</a> which contain extra parameters to specify file type, path, name and then render progress bar in console to track progress.</li>
 <li>Returns either single PDF document or multiple plots of any valid file type (e.g., png, tiff, jpeg, pdf, etc).</li>
 </ul>
 </li>
 <li>
-<strong>Helper functions easily import multiple raw data types</strong><br><a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Import data functions</a> are aimed at streamlining importing multiple files/samples with single function and/or importing files with “non-standard” file names.
-<ul>
+<strong>Helper functions easily import multiple raw data types</strong><br><a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Import data functions</a> are aimed at streamlining importing multiple files/samples with single function and/or importing files with “non-standard” file names.<ul>
 <li>Iterate import functions to simplify the import process across groups of files/samples.</li>
 <li>Parallelize functions where possible to allow for dramatic speed improvements when import large number of samples simultaneously.</li>
+<li>Provide easy wrapper functions to import files with output formats (e.g., CellBender) not supported by Seurat or other common R package.</li>
 </ul>
 </li>
 <li>
 <strong>Helper functions to simplify analysis with addition of new default parameters or wrapping multiple lines of code into single function.</strong><br>
-Goal is to both speed up and simplify coding and reduce the use of copy/paste of the same lines of code which is more likely to lead to errors in code reproducibility.
-<ul>
+Goal is to both speed up and simplify coding and reduce the use of copy/paste of the same lines of code which is more likely to lead to errors in code reproducibility.<ul>
 <li>
 <p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Add_Mito_Ribo_Seurat</span>(<span class="at">seurat_object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
-<ul>
-<li>Function already knows the defaults for Human, Mouse, and Marmoset (submit a PR if you would like more species added!).</li>
-</ul>
+<ul><li>Function already knows the defaults for Human, Mouse, Rat, Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit a PR if you would like more species added!).</li></ul>
 </li>
 <li>
 <p><em>Example of wrapping many lines to one:</em> Extracting the top 10 (or 15, 20, 25, etc) genes per identity after running <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code> is very common and scCustomize provides <code><a href="reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code> function to simplify process.<br><em>Using scCustomize function:</em></p>
@@ -217,9 +212,8 @@ Goal is to both speed up and simplify coding and reduce the use of copy/paste of
 </li>
 <li>
 <strong>Provide more informative error messages for many common issues</strong><br>
-Base R error messages resulting from error deep inside Seurat (or other package) function can sometimes be difficult to interpret, especially for users new to R.
-<ul>
-<li>scCustomize provides checks/warnings wrapped inside its functions to help and provide more informative error/warning messages. Two examples include:<br>
+Base R error messages resulting from error deep inside Seurat (or other package) function can sometimes be difficult to interpret, especially for users new to R.<ul>
+<li>scCustomize provides checks/warnings, using the cli/rlang packages, wrapped inside its functions to help and provide more informative error/warning messages. Two examples include:<br>
 </li>
 <li>
 <code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> will warn you if no mitochondrial or ribosomal features are found and won’t create new metadata column.<br>
@@ -233,7 +227,7 @@ Base R error messages resulting from error deep inside Seurat (or other package)
 <div class="section level2">
 <h2 id="support-for-other-scrna-seq-object-formats-liger-sce-etc">Support for Other scRNA-seq Object Formats (LIGER, SCE, etc)<a class="anchor" aria-label="anchor" href="#support-for-other-scrna-seq-object-formats-liger-sce-etc"></a>
 </h2>
-<p>Currently the package is primarily centered around interactivity with Seurat Objects with some functionality with LIGER objects.<br>
+<p>Currently the package is primarily centered around interactivity with Seurat Objects with some functionality with LIGER objects and support for CellBender outputs.<br>
 If users are interested in adapting functions (or creating separate functions) to provide comparable functionality with SCE or other object formats I would be happy to add them. See below for more info on PRs.</p>
 </div>
 <div class="section level2">
@@ -242,24 +236,18 @@ If users are interested in adapting functions (or creating separate functions) t
 <div class="section level4">
 <h4 id="if-you-run-into-any-issues-or-bugs-please-submit-a-github-issue-with-details-of-the-issue">If you run into any issues or bugs please submit a <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub issue</a> with details of the issue.<a class="anchor" aria-label="anchor" href="#if-you-run-into-any-issues-or-bugs-please-submit-a-github-issue-with-details-of-the-issue"></a>
 </h4>
-<ul>
-<li>If possible please include a reproducible example (suggest using <a href="https://github.com/satijalab/seurat-data" class="external-link">SeuratData package</a> pbmc dataset for lightweight examples.)</li>
-</ul>
+<ul><li>If possible please include a reproducible example (suggest using <a href="https://github.com/satijalab/seurat-data" class="external-link">SeuratData package</a> pbmc dataset for lightweight examples.)</li></ul>
 </div>
 <div class="section level4">
 <h4 id="any-requests-for-new-features-or-enhancements-can-also-be-submitted-as-github-issues">Any requests for new features or enhancements can also be submitted as <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub issues</a>.<a class="anchor" aria-label="anchor" href="#any-requests-for-new-features-or-enhancements-can-also-be-submitted-as-github-issues"></a>
 </h4>
-<ul>
-<li>Even if you don’t know how to implement/incorporate with current package go ahead a submit!</li>
-</ul>
+<ul><li>Even if you don’t know how to implement/incorporate with current package go ahead a submit!</li></ul>
 </div>
 <div class="section level4">
 <h4 id="pull-requests-are-welcome-for-bug-fixes-new-features-or-enhancements">
 <a href="https://github.com/samuel-marsh/scCustomize/pulls" class="external-link">Pull Requests</a> are welcome for bug fixes, new features, or enhancements.<a class="anchor" aria-label="anchor" href="#pull-requests-are-welcome-for-bug-fixes-new-features-or-enhancements"></a>
 </h4>
-<ul>
-<li>Please set PR to merge with “develop” branch and provide description of what the PR contains (referencing existing issue(s) if appropriate).</li>
-</ul>
+<ul><li>Please set PR to merge with “develop” branch and provide description of what the PR contains (referencing existing issue(s) if appropriate).</li></ul>
 </div>
 </div>
 </div>
@@ -318,7 +306,7 @@ If users are interested in adapting functions (or creating separate functions) t
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

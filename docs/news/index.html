@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -105,6 +105,76 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.8.0" id="sccustomize-080-2022-09-xx">scCustomize 0.8.0 (2022-09-XX)<a class="anchor" aria-label="anchor" href="#sccustomize-080-2022-09-xx"></a></h2>
+<div class="section level3">
+<h3 id="added-0-8-0">Added<a class="anchor" aria-label="anchor" href="#added-0-8-0"></a></h3>
+<ul><li>Added <code>mito_name</code> parameter to <code>QC_Plots_Mito</code> to allow for custom specification of meta data column name that contains mitochondrial information.</li>
+<li>Added <code><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln()</a></code> function to return patchwork layout of 3 QC plots.</li>
+<li>Added Rhesus Macaque (macaca mulatta) to the accepted species list for <code><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> and <code><a href="../reference/Add_Mito_Ribo_LIGER.html">Add_Mito_Ribo_LIGER()</a></code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/28" class="external-link">#28</a>).</li>
+<li>Added <code>alpha_exp</code> and <code>alpha_na_exp</code> parameters to <code>FeaturePlot_scCustom</code> to allow for control of color scale transparency (<a href="https://github.com/samuel-marsh/scCustomize/issues/21" class="external-link">#21</a>).</li>
+<li>
+<code>*_Highlight_Plot</code> functions can now plot multiple variables simultaneously using either one color for all variables or one color per variable (<a href="https://github.com/samuel-marsh/scCustomize/issues/34" class="external-link">#34</a>).</li>
+<li>Added parameter <code>figure_plot</code> to <code><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom()</a></code>. This removes axes and axes labels and adds axis legend on left bottom corner of plot (<a href="https://github.com/samuel-marsh/scCustomize/issues/40" class="external-link">#40</a>).</li>
+<li>Added parameter <code>plot_legend</code> to <code>Stacked_VlnPlot</code>. This solves issue with returning only one shared legend across all features being plotted (<a href="https://github.com/samuel-marsh/scCustomize/issues/48" class="external-link">#48</a>).</li>
+<li>Added <code>Add_Cell_Complexity_Seurat</code> and <code>Add_Cell_Complexity_LIGER</code> functions to add cell QC complexity/novelty metric (log10(Genes) / log10(UMIs)).<br></li>
+<li>Added <code>QC_Plots_Complexity</code> plot for quick plotting of cell complexity score.</li>
+<li>Added 3 new CellBender functions <code>Read_CellBender_h5_Mat</code>, <code>Read_CellBender_h5_Multi_Directory</code>, <code>Read_CellBender_h5_Multi_File</code> to enable easy reading of new CellBender output files.</li>
+<li>Added <code>raster.dpi</code> parameter from Seurat to all <code>DimPlot</code> <code>FeaturePlot</code> or <code>FeatureScatter</code> based functions.<br></li>
+<li>Added <code>add.noise</code> parameter from Seurat to <code>VlnPlot_scCustom</code> <code>Stacked_VlnPlot</code> functions.<br></li>
+<li>Added <code>group.by</code> as default listed parameter to added to all<code>VlnPlot</code> based <code>QC_Plot_*</code>.<br></li>
+<li>Added <code>ensembl_ids</code> parameter for <code>Add_Mito_Ribo_*</code> functions. If <code>ensembl_ids = TRUE</code> functions will retrieve stored ensembl IDs representing mitochondrial and ribosomal genes for accepted default species.<br></li>
+<li>Added parameter <code>label_feature_yaxis</code> to <code>FeaturePlot_scCustom</code>. Allows for plotting of feature names on secondary y-axis when using <code>split.by</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/60" class="external-link">#60</a>).<br></li>
+<li>Added <code>Add_Sample_Meta</code> function for addition of sample-level meta data to cell-level <code>@meta.data</code> slot of Seurat objects.<br></li>
+<li>Added a matrix check in <code>Read_GEO_Delim</code> to check for issues with imported matrices. Check is modified version of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CheckMatrix.html" class="external-link">SeuratObject::CheckMatrix</a></code> called <code><a href="../reference/CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code>. Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.<br></li>
+<li>
+<code>QC_Plot_UMIvsGene</code> will now returned filtered correlation value that takes into account <code>meta_gradient_name</code> if provided in addition to nFeature_RNA and nCount_RNA.</li>
+<li>Added new function <code>Variable_Features_ALL_LIGER</code> which allows for detection/selection of variable genes from entire LIGER object instead of iterating by dataset.</li>
+<li>Vignettes/Website updated with new function examples.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-0-8-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-8-0"></a></h3>
+<ul><li>
+<strong>DEPENDENCY CHANGE</strong> The required version of Seurat has been changed due to errors caused by updates to Matrix package and handling of sparse matrices. To avoid errors version requirement for Seurat has been updated to 4.2.0.</li>
+<li>
+<strong>DEPENDENCY CHANGE</strong> The dittoSeq package has been moved to Suggests to aid package installation. To catch errors a <code>PackageCheck</code> warning has been added where needed.<br></li>
+<li>
+<strong>BREAKING CHANGE</strong> Function name for iterative <code>VlnPlot</code> has been changed to <code>Iterate_VlnPlot_scCustom</code> to reflect that it now uses <code>VlnPlot_scCustom</code> to generate plots.</li>
+<li>
+<code>QC_Plot_*</code> functions now use <code>VlnPlot_scCustom</code> internally to unify color scheme and rasterization parameters.</li>
+<li>
+<code>*_Highlight_Plot</code> functions no longer display “Unselected” in plot legend and uses <code>DimPlot_scCustom</code> to generate plots (<a href="https://github.com/samuel-marsh/scCustomize/issues/34" class="external-link">#34</a>).</li>
+<li>Updated Marsh et al., 2022 citation in vignettes.</li>
+<li>Have begun to move information, warning, and error messages to rlang/cli framework for clarity and style.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-0-8-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-8-0"></a></h3>
+<ul><li>Fixed DESCRIPTION file to specify colorway version upon installation (<a href="https://github.com/samuel-marsh/scCustomize/pull/25" class="external-link">#25</a>).</li>
+<li>Fixed bug preventing <code>low_cutoff</code> from plotting via <code>QC_Plots_Mito</code>.</li>
+<li>Fixed bug in <code>Clustered_DotPlot</code> that prevented setting identity colors (<a href="https://github.com/samuel-marsh/scCustomize/issues/29" class="external-link">#29</a>).</li>
+<li>Fixed bug in <code>FeaturePlot_scCustom</code> that returned NULL when setting <code>combine = FALSE</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/31" class="external-link">#31</a>).</li>
+<li>Fixed bug in <code>Seq_QC_Plot_*</code> functions which resulted in groups being plotted out of order when specifying <code>plot_by</code> parameter.</li>
+<li>Fixed bug in <code>Seq_QC_Plot_*</code> functions that created color palette error when color palettes were not being used.</li>
+<li>Fixed bug in <code>DimPlot_scCustom</code> that caused mismatch of colors between plots when using <code>split.by</code> if one of the plots was missing 1 or more of the <code>group.by</code> levels (<a href="https://github.com/samuel-marsh/scCustomize/issues/37" class="external-link">#37</a>).</li>
+<li>Fixed bug in <code>VlnPlot_scCustom</code> that caused raster warning messages to be displayed twice (<a href="https://github.com/samuel-marsh/scCustomize/issues/42" class="external-link">#42</a>).</li>
+<li>Fixed bug in <code>Iterate_PC_Loading_Plots</code> that caused error when specifying current directory with <code>file_path = NULL</code> or <code>file_path = ""</code>
+</li>
+<li>Fixed bug in <code>DotPlot_scCustom</code> that prevented plotting of features in meta.data slot (<a href="https://github.com/samuel-marsh/scCustomize/issues/44" class="external-link">#44</a>).</li>
+<li>Fixed error messaging/reporting in <code>Stacked_VlnPlot</code> when no supplied features were present.</li>
+<li>Fixed bug in <code>plotFactors_scCustom</code> that was ignoring provided file name.</li>
+<li>Fixed bug in <code>plotFactors_scCustom</code> that caused progress to only display progress up to 50% even when it was fully complete.</li>
+<li>Fixed bug in <code>Clustered_DotPlot</code> that resulted in error related to color palettes if number of clusters was greater than 36 (<a href="https://github.com/samuel-marsh/scCustomize/issues/49" class="external-link">#49</a>).</li>
+<li>Fixed bug in <code>Add_Mito_Ribo_LIGER</code> that resulted custom column names (e.g. <code>mito_name = "pct.mt"</code>) being disregarded and also therefore issue with <code>overwrite</code> parameter. (<a href="https://github.com/samuel-marsh/scCustomize/issues/51" class="external-link">#51</a>).</li>
+<li>Fixed bug in <code>Store_Misc_Info_Seurat</code> that prevented function from working.</li>
+<li>Fixed bug in <code>Plot_Density_Custom</code> when supplying <code>custom_palette</code> and multiple features. (<a href="https://github.com/samuel-marsh/scCustomize/issues/53" class="external-link">#51</a>).</li>
+<li>Fixed bug in <code>Clustered_DotPlot</code> so that legend with identities is displayed by factor level of Seurat object idents (<a href="https://github.com/samuel-marsh/scCustomize/issues/55" class="external-link">#55</a>).</li>
+<li>Fixed bug in <code>Split_FeatureScatter</code> to remove test code that prevented function from working properly (<a href="https://github.com/samuel-marsh/scCustomize/issues/57" class="external-link">#57</a>).</li>
+<li>Fixed bug in <code>DimPlot_All_Samples</code>, <code>Split_FeatureScatter</code>, and <code>DimPlot_scCustom</code> that ignored factor order when plotting groups.</li>
+<li>Fixed error due to deprecation of functions in Matrix package v1.5-0+ (<a href="https://github.com/samuel-marsh/scCustomize/issues/61" class="external-link">#61</a>).<br></li>
+<li>Fixed error that prevent returning <code>FeaturePlot_scCustom</code> when setting <code>split.by</code> and one or more of features provided was not present in object (<a href="https://github.com/samuel-marsh/scCustomize/issues/64" class="external-link">#64</a>).<br></li>
+<li>Typo/styling fixes.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.7.0" id="sccustomize-070-2022-01-10">scCustomize 0.7.0 (2022-01-10)<a class="anchor" aria-label="anchor" href="#sccustomize-070-2022-01-10"></a></h2>
 <div class="section level3">
 <h3 id="added-0-7-0">Added<a class="anchor" aria-label="anchor" href="#added-0-7-0"></a></h3>
@@ -153,8 +223,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="changes-0-6-1">Changes<a class="anchor" aria-label="anchor" href="#changes-0-6-1"></a></h3>
-<ul><li>Changed citation info to reflect global DOI and not version DOI.</li>
-</ul></div>
+<ul><li>Changed citation info to reflect global DOI and not version DOI.</li></ul></div>
 <div class="section level3">
 <h3 id="fixes-0-6-1">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-6-1"></a></h3>
 <ul><li>Restore package color palette defaults to <code>Iterate_VlnPlot</code>.<br></li>
@@ -165,12 +234,10 @@
 <h2 class="page-header" data-toc-text="0.6.0" id="sccustomize-060-2021-11-16">scCustomize 0.6.0 (2021-11-16)<a class="anchor" aria-label="anchor" href="#sccustomize-060-2021-11-16"></a></h2>
 <div class="section level3">
 <h3 id="added-0-6-0">Added<a class="anchor" aria-label="anchor" href="#added-0-6-0"></a></h3>
-<ul><li>scCustomize is public!! Version 0.6.0 is released!</li>
-</ul></div>
+<ul><li>scCustomize is public!! Version 0.6.0 is released!</li></ul></div>
 <div class="section level3">
 <h3 id="changes-0-6-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-6-0"></a></h3>
-<ul><li>Many function names have changed since private release see reference page/manual for updated function names.</li>
-</ul></div>
+<ul><li>Many function names have changed since private release see reference page/manual for updated function names.</li></ul></div>
 </div>
   </div>
 
@@ -186,7 +253,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

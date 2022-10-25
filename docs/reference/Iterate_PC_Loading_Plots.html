@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,35 +110,48 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Iterate_PC_Loading_Plots</span><span class="op">(</span>
-  <span class="va">seurat_object</span>,
-  dims_plot <span class="op">=</span> <span class="cn">NULL</span>,
-  file_path <span class="op">=</span> <span class="cn">NULL</span>,
-  name_prefix <span class="op">=</span> <span class="cn">NULL</span>,
-  file_name <span class="op">=</span> <span class="st">"PC_Loading_Plots"</span>,
-  return_plots <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Iterate_PC_Loading_Plots</span><span class="op">(</span></span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  dims_plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  name_prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  file_name <span class="op">=</span> <span class="st">"PC_Loading_Plots"</span>,</span>
+<span>  return_plots <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
 <dt>dims_plot</dt>
 <dd><p>number of PCs to plot (integer).  Default is all dims present in PCA.</p></dd>
+
+
 <dt>file_path</dt>
 <dd><p>directory file path to save file.</p></dd>
+
+
 <dt>name_prefix</dt>
 <dd><p>prefix for file name (optional).</p></dd>
+
+
 <dt>file_name</dt>
 <dd><p>suffix for file name.  Default is "PC_Loading_Plots".</p></dd>
+
+
 <dt>return_plots</dt>
 <dd><p>Whether to return the plot list (Default is FALSE).  Must assign to environment
 to save plot list.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of plots outputted as pdf</p>
+    
+
+<p>A list of plots outputted as pdf</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -147,10 +160,10 @@ to save plot list.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">Iterate_PC_Loading_Plots</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">seurat</span>, dims_plot <span class="op">=</span> <span class="fl">25</span>, file_path <span class="op">=</span> <span class="st">"plots/"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">Iterate_PC_Loading_Plots</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">seurat</span>, dims_plot <span class="op">=</span> <span class="fl">25</span>, file_path <span class="op">=</span> <span class="st">"plots/"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -165,7 +178,7 @@ to save plot list.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

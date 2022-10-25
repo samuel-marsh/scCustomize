@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,97 +110,146 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">QC_Plot_UMIvsGene</span><span class="op">(</span>
-  <span class="va">seurat_object</span>,
-  x_axis_label <span class="op">=</span> <span class="st">"UMIs per Cell/Nucleus"</span>,
-  y_axis_label <span class="op">=</span> <span class="st">"Genes per Cell/Nucleus"</span>,
-  low_cutoff_gene <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>,
-  high_cutoff_gene <span class="op">=</span> <span class="cn">Inf</span>,
-  low_cutoff_UMI <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>,
-  high_cutoff_UMI <span class="op">=</span> <span class="cn">Inf</span>,
-  colors_use <span class="op">=</span> <span class="cn">NULL</span>,
-  meta_gradient_name <span class="op">=</span> <span class="cn">NULL</span>,
-  meta_gradient_color <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,
-  meta_gradient_na_color <span class="op">=</span> <span class="st">"lightgray"</span>,
-  meta_gradient_low_cutoff <span class="op">=</span> <span class="cn">NULL</span>,
-  cells <span class="op">=</span> <span class="cn">NULL</span>,
-  combination <span class="op">=</span> <span class="cn">F</span>,
-  pt.size <span class="op">=</span> <span class="fl">1</span>,
-  group.by <span class="op">=</span> <span class="cn">NULL</span>,
-  raster <span class="op">=</span> <span class="cn">NULL</span>,
-  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,
-  color_seed <span class="op">=</span> <span class="fl">123</span>,
-  shuffle_seed <span class="op">=</span> <span class="fl">1</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">QC_Plot_UMIvsGene</span><span class="op">(</span></span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  x_axis_label <span class="op">=</span> <span class="st">"UMIs per Cell/Nucleus"</span>,</span>
+<span>  y_axis_label <span class="op">=</span> <span class="st">"Genes per Cell/Nucleus"</span>,</span>
+<span>  low_cutoff_gene <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>,</span>
+<span>  high_cutoff_gene <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>  low_cutoff_UMI <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>,</span>
+<span>  high_cutoff_UMI <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  meta_gradient_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  meta_gradient_color <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,</span>
+<span>  meta_gradient_na_color <span class="op">=</span> <span class="st">"lightgray"</span>,</span>
+<span>  meta_gradient_low_cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cells <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  combination <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  pt.size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raster.dpi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span>,</span>
+<span>  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color_seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  shuffle_seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
 <dt>x_axis_label</dt>
 <dd><p>Label for x axis.</p></dd>
+
+
 <dt>y_axis_label</dt>
 <dd><p>Label for y axis.</p></dd>
+
+
 <dt>low_cutoff_gene</dt>
 <dd><p>Plot line a potential low threshold for filtering genes per cell.</p></dd>
+
+
 <dt>high_cutoff_gene</dt>
 <dd><p>Plot line a potential high threshold for filtering genes per cell.</p></dd>
+
+
 <dt>low_cutoff_UMI</dt>
 <dd><p>Plot line a potential low threshold for filtering UMIs per cell.</p></dd>
+
+
 <dt>high_cutoff_UMI</dt>
 <dd><p>Plot line a potential high threshold for filtering UMIs per cell.</p></dd>
+
+
 <dt>colors_use</dt>
 <dd><p>vector of colors to use for plotting by identity.</p></dd>
+
+
 <dt>meta_gradient_name</dt>
 <dd><p>Name of continuous meta data variable to color points in plot by.
 (MUST be continuous variable i.e. "percent_mito").</p></dd>
+
+
 <dt>meta_gradient_color</dt>
 <dd><p>The gradient color palette to use for plotting of meta variable (default is
 viridis "Plasma" palette with dark colors high).</p></dd>
+
+
 <dt>meta_gradient_na_color</dt>
 <dd><p>Color to use for plotting values when a <code>meta_gradient_low_cutoff</code> is
 set (default is "lightgray").</p></dd>
+
+
 <dt>meta_gradient_low_cutoff</dt>
 <dd><p>Value to use as threshold for plotting.  <code>meta_gradient_name</code> values
 below this value will be plotted using <code>meta_gradient_na_color</code>.</p></dd>
+
+
 <dt>cells</dt>
 <dd><p>Cells to include on the scatter plot (default is all cells).</p></dd>
+
+
 <dt>combination</dt>
 <dd><p>logical (default FALSE).  Whether or not to return a plot layout with both the
 plot colored by identity and the meta data gradient plot.</p></dd>
+
+
 <dt>pt.size</dt>
 <dd><p>Passes size of points to both <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">FeatureScatter</a></code> and <code>geom_point</code>.</p></dd>
+
+
 <dt>group.by</dt>
 <dd><p>Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
 Default is <code>@active.ident</code>.</p></dd>
+
+
 <dt>raster</dt>
 <dd><p>Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 cells.</p></dd>
+
+
+<dt>raster.dpi</dt>
+<dd><p>Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).</p></dd>
+
+
 <dt>ggplot_default_colors</dt>
 <dd><p>logical.  If <code>colors_use = NULL</code>, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.</p></dd>
+
+
 <dt>color_seed</dt>
 <dd><p>Random seed for the "varibow" palette shuffle if <code>colors_use = NULL</code> and number of
 groups plotted is greater than 36.  Default = 123.</p></dd>
+
+
 <dt>shuffle_seed</dt>
 <dd><p>Sets the seed if randomly shuffling the order of points (Default is 1).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">FeatureScatter</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">QC_Plot_UMIvsGene</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, x_axis_label <span class="op">=</span> <span class="st">"UMIs per Cell/Nucleus"</span>,</span>
-<span class="r-in">y_axis_label <span class="op">=</span> <span class="st">"Genes per Cell/Nucleus"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">QC_Plot_UMIvsGene</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, x_axis_label <span class="op">=</span> <span class="st">"UMIs per Cell/Nucleus"</span>,</span></span>
+<span class="r-in"><span>y_axis_label <span class="op">=</span> <span class="st">"Genes per Cell/Nucleus"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -215,7 +264,7 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

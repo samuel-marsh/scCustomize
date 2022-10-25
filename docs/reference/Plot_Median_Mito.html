@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,55 +110,76 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Plot_Median_Mito</span><span class="op">(</span>
-  <span class="va">seurat_object</span>,
-  sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,
-  group_by <span class="op">=</span> <span class="cn">NULL</span>,
-  colors_use <span class="op">=</span> <span class="cn">NULL</span>,
-  plot_title <span class="op">=</span> <span class="st">"Median % Mito per Sample"</span>,
-  y_axis_label <span class="op">=</span> <span class="st">"Percent Mitochondrial Reads"</span>,
-  x_axis_label <span class="op">=</span> <span class="cn">NULL</span>,
-  legend_title <span class="op">=</span> <span class="cn">NULL</span>,
-  x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,
-  color_seed <span class="op">=</span> <span class="fl">123</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Plot_Median_Mito</span><span class="op">(</span></span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plot_title <span class="op">=</span> <span class="st">"Median % Mito per Sample"</span>,</span>
+<span>  y_axis_label <span class="op">=</span> <span class="st">"Percent Mitochondrial Reads"</span>,</span>
+<span>  x_axis_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  color_seed <span class="op">=</span> <span class="fl">123</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
 <dt>sample_col</dt>
 <dd><p>Specify which column in meta.data specifies sample ID (i.e. orig.ident).</p></dd>
+
+
 <dt>group_by</dt>
 <dd><p>Column in meta.data slot to group results by (i.e. "Treatment").</p></dd>
+
+
 <dt>colors_use</dt>
 <dd><p>List of colors or color palette to use.  Only applicable if <code>group_by</code> is not NULL.</p></dd>
+
+
 <dt>plot_title</dt>
 <dd><p>Plot title.</p></dd>
+
+
 <dt>y_axis_label</dt>
 <dd><p>Label for y axis.</p></dd>
+
+
 <dt>x_axis_label</dt>
 <dd><p>Label for x axis.</p></dd>
+
+
 <dt>legend_title</dt>
 <dd><p>Label for plot legend.</p></dd>
+
+
 <dt>x_lab_rotate</dt>
 <dd><p>logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.</p></dd>
+
+
 <dt>color_seed</dt>
 <dd><p>random seed for the "varibow" palette shuffle if <code>colors_use = NULL</code> and number of
 groups plotted is greater than 36.  Default = 123.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">Plot_Median_Mito</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,  group_by <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">Plot_Median_Mito</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,  group_by <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -173,7 +194,7 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

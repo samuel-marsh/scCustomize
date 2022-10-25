@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,21 +110,21 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="va">viridis_plasma_dark_high</span>
-
-<span class="va">viridis_plasma_light_high</span>
-
-<span class="va">viridis_inferno_dark_high</span>
-
-<span class="va">viridis_inferno_light_high</span>
-
-<span class="va">viridis_magma_dark_high</span>
-
-<span class="va">viridis_magma_light_high</span>
-
-<span class="va">viridis_dark_high</span>
-
-<span class="va">viridis_light_high</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="va">viridis_plasma_dark_high</span></span>
+<span></span>
+<span><span class="va">viridis_plasma_light_high</span></span>
+<span></span>
+<span><span class="va">viridis_inferno_dark_high</span></span>
+<span></span>
+<span><span class="va">viridis_inferno_light_high</span></span>
+<span></span>
+<span><span class="va">viridis_magma_dark_high</span></span>
+<span></span>
+<span><span class="va">viridis_magma_light_high</span></span>
+<span></span>
+<span><span class="va">viridis_dark_high</span></span>
+<span></span>
+<span><span class="va">viridis_light_high</span></span></code></pre></div>
     </div>
 
     <div id="format">
@@ -140,15 +140,17 @@
     </div>
     <div id="value">
     <h2>Value</h2>
-    <p>A color palette for plotting</p>
+    
+
+<p>A color palette for plotting</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seurat_object</span>, features <span class="op">=</span> <span class="st">"Cx3cr1"</span>, colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>, na_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">seurat_object</span>, features <span class="op">=</span> <span class="st">"Cx3cr1"</span>, colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>, na_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -163,7 +165,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

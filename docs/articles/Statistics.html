@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -54,7 +54,7 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Statistics Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: January 13, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: October 25, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Statistics.Rmd" class="external-link"><code>vignettes/Statistics.Rmd</code></a></small>
       <div class="hidden name"><code>Statistics.Rmd</code></div>
@@ -145,41 +145,41 @@ p.caption {
   font-size: 0.9em;
 }
 </style>
-<div class="section level1">
-<h1 id="statistics-functions">Statistics Functions<a class="anchor" aria-label="anchor" href="#statistics-functions"></a>
-</h1>
+<div class="section level2">
+<h2 id="statistics-functions">Statistics Functions<a class="anchor" aria-label="anchor" href="#statistics-functions"></a>
+</h2>
 <p>scCustomize contains a couple simple helper functions to return metrics of interest.</p>
 <p>For this vignette I will be utilizing pbmc3k dataset from the SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Load Packages</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span>
-
-<span class="co"># Load example dataset for tutorial</span>
-<span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load example dataset for tutorial</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></span></code></pre></div>
 <p>Now let’s add some extra meta data for use with tutorial</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Add mito and ribo data</span>
-<span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span>
-
-<span class="co"># Add random sample and group variables</span>
-<span class="va">pbmc</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>, <span class="st">"sample4"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample1"</span> <span class="op">|</span> <span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample3"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 1"</span>
-<span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample2"</span> <span class="op">|</span> <span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample4"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 2"</span>
-
-<span class="co"># Add dummy module score</span>
-<span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD4"</span>, <span class="st">"THY1"</span>, <span class="st">"TCRA"</span><span class="op">)</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"module_score"</span><span class="op">)</span></code></pre></div>
-<div class="section level2">
-<h2 id="cells-per-identity">Cells Per Identity<a class="anchor" aria-label="anchor" href="#cells-per-identity"></a>
-</h2>
+<code class="sourceCode R"><span><span class="co"># Add mito and ribo data</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Add random sample and group variables</span></span>
+<span><span class="va">pbmc</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>, <span class="st">"sample4"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample1"</span> <span class="op">|</span> <span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample3"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 1"</span></span>
+<span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample2"</span> <span class="op">|</span> <span class="va">pbmc</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"sample4"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 2"</span></span>
+<span></span>
+<span><span class="co"># Add dummy module score</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD4"</span>, <span class="st">"THY1"</span>, <span class="st">"TCRA"</span><span class="op">)</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"module_score"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="cells-per-identity">Cells Per Identity<a class="anchor" aria-label="anchor" href="#cells-per-identity"></a>
+</h3>
 <p>It can be really helpful to know the number and percentage of cells per identity/cluster during analysis.<br>
 scCustomize provides the <code>Cluster_Stats_All_Samples</code> function to make this easy.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span>
-
-<span class="va">cluster_stats</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cluster_stats</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -228,28 +228,28 @@ Naive CD4 T
 26.4215315
 </td>
 <td style="text-align:right;">
-183
+179
 </td>
 <td style="text-align:right;">
-168
+167
 </td>
 <td style="text-align:right;">
-172
+169
 </td>
 <td style="text-align:right;">
-174
+182
 </td>
 <td style="text-align:right;">
-26.3309353
+26.3622975
 </td>
 <td style="text-align:right;">
-25.3776435
+25.9316770
 </td>
 <td style="text-align:right;">
-26.2595420
+25.4135338
 </td>
 <td style="text-align:right;">
-27.7955272
+28.0000000
 </td>
 </tr>
 <tr>
@@ -263,28 +263,28 @@ Memory CD4 T
 18.3093252
 </td>
 <td style="text-align:right;">
-123
+142
 </td>
 <td style="text-align:right;">
-127
+121
 </td>
 <td style="text-align:right;">
-117
+115
 </td>
 <td style="text-align:right;">
-116
+105
 </td>
 <td style="text-align:right;">
-17.6978417
+20.9131075
 </td>
 <td style="text-align:right;">
-19.1842900
+18.7888199
 </td>
 <td style="text-align:right;">
-17.8625954
+17.2932331
 </td>
 <td style="text-align:right;">
-18.5303514
+16.1538462
 </td>
 </tr>
 <tr>
@@ -298,28 +298,28 @@ CD14+ Mono
 18.1956027
 </td>
 <td style="text-align:right;">
-131
+129
 </td>
 <td style="text-align:right;">
-134
+102
 </td>
 <td style="text-align:right;">
-116
+141
 </td>
 <td style="text-align:right;">
-99
+108
 </td>
 <td style="text-align:right;">
-18.8489209
+18.9985272
 </td>
 <td style="text-align:right;">
-20.2416918
+15.8385093
 </td>
 <td style="text-align:right;">
-17.7099237
+21.2030075
 </td>
 <td style="text-align:right;">
-15.8146965
+16.6153846
 </td>
 </tr>
 <tr>
@@ -333,28 +333,28 @@ B
 13.0401820
 </td>
 <td style="text-align:right;">
-84
+79
 </td>
 <td style="text-align:right;">
-74
+89
 </td>
 <td style="text-align:right;">
-91
+90
 </td>
 <td style="text-align:right;">
-95
+86
 </td>
 <td style="text-align:right;">
-12.0863309
+11.6347570
 </td>
 <td style="text-align:right;">
-11.1782477
+13.8198758
 </td>
 <td style="text-align:right;">
-13.8931298
+13.5338346
 </td>
 <td style="text-align:right;">
-15.1757188
+13.2307692
 </td>
 </tr>
 <tr>
@@ -368,28 +368,28 @@ CD8 T
 10.2729340
 </td>
 <td style="text-align:right;">
-72
-</td>
-<td style="text-align:right;">
-72
-</td>
-<td style="text-align:right;">
-63
+65
 </td>
 <td style="text-align:right;">
 64
 </td>
 <td style="text-align:right;">
-10.3597122
+67
 </td>
 <td style="text-align:right;">
-10.8761329
+75
 </td>
 <td style="text-align:right;">
-9.6183206
+9.5729013
 </td>
 <td style="text-align:right;">
-10.2236422
+9.9378882
+</td>
+<td style="text-align:right;">
+10.0751880
+</td>
+<td style="text-align:right;">
+11.5384615
 </td>
 </tr>
 <tr>
@@ -403,28 +403,28 @@ FCGR3A+ Mono
 6.1410159
 </td>
 <td style="text-align:right;">
-41
-</td>
-<td style="text-align:right;">
-44
-</td>
-<td style="text-align:right;">
 42
+</td>
+<td style="text-align:right;">
+43
 </td>
 <td style="text-align:right;">
 35
 </td>
 <td style="text-align:right;">
-5.8992806
+42
 </td>
 <td style="text-align:right;">
-6.6465257
+6.1855670
 </td>
 <td style="text-align:right;">
-6.4122137
+6.6770186
 </td>
 <td style="text-align:right;">
-5.5910543
+5.2631579
+</td>
+<td style="text-align:right;">
+6.4615385
 </td>
 </tr>
 <tr>
@@ -438,28 +438,28 @@ NK
 5.8756634
 </td>
 <td style="text-align:right;">
-51
+30
 </td>
 <td style="text-align:right;">
-29
+48
 </td>
 <td style="text-align:right;">
-43
+35
 </td>
 <td style="text-align:right;">
-32
+42
 </td>
 <td style="text-align:right;">
-7.3381295
+4.4182622
 </td>
 <td style="text-align:right;">
-4.3806647
+7.4534161
 </td>
 <td style="text-align:right;">
-6.5648855
+5.2631579
 </td>
 <td style="text-align:right;">
-5.1118211
+6.4615385
 </td>
 </tr>
 <tr>
@@ -473,28 +473,28 @@ DC
 1.2130402
 </td>
 <td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
 10
 </td>
 <td style="text-align:right;">
-5
+7
 </td>
 <td style="text-align:right;">
 9
 </td>
 <td style="text-align:right;">
-1.1510791
+6
 </td>
 <td style="text-align:right;">
-1.5105740
+1.4727541
 </td>
 <td style="text-align:right;">
-0.7633588
+1.0869565
 </td>
 <td style="text-align:right;">
-1.4376997
+1.3533835
+</td>
+<td style="text-align:right;">
+0.9230769
 </td>
 </tr>
 <tr>
@@ -508,28 +508,28 @@ Platelet
 0.5307051
 </td>
 <td style="text-align:right;">
-2
+3
+</td>
+<td style="text-align:right;">
+3
 </td>
 <td style="text-align:right;">
 4
 </td>
 <td style="text-align:right;">
-6
+4
 </td>
 <td style="text-align:right;">
-2
+0.4418262
 </td>
 <td style="text-align:right;">
-0.2877698
+0.4658385
 </td>
 <td style="text-align:right;">
-0.6042296
+0.6015038
 </td>
 <td style="text-align:right;">
-0.9160305
-</td>
-<td style="text-align:right;">
-0.3194888
+0.6153846
 </td>
 </tr>
 <tr>
@@ -543,16 +543,16 @@ Total
 100.0000000
 </td>
 <td style="text-align:right;">
-695
+679
 </td>
 <td style="text-align:right;">
-662
+644
 </td>
 <td style="text-align:right;">
-655
+665
 </td>
 <td style="text-align:right;">
-626
+650
 </td>
 <td style="text-align:right;">
 100.0000000
@@ -571,9 +571,9 @@ Total
 </table>
 <p>By default <code>Cluster_Stats_All_Samples</code> uses “orig.ident” as the group variable but user can specify any <code>@meta.data</code> slot variable.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span>
-
-<span class="va">cluster_stats</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cluster_stats</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -610,16 +610,16 @@ Naive CD4 T
 26.4215315
 </td>
 <td style="text-align:right;">
-355
+348
 </td>
 <td style="text-align:right;">
-342
+349
 </td>
 <td style="text-align:right;">
-26.2962963
+25.8928571
 </td>
 <td style="text-align:right;">
-26.5527950
+26.9706337
 </td>
 </tr>
 <tr>
@@ -633,16 +633,16 @@ Memory CD4 T
 18.3093252
 </td>
 <td style="text-align:right;">
-240
+257
 </td>
 <td style="text-align:right;">
-243
+226
 </td>
 <td style="text-align:right;">
-17.7777778
+19.1220238
 </td>
 <td style="text-align:right;">
-18.8664596
+17.4652241
 </td>
 </tr>
 <tr>
@@ -656,16 +656,16 @@ CD14+ Mono
 18.1956027
 </td>
 <td style="text-align:right;">
-247
+270
 </td>
 <td style="text-align:right;">
-233
+210
 </td>
 <td style="text-align:right;">
-18.2962963
+20.0892857
 </td>
 <td style="text-align:right;">
-18.0900621
+16.2287481
 </td>
 </tr>
 <tr>
@@ -679,16 +679,16 @@ B
 13.0401820
 </td>
 <td style="text-align:right;">
-175
-</td>
-<td style="text-align:right;">
 169
 </td>
 <td style="text-align:right;">
-12.9629630
+175
 </td>
 <td style="text-align:right;">
-13.1211180
+12.5744048
+</td>
+<td style="text-align:right;">
+13.5239567
 </td>
 </tr>
 <tr>
@@ -702,16 +702,16 @@ CD8 T
 10.2729340
 </td>
 <td style="text-align:right;">
-135
+132
 </td>
 <td style="text-align:right;">
-136
+139
 </td>
 <td style="text-align:right;">
-10.0000000
+9.8214286
 </td>
 <td style="text-align:right;">
-10.5590062
+10.7418856
 </td>
 </tr>
 <tr>
@@ -725,16 +725,16 @@ FCGR3A+ Mono
 6.1410159
 </td>
 <td style="text-align:right;">
-83
+77
 </td>
 <td style="text-align:right;">
-79
+85
 </td>
 <td style="text-align:right;">
-6.1481481
+5.7291667
 </td>
 <td style="text-align:right;">
-6.1335404
+6.5687790
 </td>
 </tr>
 <tr>
@@ -748,16 +748,16 @@ NK
 5.8756634
 </td>
 <td style="text-align:right;">
-94
+65
 </td>
 <td style="text-align:right;">
-61
+90
 </td>
 <td style="text-align:right;">
-6.9629630
+4.8363095
 </td>
 <td style="text-align:right;">
-4.7360248
+6.9551777
 </td>
 </tr>
 <tr>
@@ -771,16 +771,16 @@ DC
 1.2130402
 </td>
 <td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
 19
 </td>
 <td style="text-align:right;">
-0.9629630
+13
 </td>
 <td style="text-align:right;">
-1.4751553
+1.4136905
+</td>
+<td style="text-align:right;">
+1.0046368
 </td>
 </tr>
 <tr>
@@ -794,16 +794,16 @@ Platelet
 0.5307051
 </td>
 <td style="text-align:right;">
-8
+7
 </td>
 <td style="text-align:right;">
-6
+7
 </td>
 <td style="text-align:right;">
-0.5925926
+0.5208333
 </td>
 <td style="text-align:right;">
-0.4658385
+0.5409583
 </td>
 </tr>
 <tr>
@@ -817,10 +817,10 @@ Total
 100.0000000
 </td>
 <td style="text-align:right;">
-1350
+1344
 </td>
 <td style="text-align:right;">
-1288
+1294
 </td>
 <td style="text-align:right;">
 100.0000000
@@ -832,13 +832,13 @@ Total
 </tbody>
 </table>
 </div>
-<div class="section level2">
-<h2 id="percent-of-cells-expressing-features">Percent of Cells Expressing Feature(s)<a class="anchor" aria-label="anchor" href="#percent-of-cells-expressing-features"></a>
-</h2>
+<div class="section level3">
+<h3 id="percent-of-cells-expressing-features">Percent of Cells Expressing Feature(s)<a class="anchor" aria-label="anchor" href="#percent-of-cells-expressing-features"></a>
+</h3>
 <p>It can also be informative to understand the percent of cells/nuclei that express a given feature or set of features.<br>
 scCustomize provides the <code>Percent_Expressing</code> function to return these results.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -938,12 +938,12 @@ CD8A
 </tr>
 </tbody>
 </table>
-<div class="section level3">
-<h3 id="change-grouping-variable">Change grouping variable<a class="anchor" aria-label="anchor" href="#change-grouping-variable"></a>
-</h3>
+<div class="section level4">
+<h4 id="change-grouping-variable">Change grouping variable<a class="anchor" aria-label="anchor" href="#change-grouping-variable"></a>
+</h4>
 <p>By default the function groups expression across <code>@active.ident</code> (see above) but user can specify difference variable if desired.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, group_by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, group_by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -955,10 +955,10 @@ sample2
 sample1
 </th>
 <th style="text-align:right;">
-sample4
+sample3
 </th>
 <th style="text-align:right;">
-sample3
+sample4
 </th>
 </tr></thead>
 <tbody>
@@ -967,16 +967,16 @@ sample3
 CD4
 </td>
 <td style="text-align:right;">
-13.29305
+11.024845
 </td>
 <td style="text-align:right;">
-11.65468
+12.81296
 </td>
 <td style="text-align:right;">
-12.14058
+11.27820
 </td>
 <td style="text-align:right;">
-9.770992
+11.69231
 </td>
 </tr>
 <tr>
@@ -984,27 +984,27 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-11.17825
+9.937888
 </td>
 <td style="text-align:right;">
-11.79856
+11.78203
 </td>
 <td style="text-align:right;">
-11.82109
+12.18045
 </td>
 <td style="text-align:right;">
-12.366412
+13.23077
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="split-within-groups">Split within groups<a class="anchor" aria-label="anchor" href="#split-within-groups"></a>
-</h3>
+<div class="section level4">
+<h4 id="split-within-groups">Split within groups<a class="anchor" aria-label="anchor" href="#split-within-groups"></a>
+</h4>
 <p>User can also supply a <code>split_by</code> variable to quantify expression within group split by meta data variable</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, split_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, split_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1016,10 +1016,10 @@ Naive.CD4.T_Group.2
 Naive.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
-Memory.CD4.T_Group.1
+Memory.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
-Memory.CD4.T_Group.2
+Memory.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
 CD14..Mono_Group.1
@@ -1052,16 +1052,16 @@ NK_Group.2
 NK_Group.1
 </th>
 <th style="text-align:right;">
-DC_Group.2
-</th>
-<th style="text-align:right;">
 DC_Group.1
 </th>
 <th style="text-align:right;">
-Platelet_Group.1
+DC_Group.2
 </th>
 <th style="text-align:right;">
 Platelet_Group.2
+</th>
+<th style="text-align:right;">
+Platelet_Group.1
 </th>
 </tr></thead>
 <tbody>
@@ -1070,52 +1070,52 @@ Platelet_Group.2
 CD4
 </td>
 <td style="text-align:right;">
-6.140351
+7.449857
 </td>
 <td style="text-align:right;">
-7.323944
+6.034483
 </td>
 <td style="text-align:right;">
-13.333333
+17.699115
 </td>
 <td style="text-align:right;">
-18.518518
+14.396887
 </td>
 <td style="text-align:right;">
-23.886640
+27.037037
 </td>
 <td style="text-align:right;">
-24.892704
+20.952381
 </td>
 <td style="text-align:right;">
-2.285714
+2.366864
 </td>
 <td style="text-align:right;">
-0.591716
+0.5714286
 </td>
 <td style="text-align:right;">
-1.481481
+3.030303
 </td>
 <td style="text-align:right;">
-3.676471
+2.158273
 </td>
 <td style="text-align:right;">
-21.686747
+20.779221
 </td>
 <td style="text-align:right;">
-32.911392
+32.941176
 </td>
 <td style="text-align:right;">
 0.000000
 </td>
 <td style="text-align:right;">
-1.06383
+1.538461
 </td>
 <td style="text-align:right;">
-42.105263
+31.578947
 </td>
 <td style="text-align:right;">
-23.07692
+38.46154
 </td>
 <td style="text-align:right;">
 0
@@ -1129,46 +1129,46 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-13.450292
+12.607450
 </td>
 <td style="text-align:right;">
-13.239437
+14.080460
 </td>
 <td style="text-align:right;">
-9.166667
+9.292035
 </td>
 <td style="text-align:right;">
-8.641975
+8.560311
 </td>
 <td style="text-align:right;">
-2.024291
+1.481481
 </td>
 <td style="text-align:right;">
-1.716738
-</td>
-<td style="text-align:right;">
-2.857143
+2.380952
 </td>
 <td style="text-align:right;">
 2.366864
 </td>
 <td style="text-align:right;">
-51.851852
+2.8571429
 </td>
 <td style="text-align:right;">
-49.264706
+54.545454
 </td>
 <td style="text-align:right;">
-3.614458
+46.762590
 </td>
 <td style="text-align:right;">
-3.797468
+3.896104
 </td>
 <td style="text-align:right;">
-3.278688
+3.529412
 </td>
 <td style="text-align:right;">
-11.70213
+7.777778
+</td>
+<td style="text-align:right;">
+9.230769
 </td>
 <td style="text-align:right;">
 5.263158
@@ -1186,12 +1186,12 @@ CD8A
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="set-threshold-of-expression">Set threshold of expression<a class="anchor" aria-label="anchor" href="#set-threshold-of-expression"></a>
-</h3>
+<div class="section level4">
+<h4 id="set-threshold-of-expression">Set threshold of expression<a class="anchor" aria-label="anchor" href="#set-threshold-of-expression"></a>
+</h4>
 <p>Users can also supply a threshold value to quantify percent of cells expressing feature(s) above a certain threshold (be sure to note which slot is being used to quantify expression when setting thresholds).<br><em>NOTE: <code>Percent_Expressing</code> currently only supports single threshold across all features</em></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1293,16 +1293,16 @@ CD8A
 </table>
 </div>
 </div>
-<div class="section level2">
-<h2 id="calculate-summary-median-values">Calculate Summary Median Values<a class="anchor" aria-label="anchor" href="#calculate-summary-median-values"></a>
-</h2>
-<p>scCustomize contains function <code>Median_Stats</code> to quickly calculate the medians for basic QC stats (Genes/, UMIs/, % Mito/Cell).</p>
 <div class="section level3">
-<h3 id="basic-use">Basic Use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
+<h3 id="calculate-summary-median-values">Calculate Summary Median Values<a class="anchor" aria-label="anchor" href="#calculate-summary-median-values"></a>
 </h3>
+<p>scCustomize contains function <code>Median_Stats</code> to quickly calculate the medians for basic QC stats (Genes/, UMIs/, % Mito/Cell).</p>
+<div class="section level4">
+<h4 id="basic-use">Basic Use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
+</h4>
 <p>By default <code>Median_Stats</code> will calculate medians for the following meta data columns (if present): “nCount_RNA”, “nFeature_RNA”, “percent_mito”, “percent_ribo”, “percent_mito_ribo”.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1330,19 +1330,19 @@ Median_percent_mito_ribo
 sample1
 </td>
 <td style="text-align:right;">
-2173
+2270.0
 </td>
 <td style="text-align:right;">
-810
+828
 </td>
 <td style="text-align:right;">
-2.027027
+1.999200
 </td>
 <td style="text-align:right;">
-36.91358
+36.54529
 </td>
 <td style="text-align:right;">
-38.92857
+38.42294
 </td>
 </tr>
 <tr>
@@ -1350,19 +1350,19 @@ sample1
 sample2
 </td>
 <td style="text-align:right;">
-2258
+2180.0
 </td>
 <td style="text-align:right;">
-828
+815
 </td>
 <td style="text-align:right;">
-1.980370
+1.989303
 </td>
 <td style="text-align:right;">
-36.09827
+36.89394
 </td>
 <td style="text-align:right;">
-38.58772
+38.83787
 </td>
 </tr>
 <tr>
@@ -1370,19 +1370,19 @@ sample2
 sample3
 </td>
 <td style="text-align:right;">
-2195
+2197.0
 </td>
 <td style="text-align:right;">
-814
+815
 </td>
 <td style="text-align:right;">
-1.982450
+2.055921
 </td>
 <td style="text-align:right;">
-36.89977
+36.19384
 </td>
 <td style="text-align:right;">
-39.03549
+38.61472
 </td>
 </tr>
 <tr>
@@ -1390,19 +1390,19 @@ sample3
 sample4
 </td>
 <td style="text-align:right;">
-2224
+2186.5
 </td>
 <td style="text-align:right;">
-822
+818
 </td>
 <td style="text-align:right;">
-2.057406
+1.984522
 </td>
 <td style="text-align:right;">
-37.74693
+38.32445
 </td>
 <td style="text-align:right;">
-39.88797
+40.48478
 </td>
 </tr>
 <tr>
@@ -1410,7 +1410,7 @@ sample4
 Totals (All Cells)
 </td>
 <td style="text-align:right;">
-2213
+2213.0
 </td>
 <td style="text-align:right;">
 819
@@ -1428,12 +1428,12 @@ Totals (All Cells)
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="additional-variables">Additional Variables<a class="anchor" aria-label="anchor" href="#additional-variables"></a>
-</h3>
+<div class="section level4">
+<h4 id="additional-variables">Additional Variables<a class="anchor" aria-label="anchor" href="#additional-variables"></a>
+</h4>
 <p>In addition to default variables, users can supply their own additional meta data columns to calculate medians using the <code>median_var</code> parameter.<br><em>NOTE: The meta data column must be in numeric format (e.g., integer, numeric, dbl)</em></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1464,22 +1464,22 @@ Median_module_score1
 sample1
 </td>
 <td style="text-align:right;">
-2173
+2270.0
 </td>
 <td style="text-align:right;">
-810
+828
 </td>
 <td style="text-align:right;">
-2.027027
+1.999200
 </td>
 <td style="text-align:right;">
-36.91358
+36.54529
 </td>
 <td style="text-align:right;">
-38.92857
+38.42294
 </td>
 <td style="text-align:right;">
--0.0593373
+-0.0634364
 </td>
 </tr>
 <tr>
@@ -1487,22 +1487,22 @@ sample1
 sample2
 </td>
 <td style="text-align:right;">
-2258
+2180.0
 </td>
 <td style="text-align:right;">
-828
+815
 </td>
 <td style="text-align:right;">
-1.980370
+1.989303
 </td>
 <td style="text-align:right;">
-36.09827
+36.89394
 </td>
 <td style="text-align:right;">
-38.58772
+38.83787
 </td>
 <td style="text-align:right;">
--0.0711762
+-0.0528846
 </td>
 </tr>
 <tr>
@@ -1510,22 +1510,22 @@ sample2
 sample3
 </td>
 <td style="text-align:right;">
-2195
+2197.0
 </td>
 <td style="text-align:right;">
-814
+815
 </td>
 <td style="text-align:right;">
-1.982450
+2.055921
 </td>
 <td style="text-align:right;">
-36.89977
+36.19384
 </td>
 <td style="text-align:right;">
-39.03549
+38.61472
 </td>
 <td style="text-align:right;">
--0.0972483
+-0.1827624
 </td>
 </tr>
 <tr>
@@ -1533,22 +1533,22 @@ sample3
 sample4
 </td>
 <td style="text-align:right;">
-2224
+2186.5
 </td>
 <td style="text-align:right;">
-822
+818
 </td>
 <td style="text-align:right;">
-2.057406
+1.984522
 </td>
 <td style="text-align:right;">
-37.74693
+38.32445
 </td>
 <td style="text-align:right;">
-39.88797
+40.48478
 </td>
 <td style="text-align:right;">
--0.1564458
+-0.0933191
 </td>
 </tr>
 <tr>
@@ -1556,7 +1556,7 @@ sample4
 Totals (All Cells)
 </td>
 <td style="text-align:right;">
-2213
+2213.0
 </td>
 <td style="text-align:right;">
 819
@@ -1578,9 +1578,9 @@ Totals (All Cells)
 </table>
 </div>
 </div>
-<div class="section level2">
-<h2 id="plotting-median-data">Plotting Median Data<a class="anchor" aria-label="anchor" href="#plotting-median-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="plotting-median-data">Plotting Median Data<a class="anchor" aria-label="anchor" href="#plotting-median-data"></a>
+</h3>
 <p>scCustomize also contains series of functions for plotting the results of these median calculations:</p>
 <ul>
 <li><code><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes()</a></code></li>
@@ -1589,11 +1589,11 @@ Totals (All Cells)
 <li><code><a href="../reference/Plot_Median_Other.html">Plot_Median_Other()</a></code></li>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Statistics_files/figure-html/unnamed-chunk-20-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1616,7 +1616,7 @@ Totals (All Cells)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

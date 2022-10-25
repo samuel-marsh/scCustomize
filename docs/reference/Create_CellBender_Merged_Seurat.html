@@ -18,7 +18,7 @@ separate assays within the object."><!-- mathjax --><script src="https://cdnjs.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -30,14 +30,14 @@ separate assays within the object."><!-- mathjax --><script src="https://cdnjs.c
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -112,45 +112,58 @@ separate assays within the object.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Create_CellBender_Merged_Seurat</span><span class="op">(</span>
-  raw_cell_bender_matrix <span class="op">=</span> <span class="cn">NULL</span>,
-  raw_counts_matrix <span class="op">=</span> <span class="cn">NULL</span>,
-  raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>,
-  min_cells <span class="op">=</span> <span class="fl">5</span>,
-  min_features <span class="op">=</span> <span class="fl">200</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Create_CellBender_Merged_Seurat</span><span class="op">(</span></span>
+<span>  raw_cell_bender_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raw_counts_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>,</span>
+<span>  min_cells <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  min_features <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>raw_cell_bender_matrix</dt>
 <dd><p>matrix file containing the cell bender correct counts.</p></dd>
+
+
 <dt>raw_counts_matrix</dt>
 <dd><p>matrix file contain the uncorrected Cell Ranger (or other) counts.</p></dd>
+
+
 <dt>raw_assay_name</dt>
 <dd><p>a key value to use specifying the name of assay.  Default is "RAW".</p></dd>
+
+
 <dt>min_cells</dt>
 <dd><p>value to supply to min.cells parameter of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.
 Default is 5.</p></dd>
+
+
 <dt>min_features</dt>
 <dd><p>value to supply to min.features parameter of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.
 Default is 200.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A Seurat Object contain both the Cell Bender corrected counts ("RNA" assay) and uncorrected
+    
+
+<p>A Seurat Object contain both the Cell Bender corrected counts ("RNA" assay) and uncorrected
 counts ("RAW" assay; or other name specified to <code>raw_assay_name</code>).</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu">Create_CellBender_Merged_Seurat</span><span class="op">(</span>raw_cell_bender_matrix <span class="op">=</span> <span class="va">cb_matrix</span>, raw_counts_matrix <span class="op">=</span> <span class="va">cr_matrix</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu">Create_CellBender_Merged_Seurat</span><span class="op">(</span>raw_cell_bender_matrix <span class="op">=</span> <span class="va">cb_matrix</span>, raw_counts_matrix <span class="op">=</span> <span class="va">cr_matrix</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -165,7 +178,7 @@ counts ("RAW" assay; or other name specified to <code>raw_assay_name</code>).</p
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

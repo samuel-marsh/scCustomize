@@ -19,7 +19,7 @@ custom directory structure."><!-- mathjax --><script src="https://cdnjs.cloudfla
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -31,14 +31,14 @@ custom directory structure."><!-- mathjax --><script src="https://cdnjs.cloudfla
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -114,56 +114,75 @@ custom directory structure.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Read10X_Multi_Directory</span><span class="op">(</span>
-  <span class="va">base_path</span>,
-  secondary_path <span class="op">=</span> <span class="cn">NULL</span>,
-  default_10X_path <span class="op">=</span> <span class="cn">TRUE</span>,
-  sample_list <span class="op">=</span> <span class="cn">NULL</span>,
-  sample_names <span class="op">=</span> <span class="cn">NULL</span>,
-  parallel <span class="op">=</span> <span class="cn">FALSE</span>,
-  num_cores <span class="op">=</span> <span class="cn">NULL</span>,
-  merge <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Read10X_Multi_Directory</span><span class="op">(</span></span>
+<span>  <span class="va">base_path</span>,</span>
+<span>  secondary_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  default_10X_path <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sample_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sample_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  num_cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  merge <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>base_path</dt>
 <dd><p>path to the parent directory which contains all of the subdirectories of interest.</p></dd>
+
+
 <dt>secondary_path</dt>
 <dd><p>path from the parent directory to count matrix files for each sample.</p></dd>
+
+
 <dt>default_10X_path</dt>
 <dd><p>logical (default TRUE) sets the secondary path variable to the default 10X
 directory structure.</p></dd>
+
+
 <dt>sample_list</dt>
 <dd><p>a vector of sample directory names if only specific samples are desired.  If <code>NULL</code> will
 read in subdirectories in parent directory.</p></dd>
+
+
 <dt>sample_names</dt>
 <dd><p>a set of sample names to use for each sample entry in returned list.  If <code>NULL</code> will
 set names to the subdirectory name of each sample.</p></dd>
+
+
 <dt>parallel</dt>
 <dd><p>logical (default FALSE) whether or not to use multi core processing to read in matrices.</p></dd>
+
+
 <dt>num_cores</dt>
 <dd><p>how many cores to use for parallel processing.</p></dd>
+
+
 <dt>merge</dt>
 <dd><p>logical (default FALSE) whether or not to merge samples into a single matrix or return list of
 matrices.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/Read10X.html" class="external-link">Read10X</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).</p>
+    
+
+<p>a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">base_path</span> <span class="op">&lt;-</span> <span class="st">'path/to/data/directory'</span></span>
-<span class="r-in"><span class="va">expression_matrices</span> <span class="op">&lt;-</span> <span class="fu">Read10X_Multi_Directory</span><span class="op">(</span>base_path <span class="op">=</span> <span class="va">base_path</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">base_path</span> <span class="op">&lt;-</span> <span class="st">'path/to/data/directory'</span></span></span>
+<span class="r-in"><span><span class="va">expression_matrices</span> <span class="op">&lt;-</span> <span class="fu">Read10X_Multi_Directory</span><span class="op">(</span>base_path <span class="op">=</span> <span class="va">base_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -178,7 +197,7 @@ matrices.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

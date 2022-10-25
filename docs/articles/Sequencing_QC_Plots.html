@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -54,7 +54,7 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #3: Sequencing QC Plots/Analysis</h1>
             
-            <h4 data-toc-skip class="date">Compiled: January 13, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: October 25, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Sequencing_QC_Plots.Rmd" class="external-link"><code>vignettes/Sequencing_QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>Sequencing_QC_Plots.Rmd</code></div>
@@ -145,24 +145,24 @@ p.caption {
   font-size: 0.9em;
 }
 </style>
-<div class="section level1">
-<h1 id="plotting-sequencingalignment-metrics">Plotting Sequencing/Alignment Metrics<a class="anchor" aria-label="anchor" href="#plotting-sequencingalignment-metrics"></a>
-</h1>
+<div class="section level2">
+<h2 id="plotting-sequencingalignment-metrics">Plotting Sequencing/Alignment Metrics<a class="anchor" aria-label="anchor" href="#plotting-sequencingalignment-metrics"></a>
+</h2>
 <p>In addition to other QC metrics previously discussed it can also be helpful to plot the metrics generated during alignment of sequencing data to see if there are differences that might arise as result of sequencing differences as opposed to biological differences.</p>
 <p>For this tutorial, I will be utilizing de-identified example data from my own experience but I will walk through process for using your own data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></code></pre></div>
-<div class="section level2">
-<h2 id="loading-data">Loading Data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
-</h2>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="loading-data">Loading Data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
+</h3>
 <p>Before we can plot these metrics we first need to import raw data. ### Accepted Data Types<br>
 These functions currently only work with data from 10X Genomics processed via Cell Ranger. If there is interest in adapting to other platforms I’d be happy to entertain PRs.</p>
-<div class="section level3">
-<h3 id="data-location">Data Location<a class="anchor" aria-label="anchor" href="#data-location"></a>
-</h3>
+<div class="section level4">
+<h4 id="data-location">Data Location<a class="anchor" aria-label="anchor" href="#data-location"></a>
+</h4>
 <p>Inside the output folder from Cell Ranger <code>count</code> is a file called “metrics_summary” which contains the metrics normally displayed in the html summary. See abbreviated example below.</p>
 <pre><code>Parent_Directory
 ├── sample_01
@@ -180,14 +180,14 @@ These functions currently only work with data from 10X Genomics processed via Ce
 └── sample_03</code></pre>
 <p><em>NOTE: If the path to these files on your system is different that the default 10X path be sure to specify the <code>secondary_path</code> param and set <code>default_10X = FALSE</code> when importing data.</em></p>
 </div>
-<div class="section level3">
-<h3 id="read-data">Read Data<a class="anchor" aria-label="anchor" href="#read-data"></a>
-</h3>
+<div class="section level4">
+<h4 id="read-data">Read Data<a class="anchor" aria-label="anchor" href="#read-data"></a>
+</h4>
 <p>We can read all metrics files within a given parent directory using the <code>Read_Metrics_10X</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">raw_metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_Metrics_10X.html">Read_Metrics_10X</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"path/to/parent/directory/"</span>, default_10X <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">raw_metrics</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">raw_metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_Metrics_10X.html">Read_Metrics_10X</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"path/to/parent/directory/"</span>, default_10X <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">raw_metrics</span><span class="op">)</span></span></code></pre></div>
 <p>The result of this function will be a data.frame with one row per library.</p>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -627,9 +627,9 @@ sample_6
 </tr>
 </tbody>
 </table>
-<div class="section level4">
-<h4 id="optional-parameters">Optional parameters<a class="anchor" aria-label="anchor" href="#optional-parameters"></a>
-</h4>
+<div class="section level5">
+<h5 id="optional-parameters">Optional parameters<a class="anchor" aria-label="anchor" href="#optional-parameters"></a>
+</h5>
 <p>Similarly to the scCustomize functions for reading raw count matrices (See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions Vignette</a>) there are a few optional parameters for <code>Read_Metrics_10X</code>.</p>
 <ul>
 <li>
@@ -649,12 +649,12 @@ sample_6
 </ul>
 </div>
 </div>
-<div class="section level3">
-<h3 id="add-meta-data">Add Meta Data<a class="anchor" aria-label="anchor" href="#add-meta-data"></a>
-</h3>
+<div class="section level4">
+<h4 id="add-meta-data">Add Meta Data<a class="anchor" aria-label="anchor" href="#add-meta-data"></a>
+</h4>
 <p>In order to make the resulting plots more meaningful we need to added corresponding sample level meta data.<br><em>NOTE: Make sure that one column in your meta data data.frame matches the “sample_id” column to metrics data.frame so that they are properly joined.</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">meta_metrics</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">meta_metrics</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -759,37 +759,37 @@ B
 </table>
 <p>Now we join the two data.frames before plotting.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">metrics_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">raw_metrics</span>, <span class="va">meta_metrics</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Joining, by = "sample_id"</span></code></pre>
+<code class="sourceCode R"><span><span class="va">metrics_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">raw_metrics</span>, <span class="va">meta_metrics</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining, by = "sample_id"</span></span></code></pre>
 </div>
 </div>
-<div class="section level2">
-<h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
-</h2>
+<div class="section level3">
+<h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h3>
 <p>In total there are 15 Sequencing QC plotting functions. See <a href="https://samuel-marsh.github.io/scCustomize/reference/index.html#section-sequencing-metrics-qc-plots">Reference Manual</a> for full details.</p>
 <p>However, to simplify plotting there are also two wrapper functions which will return patchwork layouts of several of these functions in a single plot.</p>
-<div class="section level3">
-<h3 id="basic-metrics-summary">Basic Metrics Summary<a class="anchor" aria-label="anchor" href="#basic-metrics-summary"></a>
-</h3>
+<div class="section level4">
+<h4 id="basic-metrics-summary">Basic Metrics Summary<a class="anchor" aria-label="anchor" href="#basic-metrics-summary"></a>
+</h4>
 <p>A set of basic metrics can be plotted using <code>Seq_QC_Plot_Basic_Combined</code></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Seq_QC_Plot_Basic_Combined.html">Seq_QC_Plot_Basic_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Seq_QC_Plot_Basic_Combined.html">Seq_QC_Plot_Basic_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Sequencing_QC_Plots_files/figure-html/unnamed-chunk-7-1.png" width="1248"></p>
 </div>
-<div class="section level3">
-<h3 id="alignment-metrics-summary">Alignment Metrics Summary<a class="anchor" aria-label="anchor" href="#alignment-metrics-summary"></a>
-</h3>
+<div class="section level4">
+<h4 id="alignment-metrics-summary">Alignment Metrics Summary<a class="anchor" aria-label="anchor" href="#alignment-metrics-summary"></a>
+</h4>
 <p>A set of alignment-based metrics can be plotted using <code>Seq_QC_Plot_Alignment_Combined</code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Seq_QC_Plot_Alignment_Combined.html">Seq_QC_Plot_Alignment_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Seq_QC_Plot_Alignment_Combined.html">Seq_QC_Plot_Alignment_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Sequencing_QC_Plots_files/figure-html/unnamed-chunk-8-1.png" width="1248"></p>
 </div>
-<div class="section level3">
-<h3 id="basic-statistics">Basic Statistics<a class="anchor" aria-label="anchor" href="#basic-statistics"></a>
-</h3>
+<div class="section level4">
+<h4 id="basic-statistics">Basic Statistics<a class="anchor" aria-label="anchor" href="#basic-statistics"></a>
+</h4>
 <p>All of the <code>Seq_QC_Plot_...</code> functions also contain parameter to calculate significance between all groups using <code><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html" class="external-link">ggpubr::stat_compare_means</a></code>.<br><strong><em>NOTE: See function help pages and ggpubr for more info to make sure the right test is being used for your data.</em></strong></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Seq_QC_Plot_Basic_Combined.html">Seq_QC_Plot_Basic_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span>, significance <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Seq_QC_Plot_Basic_Combined.html">Seq_QC_Plot_Basic_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span>, significance <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Sequencing_QC_Plots_files/figure-html/unnamed-chunk-9-1.png" width="1248"></p>
 </div>
 </div>
@@ -813,7 +813,7 @@ B
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

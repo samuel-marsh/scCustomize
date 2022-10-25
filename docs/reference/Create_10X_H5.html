@@ -18,7 +18,7 @@ Seurat, LIGER, or SCE class object.  Requires DropletUtils package from Biocondu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -30,14 +30,14 @@ Seurat, LIGER, or SCE class object.  Requires DropletUtils package from Biocondu
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -112,36 +112,45 @@ Seurat, LIGER, or SCE class object.  Requires DropletUtils package from Biocondu
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Create_10X_H5</span><span class="op">(</span>
-  <span class="va">raw_data_file_path</span>,
-  source_type <span class="op">=</span> <span class="st">"10X"</span>,
-  <span class="va">save_file_path</span>,
-  <span class="va">save_name</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Create_10X_H5</span><span class="op">(</span></span>
+<span>  <span class="va">raw_data_file_path</span>,</span>
+<span>  source_type <span class="op">=</span> <span class="st">"10X"</span>,</span>
+<span>  <span class="va">save_file_path</span>,</span>
+<span>  <span class="va">save_name</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>raw_data_file_path</dt>
 <dd><p>file path to raw data file(s).</p></dd>
+
+
 <dt>source_type</dt>
 <dd><p>type of source data (Default is "10X").  Alternatively can provide "Matrix" or "data.frame".</p></dd>
+
+
 <dt>save_file_path</dt>
 <dd><p>file path to directory to save file.</p></dd>
+
+
 <dt>save_name</dt>
 <dd><p>name prefix for output H5 file.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.</p>
+    
+
+<p>A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">Create_10X_H5</span><span class="op">(</span>raw_data_file_path <span class="op">=</span> <span class="st">"file_path"</span>, save_file_path <span class="op">=</span> <span class="st">"file_path2"</span>, save_name <span class="op">=</span> <span class="st">"NAME"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">Create_10X_H5</span><span class="op">(</span>raw_data_file_path <span class="op">=</span> <span class="st">"file_path"</span>, save_file_path <span class="op">=</span> <span class="st">"file_path2"</span>, save_name <span class="op">=</span> <span class="st">"NAME"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -156,7 +165,7 @@ Seurat, LIGER, or SCE class object.  Requires DropletUtils package from Biocondu
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

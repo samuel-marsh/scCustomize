@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -136,6 +136,18 @@
         </td>
         <td><p>Load 10X h5 count matrices from multiple directories</p></td>
       </tr><tr><td>
+          <p><code><a href="Read_CellBender_h5_Mat.html">Read_CellBender_h5_Mat()</a></code> </p>
+        </td>
+        <td><p>Load CellBender h5 matrices (corrected)</p></td>
+      </tr><tr><td>
+          <p><code><a href="Read_CellBender_h5_Multi_Directory.html">Read_CellBender_h5_Multi_Directory()</a></code> </p>
+        </td>
+        <td><p>Load CellBender h5 matrices (corrected) from multiple directories</p></td>
+      </tr><tr><td>
+          <p><code><a href="Read_CellBender_h5_Multi_File.html">Read_CellBender_h5_Multi_File()</a></code> </p>
+        </td>
+        <td><p>Load CellBender h5 matrices (corrected) from multiple files</p></td>
+      </tr><tr><td>
           <p><code><a href="Read_GEO_Delim.html">Read_GEO_Delim()</a></code> </p>
         </td>
         <td><p>Load in NCBI GEO data formatted as single file per sample</p></td>
@@ -223,6 +235,14 @@
           <p><code><a href="QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene()</a></code> </p>
         </td>
         <td><p>QC Plots Genes vs UMIs</p></td>
+      </tr><tr><td>
+          <p><code><a href="QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln()</a></code> </p>
+        </td>
+        <td><p>QC Plots Genes, UMIs, &amp; % Mito</p></td>
+      </tr><tr><td>
+          <p><code><a href="QC_Plots_Complexity.html">QC_Plots_Complexity()</a></code> </p>
+        </td>
+        <td><p>QC Plots Cell "Complexity"</p></td>
       </tr><tr><td>
           <p><code><a href="QC_Plots_Feature.html">QC_Plots_Feature()</a></code> </p>
         </td>
@@ -336,9 +356,9 @@
         </td>
         <td><p>Iterative Plotting of Gene Lists using Custom Joint Density Plots</p></td>
       </tr><tr><td>
-          <p><code><a href="Iterate_VlnPlot.html">Iterate_VlnPlot()</a></code> </p>
+          <p><code><a href="Iterate_VlnPlot_scCustom.html">Iterate_VlnPlot_scCustom()</a></code> </p>
         </td>
-        <td><p>Iterative Plotting of Gene Lists using VlnPlots</p></td>
+        <td><p>Iterative Plotting of Gene Lists using VlnPlot_scCustom</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="liger-plotting-functions">LIGER Plotting Functions <a href="#liger-plotting-functions" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions customization and plotting of single cell data/results from LIGER Objects.</p>
@@ -366,7 +386,7 @@
       </tr><tr><td>
           <p><code><a href="DiscretePalette_scCustomize.html">DiscretePalette_scCustomize()</a></code> </p>
         </td>
-        <td><p>Discrete colour palettes from the pals package</p></td>
+        <td><p>Discrete color palettes</p></td>
       </tr><tr><td>
           <p><code><a href="Hue_Pal.html">Hue_Pal()</a></code> </p>
         </td>
@@ -437,6 +457,10 @@ Checks Seurat object for the presence of features with the same spelling but alt
         </td>
         <td><p>Change barcode suffix delimiter</p></td>
       </tr><tr><td>
+          <p><code><a href="CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code> </p>
+        </td>
+        <td><p>Check Matrix Validity</p></td>
+      </tr><tr><td>
           <p><code><a href="Gene_Present.html">Gene_Present()</a></code> </p>
         </td>
         <td><p>Check if genes/features are present</p></td>
@@ -461,9 +485,17 @@ Checks Seurat object for the presence of features with the same spelling but alt
         </td>
         <td><p>Calculate and add differences post-cell bender analysis</p></td>
       </tr><tr><td>
+          <p><code><a href="Add_Cell_Complexity_Seurat.html">Add_Cell_Complexity_Seurat()</a></code> </p>
+        </td>
+        <td><p>Add Cell Complexity Value</p></td>
+      </tr><tr><td>
           <p><code><a href="Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> </p>
         </td>
         <td><p>Add Mito and Ribo percentages</p></td>
+      </tr><tr><td>
+          <p><code><a href="Add_Sample_Meta.html">Add_Sample_Meta()</a></code> </p>
+        </td>
+        <td><p>Add Sample Level Meta Data</p></td>
       </tr><tr><td>
           <p><code><a href="Liger_to_Seurat.html">Liger_to_Seurat()</a></code> </p>
         </td>
@@ -493,6 +525,10 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p class="section-desc"></p><p>Functions to provide ease of use for frequently used code from LIGER Objects.</p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="Add_Cell_Complexity_LIGER.html">Add_Cell_Complexity_LIGER()</a></code> </p>
+        </td>
+        <td><p>Add Cell Complexity Value</p></td>
+      </tr><tr><td>
           <p><code><a href="Add_Mito_Ribo_LIGER.html">Add_Mito_Ribo_LIGER()</a></code> </p>
         </td>
         <td><p>Add Mito and Ribo percentages to LIGER</p></td>
@@ -504,6 +540,10 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p><code><a href="Top_Genes_Factor.html">Top_Genes_Factor()</a></code> </p>
         </td>
         <td><p>Extract top loading genes for LIGER factor</p></td>
+      </tr><tr><td>
+          <p><code><a href="Variable_Features_ALL_LIGER.html">Variable_Features_ALL_LIGER()</a></code> </p>
+        </td>
+        <td><p>Perform variable gene selection over whole dataset</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="cluster-marker-annotation-utilities">Cluster/Marker Annotation Utilities <a href="#cluster-marker-annotation-utilities" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to provide ease of use or add functionality to DEG and cluster annotation.</p>
@@ -589,7 +629,7 @@ Checks Seurat object for the presence of features with the same spelling but alt
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

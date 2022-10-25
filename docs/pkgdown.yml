@@ -1,5 +1,5 @@
 pandoc: 2.14.0.3
-pkgdown: 2.0.1
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   Cell_Bender_Functions: Cell_Bender_Functions.html
@@ -16,7 +16,7 @@ articles:
   Read_and_Write_Functions: Read_and_Write_Functions.html
   Sequencing_QC_Plots: Sequencing_QC_Plots.html
   Statistics: Statistics.html
-last_built: 2022-01-13T20:58Z
+last_built: 2022-10-25T17:05Z
 urls:
   reference: https://samuel-marsh.github.io/scCustomize/reference
   article: https://samuel-marsh.github.io/scCustomize/articles

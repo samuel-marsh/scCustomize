@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,44 +110,57 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Seq_QC_Plot_Reads_per_Cell</span><span class="op">(</span>
-  <span class="va">metrics_dataframe</span>,
-  plot_by <span class="op">=</span> <span class="st">"sample_id"</span>,
-  colors_use <span class="op">=</span> <span class="cn">NULL</span>,
-  x_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  significance <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Seq_QC_Plot_Reads_per_Cell</span><span class="op">(</span></span>
+<span>  <span class="va">metrics_dataframe</span>,</span>
+<span>  plot_by <span class="op">=</span> <span class="st">"sample_id"</span>,</span>
+<span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  significance <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>metrics_dataframe</dt>
 <dd><p>data.frame  contain Cell Ranger QC Metrics (see <code><a href="Read_Metrics_10X.html">Read_Metrics_10X</a></code>).</p></dd>
+
+
 <dt>plot_by</dt>
 <dd><p>Grouping factor for the plot.  Default is to plot as single group with single point per sample.</p></dd>
+
+
 <dt>colors_use</dt>
 <dd><p>colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 less than 8 groups and <code>DiscretePalette_scCustomize(palette = "polychrome")</code> if more than 8.</p></dd>
+
+
 <dt>x_lab_rotate</dt>
 <dd><p>logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.</p></dd>
+
+
 <dt>significance</dt>
 <dd><p>logical.  Whether to calculate and plot p-value comparisons when plotting by
 grouping factor.  Default is FALSE.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other variables to pass to <code><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html" class="external-link">ggpubr::stat_compare_means</a></code> when doing significance testing.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">Seq_QC_Plot_Reads_per_Cell</span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">Seq_QC_Plot_Reads_per_Cell</span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -162,7 +175,7 @@ grouping factor.  Default is FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

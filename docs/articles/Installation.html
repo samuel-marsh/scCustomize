@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -54,7 +54,7 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -129,7 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Installation Instructions for scCustomize</h1>
             
-            <h4 data-toc-skip class="date">Compiled: January 13, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: October 25, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Installation.Rmd" class="external-link"><code>vignettes/Installation.Rmd</code></a></small>
       <div class="hidden name"><code>Installation.Rmd</code></div>
@@ -145,40 +145,40 @@ p.caption {
 }
 </style>
 <p>scCustomize requires <a href="https://www.r-project.org/" class="external-link">R</a> version 4.0 or greater. Highly recommend installing <a href="https://www.rstudio.com/" class="external-link">R Studio</a>.</p>
-<div class="section level1">
-<h1 id="install-from-github">Install from GitHub<a class="anchor" aria-label="anchor" href="#install-from-github"></a>
-</h1>
-<p>scCustomize can be installed from GitHub using either devtools or remotes package:</p>
 <div class="section level2">
-<h2 id="package-requirements">Package Requirements<a class="anchor" aria-label="anchor" href="#package-requirements"></a>
+<h2 id="install-from-github">Install from GitHub<a class="anchor" aria-label="anchor" href="#install-from-github"></a>
 </h2>
+<p>scCustomize can be installed from GitHub using either devtools or remotes package:</p>
+<div class="section level3">
+<h3 id="package-requirements">Package Requirements<a class="anchor" aria-label="anchor" href="#package-requirements"></a>
+</h3>
 <p>scCustomize has one import dependency requirement that needs to be updated if previously installed (if not installed they will be automatically installed during scCustomize installation).</p>
 <ul>
 <li>
 <a href="https://github.com/hypercompetent/colorway" class="external-link">colorway</a> &gt;= v0.2.0.</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
-</h2>
+<div class="section level3">
+<h3 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
+</h3>
 <p>scCustomize can be installed using either devtools or remotes package</p>
-<pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span><span class="op">)</span>
-
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="section level2">
-<h2 id="master-branch">Master branch<a class="anchor" aria-label="anchor" href="#master-branch"></a>
-</h2>
+<div class="section level3">
+<h3 id="master-branch">Master branch<a class="anchor" aria-label="anchor" href="#master-branch"></a>
+</h3>
 <p>Full releases will be available on the master branch with version scheme vX.X.X.<br>
 See <a href="https://samuel-marsh.github.io/scCustomize/news/index.html">NEWS/Changelog</a> file for ChangeLog with additions, changes, and fixes contained in each release.</p>
 </div>
-<div class="section level2">
-<h2 id="develop-branch">Develop branch<a class="anchor" aria-label="anchor" href="#develop-branch"></a>
-</h2>
+<div class="section level3">
+<h3 id="develop-branch">Develop branch<a class="anchor" aria-label="anchor" href="#develop-branch"></a>
+</h3>
 <p>I also maintain a separate development branch<sup>*</sup> that can be installed by supplying <code>ref = "develop"</code> in the devtools or remotes installation command. Version scheme vX.X.X.yyyy.</p>
-<pre><code><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span>, ref <span class="op">=</span> <span class="st">"develop"</span><span class="op">)</span>
-
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span>, ref <span class="op">=</span> <span class="st">"develop"</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span>, ref <span class="op">=</span> <span class="st">"develop"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"samuel-marsh/scCustomize"</span>, ref <span class="op">=</span> <span class="st">"develop"</span><span class="op">)</span></span></code></pre>
 <p><sup>*</sup><em>Note: While this branch is typically mostly stable it may contain breaking issues/bugs.</em><br>
 I do try and keep <a href="https://github.com/samuel-marsh/scCustomize/blob/develop/NEWS.md" class="external-link">development ChangeLog</a> up to date so it’s easier to follow changes than reading commit history.</p>
 </div>
@@ -202,7 +202,7 @@ I do try and keep <a href="https://github.com/samuel-marsh/scCustomize/blob/deve
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

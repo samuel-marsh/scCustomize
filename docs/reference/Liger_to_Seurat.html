@@ -18,7 +18,7 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -30,14 +30,14 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -112,16 +112,16 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Liger_to_Seurat</span><span class="op">(</span>
-  <span class="va">liger_object</span>,
-  nms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">liger_object</span><span class="op">@</span><span class="va">H</span><span class="op">)</span>,
-  renormalize <span class="op">=</span> <span class="cn">TRUE</span>,
-  use.liger.genes <span class="op">=</span> <span class="cn">TRUE</span>,
-  by.dataset <span class="op">=</span> <span class="cn">FALSE</span>,
-  keep_meta <span class="op">=</span> <span class="cn">TRUE</span>,
-  reduction_label <span class="op">=</span> <span class="cn">NULL</span>,
-  seurat_assay <span class="op">=</span> <span class="st">"RNA"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Liger_to_Seurat</span><span class="op">(</span></span>
+<span>  <span class="va">liger_object</span>,</span>
+<span>  nms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">liger_object</span><span class="op">@</span><span class="va">H</span><span class="op">)</span>,</span>
+<span>  renormalize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  use.liger.genes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  by.dataset <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keep_meta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  reduction_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seurat_assay <span class="op">=</span> <span class="st">"RNA"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -130,26 +130,43 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
 <dd><p>By default, labels cell names with dataset of origin (this is to account for cells in
 different datasets which may have same name). Other names can be passed here as vector, must have
 same length as the number of datasets. (default names(H)).</p></dd>
+
+
 <dt>renormalize</dt>
 <dd><p>Whether to log-normalize raw data using Seurat defaults (default TRUE).</p></dd>
+
+
 <dt>use.liger.genes</dt>
 <dd><p>Whether to carry over variable genes (default TRUE).</p></dd>
+
+
 <dt>by.dataset</dt>
 <dd><p>Include dataset of origin in cluster identity in Seurat object (default FALSE).</p></dd>
+
+
 <dt>reduction_label</dt>
 <dd><p>Name of dimensionality reduction technique used.  Enables accurate transfer
 or name to Seurat object instead of defaulting to "tSNE".</p></dd>
+
+
 <dt>seurat_assay</dt>
 <dd><p>Name to set for assay in Seurat Object.  Default is "RNA".</p></dd>
+
+
 <dt>object</dt>
 <dd><p><code>liger</code> object.</p></dd>
+
+
 <dt>keep.meta</dt>
 <dd><p>logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
 to new Seurat Object.  Default is TRUE.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.</p>
+    
+
+<p>Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -165,9 +182,9 @@ PR to liger GitHub.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">seurat_object</span> <span class="op">&lt;-</span> <span class="fu">Liger_to_Seurat</span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">LIGER_OBJ</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">seurat_object</span> <span class="op">&lt;-</span> <span class="fu">Liger_to_Seurat</span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">LIGER_OBJ</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -182,7 +199,7 @@ PR to liger GitHub.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

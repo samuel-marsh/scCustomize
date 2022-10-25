@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,38 +110,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Meta_Remove_Seurat</span><span class="op">(</span>
-  <span class="va">meta_data</span>,
-  <span class="va">seurat_object</span>,
-  barcodes_to_rownames <span class="op">=</span> <span class="cn">FALSE</span>,
-  barcodes_colname <span class="op">=</span> <span class="st">"barcodes"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Meta_Remove_Seurat</span><span class="op">(</span></span>
+<span>  <span class="va">meta_data</span>,</span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  barcodes_to_rownames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  barcodes_colname <span class="op">=</span> <span class="st">"barcodes"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>meta_data</dt>
 <dd><p>data.frame containing meta data.</p></dd>
+
+
 <dt>seurat_object</dt>
 <dd><p>object name.</p></dd>
+
+
 <dt>barcodes_to_rownames</dt>
 <dd><p>logical, are barcodes present as column and should they be moved to
 rownames (to be compatible with <code><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html" class="external-link">Seurat::AddMetaData</a></code>).  Default is FALSE.</p></dd>
+
+
 <dt>barcodes_colname</dt>
 <dd><p>name of barcodes column in meta_data.  Required if <code>barcodes_to_rownames = TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with only new columns.</p>
+    
+
+<p>data.frame with only new columns.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">new_meta</span> <span class="op">&lt;-</span> <span class="fu">Meta_Remove_Seurat</span><span class="op">(</span>meta_data <span class="op">=</span> <span class="va">meta_data_df</span>, seurat_object <span class="op">=</span> <span class="va">object</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu">AddMetaData</span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, metadata <span class="op">=</span> <span class="va">new_meta</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">new_meta</span> <span class="op">&lt;-</span> <span class="fu">Meta_Remove_Seurat</span><span class="op">(</span>meta_data <span class="op">=</span> <span class="va">meta_data_df</span>, seurat_object <span class="op">=</span> <span class="va">object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu">AddMetaData</span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, metadata <span class="op">=</span> <span class="va">new_meta</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -156,7 +165,7 @@ rownames (to be compatible with <code><a href="https://mojaveazure.github.io/seu
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

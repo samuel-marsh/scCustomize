@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,31 +110,39 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scCustomize_Palette</span><span class="op">(</span><span class="va">num_groups</span>, <span class="va">ggplot_default_colors</span>, color_seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scCustomize_Palette</span><span class="op">(</span><span class="va">num_groups</span>, <span class="va">ggplot_default_colors</span>, color_seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>num_groups</dt>
-<dd><p>number of groups to be plotted. If <code>ggplot_default_colors = FALSE</code> the by default
-if number of levels plotted is less than or equal to 36 it will use "polychrome" and
-if greater than 36 will use "varibow" with shuffle = TRUE both from <code>DiscretePalette_scCustomize</code>.</p></dd>
+<dd><p>number of groups to be plotted. If <code>ggplot_default_colors = FALSE</code> then by default:</p><ul><li><p>If number of levels plotted equal to 2 then colors will be <code><a href="NavyAndOrange.html">NavyAndOrange()</a></code>.</p></li>
+<li><p>If If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from <code>DiscretePalette_scCustomize</code>.</p></li>
+<li><p>If greater than 36 will use "varibow" with shuffle = TRUE from <code>DiscretePalette_scCustomize</code>.</p></li>
+</ul></dd>
+
+
 <dt>ggplot_default_colors</dt>
 <dd><p>logical.  Whether to use default ggplot hue palette or not.</p></dd>
+
+
 <dt>color_seed</dt>
 <dd><p>random seed to use for shuffling the "varibow" palette.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>vector of colors to use for plotting.</p>
+    
+
+<p>vector of colors to use for plotting.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">scCustomize_Palette</span><span class="op">(</span>num_groups <span class="op">=</span> <span class="fl">24</span>, ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu">scCustomize_Palette</span><span class="op">(</span>num_groups <span class="op">=</span> <span class="fl">24</span>, ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -149,7 +157,7 @@ if greater than 36 will use "varibow" with shuffle = TRUE both from <code>Discre
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

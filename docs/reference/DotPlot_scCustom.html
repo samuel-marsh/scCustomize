@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,51 +110,70 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">DotPlot_scCustom</span><span class="op">(</span>
-  <span class="va">seurat_object</span>,
-  <span class="va">features</span>,
-  colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,
-  remove_axis_titles <span class="op">=</span> <span class="cn">TRUE</span>,
-  x_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  y_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  facet_label_rotate <span class="op">=</span> <span class="cn">FALSE</span>,
-  flip_axes <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DotPlot_scCustom</span><span class="op">(</span></span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  <span class="va">features</span>,</span>
+<span>  colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,</span>
+<span>  remove_axis_titles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  x_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  y_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  facet_label_rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  flip_axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
 <dt>features</dt>
 <dd><p>Features to plot.</p></dd>
+
+
 <dt>colors_use</dt>
 <dd><p>specify color palette to used.  Default is viridis_plasma_dark_high.</p></dd>
+
+
 <dt>remove_axis_titles</dt>
 <dd><p>logical. Whether to remove the x and y axis titles.  Default = TRUE.</p></dd>
+
+
 <dt>x_lab_rotate</dt>
 <dd><p>Rotate x-axis labels 45 degrees (Default is FALSE).</p></dd>
+
+
 <dt>y_lab_rotate</dt>
 <dd><p>Rotate x-axis labels 45 degrees (Default is FALSE).</p></dd>
+
+
 <dt>facet_label_rotate</dt>
 <dd><p>Rotate facet labels on grouped <code>DotPlots</code> by 45 degrees (Default is FALSE).</p></dd>
+
+
 <dt>flip_axes</dt>
 <dd><p>whether or not to flip and X and Y axes (Default is FALSE).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">DotPlot_scCustom</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, features <span class="op">=</span> <span class="va">gene_list</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">DotPlot_scCustom</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, features <span class="op">=</span> <span class="va">gene_list</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -169,7 +188,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

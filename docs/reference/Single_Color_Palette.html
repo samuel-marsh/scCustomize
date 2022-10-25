@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,7 +110,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Single_Color_Palette</span><span class="op">(</span><span class="va">pal_color</span>, num_colors <span class="op">=</span> <span class="cn">NULL</span>, seed_use <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Single_Color_Palette</span><span class="op">(</span><span class="va">pal_color</span>, num_colors <span class="op">=</span> <span class="cn">NULL</span>, seed_use <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -118,14 +118,21 @@
     <dl><dt>pal_color</dt>
 <dd><p>color palette to select (Options are: 'reds', 'blues',
 'greens', 'purples', 'oranges', 'grays').</p></dd>
+
+
 <dt>num_colors</dt>
 <dd><p>set number of colors (max = 7).</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>set seed for reproducibility (default: 123).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of colors</p>
+    
+
+<p>A vector of colors</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -145,7 +152,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

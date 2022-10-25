@@ -18,7 +18,7 @@ or similar analysis."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -30,14 +30,14 @@ or similar analysis."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -112,59 +112,78 @@ or similar analysis.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Extract_Top_Markers</span><span class="op">(</span>
-  <span class="va">marker_dataframe</span>,
-  num_genes <span class="op">=</span> <span class="fl">10</span>,
-  group_by <span class="op">=</span> <span class="st">"cluster"</span>,
-  rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span>,
-  gene_column <span class="op">=</span> <span class="st">"gene"</span>,
-  gene_rownames_to_column <span class="op">=</span> <span class="cn">FALSE</span>,
-  data_frame <span class="op">=</span> <span class="cn">FALSE</span>,
-  named_vector <span class="op">=</span> <span class="cn">TRUE</span>,
-  make_unique <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Extract_Top_Markers</span><span class="op">(</span></span>
+<span>  <span class="va">marker_dataframe</span>,</span>
+<span>  num_genes <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>  rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span>,</span>
+<span>  gene_column <span class="op">=</span> <span class="st">"gene"</span>,</span>
+<span>  gene_rownames_to_column <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  data_frame <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  named_vector <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  make_unique <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>marker_dataframe</dt>
 <dd><p>data.frame output from <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code> or similar analysis.</p></dd>
+
+
 <dt>num_genes</dt>
 <dd><p>number of genes per group (e.g., cluster) to include in output list.</p></dd>
+
+
 <dt>group_by</dt>
 <dd><p>column name of <code>marker_dataframe</code> to group data by.  Default is "cluster" based on
 <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code>.</p></dd>
+
+
 <dt>rank_by</dt>
 <dd><p>column name of <code>marker_dataframe</code> to rank data by when selecting <code>num_genes</code> per <code>group_by</code>.
 Default is "avg_log2FC" based on <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code>.</p></dd>
+
+
 <dt>gene_column</dt>
 <dd><p>column name of <code>marker_dataframe</code> that contains the gene IDs.  Default is "gene"
 based on <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code>.</p></dd>
+
+
 <dt>gene_rownames_to_column</dt>
 <dd><p>logical. Whether gene IDs are stored in rownames and should be moved to
 column.  Default is FALSE.</p></dd>
+
+
 <dt>data_frame</dt>
 <dd><p>Logical, whether or not to return filtered data.frame of the original <code>markers_dataframe</code> or
 to return a vector of gene IDs.  Default is FALSE.</p></dd>
+
+
 <dt>named_vector</dt>
 <dd><p>Logical, whether or not to name the vector of gene names that is returned by the function.
 If <code>TRUE</code> will name the vector using the column provided to <code>group_by</code>.  Default is TRUE.</p></dd>
+
+
 <dt>make_unique</dt>
 <dd><p>Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 Not applicable when <code>data_frame = TRUE</code> or <code>named_vector = TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>filtered data.frame, vector, or named vector containing gene IDs.</p>
+    
+
+<p>filtered data.frame, vector, or named vector containing gene IDs.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">top10_genes</span> <span class="op">&lt;-</span> <span class="fu">Extract_Top_Markers</span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">markers_results</span>, num_genes <span class="op">=</span> <span class="fl">10</span>,</span>
-<span class="r-in">group_by <span class="op">=</span> <span class="st">"cluster"</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">top10_genes</span> <span class="op">&lt;-</span> <span class="fu">Extract_Top_Markers</span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">markers_results</span>, num_genes <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>group_by <span class="op">=</span> <span class="st">"cluster"</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -179,7 +198,7 @@ Not applicable when <code>data_frame = TRUE</code> or <code>named_vector = TRUE<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

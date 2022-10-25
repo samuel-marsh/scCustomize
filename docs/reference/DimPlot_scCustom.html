@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,98 +110,152 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">DimPlot_scCustom</span><span class="op">(</span>
-  <span class="va">seurat_object</span>,
-  colors_use <span class="op">=</span> <span class="cn">NULL</span>,
-  pt.size <span class="op">=</span> <span class="cn">NULL</span>,
-  reduction <span class="op">=</span> <span class="cn">NULL</span>,
-  group.by <span class="op">=</span> <span class="cn">NULL</span>,
-  split.by <span class="op">=</span> <span class="cn">NULL</span>,
-  split_seurat <span class="op">=</span> <span class="cn">FALSE</span>,
-  shuffle <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="fl">1</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  label.size <span class="op">=</span> <span class="fl">4</span>,
-  label.color <span class="op">=</span> <span class="st">"black"</span>,
-  label.box <span class="op">=</span> <span class="cn">FALSE</span>,
-  dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-  repel <span class="op">=</span> <span class="cn">FALSE</span>,
-  raster <span class="op">=</span> <span class="cn">NULL</span>,
-  num_columns <span class="op">=</span> <span class="cn">NULL</span>,
-  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,
-  color_seed <span class="op">=</span> <span class="fl">123</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DimPlot_scCustom</span><span class="op">(</span></span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pt.size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reduction <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  split_seurat <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  figure_plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  shuffle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label.size <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  label.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  label.box <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  repel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raster.dpi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span>,</span>
+<span>  num_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color_seed <span class="op">=</span> <span class="fl">123</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
 <dt>colors_use</dt>
 <dd><p>color palette to use for plotting.  By default if number of levels plotted is less than
 or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 both from <code>DiscretePalette_scCustomize</code>.</p></dd>
+
+
 <dt>pt.size</dt>
 <dd><p>Adjust point size for plotting.</p></dd>
+
+
 <dt>reduction</dt>
 <dd><p>Dimensionality Reduction to use (if NULL then defaults to Object default).</p></dd>
+
+
 <dt>group.by</dt>
 <dd><p>Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
 default is the current active.ident of the object.</p></dd>
+
+
 <dt>split.by</dt>
 <dd><p>Feature to split plots by (i.e. "orig.ident").</p></dd>
+
+
 <dt>split_seurat</dt>
 <dd><p>logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.</p></dd>
+
+
+<dt>figure_plot</dt>
+<dd><p>logical.  Whether to remove the axes and plot with legend on left of plot denoting
+axes labels.  (Default is FALSE).  Requires <code>split_seurat = TRUE</code>.</p></dd>
+
+
 <dt>shuffle</dt>
 <dd><p>logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 plots if points of interest are being buried. (Default is TRUE).</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>Sets the seed if randomly shuffling the order of points.</p></dd>
+
+
 <dt>label</dt>
 <dd><p>Whether to label the clusters.  By default if <code>group.by = NULL</code> label = TRUE, and
 otherwise it is FALSE.</p></dd>
+
+
 <dt>label.size</dt>
 <dd><p>Sets size of labels.</p></dd>
+
+
 <dt>label.color</dt>
 <dd><p>Sets the color of the label text.</p></dd>
+
+
 <dt>label.box</dt>
 <dd><p>Whether to put a box around the label text (geom_text vs geom_label).</p></dd>
+
+
 <dt>dims</dt>
 <dd><p>Which dimensions to plot.  Defaults to c(1,2) if not specified.</p></dd>
+
+
 <dt>repel</dt>
 <dd><p>Repel labels.</p></dd>
+
+
 <dt>raster</dt>
 <dd><p>Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.</p></dd>
+
+
+<dt>raster.dpi</dt>
+<dd><p>Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).</p></dd>
+
+
 <dt>num_columns</dt>
 <dd><p>Number of columns in plot layout.  Only valid if <code>split.by != NULL</code>.</p></dd>
+
+
 <dt>ggplot_default_colors</dt>
 <dd><p>logical.  If <code>colors_use = NULL</code>, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.</p></dd>
+
+
 <dt>color_seed</dt>
 <dd><p>random seed for the "varibow" palette shuffle if <code>colors_use = NULL</code> and number of
 groups plotted is greater than 36.  Default = 123.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
     <div id="references">
     <h2>References</h2>
     <p>Many of the param names and descriptions are from Seurat to facilitate ease of use as
-this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).</p>
+this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
+<code>figure_plot</code> parameter/code modified from code by Tim Stuart via twitter: (https://twitter.com/timoast/status/1526237116035891200?s=20&amp;t=foJOF81aPSjr1t7pk1cUPg).</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">DimPlot_scCustom</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">DimPlot_scCustom</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -216,7 +270,7 @@ this is simply a wrapper to alter some of the default parameters (https://github
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

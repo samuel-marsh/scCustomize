@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,42 +110,59 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">theme_ggprism_mod</span><span class="op">(</span>
-  base_size <span class="op">=</span> <span class="fl">14</span>,
-  base_family <span class="op">=</span> <span class="st">"sans"</span>,
-  base_fontface <span class="op">=</span> <span class="st">"bold"</span>,
-  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">20</span>,
-  base_rect_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">20</span>,
-  axis_text_angle <span class="op">=</span> <span class="fl">0</span>,
-  border <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">theme_ggprism_mod</span><span class="op">(</span></span>
+<span>  base_size <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>  base_family <span class="op">=</span> <span class="st">"sans"</span>,</span>
+<span>  base_fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
+<span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">20</span>,</span>
+<span>  base_rect_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">20</span>,</span>
+<span>  axis_text_angle <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  border <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>base_size</dt>
 <dd><p><code>numeric</code>. Base font size, given in <code>"pt"</code>.</p></dd>
+
+
 <dt>base_family</dt>
 <dd><p><code>string</code>. Base font family, default is <code>"sans"</code>.</p></dd>
+
+
 <dt>base_fontface</dt>
 <dd><p><code>string</code>. Base font face, default is <code>"bold"</code>.</p></dd>
+
+
 <dt>base_line_size</dt>
 <dd><p><code>numeric</code>. Base linewidth for line elements</p></dd>
+
+
 <dt>base_rect_size</dt>
 <dd><p><code>numeric</code>. Base linewidth for rect elements</p></dd>
+
+
 <dt>axis_text_angle</dt>
 <dd><p><code>integer</code>. Angle of axis text in degrees.
 One of: <code>0, 45, 90, 270</code>.</p></dd>
+
+
 <dt>border</dt>
 <dd><p><code>logical</code>. Should a border be drawn around the plot?
 Clipping will occur unless e.g. <code>coord_cartesian(clip = "off")</code> is used.</p></dd>
+
+
 <dt>palette</dt>
 <dd><p><code>string</code>. Palette name, use
 <code>names(ggprism_data$themes)</code> to show all valid palette names.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a list-like object of class <em>theme</em>.</p>
+    
+
+<p>Returns a list-like object of class <em>theme</em>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -157,11 +174,11 @@ Theme adaptation based on ggprism vignette
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">FeaturePlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj</span>, features <span class="op">=</span> <span class="st">"Cx3cr1"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">+</span> <span class="fu">theme_ggprism_mod</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">FeaturePlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj</span>, features <span class="op">=</span> <span class="st">"Cx3cr1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">+</span> <span class="fu">theme_ggprism_mod</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -176,7 +193,7 @@ Theme adaptation based on ggprism vignette
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

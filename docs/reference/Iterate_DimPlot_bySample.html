@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,58 +110,81 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Iterate_DimPlot_bySample</span><span class="op">(</span>
-  <span class="va">seurat_object</span>,
-  file_path <span class="op">=</span> <span class="cn">NULL</span>,
-  file_name <span class="op">=</span> <span class="cn">NULL</span>,
-  file_type <span class="op">=</span> <span class="cn">NULL</span>,
-  single_pdf <span class="op">=</span> <span class="cn">FALSE</span>,
-  dpi <span class="op">=</span> <span class="fl">600</span>,
-  color <span class="op">=</span> <span class="st">"black"</span>,
-  reduction <span class="op">=</span> <span class="cn">NULL</span>,
-  dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,
-  pt.size <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Iterate_DimPlot_bySample</span><span class="op">(</span></span>
+<span>  <span class="va">seurat_object</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  file_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  file_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  single_pdf <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dpi <span class="op">=</span> <span class="fl">600</span>,</span>
+<span>  color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  reduction <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  pt.size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
 <dt>file_name</dt>
 <dd><p>name suffix to append after sample name.</p></dd>
+
+
 <dt>file_type</dt>
 <dd><p>File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".</p></dd>
+
+
 <dt>single_pdf</dt>
 <dd><p>saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf</p></dd>
+
+
 <dt>dpi</dt>
 <dd><p>dpi for image saving.</p></dd>
+
+
 <dt>color</dt>
 <dd><p>color scheme to use.</p></dd>
+
+
 <dt>reduction</dt>
 <dd><p>Dimensionality Reduction to use (default is object default).</p></dd>
+
+
 <dt>dims</dt>
 <dd><p>Dimensions to plot.</p></dd>
+
+
 <dt>pt.size</dt>
 <dd><p>Adjust point size for plotting.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></code>.</p></dd>
+
+
 <dt>file_path/prefix</dt>
 <dd><p>directory file path and/or file name prefix.  Defaults to current wd.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">Iterate_DimPlot_bySample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, file_path <span class="op">=</span> <span class="st">"plots/"</span>, file_name <span class="op">=</span> <span class="st">"tsne"</span>,</span>
-<span class="r-in">file_type <span class="op">=</span> <span class="st">".jpg"</span>, dpi <span class="op">=</span> <span class="fl">600</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">Iterate_DimPlot_bySample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, file_path <span class="op">=</span> <span class="st">"plots/"</span>, file_name <span class="op">=</span> <span class="st">"tsne"</span>,</span></span>
+<span class="r-in"><span>file_type <span class="op">=</span> <span class="st">".jpg"</span>, dpi <span class="op">=</span> <span class="fl">600</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -176,7 +199,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

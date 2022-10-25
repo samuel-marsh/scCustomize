@@ -64,6 +64,12 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_Bender_Diff.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_Complexity_LIGER.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_Complexity_Seurat.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Mito_Ribo_LIGER.html</loc>
   </url>
   <url>
@@ -71,6 +77,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Pct_Diff.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Sample_Meta.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Blank_Theme.html</loc>
@@ -86,6 +95,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Change_Delim_Suffix.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/CheckMatrix_scCustom.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Cluster_Highlight_Plot.html</loc>
@@ -172,6 +184,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Iterate_VlnPlot.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Iterate_VlnPlot_scCustom.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/JCO_Four.html</loc>
   </url>
   <url>
@@ -253,6 +268,12 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/QC_Plot_UMIvsGene.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/QC_Plots_Combined_Vln.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/QC_Plots_Complexity.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/QC_Plots_Feature.html</loc>
   </url>
   <url>
@@ -275,6 +296,15 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Read10X_h5_Multi_Directory.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_CellBender_h5_Mat.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_CellBender_h5_Multi_Directory.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_CellBender_h5_Multi_File.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_GEO_Delim.html</loc>
@@ -359,6 +389,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/VariableFeaturePlot_scCustom.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Variable_Features_ALL_LIGER.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/VlnPlot_scCustom.html</loc>

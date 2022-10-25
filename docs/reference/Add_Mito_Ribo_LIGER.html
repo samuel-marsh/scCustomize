@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -29,14 +29,14 @@
   <a href="../articles/Installation.html">Install</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
     <li>
-      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: Analysis Plots</a>
+      <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
       <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
@@ -110,69 +110,99 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Add_Mito_Ribo_LIGER</span><span class="op">(</span>
-  <span class="va">liger_object</span>,
-  <span class="va">species</span>,
-  mito_name <span class="op">=</span> <span class="st">"percent_mito"</span>,
-  ribo_name <span class="op">=</span> <span class="st">"percent_ribo"</span>,
-  mito_ribo_name <span class="op">=</span> <span class="st">"percent_mito_ribo"</span>,
-  mito_pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  ribo_pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  mito_features <span class="op">=</span> <span class="cn">NULL</span>,
-  ribo_features <span class="op">=</span> <span class="cn">NULL</span>,
-  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,
-  list_species_names <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Add_Mito_Ribo_LIGER</span><span class="op">(</span></span>
+<span>  <span class="va">liger_object</span>,</span>
+<span>  <span class="va">species</span>,</span>
+<span>  mito_name <span class="op">=</span> <span class="st">"percent_mito"</span>,</span>
+<span>  ribo_name <span class="op">=</span> <span class="st">"percent_ribo"</span>,</span>
+<span>  mito_ribo_name <span class="op">=</span> <span class="st">"percent_mito_ribo"</span>,</span>
+<span>  mito_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ribo_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mito_features <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ribo_features <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ensembl_ids <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  list_species_names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>liger_object</dt>
 <dd><p>LIGER object name.</p></dd>
+
+
 <dt>species</dt>
-<dd><p>Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
-drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
-ribo_pattern values.</p></dd>
+<dd><p>Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+generate mito_pattern and ribo_pattern values.</p></dd>
+
+
 <dt>mito_name</dt>
 <dd><p>name to use for the new meta.data column containing percent mitochondrial counts.
 Default is "percent_mito".</p></dd>
+
+
 <dt>ribo_name</dt>
 <dd><p>name to use for the new meta.data column containing percent ribosomal counts.
 Default is "percent_mito".</p></dd>
+
+
 <dt>mito_ribo_name</dt>
 <dd><p>name to use for the new meta.data column containing percent mitochondrial+ribosomal
 counts.  Default is "percent_mito".</p></dd>
+
+
 <dt>mito_pattern</dt>
 <dd><p>A regex pattern to match features against for mitochondrial genes (will set automatically
 if species is mouse or human; marmoset features list saved separately).</p></dd>
+
+
 <dt>ribo_pattern</dt>
 <dd><p>A regex pattern to match features against for ribosomal genes (will set automatically
 if species is mouse, human, or marmoset).</p></dd>
+
+
 <dt>mito_features</dt>
 <dd><p>A list of mitochrondial gene names to be used instead of using regex pattern.
 Will override regex pattern if both are present (including default saved regex patterns).</p></dd>
+
+
 <dt>ribo_features</dt>
 <dd><p>A list of ribosomal gene names to be used instead of using regex pattern.
 Will override regex pattern if both are present (including default saved regex patterns).</p></dd>
+
+
+<dt>ensembl_ids</dt>
+<dd><p>logical, whether feature names in the object are gene names or
+ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).</p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 function will abort if columns with any one of the names provided to <code>mito_name</code> <code>ribo_name</code> or <code>mito_ribo_name</code>
 is present in meta.data slot.</p></dd>
+
+
 <dt>list_species_names</dt>
 <dd><p>returns list of all accepted values to use for default species names which
-contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, and drosophila).  Default is FALSE.</p></dd>
+contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
+rhesus macaque).  Default is FALSE.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A LIGER Object</p>
+    
+
+<p>A LIGER Object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu">Add_Mito_Ribo_LIGER</span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">object</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu">Add_Mito_Ribo_LIGER</span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">object</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -187,7 +217,7 @@ contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, an
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
