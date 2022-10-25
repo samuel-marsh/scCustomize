@@ -12,6 +12,7 @@ DimPlot_scCustom(
   group.by = NULL,
   split.by = NULL,
   split_seurat = FALSE,
+  figure_plot = FALSE,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -21,6 +22,7 @@ DimPlot_scCustom(
   dims = c(1, 2),
   repel = FALSE,
   raster = NULL,
+  raster.dpi = c(512, 512),
   num_columns = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
@@ -46,6 +48,9 @@ default is the current active.ident of the object.}
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
 
+\item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting
+axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
+
 \item{shuffle}{logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 plots if points of interest are being buried. (Default is TRUE).}
 
@@ -66,6 +71,9 @@ otherwise it is FALSE.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
 
 \item{num_columns}{Number of columns in plot layout.  Only valid if \code{split.by != NULL}.}
 
@@ -92,5 +100,6 @@ DimPlot_scCustom(seurat_object = object)
 \references{
 Many of the param names and descriptions are from Seurat to facilitate ease of use as
 this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
+\code{figure_plot} parameter/code modified from code by Tim Stuart via twitter: (https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg).
 }
 \concept{seurat_plotting}

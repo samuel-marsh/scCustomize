@@ -559,6 +559,7 @@ Plot_Median_Other <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom dplyr select slice left_join rename
 #' @importFrom magrittr "%>%"
@@ -590,7 +591,7 @@ Plot_Cells_per_Sample <- function(
 
   # Check grouping variable is present
   if (is.null(x = group_by)) {
-    stop("Must provided meta data variable to `group_by` in order to plot data.")
+    cli_abort(message = "Must provide meta data variable to `group_by` in order to plot data.")
   }
 
   # Check group by is valid

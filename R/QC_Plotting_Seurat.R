@@ -8,6 +8,8 @@
 #'
 #' @param seurat_object Seurat object name.
 #' @param plot_title Plot Title.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
@@ -16,6 +18,12 @@
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -36,14 +44,18 @@
 QC_Plots_Genes <- function(
   seurat_object,
   plot_title = "Genes Per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "Features",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -52,7 +64,7 @@ QC_Plots_Genes <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot(object = seurat_object, features = "nFeature_RNA", cols = colors_use, pt.size = pt.size, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -79,6 +91,8 @@ QC_Plots_Genes <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param plot_title Plot Title.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
@@ -87,6 +101,12 @@ QC_Plots_Genes <- function(
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -107,14 +127,18 @@ QC_Plots_Genes <- function(
 QC_Plots_UMIs <- function(
   seurat_object,
   plot_title = "UMIs per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "UMIs",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -123,7 +147,7 @@ QC_Plots_UMIs <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot(object = seurat_object, features = "nCount_RNA", pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -149,7 +173,11 @@ QC_Plots_UMIs <- function(
 #' #' Custom VlnPlot for initial QC checks including lines for thresholding
 #'
 #' @param seurat_object Seurat object name.
+#' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
+#' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
 #' @param plot_title Plot Title.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
@@ -158,6 +186,12 @@ QC_Plots_UMIs <- function(
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -177,15 +211,20 @@ QC_Plots_UMIs <- function(
 
 QC_Plots_Mito <- function(
   seurat_object,
+  mito_name = "percent_mito",
   plot_title = "Mito Gene % per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "% Mitochondrial Gene Counts",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -194,8 +233,8 @@ QC_Plots_Mito <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot(object = seurat_object, features = "percent_mito", pt.size = pt.size, cols = colors_use, ...) +
-    geom_hline(yintercept = high_cutoff, linetype = "dashed", color = "red") +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -221,6 +260,8 @@ QC_Plots_Mito <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param feature Feature from Meta Data to plot.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
 #' @param plot_title Plot Title.
@@ -230,6 +271,12 @@ QC_Plots_Mito <- function(
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
@@ -251,6 +298,7 @@ QC_Plots_Mito <- function(
 QC_Plots_Feature <- function(
   seurat_object,
   feature,
+  group.by = NULL,
   x_axis_label = NULL,
   y_axis_label = NULL,
   plot_title = NULL,
@@ -260,6 +308,9 @@ QC_Plots_Feature <- function(
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 ) {
   # Check Seurat
@@ -271,7 +322,7 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
-  plot <- VlnPlot(object = seurat_object, features = feature, pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot(object = seurat_object, features = feature, group.by = group.by, pt.size = pt.size, cols = colors_use, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -289,6 +340,162 @@ QC_Plots_Feature <- function(
   }
 
   return(plot)
+}
+
+
+#' QC Plots Cell "Complexity"
+#'
+#' Custom VlnPlot for initial QC checks including lines for thresholding
+#'
+#' @param seurat_object Seurat object name.
+#' @param feature Feature from Meta Data to plot.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
+#' @param y_axis_label Label for y axis.
+#' @param x_axis_label Label for x axis.
+#' @param plot_title Plot Title.
+#' @param low_cutoff Plot line a potential low threshold for filtering.
+#' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param pt.size Point size for plotting
+#' @param colors_use vector of colors to use for plot.
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
+#' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import ggplot2
+#' @importFrom Seurat VlnPlot
+#'
+#' @export
+#'
+#' @concept object_qc_plotting
+#'
+#' @examples
+#' \dontrun{
+#' QC_Plots_Complexity(seurat_object = object)
+#' }
+#'
+
+QC_Plots_Complexity <- function(
+  seurat_object,
+  feature = "log10GenesPerUMI",
+  group.by = NULL,
+  x_axis_label = NULL,
+  y_axis_label = "log10(Genes) / log10(UMIs)",
+  plot_title = "Cell Complexity",
+  low_cutoff = NULL,
+  high_cutoff = NULL,
+  pt.size = NULL,
+  colors_use = NULL,
+  x_lab_rotate = TRUE,
+  y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
+  ...
+) {
+  QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+}
+
+
+#' QC Plots Genes, UMIs, & % Mito
+#'
+#' Custom VlnPlot for initial QC checks including lines for thresholding
+#'
+#' @param seurat_object Seurat object name.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
+#' @param feature_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param UMI_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param mito_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
+#' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
+#' @param pt.size Point size for plotting
+#' @param colors_use vector of colors to use for plot.
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
+#' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom Seurat VlnPlot
+#' @importFrom patchwork wrap_plots
+#'
+#' @export
+#'
+#' @concept object_qc_plotting
+#'
+#' @examples
+#' \dontrun{
+#' QC_Plots_Combined_Vln(seurat_object = object)
+#' }
+#'
+
+QC_Plots_Combined_Vln <- function(
+  seurat_object,
+  group.by = NULL,
+  feature_cutoffs = NULL,
+  UMI_cutoffs = NULL,
+  mito_cutoffs = NULL,
+  mito_name = "percent_mito",
+  pt.size = NULL,
+  colors_use = NULL,
+  x_lab_rotate = TRUE,
+  y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
+  ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Add pt.size check
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+
+  # Setup cutoff values
+  if (length(x = feature_cutoffs) > 2 || length(x = UMI_cutoffs) > 2 || length(x = mito_cutoffs) > 2) {
+    cli_abort(message = "Length of each cutoff vector cannot be greater than 2.")
+  }
+
+  if (length(x = feature_cutoffs) == 1) {
+    feature_cutoffs <- c(NULL, feature_cutoffs)
+  }
+
+  if (length(x = UMI_cutoffs) == 1) {
+    UMI_cutoffs <- c(NULL, UMI_cutoffs)
+  }
+
+  if (length(x = mito_cutoffs) == 1) {
+    mito_cutoffs <- c(NULL, mito_cutoffs)
+  }
+
+  # Create Individual Plots
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+  # wrap plots
+  plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
+
+  return(plots)
 }
 
 
@@ -320,6 +527,8 @@ QC_Plots_Feature <- function(
 #' Default is `@active.ident`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed Random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -366,6 +575,7 @@ QC_Plot_UMIvsGene <- function(
   pt.size = 1,
   group.by = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -413,7 +623,7 @@ QC_Plot_UMIvsGene <- function(
   if (!is.null(x = meta_gradient_name)) {
     meta_names <- colnames(featurescatter_data)
     if (meta_gradient_name %in% meta_names == FALSE) {
-      stop("The meta data variable ", meta_gradient_name, " could not be found in object@metadata.")
+      cli_abort(message = "The meta data variable '{meta_gradient_name}' could not be found in object@metadata.")
     }
   }
 
@@ -444,8 +654,13 @@ QC_Plot_UMIvsGene <- function(
   # Calculate Correlation for all data
   plot_cor_full <- round(x = cor(x = featurescatter_data_sort[, "nCount_RNA"], y = featurescatter_data_sort[, "nFeature_RNA"]), digits = 2)
 
-  featurescatter_data_sort_filter <- featurescatter_data_sort %>%
-    filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene)
+  if (is.null(x = meta_gradient_name)) {
+    featurescatter_data_sort_filter <<- featurescatter_data_sort %>%
+      filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene)
+  } else {
+    featurescatter_data_sort_filter <<- featurescatter_data_sort %>%
+      filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene & .data[[meta_gradient_name]] < meta_gradient_low_cutoff)
+  }
 
   # Calculate correlation based on cutoffs
   plot_cor_filtered <- round(x = cor(x = featurescatter_data_sort_filter[, "nCount_RNA"], y = featurescatter_data_sort_filter[, "nFeature_RNA"]), digits = 2)
@@ -479,7 +694,7 @@ QC_Plot_UMIvsGene <- function(
   }
   # Plot by identity
   if (is.null(x = meta_gradient_name) && combination == FALSE) {
-    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
       xlab(x_axis_label) +
@@ -490,7 +705,7 @@ QC_Plot_UMIvsGene <- function(
 
   if (combination) {
     # Plot by identity
-    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
       xlab(x_axis_label) +
@@ -544,6 +759,8 @@ QC_Plot_UMIvsGene <- function(
 #'   Default is `@active.ident`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if greater
 #' than 100,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using default
 #' ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -579,6 +796,7 @@ QC_Plot_GenevsFeature <- function(
   pt.size = 1,
   group.by = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -618,7 +836,7 @@ QC_Plot_GenevsFeature <- function(
   }
 
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nFeature_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nFeature_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red") +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue") +
     xlab(x_axis_label) +
@@ -644,6 +862,8 @@ QC_Plot_GenevsFeature <- function(
 #' Default is `@active.ident`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if greater
 #' than 100,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -679,6 +899,7 @@ QC_Plot_UMIvsFeature <- function(
   pt.size = 1,
   group.by = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -718,7 +939,7 @@ QC_Plot_UMIvsFeature <- function(
   }
 
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nCount_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nCount_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red") +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue") +
     xlab(x_axis_label) +
@@ -746,6 +967,7 @@ QC_Plot_UMIvsFeature <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -770,26 +992,31 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -831,10 +1058,10 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -863,6 +1090,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -887,26 +1115,31 @@ Seq_QC_Plot_Number_Cells <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -948,10 +1181,10 @@ Seq_QC_Plot_Number_Cells <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -980,6 +1213,7 @@ Seq_QC_Plot_Number_Cells <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1004,26 +1238,31 @@ Seq_QC_Plot_Genes <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1055,10 +1294,10 @@ Seq_QC_Plot_Genes <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1087,6 +1326,7 @@ Seq_QC_Plot_Genes <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1111,26 +1351,31 @@ Seq_QC_Plot_UMIs <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1162,10 +1407,10 @@ Seq_QC_Plot_UMIs <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1194,6 +1439,7 @@ Seq_QC_Plot_UMIs <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1218,26 +1464,31 @@ Seq_QC_Plot_Total_Genes <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1269,10 +1520,10 @@ Seq_QC_Plot_Total_Genes <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1301,6 +1552,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1326,26 +1578,31 @@ Seq_QC_Plot_Saturation <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1383,10 +1640,10 @@ Seq_QC_Plot_Saturation <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1415,6 +1672,7 @@ Seq_QC_Plot_Saturation <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1440,26 +1698,31 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1497,10 +1760,10 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1529,6 +1792,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1554,26 +1818,31 @@ Seq_QC_Plot_Transcriptome <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1610,10 +1879,10 @@ Seq_QC_Plot_Transcriptome <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1642,6 +1911,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1667,26 +1937,31 @@ Seq_QC_Plot_Genome <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1723,10 +1998,10 @@ Seq_QC_Plot_Genome <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1755,6 +2030,7 @@ Seq_QC_Plot_Genome <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1780,26 +2056,31 @@ Seq_QC_Plot_Intergenic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1836,10 +2117,10 @@ Seq_QC_Plot_Intergenic <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1868,6 +2149,7 @@ Seq_QC_Plot_Intergenic <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -1893,26 +2175,31 @@ Seq_QC_Plot_Intronic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -1949,10 +2236,10 @@ Seq_QC_Plot_Intronic <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1981,6 +2268,7 @@ Seq_QC_Plot_Intronic <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -2006,26 +2294,31 @@ Seq_QC_Plot_Exonic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -2062,10 +2355,10 @@ Seq_QC_Plot_Exonic <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -2094,6 +2387,7 @@ Seq_QC_Plot_Exonic <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom ggpubr stat_compare_means
@@ -2119,26 +2413,31 @@ Seq_QC_Plot_Antisense <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    stop(plot_by, " is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions work
+  # Change plot_by to character vector to make significance functions show all comparisons
   if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
-    metrics_dataframe[[plot_by]] <- as.character(metrics_dataframe[[plot_by]])
+    stats_dataframe <- metrics_dataframe
+    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+  } else {
+    stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
   length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
 
-  if (is.null(x = colors_use)) {
+  if (is.null(x = colors_use) && !plot_by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby) {
-      stop("The number of colors supplied: ", length(x = colors_use), " is less than the number of groups in ", plot_by, " column: ", length_plotby, ".")
+    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+      )
     } else {
       colors_use <- colors_use
     }
@@ -2175,10 +2474,10 @@ Seq_QC_Plot_Antisense <- function(
   }
 
   if (significance) {
-    if (length(x = unique(x = metrics_dataframe[[plot_by]])) < 2) {
-      stop("Cannot calculate statistics when", plot_by, "column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
-    groups <- unique(x = metrics_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[plot_by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)

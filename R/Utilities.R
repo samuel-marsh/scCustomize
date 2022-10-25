@@ -218,6 +218,8 @@ Case_Check <- function(
 #'
 #' @return vector of meta data columns that are present
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept helper_util
@@ -248,8 +250,9 @@ Meta_Present <- function(
 
     if (abort) {
       if (length(x = found_meta) < 1) {
-        stop("No meta data columns found.  The following @meta.data columns were not found",
-             ": ", glue_collapse_scCustom(input_string = bad_meta, and = TRUE))
+        cli_abort(message = c("No meta data columns found.",
+                              "i" = "The following @meta.data columns were not found: {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}")
+        )
       }
     }
 
@@ -332,6 +335,69 @@ Meta_Numeric <- function(
 
   # Return valid column names
   return(valid_variables)
+}
+
+
+#' Check Matrix Validity
+#'
+#' Native implementation of SeuratObjects CheckMatrix but with modified warning messages.
+#'
+#' @param object A matrix
+#' @param checks Type of checks to perform, choose one or more from:
+#' \itemize{
+#'  \item \dQuote{\code{infinite}}: Emit a warning if any value is infinite
+#'  \item \dQuote{\code{logical}}: Emit a warning if any value is a logical
+#'  \item \dQuote{\code{integer}}: Emit a warning if any value is \emph{not}
+#'   an integer
+#'  \item \dQuote{\code{na}}: Emit a warning if any value is an \code{NA}
+#'   or \code{NaN}
+#' }
+#'
+#' @return Emits warnings for each test and invisibly returns \code{NULL}
+#'
+#' @import cli
+#'
+#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject (https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650) (License: MIT).
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' mat <- Read10X(...)
+#' CheckMatrix_scCustom(object = mat)
+#' }
+#'
+
+CheckMatrix_scCustom <- function(
+  object,
+  checks = c('infinite', 'logical', 'integer', 'na'),
+  ...
+) {
+  checks <- match.arg(arg = checks, several.ok = TRUE)
+  x <- slot(object = object, name = 'x')
+  for (i in checks) {
+    switch(
+      EXPR = i,
+      'infinite' = if (any(is.infinite(x = x))) {
+        cli_warn(message = "Input matrix contains infinite values")
+      },
+      'logical' = if (any(is.logical(x = x))) {
+        cli_warn(message = "Input matrix contains logical values")
+      },
+      'integer' = if (!all(round(x = x) == x, na.rm = TRUE)) {
+        cli_warn(message = c("Input matrix contains non-integer values.",
+                             "*" = "Data may represent normalized or scaled values.",
+                             "i" = "Take into account when performing analysis.")
+        )
+      },
+      'na' = if (anyNA(x = x)) {
+        cli_warn(message = "Input matrix contains NA/NaN values")
+      },
+    )
+  }
+  return(invisible(x = NULL))
 }
 
 
@@ -805,6 +871,7 @@ Change_Delim_All <- function(
 #' @param overwrite logical.  If the `marker_dataframe` already contains column named "pct_diff" whether to
 #'  overwrite or return error message.  Default is FALSE.
 #'
+#' @import cli
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #'
@@ -832,11 +899,15 @@ Add_Pct_Diff <- function(
 ) {
   # Check if percent difference exists already
   if ("pct_diff" %in% colnames(marker_dataframe)) {
+    df_name <- deparse(expr = substitute(expr = marker_dataframe))
     if (!overwrite) {
-      stop("'pct_diff' column already present in `marker_dataframe: ", '"', deparse(expr = substitute(expr = marker_dataframe)), '"', ". To overwrite previous results set `overwrite = TRUE`.")
+      cli_abort(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+                            "i" = "To overwrite previous results set `overwrite = TRUE`.")
+      )
     } else {
-      message("'pct_diff' column already present in `marker_dataframe: ", '"', deparse(expr = substitute(expr = marker_dataframe)), '"',
-      "  Overwriting column as overwrite = TRUE.")
+      cli_inform(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+                            "i" = "Overwriting column as overwrite = TRUE.")
+      )
     }
   }
   # Add percentage difference
@@ -868,6 +939,7 @@ Add_Pct_Diff <- function(
 #' @param make_unique Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 #' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
+#' @import cli
 #' @importFrom dplyr group_by slice_max
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -898,19 +970,21 @@ Extract_Top_Markers <- function(
 ) {
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
-    stop("`rank_by`: ", '"', rank_by, '"',  " not found in column names of `marker_dataframe`.")
+    cli_abort(message = "`rank_by`: '{rank_by}' not found in column names of `marker_dataframe`.")
   }
 
   # Check grouping factor in marker data.frame
   if (!is.null(x = group_by)) {
     if (!group_by %in% colnames(x = marker_dataframe)) {
-      stop("`group_by`: ", '"', group_by, '"',  " not found in column names of `marker_dataframe`.")
+      cli_abort(message = "`group_by`: '{group_by}' not found in column names of `marker_dataframe`.")
     }
   }
 
   # Check gene column is present
   if (!gene_column %in% colnames(x = marker_dataframe) && !gene_rownames_to_column) {
-    stop("`gene_column`: ", '"', gene_column, '"',  " not found in column names of `marker_dataframe`.  Set `gene_rownames_to_column` to move genes from rownames to column.")
+    cli_abort(message = c("`gene_column`: '{gene_column}' not found in column names of `marker_dataframe.",
+                          "i" = "Set `gene_rownames_to_column` to move genes from rownames to column.")
+    )
   }
 
 
@@ -944,13 +1018,14 @@ Extract_Top_Markers <- function(
   # should gene list be named
   # check naming
   if (named_vector && is.null(x = group_by)) {
-    warning("Cannot return named vector if `group_by` is NULL.\n",
-            "  Returning unnamed vector.")
+    cli_warn(message = c("Cannot return named vector if `group_by` is NULL.",
+                         "i" = "Returning unnamed vector.")
+    )
   }
 
   if (named_vector && !is.null(x = group_by)) {
     if (make_unique) {
-      stop("Cannot return unique list if 'named_vector = TRUE'.")
+      cli_abort(message = "Cannot return unique list if 'named_vector = TRUE'.")
     }
     names(gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
@@ -972,6 +1047,8 @@ Extract_Top_Markers <- function(
 #' @param file_path path to directory to save file.  Default is current working directory.
 #' @param file_name name to use for annotation file.  Function automatically adds file type ".csv" suffix.
 #' Default is "cluster_annotation".
+#'
+#' @import cli
 #'
 #' @export
 #'
@@ -995,16 +1072,20 @@ Create_Cluster_Annotation_File <- function(
   }
   # Check directory path is exists
   if (!dir.exists(paths = dir_path)) {
-    stop("Target directory ", '"', dir_path, '"', " does not exist.  Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory '{dir_path}' does not exist.",
+                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    )
   }
   # Confirm no files with same name in the same directory path.
   full_path <- file.path(dir_path, paste0(file_name, ".csv"))
   if (file.exists(full_path)) {
-    stop("File with name ", file_name, " already exists in directory directory.  Please supply a different file_name.")
+    cli_abort(message = c("File with name {file_name} already exists in directory directory.",
+                          "i" = "Please supply a different file_name.")
+    )
   }
   # Save `Cluster_Annotation_Tibble`
   write.csv(Cluster_Annotation_Tibble(), full_path, row.names = F)
-  message("Cluster annotation file created in: ", dir_path, ".")
+  cli_inform("Cluster annotation file created in: {dir_path}.")
 }
 
 
@@ -1072,6 +1153,7 @@ Cluster_Annotation_Tibble <- function(
 #' @return a list of named vectors for every cell type in the `cell_type_col` column of the annotation table and
 #' vectors new cluster names (for use with `Rename_Clusters` function or manual identity renaming).
 #'
+#' @import cli
 #' @importFrom dplyr filter pull
 #' @importFrom magrittr "%>%"
 #'
@@ -1098,7 +1180,7 @@ Pull_Cluster_Annotation <- function(
 ) {
   # Check that annotation is in environment or a file that exists.
   if (!exists(x = deparse(expr = substitute(expr = annotation))) && !file.exists(annotation)) {
-    stop("No file or environmental variable: ", '"', annotation, '"', " exists.")
+    cli_abort(message = "No file or environmental variable: {annotation} exists.")
   }
   # Read or specify annotation table
   if (exists(x = deparse(expr = substitute(expr = annotation)))) {
@@ -1147,7 +1229,7 @@ Pull_Cluster_Annotation <- function(
 #' @param cluster_annotation_path: path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
 #' @param cluster_annotation_file_name name to use for annotation file if created (optional).
 #'
-#'
+#' @import cli
 #' @importFrom data.table fread
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
@@ -1187,7 +1269,7 @@ Setup_scRNAseq_Project <- function(
   } else {
     # Check custom paths file exists
     if (!file.exists(custom_dir_file)) {
-      stop("`custom_dir_file` not found.  Please check file path and name provided.")
+      cli_abort(message = "`custom_dir_file` not found.  Please check file path and name provided.")
     }
 
     # Read file and create directory list
@@ -1201,7 +1283,7 @@ Setup_scRNAseq_Project <- function(
     if (!dir.exists(dir_path)){
       dir.create(dir_path)
     } else {
-      warning("the directory ", dir_path, " aleady exists.  No new directory created.")
+      cli_warn(message = "The directory {dir_path} aleady exists.  No new directory created.")
     }
   })
 
@@ -1212,7 +1294,7 @@ Setup_scRNAseq_Project <- function(
   }
 
   # Print completion message
-  print("scRNA-seq R project setup complete.")
+  cli_inform(message = "scRNA-seq R project setup complete.")
 }
 
 
@@ -1222,6 +1304,8 @@ Setup_scRNAseq_Project <- function(
 #'
 #' @param folder_file_path folder to be copied to GCP bucket.
 #' @param gcp_bucket_path GCP bucket path to copy to files.
+#'
+#' @import cli
 #'
 #' @export
 #'
@@ -1239,7 +1323,9 @@ Copy_To_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    stop("Target directory ", '"', folder_file_path, '"', " does not exist.  Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
+                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    )
   }
 
   # Copy files
@@ -1253,6 +1339,8 @@ Copy_To_GCP <- function(
 #'
 #' @param folder_file_path folder to be copied to GCP bucket.
 #' @param gcp_bucket_path GCP bucket path to copy to files.
+#'
+#' @import cli
 #'
 #' @export
 #'
@@ -1270,7 +1358,9 @@ Copy_From_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    stop("Target directory ", '"', folder_file_path, '"', " does not exist.  Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
+                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    )
   }
 
   # Copy files

@@ -3,9 +3,9 @@
 #' Add Mito, Ribo, percentages to meta.data slot of LIGER Object
 #'
 #' @param liger_object LIGER object name.
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat, or
-#' drosophila (name or abbreviation) provided the function will automatically provided mito_pattern and
-#' ribo_pattern values.
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' generate mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
@@ -20,12 +20,16 @@
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or `mito_ribo_name`
 #' is present in meta.data slot.
 #' @param list_species_names returns list of all accepted values to use for default species names which
-#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, and drosophila).  Default is FALSE.
+#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
+#' rhesus macaque).  Default is FALSE.
 #'
+#' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -52,6 +56,7 @@ Add_Mito_Ribo_LIGER <- function(
   ribo_pattern = NULL,
   mito_features = NULL,
   ribo_features = NULL,
+  ensembl_ids = FALSE,
   overwrite = FALSE,
   list_species_names = FALSE
 ) {
@@ -62,7 +67,8 @@ Add_Mito_Ribo_LIGER <- function(
     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA)
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
   )
 
   # Return list of accepted default species name options
@@ -77,18 +83,20 @@ Add_Mito_Ribo_LIGER <- function(
   # Overwrite check
   if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
     if (!overwrite) {
-      stop("Columns with ", mito_name," and/or ", ribo_name, " already present\n",
-           "  in cell.data slot.\n",
-           "  *To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*.")
+      cli_abort(message = c("Columns with {mito_name} and/or {ribo_name} already present in cell.data slot.",
+                            "i" = "*To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*")
+      )
     }
-    message("Columns with ", mito_name," and/or ", ribo_name, " already present\n",
-            "  in cell.data slot\n",
-            "  Overwriting those columns as overwrite = TRUE.")
+    cli_inform(message = c("Columns with {mito_name} and/or {ribo_name} already present in cell.data slot.",
+                           "i" = "Overwriting those columns as overwrite = TRUE.")
+    )
   }
 
   # Checks species
   if (is.null(x = species)) {
-    stop("No species name or abbreivation was provided to `species` parameter.  If not using default species please set `species = other`.")
+    cli_abort(message = c("No species name or abbreivation was provided to `species` parameter.",
+                          "i" = "If not using default species please set `species = other`.")
+    )
   }
 
   # Species Spelling Options
@@ -98,12 +106,21 @@ Add_Mito_Ribo_LIGER <- function(
   zebrafish_options <- accepted_names$Zebrafish_Options
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  # Check ensembl vs patterns
+  if (ensembl_ids && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
+    cli_warn(message = c("When using a default species and setting `ensembl_ids = TRUE` provided patterns or features are ignored.",
+                         "*" = "Supplied `mito_pattern`,`ribo_pattern`, `mito_features`,`ribo_features` will be disregarded.")
+    )
+  }
 
   # Assign mito/ribo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
-    warning("Pattern expressions for included species (Human & Mouse) are set by default.
-  Supplied `mito_pattern` and `ribo_pattern` will be disregarded.
-            To override defaults please supply a feature list for mito and/or ribo genes.")
+    cli_warn(message = c("Pattern expressions for included species (Human & Mouse) are set by default.",
+                         "*" = "Supplied `mito_pattern` and `ribo_pattern` will be disregarded.",
+                         "i" = "To override defaults please supply a feature list for mito and/or ribo genes.")
+    )
   }
 
   # default patterns or features
@@ -115,7 +132,7 @@ Add_Mito_Ribo_LIGER <- function(
     mito_pattern <- "^MT-"
     ribo_pattern <- "^RP[SL]"
   }
-  if (species %in% marmoset_options) {
+  if (species %in% c(marmoset_options, macaque_options)) {
     mito_features <- c("ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND4L", "ND5", "ND6")
     ribo_pattern <- "^RP[SL]"
   }
@@ -134,7 +151,14 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Check that values are provided for mito and ribo
   if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_pattern)) {
-    stop("No features or patterns provided for mito/ribo genes.  Please provide a default species name or pattern/features.")
+    cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
+                          "i" = "Please provide a default species name or pattern/features."))
+  }
+
+  # Retrieve ensembl ids if TRUE
+  if (ensembl_ids) {
+    mito_features <- Retrieve_Ensembl_Mito(species = species)
+    ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
 
   # get features from patterns
@@ -149,26 +173,34 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Check length of mito and ribo features found in object
   if (length_mito_features < 1 && length_ribo_features < 1) {
-    stop("No Mito or Ribo features found in provided object using patterns/feature list provided.  Please check pattern/feature list and/or gene names in object.")
+    cli_abort(message = c("No Mito or Ribo features found in object using patterns/feature list provided.",
+                          "i" = "Please check pattern/feature list and/or gene names in object.")
+    )
   }
   if (length_mito_features < 1) {
-    warning("No Mito features found in provided object using pattern/feature list provided.  No column will be added to meta.data")
+    cli_warn(message = c("No Mito features found in object using pattern/feature list provided.",
+                         "i" = "No column will be added to meta.data.")
+    )
   }
   if (length_ribo_features < 1) {
-    warning("No Ribo features found in provided object using pattern/feature list provided.  No column will be added to meta.data")
+    cli_warn(message = c("No Ribo features found in object using pattern/feature list provided.",
+                         "i" = "No column will be added to meta.data.")
+    )
   }
 
   # Add mito and ribo percent
   if (length_mito_features > 0) {
+    good_mito <- mito_features[mito_features %in% rownames(x = liger_object@raw.data)]
     percent_mito <- unlist(lapply(liger_object@raw.data, function(x) {
-      (Matrix::colSums(x[mito_features, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data$percent_mito <- percent_mito
+      (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
+    liger_object@cell.data[ , mito_name] <- percent_mito
   }
 
   if (length_ribo_features > 0){
+    good_ribo <- ribo_features[ribo_features %in% rownames(x = liger_object@raw.data)]
     percent_ribo <- unlist(lapply(liger_object@raw.data, function(x) {
-      (Matrix::colSums(x[ribo_features, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data$percent_ribo <- percent_ribo
+      (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
+    liger_object@cell.data[ , ribo_name] <- percent_ribo
   }
 
   # Create combined mito ribo column if both present
@@ -179,12 +211,65 @@ Add_Mito_Ribo_LIGER <- function(
     object_meta <- object_meta %>%
       mutate(percent_mito_ribo = percent_mito + percent_ribo)
 
-    liger_object@cell.data$percent_mito_ribo <- object_meta$percent_mito_ribo
+    liger_object@cell.data[ , mito_ribo_name] <- object_meta$percent_mito_ribo
   }
 
   # return object
   return(liger_object)
 }
+
+
+#' Add Cell Complexity Value
+#'
+#' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
+#'
+#' @param liger_object object name.
+#' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#'
+#' @import cli
+#'
+#' @return A LIGER Object
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
+#' }
+#'
+
+Add_Cell_Complexity_LIGER <- function(
+  liger_object,
+  meta_col_name = "log10GenesPerUMI",
+  overwrite = FALSE
+) {
+  # Check Seurat
+  Is_LIGER(liger_object = liger_object)
+
+  # Check columns for overwrite
+  if (meta_col_name %in% colnames(x = liger_object@cell.data)) {
+    if (!overwrite) {
+      cli_abort(message = c("Column '{meta_col_name}' already present in cell.data slot.",
+                            "i" = "*To run function and overwrite column, set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+      )
+    }
+    cli_inform(message = c("Column '{meta_col_name}' already present in cell.data slot",
+                           "i" = "Overwriting those columns as `overwrite = TRUE`.")
+    )
+  }
+
+  # Add score
+  liger_object@cell.data[ , meta_col_name] <- log10(liger_object@cell.data$nGene) / log10(liger_object@cell.data$nUMI)
+
+  #return object
+  return(liger_object)
+}
+
+
 
 
 #' Check if meta data are present
@@ -259,6 +344,8 @@ Meta_Present_LIGER <- function(
 #'
 #' @return A LIGER Object
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept liger_object_util
@@ -279,7 +366,9 @@ Top_Genes_Factor <- function(
 
   # check number of factors present
   if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
-    stop("'liger_factor' provided: ", '"', liger_factor, '"', " not found in provided 'liger_object'.  'liger_object' only contains ", dim(x = liger_object@W)[[1]], " factors.")
+    cli_abort(message = c("'liger_factor' provided: {liger_factor} not found",
+                          "i" = "'liger_object' only contains {dim(x = liger_object@W)[[1]]} factors.")
+    )
   }
 
   # Extract genes
@@ -449,7 +538,10 @@ Plot_By_Cluster_LIGER <- function(
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
-      stop("The number of columns specified is greater than the number of meta data variables.  ", paste0('"', split_by, '"', " only contains ", split.by_length, " variables.  "), "Please adjust `num_columns` to be less than or equal to", ": ", paste(split.by_length), ".")
+      cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                            "*" = "'{split_by}' only contains: {split.by_length} variables.",
+                            "i" = "Please adjust `num_columns` to be less than or equal t: {split.by_length}.")
+      )
     }
   }
 
@@ -694,7 +786,10 @@ Plot_By_Meta_LIGER <- function(
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
-      stop("The number of columns specified is greater than the number of meta data variables.  ", paste0('"', split_by, '"', " only contains ", split.by_length, " variables.  "), "Please adjust `num_columns` to be less than or equal to", ": ", paste(split.by_length), ".")
+      cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                            "*" = "'{split_by}' only contains: {split.by_length} variables.",
+                            "i" = "Please adjust `num_columns` to be less than or equal t: {split.by_length}.")
+      )
     }
   }
 
@@ -781,4 +876,76 @@ Plot_By_Meta_LIGER <- function(
   } else {
     return(p1)
   }
+}
+
+
+#' Perform variable gene selection over whole dataset
+#'
+#' Performs variable gene selection for LIGER object across the entire object instead of by
+#' dataset and then taking union.
+#'
+#' @param liger_object LIGER object name.
+#' @param num_genes Number of genes to find. Optimizes the value of `var.thresh`  to get
+#' this number of genes, (Default is NULL).
+#' @param var.thresh Variance threshold. Main threshold used to identify variable genes.
+#' Genes with expression variance greater than threshold (relative to mean) are selected.
+#' (higher threshold -> fewer selected genes).
+#' @param alpha.thresh Alpha threshold. Controls upper bound for expected mean gene
+#' expression (lower threshold -> higher upper bound). (default 0.99)
+#' @param tol Tolerance to use for optimization if num.genes values passed in (default 0.0001).
+#' @param do.plot Display log plot of gene variance vs. gene expression. Selected genes are
+#' plotted in green. (Default FALSE)
+#' @param pt.size Point size for plot.
+#' @param chunk size of chunks in hdf5 file. (Default 1000)
+#'
+#' @return A LIGER Object with variable genes in correct slot.
+#'
+#' @import cli
+#'
+#' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
+#' which is called by this function after creating new temporary object/dataset.
+#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' liger_obj <- Variable_Features_ALL_LIGER(liger_object = liger_obj, num_genes = 2000)
+#' }
+#'
+
+Variable_Features_ALL_LIGER <- function(
+  liger_object,
+  num_genes = NULL,
+  var.thresh = 0.3,
+  alpha.thresh = 0.99,
+  tol = 0.0001,
+  do.plot = FALSE,
+  cex.use = 0.3,
+  chunk=1000
+) {
+  Is_LIGER(liger_object = liger_object)
+
+  raw_data <- liger_object@raw.data
+
+  cli_inform(message = "Creating temporary object with combined data.")
+
+  temp_liger <- rliger::createLiger(raw.data = list("dataset" = Merge_Sparse_Data_All(raw_data)), remove.missing = FALSE)
+
+  rm(raw_data)
+  gc()
+
+  cli_inform(message = "Normalizing and identifying variable features.")
+
+  temp_liger <- rliger::normalize(temp_liger)
+  temp_liger <- rliger::selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
+  var_genes <- temp_liger@var.genes
+
+  rm(temp_liger)
+  gc()
+
+  liger_object@var.genes <- var_genes
+  return(liger_object)
 }

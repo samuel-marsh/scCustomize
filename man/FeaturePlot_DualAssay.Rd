@@ -16,8 +16,11 @@ FeaturePlot_DualAssay(
   reduction = NULL,
   na_cutoff = 1e-09,
   raster = NULL,
+  raster.dpi = c(512, 512),
   slot = "data",
   num_columns = NULL,
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 )
 }
@@ -32,6 +35,8 @@ FeaturePlot_DualAssay(
 
 \item{colors_use}{list of colors or color palette to use.}
 
+\item{na_color}{color to use for points below lower limit.}
+
 \item{order}{whether to move positive cells to the top (default = TRUE).}
 
 \item{pt.size}{Adjust point size for plotting.}
@@ -43,15 +48,22 @@ FeaturePlot_DualAssay(
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
 
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
+
 \item{slot}{Which slot to pull expression data from?  Default is "data".}
 
 \item{num_columns}{Number of columns in plot layout.  If number of features > 1 then \code{num_columns}
 dictates the number of columns in overall layout (\code{num_columns = 1} means stacked layout & \code{num_columns = 2}
 means adjacent layout).}
 
-\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
+\item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
+value between 0-1.}
 
-\item{na_value}{color to use for points below lower limit.}
+\item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
+value between 0-1.}
+
+\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 }
 \value{
 A ggplot object

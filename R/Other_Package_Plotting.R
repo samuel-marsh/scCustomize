@@ -15,7 +15,9 @@
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
+#' @import patchwork
 # #' @importFrom Nebulosa plot_density
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -59,7 +61,9 @@ Plot_Density_Custom <- function(
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
-    stop("Non-default values provided to both viridis_palette & custom_palette.  Please chose one non-default value.")
+    cli_abort(message = c("Non-default values provided to both viridis_palette & custom_palette.",
+                          "i" = "Please chose one non-default value.")
+    )
   }
 
   # Extract default reduction
@@ -76,7 +80,7 @@ Plot_Density_Custom <- function(
                                       ...)
 
   if (!is.null(x = custom_palette)) {
-    suppressMessages(plot_list <- plot_list + scale_color_gradientn(colors = custom_palette))
+    suppressMessages(plot_list <- plot_list & scale_color_gradientn(colors = custom_palette))
     return(plot_list)
   }
 
@@ -99,6 +103,7 @@ Plot_Density_Custom <- function(
 #'
 #' @return A ggplot object
 #'
+#' @import cli
 #' @import ggplot2
 # #' @importFrom Nebulosa plot_density
 #' @importFrom SeuratObject DefaultDimReduc
@@ -141,12 +146,16 @@ Plot_Density_Joint_Only <- function(
 
   # Check features
   if (length(x = features) < 2) {
-    stop("Nebulosa joint density plot requires two or more features.")
+    cli_abort(message = c("Less than 2 features provided.",
+                          "i" = "Nebulosa joint density plots require two or more features.")
+    )
   }
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
-    stop("Non-default values provided to both viridis_palette & custom_palette.  Please chose one non-default value.")
+    cli_abort(message = c("Non-default values provided to both viridis_palette & custom_palette.",
+                          "i" = "Please chose one non-default value.")
+    )
   }
 
   # Extract default reduction

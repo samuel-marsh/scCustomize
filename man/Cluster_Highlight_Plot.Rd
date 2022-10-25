@@ -11,15 +11,19 @@ Cluster_Highlight_Plot(
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
+  label = FALSE,
+  split.by = NULL,
+  split_seurat = FALSE,
   ...
 )
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{cluster_name}{Name (or number) identity of cluster to be highlighted.}
+\item{cluster_name}{Name(s) (or number(s)) identity of cluster to be highlighted.}
 
-\item{highlight_color}{Color to highlight cells (default "navy").}
+\item{highlight_color}{Color(s) to highlight cells (default "navy").}
 
 \item{background_color}{non-highlighted cell colors.}
 
@@ -28,7 +32,17 @@ Cluster_Highlight_Plot(
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
 
-\item{...}{Extra parameters passed to\code{\link[Seurat]{DimPlot}}.}
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
+
+\item{label}{Whether to label the highlighted cluster(s).  Default is FALSE.}
+
+\item{split.by}{Feature to split plots by (i.e. "orig.ident").}
+
+\item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+individual plots in layout.  Default is FALSE.}
+
+\item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
 }
 \value{
 A ggplot object

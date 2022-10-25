@@ -104,22 +104,19 @@ viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
 viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 
 
-#' Discrete colour palettes from the pals package
+#' Discrete color palettes
 #'
-#' These are included here because pals depends on a number of compiled
-#' packages, and this can lead to increases in run time for Travis,
-#' and generally should be avoided when possible.
+#' Helper function to return a number of discrete color palettes.
 #'
 #' @param num_colors Number of colors to be generated.
 #' @param palette Options are
 #' "alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".
-#' Can be omitted and the function will use the one based on the requested n.
 #' @param shuffle_pal randomly shuffle the outputted palette.  Most useful for `varibow` palette as
 #' that is normally an ordered palette.
 #' @param seed random seed for the palette shuffle.  Default = 123.
 #'
+#' @import cli
 #' @importFrom colorway varibow
-#' @importFrom dittoSeq dittoColors
 #' @importFrom paletteer paletteer_d
 #'
 #' @return A vector of colors
@@ -129,12 +126,20 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #' provide simplified access to color palettes from many different R package sources while
 #' minimizing scCustomize current and future dependencies.
 #'
-#' The following packages & palettes are called by paletteer (see individual packages for
+#' The following packages & palettes are called by this function (see individual packages for
 #' palette references/citations):
 #' \enumerate{
-#'   \item pals \url{https://cran.r-project.org/web/packages/pals/index.html}
+#'   \item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
 #'     \itemize{
 #'       \item alphabet, alphabet2, glasbey, polychrome, and stepped.
+#'       }
+#'   \item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
+#'     \itemize{
+#'       \item dittoColors.
+#'       }
+#'   \item colorway \url{https://github.com/hypercompetent/colorway}
+#'     \itemize{
+#'       \item varibow
 #'       }
 #' }
 #'
@@ -152,32 +157,65 @@ DiscretePalette_scCustomize <- function(
   shuffle_pal = FALSE,
   seed = 123
 ) {
-  palette_list <- list(
-    alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
-    alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
-    glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
-    polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
-    stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
-    ditto_seq =  dittoColors(reps = 1, get.names = FALSE),
-    varibow = varibow(n_colors = num_colors)
-  )
   if (is.null(x = palette)) {
-    if (num_colors <= 66) {
-      palette <- "polychrome"
-    } else {
-      palette <- "varibow"
-    }
+    cli_abort(message = c("Must specify a palette to return colors.",
+                          "i" = "`palette` options are: {names(palette_list)}")
+    )
   }
+
+  # dittoseq check
+  if (palette == "ditto_seq") {
+    dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
+    if (!dittoseq_check[1]) {
+      stop(
+        "Please install the dittoSeq package to `palette = 'ditto_seq'`",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('BiocManager')",
+        "\nBiocManager::install('dittoSeq')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    } else {
+      palette_list <- list(
+        alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
+        alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
+        glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
+        polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
+        stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
+        ditto_seq =  dittoSeq::dittoColors(reps = 1, get.names = FALSE),
+        varibow = varibow(n_colors = num_colors)
+      )
+    }
+  } else {
+    palette_list <- list(
+      alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
+      alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
+      glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
+      polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
+      stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
+      varibow = varibow(n_colors = num_colors)
+    )
+  }
+
+
+
+
+
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
-    warning("Not enough colors in specified palette.  ", '"', palette, '"', " only has ", length(x = palette_out), " colors.")
+    cli_abort(message = c("Not enough colors in specified palette.",
+                          "*" = "{palette} only contains {length(x = palette_out)} colors.",
+                          "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
+    )
   }
   if (shuffle_pal) {
     set.seed(seed = seed)
-    sample(palette_out[1:num_colors])
+    palette_out <- sample(palette_out[1:num_colors])
   } else {
-    palette_out[1:num_colors]
+    palette_out <- palette_out[1:num_colors]
   }
+  return(palette_out)
 }
 
 
@@ -196,6 +234,8 @@ DiscretePalette_scCustomize <- function(
 #' See RColorBrewer for more info on palettes
 #' \url{https://CRAN.R-project.org/package=RColorBrewer}
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept palettes
@@ -207,10 +247,12 @@ Single_Color_Palette <- function(pal_color,
 ) {
   # Check number of colors available
   if (is.null(x = num_colors)) {
-    stop("No value provided to `num_colors`.")
+    cli_abort(message = "No value provided to `num_colors`.")
   }
   if (num_colors > 7 || num_colors < 1) {
-    stop("Value provided to `num_colors` (", num_colors, ") is greater than maximum number allowed (7).")
+    cli_abort(message = c("Not enough colors.",
+                          "i" = "Value provided to `num_colors` ({num_colors}) is greater than maximum number allowed (7).")
+    )
   }
 
   # Modified single palettes
@@ -241,8 +283,9 @@ Single_Color_Palette <- function(pal_color,
     )
   )
   if (!pal_color %in% names(brewer_single_modified)) {
-    stop("Palette name not found.  Please select one of following palette options:
-         'reds', 'blues', 'greens', 'purples', or 'grays'")
+    cli_abort(message = c("Paleete name not found.",
+                          "i" = "Palette name not found.  Please select one of following palette options: 'reds', 'blues', 'greens', 'purples', or 'grays'")
+    )
   }
   set.seed(seed = seed_use)
   pal_use <- brewer_single_modified[[pal_color]]
@@ -257,6 +300,7 @@ Single_Color_Palette <- function(pal_color,
 #'
 #' @param palette a vector of colors (either named colors of hex codes).
 #'
+#' @import cli
 #' @import ggplot2
 #'
 #' @return Plot of all colors in supplied palette/vector
@@ -278,7 +322,7 @@ Single_Color_Palette <- function(pal_color,
 PalettePlot <- function(palette = NULL) {
   # Check palette
   if (is.null(x = palette)) {
-    stop("No value provided to `palette` parameter.")
+    cli_abort(message = "No value provided to `palette` parameter.")
   }
 
   # Generate data frame for plotting
@@ -448,9 +492,12 @@ ColorBlind_Pal <- function(
 #'
 #' Function to return package default discrete palettes depending on number of groups plotted.
 #'
-#' @param num_groups number of groups to be plotted. If `ggplot_default_colors = FALSE` the by default
-#' if number of levels plotted is less than or equal to 36 it will use "polychrome" and
-#' if greater than 36 will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
+#' @param num_groups number of groups to be plotted. If `ggplot_default_colors = FALSE` then by default:
+#' \itemize{
+#'       \item If number of levels plotted equal to 2 then colors will be `NavyAndOrange()`.
+#'       \item If If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from `DiscretePalette_scCustomize`.
+#'       \item If greater than 36 will use "varibow" with shuffle = TRUE from `DiscretePalette_scCustomize`.
+#'       }
 #' @param ggplot_default_colors logical.  Whether to use default ggplot hue palette or not.
 #' @param color_seed random seed to use for shuffling the "varibow" palette.
 #'
@@ -475,9 +522,13 @@ scCustomize_Palette <- function(
   if (ggplot_default_colors) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
-    if (num_groups <= 36) {
-      colors_use <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
-    } else {
+    if (num_groups == 2) {
+      colors_use <- NavyAndOrange()
+    }
+    if (num_groups > 2 && num_groups <= 36) {
+      colors_use <- DiscretePalette_scCustomize(num_colors = num_groups, palette = "polychrome")
+    }
+    if (num_groups > 36) {
       colors_use <- DiscretePalette_scCustomize(num_colors = num_groups, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
     }
   }

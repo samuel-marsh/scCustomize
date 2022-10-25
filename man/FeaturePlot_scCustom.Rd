@@ -14,9 +14,14 @@ FeaturePlot_scCustom(
   reduction = NULL,
   na_cutoff = 1e-09,
   raster = NULL,
+  raster.dpi = c(512, 512),
   split.by = NULL,
   num_columns = NULL,
   slot = "data",
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
+  label_feature_yaxis = FALSE,
+  combine = TRUE,
   ...
 )
 }
@@ -26,6 +31,8 @@ FeaturePlot_scCustom(
 \item{features}{Feature(s) to plot.}
 
 \item{colors_use}{list of colors or color palette to use.}
+
+\item{na_color}{color to use for points below lower limit.}
 
 \item{order}{whether to move positive cells to the top (default = TRUE).}
 
@@ -40,15 +47,29 @@ color scale and zero/negative values as NA.  To plot all values using color pale
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
 
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
+
 \item{split.by}{Variable in \verb{@meta.data} to split the plot by.}
 
 \item{num_columns}{Number of columns in plot layout.}
 
 \item{slot}{Which slot to pull expression data from?  Default is "data".}
 
-\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
+\item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
+value between 0-1.}
 
-\item{na_value}{color to use for points below lower limit.}
+\item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
+value between 0-1.}
+
+\item{label_feature_yaxis}{logical, whether to place feature labels on secondary y-axis as opposed to
+above legend key.  Default is FALSE.  When setting \code{label_feature_yaxis = TRUE} the number of columns
+in plot output will automatically be set to the number of levels in \verb{split.by'}}
+
+\item{combine}{Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
+If FALSE, return a list of ggplot objects.}
+
+\item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 }
 \value{
 A ggplot object

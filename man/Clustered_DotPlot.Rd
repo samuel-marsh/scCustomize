@@ -26,6 +26,7 @@ Clustered_DotPlot(
   idents = NULL,
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
+  color_seed = 123,
   seed = 123
 )
 }
@@ -93,7 +94,10 @@ dendrogram and children dendrograms.  Default is TRUE.}
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
 
-\item{seed}{Sets seed for reproducible plotting.}
+\item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
+groups plotted is greater than 36.  Default = 123.}
+
+\item{seed}{Sets seed for reproducible plotting (ComplexHeatmap plot).}
 }
 \value{
 A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.

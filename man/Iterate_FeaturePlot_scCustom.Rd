@@ -21,6 +21,8 @@ Iterate_FeaturePlot_scCustom(
   pt.size = NULL,
   reduction = NULL,
   raster = NULL,
+  alpha_exp = NULL,
+  alpha_na_exp = NULL,
   ...
 )
 }
@@ -56,6 +58,12 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
+value between 0-1.}
+
+\item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
+value between 0-1.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 

@@ -8,7 +8,8 @@ Store_Misc_Info_Seurat(
   seurat_object,
   data_to_store,
   data_name,
-  list_as_list = FALSE
+  list_as_list = FALSE,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ of data items being stored.}
 
 \item{list_as_list}{logical.  If \code{data_to_store} is a list, this dictates whether to store in \verb{@misc} slot
 as list (TRUE) or whether to store each entry in the list separately (FALSE).  Default is FALSE.}
+
+\item{overwrite}{Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
+that function will abort if item with \code{data_name} is present in misc slot.}
 }
 \value{
 Seurat Object with new entries in the \verb{@misc} slot.

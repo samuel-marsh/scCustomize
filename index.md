@@ -31,8 +31,8 @@ functionality.
 
 ***The goals of scCustomize are to:***
 
-***1. Customize visualizations for both ease of use and more aesthetic
-visuals.***  
+***1. Customize visualizations for aid in ease of use and create more
+aesthetic visuals.***  
 ***2. Improve speed/reproducibility of common tasks/pieces of code in
 scRNA-seq analysis with a single or group of functions.***
 
@@ -43,7 +43,7 @@ scCustomize aims to achieve these goals through:
     To create greater flexibility in visualization and more aesthetic
     visuals by:
     -   Altering default parameters for more intuitive plots (or at
-        least I believe plots). For instance:
+        least I believe more intuitive). For instance:
         `FeaturePlot(..., order = TRUE)`.  
     -   Wrapping commonly used ggplot2 post-plot themeing into function
         call. No more copy/paste of the same theme elements for every
@@ -63,8 +63,8 @@ scCustomize aims to achieve these goals through:
     often can be made easier through wrapping into a function.
     -   scCustomize contains a number of [iterative plotting
         functions](https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html)
-        contain extra parameters to specify file type, path, name and
-        then render progress bar in console to track progress.
+        which contain extra parameters to specify file type, path, name
+        and then render progress bar in console to track progress.
     -   Returns either single PDF document or multiple plots of any
         valid file type (e.g., png, tiff, jpeg, pdf, etc).
 -   **Helper functions easily import multiple raw data types**  
@@ -77,6 +77,9 @@ scCustomize aims to achieve these goals through:
         groups of files/samples.
     -   Parallelize functions where possible to allow for dramatic speed
         improvements when import large number of samples simultaneously.
+    -   Provide easy wrapper functions to import files with output
+        formats (e.g., CellBender) not supported by Seurat or other
+        common R package.
 -   **Helper functions to simplify analysis with addition of new default
     parameters or wrapping multiple lines of code into single
     function.**  
@@ -91,9 +94,9 @@ scCustomize aims to achieve these goals through:
 
             Add_Mito_Ribo_Seurat(seurat_object = obj_name, species = "Human") 
 
-        -   Function already knows the defaults for Human, Mouse, and
-            Marmoset (submit a PR if you would like more species
-            added!).  
+        -   Function already knows the defaults for Human, Mouse, Rat,
+            Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit
+            a PR if you would like more species added!).  
 
     -   *Example of wrapping many lines to one:* Extracting the top 10
         (or 15, 20, 25, etc) genes per identity after running
@@ -130,9 +133,9 @@ scCustomize aims to achieve these goals through:
     Base R error messages resulting from error deep inside Seurat (or
     other package) function can sometimes be difficult to interpret,
     especially for users new to R.
-    -   scCustomize provides checks/warnings wrapped inside its
-        functions to help and provide more informative error/warning
-        messages. Two examples include:  
+    -   scCustomize provides checks/warnings, using the cli/rlang
+        packages, wrapped inside its functions to help and provide more
+        informative error/warning messages. Two examples include:  
     -   `Add_Mito_Ribo_Seurat()` will warn you if no mitochondrial or
         ribosomal features are found and won’t create new metadata
         column.  
@@ -143,7 +146,8 @@ scCustomize aims to achieve these goals through:
 ## Support for Other scRNA-seq Object Formats (LIGER, SCE, etc)
 
 Currently the package is primarily centered around interactivity with
-Seurat Objects with some functionality with LIGER objects.  
+Seurat Objects with some functionality with LIGER objects and support
+for CellBender outputs.  
 If users are interested in adapting functions (or creating separate
 functions) to provide comparable functionality with SCE or other object
 formats I would be happy to add them. See below for more info on PRs.

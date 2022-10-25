@@ -44,7 +44,7 @@ While the default plots from Seurat and other packages are often very good they 
 
 Even simple things like adding the same two ggplot2 themeing options to every plot can be simplified for end user (and enhance reproducibility and code errors) by wrapping them inside a new function.
 
-For this tutorial, I will be utilizing microglia data from Marsh et al., 2020 ([*bioRxiv*](https://www.biorxiv.org/content/10.1101/2020.12.03.408542v1)) the mouse microglia (Figure 1) referred to as `marsh_mouse_micro` and the human post-mortem snRNA-seq (Figure 3) referred to as `marsh_human_pm` in addition to the pbmc3k dataset from SeuratData package.
+For this tutorial, I will be utilizing microglia data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) the mouse microglia (Figure 1) referred to as `marsh_mouse_micro` and the human post-mortem snRNA-seq (Figure 3) referred to as `marsh_human_pm` in addition to the pbmc3k dataset from SeuratData package.
 
 ```{r init}
 library(tidyverse)
@@ -54,7 +54,7 @@ library(Seurat)
 library(scCustomize)
 library(qs)
 
-# Load bioRxiv datasets
+# Load Marsh et al., 2022 datasets
 marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
 marsh_human_pm <- qread(file = "assets/marsh_human_pm.qs")
 
@@ -228,7 +228,7 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Sc
 FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1", na_cutoff = NA)
 ```
 
-```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
 p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1")
 p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1", na_cutoff = NA)
 wrap_plots(p1, p2, ncol = 2)
@@ -240,7 +240,7 @@ FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
 FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
 ```
 
-```{r echo=FALSE, fig.height=4, fig.width=13, fig.align='center'}
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
 p1 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
 p2 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
 wrap_plots(p1, p2, ncol = 2)
@@ -257,6 +257,21 @@ FeaturePlot(object = marsh_mouse_micro, features = "P2ry12", split.by = "orig.id
 **FeaturePlot_scCustom solves this issue and allows for setting the number of columns in FeaturePlots**
 ```{r, fig.height=8, fig.width=13, fig.cap="*`Split_FeaturePlot()` solves this issue and restores ability to set column number using `ncolumns` parameter.*", fig.align='center'}
 FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", split.by = "sample_id", num_columns = 4)
+```
+
+
+### Change the transparnecy of points
+`FeaturePlot_scCustom` also allows for customization of the transpaency (alpha) of both the points of expressing cells and non-expressing cells using optional parameters.
+```{r eval=FALSE}
+FeaturePlot_scCustom(object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="*Example comparing **A.** default `FeaturePlot_scCustom` vs. **B.** plot with alpha of expressing cells adjusted `alpha_exp = 0.55`.*", fig.align='center'}
+
+# Create Plots
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", pt.size = 1)
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", pt.size = 1, alpha_exp = 0.55)
+wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
 
@@ -617,8 +632,20 @@ Can also return to the default Seurat method of splitting plots while maintainin
 DimPlot_scCustom(seurat_object = pbmc, split.by = "treatment", num_columns = 4, repel = TRUE, split_seurat = TRUE)
 ```
 
+
+#### Figure Plotting
+Some times when creating plots for figures it is desirable to remove the axes from the plot and simply add an axis legend.  To do this with `DimPlot_scCustom` simply set `figure_plot = TRUE`.
+```{r eval=FALSE}
+DimPlot_scCustom(seurat_object = pbmc, figure_plot = TRUE)
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=6}
+DimPlot_scCustom(seurat_object = pbmc, figure_plot = TRUE)
+```
+
+
 ### Highlight Cluster(s)
-Even with optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.  
+Even with an optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.  
 scCustomize provides easy of use function `Cluster_Highlight_Plot()` to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.  
 *NOTE: While named `Cluster_Highlight_Plot` this function will simply pull from seurat_object\@active.ident slot which may or may not be cluster results depending on user settings.  For creating highlight plots of meta data variables see next section on `Meta_Highlight_Plot`.*
 
@@ -636,6 +663,17 @@ p2 <- Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = "8
 wrap_plots(p1, p2, ncol = 2)
 ```
 
+#### Highlight 2+ clusters in the same plot
+`Cluster_Highlight_Plot()` also supports the ability to plot multiple identities in the same plot.
+```{r eval=FALSE}
+Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = c("7", "8"), highlight_color = c("navy", "forestgreen"))
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=6}
+Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = c("7", "8"), highlight_color = c("navy", "forestgreen"))
+```
+
+*NOTE: If no value is provided to `highlight_color` then all clusters provided to `cluster_name` will be plotted using single default color (navy).*
 
 ### Highlight Meta Data
 scCustomize also contains an analogous function `Meta_Highlight_Plot()` that allows for quick highlight plots of any valid \@meta.data variable.  Meta data variables must be one of class(): "factor", "character", or "logical" to be highlighted.  
@@ -644,6 +682,14 @@ scCustomize also contains an analogous function `Meta_Highlight_Plot()` that all
 ```{r, fig.height=4, fig.width=6, fig.align='center'}
 Meta_Highlight_Plot(seurat_object = marsh_mouse_micro, meta_data_column = "Transcription_Method", meta_data_highlight = "ENZYMATIC_NONE", highlight_color = "firebrick", background_color = "lightgray")
 ```
+
+#### Highlight 2+ factor levels in the same plot
+`Meta_Highlight_Plot()` also supports plotting two or more levels from the same meta data column in the same plot, similar to plotting multiple identities with `Cluster_Highlight_Plot()`
+
+```{r, fig.height=4, fig.width=6, fig.align='center'}
+Meta_Highlight_Plot(seurat_object = marsh_mouse_micro, meta_data_column = "Transcription_Method", meta_data_highlight = c("ENZYMATIC_NONE", "DOUNCE_NONE"), highlight_color = c("firebrick", "dodgerblue"), background_color = "lightgray")
+```
+
 
 
 ### DimPlot Layout Plots

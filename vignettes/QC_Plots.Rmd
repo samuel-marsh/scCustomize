@@ -67,7 +67,7 @@ accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
 ```
 
 ## Add Mitochondrial and Ribosomal Gene Percentages
-scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot.  If you are using mouse, human, or marmoset data all you need to do is specify the `species` parameter.
+scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot.  If you are using mouse, human, rat, zebrafish, drosophila, marmoset, or macaque data all you need to do is specify the `species` parameter.
 ```{r}
 # These defaults can be run just by providing accepted species name
 hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human")
@@ -96,6 +96,23 @@ hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_f
 hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
 ```
 
+#### Use of Ensembl IDs
+scCustomize contains built in list of ensembl IDs that correspond to mitochondrial and ribosomal genes for all default species.  If your object using ensembl IDs as features names then simply add `ensembl_ids` parameter.
+```{r eval=FALSE}
+# Using gene name patterns
+hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", ensembl_ids = TRUE)
+```
+
+
+## Add Cell Complexity/Novelty QC Metric
+scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
+```{r}
+# These defaults can be run just by providing accepted species name
+hca_bm <- Add_Cell_Complexity_Seurat(seurat_object = hca_bm)
+```
+*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER`) but QC plotting functions currently only support Seurat objects.*
+
+
 ## Plotting QC Metrics
 scCustomize has a number of quick QC plotting options for ease of use.  
 *NOTE: Most scCustomize plotting functions contain `...` parameter to allow user to supply any of the parameters for the original Seurat function that is being used under the hood.*
@@ -106,7 +123,9 @@ scCustomize contains 4 functions which wrap `Seurat::VlnPlot()`.
 * `QC_Plots_Genes()` Plots genes per cell/nucleus.
 * `QC_Plots_UMIs()` Plots UMIs per cell/nucleus.  
 * `QC_Plots_Mito()` Plots mito% (named "percent_mito") per cell/nucleus.
+* `QC_Plots_Complexity()` Plots cell complexity metric (log10GenesPerUMI) per cell/nucleus.
 * `QC_Plots_Feature()` Plots "feature" per cell/nucleus.  Using parameter `feature` to allow plotting of any applicable named feature in object\@meta.data slot. 
+* `QC_Plots_Combined_Vln()` Returns patchwork plot of `QC_Plots_Genes()`, `QC_Plots_UMIs()`, & `QC_Plots_Mito()`.
 
 scCustomize functions have the added benefit of:  
 
@@ -119,6 +138,7 @@ scCustomize functions have the added benefit of:
 p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20)
+p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8)
 ```
 
 ```{r echo=FALSE}
@@ -126,10 +146,11 @@ p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20)
 p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500, pt.size = 0.1)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20, pt.size = 0.1)
+p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8, pt.size = 0.1)
 ```
 
 ```{r, fig.height=7, fig.width=13}
-wrap_plots(p1, p2, p3, ncol = 3)
+wrap_plots(p1, p2, p3, p4, ncol = 4)
 ```
 
 ### Additional parameters  
@@ -149,7 +170,12 @@ wrap_plots(p1, p2, ncol = 2)
 
 ```
 
+### Combined Plotting Function
+As a shortcut you can return single patchwork plot of the 3 main QC Plots (Genes, UMIs, %Mito) by using single function, `QC_Plots_Combined_Vln()`.
 
+```{r, fig.height=7, fig.width=13}
+QC_Plots_Combined_Vln(seurat_object = hca_bm, feature_cutoffs = c(800, 5500), UMI_cutoffs = c(1200, 45000), mito_cutoffs = 20, pt.size = 0.1)
+```
 
 
 ## `FeatureScatter`-Based QC Plots  

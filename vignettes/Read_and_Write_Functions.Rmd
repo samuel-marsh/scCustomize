@@ -50,8 +50,19 @@ library(Seurat)
 library(scCustomize)
 ```
 
+## Import Single Data File
+While most single cell packages have support for 10X and other commercial formats sometimes additional functions are required.
 
-## Import Data from Single Directory  
+### Import CellBender h5 File
+CellBender is tool for the removal of ambient RNA ([GitHub](https://github.com/broadinstitute/CellBender), [Preprint](https://doi.org/10.1101/791699)).  Starting with CellBender v3 the output file is styled like Cell Ranger h5 files it also contains some additional information.  This causes `Seurat::Read10X_h5()` to to fail when trying to import data.  
+
+scCustomize has new function to read both new and old CellBender output files.
+```{r eval=FALSE}
+cell_bender_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered.h5")
+```
+
+
+## Import Mutliple Data Files from Single Directory  
 Often when downloading files from NCBI GEO or other repos all of the files are contained in single directory and contain non-standard file names.
 However, functions like `Seurat::Read10X()` expect non-prefixed files (i.e. Cell Ranger outputs).  
   
@@ -60,7 +71,7 @@ scCustomize has three functions to deal with these situations without need for r
 ### Import 10X Genomics (or 10X-styled) single directory with file prefixes
 The function `Read10X_GEO` can be used to iteratively read all sets of 10X style files within single directory.  
 
-For this example I will be utilizing data from Marsh et al., 2020 ([*bioRxiv*](https://www.biorxiv.org/content/10.1101/2020.12.03.408542v1)), which were downloaded from [NCBI GEO GSE152183](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183)
+For this example I will be utilizing data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)), which were downloaded from [NCBI GEO GSE152183](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183)
 ```{r eval=FALSE}
 list.files("../man/figures/assets/GSE152183_RAW_Marsh/")
 
@@ -91,18 +102,32 @@ GEO_10X <- Read10X_h5_GEO(data_dir = "/path/to/data/", shared_suffix = "filtered
 ```
 
 
+### Import CellBender H5 Files from single directory  
+Importing CellBender h5 files from single directory can be done using `Read_CellBender_h5_Multi_File()`, which functions very similar to `Read10X_h5_GEO`.
+Here is example directory/file setup:
+```
+Parent_Directory
+├── Exp_Name
+│   └── Cell_Bender_Results
+│       └── SampleA_CB_out_filtered.h5
+│       └── SampleB_CB_out_filtered.h5
+│       └── SampleC_CB_out_filtered.h5
+```
+
+```{r eval=FALSE}
+Multi_CB <- Read_CellBender_h5_Multi_File(data_dir = "Exp_Name/Cell_Bender_Results/", custom_name = "_CB_out_filtered.h5")
+```
+
+
 ### Import delimited matrices single directory with file prefixes
 Often data is uploaded to NCBI GEO or other repositories with single file (.csv, .tsv, .txt, etc) containing all of the information.
 
 For this example I will be utilizing data from Hammond et al., 2019 ([*Immunity*](https://doi.org/10.1016/j.immuni.2018.11.004)), which were downloaded from [NCBI GEO GSE121654](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121654).  
   
 `Read_GEO_Delim` uses fread function for automatic detection of file delimiter and fast read times and then converts objects to sparse matrices to save memory
-```{r}
-list.files("../man/figures/assets/GSE121654_RAW_Hammond/")
-```
 
 ```{r eval=FALSE}
-# Read in and use file names to name the list
+# Read in and use file names to name the list (default)
 GEO_Single <- Read_GEO_Delim(data_dir = "../man/figures/assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz")
 
 # Read in and use new sample names to name the list
@@ -116,10 +141,10 @@ knitr::include_graphics(c("../man/figures/assets/delim_default.png","../man/figu
 
 
 #### `Read_GEO_Delim` additional parameters
-See manual entry for more info [LINK](LINK)
+See [manual entry](https://samuel-marsh.github.io/scCustomize/reference/Read_GEO_Delim.html) for more info.
 
 
-## Import Data from Mutliple Directories  
+## Import Multiple Files from Mutliple Directories  
 In addition to those functions for single directories, scCustomize contains functions for when files are contained in multiple sub-directories within shared parent directory.  
 *NOTE: These functions all assume that each sub-directory contains one sample and that sub-directory structure is identical between all samples.*  
 
@@ -183,12 +208,8 @@ multi_10x <- Read10X_Multi_Directory(base_path = "Parent_Directory", default_10X
 ### Import 10X Genomics (H5 Outputs)
 scCustomize contains function: `Read10X_h5_Multi_Directory` can be used to read 10X Genomics H5 files similarly to `Read10X_Multi_Directory`
 
-#### Cell Bender Outputs
-Importantly `Read10X_h5_Multi_Directory` has also been modified with optional parameters to support the files and format output by Cell Bender.
-```{r eval=FALSE}
-cell_bender <- Read10X_h5_Multi_Directory(base_path = "cellbender_results/", h5_filename = "_out_filtered.h5", cell_bender = TRUE, default_10X = FALSE, parallel = TRUE, num_cores = 8)
-```
-
+### Import CellBender h5 Outputs
+scCustomize also contains function `Read_CellBender_h5_Multi_Directory()` which can be used to read CellBender outputs in multiple sub-directories similar to `Read10X_h5_Multi_Directory` using the same type of parameters as `Read_CellBender_h5_Multi_File`
 
 
 ## Merging Sparse Matrices

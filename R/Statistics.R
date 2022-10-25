@@ -5,6 +5,7 @@
 #' @param seurat_object Seurat object name.
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
 #'
+#' @import cli
 #' @importFrom dplyr left_join rename
 #' @importFrom janitor adorn_totals
 #' @importFrom magrittr "%>%"
@@ -33,7 +34,7 @@ Cluster_Stats_All_Samples <- function(
   # Check on meta data column
   possible_meta_col <- colnames(seurat_object@meta.data)
   if (!group_by_var %in% possible_meta_col) {
-    stop(paste0('"', group_by_var, '"', " was not found in meta.data slot of Seurat Object."))
+    cli_abort(message = "'{group_by_var}' was not found in meta.data slot of Seurat Object.")
   }
 
   # Extract total percents
@@ -98,6 +99,8 @@ Cluster_Stats_All_Samples <- function(
 #' to generate values to use for plotting.  Source code can be found here:
 #' (https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391) (Licence: GPL-3).
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept stats
@@ -131,7 +134,7 @@ Percent_Expressing <- function(
   if (!is.null(x = group_by)) {
     possible_groups <- colnames(seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
-      stop(paste0("Grouping variable: ", '"', group_by, '"', " was not found in Seurat Object"))
+      cli_abort("Grouping variable '{group_by}' was not found in Seurat Object.")
     }
   }
 
@@ -139,7 +142,7 @@ Percent_Expressing <- function(
   if (!is.null(x = split_by)) {
     possible_groups <- colnames(seurat_object@meta.data)
     if (!split_by %in% possible_groups) {
-      stop(paste0("Splitting variable: ", '"', split_by, '"', " was not found in Seurat Object"))
+      cli_abort("Splitting variable '{split_by}' was not found in Seurat Object.")
     }
   }
 

@@ -238,6 +238,7 @@ DimPlot_LIGER <- function(
 #'
 #' @return A list of ggplot/patchwork objects and/or PDF file.
 #'
+#' @import cli
 #' @import ggplot2
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
@@ -281,31 +282,46 @@ plotFactors_scCustom <- function(
 
   # if returning and saving
   if (save_plots) {
-    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-    if (file_path == "") {
-      file_path <- NULL
-    }
 
     # Check file path is valid
-    if (!is.null(x = file_path)) {
+    if (!is.null(x = file_path) && file_path != "") {
       if (!dir.exists(paths = file_path)) {
-        stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+        cli_abort(message = "Provided `file_path`: '{file_path}' does not exist.")
       }
     }
 
+    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+    if (is.null(x = file_path)) {
+      file_path <- ""
+    }
+
     # Check if file name provided
+    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
+    if (length(x = file_ext) == 0) {
+      file_name <- file_name
+    } else {
+      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
+    }
+
     if (is.null(x = file_name)) {
-      stop("No file name provided.  Please provide a file name using `file_name`.")
+      cli_abort(message = c("No file name provided.",
+                            "i" = "Please provide a file name using `file_name`.")
+      )
     }
   }
 
   if (!is.null(x = reorder_datasets)) {
     # Check new order contains same dataset names and number of datasets
     if (length(x = levels(x = liger_object@cell.data$dataset)) != length(x = reorder_datasets)) {
-      stop("The number of datasets provided to 'reorder_datasets' (", length(x = reorder_datasets), ") does not match number of datasets in LIGER object (", length(x = levels(x = levels(liger_object@cell.data$dataset))), ").")
+      cli_abort(message = c("Error reordering datasets (number mismatch).",
+                            "i" = "The number of datasets provided to 'reorder_datasets' ({length(x = reorder_datasets)}) does not match number of datasets in LIGER object ({length(x = levels(x = levels(liger_object@cell.data$dataset)))}).")
+      )
     } else {
       if (!all(levels(liger_object@cell.data$dataset) %in% reorder_datasets)) {
-        stop("Dataset names provided to 'reorder_datasets' do not match names of datasets in LIGER object.  Please check spelling.")
+        cli_abort(message = c("Error reordering datasets (name mismatch).",
+                              "*" = "Dataset names provided to 'reorder_datasets' do not match names of datasets in LIGER object.",
+                              "i" = "Please check spelling.")
+        )
       } else {
         liger_object@cell.data$dataset <- factor(x = liger_object@cell.data$dataset, levels = reorder_datasets)
       }
@@ -330,7 +346,9 @@ plotFactors_scCustom <- function(
 
   # Check valid number of colors for tsne/UMAP
   if (length(x = colors_use_dimreduc) < 2) {
-    stop("Less than two values provided to `colors_use_dimreduc`.  Must provided either two colors to use for creating a gradient or a larger color gradient.")
+    cli_abort(message = c("Less than two values provided to `colors_use_dimreduc`.",
+                          "i" = "Must provided either two colors to use for creating a gradient or a larger color gradient.")
+    )
   }
 
   # Add one time dim label warning
@@ -347,7 +365,7 @@ plotFactors_scCustom <- function(
   }
 
   # Get Data and Plot Factors
-  message("Generating plots")
+  cli_inform(message = "Generating plots")
   k <- ncol(liger_object@H.norm)
   pb <- txtProgressBar(min = 0, max = k, style = 3)
   W <- t(liger_object@W)
@@ -467,9 +485,9 @@ plotFactors_scCustom <- function(
 
   # save plots
   if (save_plots) {
-    message("\nSaving plots to file")
-    pdf(paste("file_name2", ".pdf", sep=""))
-    pb <- txtProgressBar(min = 0, max = 2 * k, style = 3, file = stderr())
+    cli_inform(message = "\nSaving plots to file")
+    pdf(paste(file_path, file_name, ".pdf", sep=""))
+    pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
     for (i in 1:k) {
       if (plot_dimreduc) {
         print(plot_list[[i]])

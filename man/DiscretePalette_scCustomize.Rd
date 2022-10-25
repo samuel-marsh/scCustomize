@@ -2,7 +2,7 @@
 % Please edit documentation in R/Color_Palettes.R
 \name{DiscretePalette_scCustomize}
 \alias{DiscretePalette_scCustomize}
-\title{Discrete colour palettes from the pals package}
+\title{Discrete color palettes}
 \usage{
 DiscretePalette_scCustomize(
   num_colors,
@@ -15,8 +15,7 @@ DiscretePalette_scCustomize(
 \item{num_colors}{Number of colors to be generated.}
 
 \item{palette}{Options are
-"alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".
-Can be omitted and the function will use the one based on the requested n.}
+"alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".}
 
 \item{shuffle_pal}{randomly shuffle the outputted palette.  Most useful for \code{varibow} palette as
 that is normally an ordered palette.}
@@ -27,21 +26,27 @@ that is normally an ordered palette.}
 A vector of colors
 }
 \description{
-These are included here because pals depends on a number of compiled
-packages, and this can lead to increases in run time for Travis,
-and generally should be avoided when possible.
+Helper function to return a number of discrete color palettes.
 }
 \references{
 This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
 provide simplified access to color palettes from many different R package sources while
 minimizing scCustomize current and future dependencies.
 
-The following packages & palettes are called by paletteer (see individual packages for
+The following packages & palettes are called by this function (see individual packages for
 palette references/citations):
 \enumerate{
-\item pals \url{https://cran.r-project.org/web/packages/pals/index.html}
+\item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
 \itemize{
 \item alphabet, alphabet2, glasbey, polychrome, and stepped.
+}
+\item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
+\itemize{
+\item dittoColors.
+}
+\item colorway \url{https://github.com/hypercompetent/colorway}
+\itemize{
+\item varibow
 }
 }
 

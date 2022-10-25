@@ -7,14 +7,18 @@
 QC_Plots_UMIs(
   seurat_object,
   plot_title = "UMIs per Cell/Nucleus",
+  group.by = NULL,
   x_axis_label = NULL,
-  y_axis_label = NULL,
+  y_axis_label = "UMIs",
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
+  raster = NULL,
+  ggplot_default_colors = FALSE,
+  color_seed = 123,
   ...
 )
 }
@@ -22,6 +26,9 @@ QC_Plots_UMIs(
 \item{seurat_object}{Seurat object name.}
 
 \item{plot_title}{Plot Title.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{x_axis_label}{Label for x axis.}
 
@@ -38,6 +45,15 @@ QC_Plots_UMIs(
 \item{x_lab_rotate}{Rotate x-axis labels 45 degrees (Default is TRUE).}
 
 \item{y_axis_log}{logical. Whether to change y axis to log10 scale (Default is FALSE).}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 100,000 total points plotted (# Cells x # of features).}
+
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
+
+\item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
+groups plotted is greater than 36.  Default = 123.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }
