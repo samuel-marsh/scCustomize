@@ -23,6 +23,7 @@
 #'    and therefore needs to be set manually.}
 #' }
 #'
+#' @keywords internal
 #' @docType package
 #' @rdname scCustomize-package
 #' @name scCustomize-package
