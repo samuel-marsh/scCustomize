@@ -522,6 +522,9 @@ scCustomize_Palette <- function(
   if (ggplot_default_colors) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
+    if (num_groups == 1) {
+      colors_use <- "dodgerblue"
+    }
     if (num_groups == 2) {
       colors_use <- NavyAndOrange()
     }
