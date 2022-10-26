@@ -5,6 +5,7 @@
 ## Changed  
 
 ## Fixes  
+- Fixed for automatic color palette selection when only plotting one group.
 
  
 # scCustomize 1.0.0 (2022-10-25)  
