@@ -1,3 +1,12 @@
+# scCustomize 1.X.X (20XX-XX-XX)  
+## Added  
+
+
+## Changed  
+
+## Fixes  
+
+ 
 # scCustomize 1.0.0 (2022-10-25)  
 ## Added
 - Added `mito_name` parameter to `QC_Plots_Mito` to allow for custom specification of meta data column name that contains mitochondrial information.
