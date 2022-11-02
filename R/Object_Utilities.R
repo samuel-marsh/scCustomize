@@ -517,11 +517,11 @@ Add_Sample_Meta <- function(
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Cell_Bender_Diff(seurat_object = obj, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
 #' }
 #'
 
-Add_Cell_Bender_Diff <- function(
+Add_CellBender_Diff <- function(
   seurat_object,
   raw_assay_name,
   cell_bender_assay_name
