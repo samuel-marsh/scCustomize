@@ -719,6 +719,9 @@ CellBender_Diff_Plot <- function(
   fontface = "bold",
   ...
 ) {
+  # Calculate correlation
+  corr_val <- cor(x = feature_diff_df$Raw_Counts, y = feature_diff_df$CellBender_Counts)
+
   # Make plot
   plot <- ggplot(feature_diff_df, aes(x = Raw_Counts, y = CellBender_Counts)) +
     geom_point() +
