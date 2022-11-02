@@ -656,3 +656,112 @@ Plot_Cells_per_Sample <- function(
   # Return plot
   return(plot)
 }
+
+
+#' Plot Number of Cells/Nuclei per Sample
+#'
+#' Plot of total cell or nuclei number per sample grouped by another meta data variable.
+#'
+#' @param feature_diff_df name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}
+#' @param label logical, whether or not to label the features that have largest percent difference
+#' between raw and CellBender counts (Default is TRUE).
+#' @param num_labels Number of features to label if `label = TRUE`, (default is 20).
+#' @param repel logical, whether to use geom_text_repel to create a nicely-repelled labels; this is
+#' slow when a lot of points are being plotted. If using repel, set xnudge and ynudge to 0, (Default is TRUE).
+#' @param custom_labels A custom set of features to label instead of the features most different between
+#' raw and CellBender counts.
+#' @param plot_title Plot title.
+#' @param x_axis_label Label for x axis.
+#' @param y_axis_label Label for y axis.
+#' @param xnudge Amount to nudge X and Y coordinates of labels by
+#' @param ynudge Amount to nudge X and Y coordinates of labels by
+#' @param max.overlaps passed to \code{\link[ggrepel]{geom_text_repel}}, exclude text labels that
+#' overlap too many things. Defaults to 100.
+#' @param color Color to use for text labels.
+#' @param fontface font face to use for text labels (“plain”, “bold”, “italic”, “bold.italic”).
+#' @param ... Extra parameters passed to \code{\link[ggrepel]{geom_text_repel}} through
+#' \code{\link[Seurat]{LabelPoints}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom cowplot theme_cowplot
+#'
+#' @export
+#'
+#' @concept stats_plotting
+#'
+#' @examples
+#' \dontrun{
+#' # get cell bender differences data.frame
+#' cb_stats <- CellBender_Feature_Diff(seurat_object - obj, raw_assay = "RAW",
+#' cell_bender_assay = "RNA")
+#'
+#' # plot
+#' CellBender_Diff_Plot(feature_diff_df = cb_stats)
+#' }
+#'
+
+CellBender_Diff_Plot <- function(
+  feature_diff_df,
+  label = TRUE,
+  num_labels = 20,
+  repel = TRUE,
+  custom_labels = NULL,
+  plot_title = "Raw Counts vs. Cell Bender Counts",
+  x_axis_label = "Raw Data Counts (log10)",
+  y_axis_label = "Cell Bender Counts (log10)",
+  xnudge = 0,
+  ynudge = 0,
+  max.overlaps = 100,
+  color = "red",
+  fontface = "bold",
+  ...
+) {
+  # Make plot
+  plot <- ggplot(feature_diff_df, aes(x = Raw_Counts, y = CellBender_Counts)) +
+    geom_point() +
+    ggtitle(plot_title, subtitle = paste0("Correlation is: ", round(x = corr_val, digits = 4))) +
+    scale_y_log10() +
+    scale_x_log10() +
+    ylab(y_axis_label) +
+    xlab(x_axis_label) +
+    theme_cowplot()
+
+  # Label points
+  if (label) {
+    if (is.null(x = custom_labels)) {
+      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = color, fontface = fontface, ...)
+    } else {
+      # check for features
+      features_list <- Gene_Present(data = feature_diff_df, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+
+      all_not_found_features <- features_list[[2]]
+
+      all_found_features <- features_list[[1]]
+
+      # Stop if no features found
+      if (length(x = all_found_features) < 1) {
+        cli_abort(message = c("None of features in `custom_labels` were found.",
+                              "*" = "The following are not present in data:",
+                              "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+        )
+      }
+
+      # Return message of features not found
+      if (length(x = all_not_found_features) > 0) {
+        op <- options(warn = 1)
+        on.exit(options(op))
+        cli_warn(message = c("The following features in `custom_labels` were omitted as they were not found:",
+                             "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+        )
+      }
+      # plot with custom labels
+      plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = color, fontface = fontface, ...)
+    }
+  }
+
+  # return plot
+  return(plot)
+}

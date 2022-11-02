@@ -279,3 +279,77 @@ Median_Stats <- function(
 }
 
 
+#' CellBender Feature Differences
+#'
+#' Get quick values for raw counts, CellBender counts, count differences, and percent count differences
+#' per feature.
+#'
+#' @param seurat_object Seurat object name.
+#' @param raw_assay Name of the assay containing the raw count data.
+#' @param cell_bender_assay Name of the assay containing the CellBender count data.
+#'
+#' @return A data frame containing summed raw counts, CellBender counts, count difference, and
+#' percent difference in counts.
+#'
+#' @import cli
+#' @importFrom dplyr arrange desc left_join mutate
+#' @importFrom magrittr "%>%"
+#' @importFrom Matrix rowSums
+#' @importFrom purrr pluck
+#' @importFrom tibble rownames_to_column column_to_rownames
+#'
+#' @export
+#'
+#' @concept stats
+#'
+#' @examples
+#' \dontrun{
+#' cb_stats <- CellBender_Feature_Diff(seurat_object - obj, raw_assay = "RAW",
+#' cell_bender_assay = "RNA")
+#' }
+#'
+
+CellBender_Feature_Diff <- function(
+  seurat_object,
+  raw_assay,
+  cell_bender_assay
+) {
+  # Is Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check assays present
+  assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay, cell_bender_assay), print_msg = FALSE, omit_warn = TRUE)[[2]]
+
+  if (!is.null(x = assays_not_found)) {
+    stop_quietly()
+  }
+
+  # Pull raw counts
+  raw_counts <- pluck(seurat_object, "assays", raw_assay, "counts") %>%
+    rowSums() %>%
+    data.frame() %>%
+    rownames_to_column("Feature_Names")
+
+  colnames(raw_counts)[2] <- "Raw_Counts"
+
+  # Pull Cell Bender Counts
+  cb_counts <- pluck(object, "assays", cell_bender_assay, "counts") %>%
+    rowSums() %>%
+    data.frame() %>%
+    rownames_to_column("Feature_Names")
+
+  colnames(cb_counts)[2] <- "CellBender_Counts"
+
+  # merge
+  merged_counts <- suppressMessages(left_join(x = raw_counts, y = cb_counts))
+
+  # Add diff and % diff
+  merged_counts <- merged_counts %>%
+    mutate(Feature_Diff = Raw_Counts - CellBender_Counts,
+           Pct_Diff = 100 - ((CellBender_Counts / Raw_Counts) * 100)) %>%
+    arrange(desc(Pct_Diff)) %>%
+    column_to_rownames("Feature_Names")
+
+  # return data
+  return(merged_counts)
+}
