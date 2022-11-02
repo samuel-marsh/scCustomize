@@ -92,7 +92,7 @@ FeaturePlot_scCustom <- function(
     if (length(x = all_found_features) < 1) {
       cli_abort(message = c("No features were found.",
                             "*" = "The following are not present in object:",
-                            "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                            "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
       )
     }
 
@@ -1011,7 +1011,7 @@ Stacked_VlnPlot <- function(
   if (length(x = all_found_features) < 1) {
     cli_abort(message = c("No features were found.",
                           "*" = "The following are not present in object:",
-                          "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                          "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
     )
   }
 
@@ -1152,7 +1152,7 @@ DotPlot_scCustom <- function(
   if (length(x = all_found_features) < 1) {
     cli_abort(message = c("No features were found.",
                                "*" = "The following are not present in object:",
-                               "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                               "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
     )
   }
 
@@ -1161,7 +1161,7 @@ DotPlot_scCustom <- function(
     op <- options(warn = 1)
     on.exit(options(op))
     cli_warn(message = c("The following features were omitted as they were not found:",
-                              "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                              "i" = "{scCustomize:::glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
     )
   }
 
