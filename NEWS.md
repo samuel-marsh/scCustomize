@@ -1,8 +1,10 @@
 # scCustomize 1.X.X (20XX-XX-XX)  
 ## Added  
-
+- Added `CellBender_Feature_Diff` to return data.frame with count sums and differences between raw and CellBender assays.  
+- Added `CellBender_Diff_Plot` to plot differences between raw and CellBender assays using data from `CellBender_Feature_Diff`.  
 
 ## Changed  
+- **BREAKING CHANGE** Function name changed, `Add_CellBender_Diff` is new name for `Add_Cell_Bender_Diff` in order to unify function names for CellBender related functions.  
 
 ## Fixes  
 - Fixed for automatic color palette selection when only plotting one group.
