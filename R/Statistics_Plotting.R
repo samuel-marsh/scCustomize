@@ -720,8 +720,11 @@ CellBender_Diff_Plot <- function(
   xnudge = 0,
   ynudge = 0,
   max.overlaps = 100,
-  color = "red",
+  label_color = "red",
   fontface = "bold",
+  label_size = 3.88,
+  bg.color = "white",
+  bg.r = 0.15,
   ...
 ) {
   # Remove unshared features
@@ -771,7 +774,7 @@ CellBender_Diff_Plot <- function(
   # Label points
   if (label) {
     if (is.null(x = custom_labels)) {
-      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df_filtered)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = color, fontface = fontface, ...)
+      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df_filtered)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
     } else {
       # check for features
       features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
@@ -797,7 +800,7 @@ CellBender_Diff_Plot <- function(
         )
       }
       # plot with custom labels
-      plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = color, fontface = fontface, ...)
+      plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
     }
   }
 
