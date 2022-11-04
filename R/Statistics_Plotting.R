@@ -736,7 +736,7 @@ CellBender_Diff_Plot <- function(
     )
   }
 
-  num_features_total <- ncol(x = feature_diff_df_filtered)
+  num_features_total <- nrow(x = feature_diff_df_filtered)
 
   # Check how to filter data.frame
   if (!is.null(x = pct_diff_threshold) && !is.null(x = num_features)) {
@@ -752,7 +752,7 @@ CellBender_Diff_Plot <- function(
     feature_diff_df_filtered <- feature_diff_df_filtered[1:num_features, ]
   }
 
-  num_features_plotted <- ncol(x = feature_diff_df_filtered)
+  num_features_plotted <- nrow(x = feature_diff_df_filtered)
 
   # Make plot
   plot <- ggplot(feature_diff_df_filtered, aes(x = Raw_Counts, y = CellBender_Counts)) +
