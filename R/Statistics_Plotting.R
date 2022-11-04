@@ -687,6 +687,9 @@ Plot_Cells_per_Sample <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr drop_na
 #'
 #' @export
 #'
@@ -705,13 +708,15 @@ Plot_Cells_per_Sample <- function(
 
 CellBender_Diff_Plot <- function(
   feature_diff_df,
+  pct_diff_threshold = 25,
+  num_features = NULL,
   label = TRUE,
   num_labels = 20,
   repel = TRUE,
   custom_labels = NULL,
   plot_title = "Raw Counts vs. Cell Bender Counts",
-  x_axis_label = "Raw Data Counts (log10)",
-  y_axis_label = "Cell Bender Counts (log10)",
+  x_axis_label = "Raw Data Counts",
+  y_axis_label = "Cell Bender Counts",
   xnudge = 0,
   ynudge = 0,
   max.overlaps = 100,
@@ -719,26 +724,57 @@ CellBender_Diff_Plot <- function(
   fontface = "bold",
   ...
 ) {
-  # Calculate correlation
-  corr_val <- cor(x = feature_diff_df$Raw_Counts, y = feature_diff_df$CellBender_Counts)
+  # Remove unshared features
+  feature_diff_df_filtered <- feature_diff_df %>%
+    drop_na(Raw_Counts, CellBender_Counts)
+
+  diff_features <- symdiff(x = rownames(feature_diff_df), y = rownames(feature_diff_df_filtered))
+
+  if (length(x = diff_features > 0)) {
+    cli_warn(message = c("The following features are not present in both assays and were omitted:",
+                         "*" = "{diff_features}")
+    )
+  }
+
+  num_features_total <- ncol(x = feature_diff_df_filtered)
+
+  # Check how to filter data.frame
+  if (!is.null(x = pct_diff_threshold) && !is.null(x = num_features)) {
+    cli_abort(message = c("`pct_diff_threshold` and `num_features` cannot both have values.",
+                          "i" = "Set undesired parameter to 'NULL'."))
+  }
+
+  # Filter plot
+  if (!is.null(x = pct_diff_threshold)) {
+    feature_diff_df_filtered <- feature_diff_df_filtered %>%
+      filter(Pct_Diff > pct_diff_threshold)
+  } else {
+    feature_diff_df_filtered <- feature_diff_df_filtered[1:num_features, ]
+  }
+
+  num_features_plotted <- ncol(x = feature_diff_df_filtered)
 
   # Make plot
-  plot <- ggplot(feature_diff_df, aes(x = Raw_Counts, y = CellBender_Counts)) +
+  plot <- ggplot(feature_diff_df_filtered, aes(x = Raw_Counts, y = CellBender_Counts)) +
     geom_point() +
-    ggtitle(plot_title, subtitle = paste0("Correlation is: ", round(x = corr_val, digits = 4))) +
     scale_y_log10() +
     scale_x_log10() +
     ylab(y_axis_label) +
     xlab(x_axis_label) +
-    theme_cowplot()
+    theme_cowplot() +
+    if (!is.null(x = pct_diff_threshold)) {
+      ggtitle(plot_title, subtitle = paste0("Plotting features which exhibit difference of ", pct_diff_threshold, "% or greater (", num_features_plotted, "/", num_features_total, ")." ))
+    } else {
+      ggtitle(plot_title, subtitle = paste0("Plotting ", num_features_plotted, "/", num_features_total, " features." ))
+    }
 
   # Label points
   if (label) {
     if (is.null(x = custom_labels)) {
-      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = color, fontface = fontface, ...)
+      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df_filtered)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = color, fontface = fontface, ...)
     } else {
       # check for features
-      features_list <- Gene_Present(data = feature_diff_df, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+      features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
 
       all_not_found_features <- features_list[[2]]
 
