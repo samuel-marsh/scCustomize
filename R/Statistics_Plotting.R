@@ -673,12 +673,15 @@ Plot_Cells_per_Sample <- function(
 #' @param plot_title Plot title.
 #' @param x_axis_label Label for x axis.
 #' @param y_axis_label Label for y axis.
-#' @param xnudge Amount to nudge X and Y coordinates of labels by
-#' @param ynudge Amount to nudge X and Y coordinates of labels by
+#' @param xnudge Amount to nudge X and Y coordinates of labels by.
+#' @param ynudge Amount to nudge X and Y coordinates of labels by.
 #' @param max.overlaps passed to \code{\link[ggrepel]{geom_text_repel}}, exclude text labels that
 #' overlap too many things. Defaults to 100.
-#' @param color Color to use for text labels.
-#' @param fontface font face to use for text labels (“plain”, “bold”, “italic”, “bold.italic”).
+#' @param label_color Color to use for text labels.
+#' @param fontface font face to use for text labels (“plain”, “bold”, “italic”, “bold.italic”) (Default is "bold").
+#' @param label_size text size for feature labels (passed to \code{\link[ggrepel]{geom_text_repel}}).
+#' @param bg.color color to use for shadow/outline of text labels (passed to \code{\link[ggrepel]{geom_text_repel}}) (Default is white).
+#' @param bg.r radius to use for shadow/outline of text labels (passed to \code{\link[ggrepel]{geom_text_repel}}) (Default is 0.15).
 #' @param ... Extra parameters passed to \code{\link[ggrepel]{geom_text_repel}} through
 #' \code{\link[Seurat]{LabelPoints}}.
 #'
@@ -720,7 +723,7 @@ CellBender_Diff_Plot <- function(
   xnudge = 0,
   ynudge = 0,
   max.overlaps = 100,
-  label_color = "red",
+  label_color = "dodgerblue",
   fontface = "bold",
   label_size = 3.88,
   bg.color = "white",
