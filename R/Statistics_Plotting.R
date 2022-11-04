@@ -803,7 +803,8 @@ CellBender_Diff_Plot <- function(
         op <- options(warn = 1)
         on.exit(options(op))
         cli_warn(message = c("The following features in `custom_labels` were omitted as they were not found:",
-                             "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                             "*" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}",
+                             "i" = "Check both raw data and adjust `pct_diff_threshold` if needed.")
         )
       }
       # plot with custom labels
