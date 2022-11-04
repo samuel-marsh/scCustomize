@@ -793,9 +793,8 @@ CellBender_Diff_Plot <- function(
 
       # Stop if no features found
       if (length(x = all_found_features) < 1) {
-        cli_abort(message = c("None of features in `custom_labels` were found.",
-                              "*" = "The following are not present in data:",
-                              "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+        cli_abort(message = c("None of features in `custom_labels` were found in plot data.",
+                              "i" = "Check both raw data and adjust `pct_diff_threshold` if needed.")
         )
       }
 
