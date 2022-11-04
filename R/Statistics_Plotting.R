@@ -706,7 +706,7 @@ Plot_Cells_per_Sample <- function(
 #' cell_bender_assay = "RNA")
 #'
 #' # plot
-#' CellBender_Diff_Plot(feature_diff_df = cb_stats)
+#' CellBender_Diff_Plot(feature_diff_df = cb_stats, pct_diff_threshold = 25)
 #' }
 #'
 
