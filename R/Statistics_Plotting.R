@@ -670,6 +670,7 @@ Plot_Cells_per_Sample <- function(
 #' slow when a lot of points are being plotted. If using repel, set xnudge and ynudge to 0, (Default is TRUE).
 #' @param custom_labels A custom set of features to label instead of the features most different between
 #' raw and CellBender counts.
+#' @param plot_line logical, whether to plot diagonal line with slope = 1 (Default is TRUE).
 #' @param plot_title Plot title.
 #' @param x_axis_label Label for x axis.
 #' @param y_axis_label Label for y axis.
@@ -717,6 +718,7 @@ CellBender_Diff_Plot <- function(
   num_labels = 20,
   repel = TRUE,
   custom_labels = NULL,
+  plot_line = TRUE,
   plot_title = "Raw Counts vs. Cell Bender Counts",
   x_axis_label = "Raw Data Counts",
   y_axis_label = "Cell Bender Counts",
@@ -760,11 +762,14 @@ CellBender_Diff_Plot <- function(
 
   num_features_plotted <- nrow(x = feature_diff_df_filtered)
 
+  # Extract max plotted value
+  axis_lim <- max(feature_diff_df_filtered$Raw_Counts)
+
   # Make plot
   plot <- ggplot(feature_diff_df_filtered, aes(x = Raw_Counts, y = CellBender_Counts)) +
     geom_point() +
-    scale_y_log10() +
-    scale_x_log10() +
+    scale_x_log10(limits = c(1, axis_lim)) +
+    scale_y_log10(limits = c(1, axis_lim)) +
     ylab(y_axis_label) +
     xlab(x_axis_label) +
     theme_cowplot() +
@@ -805,6 +810,10 @@ CellBender_Diff_Plot <- function(
       # plot with custom labels
       plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
     }
+  }
+
+  if (plot_line) {
+    plot <- plot + geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red")
   }
 
   # return plot
