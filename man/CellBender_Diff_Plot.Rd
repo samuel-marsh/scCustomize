@@ -18,8 +18,11 @@ CellBender_Diff_Plot(
   xnudge = 0,
   ynudge = 0,
   max.overlaps = 100,
-  color = "red",
+  label_color = "dodgerblue",
   fontface = "bold",
+  label_size = 3.88,
+  bg.color = "white",
+  bg.r = 0.15,
   ...
 )
 }
@@ -43,16 +46,22 @@ raw and CellBender counts.}
 
 \item{y_axis_label}{Label for y axis.}
 
-\item{xnudge}{Amount to nudge X and Y coordinates of labels by}
+\item{xnudge}{Amount to nudge X and Y coordinates of labels by.}
 
-\item{ynudge}{Amount to nudge X and Y coordinates of labels by}
+\item{ynudge}{Amount to nudge X and Y coordinates of labels by.}
 
 \item{max.overlaps}{passed to \code{\link[ggrepel]{geom_text_repel}}, exclude text labels that
 overlap too many things. Defaults to 100.}
 
-\item{color}{Color to use for text labels.}
+\item{label_color}{Color to use for text labels.}
 
-\item{fontface}{font face to use for text labels (“plain”, “bold”, “italic”, “bold.italic”).}
+\item{fontface}{font face to use for text labels (“plain”, “bold”, “italic”, “bold.italic”) (Default is "bold").}
+
+\item{label_size}{text size for feature labels (passed to \code{\link[ggrepel]{geom_text_repel}}).}
+
+\item{bg.color}{color to use for shadow/outline of text labels (passed to \code{\link[ggrepel]{geom_text_repel}}) (Default is white).}
+
+\item{bg.r}{radius to use for shadow/outline of text labels (passed to \code{\link[ggrepel]{geom_text_repel}}) (Default is 0.15).}
 
 \item{...}{Extra parameters passed to \code{\link[ggrepel]{geom_text_repel}} through
 \code{\link[Seurat]{LabelPoints}}.}
