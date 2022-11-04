@@ -6,13 +6,15 @@
 \usage{
 CellBender_Diff_Plot(
   feature_diff_df,
+  pct_diff_threshold = 25,
+  num_features = NULL,
   label = TRUE,
   num_labels = 20,
   repel = TRUE,
   custom_labels = NULL,
   plot_title = "Raw Counts vs. Cell Bender Counts",
-  x_axis_label = "Raw Data Counts (log10)",
-  y_axis_label = "Cell Bender Counts (log10)",
+  x_axis_label = "Raw Data Counts",
+  y_axis_label = "Cell Bender Counts",
   xnudge = 0,
   ynudge = 0,
   max.overlaps = 100,
