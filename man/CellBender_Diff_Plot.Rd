@@ -12,6 +12,7 @@ CellBender_Diff_Plot(
   num_labels = 20,
   repel = TRUE,
   custom_labels = NULL,
+  plot_line = TRUE,
   plot_title = "Raw Counts vs. Cell Bender Counts",
   x_axis_label = "Raw Data Counts",
   y_axis_label = "Cell Bender Counts",
@@ -39,6 +40,8 @@ slow when a lot of points are being plotted. If using repel, set xnudge and ynud
 
 \item{custom_labels}{A custom set of features to label instead of the features most different between
 raw and CellBender counts.}
+
+\item{plot_line}{logical, whether to plot diagonal line with slope = 1 (Default is TRUE).}
 
 \item{plot_title}{Plot title.}
 
@@ -79,7 +82,7 @@ cb_stats <- CellBender_Feature_Diff(seurat_object - obj, raw_assay = "RAW",
 cell_bender_assay = "RNA")
 
 # plot
-CellBender_Diff_Plot(feature_diff_df = cb_stats)
+CellBender_Diff_Plot(feature_diff_df = cb_stats, pct_diff_threshold = 25)
 }
 
 }
