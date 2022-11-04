@@ -340,6 +340,16 @@ CellBender_Feature_Diff <- function(
 
   colnames(cb_counts)[2] <- "CellBender_Counts"
 
+  # Check features identical
+  diff_features <- symdiff(x = raw_counts$Feature_Names, y = cb_counts$Feature_Names)
+
+  if (length(x = diff_features > 0)) {
+    cli_warn(message = c("The following features are not present in both assays:",
+                         "*" = "{diff_features}",
+                         "i" = "Check matrices used to create object.")
+             )
+  }
+
   # merge
   merged_counts <- suppressMessages(left_join(x = raw_counts, y = cb_counts))
 
