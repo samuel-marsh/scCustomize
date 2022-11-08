@@ -755,7 +755,7 @@ CellBender_Diff_Plot <- function(
   # Filter plot
   if (!is.null(x = pct_diff_threshold)) {
     feature_diff_df_filtered <- feature_diff_df_filtered %>%
-      filter(Pct_Diff > pct_diff_threshold)
+      filter(Pct_Diff >= pct_diff_threshold)
   } else {
     feature_diff_df_filtered <- feature_diff_df_filtered[1:num_features, ]
   }
