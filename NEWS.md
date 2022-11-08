@@ -5,6 +5,7 @@
 
 ## Changed  
 - **BREAKING CHANGE** Function name changed, `Add_CellBender_Diff` is new name for `Add_Cell_Bender_Diff` in order to unify function names for CellBender related functions.  
+- Updated CellBender vignette with new functions.
 
 ## Fixes  
 - Fixed for automatic color palette selection when only plotting one group.
