@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cell Bender Functionality &amp; Plotting</h1>
             
-            <h4 data-toc-skip class="date">Compiled: October 25, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: November 10, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Cell_Bender_Functions.Rmd" class="external-link"><code>vignettes/Cell_Bender_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Cell_Bender_Functions.Rmd</code></div>
@@ -146,10 +146,10 @@ p.caption {
 }
 </style>
 <div class="section level2">
-<h2 id="cell-bender-functionality">Cell Bender Functionality<a class="anchor" aria-label="anchor" href="#cell-bender-functionality"></a>
+<h2 id="cellbender-functionality">CellBender Functionality<a class="anchor" aria-label="anchor" href="#cellbender-functionality"></a>
 </h2>
-<p>Cell Bender is software for elimination of technical artifacts in scRNA-seq/snRNA-seq that uses deep generative model for unsupervised removal of ambient RNA and chimeric PCR artifacts. You can find out more info about Cell Bender from the <a href="https://www.biorxiv.org/content/10.1101/791699v1" class="external-link">bioRxiv Preprint</a>, <a href="https://github.com/broadinstitute/CellBender" class="external-link">GitHub Repo</a>, and <a href="https://cellbender.readthedocs.io/en/latest/" class="external-link">Documentation</a>.</p>
-<p>Following completion of Cell Bender scCustomize contains a couple of functions that may be helpful when creating and visualizing data in Seurat.</p>
+<p>CellBender is software for elimination of technical artifacts in scRNA-seq/snRNA-seq that uses deep generative model for unsupervised removal of ambient RNA and chimeric PCR artifacts. You can find out more info about CellBender from the <a href="https://doi.org/10.1101/791699" class="external-link">bioRxiv Preprint</a>, <a href="https://github.com/broadinstitute/CellBender" class="external-link">GitHub Repo</a>, and <a href="https://cellbender.readthedocs.io/en/latest/" class="external-link">Documentation</a>.</p>
+<p>Following completion of CellBender scCustomize contains a couple of functions that may be helpful when creating and visualizing data in Seurat.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
@@ -160,11 +160,21 @@ p.caption {
 <div class="section level3">
 <h3 id="importing-cell-bender-h5-outputs">Importing Cell Bender H5 Outputs<a class="anchor" aria-label="anchor" href="#importing-cell-bender-h5-outputs"></a>
 </h3>
-<p>The output from Cell Bender is an H5 file that is styled and can be read like 10X Genomics H5 file. However, <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5()</a></code> assumes that the file contains no name prefix.</p>
-<p>However,<code><a href="../reference/Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory()</a></code> can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.</p>
+<p>The output from CellBender is an H5 file that is styled and can be read like 10X Genomics H5 file. In CellBender pre-v3 this file could be read by <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5()</a></code> (although that function assumes that the file contains no name prefix). However, v3+ contains extra information that causes <code>Read10X_h5</code> to fail.</p>
+<p>scCustomize contains function <code><a href="../reference/Read_CellBender_h5_Mat.html">Read_CellBender_h5_Mat()</a></code> can be used when reading in CellBender h5 files regardless of the version of CellBender used.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cell_bender_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_CellBender_h5_Mat.html">Read_CellBender_h5_Mat</a></span><span class="op">(</span>file_name <span class="op">=</span> <span class="st">"PATH/SampleA_out_filtered.h5"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="reading-multiple-cellbender-files-with-single-function">Reading multiple CellBender files with single function<a class="anchor" aria-label="anchor" href="#reading-multiple-cellbender-files-with-single-function"></a>
+</h3>
+<p>scCustomize also contains two wrapper functions to easily read multiple CellBender files stored either in single directory or in multiple sub-directories <code>Read_CellBender_h5_Multi_File</code> and <code>Read_CellBender_h5_Multi_Directory</code>.</p>
 <div class="section level4">
-<h4 id="cell-bender-output-structure">Cell Bender Output Structure<a class="anchor" aria-label="anchor" href="#cell-bender-output-structure"></a>
+<h4 id="read-in-h5-outputs-from-multiple-sub-directories-with-read_cellbender_h5_multi_directory-">Read in H5 outputs from multiple sub-directories with <code>Read_CellBender_h5_Multi_Directory()</code>.<a class="anchor" aria-label="anchor" href="#read-in-h5-outputs-from-multiple-sub-directories-with-read_cellbender_h5_multi_directory-"></a>
 </h4>
+<div class="section level5">
+<h5 id="cell-bender-output-structure">Cell Bender Output Structure<a class="anchor" aria-label="anchor" href="#cell-bender-output-structure"></a>
+</h5>
 <p>The following is typical output directory structure for Cell Bender files with sub-directory labeled with sample name and each file also prefixed with the sample name.</p>
 <pre><code>Parent_Directory
 ├── sample_01
@@ -180,29 +190,43 @@ p.caption {
 │   └── sample_02_out.log
 │   └── sample_02_out.pdf</code></pre>
 </div>
-<div class="section level4">
-<h4 id="read-in-h5-outputs">Read in H5 outputs<a class="anchor" aria-label="anchor" href="#read-in-h5-outputs"></a>
-</h4>
+<div class="section level5">
+<h5 id="read-files">Read Files<a class="anchor" aria-label="anchor" href="#read-files"></a>
+</h5>
 <p>All we have to do is adjust the parameters to account for cell bender file names and directory structure.</p>
 <ul>
 <li>
-<code>secondary_path = ""</code> as the files are directly within the immediate sub-directory</li>
+<code>secondary_path</code> In this case we can leave as <code>NULL</code> because samples are located in immediate subdirectory (secondary path must be the same for all samples).</li>
 <li>
-<code>default_10X_path = FALSE</code> because these are not 10X outputs.</li>
-<li>
-<code>h5_filename = "_out.h5"</code> specifies the shared aspect of file name that is not part of sample name. (Can also specify “_out_filtered.h5” depending on which file is desired).</li>
+<code>custom_name = "_out.h5"</code> This specifies what the common file suffix of all files are.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cell_bender_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"assets/cell_bender/"</span>, secondary_path <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    default_10X_path <span class="op">=</span> <span class="cn">FALSE</span>, h5_filename <span class="op">=</span> <span class="st">"_out.h5"</span>, cell_bender <span class="op">=</span> <span class="cn">TRUE</span>, merge <span class="op">=</span> <span class="cn">TRUE</span>, sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>,</span>
-<span>        <span class="st">"WT2"</span><span class="op">)</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span>, num_cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Optional Parameters</strong><br>
+* <code>parallel</code> and <code>num_cores</code> to use multiple core processing. * <code>sample_list</code> By default <code>Read_CellBender_h5_Multi_Directory</code> will read in all sub-directories present in parent directory. However a subset can be specified by passing a vector of sample directory names. * <code>sample_names</code> As with other functions by default <code>Read_CellBender_h5_Multi_Directory</code> will use the sub-directory names within parent directory to name the output list entries. Alternate names for the list entries can be provided here if desired. These names will also be used to add cell prefixes if <code>merge = TRUE</code> (see below).<br>
+* <code>merge</code> logical (default FALSE). Whether to combine all samples into single sparse matrix and using <code>sample_names</code> to provide sample prefixes.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cell_bender_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_CellBender_h5_Multi_Directory.html">Read_CellBender_h5_Multi_Directory</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"assets/Cell_Bender_Example/"</span>,</span>
+<span>    custom_name <span class="op">=</span> <span class="st">"_out.h5"</span>, sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>, <span class="st">"WT2"</span><span class="op">)</span>, merge <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level4">
-<h4 id="these-matrices-can-then-be-used-to-create-seurat-objects-as-desired-can-also-be-used-to-create-other-analysis-objects">These matrices can then be used to create Seurat objects as desired (can also be used to create other analysis objects)<a class="anchor" aria-label="anchor" href="#these-matrices-can-then-be-used-to-create-seurat-objects-as-desired-can-also-be-used-to-create-other-analysis-objects"></a>
+<h4 id="read-in-h5-outputs-from-single-directory-with-read_cellbender_h5_multi_file-">Read in H5 outputs from single directory with <code>Read_CellBender_h5_Multi_File()</code>.<a class="anchor" aria-label="anchor" href="#read-in-h5-outputs-from-single-directory-with-read_cellbender_h5_multi_file-"></a>
 </h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cell_bender_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">cell_bender_merged</span>, names.field <span class="op">=</span> <span class="fl">1</span>, names.delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></code></pre></div>
+<p>If all output files are in single directory you can use <code>Read_CellBender_h5_Multi_File</code> to read in all of the files with single function.</p>
+<pre><code>Parent_Directory
+├── CellBender_Outputs
+│   └── sample_01_out.h5
+│   └── sample_02_out.h5</code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cell_bender_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_CellBender_h5_Multi_File.html">Read_CellBender_h5_Multi_File</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/Cell_Bender_Example/"</span>, custom_name <span class="op">=</span> <span class="st">"_out.h5"</span>,</span>
+<span>    sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>, <span class="st">"WT2"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level3">
+<h3 id="create-seurat-object-with-corrected-counts">Create Seurat Object with Corrected Counts<a class="anchor" aria-label="anchor" href="#create-seurat-object-with-corrected-counts"></a>
+</h3>
+<p>Creating a Seurat object from merged CellBender matrices then is identical to creating any other Seurat object.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cell_bender_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">cell_bender_merged</span>, names.field <span class="op">=</span> <span class="fl">1</span>, names.delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-dual-assay-objects">Creating Dual Assay Objects<a class="anchor" aria-label="anchor" href="#creating-dual-assay-objects"></a>
@@ -212,20 +236,19 @@ p.caption {
 <div class="section level4">
 <h4 id="read-in-both-sets-of-data">Read in both sets of data<a class="anchor" aria-label="anchor" href="#read-in-both-sets-of-data"></a>
 </h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cell_bender_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"assets/cell_bender/"</span>, secondary_path <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    default_10X_path <span class="op">=</span> <span class="cn">FALSE</span>, h5_filename <span class="op">=</span> <span class="st">"_out.h5"</span>, cell_bender <span class="op">=</span> <span class="cn">TRUE</span>, merge <span class="op">=</span> <span class="cn">TRUE</span>, sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>,</span>
-<span>        <span class="st">"WT2"</span><span class="op">)</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span>, num_cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cell_bender_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_CellBender_h5_Multi_Directory.html">Read_CellBender_h5_Multi_Directory</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"assets/Cell_Bender_Cell_Ranger_Data/Cell_Bender_Example/"</span>,</span>
+<span>    custom_name <span class="op">=</span> <span class="st">"_out.h5"</span>, sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>, <span class="st">"WT2"</span><span class="op">)</span>, merge <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cell_ranger_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"assets/cell_ranger/"</span>, default_10X_path <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    h5_filename <span class="op">=</span> <span class="st">"filtered_feature_bc_matrix.h5"</span>, cell_bender <span class="op">=</span> <span class="cn">F</span>, merge <span class="op">=</span> <span class="cn">TRUE</span>, sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>,</span>
+<span><span class="va">cell_ranger_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory</a></span><span class="op">(</span>base_path <span class="op">=</span> <span class="st">"assets/Cell_Bender_Cell_Ranger_Data/Cell_Ranger_Example/"</span>,</span>
+<span>    default_10X_path <span class="op">=</span> <span class="cn">FALSE</span>, h5_filename <span class="op">=</span> <span class="st">"filtered_feature_bc_matrix.h5"</span>, merge <span class="op">=</span> <span class="cn">TRUE</span>, sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WT1"</span>,</span>
 <span>        <span class="st">"WT2"</span><span class="op">)</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span>, num_cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="create-dual-assay-seurat-object">Create Dual Assay Seurat Object<a class="anchor" aria-label="anchor" href="#create-dual-assay-seurat-object"></a>
 </h4>
 <p>To run the function the user simply needs to provide the names of the two matrices and a name for assay containing the Cell Ranger counts (by default this is named “RAW”).</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dual_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Create_CellBender_Merged_Seurat.html">Create_CellBender_Merged_Seurat</a></span><span class="op">(</span>raw_cell_bender_matrix <span class="op">=</span> <span class="va">cell_bender_merged</span>, raw_counts_matrix <span class="op">=</span> <span class="va">cell_ranger_merged</span>,</span>
 <span>    raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -233,7 +256,7 @@ p.caption {
 <h4 id="optional-parameters">Optional Parameters<a class="anchor" aria-label="anchor" href="#optional-parameters"></a>
 </h4>
 <p>Users can specify any additional parameters normally passed to <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">Seurat::CreateSeuratObject()</a></code> when using this function.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dual_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Create_CellBender_Merged_Seurat.html">Create_CellBender_Merged_Seurat</a></span><span class="op">(</span>raw_cell_bender_matrix <span class="op">=</span> <span class="va">cell_bender_merged</span>, raw_counts_matrix <span class="op">=</span> <span class="va">cell_ranger_merged</span>,</span>
 <span>    raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, min_features <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -245,12 +268,11 @@ p.caption {
 <div class="section level4">
 <h4 id="add-prepost-to-meta-data">Add Pre/Post to Meta Data<a class="anchor" aria-label="anchor" href="#add-prepost-to-meta-data"></a>
 </h4>
-<p>scCustomize includes function <code><a href="../reference/Add_Cell_Bender_Diff.html">Add_Cell_Bender_Diff()</a></code> to help with this process. This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns (“nCount_Diff” and “nFeature_Diff”) to the object meta.data.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">astrocytes_cortex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Bender_Diff.html">Add_Cell_Bender_Diff</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">astrocytes_cortex</span>, raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>,</span>
-<span>    cell_bender_assay_name <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span>
+<p>scCustomize includes function <code><a href="../reference/Add_CellBender_Diff.html">Add_CellBender_Diff()</a></code> to help with this process. This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns (“nCount_Diff” and “nFeature_Diff”) to the object meta.data.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dual_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_CellBender_Diff.html">Add_CellBender_Diff</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">dual_seurat</span>, raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>, cell_bender_assay_name <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">astrocytes_cortex</span><span class="op">@</span><span class="va">meta.data</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dual_seurat</span><span class="op">@</span><span class="va">meta.data</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -271,27 +293,6 @@ nCount_RAW
 nFeature_RAW
 </th>
 <th style="text-align:right;">
-percent_mito
-</th>
-<th style="text-align:right;">
-percent_ribo
-</th>
-<th style="text-align:right;">
-percent_mito_ribo
-</th>
-<th style="text-align:right;">
-nCount_SCT
-</th>
-<th style="text-align:right;">
-nFeature_SCT
-</th>
-<th style="text-align:left;">
-SCT_snn_res.0.6
-</th>
-<th style="text-align:left;">
-seurat_clusters
-</th>
-<th style="text-align:right;">
 nFeature_Diff
 </th>
 <th style="text-align:right;">
@@ -301,10 +302,62 @@ nCount_Diff
 <tbody>
 <tr>
 <td style="text-align:left;">
-WT-2a_AAACCCACACACCAGC-1
+WT1_AAACCCAAGCGACCCT-1
 </td>
 <td style="text-align:left;">
-WT-2a
+WT1
+</td>
+<td style="text-align:right;">
+9844
+</td>
+<td style="text-align:right;">
+3423
+</td>
+<td style="text-align:right;">
+10032
+</td>
+<td style="text-align:right;">
+3481
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+188
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT1_AAACCCAAGGAGGCAG-1
+</td>
+<td style="text-align:left;">
+WT1
+</td>
+<td style="text-align:right;">
+9248
+</td>
+<td style="text-align:right;">
+3477
+</td>
+<td style="text-align:right;">
+9431
+</td>
+<td style="text-align:right;">
+3531
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:right;">
+183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WT1_AAACCCACACACCAGC-1
+</td>
+<td style="text-align:left;">
+WT1
 </td>
 <td style="text-align:right;">
 3207
@@ -319,27 +372,6 @@ WT-2a
 1852
 </td>
 <td style="text-align:right;">
-0.0311818
-</td>
-<td style="text-align:right;">
-0.0311818
-</td>
-<td style="text-align:right;">
-0.0623636
-</td>
-<td style="text-align:right;">
-3103
-</td>
-<td style="text-align:right;">
-1695
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
 153
 </td>
 <td style="text-align:right;">
@@ -348,190 +380,54 @@ WT-2a
 </tr>
 <tr>
 <td style="text-align:left;">
-WT-2a_AAACGAAGTATCGCTA-1
+WT1_AAACCCACATCTGTTT-1
 </td>
 <td style="text-align:left;">
-WT-2a
+WT1
 </td>
 <td style="text-align:right;">
-2089
+14328
 </td>
 <td style="text-align:right;">
-1217
+3930
 </td>
 <td style="text-align:right;">
-2326
+14572
 </td>
 <td style="text-align:right;">
-1354
+3993
 </td>
 <td style="text-align:right;">
-0.0000000
+63
 </td>
 <td style="text-align:right;">
-0.0478698
-</td>
-<td style="text-align:right;">
-0.0478698
-</td>
-<td style="text-align:right;">
-2468
-</td>
-<td style="text-align:right;">
-1216
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-137
-</td>
-<td style="text-align:right;">
-237
+244
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-WT-2a_AAACGAATCGACCATA-1
+WT1_AAACCCAGTATTCTCT-1
 </td>
 <td style="text-align:left;">
-WT-2a
+WT1
 </td>
 <td style="text-align:right;">
-3327
+12034
 </td>
 <td style="text-align:right;">
-1677
+3911
 </td>
 <td style="text-align:right;">
-3687
+12223
 </td>
 <td style="text-align:right;">
-1882
+3958
 </td>
 <td style="text-align:right;">
-0.2103998
+47
 </td>
 <td style="text-align:right;">
-0.4207995
-</td>
-<td style="text-align:right;">
-0.6311993
-</td>
-<td style="text-align:right;">
-3148
-</td>
-<td style="text-align:right;">
-1672
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:right;">
-205
-</td>
-<td style="text-align:right;">
-360
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WT-2a_AAACGCTCAAACTCGT-1
-</td>
-<td style="text-align:left;">
-WT-2a
-</td>
-<td style="text-align:right;">
-2221
-</td>
-<td style="text-align:right;">
-1236
-</td>
-<td style="text-align:right;">
-2472
-</td>
-<td style="text-align:right;">
-1378
-</td>
-<td style="text-align:right;">
-0.0900495
-</td>
-<td style="text-align:right;">
-0.1350743
-</td>
-<td style="text-align:right;">
-0.2251238
-</td>
-<td style="text-align:right;">
-2504
-</td>
-<td style="text-align:right;">
-1235
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:right;">
-142
-</td>
-<td style="text-align:right;">
-251
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WT-2a_AAACGCTCATGTTACG-1
-</td>
-<td style="text-align:left;">
-WT-2a
-</td>
-<td style="text-align:right;">
-2685
-</td>
-<td style="text-align:right;">
-1518
-</td>
-<td style="text-align:right;">
-2999
-</td>
-<td style="text-align:right;">
-1694
-</td>
-<td style="text-align:right;">
-0.0744879
-</td>
-<td style="text-align:right;">
-0.8193669
-</td>
-<td style="text-align:right;">
-0.8938547
-</td>
-<td style="text-align:right;">
-2720
-</td>
-<td style="text-align:right;">
-1509
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:right;">
-176
-</td>
-<td style="text-align:right;">
-314
+189
 </td>
 </tr>
 </tbody>
@@ -541,8 +437,8 @@ WT-2a
 <h4 id="calculate-per-sample-averages">Calculate per sample averages<a class="anchor" aria-label="anchor" href="#calculate-per-sample-averages"></a>
 </h4>
 <p>We can then use <code><a href="../reference/Median_Stats.html">Median_Stats()</a></code> to calculate per sample averages across all cells by supplying the new variables to the <code>median_var</code> parameter.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">astrocytes_cortex</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nCount_Diff"</span>,</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">dual_seurat</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nCount_Diff"</span>,</span>
 <span>    <span class="st">"nFeature_Diff"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -556,15 +452,6 @@ Median_nCount_RNA
 Median_nFeature_RNA
 </th>
 <th style="text-align:right;">
-Median_percent_mito
-</th>
-<th style="text-align:right;">
-Median_percent_ribo
-</th>
-<th style="text-align:right;">
-Median_percent_mito_ribo
-</th>
-<th style="text-align:right;">
 Median_nCount_Diff
 </th>
 <th style="text-align:right;">
@@ -574,54 +461,36 @@ Median_nFeature_Diff
 <tbody>
 <tr>
 <td style="text-align:left;">
-WT-2a
+WT1
 </td>
 <td style="text-align:right;">
-2949.5
+7724.5
 </td>
 <td style="text-align:right;">
-1527.5
+2936
 </td>
 <td style="text-align:right;">
-0.0224121
+216
 </td>
 <td style="text-align:right;">
-0.0673027
-</td>
-<td style="text-align:right;">
-0.0948317
-</td>
-<td style="text-align:right;">
-280
-</td>
-<td style="text-align:right;">
-156
+73
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-WT-6a
+WT2
 </td>
 <td style="text-align:right;">
-2765.0
+7404.5
 </td>
 <td style="text-align:right;">
-1451.5
+2803
 </td>
 <td style="text-align:right;">
-0.0352609
+212
 </td>
 <td style="text-align:right;">
-0.0656276
-</td>
-<td style="text-align:right;">
-0.1065341
-</td>
-<td style="text-align:right;">
-279
-</td>
-<td style="text-align:right;">
-154
+61
 </td>
 </tr>
 <tr>
@@ -629,29 +498,165 @@ WT-6a
 Totals (All Cells)
 </td>
 <td style="text-align:right;">
-2875.0
+7565.0
 </td>
 <td style="text-align:right;">
-1498.5
+2869
 </td>
 <td style="text-align:right;">
-0.0293169
+214
 </td>
 <td style="text-align:right;">
-0.0665447
-</td>
-<td style="text-align:right;">
-0.1006627
-</td>
-<td style="text-align:right;">
-279
-</td>
-<td style="text-align:right;">
-156
+67
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level4">
+<h4 id="examine-most-changed-features">Examine most changed features<a class="anchor" aria-label="anchor" href="#examine-most-changed-features"></a>
+</h4>
+<p>It can also be helpful to understand what features may have changed the most. scCustomize provides the function <code>CellBender_Feature_Diff</code> to determine changes in features. This will return a data.frame with rowSums for each feature, the difference in each feature, and the percent change of each feature.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">feature_diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Feature_Diff.html">CellBender_Feature_Diff</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">dual_seurat</span>, raw_assay <span class="op">=</span> <span class="st">"RAW"</span>, cell_bender_assay <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Raw_Counts
+</th>
+<th style="text-align:right;">
+CellBender_Counts
+</th>
+<th style="text-align:right;">
+Count_Diff
+</th>
+<th style="text-align:right;">
+Pct_Diff
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gm42418
+</td>
+<td style="text-align:right;">
+256834
+</td>
+<td style="text-align:right;">
+3198
+</td>
+<td style="text-align:right;">
+253636
+</td>
+<td style="text-align:right;">
+98.75484
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Uqcr11
+</td>
+<td style="text-align:right;">
+1315
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+1295
+</td>
+<td style="text-align:right;">
+98.47909
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gm48099
+</td>
+<td style="text-align:right;">
+277
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+272
+</td>
+<td style="text-align:right;">
+98.19495
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tmsb4x
+</td>
+<td style="text-align:right;">
+6010
+</td>
+<td style="text-align:right;">
+116
+</td>
+<td style="text-align:right;">
+5894
+</td>
+<td style="text-align:right;">
+98.06988
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rps21
+</td>
+<td style="text-align:right;">
+2597
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+2536
+</td>
+<td style="text-align:right;">
+97.65114
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="plot-feature-differences">Plot feature differences<a class="anchor" aria-label="anchor" href="#plot-feature-differences"></a>
+</h4>
+<p>In addition to returning the data.frame it can be useful to visually examine the changes/trends after running CellBender. The function <code>CellBender_Diff_Plot</code> takes the data.frame from <code>CellBender_Feature_Diff</code> as input and plots the results.</p>
+<p><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><strong>Optional Parameters</strong></p>
+<ul>
+<li>
+<code>pct_diff_threshold</code> plot genes that exhibit a change equal to or greater than this threshold.<br>
+</li>
+<li>
+<code>num_features</code> instead of plotting genes above a threshold simply plot the top X changed genes.<br>
+</li>
+<li>
+<code>num_labels</code> change how many genes are labeled.<br>
+</li>
+<li>
+<code>label</code> logical, whether or not to label features.<br>
+</li>
+<li>
+<code>custom_labels</code> specify vector of specific features to label.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span>, pct_diff_threshold <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span>, num_features <span class="op">=</span> <span class="fl">500</span>, pct_diff_threshold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span>, num_labels <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span>, label <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span>, custom_labels <span class="op">=</span> <span class="st">"Gm48099"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span>, <span class="va">p5</span>, <span class="va">p6</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-17-1.png" width="1440" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -666,12 +671,12 @@ Totals (All Cells)
 <div class="section level5">
 <h5 id="ambient-rna-gene">Ambient RNA gene<a class="anchor" aria-label="anchor" href="#ambient-rna-gene"></a>
 </h5>
-<p>First let’s plot gene that represents ambient RNA as it’s restricted in expression to neurons (synaptic gene). If Cell Bender has worked well we expect that expression of this gene will be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;"></p>
+<p>First let’s plot gene that represents ambient RNA as it’s restricted in expression to neurons (synaptic gene). If Cell Bender has worked well we expect that expression of this gene will be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-18-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level5">
 <h5 id="non-ambient-rna-gene">Non-Ambient RNA gene<a class="anchor" aria-label="anchor" href="#non-ambient-rna-gene"></a>
 </h5>
-<p>Now let’s plot normally astrocyte restricted gene. If Cell Bender has worked well we expect that expression of this gene shouldn’t be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
+<p>Now let’s plot normally astrocyte restricted gene. If Cell Bender has worked well we expect that expression of this gene shouldn’t be very different between the two assays. <img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-19-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

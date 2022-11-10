@@ -61,6 +61,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/news/index.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_CellBender_Diff.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_Bender_Diff.html</loc>
   </url>
   <url>
@@ -86,6 +89,12 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Case_Check.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/CellBender_Diff_Plot.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/CellBender_Feature_Diff.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Change_Delim_All.html</loc>
