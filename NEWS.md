@@ -1,4 +1,4 @@
-# scCustomize 1.X.X (20XX-XX-XX)  
+# scCustomize 1.0.1 (2022-11-10)  
 ## Added  
 - Added `CellBender_Feature_Diff` to return data.frame with count sums and differences between raw and CellBender assays.  
 - Added `CellBender_Diff_Plot` to plot differences between raw and CellBender assays using data from `CellBender_Feature_Diff`.  
