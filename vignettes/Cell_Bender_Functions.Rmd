@@ -39,10 +39,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Cell Bender Functionality
-Cell Bender is software for elimination of technical artifacts in scRNA-seq/snRNA-seq that uses deep generative model for unsupervised removal of ambient RNA and chimeric PCR artifacts.  You can find out more info about Cell Bender from the [bioRxiv Preprint](https://www.biorxiv.org/content/10.1101/791699v1), [GitHub Repo](https://github.com/broadinstitute/CellBender), and [Documentation](https://cellbender.readthedocs.io/en/latest/).  
+# CellBender Functionality
+CellBender is software for elimination of technical artifacts in scRNA-seq/snRNA-seq that uses deep generative model for unsupervised removal of ambient RNA and chimeric PCR artifacts.  You can find out more info about CellBender from the [bioRxiv Preprint](https://doi.org/10.1101/791699), [GitHub Repo](https://github.com/broadinstitute/CellBender), and [Documentation](https://cellbender.readthedocs.io/en/latest/).  
   
-Following completion of Cell Bender scCustomize contains a couple of functions that may be helpful when creating and visualizing data in Seurat.
+Following completion of CellBender scCustomize contains a couple of functions that may be helpful when creating and visualizing data in Seurat.
 
 ```{r init}
 library(tidyverse)
@@ -61,11 +61,21 @@ astrocytes_cortex <- qread("assets/astro_nuc_seq.qs")
 
 
 ## Importing Cell Bender H5 Outputs  
-The output from Cell Bender is an H5 file that is styled and can be read like 10X Genomics H5 file.  However, `Seurat::Read10X_h5()` assumes that the file contains no name prefix.
+The output from CellBender is an H5 file that is styled and can be read like 10X Genomics H5 file.  In CellBender pre-v3 this file could be read by `Seurat::Read10X_h5()` (although that function assumes that the file contains no name prefix).  However, v3+ contains extra information that causes `Read10X_h5` to fail.  
 
-However,`Read10X_h5_Multi_Directory()` can be used when reading in Cell Bender files. and contains additional parameters related to Cell Bender imports.
+scCustomize contains function `Read_CellBender_h5_Mat()` can be used when reading in CellBender h5 files regardless of the version of CellBender used.  
 
-### Cell Bender Output Structure
+```{r eval=FALSE}
+cell_bender_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered.h5")
+```
+
+
+## Reading multiple CellBender files with single function    
+scCustomize also contains two wrapper functions to easily read multiple CellBender files stored either in single directory or in multiple sub-directories `Read_CellBender_h5_Multi_File` and `Read_CellBender_h5_Multi_Directory`.  
+
+### Read in H5 outputs from multiple sub-directories with `Read_CellBender_h5_Multi_Directory()`.  
+
+#### Cell Bender Output Structure
 The following is typical output directory structure for Cell Bender files with sub-directory labeled with sample name and each file also prefixed with the sample name.
 
 ```
@@ -84,22 +94,46 @@ Parent_Directory
 │   └── sample_02_out.pdf
 ```
 
-### Read in H5 outputs  
+#### Read Files
 All we have to do is adjust the parameters to account for cell bender file names and directory structure.  
 
-* `secondary_path = ""` as the files are directly within the immediate sub-directory
-* `default_10X_path = FALSE` because these are not 10X outputs.
-* `h5_filename = "_out.h5"` specifies the shared aspect of file name that is not part of sample name.  (Can also specify "_out_filtered.h5" depending on which file is desired).
+* `secondary_path` In this case we can leave as `NULL` because samples are located in immediate subdirectory (secondary path must be the same for all samples).
+* `custom_name = "_out.h5"` This specifies what the common file suffix of all files are.  
+
+**Optional Parameters**  
+* `parallel` and `num_cores` to use multiple core processing.
+* `sample_list` By default `Read_CellBender_h5_Multi_Directory` will read in all sub-directories present in parent directory.  However a subset can be specified by passing a vector of sample directory names.
+* `sample_names` As with other functions by default `Read_CellBender_h5_Multi_Directory` will use the sub-directory names within parent directory to name the output list entries.  Alternate names for the list entries can be provided here if desired.  These names will also be used to add cell prefixes if `merge = TRUE` (see below).  
+* `merge` logical (default FALSE).  Whether to combine all samples into single sparse matrix and using `sample_names` to provide sample prefixes.
+
 
 ```{r eval=FALSE}
-cell_bender_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_bender/", secondary_path = "", default_10X_path = FALSE, h5_filename = "_out.h5", cell_bender = TRUE, merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
+cell_bender_merged <- Read_CellBender_h5_Multi_Directory(base_path = "assets/Cell_Bender_Example/", custom_name = "_out.h5", sample_names = c("WT1", "WT2"), merge = TRUE)
 ```
 
-### These matrices can then be used to create Seurat objects as desired (can also be used to create other analysis objects)  
+
+### Read in H5 outputs from single directory with `Read_CellBender_h5_Multi_File()`.  
+If all output files are in single directory you can use `Read_CellBender_h5_Multi_File` to read in all of the files with single function.
+
+```
+Parent_Directory
+├── CellBender_Outputs
+│   └── sample_01_out.h5
+│   └── sample_02_out.h5
+```
+
+```{r eval=FALSE}
+cell_bender_merged <- Read_CellBender_h5_Multi_File(data_dir = "assets/Cell_Bender_Example/", custom_name = "_out.h5", sample_names = c("WT1", "WT2"))
+```
+
+
+## Create Seurat Object with Corrected Counts  
+Creating a Seurat object from merged CellBender matrices then is identical to creating any other Seurat object.  
 
 ```{r eval=FALSE}
 cell_bender_seurat <- CreateSeuratObject(counts = cell_bender_merged, names.field = 1, names.delim = "_")
 ```
+
 
 ## Creating Dual Assay Objects  
 Sometimes it can be helpful to create object that contains both the cell ranger values and cell bender values (we'll come to why below).  scCustomize contains a helper function `Create_CellBender_Merged_Seurat()` to handle object creation in one quick step.
@@ -107,15 +141,15 @@ Sometimes it can be helpful to create object that contains both the cell ranger 
 For this function we assume that we will use the cell calling algorithm of Cell Ranger with the modified counts for Cell Bender.  
 
 ### Read in both sets of data
-```{r eval=FALSE}
-cell_bender_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_bender/", secondary_path = "", default_10X_path = FALSE, h5_filename = "_out.h5", cell_bender = TRUE, merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
+```{r echo=TRUE}
+cell_bender_merged <- Read_CellBender_h5_Multi_Directory(base_path = "assets/Cell_Bender_Cell_Ranger_Data/Cell_Bender_Example/", custom_name = "_out.h5", sample_names = c("WT1", "WT2"), merge = TRUE)
 
-cell_ranger_merged <- Read10X_h5_Multi_Directory(base_path = "assets/cell_ranger/", default_10X_path = TRUE, h5_filename = "filtered_feature_bc_matrix.h5", cell_bender = F, merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
+cell_ranger_merged <- Read10X_h5_Multi_Directory(base_path = "assets/Cell_Bender_Cell_Ranger_Data/Cell_Ranger_Example/", default_10X_path = FALSE, h5_filename = "filtered_feature_bc_matrix.h5", merge = TRUE, sample_names = c("WT1", "WT2"), parallel = TRUE, num_cores = 2)
 ```
 
 ### Create Dual Assay Seurat Object
 To run the function the user simply needs to provide the names of the two matrices and a name for assay containing the Cell Ranger counts (by default this is named "RAW").
-```{r eval=FALSE}
+```{r echo=TRUE}
 dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_bender_merged, raw_counts_matrix = cell_ranger_merged, raw_assay_name = "RAW")
 ```
 
@@ -129,18 +163,18 @@ dual_seurat <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cell_ben
 It can be very important with tools like Cell Bender to analyze how much the process has effected data on a per cell basis.
 
 ### Add Pre/Post to Meta Data
-scCustomize includes function `Add_Cell_Bender_Diff()` to help with this process.  This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns ("nCount_Diff" and "nFeature_Diff") to the object meta.data.
+scCustomize includes function `Add_CellBender_Diff()` to help with this process.  This function will take the nCount and nFeature statistics from both assays in the object and calculate the difference and return 2 new columns ("nCount_Diff" and "nFeature_Diff") to the object meta.data.
 
 ```{r eval=FALSE}
-astrocytes_cortex <- Add_Cell_Bender_Diff(seurat_object = astrocytes_cortex, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+dual_seurat <- Add_CellBender_Diff(seurat_object = dual_seurat, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
 
-head(astrocytes_cortex@meta.data, 5)
+head(dual_seurat@meta.data, 5)
 ```
 
 ```{r echo=FALSE}
-astrocytes_cortex <- Add_Cell_Bender_Diff(seurat_object = astrocytes_cortex, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+dual_seurat <- Add_CellBender_Diff(seurat_object = dual_seurat, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
 
-head(astrocytes_cortex@meta.data, 5) %>%
+head(dual_seurat@meta.data, 5) %>%
   kableExtra::kbl() %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
 ```
@@ -149,16 +183,73 @@ head(astrocytes_cortex@meta.data, 5) %>%
 We can then use `Median_Stats()` to calculate per sample averages across all cells by supplying the new variables to the `median_var` parameter.
 
 ```{r eval=FALSE}
-median_stats <- Median_Stats(seurat_object = astrocytes_cortex, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
+median_stats <- Median_Stats(seurat_object = dual_seurat, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
 ```
 
 ```{r echo=FALSE}
-median_stats <- Median_Stats(seurat_object = astrocytes_cortex, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
+median_stats <- Median_Stats(seurat_object = dual_seurat, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
 
 median_stats %>%
   kableExtra::kbl() %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
 ```
+
+
+### Examine most changed features  
+It can also be helpful to understand what features may have changed the most.  scCustomize provides the function `CellBender_Feature_Diff` to determine changes in features. This will return a data.frame with rowSums for each feature, the difference in each feature, and the percent change of each feature.  
+```{r eval=FALSE}
+feature_diff <- CellBender_Feature_Diff(seurat_object = dual_seurat, raw_assay = "RAW", cell_bender_assay = "RNA")
+```
+
+```{r echo=FALSE}
+feature_diff <- CellBender_Feature_Diff(seurat_object = dual_seurat, raw_assay = "RAW", cell_bender_assay = "RNA")
+
+head(feature_diff, 5) %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+### Plot feature differences
+In addition to returning the data.frame it can be useful to visually examine the changes/trends after running CellBender. The function `CellBender_Diff_Plot` takes the data.frame from `CellBender_Feature_Diff` as input and plots the results.  
+
+```{r echo=FALSE, fig.height=6, fig.width=8, fig.align='center'}
+CellBender_Diff_Plot(feature_diff_df = feature_diff)
+```
+
+**Optional Parameters**  
+  
+* `pct_diff_threshold` plot genes that exhibit a change equal to or greater than this threshold.  
+* `num_features` instead of plotting genes above a threshold simply plot the top X changed genes.  
+* `num_labels` change how many genes are labeled.  
+* `label` logical, whether or not to label features.  
+* `custom_labels` specify vector of specific features to label.  
+
+```{r eval=FALSE}
+p1 <- CellBender_Diff_Plot(feature_diff_df = feature_diff)
+p2 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, pct_diff_threshold = 50)
+p3 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, num_features = 500, pct_diff_threshold = NULL)
+p4 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, num_labels = 10)
+p5 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, label = F)
+p6 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, custom_labels = "Gm48099")
+
+wrap_plots(p1, p2, p3, p4, p5, p6, ncol = 2)
+```
+
+
+```{r echo=FALSE, fig.height=15, fig.width=15, fig.align='center'}
+p1 <- CellBender_Diff_Plot(feature_diff_df = feature_diff)
+p2 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, pct_diff_threshold = 50)
+p3 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, num_features = 500, pct_diff_threshold = NULL)
+p4 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, num_labels = 10)
+p5 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, label = F)
+p6 <- CellBender_Diff_Plot(feature_diff_df = feature_diff, custom_labels = "Gm48099")
+
+wrap_plots(p1, p2, p3, p4, p5, p6, ncol = 2)
+```
+
+
+
+
 
 ## Dual Assay Plotting
 For Cell Bender especially, but also potentially for other assays as well, it can be helpful during analysis to plot the corrected and uncorrected counts for given feature.  scCustomize contains function `FeaturePlot_DualAssay()` to make easy.

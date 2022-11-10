@@ -453,3 +453,28 @@ No_Right <- function() {
   )
   return(no.right)
 }
+
+
+#' Symetrical setdiff
+#'
+#' tests for differences between two vectors symmetrically.
+#'
+#' @param x first vector to test
+#' @param y second vector to test
+#'
+#' @return vector differences x vs. y and y vs. x
+#'
+#' @references Function name and code from R-bloggers post:
+#' (https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/)
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+symdiff <- function(
+  x,
+  y
+) {
+  setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
+}

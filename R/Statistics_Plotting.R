@@ -656,3 +656,166 @@ Plot_Cells_per_Sample <- function(
   # Return plot
   return(plot)
 }
+
+
+#' Plot Number of Cells/Nuclei per Sample
+#'
+#' Plot of total cell or nuclei number per sample grouped by another meta data variable.
+#'
+#' @param feature_diff_df name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}
+#' @param label logical, whether or not to label the features that have largest percent difference
+#' between raw and CellBender counts (Default is TRUE).
+#' @param num_labels Number of features to label if `label = TRUE`, (default is 20).
+#' @param repel logical, whether to use geom_text_repel to create a nicely-repelled labels; this is
+#' slow when a lot of points are being plotted. If using repel, set xnudge and ynudge to 0, (Default is TRUE).
+#' @param custom_labels A custom set of features to label instead of the features most different between
+#' raw and CellBender counts.
+#' @param plot_line logical, whether to plot diagonal line with slope = 1 (Default is TRUE).
+#' @param plot_title Plot title.
+#' @param x_axis_label Label for x axis.
+#' @param y_axis_label Label for y axis.
+#' @param xnudge Amount to nudge X and Y coordinates of labels by.
+#' @param ynudge Amount to nudge X and Y coordinates of labels by.
+#' @param max.overlaps passed to \code{\link[ggrepel]{geom_text_repel}}, exclude text labels that
+#' overlap too many things. Defaults to 100.
+#' @param label_color Color to use for text labels.
+#' @param fontface font face to use for text labels (“plain”, “bold”, “italic”, “bold.italic”) (Default is "bold").
+#' @param label_size text size for feature labels (passed to \code{\link[ggrepel]{geom_text_repel}}).
+#' @param bg.color color to use for shadow/outline of text labels (passed to \code{\link[ggrepel]{geom_text_repel}}) (Default is white).
+#' @param bg.r radius to use for shadow/outline of text labels (passed to \code{\link[ggrepel]{geom_text_repel}}) (Default is 0.15).
+#' @param ... Extra parameters passed to \code{\link[ggrepel]{geom_text_repel}} through
+#' \code{\link[Seurat]{LabelPoints}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom cowplot theme_cowplot
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr drop_na
+#'
+#' @export
+#'
+#' @concept stats_plotting
+#'
+#' @examples
+#' \dontrun{
+#' # get cell bender differences data.frame
+#' cb_stats <- CellBender_Feature_Diff(seurat_object - obj, raw_assay = "RAW",
+#' cell_bender_assay = "RNA")
+#'
+#' # plot
+#' CellBender_Diff_Plot(feature_diff_df = cb_stats, pct_diff_threshold = 25)
+#' }
+#'
+
+CellBender_Diff_Plot <- function(
+  feature_diff_df,
+  pct_diff_threshold = 25,
+  num_features = NULL,
+  label = TRUE,
+  num_labels = 20,
+  repel = TRUE,
+  custom_labels = NULL,
+  plot_line = TRUE,
+  plot_title = "Raw Counts vs. Cell Bender Counts",
+  x_axis_label = "Raw Data Counts",
+  y_axis_label = "Cell Bender Counts",
+  xnudge = 0,
+  ynudge = 0,
+  max.overlaps = 100,
+  label_color = "dodgerblue",
+  fontface = "bold",
+  label_size = 3.88,
+  bg.color = "white",
+  bg.r = 0.15,
+  ...
+) {
+  # Remove unshared features
+  feature_diff_df_filtered <- feature_diff_df %>%
+    drop_na(Raw_Counts, CellBender_Counts)
+
+  diff_features <- symdiff(x = rownames(feature_diff_df), y = rownames(feature_diff_df_filtered))
+
+  if (length(x = diff_features > 0)) {
+    cli_warn(message = c("The following features are not present in both assays and were omitted:",
+                         "*" = "{diff_features}")
+    )
+  }
+
+  num_features_total <- nrow(x = feature_diff_df_filtered)
+
+  # Check how to filter data.frame
+  if (!is.null(x = pct_diff_threshold) && !is.null(x = num_features)) {
+    cli_abort(message = c("`pct_diff_threshold` and `num_features` cannot both have values.",
+                          "i" = "Set undesired parameter to 'NULL'."))
+  }
+
+  # Filter plot
+  if (!is.null(x = pct_diff_threshold)) {
+    feature_diff_df_filtered <- feature_diff_df_filtered %>%
+      filter(Pct_Diff >= pct_diff_threshold)
+  } else {
+    feature_diff_df_filtered <- feature_diff_df_filtered[1:num_features, ]
+  }
+
+  num_features_plotted <- nrow(x = feature_diff_df_filtered)
+
+  # Extract max plotted value
+  axis_lim <- max(feature_diff_df_filtered$Raw_Counts)
+
+  # Make plot
+  plot <- ggplot(feature_diff_df_filtered, aes(x = Raw_Counts, y = CellBender_Counts)) +
+    geom_point() +
+    scale_x_log10(limits = c(1, axis_lim)) +
+    scale_y_log10(limits = c(1, axis_lim)) +
+    ylab(y_axis_label) +
+    xlab(x_axis_label) +
+    theme_cowplot() +
+    if (!is.null(x = pct_diff_threshold)) {
+      ggtitle(plot_title, subtitle = paste0("Plotting features which exhibit difference of ", pct_diff_threshold, "% or greater (", num_features_plotted, "/", num_features_total, ")." ))
+    } else {
+      ggtitle(plot_title, subtitle = paste0("Plotting ", num_features_plotted, "/", num_features_total, " features." ))
+    }
+
+  # Label points
+  if (label) {
+    if (is.null(x = custom_labels)) {
+      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df_filtered)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+    } else {
+      # check for features
+      features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+
+      all_not_found_features <- features_list[[2]]
+
+      all_found_features <- features_list[[1]]
+
+      # Stop if no features found
+      if (length(x = all_found_features) < 1) {
+        cli_abort(message = c("None of features in `custom_labels` were found in plot data.",
+                              "i" = "Check both raw data and adjust `pct_diff_threshold` if needed.")
+        )
+      }
+
+      # Return message of features not found
+      if (length(x = all_not_found_features) > 0) {
+        op <- options(warn = 1)
+        on.exit(options(op))
+        cli_warn(message = c("The following features in `custom_labels` were omitted as they were not found:",
+                             "*" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}",
+                             "i" = "Check both raw data and adjust `pct_diff_threshold` if needed.")
+        )
+      }
+      # plot with custom labels
+      plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+    }
+  }
+
+  if (plot_line) {
+    plot <- plot + geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red")
+  }
+
+  # return plot
+  return(plot)
+}
