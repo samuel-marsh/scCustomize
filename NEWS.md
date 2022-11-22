@@ -1,3 +1,14 @@
+# scCustomize 1.0.2 (2022-11-22)  
+## Added  
+- None. 
+
+## Changed  
+- Updated required Seurat version (v4.3.0) to avoid bug in `FindMarkers`.  
+
+## Fixes  
+- None.  
+
+ 
 # scCustomize 1.0.1 (2022-11-10)  
 ## Added  
 - Added `CellBender_Feature_Diff` to return data.frame with count sums and differences between raw and CellBender assays.  
