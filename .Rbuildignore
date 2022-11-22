@@ -10,3 +10,4 @@
 ^inst$
 ^\.github$
 vignettes/*.orig$
+^vignettes$
