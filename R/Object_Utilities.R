@@ -777,15 +777,15 @@ Rename_Clusters <- function(
 
 #' Merge a list of Seurat Objects
 #'
-#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[Seurat]{merge}} for more information,
+#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
 #'
 #' @param list_seurat list composed of multiple Seurat Objects.
 #' @param add.cell.ids A character vector of length(x = c(x, y)). Appends the corresponding values
-#' to the start of each objects' cell names.  See \code{\link[Seurat]{merge}}.
+#' to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
 #' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
 #' This is recommended if the same normalization approach was applied to all objects.
-#' See \code{\link[Seurat]{merge}}.
-#' @param project Project name for the Seurat object. See \code{\link[Seurat]{merge}}.
+#' See \code{\link[SeuratObject]{merge}}.
+#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
 #'
 #' @importFrom purrr reduce
 #'
