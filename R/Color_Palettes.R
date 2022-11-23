@@ -434,7 +434,7 @@ Dark2_Pal <- function(
 #'
 #' Shortcut to hue_pal to return to ggplot2 defaults if user desires, from scales package.
 #'
-#' @param num_colors
+#' @param num_colors number of colors to return in palette.
 #'
 #' @importFrom scales hue_pal
 #'
