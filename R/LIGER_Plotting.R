@@ -253,8 +253,8 @@ DimPlot_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' plotFactors_scCustom(liger_object = liger_obj, return_plots = FALSE, plot_dimreduc = TRUE, raster = FALSE,
-#' save_plots = TRUE)
+#' plotFactors_scCustom(liger_object = liger_obj, return_plots = FALSE, plot_dimreduc = TRUE,
+#' raster = FALSE, save_plots = TRUE)
 #' }
 #'
 
