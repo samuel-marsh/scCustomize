@@ -11,3 +11,5 @@
 ^\.github$
 vignettes/*.orig$
 ^vignettes$
+^index\.Rmd$
+^README\.Rmd$
