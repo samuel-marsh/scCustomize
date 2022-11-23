@@ -51,8 +51,7 @@ Imports:
     tidyselect,
     viridis
 Remotes: 
-    hypercompetent/colorway,
-    csdaw/ggprism
+    hypercompetent/colorway
 Suggests:
     ComplexHeatmap,
     dittoSeq,
