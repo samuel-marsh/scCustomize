@@ -13,7 +13,6 @@
 #'
 #' }
 #' @concept data
-#' @noRd
 #'
 "ensembl_mito_id"
 
@@ -34,6 +33,5 @@
 #'
 #' }
 #' @concept data
-#' @noRd
 #'
 "ensembl_ribo_id"
