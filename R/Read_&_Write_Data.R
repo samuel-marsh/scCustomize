@@ -102,7 +102,8 @@ Create_10X_H5 <- function(
 #'
 #' @examples
 #' \dontrun{
-#' seurat_obj <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cb_matrix, raw_counts_matrix = cr_matrix)
+#' seurat_obj <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cb_matrix,
+#' raw_counts_matrix = cr_matrix)
 #' }
 #'
 
@@ -152,7 +153,8 @@ Create_CellBender_Merged_Seurat <- function(
 
 #' Load in NCBI GEO data from 10X
 #'
-#' Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes added to them by NCBI GEO or other repos.
+#' Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes
+#' added to them by NCBI GEO or other repos.
 #'
 #' @param data_dir Directory containing the matrix.mtx, genes.tsv (or features.tsv), and barcodes.tsv
 #' files provided by 10X.

@@ -45,8 +45,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1", colors_use = viridis_plasma_dark_high,
-#' na_color = "lightgray")
+#' FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1",
+#' colors_use = viridis_plasma_dark_high, na_color = "lightgray")
 #' }
 #'
 
@@ -716,8 +716,9 @@ Cluster_Highlight_Plot <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Meta_Highlight_Plot(seurat_object = object, meta_data_column = "orig.ident", meta_data_highlight = "sample_01",
-#' highlight_color = "gold", background_color = "lightgray",  pt.size = 2)
+#' Meta_Highlight_Plot(seurat_object = object, meta_data_column = "orig.ident",
+#' meta_data_highlight = "sample_01", highlight_color = "gold", background_color = "lightgray",
+#' pt.size = 2)
 #' }
 #'
 

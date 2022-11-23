@@ -13,7 +13,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' FeaturePlot_scCustom(object = seurat_object, features = "Cx3cr1", colors_use = viridis_plasma_dark_high, na_color = "lightgray")
+#' FeaturePlot_scCustom(object = seurat_object, features = "Cx3cr1",
+#' colors_use = viridis_plasma_dark_high, na_color = "lightgray")
 #' }
 #'
 

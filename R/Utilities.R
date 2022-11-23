@@ -428,8 +428,8 @@ CheckMatrix_scCustom <- function(
 #' @examples
 #' \dontrun{
 #' data_list <- Read10X_GEO(...)
-#' merged <- Merge_Sparse_Data_All(matrix_list = data_list, add_cell_ids = names(data_list), prefix = TRUE,
-#' cell_id_delimiter = "_")
+#' merged <- Merge_Sparse_Data_All(matrix_list = data_list, add_cell_ids = names(data_list),
+#' prefix = TRUE, cell_id_delimiter = "_")
 #' }
 #'
 
@@ -1166,8 +1166,8 @@ Cluster_Annotation_Tibble <- function(
 #' @examples
 #' \dontrun{
 #' # If pulling from a data.frame/tibble
-#' cluster_annotation <- Pull_Cluster_Annotation(annotation = annotation_df, cluster_name_col = "cluster",
-#' cell_type_col = "cell_type")
+#' cluster_annotation <- Pull_Cluster_Annotation(annotation = annotation_df,
+#' cluster_name_col = "cluster", cell_type_col = "cell_type")
 #'
 #' # If pulling from csv file
 #' cluster_annotation <- Pull_Cluster_Annotation(annotation = "file_path/file_name.csv",

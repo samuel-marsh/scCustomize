@@ -238,7 +238,7 @@ Add_Mito_Ribo_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
+#' object <- Add_Cell_Complexity_LIGER(liger_object = object)
 #' }
 #'
 
@@ -289,7 +289,7 @@ Add_Cell_Complexity_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' meta_variables <- Meta_Present_LIGER(seurat_object = obj_name, gene_list = DEG_list, print_msg = TRUE)
+#' meta_variables <- Meta_Present_LIGER(liger_object = obj, gene_list = DEG_list, print_msg = TRUE)
 #' }
 #'
 

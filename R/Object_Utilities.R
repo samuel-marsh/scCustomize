@@ -384,12 +384,12 @@ Meta_Remove_Seurat <- function(
 #' \dontrun{
 #' # meta_data present in environment
 #' sample_level_meta <- data.frame(...)
-#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta, join_by_seurat = "orig.ident",
-#' join_by_meta = "sample_ID")
+#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta,
+#' join_by_seurat = "orig.ident", join_by_meta = "sample_ID")
 #'
 #' # from meta data file
-#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv", join_by_seurat = "orig.ident",
-#' join_by_meta = "sample_ID")
+#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv",
+#' join_by_seurat = "orig.ident", join_by_meta = "sample_ID")
 #' }
 #'
 
@@ -517,7 +517,8 @@ Add_Sample_Meta <- function(
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
+#' cell_bender_assay_name = "RNA")
 #' }
 #'
 
@@ -585,7 +586,8 @@ Add_CellBender_Diff <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data, data_name = "rd1_colors")
+#' obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data,
+#' data_name = "rd1_colors")
 #' }
 #'
 
@@ -689,7 +691,8 @@ Store_Misc_Info_Seurat <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector, data_name = "rd1_colors")
+#' obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector,
+#' data_name = "rd1_colors")
 #' }
 #'
 
@@ -729,7 +732,8 @@ Store_Palette_Seurat <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec, meta_col_name = "Round01_Res0.6_Idents")
+#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
+#' meta_col_name = "Round01_Res0.6_Idents")
 #' }
 #'
 

@@ -37,7 +37,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' QC_Plots_Genes(seurat_object = object, plot_title = "Genes per Cell", low_cutoff = 600, high_cutoff = 4000)
+#' QC_Plots_Genes(seurat_object = object, plot_title = "Genes per Cell", low_cutoff = 600,
+#' high_cutoff = 4000)
 #' }
 #'
 
@@ -120,7 +121,8 @@ QC_Plots_Genes <- function(
 #'
 #' @examples
 #' \dontrun{
-#' QC_Plots_UMIs(seurat_object = object, plot_title = "UMIs per Cell", low_cutoff = 500, high_cutoff = 10000)
+#' QC_Plots_UMIs(seurat_object = object, plot_title = "UMIs per Cell", low_cutoff = 500,
+#' high_cutoff = 10000)
 #' }
 #'
 
@@ -291,7 +293,8 @@ QC_Plots_Mito <- function(
 #' @examples
 #' \dontrun{
 #' QC_Plots_Feature(seurat_object = object, feature = "FEATURE_NAME",
-#' y_axis_label = "FEATURE per Cell", plot_title = "FEATURE per Cell", high_cutoff = 10, low_cutoff = 2)
+#' y_axis_label = "FEATURE per Cell", plot_title = "FEATURE per Cell", high_cutoff = 10,
+#' low_cutoff = 2)
 #' }
 #'
 
