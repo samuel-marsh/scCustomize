@@ -10,7 +10,7 @@
 #'   \code{\link{DimPlot_LIGER}} due to new functionality compared to LIGER.}
 #'   \item{\code{scCustomize_warn_na_cutoff}}{Show message about properly setting `na_cutoff` parameter in \code{\link{FeaturePlot_scCustom}}.}
 #'   #'   \item{\code{scCustomize_warn_zero_na_cutoff}}{Show message about properly setting `na_cutoff` parameter in \code{\link{FeaturePlot_scCustom}} if `na_cutoff` is set to exactly zero.}
-#'   \item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot}}
+#'   \item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot_scCustom}}
 #'    when `pt.size > 0` due to current lack of raster support in \code{\link[Seurat]{VlnPlot}}}
 #'    \item{\code{scCustomize_warn_LIGER_dim_labels}}{Show message about \code{\link{DimPlot_LIGER}}
 #'    parameter `reduction_label` as LIGER objects do not store dimensionality reduction name and
