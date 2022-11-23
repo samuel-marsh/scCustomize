@@ -16,7 +16,7 @@
 #' if species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes (will set automatically
 #' if species is mouse, human, or marmoset).
-#' @param mito_features A list of mitochrondial gene names to be used instead of using regex pattern.
+#' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
