@@ -14,6 +14,7 @@
 #'
 #' @import patchwork
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -110,6 +111,7 @@ Iterate_PC_Loading_Plots <- function(
 #' @return A ggplot object
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -267,6 +269,7 @@ Iterate_DimPlot_bySample <- function(
 #' @return Saved plots
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pbmapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -461,6 +464,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' @return Saved plots
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom forcats fct_relevel
 #' @importFrom pbapply pbmapply pboptions
 #' @importFrom Seurat DimPlot
@@ -693,6 +697,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -903,6 +908,7 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat VlnPlot
 #' @importFrom stringr str_detect
@@ -1077,6 +1083,7 @@ Iterate_VlnPlot_scCustom <- function(
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
@@ -1268,6 +1275,7 @@ Iterate_Plot_Density_Custom <- function(
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom purrr discard keep
 #' @importFrom SeuratObject DefaultDimReduc

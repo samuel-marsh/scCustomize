@@ -240,6 +240,7 @@ DimPlot_LIGER <- function(
 #'
 #' @import cli
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #'
