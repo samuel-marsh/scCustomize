@@ -180,7 +180,7 @@ Create_CellBender_Merged_Seurat <- function(
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
-#' @importFrom utils read.delim txtProgressBar setTxtProgressBar
+#' @importFrom utils read.delim txtProgressBar setTxtProgressBar read.table
 #'
 #' @export
 #'
