@@ -33,6 +33,7 @@ Imports:
     janitor,
     magrittr,
     Matrix (>= 1.5.0),
+    methods,
     paletteer,
     patchwork,
     pbapply,
