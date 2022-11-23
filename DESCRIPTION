@@ -42,7 +42,6 @@ Imports:
     rlang (>= 1.0.1),
     scales,
     scattermore (>= 0.7), 
-    Seurat (>= 4.2.0),
     SeuratObject (>= 4.1.2),
     stringi,
     stringr,
