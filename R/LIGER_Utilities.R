@@ -277,7 +277,7 @@ Add_Cell_Complexity_LIGER <- function(
 #' Check if meta data columns are present in object and return vector of found columns  Return warning
 #' messages for meta data columns not found.
 #'
-#' @param seurat_object object name.
+#' @param liger_object object name.
 #' @param meta_col_names vector of column names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #'
