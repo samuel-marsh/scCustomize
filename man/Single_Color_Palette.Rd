@@ -12,7 +12,7 @@ Single_Color_Palette(pal_color, num_colors = NULL, seed_use = 123)
 
 \item{num_colors}{set number of colors (max = 7).}
 
-\item{seed}{set seed for reproducibility (default: 123).}
+\item{seed_use}{set seed for reproducibility (default: 123).}
 }
 \value{
 A vector of colors

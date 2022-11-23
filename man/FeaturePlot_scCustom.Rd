@@ -79,8 +79,8 @@ Create Custom FeaturePlots and preserve scale (no binning)
 }
 \examples{
 \dontrun{
-FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1", colors_use = viridis_plasma_dark_high,
-na_color = "lightgray")
+FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1",
+colors_use = viridis_plasma_dark_high, na_color = "lightgray")
 }
 
 }

@@ -9,7 +9,7 @@ PC_Plotting(seurat_object, dim_number)
 \arguments{
 \item{seurat_object}{Seurat Object.}
 
-\item{dims_number}{A single dim to plot (integer).}
+\item{dim_number}{A single dim to plot (integer).}
 }
 \value{
 A plot of PC heatmap and gene loadings for single
@@ -20,7 +20,7 @@ Used for PC_Loading_Plots function.
 }
 \examples{
 \dontrun{
-PC_Plotting(seurat_object = seurat, dims_plot = 25, "plots/")
+PC_Plotting(seurat_object = seurat, dim_number = 25, "plots/")
 }
 
 }

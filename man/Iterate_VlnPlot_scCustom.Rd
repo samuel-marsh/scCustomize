@@ -38,6 +38,8 @@ default is the current active.ident of the object.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
 
+\item{file_path}{directory file path and/or file name prefix.  Defaults to current wd.}
+
 \item{file_name}{name suffix and file extension.}
 
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
@@ -56,16 +58,14 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 groups plotted is greater than 36.  Default = 123.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
-
-\item{file_path/prefix}{directory file path and/or file name prefix.  Defaults to current wd.}
 }
 \description{
 Create and Save plots for Gene list with Single Command
 }
 \examples{
 \dontrun{
-Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list, file_path = "plots/",
-file_name = "_vln", file_type = ".jpg", dpi = 600)
+Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list,
+file_path = "plots/", file_name = "_vln", file_type = ".jpg", dpi = 600)
 }
 
 }

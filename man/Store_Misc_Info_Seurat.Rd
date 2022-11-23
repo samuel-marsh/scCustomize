@@ -35,7 +35,8 @@ Wrapper function save variety of data types to the \code{object@misc} slot of Se
 }
 \examples{
 \dontrun{
-obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data, data_name = "rd1_colors")
+obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data,
+data_name = "rd1_colors")
 }
 
 }

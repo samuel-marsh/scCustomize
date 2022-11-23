@@ -65,7 +65,8 @@ A ggplot object
 }
 \examples{
 \dontrun{
-QC_Plots_UMIs(seurat_object = object, plot_title = "UMIs per Cell", low_cutoff = 500, high_cutoff = 10000)
+QC_Plots_UMIs(seurat_object = object, plot_title = "UMIs per Cell", low_cutoff = 500,
+high_cutoff = 10000)
 }
 
 }

@@ -65,7 +65,8 @@ Custom VlnPlot for initial QC checks including lines for thresholding
 }
 \examples{
 \dontrun{
-QC_Plots_Genes(seurat_object = object, plot_title = "Genes per Cell", low_cutoff = 600, high_cutoff = 4000)
+QC_Plots_Genes(seurat_object = object, plot_title = "Genes per Cell", low_cutoff = 600,
+high_cutoff = 4000)
 }
 
 }

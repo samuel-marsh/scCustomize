@@ -5,6 +5,7 @@
 \title{Modified ggprism theme}
 \usage{
 theme_ggprism_mod(
+  palette = "black_and_white",
   base_size = 14,
   base_family = "sans",
   base_fontface = "bold",
@@ -15,6 +16,9 @@ theme_ggprism_mod(
 )
 }
 \arguments{
+\item{palette}{\code{string}. Palette name, use
+\code{names(ggprism_data$themes)} to show all valid palette names.}
+
 \item{base_size}{\code{numeric}. Base font size, given in \code{"pt"}.}
 
 \item{base_family}{\code{string}. Base font family, default is \code{"sans"}.}
@@ -30,9 +34,6 @@ One of: \verb{0, 45, 90, 270}.}
 
 \item{border}{\code{logical}. Should a border be drawn around the plot?
 Clipping will occur unless e.g. \code{coord_cartesian(clip = "off")} is used.}
-
-\item{palette}{\code{string}. Palette name, use
-\code{names(ggprism_data$themes)} to show all valid palette names.}
 }
 \value{
 Returns a list-like object of class \emph{theme}.

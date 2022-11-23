@@ -13,9 +13,9 @@ Pull_Cluster_Annotation(
 \arguments{
 \item{annotation}{name of the data.frame/tibble or path to CSV file containing cluster annotation.}
 
-\item{cell_type_col}{name of column contain the cell type annotation (default is "cell_type").}
+\item{cluster_name_col}{name of column containing cluster names/numbers (default is "cluster").}
 
-\item{cluster_name_col:}{name of column containing cluster names/numbers (default is "cluster").}
+\item{cell_type_col}{name of column contain the cell type annotation (default is "cell_type").}
 }
 \value{
 a list of named vectors for every cell type in the \code{cell_type_col} column of the annotation table and
@@ -28,8 +28,8 @@ by default but also any other csv file.
 \examples{
 \dontrun{
 # If pulling from a data.frame/tibble
-cluster_annotation <- Pull_Cluster_Annotation(annotation = annotation_df, cluster_name_col = "cluster",
-cell_type_col = "cell_type")
+cluster_annotation <- Pull_Cluster_Annotation(annotation = annotation_df,
+cluster_name_col = "cluster", cell_type_col = "cell_type")
 
 # If pulling from csv file
 cluster_annotation <- Pull_Cluster_Annotation(annotation = "file_path/file_name.csv",

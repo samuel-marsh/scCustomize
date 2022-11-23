@@ -25,7 +25,8 @@ Wrapper function to rename active identities in Seurat Object with new idents.
 }
 \examples{
 \dontrun{
-obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec, meta_col_name = "Round01_Res0.6_Idents")
+obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
+meta_col_name = "Round01_Res0.6_Idents")
 }
 
 }

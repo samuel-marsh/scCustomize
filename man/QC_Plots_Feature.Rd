@@ -69,7 +69,8 @@ Custom VlnPlot for initial QC checks including lines for thresholding
 \examples{
 \dontrun{
 QC_Plots_Feature(seurat_object = object, feature = "FEATURE_NAME",
-y_axis_label = "FEATURE per Cell", plot_title = "FEATURE per Cell", high_cutoff = 10, low_cutoff = 2)
+y_axis_label = "FEATURE per Cell", plot_title = "FEATURE per Cell", high_cutoff = 10,
+low_cutoff = 2)
 }
 
 }

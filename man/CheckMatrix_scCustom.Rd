@@ -6,8 +6,7 @@
 \usage{
 CheckMatrix_scCustom(
   object,
-  checks = c("infinite", "logical", "integer", "na"),
-  ...
+  checks = c("infinite", "logical", "integer", "na")
 )
 }
 \arguments{

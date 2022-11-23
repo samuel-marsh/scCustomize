@@ -16,6 +16,8 @@ Liger_to_Seurat(
 )
 }
 \arguments{
+\item{liger_object}{\code{liger} object.}
+
 \item{nms}{By default, labels cell names with dataset of origin (this is to account for cells in
 different datasets which may have same name). Other names can be passed here as vector, must have
 same length as the number of datasets. (default names(H)).}
@@ -26,15 +28,13 @@ same length as the number of datasets. (default names(H)).}
 
 \item{by.dataset}{Include dataset of origin in cluster identity in Seurat object (default FALSE).}
 
+\item{keep_meta}{logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
+to new Seurat Object.  Default is TRUE.}
+
 \item{reduction_label}{Name of dimensionality reduction technique used.  Enables accurate transfer
 or name to Seurat object instead of defaulting to "tSNE".}
 
 \item{seurat_assay}{Name to set for assay in Seurat Object.  Default is "RNA".}
-
-\item{object}{\code{liger} object.}
-
-\item{keep.meta}{logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
-to new Seurat Object.  Default is TRUE.}
 }
 \value{
 Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.

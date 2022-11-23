@@ -8,6 +8,8 @@ Move_Legend(position = "right", ...)
 }
 \arguments{
 \item{position}{valid position to move legend.  Default is "right".}
+
+\item{...}{extra arguments passed to \code{ggplot2::theme()}.}
 }
 \description{
 Shortcut for thematic modification to move legend position.

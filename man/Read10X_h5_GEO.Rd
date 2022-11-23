@@ -23,10 +23,14 @@ will load all samples in given directory.}
 \item{sample_names}{a set of sample names to use for each sample entry in returned list.  If \code{NULL}
 will set names to the file name of each sample.}
 
+\item{shared_suffix}{a suffix and file extension shared by all samples.}
+
 \item{parallel}{logical (default FALSE).  Whether to use multiple cores when reading in data.
 Only possible on Linux based systems.}
 
 \item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
+
+\item{...}{Additional arguments passed to \code{\link[Seurat]{Read10X_h5}}}
 }
 \value{
 If the data has multiple data types, a list

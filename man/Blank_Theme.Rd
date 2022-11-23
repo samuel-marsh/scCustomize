@@ -6,6 +6,9 @@
 \usage{
 Blank_Theme(...)
 }
+\arguments{
+\item{...}{extra arguments passed to \code{ggplot2::theme()}.}
+}
 \description{
 Shortcut for thematic modification to remove all axis labels and grid lines
 }

@@ -45,7 +45,8 @@ containing a sparse matrix of the data from each type will be returned.
 Otherwise a sparse matrix containing the expression data will be returned.
 }
 \description{
-Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes added to them by NCBI GEO or other repos.
+Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes
+added to them by NCBI GEO or other repos.
 }
 \examples{
 \dontrun{

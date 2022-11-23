@@ -43,12 +43,12 @@ Add meta data from ample level data.frame/tibble to cell level seurat \verb{@met
 \dontrun{
 # meta_data present in environment
 sample_level_meta <- data.frame(...)
-obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta, join_by_seurat = "orig.ident",
-join_by_meta = "sample_ID")
+obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta,
+join_by_seurat = "orig.ident", join_by_meta = "sample_ID")
 
 # from meta data file
-obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv", join_by_seurat = "orig.ident",
-join_by_meta = "sample_ID")
+obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv",
+join_by_seurat = "orig.ident", join_by_meta = "sample_ID")
 }
 
 }

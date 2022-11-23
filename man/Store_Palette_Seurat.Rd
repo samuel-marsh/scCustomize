@@ -15,6 +15,9 @@ Store_Palette_Seurat(
 \arguments{
 \item{seurat_object}{object name.}
 
+\item{palette}{vector or list of vectors containing color palettes to store.  If list of palettes
+see \code{list_as_list} parameter for control over data storage.}
+
 \item{palette_name}{name to give the palette(s) in \verb{@misc} slot.  Must be of equal length to the number
 of data items being stored.}
 
@@ -23,9 +26,6 @@ as list (TRUE) or whether to store each entry in the list separately (FALSE).  D
 
 \item{overwrite}{Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
 that function will abort if item with \code{data_name} is present in misc slot.}
-
-\item{palette(s)}{vector or list of vectors containing color palettes to store.  If list of palettes
-see \code{list_as_list} parameter for control over data storage.}
 }
 \value{
 Seurat Object with new entries in the \verb{@misc} slot.
@@ -35,7 +35,8 @@ Wrapper function around \code{Store_Misc_Info_Seurat} to store color palettes.
 }
 \examples{
 \dontrun{
-obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector, data_name = "rd1_colors")
+obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector,
+data_name = "rd1_colors")
 }
 
 }

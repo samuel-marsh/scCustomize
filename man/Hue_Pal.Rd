@@ -7,7 +7,7 @@
 Hue_Pal(num_colors)
 }
 \arguments{
-\item{num_colors}{}
+\item{num_colors}{number of colors to return in palette.}
 }
 \value{
 hue color palette (as many colors as desired)

@@ -4,7 +4,7 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: An R package for custom visualization & analyses of single cell sequencing.}
+\title{scCustomize: An R package for custom visualization & analyses of single cell sequencing}
 \description{
 Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
 }
@@ -21,7 +21,7 @@ due to large file sizes.}
 \code{\link{DimPlot_LIGER}} due to new functionality compared to LIGER.}
 \item{\code{scCustomize_warn_na_cutoff}}{Show message about properly setting \code{na_cutoff} parameter in \code{\link{FeaturePlot_scCustom}}.}
 #'   \item{\code{scCustomize_warn_zero_na_cutoff}}{Show message about properly setting \code{na_cutoff} parameter in \code{\link{FeaturePlot_scCustom}} if \code{na_cutoff} is set to exactly zero.}
-\item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot}}
+\item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot_scCustom}}
 when \code{pt.size > 0} due to current lack of raster support in \code{\link[Seurat]{VlnPlot}}}
 \item{\code{scCustomize_warn_LIGER_dim_labels}}{Show message about \code{\link{DimPlot_LIGER}}
 parameter \code{reduction_label} as LIGER objects do not store dimensionality reduction name and

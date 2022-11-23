@@ -44,6 +44,8 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 
 \item{return_plots}{logical. Whether to return plots to list instead of saving them to file(s).  Default is FALSE.}
 
+\item{file_path}{directory file path and/or file name prefix.  Defaults to current wd.}
+
 \item{file_name}{name suffix and file extension.}
 
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
@@ -66,16 +68,15 @@ value between 0-1.}
 value between 0-1.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
-
-\item{file_path/prefix}{directory file path and/or file name prefix.  Defaults to current wd.}
 }
 \description{
 Create and Save plots for Gene list with Single Command
 }
 \examples{
 \dontrun{
-Iterate_FeaturePlot_scCustom(seurat_object = object, gene_list = DEG_list, colors_use = viridis_plasma_dark_high,
-na_color = "lightgray", file_path = "plots/", file_name = "tsne", file_type = ".jpg", dpi = 600)
+Iterate_FeaturePlot_scCustom(seurat_object = object, gene_list = DEG_list,
+colors_use = viridis_plasma_dark_high, na_color = "lightgray", file_path = "plots/",
+file_name = "tsne", file_type = ".jpg", dpi = 600)
 }
 
 }

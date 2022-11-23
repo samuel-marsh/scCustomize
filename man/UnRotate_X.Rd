@@ -6,6 +6,9 @@
 \usage{
 UnRotate_X(...)
 }
+\arguments{
+\item{...}{extra arguments passed to \code{ggplot2::theme()}.}
+}
 \description{
 Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnPlot is rotated by default).
 }

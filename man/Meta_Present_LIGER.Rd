@@ -22,7 +22,7 @@ messages for meta data columns not found.
 }
 \examples{
 \dontrun{
-meta_variables <- Meta_Present_LIGER(seurat_object = obj_name, gene_list = DEG_list, print_msg = TRUE)
+meta_variables <- Meta_Present_LIGER(liger_object = obj, gene_list = DEG_list, print_msg = TRUE)
 }
 
 }

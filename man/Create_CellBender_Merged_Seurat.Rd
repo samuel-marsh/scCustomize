@@ -38,7 +38,8 @@ separate assays within the object.
 }
 \examples{
 \dontrun{
-seurat_obj <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cb_matrix, raw_counts_matrix = cr_matrix)
+seurat_obj <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cb_matrix,
+raw_counts_matrix = cr_matrix)
 }
 
 }

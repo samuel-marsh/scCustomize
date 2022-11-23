@@ -50,7 +50,8 @@ Plot of median other variable per cell per sample grouped by desired meta data v
 }
 \examples{
 \dontrun{
-Plot_Median_Other(seurat_object = obj, median_var = "module_score", sample_col = "orig.ident", group_by = "Treatment")
+Plot_Median_Other(seurat_object = obj, median_var = "module_score", sample_col = "orig.ident",
+group_by = "Treatment")
 }
 
 }
