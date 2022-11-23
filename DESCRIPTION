@@ -63,7 +63,7 @@ Suggests:
     tidyverse, 
     qs
 VignetteBuilder: knitr, rmarkdown
-License: GPL (>= 3) | file LICENSE
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
