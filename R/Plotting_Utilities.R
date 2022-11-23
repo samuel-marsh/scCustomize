@@ -9,7 +9,7 @@
 #'   Used for PC_Loading_Plots function.
 #'
 #' @param seurat_object Seurat Object.
-#' @param dims_number A single dim to plot (integer).
+#' @param dim_number A single dim to plot (integer).
 #'
 #' @return A plot of PC heatmap and gene loadings for single
 #'
@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' PC_Plotting(seurat_object = seurat, dims_plot = 25, "plots/")
+#' PC_Plotting(seurat_object = seurat, dim_number = 25, "plots/")
 #' }
 #'
 
@@ -218,6 +218,8 @@ Test_Integer <- function(
 #'
 #' Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnPlot is rotated by default).
 #'
+#' @param ... extra arguments passed to `ggplot2::theme()`.
+#'
 #' @importFrom ggplot2 theme
 #'
 #' @export
@@ -248,6 +250,8 @@ UnRotate_X <- function(...) {
 #' Blank Theme
 #'
 #' Shortcut for thematic modification to remove all axis labels and grid lines
+#'
+#' @param ... extra arguments passed to `ggplot2::theme()`.
 #'
 #' @importFrom ggplot2 theme
 #'
@@ -288,6 +292,7 @@ Blank_Theme <- function(...) {
 #' Shortcut for thematic modification to move legend position.
 #'
 #' @param position valid position to move legend.  Default is "right".
+#' @param ... extra arguments passed to `ggplot2::theme()`.
 #'
 #' @importFrom ggplot2 theme
 #'
@@ -354,20 +359,24 @@ Move_Legend <- function(
 #' p + theme_ggprism_mod()
 #' }
 
-theme_ggprism_mod <- function(base_size = 14,
-                              base_family = "sans",
-                              base_fontface = "bold",
-                              base_line_size = base_size / 20,
-                              base_rect_size = base_size / 20,
-                              axis_text_angle = 0,
-                              border = FALSE) {
-  theme_prism( base_size = base_size,
-               base_family = base_family,
-               base_fontface = base_fontface,
-               base_line_size = base_line_size,
-               base_rect_size = base_rect_size,
-               axis_text_angle = axis_text_angle,
-               border = border) %+replace%
+theme_ggprism_mod <- function(
+  palette = "black_and_white",
+  base_size = 14,
+  base_family = "sans",
+  base_fontface = "bold",
+  base_line_size = base_size / 20,
+  base_rect_size = base_size / 20,
+  axis_text_angle = 0,
+  border = FALSE
+) {
+  theme_prism(palette = palette,
+              base_size = base_size,
+              base_family = base_family,
+              base_fontface = base_fontface,
+              base_line_size = base_line_size,
+              base_rect_size = base_rect_size,
+              axis_text_angle = axis_text_angle,
+              border = border) %+replace%
     theme(legend.title = element_text(hjust = 0),
           axis.text = element_text(size = rel(0.95), face = "plain")
     )

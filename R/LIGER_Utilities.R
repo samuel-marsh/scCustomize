@@ -923,7 +923,7 @@ Variable_Features_ALL_LIGER <- function(
   alpha.thresh = 0.99,
   tol = 0.0001,
   do.plot = FALSE,
-  cex.use = 0.3,
+  pt.size = 0.3,
   chunk=1000
 ) {
   Is_LIGER(liger_object = liger_object)

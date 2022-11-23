@@ -416,8 +416,8 @@ QC_Plots_Complexity <- function(
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param feature_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
-#' @param UMI_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
-#' @param mito_cutoff Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param UMI_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
+#' @param mito_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
 #' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
 #' @param pt.size Point size for plotting

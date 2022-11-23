@@ -97,7 +97,7 @@ Iterate_PC_Loading_Plots <- function(
 #' Iterate Dimplot by orig.ident column from Seurat object metadata
 #'
 #' @param seurat_object Seurat object name.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
@@ -683,7 +683,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param return_plots logical. Whether to return plots to list instead of saving them to file(s).  Default is FALSE.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
@@ -897,7 +897,7 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param group.by Name of one or more metadata columns to group (color) plot by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
@@ -1074,14 +1074,14 @@ Iterate_VlnPlot_scCustom <- function(
 #' will be incorporated into plot title if `single_pdf = TRUE` or into file name if `FALSE`.
 #' @param viridis_palette color scheme to use.
 #' @param custom_palette color for non-expressed cells.
-#' #' @param pt.size Adjust point size for plotting.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param pt.size Adjust point size for plotting.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
-#' #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
+#' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
@@ -1266,14 +1266,14 @@ Iterate_Plot_Density_Custom <- function(
 #' into file name if `FALSE`.
 #' @param viridis_palette color scheme to use.
 #' @param custom_palette color for non-expressed cells.
-#' #' @param pt.size Adjust point size for plotting.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param pt.size Adjust point size for plotting.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
-#' #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
+#' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'

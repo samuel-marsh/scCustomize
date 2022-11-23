@@ -372,8 +372,7 @@ Meta_Numeric <- function(
 
 CheckMatrix_scCustom <- function(
   object,
-  checks = c('infinite', 'logical', 'integer', 'na'),
-  ...
+  checks = c('infinite', 'logical', 'integer', 'na')
 ) {
   checks <- match.arg(arg = checks, several.ok = TRUE)
   x <- slot(object = object, name = 'x')
@@ -639,7 +638,7 @@ Replace_Suffix <- function(
 #' Change barcode suffix delimiter from list of data.frames/matrices or single data.frame/matrix
 #'
 #' @param data Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.
-#' @param currnet_delim a single value of current delimiter.
+#' @param current_delim a single value of current delimiter.
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @importFrom stringi stri_replace_last_fixed
@@ -650,7 +649,7 @@ Replace_Suffix <- function(
 #'
 #' @examples
 #' \dontrun{
-#' dge_matrix <- Change_Delim_Suffix(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+#' dge_matrix <- Change_Delim_Suffix(data = dge_matrix, current_delim = ".", new_delim = "-")
 #' }
 #'
 
@@ -713,7 +712,7 @@ Change_Delim_Suffix <- function(
 #' Change barcode prefix delimiter from list of data.frames/matrices or single data.frame/matrix
 #'
 #' @param data Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.
-#' @param currnet_delim a single value of current delimiter.
+#' @param current_delim a single value of current delimiter.
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @importFrom stringi stri_replace_first_fixed
@@ -724,7 +723,7 @@ Change_Delim_Suffix <- function(
 #'
 #' @examples
 #' \dontrun{
-#' dge_matrix <- Change_Delim_Prefix(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+#' dge_matrix <- Change_Delim_Prefix(data = dge_matrix, current_delim = ".", new_delim = "-")
 #' }
 #'
 
@@ -787,7 +786,7 @@ Change_Delim_Prefix <- function(
 #' Change all instances of delimiter in cell names from list of data.frames/matrices or single data.frame/matrix
 #'
 #' @param data Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.
-#' @param currnet_delim a single value of current delimiter.
+#' @param current_delim a single value of current delimiter.
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @export
@@ -796,7 +795,7 @@ Change_Delim_Prefix <- function(
 #'
 #' @examples
 #' \dontrun{
-#' dge_matrix <- Change_Delim_All(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+#' dge_matrix <- Change_Delim_All(data = dge_matrix, current_delim = ".", new_delim = "-")
 #' }
 #'
 
@@ -1148,7 +1147,7 @@ Cluster_Annotation_Tibble <- function(
 #' by default but also any other csv file.
 #'
 #' @param annotation name of the data.frame/tibble or path to CSV file containing cluster annotation.
-#' @param cluster_name_col: name of column containing cluster names/numbers (default is "cluster").
+#' @param cluster_name_col name of column containing cluster names/numbers (default is "cluster").
 #' @param cell_type_col name of column contain the cell type annotation (default is "cell_type").
 #'
 #' @return a list of named vectors for every cell type in the `cell_type_col` column of the annotation table and
@@ -1228,7 +1227,7 @@ Pull_Cluster_Annotation <- function(
 #'
 #' @param custom_dir_file file to file containing desired directory structure.  Default is NULL and
 #' will provide generic built-in directory structure.
-#' @param cluster_annotation_path: path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
+#' @param cluster_annotation_path path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
 #' @param cluster_annotation_file_name name to use for annotation file if created (optional).
 #'
 #' @import cli

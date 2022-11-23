@@ -5,6 +5,7 @@
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
 #' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
+#' @param split_by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
 #' less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from \code{\link{DiscretePalette_scCustomize}}.

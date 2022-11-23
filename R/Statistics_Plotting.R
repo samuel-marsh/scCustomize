@@ -663,7 +663,11 @@ Plot_Cells_per_Sample <- function(
 #'
 #' Plot of total cell or nuclei number per sample grouped by another meta data variable.
 #'
-#' @param feature_diff_df name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}
+#' @param feature_diff_df name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}.
+#' @param pct_diff_threshold threshold to use for feature plotting.  Resulting plot will only contain
+#' features which exhibit percent change >= value.  Default is 25.
+#' @param num_features Number of features to plot.  Will ignore `pct_diff_threshold` and return
+#' plot with specified number of features.  Default is NULL.
 #' @param label logical, whether or not to label the features that have largest percent difference
 #' between raw and CellBender counts (Default is TRUE).
 #' @param num_labels Number of features to label if `label = TRUE`, (default is 20).

@@ -674,7 +674,7 @@ Store_Misc_Info_Seurat <- function(
 #' Wrapper function around `Store_Misc_Info_Seurat` to store color palettes.
 #'
 #' @param seurat_object object name.
-#' @param palette(s) vector or list of vectors containing color palettes to store.  If list of palettes
+#' @param palette vector or list of vectors containing color palettes to store.  If list of palettes
 #' see `list_as_list` parameter for control over data storage.
 #' @param palette_name name to give the palette(s) in `@misc` slot.  Must be of equal length to the number
 #' of data items being stored.
@@ -822,14 +822,14 @@ Merge_Seurat_List <- function(
 #' Stores original dataset identity by default in new object metadata if dataset names are passed
 #' in nms. iNMF factorization is stored in dim.reduction object with key "iNMF".
 #'
-#' @param object \code{liger} object.
+#' @param liger_object \code{liger} object.
 #' @param nms By default, labels cell names with dataset of origin (this is to account for cells in
 #' different datasets which may have same name). Other names can be passed here as vector, must have
 #' same length as the number of datasets. (default names(H)).
 #' @param renormalize Whether to log-normalize raw data using Seurat defaults (default TRUE).
 #' @param use.liger.genes Whether to carry over variable genes (default TRUE).
 #' @param by.dataset Include dataset of origin in cluster identity in Seurat object (default FALSE).
-#' @param keep.meta logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
+#' @param keep_meta logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
 #' to new Seurat Object.  Default is TRUE.
 #' @param reduction_label Name of dimensionality reduction technique used.  Enables accurate transfer
 #' or name to Seurat object instead of defaulting to "tSNE".

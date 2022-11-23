@@ -227,7 +227,7 @@ DiscretePalette_scCustomize <- function(
 #' @param pal_color color palette to select (Options are: 'reds', 'blues',
 #' 'greens', 'purples', 'oranges', 'grays').
 #' @param num_colors set number of colors (max = 7).
-#' @param seed set seed for reproducibility (default: 123).
+#' @param seed_use set seed for reproducibility (default: 123).
 #'
 #' @return A vector of colors
 #'

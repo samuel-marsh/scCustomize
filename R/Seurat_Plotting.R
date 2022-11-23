@@ -700,6 +700,7 @@ Cluster_Highlight_Plot <- function(
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
 #' @param label Whether to label the highlighted meta data variable(s).  Default is FALSE.
+#' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
