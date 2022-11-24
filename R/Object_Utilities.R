@@ -301,7 +301,6 @@ Add_Cell_Complexity_Seurat <- function(
 #' @importFrom dplyr select
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
-#' @importFrom tidyselect all_of
 #'
 #' @return data.frame with only new columns.
 #'
@@ -372,7 +371,6 @@ Meta_Remove_Seurat <- function(
 #' @importFrom dplyr select left_join
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames rownames_to_column
-#' @importFrom tidyselect all_of
 #'
 #' @return Seurat object with new `@meta.data` columns
 #'
