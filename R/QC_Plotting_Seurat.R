@@ -973,7 +973,6 @@ QC_Plot_UMIvsFeature <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom utils combn
 #'
 #' @export
@@ -1061,6 +1060,18 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1071,7 +1082,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1096,7 +1107,6 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom utils combn
 #'
 #' @export
@@ -1184,6 +1194,18 @@ Seq_QC_Plot_Number_Cells <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1194,7 +1216,7 @@ Seq_QC_Plot_Number_Cells <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1219,7 +1241,6 @@ Seq_QC_Plot_Number_Cells <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom utils combn
 #'
 #' @export
@@ -1297,6 +1318,18 @@ Seq_QC_Plot_Genes <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1307,7 +1340,7 @@ Seq_QC_Plot_Genes <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1332,7 +1365,6 @@ Seq_QC_Plot_Genes <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom utils combn
 #'
 #' @export
@@ -1410,6 +1442,18 @@ Seq_QC_Plot_UMIs <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1420,7 +1464,7 @@ Seq_QC_Plot_UMIs <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1445,7 +1489,6 @@ Seq_QC_Plot_UMIs <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom utils combn
 #'
 #' @export
@@ -1523,6 +1566,18 @@ Seq_QC_Plot_Total_Genes <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1533,7 +1588,7 @@ Seq_QC_Plot_Total_Genes <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1558,7 +1613,6 @@ Seq_QC_Plot_Total_Genes <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -1643,6 +1697,18 @@ Seq_QC_Plot_Saturation <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1653,7 +1719,7 @@ Seq_QC_Plot_Saturation <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1678,7 +1744,6 @@ Seq_QC_Plot_Saturation <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -1763,6 +1828,18 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1773,7 +1850,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1798,7 +1875,6 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -1882,6 +1958,18 @@ Seq_QC_Plot_Transcriptome <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -1892,7 +1980,7 @@ Seq_QC_Plot_Transcriptome <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -1917,7 +2005,6 @@ Seq_QC_Plot_Transcriptome <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -2001,6 +2088,18 @@ Seq_QC_Plot_Genome <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -2011,7 +2110,7 @@ Seq_QC_Plot_Genome <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -2036,7 +2135,6 @@ Seq_QC_Plot_Genome <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -2120,6 +2218,18 @@ Seq_QC_Plot_Intergenic <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -2130,7 +2240,7 @@ Seq_QC_Plot_Intergenic <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -2155,7 +2265,6 @@ Seq_QC_Plot_Intergenic <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -2239,6 +2348,18 @@ Seq_QC_Plot_Intronic <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -2249,7 +2370,7 @@ Seq_QC_Plot_Intronic <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -2274,7 +2395,6 @@ Seq_QC_Plot_Intronic <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -2358,6 +2478,18 @@ Seq_QC_Plot_Exonic <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -2368,7 +2500,7 @@ Seq_QC_Plot_Exonic <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
@@ -2393,7 +2525,6 @@ Seq_QC_Plot_Exonic <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales label_percent
 #' @importFrom utils combn
 #'
@@ -2477,6 +2608,18 @@ Seq_QC_Plot_Antisense <- function(
   }
 
   if (significance) {
+    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    if (!ggpubr_check[1]) {
+      stop(
+        "Please install the ggpubr package to calculate/plot significance values.",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('ggpubr')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    }
+
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
       cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
     }
@@ -2487,7 +2630,7 @@ Seq_QC_Plot_Antisense <- function(
     comparisons <- lapply(1:length(x = colnames(x = comparisons)), function(x){
       indiv_comp <- as.character(x = comparisons[[x]])
     })
-    plot <- plot + stat_compare_means(comparisons = comparisons, ...)
+    plot <- plot + ggpubr::stat_compare_means(comparisons = comparisons, ...)
   }
 
   return(plot)
