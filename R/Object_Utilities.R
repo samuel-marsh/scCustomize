@@ -208,10 +208,10 @@ Add_Mito_Ribo_Seurat <- function(
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
-      mutate(percent_mito_ribo = percent_mito + percent_ribo)
+      mutate(percent_mito_ribo = .data[["percent_mito"]] + .data[["percent_ribo"]])
 
     object_meta <- object_meta %>%
-      select(barcodes, percent_mito_ribo) %>%
+      select(all_of(c("barcodes", "percent_mito_ribo"))) %>%
       column_to_rownames("barcodes")
 
     seurat_object <- AddMetaData(object = seurat_object, metadata = object_meta)
