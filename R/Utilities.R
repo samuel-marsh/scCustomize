@@ -375,7 +375,7 @@ CheckMatrix_scCustom <- function(
   checks = c('infinite', 'logical', 'integer', 'na')
 ) {
   checks <- match.arg(arg = checks, several.ok = TRUE)
-  x <- slot(object = object, name = 'x')
+  # x <- slot(object = object, name = 'x')
   for (i in checks) {
     switch(
       EXPR = i,
