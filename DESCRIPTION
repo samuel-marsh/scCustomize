@@ -47,7 +47,6 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    tidyselect,
     viridis
 Remotes: 
     hypercompetent/colorway
@@ -60,6 +59,7 @@ Suggests:
     Nebulosa,
     rliger,
     rmarkdown,
+    tidyselect,
     tidyverse, 
     qs
 VignetteBuilder: knitr, rmarkdown
