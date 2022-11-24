@@ -31,7 +31,7 @@
 #' rhesus macaque).  Default is FALSE.
 #'
 #' @import cli
-#' @importFrom dplyr mutate select intersect
+#' @importFrom dplyr mutate select intersect all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
 #' @importFrom tibble rownames_to_column column_to_rownames
