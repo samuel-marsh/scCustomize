@@ -1260,7 +1260,7 @@ DotPlot_scCustom <- function(
 #' @importFrom dplyr filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom Seurat DotPlot
+#' @importFrom Seurat DotPlot PackageCheck
 #' @importFrom tidyr pivot_wider
 #'
 #' @export

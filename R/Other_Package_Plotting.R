@@ -19,6 +19,7 @@
 #' @import ggplot2
 #' @import patchwork
 # #' @importFrom Nebulosa plot_density
+#' @importFrom Seurat PackageCheck
 #' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
@@ -106,6 +107,7 @@ Plot_Density_Custom <- function(
 #' @import cli
 #' @import ggplot2
 # #' @importFrom Nebulosa plot_density
+#' @importFrom Seurat PackageCheck
 #' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export

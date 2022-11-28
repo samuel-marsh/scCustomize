@@ -973,6 +973,7 @@ QC_Plot_UMIvsFeature <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1107,6 +1108,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1241,6 +1243,7 @@ Seq_QC_Plot_Number_Cells <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1365,6 +1368,7 @@ Seq_QC_Plot_Genes <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1489,6 +1493,7 @@ Seq_QC_Plot_UMIs <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1614,6 +1619,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1745,6 +1751,7 @@ Seq_QC_Plot_Saturation <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -1876,6 +1883,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -2006,6 +2014,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -2136,6 +2145,7 @@ Seq_QC_Plot_Genome <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -2266,6 +2276,7 @@ Seq_QC_Plot_Intergenic <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -2396,6 +2407,7 @@ Seq_QC_Plot_Intronic <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -2526,6 +2538,7 @@ Seq_QC_Plot_Exonic <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
+#' @importFrom Seurat PackageCheck
 #' @importFrom utils combn
 #'
 #' @export
@@ -2655,6 +2668,7 @@ Seq_QC_Plot_Antisense <- function(
 #'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout plot_annotation
+#' @importFrom Seurat PackageCheck
 #' @importFrom stringr str_wrap
 #'
 #' @export
@@ -2745,6 +2759,7 @@ Seq_QC_Plot_Basic_Combined <- function(
 #'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout plot_annotation
+#' @importFrom Seurat PackageCheck
 #' @importFrom stringr str_wrap
 #'
 #' @export
