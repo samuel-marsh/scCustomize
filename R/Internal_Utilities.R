@@ -329,7 +329,7 @@ Retrieve_Ensembl_Mito <- function(
   macaque_options <- accepted_names$Macaque_Options
 
   if (species %in% marmoset_options) {
-    cli::cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
+    cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
   }
 
   if (species %in% mouse_options) {
