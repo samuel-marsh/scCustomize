@@ -427,6 +427,7 @@ FeaturePlot_DualAssay <- function(
 #' @import patchwork
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat FeatureScatter
+#' @importFrom stats cor
 #'
 #' @export
 #'
@@ -572,7 +573,7 @@ Split_FeatureScatter <- function(
       xlim(min_feature1, max_feature1) +
       ylim(min_feature2, max_feature2)
     if (plot_cor) {
-      plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[i]))
+      plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[j]))
     } else {
       plot + ggtitle(paste(meta_sample_list[[j]]))
     }
