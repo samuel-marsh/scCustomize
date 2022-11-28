@@ -183,7 +183,6 @@ Create_CellBender_Merged_Seurat <- function(
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
-#' @importFrom Seurat ExtractField
 #' @importFrom utils read.delim txtProgressBar setTxtProgressBar read.table
 #'
 #' @export
