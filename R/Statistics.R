@@ -40,12 +40,12 @@ Cluster_Stats_All_Samples <- function(
   # Extract total percents
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
-    rename(Cluster = Var1)
+    rename(Cluster = .data[["Var1"]])
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
-    rename(Cluster = Var1, Number = Freq)
+    rename(Cluster = .data[["Var1"]], Number = .data[["Freq"]])
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
@@ -53,10 +53,10 @@ Cluster_Stats_All_Samples <- function(
   # Extract cells per metadata column per cluster
   cells_per_cluster_2 <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
   cells_per_cluster_2 <- data.frame(cells_per_cluster_2) %>%
-    rename(Cluster = Var1, group_by_var = Var2, cell_number = Freq)
+    rename(Cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], cell_number = .data[["Freq"]])
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = cell_number)
+    pivot_wider(names_from = group_by_var, values_from = .data[["cell_number"]])
 
   # Merge cells per metadata column per cluster with cluster stats
   cluster_stats_2 <- suppressMessages(left_join(cluster_stats, cells_per_cluster_2))
@@ -64,9 +64,9 @@ Cluster_Stats_All_Samples <- function(
   # Calculate and extract percents of cells per cluster per
   percent_per_cluster_2 <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var]), margin = 2) * 100
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
-    rename(cluster = Var1, group_by_var = Var2, percent = Freq)
+    rename(cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], percent = .data[["Freq"]])
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = percent) %>%
+    pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
     column_to_rownames("cluster")
   colnames(percent_per_cluster_2) <- paste(colnames(percent_per_cluster_2), "%", sep = "_")
 

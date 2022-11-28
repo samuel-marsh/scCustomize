@@ -356,6 +356,7 @@ Meta_Numeric <- function(
 #' @return Emits warnings for each test and invisibly returns \code{NULL}
 #'
 #' @import cli
+#' @import methods slot
 #'
 #' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject (https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650) (License: MIT).
 #'
@@ -375,7 +376,7 @@ CheckMatrix_scCustom <- function(
   checks = c('infinite', 'logical', 'integer', 'na')
 ) {
   checks <- match.arg(arg = checks, several.ok = TRUE)
-  # x <- slot(object = object, name = 'x')
+  x <- slot(object = object, name = 'x')
   for (i in checks) {
     switch(
       EXPR = i,
