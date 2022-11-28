@@ -18,7 +18,7 @@
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -95,7 +95,7 @@ Plot_Median_Genes <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = Median_nFeature_RNA)) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_nFeature_RNA"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -103,7 +103,7 @@ Plot_Median_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Median_nFeature_RNA, fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nFeature_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -151,7 +151,7 @@ Plot_Median_Genes <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -228,7 +228,7 @@ Plot_Median_UMIs <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = Median_nCount_RNA)) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_nCount_RNA"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -236,7 +236,7 @@ Plot_Median_UMIs <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Median_nCount_RNA, fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -284,7 +284,7 @@ Plot_Median_UMIs <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -361,7 +361,7 @@ Plot_Median_Mito <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = Median_percent_mito)) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_percent_mito"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -369,7 +369,7 @@ Plot_Median_Mito <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Median_percent_mito, fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_percent_mito"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -418,7 +418,7 @@ Plot_Median_Mito <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -506,7 +506,7 @@ Plot_Median_Other <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = .data[[paste0("Median_", median_var)]])) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[[paste0("Median_", median_var)]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
