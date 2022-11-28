@@ -562,6 +562,7 @@ Plot_Median_Other <- function(
 #'
 #' @import cli
 #' @import ggplot2
+#' @import rlang
 #' @importFrom dplyr select slice left_join rename
 #' @importFrom magrittr "%>%"
 #'
@@ -604,7 +605,7 @@ Plot_Cells_per_Sample <- function(
   # Calculate total cells and merge with meta.data
   total_cells <- table(seurat_object@meta.data[[sample_col]]) %>%
     data.frame() %>%
-    rename(!!sample_col := Var1, Number_of_Cells = Freq)
+    rename(!!sample_col := .data[["Var1"]], Number_of_Cells = .data[["Freq"]])
 
   meta <- seurat_object@meta.data
 
@@ -632,7 +633,7 @@ Plot_Cells_per_Sample <- function(
   }
 
   # Generate base plot
-  plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Number_of_Cells, fill = .data[[group_by]])) +
+  plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Number_of_Cells"]], fill = .data[[group_by]])) +
     geom_boxplot(fill = "white") +
     geom_dotplot(binaxis ='y', stackdir = 'center') +
     scale_fill_manual(values = colors_use) +
