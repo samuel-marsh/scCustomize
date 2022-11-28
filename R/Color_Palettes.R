@@ -119,7 +119,7 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #' @import cli
 #' @importFrom colorway varibow
 #' @importFrom paletteer paletteer_d
-#' @importFrom Seurat PackageCheck
+#' @importFrom SeuratObject PackageCheck
 #'
 #' @return A vector of colors
 #'

@@ -1088,8 +1088,7 @@ Iterate_VlnPlot_scCustom <- function(
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
-#' @importFrom Seurat PackageCheck
-#' @importFrom SeuratObject DefaultDimReduc
+#' @importFrom SeuratObject DefaultDimReduc PackageCheck
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -1282,8 +1281,7 @@ Iterate_Plot_Density_Custom <- function(
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom purrr discard keep
-#' @importFrom Seurat PackageCheck
-#' @importFrom SeuratObject DefaultDimReduc
+#' @importFrom SeuratObject DefaultDimReduc PackageCheck
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'

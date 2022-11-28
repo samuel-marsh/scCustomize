@@ -14,7 +14,8 @@
 #'
 #' @importFrom Matrix readMM
 # #' @importFrom DropletUtils write10xCounts
-#' @importFrom Seurat Read10X PackageCheck
+#' @importFrom Seurat Read10X
+#' @importFrom SeuratObject PackageCheck
 #'
 #' @return A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.
 #'
