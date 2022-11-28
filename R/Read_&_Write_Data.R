@@ -183,6 +183,7 @@ Create_CellBender_Merged_Seurat <- function(
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
+#' @importFrom Seurat ExtractField
 #' @importFrom utils read.delim txtProgressBar setTxtProgressBar read.table
 #'
 #' @export
@@ -880,6 +881,7 @@ Read10X_h5_Multi_Directory <- function(
 #' @import pbapply
 #' @importFrom data.table fread
 #' @importFrom magrittr "%>%"
+#' @importFrom methods as
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom utils read.delim
 #' @importFrom utils txtProgressBar setTxtProgressBar
