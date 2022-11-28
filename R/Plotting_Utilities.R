@@ -111,6 +111,7 @@ Modify_VlnPlot <- function(
 #'
 #' @import ggplot2
 #' @importFrom magrittr "%>%"
+#' @importFrom stats kmeans var
 #' @importFrom tibble rownames_to_column
 #'
 #' @noRd
@@ -137,7 +138,7 @@ kMeans_Elbow <- function(
   plot_data$k <- as.numeric(plot_data$k)
 
   # Plot data
-  plot <- ggplot(data = plot_data, mapping = aes(y = wss, x = k)) +
+  plot <- ggplot(data = plot_data, mapping = aes(y = wss, x = .data[["k"]])) +
     geom_point() +
     geom_path() +
     scale_x_continuous(n.breaks = k_max) +
