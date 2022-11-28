@@ -486,9 +486,11 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @return A ggplot/patchwork object
 #'
 #' @import ggplot2
-#' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom cowplot theme_cowplot
+#' @importFrom dplyr summarize
+#' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom patchwork wrap_plots
+#' @importFrom stats median
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
