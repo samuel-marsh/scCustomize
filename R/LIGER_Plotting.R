@@ -385,15 +385,15 @@ plotFactors_scCustom <- function(
                       h_raw = H_raw[, i], dataset = liger_object@cell.data$dataset,
                       highlight = FALSE)
     if (raster) {
-      top <- ggplot(h_df, aes(x = x, y=h_raw, col = dataset)) +
-        scattermore::geom_scattermore(pointsize = pt.size_factors) +
+      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
+        geom_scattermore(pointsize = pt.size_factors) +
         labs(x = 'Cell', y = 'Raw H Score') +
         ggtitle(plot_title1) +
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
-      bottom <- ggplot(h_df, aes(x = x, y=h_norm, col = dataset)) +
-        scattermore::geom_scattermore(pointsize = pt.size_factors) +
+      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
+        geom_scattermore(pointsize = pt.size_factors) +
         labs(x = 'Cell', y = 'H_norm Score') +
         theme(legend.position = 'top',
               legend.title = element_blank()) +
@@ -402,14 +402,14 @@ plotFactors_scCustom <- function(
 
 
     } else {
-      top <- ggplot(h_df, aes(x = x, y=h_raw, col = dataset)) +
+      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
         labs(x = 'Cell', y = 'Raw H Score') +
         ggtitle(plot_title1) +
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
-      bottom <- ggplot(h_df, aes(x = x, y=h_norm, col = dataset)) +
+      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
         labs(x = 'Cell', y = 'H_norm Score') +
         theme(legend.position = 'top',
@@ -422,20 +422,20 @@ plotFactors_scCustom <- function(
     if (!is.null(cells.highlight)) {
       h_df[cells.highlight, 'highlight'] = TRUE
       if (raster) {
-        top <- top + scattermore::geom_scattermore(data = subset(h_df, highlight == TRUE),
+        top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                                    aes(x, h_raw),
                                                    col = "black",
                                                    pointsize = pt.size_factors)
-        bottom <- bottom + scattermore::geom_scattermore(data = subset(h_df, highlight == TRUE),
+        bottom <- bottom + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                                          aes(x, h_norm),
                                                          col = "black",
                                                          pointsize = pt.size_factors)
       } else {
-        top <- top + geom_point(data = subset(h_df, highlight == TRUE),
+        top <- top + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
                                 aes(x, h_raw),
                                 col = "black",
                                 size = pt.size_factors)
-        bottom <- bottom + geom_point(data = subset(h_df, highlight == TRUE),
+        bottom <- bottom + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
                                       aes(x, h_norm),
                                       col = "black",
                                       size = pt.size_factors)
@@ -455,8 +455,8 @@ plotFactors_scCustom <- function(
       }
 
       if (raster) {
-        p1 <- ggplot(tsne_df, aes_string(x = x_axis_label, y = y_axis_label, color = factorlab)) +
-          scattermore::geom_scattermore(pointsize = pt.size_dimreduc) +
+        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
+          geom_scattermore(pointsize = pt.size_dimreduc) +
           ggtitle(label = paste('Factor', i)) +
           theme(legend.position = 'none') +
           xlab(x_axis_label) +
@@ -467,7 +467,7 @@ plotFactors_scCustom <- function(
             scale_color_gradientn(colours = colors_use_dimreduc)
           }
       } else {
-        p1 <- ggplot(tsne_df, aes_string(x = x_axis_label, y = y_axis_label, color = factorlab)) +
+        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
           geom_point(size = pt.size_dimreduc) +
           ggtitle(label = paste('Factor', i)) +
           theme(legend.position = 'none') +
