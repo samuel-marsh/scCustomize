@@ -1257,11 +1257,12 @@ DotPlot_scCustom <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
-#' @importFrom dplyr filter select
+#' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat DotPlot
 #' @importFrom SeuratObject PackageCheck
+#' @importFrom stats quantile
 #' @importFrom tidyr pivot_wider
 #'
 #' @export
@@ -1341,8 +1342,8 @@ Clustered_DotPlot <- function(
 
   # Get expression data
   exp_mat <- data %>%
-    select(-pct.exp, -avg.exp) %>%
-    pivot_wider(names_from = id, values_from = avg.exp.scaled) %>%
+    select(-any_of(c("pct.exp", "avg.exp"))) %>%
+    pivot_wider(names_from = .data[["id"]], values_from = .data[["avg.exp.scaled"]]) %>%
     as.data.frame()
 
   row.names(x = exp_mat) <- exp_mat$features.plot
@@ -1362,7 +1363,7 @@ Clustered_DotPlot <- function(
 
     # Remove rows with NAs
     exp_mat <- exp_mat %>%
-      filter(features.plot %in% good_features)
+      filter(.data[["features.plot"]] %in% good_features)
   }
 
   exp_mat <- exp_mat[,-1] %>%
@@ -1370,8 +1371,8 @@ Clustered_DotPlot <- function(
 
   # Get percent expressed data
   percent_mat <- data %>%
-    select(-avg.exp, -avg.exp.scaled) %>%
-    pivot_wider(names_from = id, values_from = pct.exp) %>%
+    select(-any_of(c("avg.exp", "avg.exp.scaled"))) %>%
+    pivot_wider(names_from = .data[["id"]], values_from = .data[["pct.exp"]]) %>%
     as.data.frame()
 
   row.names(x = percent_mat) <- percent_mat$features.plot
@@ -1379,7 +1380,7 @@ Clustered_DotPlot <- function(
   # Subset dataframe for NAs if idents so that exp_mat and percent_mat match
   if (!is.null(x = idents)) {
     percent_mat <- percent_mat %>%
-      filter(features.plot %in% good_features)
+      filter(.data[["features.plot"]] %in% good_features)
   }
 
   percent_mat <- percent_mat[,-1] %>%
@@ -1707,7 +1708,7 @@ DimPlot_scCustom <- function(
 
       plot <- plot & NoAxes()
 
-      axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
+      axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
         geom_point() +
         xlim(c(0, 10)) + ylim(c(0, 10)) +
         theme_classic() +
@@ -1745,7 +1746,7 @@ DimPlot_scCustom <- function(
 
         plot <- plot & NoAxes()
 
-        axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
+        axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
           geom_point() +
           xlim(c(0, 10)) + ylim(c(0, 10)) +
           theme_classic() +
