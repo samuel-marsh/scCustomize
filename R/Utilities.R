@@ -320,13 +320,13 @@ Meta_Numeric <- function(
   # Pull results into vectors
   invalid_variables <- all_numeric %>%
     rownames_to_column("variables") %>%
-    filter(Is_Numeric == FALSE) %>%
-    pull(variables)
+    filter(.data[["Is_Numeric"]] == FALSE) %>%
+    pull(.data[["variables"]])
 
   valid_variables <- all_numeric %>%
     rownames_to_column("variables") %>%
-    filter(Is_Numeric == TRUE) %>%
-    pull(variables)
+    filter(.data[["Is_Numeric"]] == TRUE) %>%
+    pull(.data[["variables"]])
 
   # Warn if columns are not numeric
   if (length(x = invalid_variables) > 0) {
