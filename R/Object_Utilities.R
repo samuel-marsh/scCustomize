@@ -370,6 +370,7 @@ Meta_Remove_Seurat <- function(
 #' @importFrom data.table fread
 #' @importFrom dplyr select left_join
 #' @importFrom magrittr "%>%"
+#' @importFrom stats setNames
 #' @importFrom tibble column_to_rownames rownames_to_column
 #'
 #' @return Seurat object with new `@meta.data` columns

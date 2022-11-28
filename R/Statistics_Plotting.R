@@ -760,7 +760,7 @@ CellBender_Diff_Plot <- function(
   # Filter plot
   if (!is.null(x = pct_diff_threshold)) {
     feature_diff_df_filtered <- feature_diff_df_filtered %>%
-      filter(Pct_Diff >= pct_diff_threshold)
+      filter(.data[["Pct_Diff"]] >= pct_diff_threshold)
   } else {
     feature_diff_df_filtered <- feature_diff_df_filtered[1:num_features, ]
   }
@@ -771,7 +771,7 @@ CellBender_Diff_Plot <- function(
   axis_lim <- max(feature_diff_df_filtered$Raw_Counts)
 
   # Make plot
-  plot <- ggplot(feature_diff_df_filtered, aes(x = Raw_Counts, y = CellBender_Counts)) +
+  plot <- ggplot(feature_diff_df_filtered, aes(x = .data[["Raw_Counts"]], y = .data[["CellBender_Counts"]])) +
     geom_point() +
     scale_x_log10(limits = c(1, axis_lim)) +
     scale_y_log10(limits = c(1, axis_lim)) +

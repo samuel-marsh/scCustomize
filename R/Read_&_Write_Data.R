@@ -66,7 +66,7 @@ Create_10X_H5 <- function(
   temp_file <- tempfile(pattern = paste(save_name, "_", sep = ""),
                         tmpdir = save_file_path,
                         fileext=".h5")
-  write10xCounts(path = temp_file,
+  DropletUtils::write10xCounts(path = temp_file,
                  x = count_matrix,
                  barcodes = colnames(count_matrix),
                  gene.symbol = rownames(count_matrix),

@@ -355,9 +355,9 @@ CellBender_Feature_Diff <- function(
 
   # Add diff and % diff
   merged_counts <- merged_counts %>%
-    mutate(Count_Diff = Raw_Counts - CellBender_Counts,
-           Pct_Diff = 100 - ((CellBender_Counts / Raw_Counts) * 100)) %>%
-    arrange(desc(Pct_Diff)) %>%
+    mutate(Count_Diff = .data[["Raw_Counts"]] - .data[["CellBender_Counts"]],
+           Pct_Diff = 100 - ((.data[["CellBender_Counts"]] / .data[["Raw_Counts"]]) * 100)) %>%
+    arrange(desc(.data[["Pct_Diff"]])) %>%
     column_to_rownames("Feature_Names")
 
   # return data
