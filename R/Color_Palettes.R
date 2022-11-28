@@ -332,8 +332,8 @@ PalettePlot <- function(palette = NULL) {
 
   # Plot
   palette_plot <- ggplot(palette_data) +
-    geom_tile(aes(x = x, y = y, fill = fill)) +
-    geom_text(aes(x = x, y = y, label = x)) +
+    geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
+    geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
     scale_fill_identity() +
     theme_void()
   return(palette_plot)
