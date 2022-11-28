@@ -548,6 +548,7 @@ QC_Plots_Combined_Vln <- function(
 #' @importFrom magrittr "%>%"
 #' @importFrom scattermore geom_scattermore
 #' @importFrom Seurat FeatureScatter
+#' @importFrom stats cor
 #'
 #' @export
 #'
@@ -633,7 +634,7 @@ QC_Plot_UMIvsGene <- function(
   # filter meta data by cells plotting if valid
   if (!is.null(x = cells)) {
     featurescatter_data <- featurescatter_data %>%
-      filter(barcodes %in% cells)
+      filter(.data[["barcodes"]] %in% cells)
   }
 
   # Add reported value for plot subtitle
@@ -658,11 +659,11 @@ QC_Plot_UMIvsGene <- function(
   plot_cor_full <- round(x = cor(x = featurescatter_data_sort[, "nCount_RNA"], y = featurescatter_data_sort[, "nFeature_RNA"]), digits = 2)
 
   if (is.null(x = meta_gradient_name)) {
-    featurescatter_data_sort_filter <<- featurescatter_data_sort %>%
-      filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene)
+    featurescatter_data_sort_filter <- featurescatter_data_sort %>%
+      filter(.data[["nCount_RNA"]] > low_cutoff_UMI & .data[["nCount_RNA"]] < high_cutoff_UMI & .data[["nFeature_RNA"]] > low_cutoff_gene & .data[["nFeature_RNA"]] < high_cutoff_gene)
   } else {
-    featurescatter_data_sort_filter <<- featurescatter_data_sort %>%
-      filter(nCount_RNA > low_cutoff_UMI & nCount_RNA < high_cutoff_UMI & nFeature_RNA > low_cutoff_gene & nFeature_RNA < high_cutoff_gene & .data[[meta_gradient_name]] < meta_gradient_low_cutoff)
+    featurescatter_data_sort_filter <- featurescatter_data_sort %>%
+      filter(.data[["nCount_RNA"]] > low_cutoff_UMI & .data[["nCount_RNA"]] < high_cutoff_UMI & .data[["nFeature_RNA"]] > low_cutoff_gene & .data[["nFeature_RNA"]] < high_cutoff_gene & .data[[meta_gradient_name]] < meta_gradient_low_cutoff)
   }
 
   # Calculate correlation based on cutoffs
@@ -671,7 +672,7 @@ QC_Plot_UMIvsGene <- function(
   # Plot with meta gradient
   if (!is.null(x = meta_gradient_name) && combination == FALSE) {
     if (raster) {
-      p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = nCount_RNA, y = nFeature_RNA)) +
+      p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
@@ -683,7 +684,7 @@ QC_Plot_UMIvsGene <- function(
         ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".  ", "\nThe low cutoff for plotting ", meta_gradient_name, " is: ", meta_cutoff_reported)))
       return(p1)
     }
-    p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = nCount_RNA, y = nFeature_RNA)) +
+    p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
       geom_point(mapping = aes(color = .data[[meta_gradient_name]]), size = pt.size) +
       scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
       theme_cowplot() +
@@ -716,7 +717,7 @@ QC_Plot_UMIvsGene <- function(
 
     # Plot with meta gradient
     if (raster) {
-      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = nCount_RNA, y = nFeature_RNA)) +
+      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
@@ -726,7 +727,7 @@ QC_Plot_UMIvsGene <- function(
         xlab(x_axis_label) +
         ylab(y_axis_label)
     } else {
-      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = nCount_RNA, y = nFeature_RNA)) +
+      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_point(mapping = aes(color = .data[[meta_gradient_name]]), size = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
@@ -1028,7 +1029,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Mean_Reads_per_Cell)) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Mean_Reads_per_Cell"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       theme(legend.position = "none",
@@ -1041,7 +1042,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Mean_Reads_per_Cell, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Mean_Reads_per_Cell"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       theme(legend.position = "none",
@@ -1163,7 +1164,7 @@ Seq_QC_Plot_Number_Cells <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Estimated_Number_of_Cells)) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Estimated_Number_of_Cells"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       theme(legend.position = "none",
@@ -1176,7 +1177,7 @@ Seq_QC_Plot_Number_Cells <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Estimated_Number_of_Cells, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Estimated_Number_of_Cells"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       theme(legend.position = "none",
@@ -1298,7 +1299,7 @@ Seq_QC_Plot_Genes <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Median_Genes_per_Cell)) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Median_Genes_per_Cell"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Median Genes per Cell") +
@@ -1306,7 +1307,7 @@ Seq_QC_Plot_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Median_Genes_per_Cell, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Median_Genes_per_Cell"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -1423,7 +1424,7 @@ Seq_QC_Plot_UMIs <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Median_UMI_Counts_per_Cell)) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Median_UMI_Counts_per_Cell"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Median UMIs per Cell") +
@@ -1431,7 +1432,7 @@ Seq_QC_Plot_UMIs <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Median_UMI_Counts_per_Cell, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Median_UMI_Counts_per_Cell"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -1548,7 +1549,7 @@ Seq_QC_Plot_Total_Genes <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Total_Genes_Detected)) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Total_Genes_Detected"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Total Genes Detected per Sample") +
@@ -1556,7 +1557,7 @@ Seq_QC_Plot_Total_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Total_Genes_Detected, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Total_Genes_Detected"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -1678,7 +1679,7 @@ Seq_QC_Plot_Saturation <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Sequencing_Saturation), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Sequencing_Saturation"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Sequencing Saturation") +
@@ -1687,7 +1688,7 @@ Seq_QC_Plot_Saturation <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Sequencing_Saturation, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Sequencing_Saturation"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -1810,7 +1811,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Fraction_Reads_in_Cells), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Fraction_Reads_in_Cells"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Fraction of Reads in Cells per Sample") +
@@ -1819,7 +1820,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Fraction_Reads_in_Cells, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Fraction_Reads_in_Cells"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -1942,7 +1943,7 @@ Seq_QC_Plot_Transcriptome <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Reads_Mapped_Confidently_to_Transcriptome), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Transcriptome"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Percent of Reads Confidently Mapped to Transcriptome") +
@@ -1951,7 +1952,7 @@ Seq_QC_Plot_Transcriptome <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Reads_Mapped_Confidently_to_Transcriptome, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Transcriptome"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -2073,7 +2074,7 @@ Seq_QC_Plot_Genome <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Reads_Mapped_Confidently_to_Genome), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Genome"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Percent of Reads Confidently Mapped to Genome") +
@@ -2082,7 +2083,7 @@ Seq_QC_Plot_Genome <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Reads_Mapped_Confidently_to_Genome, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Genome"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -2204,7 +2205,7 @@ Seq_QC_Plot_Intergenic <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Reads_Mapped_Confidently_to_Intergenic_Regions), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Intergenic_Regions"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Percent of Reads Confidently Mapped to Intergenic Regions") +
@@ -2213,7 +2214,7 @@ Seq_QC_Plot_Intergenic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Reads_Mapped_Confidently_to_Intergenic_Regions, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Intergenic_Regions"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -2335,7 +2336,7 @@ Seq_QC_Plot_Intronic <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Reads_Mapped_Confidently_to_Intronic_Regions), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Intronic_Regions"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Percent of Reads Confidently Mapped to Intronic Regions") +
@@ -2344,7 +2345,7 @@ Seq_QC_Plot_Intronic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Reads_Mapped_Confidently_to_Intronic_Regions, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Intronic_Regions"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -2466,7 +2467,7 @@ Seq_QC_Plot_Exonic <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Reads_Mapped_Confidently_to_Exonic_Regions), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Exonic_Regions"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Percent of Reads Confidently Mapped to Exonic Regions") +
@@ -2475,7 +2476,7 @@ Seq_QC_Plot_Exonic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Reads_Mapped_Confidently_to_Exonic_Regions, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Exonic_Regions"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -2597,7 +2598,7 @@ Seq_QC_Plot_Antisense <- function(
   if (plot_by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
-    plot <- ggplot(metrics_dataframe, aes(x = samples_plotting, y = Reads_Mapped_Antisense_to_Gene), color = samples_plotting) +
+    plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Antisense_to_Gene"]]), color = .data[["samples_plotting"]]) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle("Percent of Reads Confidently Mapped to Antisense to Gene") +
@@ -2606,7 +2607,7 @@ Seq_QC_Plot_Antisense <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = Reads_Mapped_Antisense_to_Gene, fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Antisense_to_Gene"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
