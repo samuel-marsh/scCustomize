@@ -1191,6 +1191,15 @@ Pull_Cluster_Annotation <- function(
     annotation_table <- read.csv(file = annotation, stringsAsFactors = FALSE)
   }
 
+  # Check that cluster and cell type columns are present
+  if (!cluster_name_col %in% colnames(x = annotation_table)) {
+    cli_abort(message = "`cluster_name_col`: '{cluster_name_col}' not found in annotation data.frame.")
+  }
+
+  if (!cell_type_col %in% colnames(x = annotation_table)) {
+    cli_abort(message = "`cell_type_col`: '{cell_type_col}' not found in annotation data.frame.")
+  }
+
   # Create list elements per cluster
   cell_type_list <- unique(annotation_table[[cell_type_col]])
   cluster_annotation_list <- lapply(c(1:length(cell_type_list)), function(x){
@@ -1202,7 +1211,7 @@ Pull_Cluster_Annotation <- function(
 
   # Create list elements for renaming idents
   new_cluster_ids <- annotation_table %>%
-    pull(cell_type)
+    pull(cell_type_col)
   secondary_ids <- annotation_table[, 3]
 
   new_cluster_ids_list <- list(new_cluster_ids)
