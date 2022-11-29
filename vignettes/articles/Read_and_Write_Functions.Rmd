@@ -73,9 +73,9 @@ The function `Read10X_GEO` can be used to iteratively read all sets of 10X style
 
 For this example I will be utilizing data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)), which were downloaded from [NCBI GEO GSE152183](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183)
 ```{r eval=FALSE}
-list.files("../../man/figures/assets/GSE152183_RAW_Marsh/")
+list.files("../man/figures/assets/GSE152183_RAW_Marsh/")
 
-GEO_10X <- Read10X_GEO(data_dir = "../../man/figures/assets/GSE152183_RAW_Marsh/")
+GEO_10X <- Read10X_GEO(data_dir = "../man/figures/assets/GSE152183_RAW_Marsh/")
 ```
 
 #### `Read10X_GEO` Additional Parameters  
@@ -89,8 +89,8 @@ GEO_10X <- Read10X_GEO(data_dir = "../../man/figures/assets/GSE152183_RAW_Marsh/
 #### `Read10X_GEO` Import Format
 `Read10X_GEO` will return list of matrices (single modality data) or list of list of matrices (multi-modal data).
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../../man/figures/assets/"}
-knitr::include_graphics(c("../../man/figures/assets/Read10X_GEO.png","../../man/figures/assets/multimodal.png")) 
+```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../man/figures/assets/"}
+knitr::include_graphics(c("../man/figures/assets/Read10X_GEO.png","../man/figures/assets/multimodal.png")) 
 ```
 
 
@@ -128,15 +128,15 @@ For this example I will be utilizing data from Hammond et al., 2019 ([*Immunity*
 
 ```{r eval=FALSE}
 # Read in and use file names to name the list (default)
-GEO_Single <- Read_GEO_Delim(data_dir = "../../man/figures/assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz")
+GEO_Single <- Read_GEO_Delim(data_dir = "../man/figures/assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz")
 
 # Read in and use new sample names to name the list
-GEO_Single <- Read_GEO_Delim(data_dir = "../../man/figures/assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz", sample_names = c("sample01", "sample02", "sample03", "sample04"))
+GEO_Single <- Read_GEO_Delim(data_dir = "../man/figures/assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz", sample_names = c("sample01", "sample02", "sample03", "sample04"))
 
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs with default naming based on file name or providing `sample_names` parameter.*", fig.show='hold', out.width="49%"}
-knitr::include_graphics(c("../../man/figures/assets/delim_default.png","../../man/figures/assets/renamed.png")) 
+knitr::include_graphics(c("../man/figures/assets/delim_default.png","../man/figures/assets/renamed.png")) 
 ```
 
 
@@ -223,7 +223,7 @@ GEO_Merged <- Merge_Sparse_Data_All(matrix_list = GEO_Single)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*", fig.show='hold', out.width="98%"}
-knitr::include_graphics(c("../../man/figures/assets/geo_merged.png")) 
+knitr::include_graphics(c("../man/figures/assets/geo_merged.png")) 
 ```
 
 ### Add Barcode Prefix/Suffix  
