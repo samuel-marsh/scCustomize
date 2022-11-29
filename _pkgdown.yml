@@ -127,5 +127,10 @@ reference:
   - has_concept("stats")
   - has_concept("stats_plotting")
 
+- title: "Data"
+  desc: "Reference data for package functions."
+- contents:
+  - has_concept("data")
+
 deploy:
   install_metadata: true
