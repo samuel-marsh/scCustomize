@@ -740,7 +740,7 @@ CellBender_Diff_Plot <- function(
 ) {
   # Remove unshared features
   feature_diff_df_filtered <- feature_diff_df %>%
-    drop_na(Raw_Counts, CellBender_Counts)
+    drop_na(.data[["Raw_Counts"]], .data[["CellBender_Counts"]])
 
   diff_features <- symdiff(x = rownames(feature_diff_df), y = rownames(feature_diff_df_filtered))
 
