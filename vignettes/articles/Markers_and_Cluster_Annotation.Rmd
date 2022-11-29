@@ -187,7 +187,7 @@ Iterate_FeaturePlot_scCustom(seurat_object = pbmc, gene_list = top_5_presto, sin
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example plot showing the gene name and additional name of the plot.*", fig.show='hold', out.width="49%"}
-knitr::include_graphics("../man/figures/assets/Iterate_named_plots.png")
+knitr::include_graphics("../../man/figures/assets/Iterate_named_plots.png")
 ```
 
 
@@ -223,7 +223,7 @@ The result of `Pull_Cluster_Annotation` is a list that contains:
 * One entry called "new_cluster_idents" containing a vector of idents in order that can be used for renaming clusters either using `Rename_Clusters` function (see below) or manually.
 * One entry containing vector of cell sub-types (if present).
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example output of `Pull_Cluster_Annotation*", fig.show='hold'}
-knitr::include_graphics("../man/figures/assets/annotation_info.png")
+knitr::include_graphics("../../man/figures/assets/annotation_info.png")
 ```
 
 ## Renaming Clusters
