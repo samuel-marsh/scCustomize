@@ -49,8 +49,6 @@ Imports:
     tibble,
     tidyr,
     viridis
-Remotes: 
-    hypercompetent/colorway
 Suggests:
     ComplexHeatmap,
     dittoSeq,
