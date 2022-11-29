@@ -423,20 +423,20 @@ plotFactors_scCustom <- function(
       h_df[cells.highlight, 'highlight'] = TRUE
       if (raster) {
         top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                                   aes(x, h_raw),
+                                                   aes(.data[["x"]], .data[["h_raw"]]),
                                                    col = "black",
                                                    pointsize = pt.size_factors)
         bottom <- bottom + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                                         aes(x, h_norm),
+                                                         aes(.data[["x"]], .data[["h_norm"]]),
                                                          col = "black",
                                                          pointsize = pt.size_factors)
       } else {
         top <- top + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                aes(x, h_raw),
+                                aes(.data[["x"]], .data[["h_raw"]]),
                                 col = "black",
                                 size = pt.size_factors)
         bottom <- bottom + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                      aes(x, h_norm),
+                                      aes(.data[["x"]], .data[["h_norm"]]),
                                       col = "black",
                                       size = pt.size_factors)
       }
