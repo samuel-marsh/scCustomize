@@ -117,7 +117,7 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #' @param seed random seed for the palette shuffle.  Default = 123.
 #'
 #' @import cli
-#' @importFrom colorway varibow
+# #' @importFrom colorway varibow
 #' @importFrom paletteer paletteer_d
 #' @importFrom SeuratObject PackageCheck
 #'
@@ -186,7 +186,7 @@ DiscretePalette_scCustomize <- function(
         polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
         stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
         ditto_seq =  dittoSeq::dittoColors(reps = 1, get.names = FALSE),
-        varibow = varibow(n_colors = num_colors)
+        varibow = varibow_scCustom(n_colors = num_colors)
       )
     }
   } else {
@@ -196,13 +196,9 @@ DiscretePalette_scCustomize <- function(
       glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
       polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
       stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
-      varibow = varibow(n_colors = num_colors)
+      varibow = varibow_scCustom(n_colors = num_colors)
     )
   }
-
-
-
-
 
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
@@ -538,4 +534,28 @@ scCustomize_Palette <- function(
     }
   }
   return(colors_use)
+}
+
+
+#' Generate a rainbow palette with variation in saturation and value
+#'
+#' @param n_colors The number of colors to generate
+#'
+#' @importFrom grDevices rainbow
+#'
+#' @return a character vector of hex color values of length n_colors.
+#'
+#' @references Ported from colorway package for CRAN release.  See https://github.com/hypercompetent/colorway/blob/master/R/palettes.R (Licence: GPL-3).
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+varibow_scCustom <- function(
+  n_colors
+) {
+  sats <- rep_len(c(0.55,0.7,0.85,1),length.out = n_colors)
+  vals <- rep_len(c(1,0.8,0.6),length.out = n_colors)
+  rainbow(n_colors, s = sats, v = vals)
 }
