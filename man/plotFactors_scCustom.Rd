@@ -13,6 +13,7 @@ plotFactors_scCustom(
   pt.size_dimreduc = 1,
   reduction_label = "UMAP",
   raster = TRUE,
+  raster.dpi = c(512, 512),
   order = FALSE,
   plot_dimreduc = TRUE,
   save_plots = TRUE,
@@ -45,6 +46,9 @@ technique and therefore needs to be set manually.  Default is "UMAP".}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
 
 \item{order}{logical. Whether to plot higher loading cells on top of cells with lower loading values in the
 dimensionality reduction plots (Default = FALSE).}

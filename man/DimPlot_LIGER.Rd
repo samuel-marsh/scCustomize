@@ -21,6 +21,7 @@ DimPlot_LIGER(
   label_color = "black",
   combination = FALSE,
   raster = NULL,
+  raster.dpi = c(512, 512),
   num_columns = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123
@@ -68,6 +69,9 @@ Default is FALSE.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
+
+\item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).}
 
 \item{num_columns}{Number of columns in plot layout.  Only valid if \code{split.by != NULL}.}
 
