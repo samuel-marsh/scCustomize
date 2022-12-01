@@ -28,6 +28,8 @@
 #' @param combination logical, whether to return patchwork displaying both plots side by side.  (Default is FALSE).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -66,6 +68,7 @@ DimPlot_LIGER <- function(
   label_color = "black",
   combination = FALSE,
   raster = NULL,
+  raster.dpi = c(512, 512),
   num_columns = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123
@@ -140,6 +143,7 @@ DimPlot_LIGER <- function(
                                 reduction_label = reduction_label,
                                 shuffle = shuffle,
                                 raster = raster,
+                                raster.dpi = raster.dpi,
                                 ggplot_default_colors = ggplot_default_colors,
                                 num_columns = num_columns,
                                 shuffle_seed = shuffle_seed,
@@ -158,6 +162,7 @@ DimPlot_LIGER <- function(
                              num_columns = num_columns,
                              shuffle = shuffle,
                              raster = raster,
+                             raster.dpi = raster.dpi,
                              ggplot_default_colors = ggplot_default_colors,
                              split_by = split_by,
                              color_seed = color_seed,
@@ -176,6 +181,7 @@ DimPlot_LIGER <- function(
                                 reduction_label = reduction_label,
                                 shuffle = shuffle,
                                 raster = raster,
+                                raster.dpi = raster.dpi,
                                 ggplot_default_colors = ggplot_default_colors,
                                 num_columns = num_columns,
                                 shuffle_seed = shuffle_seed,
@@ -198,6 +204,7 @@ DimPlot_LIGER <- function(
                              num_columns = num_columns,
                              shuffle = shuffle,
                              raster = raster,
+                             raster.dpi = raster.dpi,
                              ggplot_default_colors = ggplot_default_colors,
                              split_by = split_by,
                              shuffle_seed = shuffle_seed,
@@ -223,6 +230,8 @@ DimPlot_LIGER <- function(
 #' technique and therefore needs to be set manually.  Default is "UMAP".
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param order logical. Whether to plot higher loading cells on top of cells with lower loading values in the
 #' dimensionality reduction plots (Default = FALSE).
 #' @param plot_dimreduc logical.  Whether to plot factor loadings on dimensionality reduction coordinates.  Default is TRUE.
@@ -268,6 +277,7 @@ plotFactors_scCustom <- function(
   pt.size_dimreduc = 1,
   reduction_label = "UMAP",
   raster = TRUE,
+  raster.dpi = c(512, 512),
   order = FALSE,
   plot_dimreduc = TRUE,
   save_plots = TRUE,
@@ -386,14 +396,14 @@ plotFactors_scCustom <- function(
                       highlight = FALSE)
     if (raster) {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
-        geom_scattermore(pointsize = pt.size_factors) +
+        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
         labs(x = 'Cell', y = 'Raw H Score') +
         ggtitle(plot_title1) +
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
-        geom_scattermore(pointsize = pt.size_factors) +
+        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
         labs(x = 'Cell', y = 'H_norm Score') +
         theme(legend.position = 'top',
               legend.title = element_blank()) +
@@ -425,11 +435,13 @@ plotFactors_scCustom <- function(
         top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                                    aes(.data[["x"]], .data[["h_raw"]]),
                                                    col = "black",
-                                                   pointsize = pt.size_factors)
+                                                   pointsize = pt.size_factors,
+                                                   pixels = raster.dpi)
         bottom <- bottom + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                                          aes(.data[["x"]], .data[["h_norm"]]),
                                                          col = "black",
-                                                         pointsize = pt.size_factors)
+                                                         pointsize = pt.size_factors,
+                                                         pixels = raster.dpi)
       } else {
         top <- top + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
                                 aes(.data[["x"]], .data[["h_raw"]]),
@@ -456,7 +468,7 @@ plotFactors_scCustom <- function(
 
       if (raster) {
         p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
-          geom_scattermore(pointsize = pt.size_dimreduc) +
+          geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
           ggtitle(label = paste('Factor', i)) +
           theme(legend.position = 'none') +
           xlab(x_axis_label) +

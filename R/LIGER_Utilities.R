@@ -478,6 +478,8 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @param new.order What should the new ident order be if `reorder.idents = TRUE`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -490,6 +492,7 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @importFrom dplyr summarize
 #' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom patchwork wrap_plots
+#' @importFrom scattermore geom_scattermore
 #' @importFrom stats median
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
@@ -521,6 +524,7 @@ Plot_By_Cluster_LIGER <- function(
   reorder.idents = FALSE,
   new.order = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
@@ -569,9 +573,9 @@ Plot_By_Cluster_LIGER <- function(
   if (raster) {
     if (!is.null(x = split_by)) {
       p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
           theme_cowplot() +
-          geom_scattermore(pointsize = pt_size) +
+          geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
           ggtitle(list_of_splits[x]) +
           scale_color_manual(values = colors_use) +
@@ -586,14 +590,14 @@ Plot_By_Cluster_LIGER <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (label) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -601,9 +605,9 @@ Plot_By_Cluster_LIGER <- function(
         }
       })
     } else {
-      p2 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+      p2 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
         theme_cowplot() +
-        geom_scattermore(pointsize = pt_size) +
+        geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
         scale_color_manual(values = colors_use) +
         theme(legend.position = "right",
@@ -617,14 +621,14 @@ Plot_By_Cluster_LIGER <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (label) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -635,7 +639,7 @@ Plot_By_Cluster_LIGER <- function(
   } else {
     if (!is.null(x = split_by)) {
       p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -652,14 +656,14 @@ Plot_By_Cluster_LIGER <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (label) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -667,7 +671,7 @@ Plot_By_Cluster_LIGER <- function(
         }
       })
     } else {
-      p2 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+      p2 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -683,14 +687,14 @@ Plot_By_Cluster_LIGER <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (label) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -734,6 +738,8 @@ Plot_By_Cluster_LIGER <- function(
 #' @param new.order What should the new ident order be if `reorder.idents = TRUE`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -744,6 +750,8 @@ Plot_By_Cluster_LIGER <- function(
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom patchwork wrap_plots
+#' @importFrom rlang sym
+#' @importFrom scattermore geom_scattermore
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
@@ -769,6 +777,7 @@ Plot_By_Meta_LIGER <- function(
   reorder.idents = FALSE,
   new.order = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
@@ -808,12 +817,14 @@ Plot_By_Meta_LIGER <- function(
   x_axis_label <- paste0(reduction_label, "_1")
   y_axis_label <- paste0(reduction_label, "_2")
 
+  group_by <- sym(xvar)
+
   if (raster) {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
           theme_cowplot() +
-          geom_scattermore(pointsize = pt_size) +
+          geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
           ggtitle(list_of_splits[x]) +
           scale_color_manual(values = colors_use) +
@@ -825,9 +836,9 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
         theme_cowplot() +
-        geom_scattermore(pointsize = pt_size) +
+        geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
         scale_color_manual(values = colors_use) +
         theme(legend.position = "right",
@@ -841,7 +852,7 @@ Plot_By_Meta_LIGER <- function(
   } else {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -855,7 +866,7 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
