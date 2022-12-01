@@ -13,7 +13,8 @@ Read10X_GEO(
   unique.features = TRUE,
   strip.suffix = FALSE,
   parallel = FALSE,
-  num_cores = NULL
+  num_cores = NULL,
+  merge = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,10 @@ set names to the file name of each sample.}
 Only possible on Linux based systems.}
 
 \item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
+
+\item{merge}{logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from \code{sample_names}.}
 }
 \value{
 If features.csv indicates the data has multiple data types, a list

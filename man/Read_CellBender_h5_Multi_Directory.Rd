@@ -46,7 +46,8 @@ See \code{\link{Replace_Suffix}} for more information.  To remove all suffixes s
 \item{num_cores}{how many cores to use for parallel processing.}
 
 \item{merge}{logical (default FALSE) whether or not to merge samples into a single matrix or return
-list of matrices.  Will use the \code{sample_names} parameter to add prefix to cell barcodes.}
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from \code{sample_names}.}
 
 \item{...}{Extra parameters passed to \code{\link[scCustomize]{Read_CellBender_h5_Mat}}.}
 }

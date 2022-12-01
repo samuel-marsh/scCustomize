@@ -13,7 +13,8 @@ Read_GEO_Delim(
   sample_names = NULL,
   barcode_suffix_period = FALSE,
   parallel = FALSE,
-  num_cores = NULL
+  num_cores = NULL,
+  merge = FALSE
 )
 }
 \arguments{
@@ -43,6 +44,10 @@ be changed to "-".}
 Only possible on Linux based systems.}
 
 \item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
+
+\item{merge}{logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from \code{sample_names}.}
 }
 \value{
 List of gene x cell matrices in list format named by sample name.

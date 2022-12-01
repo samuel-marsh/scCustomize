@@ -11,6 +11,7 @@ Read10X_h5_GEO(
   shared_suffix = NULL,
   parallel = FALSE,
   num_cores = NULL,
+  merge = FALSE,
   ...
 )
 }
@@ -29,6 +30,10 @@ will set names to the file name of each sample.}
 Only possible on Linux based systems.}
 
 \item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
+
+\item{merge}{logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from \code{sample_names}.}
 
 \item{...}{Additional arguments passed to \code{\link[Seurat]{Read10X_h5}}}
 }
