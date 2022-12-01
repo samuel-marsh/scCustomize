@@ -1,3 +1,7 @@
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### NEBULOSA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 #' Nebulosa Density Plot
 #'
 #' Allow for customization of Nebulosa plot_density.  Requires Nebulosa package from Bioconductor.
