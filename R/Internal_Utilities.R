@@ -1,3 +1,7 @@
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### Operators ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 #' Set a default value if an object is NOT null
 #'
 #' @param lhs An object to set if it's NOT null
@@ -41,25 +45,15 @@
   }
 }
 
-#' Stop function without error message
-#'
-#' Modifies R options within the function call only to hide the error message from `stop` while
-#' keeping global options preserved outside of function.
-#'
-#' @return stops function without error message
-#'
-#' @author Stibu
-#' @references https://stackoverflow.com/a/42945293/15568251
-#' @details https://creativecommons.org/licenses/by-sa/3.0/
-#'
-#' @noRd
-#'
 
-stop_quietly <- function() {
-  opt <- options(show.error.messages = FALSE)
-  on.exit(options(opt))
-  stop()
-}
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### Object Checks ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
 
 
 #' Check Seurat Object
@@ -102,41 +96,6 @@ Is_LIGER <- function(
 ) {
   if (class(x = liger_object)[[1]] != "liger") {
     cli_abort(message = "'liger_object' provided is not an object of class: liger")
-  }
-}
-
-
-#' Automatically calculate a point size for ggplot2-based scatter plots
-#
-#' It happens to look good
-#'
-#' @param data a single value length vector corresponding to the number of cells.
-#' @param raster If TRUE, point size is set to 1
-#'
-#' @return The "optimal" point size for visualizing these data
-#'
-#' @noRd
-#'
-#' @references This function and documentation text are modified versions of the `AutoPointSize` function
-#' and documentation from Seurat (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
-#' This version has been modified to take single value length input instead of data.frame input.
-#'
-
-AutoPointSize_scCustom <- function(data, raster = NULL) {
-  # for single value
-  if (is.null(x = nrow(x = data)) && length(x = data) == 1 && is.numeric(x = data)) {
-    return(ifelse(
-      test = isTRUE(x = raster),
-      yes = 1,
-      no = min(1583 / data, 1)
-    ))
-  } else {
-    # for data frame/object based values (from Seurat, see documentation)
-    return(ifelse(
-      test = isTRUE(x = raster),
-      yes = 1,
-      no = min(1583 / nrow(x = data), 1)
-    ))
   }
 }
 
@@ -207,6 +166,32 @@ Assay_Present <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### WARN/ERROR MESSAGING ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Stop function without error message
+#'
+#' Modifies R options within the function call only to hide the error message from `stop` while
+#' keeping global options preserved outside of function.
+#'
+#' @return stops function without error message
+#'
+#' @author Stibu
+#' @references https://stackoverflow.com/a/42945293/15568251
+#' @details https://creativecommons.org/licenses/by-sa/3.0/
+#'
+#' @noRd
+#'
+
+stop_quietly <- function() {
+  opt <- options(show.error.messages = FALSE)
+  on.exit(options(opt))
+  stop()
+}
+
+
 #' Custom glue collapse
 #
 #' Customized glue_collapse that is based on the number of items in input list
@@ -241,6 +226,11 @@ glue_collapse_scCustom <- function(
     glue_collapse(x = input_string, sep = ", ", last = paste0(",", last_sep))
   }
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### GENERAL HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Calculate the percentage of a vector above some threshold
@@ -313,6 +303,31 @@ Middle_Number <- function(
   min_max <- c(min, max)
   middle <- min_max[-length(min_max)] + diff(min_max) / 2
   return(middle)
+}
+
+
+#' Symmetrical setdiff
+#'
+#' tests for differences between two vectors symmetrically.
+#'
+#' @param x first vector to test
+#' @param y second vector to test
+#'
+#' @return vector differences x vs. y and y vs. x
+#'
+#' @references Function name and code from R-bloggers post:
+#' (https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/)
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+symdiff <- function(
+  x,
+  y
+) {
+  setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
 }
 
 
@@ -442,65 +457,4 @@ Retrieve_Ensembl_Ribo <- function(
   }
 
   return(ribo_ensembl)
-}
-
-
-#' Remove Right Y Axis
-#'
-#' Shortcut for removing right y axis from ggplot2 object
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @references Shortcut slightly modified from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
-#'
-#' @keywords internal
-#'
-#' @noRd
-#'
-#' @examples
-#' \dontrun{
-#' # Generate a plot without axes, labels, or grid lines
-#' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
-#' p + No_Right()
-#' }
-
-No_Right <- function() {
-  no.right <- theme(
-    axis.line.y.right = element_blank(),
-    axis.ticks.y.right = element_blank(),
-    axis.text.y.right = element_blank(),
-    axis.title.y.right = element_text(
-      face = "bold",
-      size = 14,
-      margin = margin(r = 7),
-      angle = 270
-    )
-  )
-  return(no.right)
-}
-
-
-#' Symetrical setdiff
-#'
-#' tests for differences between two vectors symmetrically.
-#'
-#' @param x first vector to test
-#' @param y second vector to test
-#'
-#' @return vector differences x vs. y and y vs. x
-#'
-#' @references Function name and code from R-bloggers post:
-#' (https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/)
-#'
-#' @keywords internal
-#'
-#' @noRd
-#'
-
-symdiff <- function(
-  x,
-  y
-) {
-  setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
 }

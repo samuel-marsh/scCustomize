@@ -157,6 +157,41 @@ kMeans_Elbow <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+#' Automatically calculate a point size for ggplot2-based scatter plots
+#
+#' It happens to look good
+#'
+#' @param data a single value length vector corresponding to the number of cells.
+#' @param raster If TRUE, point size is set to 1
+#'
+#' @return The "optimal" point size for visualizing these data
+#'
+#' @noRd
+#'
+#' @references This function and documentation text are modified versions of the `AutoPointSize` function
+#' and documentation from Seurat (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
+#' This version has been modified to take single value length input instead of data.frame input.
+#'
+
+AutoPointSize_scCustom <- function(data, raster = NULL) {
+  # for single value
+  if (is.null(x = nrow(x = data)) && length(x = data) == 1 && is.numeric(x = data)) {
+    return(ifelse(
+      test = isTRUE(x = raster),
+      yes = 1,
+      no = min(1583 / data, 1)
+    ))
+  } else {
+    # for data frame/object based values (from Seurat, see documentation)
+    return(ifelse(
+      test = isTRUE(x = raster),
+      yes = 1,
+      no = min(1583 / nrow(x = data), 1)
+    ))
+  }
+}
+
+
 #' Extract max value for stacked violin plot
 #'
 #' extract max expression value
@@ -381,4 +416,40 @@ theme_ggprism_mod <- function(
     theme(legend.title = element_text(hjust = 0),
           axis.text = element_text(size = rel(0.95), face = "plain")
     )
+}
+
+
+#' Remove Right Y Axis
+#'
+#' Shortcut for removing right y axis from ggplot2 object
+#'
+#' @importFrom ggplot2 theme
+#'
+#' @references Shortcut slightly modified from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' # Generate a plot without axes, labels, or grid lines
+#' library(ggplot2)
+#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' p + No_Right()
+#' }
+
+No_Right <- function() {
+  no.right <- theme(
+    axis.line.y.right = element_blank(),
+    axis.ticks.y.right = element_blank(),
+    axis.text.y.right = element_blank(),
+    axis.title.y.right = element_text(
+      face = "bold",
+      size = 14,
+      margin = margin(r = 7),
+      angle = 270
+    )
+  )
+  return(no.right)
 }

@@ -105,118 +105,6 @@ viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
 viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 
 
-#' Discrete color palettes
-#'
-#' Helper function to return a number of discrete color palettes.
-#'
-#' @param num_colors Number of colors to be generated.
-#' @param palette Options are
-#' "alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".
-#' @param shuffle_pal randomly shuffle the outputted palette.  Most useful for `varibow` palette as
-#' that is normally an ordered palette.
-#' @param seed random seed for the palette shuffle.  Default = 123.
-#'
-#' @import cli
-# #' @importFrom colorway varibow
-#' @importFrom paletteer paletteer_d
-#' @importFrom SeuratObject PackageCheck
-#'
-#' @return A vector of colors
-#'
-#' @references
-#' This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
-#' provide simplified access to color palettes from many different R package sources while
-#' minimizing scCustomize current and future dependencies.
-#'
-#' The following packages & palettes are called by this function (see individual packages for
-#' palette references/citations):
-#' \enumerate{
-#'   \item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
-#'     \itemize{
-#'       \item alphabet, alphabet2, glasbey, polychrome, and stepped.
-#'       }
-#'   \item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
-#'     \itemize{
-#'       \item dittoColors.
-#'       }
-#'   \item colorway \url{https://github.com/hypercompetent/colorway}
-#'     \itemize{
-#'       \item varibow
-#'       }
-#' }
-#'
-#' Function name and implementation modified from Seurat (Licence: GPL-3).
-#' \url{https://github.com/satijalab/seurat}
-#'
-#' @export
-#'
-#' @concept palettes
-#'
-
-DiscretePalette_scCustomize <- function(
-  num_colors,
-  palette = NULL,
-  shuffle_pal = FALSE,
-  seed = 123
-) {
-  if (is.null(x = palette)) {
-    cli_abort(message = c("Must specify a palette to return colors.",
-                          "i" = "`palette` options are: {names(palette_list)}")
-    )
-  }
-
-  # dittoseq check
-  if (palette == "ditto_seq") {
-    dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
-    if (!dittoseq_check[1]) {
-      stop(
-        "Please install the dittoSeq package to `palette = 'ditto_seq'`",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('BiocManager')",
-        "\nBiocManager::install('dittoSeq')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
-    } else {
-      palette_list <- list(
-        alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
-        alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
-        glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
-        polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
-        stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
-        ditto_seq =  dittoSeq::dittoColors(reps = 1, get.names = FALSE),
-        varibow = varibow_scCustom(n_colors = num_colors)
-      )
-    }
-  } else {
-    palette_list <- list(
-      alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
-      alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
-      glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
-      polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
-      stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
-      varibow = varibow_scCustom(n_colors = num_colors)
-    )
-  }
-
-  palette_out <- palette_list[[palette]]
-  if (num_colors > length(x = palette_out)) {
-    cli_abort(message = c("Not enough colors in specified palette.",
-                          "*" = "{palette} only contains {length(x = palette_out)} colors.",
-                          "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
-    )
-  }
-  if (shuffle_pal) {
-    set.seed(seed = seed)
-    palette_out <- sample(palette_out[1:num_colors])
-  } else {
-    palette_out <- palette_out[1:num_colors]
-  }
-  return(palette_out)
-}
-
-
 #' Single Color Palettes for Plotting
 #'
 #' Selects colors from modified versions of RColorBrewer single colors palettes
@@ -289,50 +177,6 @@ Single_Color_Palette <- function(pal_color,
   pal_use <- brewer_single_modified[[pal_color]]
   output_pal <- sample(pal_use, size = num_colors)
   return(output_pal)
-}
-
-
-#' Plot color palette in viewer
-#'
-#' Plots given color vector/palette in viewer to evaluate palette before plotting on data.
-#'
-#' @param palette a vector of colors (either named colors of hex codes).
-#'
-#' @import cli
-#' @import ggplot2
-#'
-#' @return Plot of all colors in supplied palette/vector
-#'
-#' @references
-#' Adapted from colorway package `build_palette` internals (Licence: GPL-3).
-#' \url{https://github.com/hypercompetent/colorway}.
-#'
-#' @export
-#'
-#' @concept palettes
-#'
-#' @examples
-#' \dontrun{
-#' PalettePlot(palette = varibow(n_colors = 36))
-#' }
-#'
-
-PalettePlot <- function(palette = NULL) {
-  # Check palette
-  if (is.null(x = palette)) {
-    cli_abort(message = "No value provided to `palette` parameter.")
-  }
-
-  # Generate data frame for plotting
-  palette_data <- data.frame(x = 1:length(palette), y = 1, fill = palette)
-
-  # Plot
-  palette_plot <- ggplot(palette_data) +
-    geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
-    geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
-    scale_fill_identity() +
-    theme_void()
-  return(palette_plot)
 }
 
 
@@ -483,7 +327,142 @@ ColorBlind_Pal <- function(
 
   return(color_blind_pal)
 }
-"firebrick1"
+
+
+#' Generate a rainbow palette with variation in saturation and value
+#'
+#' @param n_colors The number of colors to generate
+#'
+#' @importFrom grDevices rainbow
+#'
+#' @return a character vector of hex color values of length n_colors.
+#'
+#' @references Ported from colorway package for CRAN release.  See https://github.com/hypercompetent/colorway/blob/master/R/palettes.R (Licence: GPL-3).
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+varibow_scCustom <- function(
+  n_colors
+) {
+  sats <- rep_len(c(0.55,0.7,0.85,1),length.out = n_colors)
+  vals <- rep_len(c(1,0.8,0.6),length.out = n_colors)
+  rainbow(n_colors, s = sats, v = vals)
+}
+
+
+#' Discrete color palettes
+#'
+#' Helper function to return a number of discrete color palettes.
+#'
+#' @param num_colors Number of colors to be generated.
+#' @param palette Options are
+#' "alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow".
+#' @param shuffle_pal randomly shuffle the outputted palette.  Most useful for `varibow` palette as
+#' that is normally an ordered palette.
+#' @param seed random seed for the palette shuffle.  Default = 123.
+#'
+#' @import cli
+# #' @importFrom colorway varibow
+#' @importFrom paletteer paletteer_d
+#' @importFrom SeuratObject PackageCheck
+#'
+#' @return A vector of colors
+#'
+#' @references
+#' This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
+#' provide simplified access to color palettes from many different R package sources while
+#' minimizing scCustomize current and future dependencies.
+#'
+#' The following packages & palettes are called by this function (see individual packages for
+#' palette references/citations):
+#' \enumerate{
+#'   \item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
+#'     \itemize{
+#'       \item alphabet, alphabet2, glasbey, polychrome, and stepped.
+#'       }
+#'   \item dittoSeq \url{https://bioconductor.org/packages/release/bioc/html/dittoSeq.html}
+#'     \itemize{
+#'       \item dittoColors.
+#'       }
+#'   \item colorway \url{https://github.com/hypercompetent/colorway}
+#'     \itemize{
+#'       \item varibow
+#'       }
+#' }
+#'
+#' Function name and implementation modified from Seurat (Licence: GPL-3).
+#' \url{https://github.com/satijalab/seurat}
+#'
+#' @export
+#'
+#' @concept palettes
+#'
+
+DiscretePalette_scCustomize <- function(
+  num_colors,
+  palette = NULL,
+  shuffle_pal = FALSE,
+  seed = 123
+) {
+  if (is.null(x = palette)) {
+    cli_abort(message = c("Must specify a palette to return colors.",
+                          "i" = "`palette` options are: {names(palette_list)}")
+    )
+  }
+
+  # dittoseq check
+  if (palette == "ditto_seq") {
+    dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
+    if (!dittoseq_check[1]) {
+      stop(
+        "Please install the dittoSeq package to `palette = 'ditto_seq'`",
+        "\nThis can be accomplished with the following commands: ",
+        "\n----------------------------------------",
+        "\ninstall.packages('BiocManager')",
+        "\nBiocManager::install('dittoSeq')",
+        "\n----------------------------------------",
+        call. = FALSE
+      )
+    } else {
+      palette_list <- list(
+        alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
+        alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
+        glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
+        polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
+        stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
+        ditto_seq =  dittoSeq::dittoColors(reps = 1, get.names = FALSE),
+        varibow = varibow_scCustom(n_colors = num_colors)
+      )
+    }
+  } else {
+    palette_list <- list(
+      alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
+      alphabet2 = as.vector(x = paletteer_d("pals::alphabet2", 26)),
+      glasbey = as.vector(x = paletteer_d("pals::glasbey", 32)),
+      polychrome = as.vector(x = paletteer_d("pals::polychrome", 36)),
+      stepped = as.vector(x = paletteer_d("pals::stepped", 24)),
+      varibow = varibow_scCustom(n_colors = num_colors)
+    )
+  }
+
+  palette_out <- palette_list[[palette]]
+  if (num_colors > length(x = palette_out)) {
+    cli_abort(message = c("Not enough colors in specified palette.",
+                          "*" = "{palette} only contains {length(x = palette_out)} colors.",
+                          "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
+    )
+  }
+  if (shuffle_pal) {
+    set.seed(seed = seed)
+    palette_out <- sample(palette_out[1:num_colors])
+  } else {
+    palette_out <- palette_out[1:num_colors]
+  }
+  return(palette_out)
+}
 
 
 #' Color Palette Selection for scCustomize
@@ -537,25 +516,45 @@ scCustomize_Palette <- function(
 }
 
 
-#' Generate a rainbow palette with variation in saturation and value
+#' Plot color palette in viewer
 #'
-#' @param n_colors The number of colors to generate
+#' Plots given color vector/palette in viewer to evaluate palette before plotting on data.
 #'
-#' @importFrom grDevices rainbow
+#' @param palette a vector of colors (either named colors of hex codes).
 #'
-#' @return a character vector of hex color values of length n_colors.
+#' @import cli
+#' @import ggplot2
 #'
-#' @references Ported from colorway package for CRAN release.  See https://github.com/hypercompetent/colorway/blob/master/R/palettes.R (Licence: GPL-3).
+#' @return Plot of all colors in supplied palette/vector
 #'
-#' @keywords internal
+#' @references
+#' Adapted from colorway package `build_palette` internals (Licence: GPL-3).
+#' \url{https://github.com/hypercompetent/colorway}.
 #'
-#' @noRd
+#' @export
+#'
+#' @concept palettes
+#'
+#' @examples
+#' \dontrun{
+#' PalettePlot(palette = varibow(n_colors = 36))
+#' }
 #'
 
-varibow_scCustom <- function(
-  n_colors
-) {
-  sats <- rep_len(c(0.55,0.7,0.85,1),length.out = n_colors)
-  vals <- rep_len(c(1,0.8,0.6),length.out = n_colors)
-  rainbow(n_colors, s = sats, v = vals)
+PalettePlot <- function(palette = NULL) {
+  # Check palette
+  if (is.null(x = palette)) {
+    cli_abort(message = "No value provided to `palette` parameter.")
+  }
+
+  # Generate data frame for plotting
+  palette_data <- data.frame(x = 1:length(palette), y = 1, fill = palette)
+
+  # Plot
+  palette_plot <- ggplot(palette_data) +
+    geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
+    geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
+    scale_fill_identity() +
+    theme_void()
+  return(palette_plot)
 }
