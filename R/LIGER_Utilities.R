@@ -817,7 +817,7 @@ Plot_By_Meta_LIGER <- function(
   x_axis_label <- paste0(reduction_label, "_1")
   y_axis_label <- paste0(reduction_label, "_2")
 
-  group_by <- sym(xvar)
+  group_by <- sym(group_by)
 
   if (raster) {
     if (!is.null(x = split_by)) {
