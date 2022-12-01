@@ -1,3 +1,17 @@
+# scCustomize 1.1.0 (2022-XX-XX)  
+## Added  
+- Added `merge` parameter to `Read10X_GEO`, `Read10X_h5_GEO`, `Read_GEO_Delim` and `Read_CellBender_h5_Multi_File`.  
+- Added `raster.dpi` parameter to `DimPlot_LIGER`.
+
+## Changed  
+- Updated Imports/Suggests for CRAN compatibility. 
+- Rearrange base R code within `R/` scripts for better organization.
+
+## Fixes  
+- Fixed missing documentation for number of package functions.  
+- Typo/styling fixes.  
+
+ 
 # scCustomize 1.0.2 (2022-11-22)  
 ## Added  
 - None. 
