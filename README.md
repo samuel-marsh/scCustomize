@@ -4,7 +4,7 @@
 [![GitHub release (latest by
 date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?color=gree)](https://github.com/samuel-marsh/scCustomize/releases)
 [![R-CMD-check](https://github.com/samuel-marsh/scCustomize/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/samuel-marsh/scCustomize/actions/workflows/R-CMD-check.yaml)
-[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE.md)
 [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/issues)
 [![DOI](https://zenodo.org/badge/411807769.svg)](https://zenodo.org/badge/latestdoi/411807769)
 
