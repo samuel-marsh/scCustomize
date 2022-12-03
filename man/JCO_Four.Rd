@@ -21,6 +21,6 @@ cols <- JCO_Four()
 \references{
 Selection of colors from the JCO palette from ggsci being called through paletteer.
 See ggsci for more info on palettes
-\url{https://cran.r-project.org/web/packages/ggsci/index.html}
+\url{https://CRAN.R-project.org/package=ggsci}
 }
 \concept{palettes}
