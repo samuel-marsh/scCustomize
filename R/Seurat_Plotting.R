@@ -847,6 +847,7 @@ Meta_Highlight_Plot <- function(
 #'
 #' @import cli
 #' @import patchwork
+#' @import ggrastr
 #' @importFrom Seurat VlnPlot
 #'
 #' @export
