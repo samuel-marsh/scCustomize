@@ -1330,7 +1330,7 @@ Iterate_Plot_Density_Joint <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check gene list is in list form
-  if (class(x = gene_list) != "list") {
+  if (!inherits(x = gene_list, what = "list")) {
     stop("For 'Iterate_Plot_Density_Joint' the 'gene_list' must be of class() 'list', please reformat from current class(): ", '"', class(x = gene_list), '"', ".")
   }
 
