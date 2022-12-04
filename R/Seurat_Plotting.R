@@ -1911,7 +1911,7 @@ DimPlot_All_Samples <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract meta_data_column list of values
-  if (inherits(x = seurat_object@meta.data[, meta_data_column] what = "factor") {
+  if (inherits(x = seurat_object@meta.data[, meta_data_column], what = "factor")) {
     meta_sample_list <- levels(x = seurat_object@meta.data[, meta_data_column])
   } else {
     meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
