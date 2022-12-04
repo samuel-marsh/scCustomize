@@ -511,7 +511,7 @@ Split_FeatureScatter <- function(
   }
 
   # Extract split.by list of values
-  if (class(x = seurat_object@meta.data[, split.by]) == "factor") {
+  if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
     meta_sample_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
   } else {
     meta_sample_list <- as.character(unique(seurat_object@meta.data[, split.by]))
@@ -1417,7 +1417,7 @@ Clustered_DotPlot <- function(
   colors_use_idents <- colors_use_idents[1:group_by_length]
 
   # Modify if class = "colors"
-  if (class(x = colors_use_idents) == "colors") {
+  if (inherits(x = colors_use_idents, what = "colors")) {
     colors_use_idents <- as.vector(colors_use_idents)
   }
 
@@ -1911,7 +1911,7 @@ DimPlot_All_Samples <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract meta_data_column list of values
-  if (class(x = seurat_object@meta.data[, meta_data_column]) == "factor") {
+  if (inherits(x = seurat_object@meta.data[, meta_data_column] what = "factor") {
     meta_sample_list <- levels(x = seurat_object@meta.data[, meta_data_column])
   } else {
     meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
