@@ -1791,7 +1791,7 @@ DimPlot_scCustom <- function(
 
       # Extract cell names per meta data list of values
       # Extract split.by list of values
-      if (class(x = seurat_object@meta.data[, split.by]) == "factor") {
+      if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
         split_by_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
       } else {
         split_by_list <- as.character(unique(seurat_object@meta.data[, split.by]))

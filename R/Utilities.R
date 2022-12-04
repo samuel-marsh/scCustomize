@@ -572,7 +572,7 @@ Replace_Suffix <- function(
   new_suffix
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -670,7 +670,7 @@ Change_Delim_Suffix <- function(
   new_delim
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -744,7 +744,7 @@ Change_Delim_Prefix <- function(
   new_delim
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -816,7 +816,7 @@ Change_Delim_All <- function(
   new_delim
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])

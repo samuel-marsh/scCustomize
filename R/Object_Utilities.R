@@ -621,7 +621,7 @@ Store_Misc_Info_Seurat <- function(
   # }
 
   # Check class of data
-  if (class(x = data_to_store) == "list") {
+  if (inherits(x = data_to_store, what = "list")) {
     if (list_as_list) {
       # Check length of name
       if (length(x = data_name) != 1) {

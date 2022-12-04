@@ -1005,7 +1005,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1140,7 +1140,7 @@ Seq_QC_Plot_Number_Cells <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1275,7 +1275,7 @@ Seq_QC_Plot_Genes <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1400,7 +1400,7 @@ Seq_QC_Plot_UMIs <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1525,7 +1525,7 @@ Seq_QC_Plot_Total_Genes <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1651,7 +1651,7 @@ Seq_QC_Plot_Saturation <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1783,7 +1783,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -1915,7 +1915,7 @@ Seq_QC_Plot_Transcriptome <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -2046,7 +2046,7 @@ Seq_QC_Plot_Genome <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -2177,7 +2177,7 @@ Seq_QC_Plot_Intergenic <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -2308,7 +2308,7 @@ Seq_QC_Plot_Intronic <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -2439,7 +2439,7 @@ Seq_QC_Plot_Exonic <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
@@ -2570,7 +2570,7 @@ Seq_QC_Plot_Antisense <- function(
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
-  if (class(x = metrics_dataframe[[plot_by]]) == "factor") {
+  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
     stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
   } else {
