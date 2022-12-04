@@ -4,9 +4,9 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: An R package for custom visualization & analyses of single cell sequencing}
+\title{scCustomize: Tools for Custom Visualization & Streamlined Analyses of Single Cell Sequencing}
 \description{
-Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
+Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R. scCustomize aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.
 }
 \section{Package options}{
 
@@ -39,7 +39,7 @@ and therefore needs to be set manually.}
 Useful links:
 \itemize{
   \item \url{https://github.com/samuel-marsh/scCustomize}
-  \item \url{https://samuel-marsh.github.io/scCustomize}
+  \item \url{https://samuel-marsh.github.io/scCustomize/}
   \item \doi{10.5281/zenodo.5706431}
   \item Report bugs at \url{https://github.com/samuel-marsh/scCustomize/issues}
 }
