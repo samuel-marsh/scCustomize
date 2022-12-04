@@ -56,7 +56,7 @@ Suggests:
     hdf5r,
     knitr,
     Nebulosa,
-    remotes (>= 2.4.0),
+    remotes (>= 2.4.2),
     rliger,
     rmarkdown,
     tidyselect,
