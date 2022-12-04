@@ -43,7 +43,6 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
           needs: check
-          upload-results: true
 
       - uses: r-lib/actions/check-r-package@v2
         with:
