@@ -23,6 +23,7 @@
 #' value between 0-1.
 #' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
 #' value between 0-1.
+#' @param label logical, whether to label the clusters.  Default is FALSE.
 #' @param label_feature_yaxis logical, whether to place feature labels on secondary y-axis as opposed to
 #' above legend key.  Default is FALSE.  When setting `label_feature_yaxis = TRUE` the number of columns
 #' in plot output will automatically be set to the number of levels in `split.by'`
@@ -66,6 +67,7 @@ FeaturePlot_scCustom <- function(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  label = FALSE,
   label_feature_yaxis = FALSE,
   combine = TRUE,
   ...
@@ -186,12 +188,12 @@ FeaturePlot_scCustom <- function(
 
   # plot no split & combined
   if (is.null(x = split.by) && combine) {
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && !combine) {
-    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, ...))
+    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
 
     plot <- lapply(1:length(x = plot_list), function(i) {
       p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
@@ -210,7 +212,7 @@ FeaturePlot_scCustom <- function(
     max_exp_value <- max(feature_data)
     min_exp_value <- min(feature_data)
 
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
     if (label_feature_yaxis) {
       plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
@@ -233,7 +235,7 @@ FeaturePlot_scCustom <- function(
       max_exp_value <- max(feature_data)
       min_exp_value <- min(feature_data)
 
-      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
       if (label_feature_yaxis) {
         single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
