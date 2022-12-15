@@ -954,6 +954,7 @@ VlnPlot_scCustom <- function(
 #' @param plot_spacing Numerical value specifying the vertical spacing between each plot in the stack.
 #' Default is 0.15 ("cm").  Spacing dependent on unit provided to `spacing_unit`.
 #' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
+#' @param vln_linewidth Adjust the linewidth of violin outline.  Must be numeric.
 #' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with
 #' rendering so many points in vector form.  Alteratively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -996,6 +997,7 @@ Stacked_VlnPlot <- function(
   ggplot_default_colors = FALSE,
   plot_spacing = 0.15,
   spacing_unit = "cm",
+  vln_linewidth = NULL,
   pt.size = NULL,
   raster = NULL,
   add.noise = TRUE,
@@ -1094,6 +1096,15 @@ Stacked_VlnPlot <- function(
   if (plot_legend) {
     plot_return <- plot_return & theme(legend.position = "right")
     plot_return <- plot_return + plot_layout(guides = 'collect')
+  }
+
+  if (!is.null(x = vln_linewidth)) {
+    if (!is.numeric(x = vln_linewidth)) {
+      cli_abort(message = "`vln_linewidth` must be numeric.")
+    }
+    for (j in 1:length(plot_list)) {
+      plot_return[[j]]$layers[[1]]$aes_params$linewidth <- vln_linewidth
+    }
   }
 
   # return plot
