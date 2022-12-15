@@ -17,6 +17,7 @@ Stacked_VlnPlot(
   ggplot_default_colors = FALSE,
   plot_spacing = 0.15,
   spacing_unit = "cm",
+  vln_linewidth = NULL,
   pt.size = NULL,
   raster = NULL,
   add.noise = TRUE,
@@ -52,6 +53,8 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_unit}.}
 
 \item{spacing_unit}{Unit to use in specifying vertical spacing between plots.  Default is "cm".}
+
+\item{vln_linewidth}{Adjust the linewidth of violin outline.  Must be numeric.}
 
 \item{pt.size}{Adjust point size for plotting.  Default for \code{StackedVlnPlot} is 0 to avoid issues with
 rendering so many points in vector form.  Alteratively, see \code{raster} parameter.}
