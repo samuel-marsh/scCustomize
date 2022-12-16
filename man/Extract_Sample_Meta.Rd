@@ -53,3 +53,4 @@ sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", in
 }
 
 }
+\concept{object_util}
