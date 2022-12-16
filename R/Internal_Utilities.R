@@ -72,7 +72,7 @@
 Is_Seurat <- function(
   seurat_object
 ) {
-  if (class(x = seurat_object)[[1]] != "Seurat") {
+  if (!inherits(what = "Seurat", x = seurat_object)) {
     cli_abort(message = "'seurat_object' provided is not an object of class: Seurat.")
   }
 }
