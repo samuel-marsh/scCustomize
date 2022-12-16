@@ -497,6 +497,153 @@ Add_Sample_Meta <- function(
 }
 
 
+#' Extract sample level meta.data
+#'
+#' Returns a by identity meta.data data.frame with one row per sample.  Useful for downstream
+#' quick view of sample breakdown, meta data table creation, and/or use in pseudobulk analysis
+#'
+#' @param object Seurat object
+#' @param sample_name meta.data column to use as sample.  Output data.frame will contain one row per
+#' level or unique value in this variable.
+#' @param variables_include `@meta.data` columns to keep in final data.frame.  All other columns will
+#' be discarded.  Default is NULL.
+#' @param variable_exclude columns to discard in final data.frame.  Many cell level columns are
+#' irrelevant at the sample level (e.g., nFeature_RNA, percent_mito).
+#' \itemize{
+#' \item Default parameter value is `NULL` but internally will set to discard nFeature_ASSAY(s),
+#' nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, log10GenesPerUMI.
+#' \item \emph{If sample level median values are
+#' desired for these type of variables the output of this function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.}
+#' \item Set parameter to `include_all = TRUE` to prevent any columns from being excluded.
+#' }
+#' @param include_all logical, whether or not to include all object meta data columns in output data.frame.
+#' Default is FALSE.
+#'
+#' @return Returns a data.frame with one row per `sample_name`.
+#'
+#' @import cli
+#' @importFrom dplyr any_of grouped_df select slice
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
+#'
+#' # Only return specific columns from meta data
+#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "stim")
+#'
+#' # Return all columns from meta data
+#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", include_all = TRUE)
+#'}
+#'
+
+Extract_Sample_Meta <- function(
+  object,
+  sample_name = "orig.ident",
+  variables_include = NULL,
+  variables_exclude = NULL,
+  include_all = FALSE
+) {
+  # Pull meta data
+  meta_df <- Fetch_Meta(object = object)
+
+  # Check sample name parameter is present
+  if (!sample_name %in% colnames(x = meta_df)) {
+    cli_abort(message = "The `sample_name` parameter: '{sample_name}' was not found in object meta.data")
+  }
+
+  if (!is.null(x = variables_include) && !is.null(x = variables_exclude) && include_all) {
+    cli_abort(message = "If `include_all = TRUE` then `varibles_include` and `variables_exclude` must be NULL.")
+  }
+
+  # Generate nCount and nFeature variable vectors for exclusion
+  if (is.null(x = variables_exclude)) {
+    nFeature_cols <- grep(x = colnames(object@meta.data), pattern = "^nFeature", value = TRUE)
+
+    nCount_cols <- grep(x = colnames(object@meta.data), pattern = "^nCount", value = TRUE)
+
+    combined_exclude <- c(nFeature_cols, nCount_cols, "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
+
+    variables_exclude <- Meta_Present(seurat_object = object, meta_col_names = combined_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+  }
+
+  # Ensure include exclude are unique
+  if (!is.null(x = variables_include) && !is.null(x = variables_exclude)) {
+    variable_intersect <- intersect(x = variables_include, y = variables_exclude)
+    if (length(x = variable_intersect > 0)) {
+      cli_abort(message = c("Following varible is present in both `variable_include` and `variable_exclude` parameters.",
+                            "i" = "{variable_intersect}")
+      )
+    }
+  }
+
+  # Check variables include/exclude are present
+  if (!is.null(x = variables_include)) {
+    include_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_include, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  } else {
+    include_meta_list <- NULL
+  }
+
+  if (!is.null(x = variables_exclude)) {
+    exclude_meta_list <<- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  } else {
+    exclude_meta_list <- NULL
+  }
+
+  all_not_found_features <- c(include_meta_list[[2]], exclude_meta_list[[2]])
+
+  all_found_features <- c(include_meta_list[[1]], exclude_meta_list[[1]])
+
+  # Stop if no features found
+  if (length(x = all_found_features) < 1) {
+    cli_abort(message = c("No features were found.",
+                          "*" = "The following are not present in object meta data:",
+                          "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
+  # Return message of features not found
+  if (length(x = all_not_found_features) > 0) {
+    op <- options(warn = 1)
+    on.exit(options(op))
+    cli_warn(message = c("The following meta data variables were omitted as they were not found:",
+                         "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
+  # Create by sample data.frame
+  sample_meta_df <- meta_df %>%
+    grouped_df(vars = sample_name) %>%
+    slice(1)
+
+  # remove rownames
+  rownames(sample_meta_df) <- NULL
+
+  # Filter data.frame
+  if (include_all) {
+    sample_meta_df_filtered <- sample_meta_df
+  } else {
+    if (length(x = include_meta_list[[1]]) > 0) {
+      sample_meta_df_filtered <- sample_meta_df %>%
+        select(any_of(c(include_meta_list[[1]], sample_name)))
+      if (length(x = exclude_meta_list[[1]]) > 0) {
+        sample_meta_df_filtered <- sample_meta_df_filtered %>%
+          select(-any_of(exclude_meta_list[[1]]))
+      }
+    } else {
+      if (length(x = exclude_meta_list[[1]]) > 0) {
+        sample_meta_df_filtered <- sample_meta_df %>%
+          select(-any_of(exclude_meta_list[[1]]))
+      }
+    }
+  }
+
+  # return data
+  return(sample_meta_df_filtered)
+}
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
