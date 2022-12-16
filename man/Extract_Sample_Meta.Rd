@@ -46,7 +46,7 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
 
 # Only return specific columns from meta data
-sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "stim")
+sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "batch")
 
 # Return all columns from meta data
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", include_all = TRUE)
