@@ -526,6 +526,8 @@ Add_Sample_Meta <- function(
 #'
 #' @export
 #'
+#' @concept object_util
+#'
 #' @examples
 #' \dontrun{
 #' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
