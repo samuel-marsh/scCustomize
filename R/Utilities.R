@@ -366,9 +366,11 @@ Meta_Numeric <- function(
 Fetch_Meta <- function(
   object
 ) {
-  if (Is_Seurat(seurat_object = object)) {
-    object_meta <- slot(object = object, name = "meta.data")
-  }
+  # Check Seurat
+  Is_Seurat(seurat_object = object)
+
+  # Pull meta data
+  object_meta <- slot(object = object, name = "meta.data")
 
   return(object_meta)
 }
