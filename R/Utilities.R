@@ -339,6 +339,44 @@ Meta_Numeric <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### DATA ACCESS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Get meta data from object
+#'
+#' Quick function to properly pull meta.data from objects.
+#'
+#' @param object list of matrices to merge.
+#'
+#' @importFrom methods slot
+#'
+#' @return A data.frame
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' data_list <- Read10X_GEO(...)
+#' merged <- Merge_Sparse_Data_All(matrix_list = data_list, add_cell_ids = names(data_list),
+#' prefix = TRUE, cell_id_delimiter = "_")
+#' }
+#'
+
+Fetch_Meta <- function(
+  object
+) {
+  if (Is_Seurat(seurat_object = object)) {
+    object_meta <- slot(object = object, name = "meta.data")
+  }
+
+  return(object_meta)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### MATRIX HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
