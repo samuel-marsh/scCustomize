@@ -507,7 +507,7 @@ Add_Sample_Meta <- function(
 #' level or unique value in this variable.
 #' @param variables_include `@meta.data` columns to keep in final data.frame.  All other columns will
 #' be discarded.  Default is NULL.
-#' @param variable_exclude columns to discard in final data.frame.  Many cell level columns are
+#' @param variables_exclude columns to discard in final data.frame.  Many cell level columns are
 #' irrelevant at the sample level (e.g., nFeature_RNA, percent_mito).
 #' \itemize{
 #' \item Default parameter value is `NULL` but internally will set to discard nFeature_ASSAY(s),
