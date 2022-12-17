@@ -28,7 +28,7 @@ Default is FALSE.}
 irrelevant at the sample level (e.g., nFeature_RNA, percent_mito).
 \itemize{
 \item Default parameter value is \code{NULL} but internally will set to discard nFeature_ASSAY(s),
-nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, log10GenesPerUMI.
+nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, and log10GenesPerUMI.
 \item If sample level median values are desired for these type of variables the output of this
 function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.
 \item Set parameter to \code{include_all = TRUE} to prevent any columns from being excluded.
