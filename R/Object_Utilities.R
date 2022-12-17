@@ -512,8 +512,8 @@ Add_Sample_Meta <- function(
 #' \itemize{
 #' \item Default parameter value is `NULL` but internally will set to discard nFeature_ASSAY(s),
 #' nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, log10GenesPerUMI.
-#' \item \emph{If sample level median values are
-#' desired for these type of variables the output of this function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.}
+#' \item If sample level median values are desired for these type of variables the output of this
+#' function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.
 #' \item Set parameter to `include_all = TRUE` to prevent any columns from being excluded.
 #' }
 #' @param include_all logical, whether or not to include all object meta data columns in output data.frame.
@@ -532,7 +532,7 @@ Add_Sample_Meta <- function(
 #' \dontrun{
 #' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
 #'
-#' # Only return specific columns from meta data
+#' # Only return specific columns from meta data (orig.ident and batch)
 #' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "batch")
 #'
 #' # Return all columns from meta data
