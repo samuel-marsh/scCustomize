@@ -29,8 +29,8 @@ irrelevant at the sample level (e.g., nFeature_RNA, percent_mito).
 \itemize{
 \item Default parameter value is \code{NULL} but internally will set to discard nFeature_ASSAY(s),
 nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, log10GenesPerUMI.
-\item \emph{If sample level median values are
-desired for these type of variables the output of this function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.}
+\item If sample level median values are desired for these type of variables the output of this
+function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.
 \item Set parameter to \code{include_all = TRUE} to prevent any columns from being excluded.
 }}
 }
@@ -45,7 +45,7 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
 \dontrun{
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
 
-# Only return specific columns from meta data
+# Only return specific columns from meta data (orig.ident and batch)
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "batch")
 
 # Return all columns from meta data
