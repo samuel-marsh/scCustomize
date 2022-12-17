@@ -588,7 +588,7 @@ Extract_Sample_Meta <- function(
   }
 
   if (!is.null(x = variables_exclude)) {
-    exclude_meta_list <<- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+    exclude_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
   } else {
     exclude_meta_list <- NULL
   }
