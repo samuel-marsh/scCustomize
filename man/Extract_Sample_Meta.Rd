@@ -21,10 +21,7 @@ level or unique value in this variable.}
 \item{variables_include}{\verb{@meta.data} columns to keep in final data.frame.  All other columns will
 be discarded.  Default is NULL.}
 
-\item{include_all}{logical, whether or not to include all object meta data columns in output data.frame.
-Default is FALSE.}
-
-\item{variable_exclude}{columns to discard in final data.frame.  Many cell level columns are
+\item{variables_exclude}{columns to discard in final data.frame.  Many cell level columns are
 irrelevant at the sample level (e.g., nFeature_RNA, percent_mito).
 \itemize{
 \item Default parameter value is \code{NULL} but internally will set to discard nFeature_ASSAY(s),
@@ -33,6 +30,9 @@ nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, and log10GenesPe
 function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.
 \item Set parameter to \code{include_all = TRUE} to prevent any columns from being excluded.
 }}
+
+\item{include_all}{logical, whether or not to include all object meta data columns in output data.frame.
+Default is FALSE.}
 }
 \value{
 Returns a data.frame with one row per \code{sample_name}.
@@ -46,7 +46,8 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
 
 # Only return specific columns from meta data (orig.ident and batch)
-sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "batch")
+sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident",
+variables_include = "batch")
 
 # Return all columns from meta data
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", include_all = TRUE)
