@@ -533,7 +533,8 @@ Add_Sample_Meta <- function(
 #' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
 #'
 #' # Only return specific columns from meta data (orig.ident and batch)
-#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", variables_include = "batch")
+#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident",
+#' variables_include = "batch")
 #'
 #' # Return all columns from meta data
 #' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", include_all = TRUE)
