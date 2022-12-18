@@ -5,7 +5,8 @@
 - Added `label` parameter to `FeaturePlot_scCustom` to avoid error collision ([#80](https://github.com/samuel-marsh/scCustomize/issues/80)).  
 - Added `vln_linewidth` parameter to control violin outline line width ([#32](https://github.com/samuel-marsh/scCustomize/issues/32)).  
 - Added quick meta data accessor function `Fetch_Meta` for returning data.frame of object meta data.  
-- Added `Extract_Sample_Meta` to extract sample-level meta data from object.
+- Added `Extract_Sample_Meta` to extract sample-level meta data from object.  
+- Added `Cell_Highlight_Plot` for highlight plots of custom cells not in active ident or meta data.
 
 ## Changed  
 - Updated Imports/Suggests for CRAN compatibility. 
