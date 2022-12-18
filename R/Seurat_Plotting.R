@@ -879,7 +879,7 @@ Cell_Highlight_Plot <- function(
   ...
 ) {
   # Check Seurat
-  scCustomize:::Is_Seurat(seurat_object = seurat_object)
+  Is_Seurat(seurat_object = seurat_object)
 
   if (!inherits(x = cells_highlight, what = "list")) {
     cli_abort(message = "`cells_highlight` must be a `list()`.")
@@ -910,7 +910,7 @@ Cell_Highlight_Plot <- function(
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- scCustomize:::AutoPointSize_scCustom(data = sum(lengths(cells_highlight)), raster = raster)
+    pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_highlight)), raster = raster)
   }
 
   # Check right number of colors provided
