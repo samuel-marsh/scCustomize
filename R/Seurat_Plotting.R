@@ -821,6 +821,137 @@ Meta_Highlight_Plot <- function(
 }
 
 
+#' Meta Highlight Plot
+#'
+#' Create Plot with meta data variable of interest highlighted
+#'
+#' @param seurat_object Seurat object name.
+#' @param cells_highlight Cell names to highlight in named list.
+#' @param highlight_color Color to highlight cells.
+#' @param background_color non-highlighted cell colors (default is "lightgray")..
+#' @param pt.size point size for both highlighted cluster and background.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
+#' @param label Whether to label the highlighted meta data variable(s).  Default is FALSE.
+#' @param split.by Variable in `@meta.data` to split the plot by.
+#' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+#' individual plots in layout.  Default is FALSE.
+#' @param ggplot_default_colors logical.  If `highlight_color = NULL`, Whether or not to return plot
+#' using default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#'
+#' @export
+#'
+#' @concept seurat_plotting
+#'
+#' @examples
+#' \dontrun{
+#' MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+#' GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
+#'
+#' cells <- list("MS4A1" = MS4A1,
+#'               "GZMB" = GZMB)
+#'
+#' Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+#' }
+#'
+
+Cell_Highlight_Plot <- function(
+  seurat_object,
+  cells_highlight,
+  highlight_color = NULL,
+  background_color = "lightgray",
+  pt.size = NULL,
+  raster = NULL,
+  raster.dpi = c(512, 512),
+  label = FALSE,
+  split.by = NULL,
+  split_seurat = FALSE,
+  ggplot_default_colors = FALSE,
+  ...
+) {
+  # Check Seurat
+  scCustomize:::Is_Seurat(seurat_object = seurat_object)
+
+  if (!inherits(x = cells_highlight, what = "list")) {
+    cli_abort(message = "`cells_highlight` must be a `list()`.")
+  }
+
+  if (is.null(x = names(x = cells_highlight))) {
+    cli_abort(message = "Entries in `cells_highlight` list must be named.")
+  }
+
+  # Check duplicates
+  if (any(duplicated(x = unlist(x = cells_highlight)))) {
+    cli_abort(message = c("The list of `cells_highlight` contains duplicate cell names.",
+                          "i" = "Ensure all cell names are unique before plotting."
+                          )
+              )
+  }
+
+  # Check all cells are present in object
+  if (!all(unlist(x = cells_highlight) %in% colnames(x = seurat_object))) {
+    cli_abort(message = c("Some of cells in `cells_highlight` are not present in object.",
+                          "i" = "Ensure all cells are present in object before plotting."
+                          )
+              )
+  }
+
+  # Add raster check for scCustomize
+  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+
+  # set point size
+  if (is.null(x = pt.size)) {
+    pt.size <- scCustomize:::AutoPointSize_scCustom(data = sum(lengths(cells_highlight)), raster = raster)
+  }
+
+  # Check right number of colors provided
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = highlight_color) && ggplot_default_colors) {
+    cli_abort(message = "Cannot provide both `highlight_color` and specify `ggplot_default_colors = TRUE`.")
+  }
+
+  if (!is.null(x = highlight_color)) {
+    if (length(x = highlight_color) != length(x = cells_highlight)) {
+      cli_abort(message = c("Incorrect number of highlight colors provided. Number of colors and groups must be equal.",
+                            "i" = "`cells_highlight` contains: {length(x = cells_highlight)} groups but `highlight_color` contains: {length(x = highlight_color)} colors."
+                            )
+                )
+    }
+  } else {
+    highlight_color <- scCustomize_Palette(num_groups = length(x = cells_highlight), ggplot_default_colors = ggplot_default_colors)
+  }
+
+  # plot
+  plot <- DimPlot_scCustom(seurat_object = seurat_object,
+                           cells.highlight = cells_highlight,
+                           cols.highlight = highlight_color,
+                           colors_use = background_color,
+                           sizes.highlight = pt.size,
+                           pt.size = pt.size,
+                           order = TRUE,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           split.by = split.by,
+                           split_seurat = split_seurat,
+                           label = label,
+                           ...)
+
+  # Edit plot legend
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_highlight), values = c(highlight_color, background_color), na.value = background_color))
+
+  return(plot)
+}
+
+
 #' VlnPlot with modified default settings
 #'
 #' Creates DimPlot with some of the settings modified from their Seurat defaults (colors_use, shuffle, label).
