@@ -31,6 +31,7 @@ Imports:
     grDevices,
     grid,
     janitor,
+    lifecycle,
     magrittr,
     Matrix (>= 1.5.0),
     methods,
