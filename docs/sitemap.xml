@@ -136,6 +136,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/CellBender_Feature_Diff.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Cell_Highlight_Plot.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Change_Delim_All.html</loc>
   </url>
   <url>
@@ -193,6 +196,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/DotPlot_scCustom.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Extract_Sample_Meta.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Extract_Top_Markers.html</loc>
   </url>
   <url>
@@ -200,6 +206,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/FeaturePlot_scCustom.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Fetch_Meta.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Gene_Present.html</loc>

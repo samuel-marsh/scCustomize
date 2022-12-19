@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2.9016</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2.9037</span>
       </span>
     </div>
 
@@ -120,9 +120,12 @@
 <span>  print_exp_quantiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  colors_use_idents <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  flip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  row_km_repeats <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  column_km_repeats <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  feature_km_repeats <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  ident_km_repeats <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  row_km_repeats <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  column_km_repeats <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  row_label_size <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plot_km_elbow <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -183,22 +186,35 @@ will use "varibow" with shuffle = TRUE both from <code>DiscretePalette_scCustomi
 If set <code>FALSE</code> rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.</p></dd>
 
 
+<dt>flip</dt>
+<dd><p>logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
+columns = idents.</p></dd>
+
+
 <dt>k</dt>
-<dd><p>Value to use for k-means clustering on rows.  Sets (km) parameter in <code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html" class="external-link">ComplexHeatmap::Heatmap()</a></code>.
+<dd><p>Value to use for k-means clustering on features  Sets (km) parameter in <code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html" class="external-link">ComplexHeatmap::Heatmap()</a></code>.
 From <code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html" class="external-link">ComplexHeatmap::Heatmap()</a></code>: Apply k-means clustering on rows. If the value is larger than 1, the
 heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
 clustering is still applied with parameters above.</p></dd>
 
 
+<dt>feature_km_repeats</dt>
+<dd><p>Number of k-means runs to get a consensus k-means clustering for features.
+Note if <code>feature_km_repeats</code> is set to value greater than one, the final number of groups might be
+smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.</p></dd>
+
+
+<dt>ident_km_repeats</dt>
+<dd><p>Number of k-means runs to get a consensus k-means clustering. Similar to
+<code>feature_km_repeats</code>.  Default is 1000.</p></dd>
+
+
 <dt>row_km_repeats</dt>
-<dd><p>Number of k-means runs to get a consensus k-means clustering. Note if row_km_repeats
-is set to more than one, the final number of groups might be smaller than row_km, but this might
-mean the original row_km is not a good choice.  Default is 1000.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated.  See <code>feature_km_repeats</code></p></dd>
 
 
 <dt>column_km_repeats</dt>
-<dd><p>Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
-Default is 100.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated.  See <code>ident_km_repeats</code></p></dd>
 
 
 <dt>row_label_size</dt>
