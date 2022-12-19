@@ -557,7 +557,7 @@ This is simple function to add functionality that `Seurat::FeatureScatter()` lac
 Split_FeatureScatter(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, split.by = "Transcription_Method", group.by = "ident", num_columns = 2, pt.size = 1)
 ```
 
-## Plot Meta Data in 2D Space (PCA/tSNE/UMAP)
+## DimPlots: Plot Meta Data in 2D Space (PCA/tSNE/UMAP)
 scCustomize has a few functions that improve on the default plotting options available in Seurat
 
 ### DimPlots
