@@ -1721,11 +1721,11 @@ Clustered_DotPlot <- function(
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
-                                                  row_km = k,
-                                                  row_km_repeats = row_km_repeats,
+                                                  column_km = k,
+                                                  row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
-                                                  column_km_repeats = column_km_repeats,
+                                                  column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate)
     } else {
@@ -1736,10 +1736,10 @@ Clustered_DotPlot <- function(
                                                   layer_fun = layer_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
                                                   row_km = k,
-                                                  row_km_repeats = row_km_repeats,
+                                                  row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
-                                                  column_km_repeats = column_km_repeats,
+                                                  column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate)
     }
@@ -1751,11 +1751,11 @@ Clustered_DotPlot <- function(
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
-                                                  row_km = k,
-                                                  row_km_repeats = row_km_repeats,
+                                                  column_km = k,
+                                                  row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
-                                                  column_km_repeats = column_km_repeats,
+                                                  column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate)
     } else {
@@ -1766,10 +1766,10 @@ Clustered_DotPlot <- function(
                                                   cell_fun = cell_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
                                                   row_km = k,
-                                                  row_km_repeats = row_km_repeats,
+                                                  row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
-                                                  column_km_repeats = column_km_repeats,
+                                                  column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate)
     }
