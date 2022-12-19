@@ -111,12 +111,18 @@ groups plotted is greater than 36.  Default = 123.}
 }
 \value{
 A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
-
-\code{lifecycle::badge("deprecated")}
 }
 \description{
 Clustered DotPlots using ComplexHeatmap
 }
+\section{test}{
+
+\code{lifecycle::badge("deprecated")}
+\itemize{
+\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \code{lifecycle::badge("experimental")}
+}
+}
+
 \examples{
 \dontrun{
 Clustered_DotPlot(seurat_object = object, features = gene_list)
