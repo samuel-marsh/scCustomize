@@ -1404,6 +1404,8 @@ DotPlot_scCustom <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
+#' `lifecycle::badge("deprecated")`
+#'
 #' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
