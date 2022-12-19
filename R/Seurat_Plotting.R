@@ -1369,6 +1369,8 @@ DotPlot_scCustom <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
+#' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
+#' columns = idents.
 #' @param k Value to use for k-means clustering on rows.  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: Apply k-means clustering on rows. If the value is larger than 1, the
 #' heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
@@ -1435,6 +1437,7 @@ Clustered_DotPlot <- function(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  flip = FALSE,
   k = 1,
   row_km_repeats = 1000,
   column_km_repeats = 1000,
@@ -1573,12 +1576,21 @@ Clustered_DotPlot <- function(
   identity_colors_list <- list(Identity = identity_colors)
 
   # Create identity annotation
-  column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
-                                                 col =  identity_colors_list,
-                                                 na_col = "grey",
-                                                 name = "Identity",
-                                                 show_legend = FALSE
-  )
+  if (flip) {
+    column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
+                                               col =  identity_colors_list,
+                                               na_col = "grey",
+                                               name = "Identity",
+                                               show_legend = FALSE
+    )
+  } else {
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
+                                                   col =  identity_colors_list,
+                                                   na_col = "grey",
+                                                   name = "Identity",
+                                                   show_legend = FALSE
+    )
+  }
 
   # Set middle of color scale if not specified
   if (is.null(x = exp_color_middle)) {
@@ -1615,19 +1627,37 @@ Clustered_DotPlot <- function(
   }
 
   # prep heatmap
-  if (raster) {
-    layer_fun = function(j, i, x, y, w, h, fill) {
-      grid.rect(x = x, y = y, width = w, height = h,
-                      gp = gpar(col = NA, fill = NA))
-      grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
-                        gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+  if (flip) {
+    if (raster) {
+      layer_fun = function(i, j, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+      }
+    } else {
+      cell_fun = function(i, j, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+      }
     }
   } else {
-    cell_fun = function(j, i, x, y, w, h, fill) {
-      grid.rect(x = x, y = y, width = w, height = h,
-                      gp = gpar(col = NA, fill = NA))
-      grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
-                        gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+    if (raster) {
+      layer_fun = function(j, i, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+      }
+    } else {
+      cell_fun = function(j, i, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+      }
     }
   }
 
@@ -1637,13 +1667,13 @@ Clustered_DotPlot <- function(
     ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.5) * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")))
+                                                              gp = gpar(fill = "black")))
     )
   )
 
@@ -1659,33 +1689,65 @@ Clustered_DotPlot <- function(
   # Create Plot
   set.seed(seed = seed)
   if (raster) {
-    cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                heatmap_legend_param=list(title="Expression"),
-                                                col=col_fun,
-                                                rect_gp = gpar(type = "none"),
-                                                layer_fun = layer_fun,
-                                                row_names_gp = gpar(fontsize = row_label_size),
-                                                row_km = k,
-                                                row_km_repeats = row_km_repeats,
-                                                border = "black",
-                                                top_annotation = column_ha,
-                                                column_km_repeats = column_km_repeats,
-                                                show_parent_dend_line = show_parent_dend_line,
-                                                column_names_rot = x_lab_rotate)
+    if (flip) {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  layer_fun = layer_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_km = k,
+                                                  row_km_repeats = row_km_repeats,
+                                                  border = "black",
+                                                  left_annotation = column_ha,
+                                                  column_km_repeats = column_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    } else {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  layer_fun = layer_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_km = k,
+                                                  row_km_repeats = row_km_repeats,
+                                                  border = "black",
+                                                  top_annotation = column_ha,
+                                                  column_km_repeats = column_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    }
   } else {
-    cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                heatmap_legend_param=list(title="Expression"),
-                                                col=col_fun,
-                                                rect_gp = gpar(type = "none"),
-                                                cell_fun = cell_fun,
-                                                row_names_gp = gpar(fontsize = row_label_size),
-                                                row_km = k,
-                                                row_km_repeats = row_km_repeats,
-                                                border = "black",
-                                                top_annotation = column_ha,
-                                                column_km_repeats = column_km_repeats,
-                                                show_parent_dend_line = show_parent_dend_line,
-                                                column_names_rot = x_lab_rotate)
+    if (flip) {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  cell_fun = cell_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_km = k,
+                                                  row_km_repeats = row_km_repeats,
+                                                  border = "black",
+                                                  left_annotation = column_ha,
+                                                  column_km_repeats = column_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    } else {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  cell_fun = cell_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_km = k,
+                                                  row_km_repeats = row_km_repeats,
+                                                  border = "black",
+                                                  top_annotation = column_ha,
+                                                  column_km_repeats = column_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    }
   }
 
   # Add pt.size legend & return plots
