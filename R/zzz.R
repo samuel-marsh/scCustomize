@@ -47,9 +47,9 @@ scCustomize_default_options <- list(
 
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(cli::format_message(c("scCustomize v{packageVersion(pkg = 'scCustomize')}",
-                        "If you find the scCustomize useful please cite.",
-                        "See 'samuel-marsh.github.io/scCustomize/articles/FAQ.html' for citation info.")))
+  packageStartupMessage("scCustomize v", packageVersion(pkg = "scCustomize"), "\n",
+                        "If you find the scCustomize useful please cite. \n",
+                        "See 'samuel-marsh.github.io/scCustomize/articles/FAQ.html' for citation info.")
 }
 
 .onLoad <- function(libname, pkgname) {
