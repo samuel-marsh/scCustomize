@@ -203,7 +203,7 @@ Percent_Expressing <- function(
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 #' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo" in addition to variables supplied to `median_var`.
 #' @param median_var Column(s) in `@meta.data` to calculate medians for in addition to defaults.
-#' Must be of `class()`` integer or numeric.
+#' Must be of `class()` integer or numeric.
 #'
 #' @return A data frame.
 #'
