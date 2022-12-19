@@ -75,9 +75,9 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{ident_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar to
 \code{feature_km_repeats}.  Default is 1000.}
 
-\item{row_km_repeats}{soft-deprecated.  See \code{feature_km_repeats}}
+\item{row_km_repeats}{\code{lifecycle::badge("deprecated")} soft-deprecated.  See \code{feature_km_repeats}}
 
-\item{column_km_repeats}{soft-deprecated.  See \code{ident_km_repeats}}
+\item{column_km_repeats}{\code{lifecycle::badge("deprecated")} soft-deprecated.  See \code{ident_km_repeats}}
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
