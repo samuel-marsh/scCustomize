@@ -1654,14 +1654,14 @@ Clustered_DotPlot <- function(
   # prep heatmap
   if (flip) {
     if (raster) {
-      layer_fun = function(i, j, x, y, w, h, fill) {
+      layer_fun_flip = function(i, j, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
                   gp = gpar(col = NA, fill = NA))
         grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
                     gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
       }
     } else {
-      cell_fun = function(i, j, x, y, w, h, fill) {
+      cell_fun_flip = function(i, j, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
                   gp = gpar(col = NA, fill = NA))
         grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
@@ -1749,7 +1749,7 @@ Clustered_DotPlot <- function(
                                                   heatmap_legend_param=list(title="Expression"),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
-                                                  cell_fun = cell_fun,
+                                                  cell_fun = cell_fun_flip,
                                                   row_names_gp = gpar(fontsize = row_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
