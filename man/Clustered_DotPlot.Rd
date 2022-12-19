@@ -14,6 +14,7 @@ Clustered_DotPlot(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  flip = FALSE,
   k = 1,
   row_km_repeats = 1000,
   column_km_repeats = 1000,
@@ -56,6 +57,9 @@ will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomi
 
 \item{x_lab_rotate}{How to rotate column labels.  By default set to \code{TRUE} which rotates labels 45 degrees.
 If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.}
+
+\item{flip}{logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
+columns = idents.}
 
 \item{k}{Value to use for k-means clustering on rows.  Sets (km) parameter in \code{ComplexHeatmap::Heatmap()}.
 From \code{ComplexHeatmap::Heatmap()}: Apply k-means clustering on rows. If the value is larger than 1, the
