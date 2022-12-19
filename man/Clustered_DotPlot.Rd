@@ -111,6 +111,8 @@ groups plotted is greater than 36.  Default = 123.}
 }
 \value{
 A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
+
+\code{lifecycle::badge("deprecated")}
 }
 \description{
 Clustered DotPlots using ComplexHeatmap
