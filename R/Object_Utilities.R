@@ -418,7 +418,7 @@ Add_Sample_Meta <- function(
   }
 
   # Check meta data structure
-  if (!class(meta_data)[1] %in% c("tbl_df", "data.frame")) {
+  if (!inherits(x = meta_data, what = "data.frame")) {
     cli_abort(message = c("`meta_data` not in correct format",
                           "*" = "`meta_data` must be a data.frame or tibble.",
                           "i" = "Change format and re-run function.")

@@ -52,7 +52,7 @@ Gene_Present <- function(
   # Check object type
   # Seurat
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
-  if ((class(x = data)[[1]] == "Seurat")) {
+  if (inherits(x = data, what = "Seurat")) {
     # set assay (if null set to active assay)
     assay <- seurat_assay %||% DefaultAssay(object = data)
 
