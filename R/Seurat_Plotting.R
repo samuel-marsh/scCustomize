@@ -1378,10 +1378,10 @@ DotPlot_scCustom <- function(
 #' @param feature_km_repeats Number of k-means runs to get a consensus k-means clustering for features.
 #' Note if `feature_km_repeats` is set to value greater than one, the final number of groups might be
 #' smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.
-#' @param row_km_repeats `lifecycle::badge("deprecated")` soft-deprecated.  See `feature_km_repeats`
+#' @param row_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `feature_km_repeats`
 #' @param ident_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar to
 #' `feature_km_repeats`.  Default is 1000.
-#' @param column_km_repeats `lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
+#' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
@@ -1403,10 +1403,6 @@ DotPlot_scCustom <- function(
 #' @param seed Sets seed for reproducible plotting (ComplexHeatmap plot).
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
-#'
-#' @section test:
-#' `lifecycle::badge("deprecated")` `lifecycle::badge("deprecated")`
-#' * `r lifecycle::badge("experimental")` `lifecycle::badge("experimental")`
 #'
 #' @import cli
 #' @import ggplot2

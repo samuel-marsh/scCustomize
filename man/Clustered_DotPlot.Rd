@@ -75,9 +75,9 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{ident_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar to
 \code{feature_km_repeats}.  Default is 1000.}
 
-\item{row_km_repeats}{\code{lifecycle::badge("deprecated")} soft-deprecated.  See \code{feature_km_repeats}}
+\item{row_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{feature_km_repeats}}
 
-\item{column_km_repeats}{\code{lifecycle::badge("deprecated")} soft-deprecated.  See \code{ident_km_repeats}}
+\item{column_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{ident_km_repeats}}
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
@@ -115,14 +115,6 @@ A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and
 \description{
 Clustered DotPlots using ComplexHeatmap
 }
-\section{test}{
-
-\code{lifecycle::badge("deprecated")} \code{lifecycle::badge("deprecated")}
-\itemize{
-\item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \code{lifecycle::badge("experimental")}
-}
-}
-
 \examples{
 \dontrun{
 Clustered_DotPlot(seurat_object = object, features = gene_list)
