@@ -73,7 +73,7 @@ GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
 We'll add some random meta data variables to pbmc data form use in this vignette
 ```{r}
 pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
-pbmc$treatment <- sample(c("Treatment1", "Treatment", "Treatment3", "Treatment4"), size = ncol(pbmc), replace = TRUE)
+pbmc$treatment <- sample(c("Treatment1", "Treatment2", "Treatment3", "Treatment4"), size = ncol(pbmc), replace = TRUE)
 ```
 
 
