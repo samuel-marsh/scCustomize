@@ -23,6 +23,8 @@
 #'    and therefore needs to be set manually.}
 #' }
 #'
+#' @importFrom lifecycle deprecated
+#'
 #' @keywords internal
 #' @docType package
 #' @rdname scCustomize-package
