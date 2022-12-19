@@ -157,11 +157,15 @@ pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 
 ### Extract all meta data (cell-level) from object  
 `Fetch_Meta()` functions as simple getter function to obtain meta data from object and return data.frame.  
-```{r}
+```{r eval = FALSE}
 meta_data <- Fetch_Meta(object = pbmc)
+
+head(meta_data, 10)
 ```
 
 ```{r echo=FALSE}
+meta_data <- Fetch_Meta(object = pbmc)
+
 head(meta_data, 10) %>%
   kableExtra::kbl(row.names = TRUE) %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
