@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2.9037</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -423,7 +423,9 @@ NA
 </h4>
 <p><code><a href="../reference/Fetch_Meta.html">Fetch_Meta()</a></code> functions as simple getter function to obtain meta data from object and return data.frame.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">meta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Fetch_Meta.html">Fetch_Meta</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">meta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Fetch_Meta.html">Fetch_Meta</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">meta_data</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -465,10 +467,10 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample1
+sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -488,7 +490,7 @@ pbmc3k
 B
 </td>
 <td style="text-align:left;">
-sample3
+sample5
 </td>
 <td style="text-align:left;">
 Batch2
@@ -534,10 +536,10 @@ pbmc3k
 CD14+ Mono
 </td>
 <td style="text-align:left;">
-sample2
+sample6
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -557,10 +559,10 @@ pbmc3k
 NK
 </td>
 <td style="text-align:left;">
-sample2
+sample5
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -580,10 +582,10 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample6
+sample5
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -603,7 +605,7 @@ pbmc3k
 CD8 T
 </td>
 <td style="text-align:left;">
-sample3
+sample5
 </td>
 <td style="text-align:left;">
 Batch1
@@ -626,7 +628,7 @@ pbmc3k
 CD8 T
 </td>
 <td style="text-align:left;">
-sample1
+sample4
 </td>
 <td style="text-align:left;">
 Batch2
@@ -672,10 +674,10 @@ pbmc3k
 FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
-sample5
+sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 </tbody>
@@ -713,13 +715,13 @@ batch
 pbmc3k
 </td>
 <td style="text-align:left;">
-Memory CD4 T
+FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
 sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -747,7 +749,7 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-B
+Naive CD4 T
 </td>
 <td style="text-align:left;">
 sample3
@@ -764,13 +766,13 @@ Batch2
 pbmc3k
 </td>
 <td style="text-align:left;">
-NA
+CD8 T
 </td>
 <td style="text-align:left;">
 sample4
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -781,7 +783,7 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-FCGR3A+ Mono
+B
 </td>
 <td style="text-align:left;">
 sample5
@@ -804,7 +806,7 @@ Memory CD4 T
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 </tbody>
@@ -836,7 +838,7 @@ batch
 sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -869,7 +871,7 @@ Batch2
 sample4
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -891,7 +893,7 @@ Batch2
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 </tbody>
@@ -934,13 +936,13 @@ Median_nFeature_RNA
 sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 <td style="text-align:right;">
-2229.5
+2214.5
 </td>
 <td style="text-align:right;">
-822.5
+823
 </td>
 </tr>
 <tr>
@@ -954,10 +956,10 @@ sample2
 Batch1
 </td>
 <td style="text-align:right;">
-2173.0
+2206.0
 </td>
 <td style="text-align:right;">
-816.5
+816
 </td>
 </tr>
 <tr>
@@ -971,10 +973,10 @@ sample3
 Batch2
 </td>
 <td style="text-align:right;">
-2224.0
+2176.0
 </td>
 <td style="text-align:right;">
-816.0
+808
 </td>
 </tr>
 <tr>
@@ -985,13 +987,13 @@ Batch2
 sample4
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2206.0
+2157.0
 </td>
 <td style="text-align:right;">
-805.0
+796
 </td>
 </tr>
 <tr>
@@ -1005,10 +1007,10 @@ sample5
 Batch2
 </td>
 <td style="text-align:right;">
-2143.0
+2227.0
 </td>
 <td style="text-align:right;">
-808.0
+823
 </td>
 </tr>
 <tr>
@@ -1019,13 +1021,13 @@ Batch2
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 <td style="text-align:right;">
-2243.0
+2244.5
 </td>
 <td style="text-align:right;">
-821.0
+835
 </td>
 </tr>
 <tr>
@@ -1042,7 +1044,7 @@ NA
 2196.0
 </td>
 <td style="text-align:right;">
-816.0
+816
 </td>
 </tr>
 </tbody>
@@ -1300,7 +1302,7 @@ To make it easier to remember function call in this situation scCustomize contai
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
