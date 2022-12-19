@@ -57,6 +57,12 @@ pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(pbmc)
 ```
 
+We'll add some random meta data variables to pbmc data form use in this vignette
+```{r}
+pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
+pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+```
+
 ## Add Mitochondrial & Ribosomal Percentages
 As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
@@ -134,6 +140,94 @@ scCustomize also contains identical function for use with LIGER objects.  `Add_M
 ```{r eval=FALSE}
 liger_obj <- Add_Mito_Ribo_Seurat(seurat_object = liger_obj, species = "human")
 ```
+
+
+## Meta Data  
+scCustomize contains a set of functions to add in use of meta data both within and outside of objects.  
+
+```{r, include = FALSE}
+pbmc <- pbmc3k.SeuratData::pbmc3k
+pbmc <- UpdateSeuratObject(object = pbmc)
+
+pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
+pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+```
+
+
+
+### Extract all meta data (cell-level) from object  
+`Fetch_Meta()` functions as simple getter function to obtain meta data from object and return data.frame.  
+```{r}
+meta_data <- Fetch_Meta(object = pbmc)
+```
+
+```{r echo=FALSE}
+head(meta_data, 10) %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+### Extract sample-level meta data from object  
+While cell-level meta data is helpful in some situations often all that is required is sample-level meta data.  This can easily be extracted and filtered using `Extract_Sample_Meta()`.  
+
+```{r}
+sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "sample_id")
+```
+
+```{r echo=FALSE}
+sample_meta %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+#### Remove columns that are not relevant on sample level  
+As you can see by default `Extract_Sample_Meta` removes a default set of columns (see documentation) which do not provide meaningful sample-level information (e.g., nFeature_RNA). However, you may want to remove other columns too.  This can be achieved using either positive or negative selection using `variables_include` or `variables_exclude` parameters.
+
+```{r}
+sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "sample_id", variables_exclude = c("nFeature_RNA", "nCount_RNA", "seurat_annotations", "orig.ident"))
+```
+
+
+```{r echo=FALSE}
+sample_meta %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+
+#### Merge with sample-level summary statisic data  
+While some original number columns are not valid at sample-level it can be valuable to get summary information for those variables.  This can be achieved by merging outputs with `Median_Stats` function.
+
+```{r}
+sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "sample_id", variables_exclude = c("nFeature_RNA", "nCount_RNA", "seurat_annotations", "orig.ident"))
+
+sample_median <- Median_Stats(seurat_object = pbmc, group_by_var = "sample_id")
+
+sample_merged <- right_join(x = sample_meta, y = sample_median)
+```
+
+```{r echo=FALSE}
+sample_merged %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+
+### Add sample-level meta data to object  
+scCustomize provides easy function to add sample-level meta data to object without the need to first convert it to cell-level meta data.  This makes adding meta data from summary or supplemental tables to cell level object data very easy.
+
+In order to add meta data you will need to specify:  
+
+* Seurat Object with `@meta.data` column that matches sample-level meta data (often "orig.ident").  
+* Sample-level meta data/file.  Can be either a data.frame or tibble in environemnt or a path to file to read.  
+* Joining parameters.  Define the column names the specify matching information in Seurat object and sample-level meta data.  
+
+This is example command:
+```{r, eval = FALSE}
+obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_meta, join_by_seurat = "orig.ident", join_by_meta = "sample_id")
+```
+
+
 
 
 ## Check for Features/Genes
