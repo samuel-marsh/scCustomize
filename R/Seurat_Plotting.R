@@ -1371,15 +1371,17 @@ DotPlot_scCustom <- function(
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
 #' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 #' columns = idents.
-#' @param k Value to use for k-means clustering on rows.  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
+#' @param k Value to use for k-means clustering on features  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: Apply k-means clustering on rows. If the value is larger than 1, the
 #' heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
 #' clustering is still applied with parameters above.
-#' @param row_km_repeats Number of k-means runs to get a consensus k-means clustering. Note if row_km_repeats
-#' is set to more than one, the final number of groups might be smaller than row_km, but this might
-#' mean the original row_km is not a good choice.  Default is 1000.
-#' @param column_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
-#' Default is 100.
+#' @param feature_km_repeats Number of k-means runs to get a consensus k-means clustering for features.
+#' Note if `feature_km_repeats` is set to value greater than one, the final number of groups might be
+#' smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.
+#' @param row_km_repeats soft-deprecated.  See `feature_km_repeats`
+#' @param ident_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar to
+#' `feature_km_repeats`.  Default is 1000.
+#' @param column_km_repeats soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
@@ -1439,8 +1441,10 @@ Clustered_DotPlot <- function(
   x_lab_rotate = TRUE,
   flip = FALSE,
   k = 1,
-  row_km_repeats = 1000,
-  column_km_repeats = 1000,
+  feature_km_repeats = 1000,
+  ident_km_repeats = 1000,
+  row_km_repeats = deprecated(),
+  column_km_repeats = deprecated(),
   row_label_size = 8,
   raster = FALSE,
   plot_km_elbow = TRUE,
@@ -1466,6 +1470,17 @@ Clustered_DotPlot <- function(
       call. = FALSE
     )
   }
+
+  if (lifecycle::is_present(row_km_repeats)) {
+    lifecycle::deprecate_warn("1.1.0", "Clustered_DotPlot(row_km_repeats)", "Clustered_DotPlot(feature_km_repeats)")
+    feature_km_repeats <- row_km_repeats
+  }
+
+  if (lifecycle::is_present(column_km_repeats)) {
+    lifecycle::deprecate_warn("1.1.0", "Clustered_DotPlot(column_km_repeats)", "Clustered_DotPlot(ident_km_repeats)")
+    ident_km_repeats <- column_km_repeats
+  }
+
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
