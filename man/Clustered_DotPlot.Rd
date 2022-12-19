@@ -16,8 +16,10 @@ Clustered_DotPlot(
   x_lab_rotate = TRUE,
   flip = FALSE,
   k = 1,
-  row_km_repeats = 1000,
-  column_km_repeats = 1000,
+  feature_km_repeats = 1000,
+  ident_km_repeats = 1000,
+  row_km_repeats = deprecated(),
+  column_km_repeats = deprecated(),
   row_label_size = 8,
   raster = FALSE,
   plot_km_elbow = TRUE,
@@ -61,17 +63,21 @@ If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom 
 \item{flip}{logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 columns = idents.}
 
-\item{k}{Value to use for k-means clustering on rows.  Sets (km) parameter in \code{ComplexHeatmap::Heatmap()}.
+\item{k}{Value to use for k-means clustering on features  Sets (km) parameter in \code{ComplexHeatmap::Heatmap()}.
 From \code{ComplexHeatmap::Heatmap()}: Apply k-means clustering on rows. If the value is larger than 1, the
 heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
 clustering is still applied with parameters above.}
 
-\item{row_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Note if row_km_repeats
-is set to more than one, the final number of groups might be smaller than row_km, but this might
-mean the original row_km is not a good choice.  Default is 1000.}
+\item{feature_km_repeats}{Number of k-means runs to get a consensus k-means clustering for features.
+Note if \code{feature_km_repeats} is set to value greater than one, the final number of groups might be
+smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.}
 
-\item{column_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
-Default is 100.}
+\item{ident_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar to
+\code{feature_km_repeats}.  Default is 1000.}
+
+\item{row_km_repeats}{soft-deprecated.  See \code{feature_km_repeats}}
+
+\item{column_km_repeats}{soft-deprecated.  See \code{ident_km_repeats}}
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
