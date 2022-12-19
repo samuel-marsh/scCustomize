@@ -65,6 +65,9 @@ pbmc <- pbmc3k.SeuratData::pbmc3k.final
 ```{r include=FALSE}
 # Update pbmc check
 pbmc <- UpdateSeuratObject(pbmc)
+
+MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
 ```
 
 We'll add some random meta data variables to pbmc data form use in this vignette
@@ -690,6 +693,56 @@ Meta_Highlight_Plot(seurat_object = marsh_mouse_micro, meta_data_column = "Trans
 Meta_Highlight_Plot(seurat_object = marsh_mouse_micro, meta_data_column = "Transcription_Method", meta_data_highlight = c("ENZYMATIC_NONE", "DOUNCE_NONE"), highlight_color = c("firebrick", "dodgerblue"), background_color = "lightgray")
 ```
 
+
+### Highlight Cells  
+Sometimes the cells that you want to highlight on a plot may not be represented by an active.ident or meta.data column.  In this scenario you can use `Cell_Highlight_Plot`.  
+
+
+*NOTE: Values of cell names provided to `cells_highlight` parameter must be a named list.*  
+
+
+Let's say we want to highlight cells with expression of *MS4A1* above certain threshold.  
+```{r, eval=FALSE}
+# Get cell names
+MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+
+# Make into list
+cells <- list("MS4A1" = MS4A1)
+
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+
+```{r, echo = FALSE, fig.height=4, fig.width=6, fig.align='center'}
+# Make into list
+cells <- list("MS4A1" = MS4A1)
+
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+#### Highlight 2+ sets of cells in the same plot
+`Cell_Highlight_Plot()` also supports plotting two or more sets of cells in the same plot, similar to plotting multiple identities with `Cluster_Highlight_Plot()`/`Meta_Highlight_Plot()`.  
+
+```{r, eval=FALSE}
+# Get cell names and make list
+MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
+
+cells <- list("MS4A1" = MS4A1,
+              "GZMB" = GZMB)
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+```{r, echo = FALSE, fig.height=4, fig.width=6, fig.align='center'}
+# Get cell names and make list
+cells <- list("MS4A1" = MS4A1,
+              "GZMB" = GZMB)
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
 
 
 ### DimPlot Layout Plots
