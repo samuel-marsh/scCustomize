@@ -1472,12 +1472,22 @@ Clustered_DotPlot <- function(
   }
 
   if (lifecycle::is_present(row_km_repeats)) {
-    lifecycle::deprecate_soft("1.1.0", "Clustered_DotPlot(row_km_repeats)", "Clustered_DotPlot(feature_km_repeats)")
+    lifecycle::deprecate_warn(when = "1.1.0",
+                              what = "Clustered_DotPlot(row_km_repeats)",
+                              with = "Clustered_DotPlot(feature_km_repeats)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
     feature_km_repeats <- row_km_repeats
   }
 
   if (lifecycle::is_present(column_km_repeats)) {
-    lifecycle::deprecate_soft("1.1.0", "Clustered_DotPlot(column_km_repeats)", "Clustered_DotPlot(ident_km_repeats)")
+    lifecycle::deprecate_warn(when = "1.1.0",
+                              what = "Clustered_DotPlot(column_km_repeats)",
+                              with = "Clustered_DotPlot(ident_km_repeats)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
     ident_km_repeats <- column_km_repeats
   }
 
