@@ -626,7 +626,7 @@ QC_Plot_UMIvsGene <- function(
   }
 
   # Pull meta data
-  featurescatter_data <- seurat_object@meta.data %>%
+  featurescatter_data <- Fetch_Meta(object = seurat_object) %>%
     rownames_to_column("barcodes")
   # Check valid meta variable
   if (!is.null(x = meta_gradient_name)) {
