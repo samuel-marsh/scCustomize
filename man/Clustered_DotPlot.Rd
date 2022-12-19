@@ -117,7 +117,7 @@ Clustered DotPlots using ComplexHeatmap
 }
 \section{test}{
 
-\code{lifecycle::badge("deprecated")}
+\code{lifecycle::badge("deprecated")} \code{lifecycle::badge("deprecated")}
 \itemize{
 \item \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} \code{lifecycle::badge("experimental")}
 }

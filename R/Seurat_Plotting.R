@@ -1405,8 +1405,8 @@ DotPlot_scCustom <- function(
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
 #' @section test:
-#' `lifecycle::badge("deprecated")`
-#'  * `r lifecycle::badge("experimental")` `lifecycle::badge("experimental")`
+#' `lifecycle::badge("deprecated")` `lifecycle::badge("deprecated")`
+#' * `r lifecycle::badge("experimental")` `lifecycle::badge("experimental")`
 #'
 #' @import cli
 #' @import ggplot2
