@@ -19,17 +19,15 @@ tutorials of all aspects of scCustomize functionality.
 
 ## Installing scCustomize
 
-scCustomize can be installed from GitHub using either devtools or
-remotes package. For more detailed instructions see
+scCustomize can be installed from CRAN on all platforms. For more
+detailed instructions see
 [Installation](https://samuel-marsh.github.io/scCustomize/articles/Installation.html).
 
-    devtools::install_github(repo = "samuel-marsh/scCustomize")
-
-    remotes::install_github(repo = "samuel-marsh/scCustomize")
+    install.packages("scCustomize")
 
 **Master branch**  
-Full releases will be available on the master branch with version scheme
-vX.X.X.  
+Full releases will be available from CRAN or GitHub via the master
+branch with version scheme vX.X.X.  
 See
 [NEWS.md](https://github.com/samuel-marsh/scCustomize/blob/master/NEWS.md)
 file for ChangeLog with additions, changes, and fixes contained in each
@@ -38,7 +36,7 @@ release.
 **Develop branch**  
 I also maintain a separate development branch<sup>\*</sup> that can be
 installed by supplying `ref = "develop"` in the devtools or remotes
-installation command. Version scheme vX.X.X.yyyy.  
+installation command. Version scheme vX.X.X.9yyy.  
 <sup>\*</sup>*Note: While this branch is typically mostly stable it may
 contain breaking issues/bugs.*  
 I do try and keep [development
