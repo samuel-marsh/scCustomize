@@ -34,7 +34,7 @@ across the entire object as opposed to by cluster or by \code{group_by} variable
 \item{assay}{Assay to pull feature data from.  Default is active assay.}
 }
 \value{
-A Data Frame
+A data.frame
 }
 \description{
 Calculates the percent of cells that express a given set of features by various grouping factors

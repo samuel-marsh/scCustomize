@@ -51,6 +51,9 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 
 \item{...}{Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.}
 }
+\value{
+Saved plots
+}
 \description{
 Create and save plots for gene list with single command.  Requires Nebulosa package from Bioconductor.
 }

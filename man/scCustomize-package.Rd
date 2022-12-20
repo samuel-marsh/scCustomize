@@ -6,7 +6,7 @@
 \alias{scCustomize-package}
 \title{scCustomize: Tools for Custom Visualization & Streamlined Analyses of Single Cell Sequencing}
 \description{
-Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R. scCustomize aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.
+Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using 'R'. 'scCustomize' aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.
 }
 \section{Package options}{
 
@@ -53,7 +53,6 @@ Other contributors:
   \item Ming Tang \email{tangming2005@gmail.com} [contributor]
   \item Velina Kozareva [contributor]
   \item Lucas Graybuck \email{lucasg@alleninstitute.org} [contributor]
-  \item Tim Stuart \email{tstuart@nygenome.org} [contributor]
 }
 
 }

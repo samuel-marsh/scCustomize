@@ -23,7 +23,7 @@ Median_Stats(
 Must be of \code{class()} integer or numeric.}
 }
 \value{
-A data frame.
+A data.frame.
 }
 \description{
 Get quick values for median Genes, UMIs, \%mito per cell grouped by meta.data variable.

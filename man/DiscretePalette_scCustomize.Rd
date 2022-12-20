@@ -28,6 +28,11 @@ A vector of colors
 \description{
 Helper function to return a number of discrete color palettes.
 }
+\examples{
+pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
+PalettePlot(palette = pal)
+
+}
 \references{
 This function uses the paletteer package \url{https://github.com/EmilHvitfeldt/paletteer} to
 provide simplified access to color palettes from many different R package sources while

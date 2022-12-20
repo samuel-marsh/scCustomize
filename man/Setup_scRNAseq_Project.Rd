@@ -18,6 +18,9 @@ will provide generic built-in directory structure.}
 
 \item{cluster_annotation_file_name}{name to use for annotation file if created (optional).}
 }
+\value{
+no return value.  Creates system folders.
+}
 \description{
 Create reproducible project directory organization when initiating a new analysis.
 }

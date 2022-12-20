@@ -12,7 +12,7 @@ Cluster_Stats_All_Samples(seurat_object, group_by_var = "orig.ident")
 \item{group_by_var}{meta data column to classify samples (default = "orig.ident").}
 }
 \value{
-A Data Frame
+A data.frame
 }
 \description{
 Calculates both overall and per sample cell number and percentages per cluster based on orig.ident

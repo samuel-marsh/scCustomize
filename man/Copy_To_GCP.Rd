@@ -11,6 +11,9 @@ Copy_To_GCP(folder_file_path, gcp_bucket_path)
 
 \item{gcp_bucket_path}{GCP bucket path to copy to files.}
 }
+\value{
+No return value.  Performs system copy to GCP bucket.
+}
 \description{
 Run command from R console without moving to terminal to copy folder to GCP bucket
 }

@@ -16,9 +16,8 @@ Plot of all colors in supplied palette/vector
 Plots given color vector/palette in viewer to evaluate palette before plotting on data.
 }
 \examples{
-\dontrun{
-PalettePlot(palette = varibow(n_colors = 36))
-}
+pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
+PalettePlot(palette = pal)
 
 }
 \references{

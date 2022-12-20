@@ -53,6 +53,9 @@ into file name if \code{FALSE}.}
 
 \item{...}{Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.}
 }
+\value{
+Saved plots
+}
 \description{
 Create and save plots for gene list with single command.  Requires Nebulosa package from Bioconductor.
 }

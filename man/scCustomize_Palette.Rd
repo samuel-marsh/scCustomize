@@ -25,9 +25,8 @@ vector of colors to use for plotting.
 Function to return package default discrete palettes depending on number of groups plotted.
 }
 \examples{
-\dontrun{
 cols <- scCustomize_Palette(num_groups = 24, ggplot_default_colors = FALSE)
-}
+PalettePlot(palette = cols)
 
 }
 \concept{palettes}

@@ -13,6 +13,9 @@ Change_Delim_All(data, current_delim, new_delim)
 
 \item{new_delim}{a single value of new delimiter desired.}
 }
+\value{
+matrix or data.frame with new column names.
+}
 \description{
 Change all instances of delimiter in cell names from list of data.frames/matrices or single data.frame/matrix
 }

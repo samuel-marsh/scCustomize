@@ -14,7 +14,7 @@ CellBender_Feature_Diff(seurat_object, raw_assay, cell_bender_assay)
 \item{cell_bender_assay}{Name of the assay containing the CellBender count data.}
 }
 \value{
-A data frame containing summed raw counts, CellBender counts, count difference, and
+A data.frame containing summed raw counts, CellBender counts, count difference, and
 percent difference in counts.
 }
 \description{

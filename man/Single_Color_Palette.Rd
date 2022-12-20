@@ -20,6 +20,11 @@ A vector of colors
 \description{
 Selects colors from modified versions of RColorBrewer single colors palettes
 }
+\examples{
+pal <- Single_Color_Palette(pal_color = "reds", num_colors = 7)
+PalettePlot(palette = pal)
+
+}
 \references{
 See RColorBrewer for more info on palettes
 \url{https://CRAN.R-project.org/package=RColorBrewer}

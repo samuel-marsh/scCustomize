@@ -13,6 +13,9 @@ Change_Delim_Suffix(data, current_delim, new_delim)
 
 \item{new_delim}{a single value of new delimiter desired.}
 }
+\value{
+matrix or data.frame with new column names.
+}
 \description{
 Change barcode suffix delimiter from list of data.frames/matrices or single data.frame/matrix
 }

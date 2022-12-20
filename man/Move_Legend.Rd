@@ -11,6 +11,9 @@ Move_Legend(position = "right", ...)
 
 \item{...}{extra arguments passed to \code{ggplot2::theme()}.}
 }
+\value{
+Returns a list-like object of class \emph{theme}.
+}
 \description{
 Shortcut for thematic modification to move legend position.
 }

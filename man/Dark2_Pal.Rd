@@ -13,9 +13,8 @@ Dark2_Pal()
 Shortcut to Dark2 color palette from RColorBrewer (8 Colors)
 }
 \examples{
-\dontrun{
 cols <- Dark2_Pal()
-}
+PalettePlot(palette = cols)
 
 }
 \references{

@@ -69,6 +69,9 @@ value between 0-1.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
 }
+\value{
+Saved plots
+}
 \description{
 Create and Save plots for Gene list with Single Command
 }

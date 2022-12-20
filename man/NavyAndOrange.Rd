@@ -4,7 +4,7 @@
 \alias{NavyAndOrange}
 \title{Navy and Orange Dual Color Palette}
 \usage{
-NavyAndOrange(flip_order = F)
+NavyAndOrange(flip_order = FALSE)
 }
 \arguments{
 \item{flip_order}{Whether to flip the order of colors.}
@@ -16,9 +16,8 @@ Navy orange palette
 Shortcut to navy orange color plot
 }
 \examples{
-\dontrun{
 cols <- NavyAndOrange()
-}
+PalettePlot(palette = cols)
 
 }
 \concept{palettes}

@@ -59,6 +59,9 @@ groups plotted is greater than 36.  Default = 123.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
 }
+\value{
+Saved plots
+}
 \description{
 Create and Save plots for Gene list with Single Command
 }
