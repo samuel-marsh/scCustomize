@@ -580,7 +580,7 @@ QC_Plot_UMIvsGene <- function(
   meta_gradient_na_color = "lightgray",
   meta_gradient_low_cutoff = NULL,
   cells = NULL,
-  combination = F,
+  combination = FALSE,
   pt.size = 1,
   group.by = NULL,
   raster = NULL,

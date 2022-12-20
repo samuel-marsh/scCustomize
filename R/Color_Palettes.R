@@ -209,7 +209,7 @@ Single_Color_Palette <- function(pal_color,
 #'
 
 NavyAndOrange <- function(
-  flip_order = F
+  flip_order = FALSE
 ) {
   navy_orange <- c("navy", "orange")
   if (flip_order) {
