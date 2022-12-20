@@ -260,6 +260,8 @@ Test_Integer <- function(
 #'
 #' @export
 #'
+#' @return Returns a list-like object of class _theme_.
+#'
 #' @concept themes
 #'
 #' @examples
@@ -293,15 +295,17 @@ UnRotate_X <- function(...) {
 #'
 #' @export
 #'
+#' @return Returns a list-like object of class _theme_.
+#'
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a plot without axes, labels, or grid lines
+#' # Generate a plot and customize theme
 #' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 #' p + Blank_Theme()
-#' }
+#'
 
 Blank_Theme <- function(...) {
   blank_theme <- theme(
@@ -333,6 +337,8 @@ Blank_Theme <- function(...) {
 #' @importFrom ggplot2 theme
 #'
 #' @export
+#'
+#' @return Returns a list-like object of class _theme_.
 #'
 #' @concept themes
 #'
@@ -428,6 +434,8 @@ theme_ggprism_mod <- function(
 #' @references Shortcut slightly modified from Seurat \url{https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048}
 #'
 #' @keywords internal
+#'
+#' @return Returns a list-like object of class _theme_.
 #'
 #' @noRd
 #'

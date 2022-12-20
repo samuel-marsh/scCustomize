@@ -596,6 +596,8 @@ CheckMatrix_scCustom <- function(
 #'
 #' @export
 #'
+#' @return matrix or data.frame with new column names.
+#'
 #' @concept helper_util
 #'
 #' @examples
@@ -694,6 +696,8 @@ Replace_Suffix <- function(
 #'
 #' @export
 #'
+#' @return matrix or data.frame with new column names.
+#'
 #' @concept helper_util
 #'
 #' @examples
@@ -768,6 +772,8 @@ Change_Delim_Suffix <- function(
 #'
 #' @export
 #'
+#' @return matrix or data.frame with new column names.
+#'
 #' @concept helper_util
 #'
 #' @examples
@@ -839,6 +845,8 @@ Change_Delim_Prefix <- function(
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @export
+#'
+#' @return matrix or data.frame with new column names.
 #'
 #' @concept helper_util
 #'
@@ -1101,6 +1109,8 @@ Extract_Top_Markers <- function(
 #'
 #' @export
 #'
+#' @return No value returned.  Creates .csv file.
+#'
 #' @concept marker_annotation_util
 #'
 #' @examples
@@ -1144,6 +1154,8 @@ Create_Cluster_Annotation_File <- function(
 #' "cluster" with values 0-32, and blank columns: "cell_type", "sub_type", "notes".
 #'
 #' @importFrom tibble tribble
+#'
+#' @keywords internal
 #'
 #' @noRd
 #'
@@ -1295,6 +1307,8 @@ Pull_Cluster_Annotation <- function(
 #'
 #' @export
 #'
+#' @return no return value.  Creates system folders.
+#'
 #' @concept organization_util
 #'
 #' @examples
@@ -1368,6 +1382,8 @@ Setup_scRNAseq_Project <- function(
 #'
 #' @export
 #'
+#' @return No return value.  Performs system copy to GCP bucket.
+#'
 #' @concept organization_util
 #'
 #' @examples
@@ -1402,6 +1418,8 @@ Copy_To_GCP <- function(
 #' @import cli
 #'
 #' @export
+#'
+#' @return No return value.  Performs system copy from GCP bucket.
 #'
 #' @concept organization_util
 #'
