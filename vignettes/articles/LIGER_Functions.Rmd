@@ -274,7 +274,7 @@ seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UM
 
 
 ## Add Mitochondrial & Ribosomal Percentages  
-For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vingette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo_LIGER` which is analogous to `Add_Mito_Ribo_Seurat`.
+For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo_LIGER` which is analogous to `Add_Mito_Ribo_Seurat`.
 
 
 ## Variable Gene Selection  

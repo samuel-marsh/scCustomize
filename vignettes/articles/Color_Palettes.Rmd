@@ -40,7 +40,7 @@ knitr::opts_chunk$set(
 ```
 
 ## Choosing Color Palettes and Themes
-While the default Seurat and ggplot2 plots work well they can often be enhanced by customizing color palettes and theming options used.  To simplify/streamline this process for end users scCustomize contains a number of shortcut or helper functions for quick access to color palettes and themes that are frequently used.
+While the default Seurat and ggplot2 plots work well they can often be enhanced by customizing color palettes and themeing options used.  To simplify/streamline this process for end users scCustomize contains a number of shortcut or helper functions for quick access to color palettes and themes that are frequently used.
 
 ```{r init}
 # Load Packages

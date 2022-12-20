@@ -264,7 +264,7 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", spl
 
 
 ### Change the transparnecy of points
-`FeaturePlot_scCustom` also allows for customization of the transpaency (alpha) of both the points of expressing cells and non-expressing cells using optional parameters.
+`FeaturePlot_scCustom` also allows for customization of the transparency (alpha) of both the points of expressing cells and non-expressing cells using optional parameters.
 ```{r eval=FALSE}
 FeaturePlot_scCustom(object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
 ```
@@ -336,7 +336,7 @@ Stacked_VlnPlot(seurat_object = marsh_human_pm, features = gene_list_plot, x_lab
 
 #### `Stacked_VlnPlot` also supports any additional parameters that are part of `Seurat::VlnPlot()`
 For instance splitting plot by meta data feature.
-```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Example plot adding the `split.by` parameter toview expression by sample and cell type.*"}
+```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Example plot adding the `split.by` parameter to view expression by sample and cell type.*"}
 sample_colors <- c("dodgerblue", "forestgreen", "firebrick1")
 
 # Create Plots

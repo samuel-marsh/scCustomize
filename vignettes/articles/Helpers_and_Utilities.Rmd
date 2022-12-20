@@ -199,7 +199,7 @@ sample_meta %>%
 ```
 
 
-#### Merge with sample-level summary statisic data  
+#### Merge with sample-level summary statistic data  
 While some original number columns are not valid at sample-level it can be valuable to get summary information for those variables.  This can be achieved by merging outputs with `Median_Stats` function.
 
 ```{r}
