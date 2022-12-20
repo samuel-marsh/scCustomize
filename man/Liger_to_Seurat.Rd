@@ -37,7 +37,7 @@ or name to Seurat object instead of defaulting to "tSNE".}
 \item{seurat_assay}{Name to set for assay in Seurat Object.  Default is "RNA".}
 }
 \value{
-Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.
+Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
 }
 \description{
 Merges raw.data and scale.data of object, and creates Seurat object with these values along with

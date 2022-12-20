@@ -22,7 +22,7 @@ PalettePlot(palette = varibow(n_colors = 36))
 
 }
 \references{
-Adapted from colorway package \code{build_palette} internals (Licence: GPL-3).
+Adapted from colorway package \code{build_palette} internals (License: GPL-3).
 \url{https://github.com/hypercompetent/colorway}.
 }
 \concept{palettes}

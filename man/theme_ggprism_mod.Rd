@@ -50,7 +50,7 @@ p + theme_ggprism_mod()
 }
 \references{
 theme is a modified version of \code{theme_prism} from ggprism package \url{https://github.com/csdaw/ggprism}
-(Licence: GPL-3).  Param text is from \code{ggprism:theme_prism()} documentation \code{\link[ggprism]{theme_prism}}.
+(License: GPL-3).  Param text is from \code{ggprism:theme_prism()} documentation \code{\link[ggprism]{theme_prism}}.
 Theme adaptation based on ggprism vignette
 \url{https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1}.
 }

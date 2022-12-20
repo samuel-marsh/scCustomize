@@ -27,6 +27,6 @@ mat <- Read_CellBender_h5_Mat(file_name = "/SampleA_out_filtered.h5")
 }
 \references{
 Code used in function has been modified from \code{Seurat::Read10X_h5} function of
-Seurat package \url{https://github.com/satijalab/seurat} (Licence: GPL-3).
+Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).
 }
 \concept{read_&_write}

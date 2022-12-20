@@ -48,6 +48,6 @@ percent_stats <- Percent_Expressing(seurat_object = object, features = "Cx3cr1",
 \references{
 Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
 to generate values to use for plotting.  Source code can be found here:
-\url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (Licence: GPL-3).
+\url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
 }
 \concept{stats}

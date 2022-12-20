@@ -13,7 +13,7 @@ NavyAndOrange(flip_order = F)
 Navy orange palette
 }
 \description{
-Shortcut to navy ornage color plot
+Shortcut to navy orange color plot
 }
 \examples{
 \dontrun{

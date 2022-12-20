@@ -50,7 +50,7 @@ palette references/citations):
 }
 }
 
-Function name and implementation modified from Seurat (Licence: GPL-3).
+Function name and implementation modified from Seurat (License: GPL-3).
 \url{https://github.com/satijalab/seurat}
 }
 \concept{palettes}
