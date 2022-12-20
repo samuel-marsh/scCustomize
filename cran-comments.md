@@ -2,6 +2,7 @@
 
 0 errors | 0 warnings | 2 notes
 
+### Test environments  
 - Run locally, R4.1.2, Platform: x86_64-apple-darwin17.0 (64-bit) with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
