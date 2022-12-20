@@ -29,7 +29,7 @@ A vector of colors
 Helper function to return a number of discrete color palettes.
 }
 \references{
-This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
+This function uses the paletteer package \url{https://github.com/EmilHvitfeldt/paletteer} to
 provide simplified access to color palettes from many different R package sources while
 minimizing scCustomize current and future dependencies.
 

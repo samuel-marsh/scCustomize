@@ -45,7 +45,7 @@ Iterate_DimPlot_bySample(
 A ggplot object
 }
 \description{
-Iterate Dimplot by orig.ident column from Seurat object metadata
+Iterate DimPlot by orig.ident column from Seurat object metadata
 }
 \examples{
 \dontrun{

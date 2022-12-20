@@ -64,7 +64,7 @@ seurat_object = CreateSeuratObject(counts = expression_matrices[[1]])
 }
 \references{
 Code used in function has been slightly modified from \code{Seurat::Read10X} function of
-Seurat package (https://github.com/satijalab/seurat) (Licence: GPL-3).  Function was modified to
+Seurat package \url{https://github.com/satijalab/seurat} (Licence: GPL-3).  Function was modified to
 support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 potential PR to Seurat GitHub).
 }

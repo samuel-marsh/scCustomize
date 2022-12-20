@@ -53,7 +53,7 @@ seurat_object <- Liger_to_Seurat(liger_object = LIGER_OBJ, reduction_label = "UM
 }
 }
 \references{
-Original function is part of LIGER package (https://github.com/welch-lab/liger) (Licence: GPL-3).
+Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
 Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
 PR to liger GitHub.
 }

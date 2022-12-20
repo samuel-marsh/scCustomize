@@ -20,6 +20,6 @@ cols <- ColorBlind_Pal()
 }
 \references{
 palette is slightly modified version of the Color Universal Design (CUD) colorblindness
-friendly palette (https://jfly.uni-koeln.de/color/).
+friendly palette \url{https://jfly.uni-koeln.de/color/}.
 }
 \concept{palettes}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Seurat_Iterative_Plotting.R
 \name{Iterate_FeaturePlot_scCustom}
 \alias{Iterate_FeaturePlot_scCustom}
-\title{Iterative Plotting of Gene Lists using Custom Featureplots}
+\title{Iterative Plotting of Gene Lists using Custom FeaturePlots}
 \usage{
 Iterate_FeaturePlot_scCustom(
   seurat_object,

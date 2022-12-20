@@ -85,7 +85,7 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 
 \item{plot_km_elbow}{Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 Estimating elbow of this plot is one way to determine "optimal" value for \code{k}.
-Based on: https://stackoverflow.com/a/15376462/15568251.}
+Based on: \url{https://stackoverflow.com/a/15376462/15568251}.}
 
 \item{elbow_kmax}{The maximum value of k to use for \code{plot_km_elbow}.  Suggest setting larger value so the
 true shape of plot can be observed.  Value must be 1 less than number of features provided.  If NULL parameter
@@ -122,10 +122,10 @@ Clustered_DotPlot(seurat_object = object, features = gene_list)
 
 }
 \references{
-https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/
+\url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
 }
 \seealso{
-https://twitter.com/tangming2005
+\url{https://twitter.com/tangming2005}
 }
 \author{
 Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)

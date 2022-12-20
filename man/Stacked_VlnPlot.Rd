@@ -57,7 +57,7 @@ Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_uni
 \item{vln_linewidth}{Adjust the linewidth of violin outline.  Must be numeric.}
 
 \item{pt.size}{Adjust point size for plotting.  Default for \code{StackedVlnPlot} is 0 to avoid issues with
-rendering so many points in vector form.  Alteratively, see \code{raster} parameter.}
+rendering so many points in vector form.  Alternatively, see \code{raster} parameter.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 total points plotted (# Cells x # of features).}
@@ -79,10 +79,10 @@ Stacked_VlnPlot(seurat_object = object, features = gene_list, x_lab_rotate = TRU
 
 }
 \references{
-https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
+\url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
 }
 \seealso{
-https://twitter.com/tangming2005
+\url{https://twitter.com/tangming2005}
 }
 \author{
 Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
