@@ -47,7 +47,7 @@ Yes!  If you use scCustomize in your research I would really appreciate citing t
 ### *Something isn't working*
 If you run into any issues or bugs please submit a [GitHub Issue](https://github.com/samuel-marsh/scCustomize/issues) with details of the issue.   
   
-- Please incude the code that you are running and the full text of the error message.
+- Please include the code that you are running and the full text of the error message.
 - If possible please include a reproducible example.  Suggest using [SeuratData package](https://github.com/satijalab/seurat-data) pbmc3k dataset for lightweight example.
 
 Please note though scCustomize is currently one-person operation and I may not respond right away.  I'm going to aim to respond to all issues posted during the week by Friday of that week so please be patient and know that I will work to solve your issue.
