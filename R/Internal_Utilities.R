@@ -64,7 +64,7 @@
 #'
 #' @import cli
 #'
-#' @return stops function without error message
+#' @return error if not Seurat object.
 #'
 #' @noRd
 #'
@@ -86,7 +86,7 @@ Is_Seurat <- function(
 #'
 #' @import cli
 #'
-#' @return stops function without error message
+#' @return error is not LIGER object
 #'
 #' @noRd
 #'

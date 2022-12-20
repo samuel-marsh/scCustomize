@@ -706,6 +706,8 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
+#' @return Saved plots
+#'
 #' @export
 #'
 #' @concept iterative_plotting
@@ -917,6 +919,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
+#' @return Saved plots
+#'
 #' @export
 #'
 #' @concept iterative_plotting
@@ -1091,6 +1095,8 @@ Iterate_VlnPlot_scCustom <- function(
 #' @importFrom SeuratObject DefaultDimReduc PackageCheck
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @return Saved plots
 #'
 #' @export
 #'
@@ -1286,6 +1292,8 @@ Iterate_Plot_Density_Custom <- function(
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
 #' @export
+#'
+#' @return Saved plots
 #'
 #' @concept iterative_plotting
 #'

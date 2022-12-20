@@ -12,7 +12,7 @@
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
 #'
-#' @return A Data Frame
+#' @return A data.frame
 #'
 #' @export
 #'
@@ -93,7 +93,7 @@ Cluster_Stats_All_Samples <- function(
 #' @param assay Assay to pull feature data from.  Default is active assay.
 #' @param slot Slot to pull feature data for.  Default is "data".
 #'
-#' @return A Data Frame
+#' @return A data.frame
 #'
 #' @references Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
 #' to generate values to use for plotting.  Source code can be found here:
@@ -205,7 +205,7 @@ Percent_Expressing <- function(
 #' @param median_var Column(s) in `@meta.data` to calculate medians for in addition to defaults.
 #' Must be of `class()` integer or numeric.
 #'
-#' @return A data frame.
+#' @return A data.frame.
 #'
 #' @importFrom dplyr group_by one_of select_at summarise_at
 #' @importFrom magrittr "%>%"
@@ -289,7 +289,7 @@ Median_Stats <- function(
 #' @param raw_assay Name of the assay containing the raw count data.
 #' @param cell_bender_assay Name of the assay containing the CellBender count data.
 #'
-#' @return A data frame containing summed raw counts, CellBender counts, count difference, and
+#' @return A data.frame containing summed raw counts, CellBender counts, count difference, and
 #' percent difference in counts.
 #'
 #' @import cli
