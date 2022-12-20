@@ -10,8 +10,9 @@
 - Added `flip` parameter to `Clustered_DotPlot` to enable axes flipping ([#69](https://github.com/samuel-marsh/scCustomize/issues/69)).  
 
 ## Changed  
-- Updated Imports/Suggests for CRAN compatibility. 
-- Rearrange base R code within `R/` scripts for better organization.
+- Updated Imports/Suggests for CRAN compatibility.  
+- Under the hood code updates for CRAN compatibility.  
+- Rearrange base R code within `R/` scripts for better organization.  
 
 ## Fixes  
 - Fixed missing documentation for number of package functions.  
