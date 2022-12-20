@@ -67,8 +67,8 @@ PC_Plotting <- function(
 #' @noRd
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Modified function for use in scCustomtize)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/.  Solution for re-enabling plot spacing modification by Abdenour ABBAS (comment on original blog post; http://disq.us/p/2b54qh2).
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}.  Solution for re-enabling plot spacing modification by Abdenour ABBAS (comment on original blog post; \url{http://disq.us/p/2b54qh2}).
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 
 Modify_VlnPlot <- function(
@@ -116,7 +116,7 @@ Modify_VlnPlot <- function(
 #'
 #' @noRd
 #'
-#' @references Code to calculate wss values from: https://stackoverflow.com/a/15376462/15568251
+#' @references Code to calculate wss values from: \url{https://stackoverflow.com/a/15376462/15568251}
 #'
 
 kMeans_Elbow <- function(
@@ -169,7 +169,7 @@ kMeans_Elbow <- function(
 #' @noRd
 #'
 #' @references This function and documentation text are modified versions of the `AutoPointSize` function
-#' and documentation from Seurat (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
+#' and documentation from Seurat \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (Licence: GPL-3).
 #' This version has been modified to take single value length input instead of data.frame input.
 #'
 
@@ -205,8 +205,8 @@ AutoPointSize_scCustom <- function(data, raster = NULL) {
 #' @noRd
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Modified function for use in scCustomtize)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 
 # extract the max value of the y axis
@@ -229,7 +229,7 @@ Extract_Max <- function(
 #' @noRd
 #'
 #' @author Iterator (StackOverflow)
-#' @source  https://stackoverflow.com/a/7798235
+#' @source  \url{https://stackoverflow.com/a/7798235}
 #' @details https://creativecommons.org/licenses/by-sa/3.0/
 #'
 
@@ -374,10 +374,10 @@ Move_Legend <- function(
 #' @param border `logical`. Should a border be drawn around the plot?
 #' Clipping will occur unless e.g. `coord_cartesian(clip = "off")` is used.
 #'
-#' @references theme is a modified version of `theme_prism` from ggprism package (https://github.com/csdaw/ggprism)
+#' @references theme is a modified version of `theme_prism` from ggprism package \url{https://github.com/csdaw/ggprism}
 #' (Licence: GPL-3).  Param text is from `ggprism:theme_prism()` documentation \code{\link[ggprism]{theme_prism}}.
 #' Theme adaptation based on ggprism vignette
-#' (https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1).
+#' \url{https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1}.
 #'
 #' @import ggplot2
 #' @importFrom ggprism theme_prism
@@ -425,7 +425,7 @@ theme_ggprism_mod <- function(
 #'
 #' @importFrom ggplot2 theme
 #'
-#' @references Shortcut slightly modified from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
+#' @references Shortcut slightly modified from Seurat \url{https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048}
 #'
 #' @keywords internal
 #'

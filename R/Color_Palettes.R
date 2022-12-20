@@ -318,7 +318,7 @@ Hue_Pal <- function(
 #' @return modified/reordered color palette (8 colors) based on ditto-seq
 #'
 #' @references palette is slightly modified version of the Color Universal Design (CUD) colorblindness
-#' friendly palette (https://jfly.uni-koeln.de/color/).
+#' friendly palette \url{https://jfly.uni-koeln.de/color/}.
 #'
 #' @export
 #'
@@ -347,7 +347,7 @@ ColorBlind_Pal <- function(
 #'
 #' @return a character vector of hex color values of length n_colors.
 #'
-#' @references Ported from colorway package for CRAN release.  See https://github.com/hypercompetent/colorway/blob/master/R/palettes.R (Licence: GPL-3).
+#' @references Ported from colorway package for CRAN release.  See \url{https://github.com/hypercompetent/colorway/blob/master/R/palettes.R} (Licence: GPL-3).
 #'
 #' @keywords internal
 #'
@@ -382,7 +382,7 @@ varibow_scCustom <- function(
 #' @return A vector of colors
 #'
 #' @references
-#' This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
+#' This function uses the paletteer package \url{https://github.com/EmilHvitfeldt/paletteer} to
 #' provide simplified access to color palettes from many different R package sources while
 #' minimizing scCustomize current and future dependencies.
 #'

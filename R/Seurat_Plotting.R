@@ -986,7 +986,7 @@ Cell_Highlight_Plot <- function(
 #' @export
 #'
 #' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
-#' this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
+#' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (Licence: GPL-3).
 #'
 #' @concept seurat_plotting
 #'
@@ -1087,7 +1087,7 @@ VlnPlot_scCustom <- function(
 #' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
 #' @param vln_linewidth Adjust the linewidth of violin outline.  Must be numeric.
 #' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with
-#' rendering so many points in vector form.  Alteratively, see `raster` parameter.
+#' rendering so many points in vector form.  Alternatively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
 #' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
@@ -1106,8 +1106,8 @@ VlnPlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
 #' \dontrun{
@@ -1386,7 +1386,7 @@ DotPlot_scCustom <- function(
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
-#' Based on: https://stackoverflow.com/a/15376462/15568251.
+#' Based on: \url{https://stackoverflow.com/a/15376462/15568251}.
 #' @param elbow_kmax The maximum value of k to use for `plot_km_elbow`.  Suggest setting larger value so the
 #' true shape of plot can be observed.  Value must be 1 less than number of features provided.  If NULL parameter
 #' will be set dependent on length of feature list up to `elbow_kmax = 20`.
@@ -1420,8 +1420,8 @@ DotPlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
 #' \dontrun{
@@ -1832,8 +1832,8 @@ Clustered_DotPlot <- function(
 #' @export
 #'
 #' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
-#' this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
-#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: (https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg).
+#' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (Licence: GPL-3).
+#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
 #'
 #' @concept seurat_plotting
 #'

@@ -392,7 +392,7 @@ Fetch_Meta <- function(
 #' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
 #'
 #' @references Original function is part of LIGER package as non-exported function
-#' (https://github.com/welch-lab/liger/blob/master/R/utilities.R) (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (Licence: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
 #' @import Matrix
@@ -535,7 +535,7 @@ Merge_Sparse_Data_All <- function(
 #' @import cli
 #' @importFrom methods slot
 #'
-#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject (https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650) (License: MIT).
+#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject \url{https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650} (License: MIT).
 #'
 #' @export
 #'

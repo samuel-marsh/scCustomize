@@ -399,7 +399,7 @@ Top_Genes_Factor <- function(
 #' @references This function is encompasses the first part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to allow plotting other meta data variables.  In this case the function
 #' just returns the data.frame needed for plotting rather than plots themselves.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @noRd
 #'
@@ -497,7 +497,7 @@ Generate_Plotting_df_LIGER <- function(object,
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @noRd
 #'
@@ -755,7 +755,7 @@ Plot_By_Cluster_LIGER <- function(
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @noRd
 #'
@@ -917,7 +917,7 @@ Plot_By_Meta_LIGER <- function(
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
 #' which is called by this function after creating new temporary object/dataset.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @export
 #'
@@ -987,7 +987,7 @@ Variable_Features_ALL_LIGER <- function(
 #'
 #' @return Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.
 #'
-#' @references Original function is part of LIGER package (https://github.com/welch-lab/liger) (Licence: GPL-3).
+#' @references Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
 #' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
 #' PR to liger GitHub.
 #'

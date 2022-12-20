@@ -94,7 +94,7 @@ Iterate_PC_Loading_Plots <- function(
 
 #' Iterate DimPlot By Sample
 #'
-#' Iterate Dimplot by orig.ident column from Seurat object metadata
+#' Iterate DimPlot by orig.ident column from Seurat object metadata
 #'
 #' @param seurat_object Seurat object name.
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
@@ -670,7 +670,7 @@ Iterate_Meta_Highlight_Plot <- function(
 }
 
 
-#' Iterative Plotting of Gene Lists using Custom Featureplots
+#' Iterative Plotting of Gene Lists using Custom FeaturePlots
 #'
 #' Create and Save plots for Gene list with Single Command
 #'

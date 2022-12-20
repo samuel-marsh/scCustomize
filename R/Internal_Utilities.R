@@ -10,7 +10,7 @@
 #' @return lhs if lhs is null, else rhs
 #'
 #' @author Hadley Wickham
-#' @references https://adv-r.hadley.nz/functions.html#missing-arguments
+#' @references \url{https://adv-r.hadley.nz/functions.html#missing-arguments}
 #'
 #' @noRd
 #'
@@ -32,7 +32,7 @@
 #' @return rhs if lhs is null, else lhs
 #'
 #' @author Hadley Wickham
-#' @references https://adv-r.hadley.nz/functions.html#missing-arguments
+#' @references \url{https://adv-r.hadley.nz/functions.html#missing-arguments}
 #'
 #' @noRd
 #'
@@ -179,8 +179,8 @@ Assay_Present <- function(
 #' @return stops function without error message
 #'
 #' @author Stibu
-#' @references https://stackoverflow.com/a/42945293/15568251
-#' @details https://creativecommons.org/licenses/by-sa/3.0/
+#' @references \url{https://stackoverflow.com/a/42945293/15568251}
+#' @details \url{https://creativecommons.org/licenses/by-sa/3.0/}
 #'
 #' @noRd
 #'
@@ -241,7 +241,7 @@ glue_collapse_scCustom <- function(
 #' @return Returns the percentage of `x` values above the given threshold
 #'
 #' @author Satija Lab & all co-Authors of Seurat Package
-#' @references See Utilities.R in source code of Seurat https://github.com/satijalab/seurat/blob/master/R/utilities.R  (Licence: GPL-3).
+#' @references See Utilities.R in source code of Seurat \url{https://github.com/satijalab/seurat/blob/master/R/utilities.R}  (Licence: GPL-3).
 #'
 #' @note modified from Seurat version to return a percentage instead of proportion/decimal as part of `Percent_Expressing` function.  To be replaced following next Seurat version update.
 #'
@@ -265,7 +265,7 @@ PercentAbove_Seurat <- function(x, threshold) {
 #'
 #' @return A new string, that parses out the requested fields, and (if multiple), rejoins them with the same delimiter
 #'
-#' @references See Utilities.R in source code of Seurat https://github.com/satijalab/seurat/blob/master/R/utilities.R  (Licence: GPL-3).
+#' @references See Utilities.R in source code of Seurat \url{https://github.com/satijalab/seurat/blob/master/R/utilities.R}  (Licence: GPL-3).
 #'
 #' @keywords internal
 #'
@@ -288,7 +288,7 @@ ExtractField <- function(string, field = 1, delim = "_") {
 #'
 #' @return Returns number in middle of two provided values.
 #'
-#' @references Code to calculate middle value from: adapted from: https://stackoverflow.com/a/54147509/15568251.
+#' @references Code to calculate middle value from: adapted from: \url{https://stackoverflow.com/a/54147509/15568251}.
 #' Renamed and wrapped into function by Samuel Marsh.
 #'
 #' @keywords internal
@@ -316,7 +316,7 @@ Middle_Number <- function(
 #' @return vector differences x vs. y and y vs. x
 #'
 #' @references Function name and code from R-bloggers post:
-#' (https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/)
+#' \url{https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/}
 #'
 #' @keywords internal
 #'
