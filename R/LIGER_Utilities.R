@@ -985,7 +985,7 @@ Variable_Features_ALL_LIGER <- function(
 #' or name to Seurat object instead of defaulting to "tSNE".
 #' @param seurat_assay Name to set for assay in Seurat Object.  Default is "RNA".
 #'
-#' @return Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.
+#' @return Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
 #'
 #' @references Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
 #' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as

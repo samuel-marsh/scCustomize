@@ -392,7 +392,7 @@ Fetch_Meta <- function(
 #' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
 #'
 #' @references Original function is part of LIGER package as non-exported function
-#' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (License: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
 #' @import Matrix

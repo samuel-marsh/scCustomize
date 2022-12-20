@@ -192,7 +192,7 @@ Single_Color_Palette <- function(pal_color,
 
 #' Navy and Orange Dual Color Palette
 #'
-#' Shortcut to navy ornage color plot
+#' Shortcut to navy orange color plot
 #'
 #' @param flip_order Whether to flip the order of colors.
 #'
@@ -347,7 +347,7 @@ ColorBlind_Pal <- function(
 #'
 #' @return a character vector of hex color values of length n_colors.
 #'
-#' @references Ported from colorway package for CRAN release.  See \url{https://github.com/hypercompetent/colorway/blob/master/R/palettes.R} (Licence: GPL-3).
+#' @references Ported from colorway package for CRAN release.  See \url{https://github.com/hypercompetent/colorway/blob/master/R/palettes.R} (License: GPL-3).
 #'
 #' @keywords internal
 #'
@@ -403,7 +403,7 @@ varibow_scCustom <- function(
 #'       }
 #' }
 #'
-#' Function name and implementation modified from Seurat (Licence: GPL-3).
+#' Function name and implementation modified from Seurat (License: GPL-3).
 #' \url{https://github.com/satijalab/seurat}
 #'
 #' @export
@@ -543,7 +543,7 @@ scCustomize_Palette <- function(
 #' @return Plot of all colors in supplied palette/vector
 #'
 #' @references
-#' Adapted from colorway package `build_palette` internals (Licence: GPL-3).
+#' Adapted from colorway package `build_palette` internals (License: GPL-3).
 #' \url{https://github.com/hypercompetent/colorway}.
 #'
 #' @export

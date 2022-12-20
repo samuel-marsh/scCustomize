@@ -169,7 +169,7 @@ kMeans_Elbow <- function(
 #' @noRd
 #'
 #' @references This function and documentation text are modified versions of the `AutoPointSize` function
-#' and documentation from Seurat \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (Licence: GPL-3).
+#' and documentation from Seurat \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
 #' This version has been modified to take single value length input instead of data.frame input.
 #'
 
@@ -375,7 +375,7 @@ Move_Legend <- function(
 #' Clipping will occur unless e.g. `coord_cartesian(clip = "off")` is used.
 #'
 #' @references theme is a modified version of `theme_prism` from ggprism package \url{https://github.com/csdaw/ggprism}
-#' (Licence: GPL-3).  Param text is from `ggprism:theme_prism()` documentation \code{\link[ggprism]{theme_prism}}.
+#' (License: GPL-3).  Param text is from `ggprism:theme_prism()` documentation \code{\link[ggprism]{theme_prism}}.
 #' Theme adaptation based on ggprism vignette
 #' \url{https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1}.
 #'

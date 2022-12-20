@@ -179,7 +179,7 @@ Create_CellBender_Merged_Seurat <- function(
 #'   Otherwise a sparse matrix containing the expression data will be returned.
 #'
 #' @references Code used in function has been slightly modified from `Seurat::Read10X` function of
-#' Seurat package \url{https://github.com/satijalab/seurat} (Licence: GPL-3).  Function was modified to
+#' Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).  Function was modified to
 #' support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 #' potential PR to Seurat GitHub).
 #'
@@ -1056,7 +1056,7 @@ Read_GEO_Delim <- function(
 #' @return sparse matrix
 #'
 #' @references Code used in function has been modified from `Seurat::Read10X_h5` function of
-#' Seurat package \url{https://github.com/satijalab/seurat} (Licence: GPL-3).
+#' Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).
 #'
 #' @import cli
 #' @import Matrix
