@@ -136,6 +136,10 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #'
 #' @concept palettes
 #'
+#' @examples
+#' pal <- Single_Color_Palette(pal_color = "reds", num_colors = 7)
+#' PalettePlot(palette = pal)
+#'
 
 Single_Color_Palette <- function(pal_color,
                                  num_colors = NULL,
@@ -203,9 +207,8 @@ Single_Color_Palette <- function(pal_color,
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
 #' cols <- NavyAndOrange()
-#' }
+#' PalettePlot(palette = cols)
 #'
 
 NavyAndOrange <- function(
@@ -237,9 +240,8 @@ NavyAndOrange <- function(
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
 #' cols <- JCO_Four()
-#' }
+#' PalettePlot(palette = cols)
 #'
 
 JCO_Four <- function(
@@ -269,9 +271,8 @@ JCO_Four <- function(
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
 #' cols <- Dark2_Pal()
-#' }
+#' PalettePlot(palette = cols)
 #'
 
 Dark2_Pal <- function(
@@ -297,9 +298,8 @@ Dark2_Pal <- function(
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
 #' cols <- Hue_Pal(num_colors = 8)
-#' }
+#' PalettePlot(palette = cols)
 #'
 
 Hue_Pal <- function(
@@ -325,9 +325,8 @@ Hue_Pal <- function(
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
 #' cols <- ColorBlind_Pal()
-#' }
+#' PalettePlot(palette = cols)
 #'
 
 ColorBlind_Pal <- function(
@@ -409,6 +408,10 @@ varibow_scCustom <- function(
 #' @export
 #'
 #' @concept palettes
+#'
+#' @examples
+#' pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
+#' PalettePlot(palette = pal)
 #'
 
 DiscretePalette_scCustomize <- function(
@@ -495,9 +498,8 @@ DiscretePalette_scCustomize <- function(
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
 #' cols <- scCustomize_Palette(num_groups = 24, ggplot_default_colors = FALSE)
-#' }
+#' PalettePlot(palette = cols)
 #'
 
 scCustomize_Palette <- function(
@@ -551,9 +553,8 @@ scCustomize_Palette <- function(
 #' @concept palettes
 #'
 #' @examples
-#' \dontrun{
-#' PalettePlot(palette = varibow(n_colors = 36))
-#' }
+#' pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
+#' PalettePlot(palette = pal)
 #'
 
 PalettePlot <- function(palette = NULL) {
