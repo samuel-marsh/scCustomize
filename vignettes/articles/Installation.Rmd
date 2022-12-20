@@ -59,7 +59,7 @@ remotes::install_github(repo = "samuel-marsh/scCustomize")
 
 ## Master branch    
 Full releases will be available on the master branch with version scheme vX.X.X.  
-See [NEWS/Changelog](https://samuel-marsh.github.io/scCustomize/news/index.html) file for ChangeLog with additions, changes, and fixes contained in each release.
+See [NEWS/ChangeLog](https://samuel-marsh.github.io/scCustomize/news/index.html) file for ChangeLog with additions, changes, and fixes contained in each release.
 
 ## Develop branch    
 I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.yyyy.  

@@ -144,7 +144,7 @@ knitr::include_graphics(c("../../docs/reference/figures/assets/delim_default.png
 See [manual entry](https://samuel-marsh.github.io/scCustomize/reference/Read_GEO_Delim.html) for more info.
 
 
-## Import Multiple Files from Mutliple Directories  
+## Import Multiple Files from Multiple Directories  
 In addition to those functions for single directories, scCustomize contains functions for when files are contained in multiple sub-directories within shared parent directory.  
 *NOTE: These functions all assume that each sub-directory contains one sample and that sub-directory structure is identical between all samples.*  
 

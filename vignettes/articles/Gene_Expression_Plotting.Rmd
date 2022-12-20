@@ -263,7 +263,7 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", spl
 ```
 
 
-### Change the transparnecy of points
+### Change the transparency of points
 `FeaturePlot_scCustom` also allows for customization of the transparency (alpha) of both the points of expressing cells and non-expressing cells using optional parameters.
 ```{r eval=FALSE}
 FeaturePlot_scCustom(object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
