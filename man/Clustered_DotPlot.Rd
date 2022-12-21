@@ -116,8 +116,10 @@ A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and
 Clustered DotPlots using ComplexHeatmap
 }
 \examples{
+\donttest{
 library(Seurat)
 Clustered_DotPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
+}
 
 }
 \references{
