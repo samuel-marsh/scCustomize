@@ -442,10 +442,11 @@ Plot_Median_Mito <- function(
 #' library(Seurat)
 #' cd_features <- list(c(CD79B', CD79A', CD19', CD180', CD200', 'CD3D', CD2','CD3E',
 #' 'CD7','CD8A', 'CD14', 'CD1C', 'CD68', 'CD9', 'CD247'))
-#' pbmc_small <- AddModuleScore(object = pbmc_small, features = cd_features, ctrl = 5,name = 'CD_Features')
+#' pbmc_small <- AddModuleScore(object = pbmc_small, features = cd_features, ctrl = 5,
+#' name = 'CD_Features')
 #'
-#' Plot_Median_Other(seurat_object = pbmc_small, median_var = "CD_Features1", sample_col = "orig.ident",
-#' group_by = "Treatment")
+#' Plot_Median_Other(seurat_object = pbmc_small, median_var = "CD_Features1",
+#' sample_col = "orig.ident", group_by = "Treatment")
 #' }
 #'
 

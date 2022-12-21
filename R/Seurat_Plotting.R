@@ -720,7 +720,7 @@ Cluster_Highlight_Plot <- function(
 #' library(Seurat)
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
-#' Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id",
+#' Meta_Highlight_Plot(seurat_object = pbmc_small, meta_data_column = "sample_id",
 #' meta_data_highlight = "sample1", highlight_color = "gold", background_color = "lightgray",
 #' pt.size = 2)
 #'
