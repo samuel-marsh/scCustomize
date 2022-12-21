@@ -245,7 +245,7 @@ Median_Stats <- function(
   all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
 
   # Filter meta data for columns of interest
-  meta_numeric_check <- seurat_object@meta.data %>%
+  meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
     select_at(all_variables)
 
   all_variables <- Meta_Numeric(data = meta_numeric_check)
@@ -254,7 +254,7 @@ Median_Stats <- function(
   all_variable_col_names <- c(group_by_var, paste0("Median_", all_variables))
 
   # Calculate medians for each group_by
-  meta_data <- seurat_object@meta.data
+  meta_data <- Fetch_Meta(object = seurat_object)
 
   median_by_group <- meta_data %>%
     group_by(.data[[group_by_var]]) %>%

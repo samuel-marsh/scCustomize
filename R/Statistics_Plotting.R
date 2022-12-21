@@ -60,7 +60,7 @@ Plot_Median_Genes <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -196,7 +196,7 @@ Plot_Median_UMIs <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -335,7 +335,7 @@ Plot_Median_Mito <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -485,7 +485,7 @@ Plot_Median_Other <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -580,7 +580,7 @@ Plot_Median_Other <- function(
 #' @import cli
 #' @import ggplot2
 #' @import rlang
-#' @importFrom dplyr select slice left_join rename
+#' @importFrom dplyr select slice left_join rename all_of
 #' @importFrom magrittr "%>%"
 #'
 #' @export

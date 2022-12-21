@@ -45,10 +45,9 @@
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1",
+#' library(Seurat)
+#' FeaturePlot_scCustom(seurat_object = pbmc_small, features = "CD3E",
 #' colors_use = viridis_plasma_dark_high, na_color = "lightgray")
-#' }
 #'
 
 FeaturePlot_scCustom <- function(

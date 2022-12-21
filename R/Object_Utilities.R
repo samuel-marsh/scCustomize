@@ -307,8 +307,10 @@ Add_Cell_Complexity_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
+#' \dontrun{
 #' new_meta <- Meta_Remove_Seurat(meta_data = meta_data_df, seurat_object = object)
 #' object <- AddMetaData(object = object, metadata = new_meta)
+#' }
 #'
 
 Meta_Remove_Seurat <- function(
@@ -535,7 +537,8 @@ Add_Sample_Meta <- function(
 #' variables_include = "batch")
 #'
 #' # Return all columns from meta data
-#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident", include_all = TRUE)
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' include_all = TRUE)
 #'
 
 Extract_Sample_Meta <- function(
