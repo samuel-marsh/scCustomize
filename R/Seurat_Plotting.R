@@ -1423,8 +1423,10 @@ DotPlot_scCustom <- function(
 #' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
+#' \donttest{
 #' library(Seurat)
 #' Clustered_DotPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
+#'}
 #'
 
 Clustered_DotPlot <- function(
