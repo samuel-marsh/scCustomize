@@ -26,9 +26,12 @@
 #' @concept stats_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Plot_Median_Genes(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-#' }
+#' library(Seurat)
+#' # Create example groups
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' # Plot
+#' Plot_Median_Genes(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 #'
 
 Plot_Median_Genes <- function(
@@ -159,9 +162,12 @@ Plot_Median_Genes <- function(
 #' @concept stats_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Plot_Median_UMIs(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-#' }
+#' library(Seurat)
+#' # Create example groups
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' # Plot
+#' Plot_Median_UMIs(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 #'
 
 Plot_Median_UMIs <- function(
@@ -292,9 +298,15 @@ Plot_Median_UMIs <- function(
 #' @concept stats_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-#' }
+#' library(Seurat)
+#' # Create example groups
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' # Add mito
+#' pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
+#'
+#' # Plot
+#' Plot_Median_Mito(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 #'
 
 Plot_Median_Mito <- function(
@@ -427,7 +439,12 @@ Plot_Median_Mito <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Plot_Median_Other(seurat_object = obj, median_var = "module_score", sample_col = "orig.ident",
+#' library(Seurat)
+#' cd_features <- list(c(CD79B', CD79A', CD19', CD180', CD200', 'CD3D', CD2','CD3E',
+#' 'CD7','CD8A', 'CD14', 'CD1C', 'CD68', 'CD9', 'CD247'))
+#' pbmc_small <- AddModuleScore(object = pbmc_small, features = cd_features, ctrl = 5,name = 'CD_Features')
+#'
+#' Plot_Median_Other(seurat_object = pbmc_small, median_var = "CD_Features1", sample_col = "orig.ident",
 #' group_by = "Treatment")
 #' }
 #'
@@ -607,10 +624,10 @@ Plot_Cells_per_Sample <- function(
     data.frame() %>%
     rename(!!sample_col := .data[["Var1"]], Number_of_Cells = .data[["Freq"]])
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   meta <- meta %>%
-    select(.data[[sample_col]], .data[[group_by]])
+    select(all_of(c(sample_col, group_by)))
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
 
