@@ -266,7 +266,7 @@ Test_Integer <- function(
 #' @examples
 #' library(Seurat)
 #' p <- VlnPlot(object = pbmc_small, features = "CD3E")
-#' p + UnRotate_X
+#' p + UnRotate_X()
 #'
 
 UnRotate_X <- function(...) {
