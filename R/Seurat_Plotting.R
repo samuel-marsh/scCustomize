@@ -438,7 +438,7 @@ FeaturePlot_DualAssay <- function(
 #' library(Seurat)
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
-#' Split_FeatureScatter(seurat_object = object, features1= "nCount_RNA", feature2 = "nFeature_RNA",
+#' Split_FeatureScatter(seurat_object = pbmc_small, features1= "nCount_RNA", feature2 = "nFeature_RNA",
 #' split.by = "sample_id")
 #'
 
@@ -1268,9 +1268,8 @@ Stacked_VlnPlot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' DotPlot_scCustom(seurat_object = object, features = gene_list)
-#' }
+#' library(Seurat)
+#' DotPlot_scCustom(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
 #'
 
 DotPlot_scCustom <- function(
