@@ -435,10 +435,11 @@ FeaturePlot_DualAssay <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
+#' library(Seurat)
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
 #' Split_FeatureScatter(seurat_object = object, features1= "nCount_RNA", feature2 = "nFeature_RNA",
-#' split.by = "orig.ident", colors_use = "navy")
-#' }
+#' split.by = "sample_id")
 #'
 
 Split_FeatureScatter <- function(
@@ -615,10 +616,8 @@ Split_FeatureScatter <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Cluster_Highlight_Plot(seurat_object = object, cluster_name = "Microglia", highlight_color = "gold",
+#' Cluster_Highlight_Plot(seurat_object = pbmc_small, cluster_name = "1", highlight_color = "gold",
 #' background_color = "lightgray",  pt.size = 2)
-#' }
 #'
 
 Cluster_Highlight_Plot <- function(
@@ -718,11 +717,12 @@ Cluster_Highlight_Plot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Meta_Highlight_Plot(seurat_object = object, meta_data_column = "orig.ident",
-#' meta_data_highlight = "sample_01", highlight_color = "gold", background_color = "lightgray",
+#' library(Seurat)
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id",
+#' meta_data_highlight = "sample1", highlight_color = "gold", background_color = "lightgray",
 #' pt.size = 2)
-#' }
 #'
 
 Meta_Highlight_Plot <- function(
@@ -852,15 +852,17 @@ Meta_Highlight_Plot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
-#' GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
+#' library(Seurat)
 #'
+#' # Creating example non-overlapping vectors of cells
+#' MS4A1 <- WhichCells(object = pbmc_small, expression = MS4A1 > 4)
+#' GZMB <- WhichCells(object = pbmc_small, expression = GZMB > 4)
+#'
+#' # Format as named list
 #' cells <- list("MS4A1" = MS4A1,
 #'               "GZMB" = GZMB)
 #'
-#' Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
-#' }
+#' Cell_Highlight_Plot(seurat_object = pbmc_small, cells_highlight = cells)
 #'
 
 Cell_Highlight_Plot <- function(
@@ -990,9 +992,8 @@ Cell_Highlight_Plot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' VlnPlot_scCustom(seurat_object = object, features = "Cx3cr1")
-#' }
+#' library(Seurat)
+#' VlnPlot_scCustom(seurat_object = pbmc_small, features = "CD3E")
 #'
 
 VlnPlot_scCustom <- function(
@@ -1109,9 +1110,9 @@ VlnPlot_scCustom <- function(
 #' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
-#' \dontrun{
-#' Stacked_VlnPlot(seurat_object = object, features = gene_list, x_lab_rotate = TRUE)
-#' }
+#' library(Seurat)
+#' Stacked_VlnPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"),
+#' x_lab_rotate = TRUE)
 #'
 
 Stacked_VlnPlot <- function(
@@ -1423,9 +1424,8 @@ DotPlot_scCustom <- function(
 #' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
-#' \dontrun{
-#' Clustered_DotPlot(seurat_object = object, features = gene_list)
-#' }
+#' library(Seurat)
+#' Clustered_DotPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
 #'
 
 Clustered_DotPlot <- function(
@@ -1837,9 +1837,8 @@ Clustered_DotPlot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' DimPlot_scCustom(seurat_object = object)
-#' }
+#' library(Seurat)
+#' DimPlot_scCustom(seurat_object = pbmc_small)
 #'
 
 DimPlot_scCustom <- function(
@@ -2098,10 +2097,12 @@ DimPlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' DimPlot_All_Samples(seurat_object = object, meta_data_column = "orig.ident", color = "black",
-#' num_columns = 2, reduction = "tsne")
-#' }
+#' library(Seurat)
+#'
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' DimPlot_All_Samples(seurat_object = pbmc_small, meta_data_column = "sample_id", color = "black",
+#' num_columns = 2)
 #'
 
 DimPlot_All_Samples <- function(
@@ -2214,9 +2215,8 @@ DimPlot_All_Samples <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' VariableFeaturePlot_scCustom(seurat_object = object, num_features = 10)
-#' }
+#' library(Seurat)
+#' VariableFeaturePlot_scCustom(seurat_object = pbmc_small, num_features = 10)
 #'
 
 VariableFeaturePlot_scCustom <- function(
