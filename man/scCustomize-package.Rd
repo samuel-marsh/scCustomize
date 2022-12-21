@@ -4,9 +4,9 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: Tools for Custom Visualization & Streamlined Analyses of Single Cell Sequencing}
+\title{scCustomize: Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing}
 \description{
-Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using 'R'. 'scCustomize' aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.
+Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using 'R'. 'scCustomize' aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions. For citation please see package website FAQ: <[https://samuel-marsh.github.io/scCustomize/articles/FAQ.html]https://samuel-marsh.github.io/scCustomize/articles/FAQ.html> or Zenodo record: \doi{10.5281/zenodo.5706430}
 }
 \section{Package options}{
 
