@@ -28,8 +28,10 @@ data.frame with only new columns.
 Remove any columns from new meta_data data.frame in preparation for adding back to Seurat Object
 }
 \examples{
+\dontrun{
 new_meta <- Meta_Remove_Seurat(meta_data = meta_data_df, seurat_object = object)
 object <- AddMetaData(object = object, metadata = new_meta)
+}
 
 }
 \concept{object_util}

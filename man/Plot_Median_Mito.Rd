@@ -46,9 +46,15 @@ A ggplot object
 Plot of median percent mito per cell per sample grouped by desired meta data variable.
 }
 \examples{
-\dontrun{
-Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-}
+library(Seurat)
+# Create example groups
+pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+
+# Add mito
+pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
+
+# Plot
+Plot_Median_Mito(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 
 }
 \concept{stats_plotting}

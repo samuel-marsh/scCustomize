@@ -52,7 +52,8 @@ sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.iden
 variables_include = "batch")
 
 # Return all columns from meta data
-sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident", include_all = TRUE)
+sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+include_all = TRUE)
 
 }
 \concept{object_util}

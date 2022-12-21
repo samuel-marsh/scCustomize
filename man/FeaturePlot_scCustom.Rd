@@ -81,10 +81,9 @@ A ggplot object
 Create Custom FeaturePlots and preserve scale (no binning)
 }
 \examples{
-\dontrun{
-FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1",
+library(Seurat)
+FeaturePlot_scCustom(seurat_object = pbmc_small, features = "CD3E",
 colors_use = viridis_plasma_dark_high, na_color = "lightgray")
-}
 
 }
 \concept{seurat_plotting}

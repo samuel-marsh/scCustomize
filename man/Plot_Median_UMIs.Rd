@@ -46,9 +46,12 @@ A ggplot object
 Plot of median UMIs per cell per sample grouped by desired meta data variable.
 }
 \examples{
-\dontrun{
-Plot_Median_UMIs(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-}
+library(Seurat)
+# Create example groups
+pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+
+# Plot
+Plot_Median_UMIs(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 
 }
 \concept{stats_plotting}
