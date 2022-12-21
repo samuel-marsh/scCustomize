@@ -1268,8 +1268,10 @@ Stacked_VlnPlot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
+#' \donttest{
 #' library(Seurat)
 #' DotPlot_scCustom(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
+#'}
 #'
 
 DotPlot_scCustom <- function(
