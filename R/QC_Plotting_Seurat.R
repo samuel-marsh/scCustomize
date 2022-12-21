@@ -39,7 +39,6 @@
 #' library(Seurat)
 #' QC_Plots_Genes(seurat_object = pbmc_small, plot_title = "Genes per Cell", low_cutoff = 40,
 #' high_cutoff = 85)
-#' }
 #'
 
 QC_Plots_Genes <- function(

@@ -309,7 +309,6 @@ Add_Cell_Complexity_Seurat <- function(
 #' @examples
 #' new_meta <- Meta_Remove_Seurat(meta_data = meta_data_df, seurat_object = object)
 #' object <- AddMetaData(object = object, metadata = new_meta)
-#' }
 #'
 
 Meta_Remove_Seurat <- function(
