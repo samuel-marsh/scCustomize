@@ -24,9 +24,8 @@
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' PC_Plotting(seurat_object = seurat, dim_number = 25, "plots/")
-#' }
+#' library(Seurat)
+#' PC_Plotting(seurat_object = pbmc_small, dim_number = 1)
 #'
 
 PC_Plotting <- function(
@@ -265,12 +264,9 @@ Test_Integer <- function(
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a plot and unrotate the x-axis label
-#' library(ggplot2)
-#' p <- VlnPlot(object = obj, features = "Cx3cr1")
+#' library(Seurat)
+#' p <- VlnPlot(object = pbmc_small, features = "CD3E")
 #' p + UnRotate_X
-#' }
 #'
 
 UnRotate_X <- function(...) {
@@ -343,12 +339,11 @@ Blank_Theme <- function(...) {
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a plot and move the legend.
+#' # Generate a plot and customize theme
 #' library(ggplot2)
-#' p <- VlnPlot(object = obj, features = "Cx3cr1")
+#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 #' p + Move_Legend("left")
-#' }
 #'
 
 Move_Legend <- function(
@@ -395,11 +390,12 @@ Move_Legend <- function(
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
+#' # Generate a plot and customize theme
 #' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 #' p + theme_ggprism_mod()
-#' }
+#'
 
 theme_ggprism_mod <- function(
   palette = "black_and_white",

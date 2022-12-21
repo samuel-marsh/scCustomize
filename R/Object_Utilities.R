@@ -43,9 +43,8 @@
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' object <- Add_Mito_Ribo_Seurat(seurat_object = object, species = "mouse")
-#' }
+#' library(Seurat)
+#' pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
 #'
 
 Add_Mito_Ribo_Seurat <- function(
@@ -242,9 +241,8 @@ Add_Mito_Ribo_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
-#' }
+#' library(Seurat)
+#' pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
 #'
 
 Add_Cell_Complexity_Seurat <- function(
@@ -309,7 +307,6 @@ Add_Cell_Complexity_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
 #' new_meta <- Meta_Remove_Seurat(meta_data = meta_data_df, seurat_object = object)
 #' object <- AddMetaData(object = object, metadata = new_meta)
 #' }
@@ -529,16 +526,17 @@ Add_Sample_Meta <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident")
+#' library(Seurat)
+#' pbmc_small$batch <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident")
 #'
 #' # Only return specific columns from meta data (orig.ident and batch)
-#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident",
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
 #' variables_include = "batch")
 #'
 #' # Return all columns from meta data
-#' sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "orig.ident", include_all = TRUE)
-#'}
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident", include_all = TRUE)
 #'
 
 Extract_Sample_Meta <- function(
@@ -734,10 +732,11 @@ Add_CellBender_Diff <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data,
+#' library(Seurat)
+#' clu_pal <- c("red", "green", "blue")
+#'
+#' pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
 #' data_name = "rd1_colors")
-#' }
 #'
 
 Store_Misc_Info_Seurat <- function(
@@ -839,10 +838,12 @@ Store_Misc_Info_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector,
+#' library(Seurat)
+#' clu_pal <- c("red", "green", "blue")
+#'
+#' pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
 #' data_name = "rd1_colors")
-#' }
+#'
 #'
 
 Store_Palette_Seurat <- function(

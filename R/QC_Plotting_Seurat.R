@@ -36,9 +36,9 @@
 #' @concept object_qc_plotting
 #'
 #' @examples
-#' \dontrun{
-#' QC_Plots_Genes(seurat_object = object, plot_title = "Genes per Cell", low_cutoff = 600,
-#' high_cutoff = 4000)
+#' library(Seurat)
+#' QC_Plots_Genes(seurat_object = pbmc_small, plot_title = "Genes per Cell", low_cutoff = 40,
+#' high_cutoff = 85)
 #' }
 #'
 
@@ -120,10 +120,9 @@ QC_Plots_Genes <- function(
 #' @concept object_qc_plotting
 #'
 #' @examples
-#' \dontrun{
-#' QC_Plots_UMIs(seurat_object = object, plot_title = "UMIs per Cell", low_cutoff = 500,
-#' high_cutoff = 10000)
-#' }
+#' library(Seurat)
+#' QC_Plots_UMIs(seurat_object = pbmc_small, plot_title = "UMIs per Cell", low_cutoff = 75,
+#' high_cutoff = 600)
 #'
 
 QC_Plots_UMIs <- function(
@@ -381,9 +380,10 @@ QC_Plots_Feature <- function(
 #' @concept object_qc_plotting
 #'
 #' @examples
-#' \dontrun{
-#' QC_Plots_Complexity(seurat_object = object)
-#' }
+#' library(Seurat)
+#' pbmc_small <- Add_Cell_Complexity_Seurat(pbmc_small)
+#'
+#' QC_Plots_Complexity(seurat_object = pbmc_small)
 #'
 
 QC_Plots_Complexity <- function(
@@ -560,10 +560,9 @@ QC_Plots_Combined_Vln <- function(
 #' @concept object_qc_plotting
 #'
 #' @examples
-#' \dontrun{
-#' QC_Plot_UMIvsGene(seurat_object = obj, x_axis_label = "UMIs per Cell/Nucleus",
+#' library(Seurat)
+#' QC_Plot_UMIvsGene(seurat_object = pbmc_small, x_axis_label = "UMIs per Cell/Nucleus",
 #' y_axis_label = "Genes per Cell/Nucleus")
-#' }
 #'
 
 QC_Plot_UMIvsGene <- function(
