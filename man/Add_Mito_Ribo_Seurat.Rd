@@ -68,9 +68,8 @@ A Seurat Object
 Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
 }
 \examples{
-\dontrun{
-object <- Add_Mito_Ribo_Seurat(seurat_object = object, species = "mouse")
-}
+library(Seurat)
+pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
 
 }
 \concept{object_util}

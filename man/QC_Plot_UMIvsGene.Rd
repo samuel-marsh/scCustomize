@@ -91,10 +91,9 @@ A ggplot object
 Custom FeatureScatter for initial QC checks including lines for thresholding
 }
 \examples{
-\dontrun{
-QC_Plot_UMIvsGene(seurat_object = obj, x_axis_label = "UMIs per Cell/Nucleus",
+library(Seurat)
+QC_Plot_UMIvsGene(seurat_object = pbmc_small, x_axis_label = "UMIs per Cell/Nucleus",
 y_axis_label = "Genes per Cell/Nucleus")
-}
 
 }
 \concept{object_qc_plotting}

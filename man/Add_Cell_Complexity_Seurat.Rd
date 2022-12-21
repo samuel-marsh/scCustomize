@@ -29,9 +29,8 @@ A Seurat Object
 Add measure of cell complexity/novelty (log10PerUMI) for data QC.
 }
 \examples{
-\dontrun{
-object <- Add_Cell_Complexity_Seurat(seurat_object = object)
-}
+library(Seurat)
+pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
 
 }
 \concept{object_util}

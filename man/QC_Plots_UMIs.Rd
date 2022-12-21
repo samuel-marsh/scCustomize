@@ -64,10 +64,9 @@ A ggplot object
 #' Custom VlnPlot for initial QC checks including lines for thresholding
 }
 \examples{
-\dontrun{
-QC_Plots_UMIs(seurat_object = object, plot_title = "UMIs per Cell", low_cutoff = 500,
-high_cutoff = 10000)
-}
+library(Seurat)
+QC_Plots_UMIs(seurat_object = pbmc_small, plot_title = "UMIs per Cell", low_cutoff = 75,
+high_cutoff = 600)
 
 }
 \concept{object_qc_plotting}

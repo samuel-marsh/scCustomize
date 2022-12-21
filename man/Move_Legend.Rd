@@ -18,12 +18,11 @@ Returns a list-like object of class \emph{theme}.
 Shortcut for thematic modification to move legend position.
 }
 \examples{
-\dontrun{
-# Generate a plot and move the legend.
+# Generate a plot and customize theme
 library(ggplot2)
-p <- VlnPlot(object = obj, features = "Cx3cr1")
+df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 p + Move_Legend("left")
-}
 
 }
 \concept{themes}

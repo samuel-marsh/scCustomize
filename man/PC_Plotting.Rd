@@ -19,9 +19,8 @@ Plot PC Heatmaps and Dim Loadings for exploratory analysis.  Plots a single Heat
 Used for PC_Loading_Plots function.
 }
 \examples{
-\dontrun{
-PC_Plotting(seurat_object = seurat, dim_number = 25, "plots/")
-}
+library(Seurat)
+PC_Plotting(seurat_object = pbmc_small, dim_number = 1)
 
 }
 \seealso{

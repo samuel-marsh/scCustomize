@@ -34,10 +34,12 @@ Seurat Object with new entries in the \verb{@misc} slot.
 Wrapper function around \code{Store_Misc_Info_Seurat} to store color palettes.
 }
 \examples{
-\dontrun{
-obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector,
+library(Seurat)
+clu_pal <- c("red", "green", "blue")
+
+pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
 data_name = "rd1_colors")
-}
+
 
 }
 \concept{object_util}
