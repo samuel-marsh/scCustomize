@@ -1,3 +1,16 @@
+## Resubmission  
+This is a resubmission. In this version I have:  
+
+- Single-quoted software names in DESCRIPTION.  
+- Omitted redundant "Tools" in package title.  
+- Added doi and citation links to description text.
+- Fixed instances where TRUE/FALSE were abbreviated.  
+- Added return values to documentation of exported functions where missing.  
+- Where possible I have eliminated `\dontrun{}` in documentation examples.  
+    - In remaining instances there is not lightweight example that can be used in documentation.
+    These are documented in more detail in accompanying pkgdown website which utilizes heavier weight example data.  
+
+
 ## R CMD check results
 
 0 errors | 0 warnings | 2 notes
