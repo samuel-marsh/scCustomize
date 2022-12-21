@@ -55,15 +55,17 @@ A ggplot object
 Create Plot with meta data variable of interest highlighted
 }
 \examples{
-\dontrun{
-MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
-GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
+library(Seurat)
 
+# Creating example non-overlapping vectors of cells
+MS4A1 <- WhichCells(object = pbmc_small, expression = MS4A1 > 4)
+GZMB <- WhichCells(object = pbmc_small, expression = GZMB > 4)
+
+# Format as named list
 cells <- list("MS4A1" = MS4A1,
               "GZMB" = GZMB)
 
-Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
-}
+Cell_Highlight_Plot(seurat_object = pbmc_small, cells_highlight = cells)
 
 }
 \concept{seurat_plotting}

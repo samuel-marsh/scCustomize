@@ -50,10 +50,12 @@ A ggplot object
 Creates DimPlot layout containing all samples within Seurat Object from orig.ident column
 }
 \examples{
-\dontrun{
-DimPlot_All_Samples(seurat_object = object, meta_data_column = "orig.ident", color = "black",
-num_columns = 2, reduction = "tsne")
-}
+library(Seurat)
+
+pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+
+DimPlot_All_Samples(seurat_object = pbmc_small, meta_data_column = "sample_id", color = "black",
+num_columns = 2)
 
 }
 \concept{seurat_plotting}

@@ -92,9 +92,8 @@ A ggplot object
 Creates DimPlot with some of the settings modified from their Seurat defaults (colors_use, shuffle, label).
 }
 \examples{
-\dontrun{
-DimPlot_scCustom(seurat_object = object)
-}
+library(Seurat)
+DimPlot_scCustom(seurat_object = pbmc_small)
 
 }
 \references{

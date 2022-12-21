@@ -54,11 +54,12 @@ A ggplot object
 Create Plot with meta data variable of interest highlighted
 }
 \examples{
-\dontrun{
-Meta_Highlight_Plot(seurat_object = object, meta_data_column = "orig.ident",
-meta_data_highlight = "sample_01", highlight_color = "gold", background_color = "lightgray",
+library(Seurat)
+pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+
+Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id",
+meta_data_highlight = "sample1", highlight_color = "gold", background_color = "lightgray",
 pt.size = 2)
-}
 
 }
 \concept{seurat_plotting}

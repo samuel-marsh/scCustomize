@@ -73,9 +73,9 @@ A ggplot object
 Code for creating stacked violin plot gene expression.
 }
 \examples{
-\dontrun{
-Stacked_VlnPlot(seurat_object = object, features = gene_list, x_lab_rotate = TRUE)
-}
+library(Seurat)
+Stacked_VlnPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"),
+x_lab_rotate = TRUE)
 
 }
 \references{
