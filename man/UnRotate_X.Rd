@@ -18,7 +18,7 @@ Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnP
 \examples{
 library(Seurat)
 p <- VlnPlot(object = pbmc_small, features = "CD3E")
-p + UnRotate_X
+p + UnRotate_X()
 
 }
 \concept{themes}
