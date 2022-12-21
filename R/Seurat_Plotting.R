@@ -438,7 +438,7 @@ FeaturePlot_DualAssay <- function(
 #' library(Seurat)
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
-#' Split_FeatureScatter(seurat_object = pbmc_small, features1= "nCount_RNA", feature2 = "nFeature_RNA",
+#' Split_FeatureScatter(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
 #' split.by = "sample_id")
 #'
 
