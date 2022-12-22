@@ -438,8 +438,9 @@ Plot_Median_Mito <- function(
 #' @examples
 #' \dontrun{
 #' library(Seurat)
-#' cd_features <- list(c(CD79B', CD79A', CD19', CD180', CD200', 'CD3D', CD2','CD3E',
+#' cd_features <- list(c('CD79B', CD79A', CD19', CD180', CD200', 'CD3D', CD2','CD3E',
 #' 'CD7','CD8A', 'CD14', 'CD1C', 'CD68', 'CD9', 'CD247'))
+#'
 #' pbmc_small <- AddModuleScore(object = pbmc_small, features = cd_features, ctrl = 5,
 #' name = 'CD_Features')
 #'
