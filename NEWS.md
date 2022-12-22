@@ -1,4 +1,4 @@
-# scCustomize 1.1.0 (2022-12-21)  
+# scCustomize 1.1.0 (2022-12-22)  
 ## Added  
 - Added `merge` parameter to `Read10X_GEO`, `Read10X_h5_GEO`, `Read_GEO_Delim` and `Read_CellBender_h5_Multi_File`.  
 - Added `raster.dpi` parameter to `DimPlot_LIGER`.  
