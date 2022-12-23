@@ -9,7 +9,7 @@
 #'   Used for PC_Loading_Plots function.
 #'
 #' @param seurat_object Seurat Object.
-#' @param dims_number A single dim to plot (integer).
+#' @param dim_number A single dim to plot (integer).
 #'
 #' @return A plot of PC heatmap and gene loadings for single
 #'
@@ -24,9 +24,8 @@
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' PC_Plotting(seurat_object = seurat, dims_plot = 25, "plots/")
-#' }
+#' library(Seurat)
+#' PC_Plotting(seurat_object = pbmc_small, dim_number = 1)
 #'
 
 PC_Plotting <- function(
@@ -67,8 +66,8 @@ PC_Plotting <- function(
 #' @noRd
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Modified function for use in scCustomtize)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/.  Solution for re-enabling plot spacing modification by Abdenour ABBAS (comment on original blog post; http://disq.us/p/2b54qh2).
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}.  Solution for re-enabling plot spacing modification by Abdenour ABBAS (comment on original blog post; \url{http://disq.us/p/2b54qh2}).
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 
 Modify_VlnPlot <- function(
@@ -111,11 +110,12 @@ Modify_VlnPlot <- function(
 #'
 #' @import ggplot2
 #' @importFrom magrittr "%>%"
+#' @importFrom stats kmeans var
 #' @importFrom tibble rownames_to_column
 #'
 #' @noRd
 #'
-#' @references Code to calculate wss values from: https://stackoverflow.com/a/15376462/15568251
+#' @references Code to calculate wss values from: \url{https://stackoverflow.com/a/15376462/15568251}
 #'
 
 kMeans_Elbow <- function(
@@ -137,7 +137,7 @@ kMeans_Elbow <- function(
   plot_data$k <- as.numeric(plot_data$k)
 
   # Plot data
-  plot <- ggplot(data = plot_data, mapping = aes(y = wss, x = k)) +
+  plot <- ggplot(data = plot_data, mapping = aes(y = wss, x = .data[["k"]])) +
     geom_point() +
     geom_path() +
     scale_x_continuous(n.breaks = k_max) +
@@ -156,6 +156,41 @@ kMeans_Elbow <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+#' Automatically calculate a point size for ggplot2-based scatter plots
+#
+#' It happens to look good
+#'
+#' @param data a single value length vector corresponding to the number of cells.
+#' @param raster If TRUE, point size is set to 1
+#'
+#' @return The "optimal" point size for visualizing these data
+#'
+#' @noRd
+#'
+#' @references This function and documentation text are modified versions of the `AutoPointSize` function
+#' and documentation from Seurat \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
+#' This version has been modified to take single value length input instead of data.frame input.
+#'
+
+AutoPointSize_scCustom <- function(data, raster = NULL) {
+  # for single value
+  if (is.null(x = nrow(x = data)) && length(x = data) == 1 && is.numeric(x = data)) {
+    return(ifelse(
+      test = isTRUE(x = raster),
+      yes = 1,
+      no = min(1583 / data, 1)
+    ))
+  } else {
+    # for data frame/object based values (from Seurat, see documentation)
+    return(ifelse(
+      test = isTRUE(x = raster),
+      yes = 1,
+      no = min(1583 / nrow(x = data), 1)
+    ))
+  }
+}
+
+
 #' Extract max value for stacked violin plot
 #'
 #' extract max expression value
@@ -169,8 +204,8 @@ kMeans_Elbow <- function(
 #' @noRd
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Modified function for use in scCustomtize)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 
 # extract the max value of the y axis
@@ -193,7 +228,7 @@ Extract_Max <- function(
 #' @noRd
 #'
 #' @author Iterator (StackOverflow)
-#' @source  https://stackoverflow.com/a/7798235
+#' @source  \url{https://stackoverflow.com/a/7798235}
 #' @details https://creativecommons.org/licenses/by-sa/3.0/
 #'
 
@@ -218,19 +253,20 @@ Test_Integer <- function(
 #'
 #' Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnPlot is rotated by default).
 #'
+#' @param ... extra arguments passed to `ggplot2::theme()`.
+#'
 #' @importFrom ggplot2 theme
 #'
 #' @export
 #'
+#' @return Returns a list-like object of class _theme_.
+#'
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a plot and unrotate the x-axis label
-#' library(ggplot2)
-#' p <- VlnPlot(object = obj, features = "Cx3cr1")
-#' p + UnRotate_X
-#' }
+#' library(Seurat)
+#' p <- VlnPlot(object = pbmc_small, features = "CD3E")
+#' p + UnRotate_X()
 #'
 
 UnRotate_X <- function(...) {
@@ -249,19 +285,23 @@ UnRotate_X <- function(...) {
 #'
 #' Shortcut for thematic modification to remove all axis labels and grid lines
 #'
+#' @param ... extra arguments passed to `ggplot2::theme()`.
+#'
 #' @importFrom ggplot2 theme
 #'
 #' @export
 #'
+#' @return Returns a list-like object of class _theme_.
+#'
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a plot without axes, labels, or grid lines
+#' # Generate a plot and customize theme
 #' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 #' p + Blank_Theme()
-#' }
+#'
 
 Blank_Theme <- function(...) {
   blank_theme <- theme(
@@ -288,20 +328,22 @@ Blank_Theme <- function(...) {
 #' Shortcut for thematic modification to move legend position.
 #'
 #' @param position valid position to move legend.  Default is "right".
+#' @param ... extra arguments passed to `ggplot2::theme()`.
 #'
 #' @importFrom ggplot2 theme
 #'
 #' @export
 #'
+#' @return Returns a list-like object of class _theme_.
+#'
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a plot and move the legend.
+#' # Generate a plot and customize theme
 #' library(ggplot2)
-#' p <- VlnPlot(object = obj, features = "Cx3cr1")
+#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 #' p + Move_Legend("left")
-#' }
 #'
 
 Move_Legend <- function(
@@ -333,10 +375,10 @@ Move_Legend <- function(
 #' @param border `logical`. Should a border be drawn around the plot?
 #' Clipping will occur unless e.g. `coord_cartesian(clip = "off")` is used.
 #'
-#' @references theme is a modified version of `theme_prism` from ggprism package (https://github.com/csdaw/ggprism)
-#' (Licence: GPL-3).  Param text is from `ggprism:theme_prism()` documentation \code{\link[ggprism]{theme_prism}}.
+#' @references theme is a modified version of `theme_prism` from ggprism package \url{https://github.com/csdaw/ggprism}
+#' (License: GPL-3).  Param text is from `ggprism:theme_prism()` documentation \code{\link[ggprism]{theme_prism}}.
 #' Theme adaptation based on ggprism vignette
-#' (https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1).
+#' \url{https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1}.
 #'
 #' @import ggplot2
 #' @importFrom ggprism theme_prism
@@ -348,27 +390,70 @@ Move_Legend <- function(
 #' @concept themes
 #'
 #' @examples
-#' \dontrun{
+#' # Generate a plot and customize theme
 #' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 #' p + theme_ggprism_mod()
-#' }
+#'
 
-theme_ggprism_mod <- function(base_size = 14,
-                              base_family = "sans",
-                              base_fontface = "bold",
-                              base_line_size = base_size / 20,
-                              base_rect_size = base_size / 20,
-                              axis_text_angle = 0,
-                              border = FALSE) {
-  theme_prism( base_size = base_size,
-               base_family = base_family,
-               base_fontface = base_fontface,
-               base_line_size = base_line_size,
-               base_rect_size = base_rect_size,
-               axis_text_angle = axis_text_angle,
-               border = border) %+replace%
+theme_ggprism_mod <- function(
+  palette = "black_and_white",
+  base_size = 14,
+  base_family = "sans",
+  base_fontface = "bold",
+  base_line_size = base_size / 20,
+  base_rect_size = base_size / 20,
+  axis_text_angle = 0,
+  border = FALSE
+) {
+  theme_prism(palette = palette,
+              base_size = base_size,
+              base_family = base_family,
+              base_fontface = base_fontface,
+              base_line_size = base_line_size,
+              base_rect_size = base_rect_size,
+              axis_text_angle = axis_text_angle,
+              border = border) %+replace%
     theme(legend.title = element_text(hjust = 0),
           axis.text = element_text(size = rel(0.95), face = "plain")
     )
+}
+
+
+#' Remove Right Y Axis
+#'
+#' Shortcut for removing right y axis from ggplot2 object
+#'
+#' @importFrom ggplot2 theme
+#'
+#' @references Shortcut slightly modified from Seurat \url{https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048}
+#'
+#' @keywords internal
+#'
+#' @return Returns a list-like object of class _theme_.
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' # Generate a plot without axes, labels, or grid lines
+#' library(ggplot2)
+#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
+#' p + No_Right()
+#' }
+
+No_Right <- function() {
+  no.right <- theme(
+    axis.line.y.right = element_blank(),
+    axis.ticks.y.right = element_blank(),
+    axis.text.y.right = element_blank(),
+    axis.title.y.right = element_text(
+      face = "bold",
+      size = 14,
+      margin = margin(r = 7),
+      angle = 270
+    )
+  )
+  return(no.right)
 }

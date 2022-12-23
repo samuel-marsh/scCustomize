@@ -29,6 +29,10 @@ default is the current active.ident of the object.}
 
 \item{feature_cutoffs}{Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.}
 
+\item{UMI_cutoffs}{Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.}
+
+\item{mito_cutoffs}{Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.}
+
 \item{mito_name}{The column name containing percent mitochondrial counts information.  Default value is
 "percent_mito" which is default value created when using \code{Add_Mito_Ribo_Seurat()}.}
 
@@ -50,10 +54,6 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 groups plotted is greater than 36.  Default = 123.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.}
-
-\item{UMI_cutoff}{Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.}
-
-\item{mito_cutoff}{Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.}
 }
 \value{
 A ggplot object

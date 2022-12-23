@@ -1,0 +1,75 @@
+---
+title: "Frequently Asked Questions"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Frequently Asked Questions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.8em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+### *Can I cite scCustomize?*
+Yes!  If you use scCustomize in your research I would really appreciate citing the package.  The package can be cited as:  
+
+***Samuel Marsh (2021). scCustomize: An R package for custom visualization & analyses of single cell sequencing.  https://doi.org/10.5281/zenodo.5706430.***
+
+### *Something isn't working*
+If you run into any issues or bugs please submit a [GitHub Issue](https://github.com/samuel-marsh/scCustomize/issues) with details of the issue.   
+  
+- Please include the code that you are running and the full text of the error message.
+- If possible please include a reproducible example.  Suggest using [SeuratData package](https://github.com/satijalab/seurat-data) pbmc3k dataset for lightweight example.
+
+Please note though scCustomize is currently one-person operation and I may not respond right away.  I'm going to aim to respond to all issues posted during the week by Friday of that week so please be patient and know that I will work to solve your issue.
+
+### *New Features/Enhancements*
+New features and enhancing current functions are always in my mind but again my bandwidth on other projects will dictate how quickly I can implement new features/enhancements.
+
+***If you have idea and code to implement new feature/enhancement [Pull Requests](https://github.com/samuel-marsh/scCustomize/pulls) are welcome for bug fixes, new features, or enhancements.***  
+  
+- Please set PR to merge with "develop" branch and provide description of what the PR contains (referencing existing issue(s) if appropriate).
+
+***I have idea for new feature/enhancement but don't know how to accomplish/write code for it.***  
+That's totally fine!  Post your idea as a [GitHub Issue](https://github.com/samuel-marsh/scCustomize/issues) and I will get back to you.
+
+### *Does scCustomize support formats other than Seurat Objects?*
+Yes, though not extensively.  Currently the package is primarily centered around interactivity with Seurat Objects with some functionality with LIGER objects (see [LIGER Vignette](LINK)) as well as some functions which can interact with raw data, base R data.frames, tibbles, and ggplot2 objects.  
+
+* **If users are interested in adapting functions (or creating separate functions) to provide comparable functionality with SCE or other object formats I would be happy to add them.  See above for more info on PRs.**
+
+### *Installation Issues*  
+Please see [Installation](https://samuel-marsh.github.io/scCustomize/articles/Installation.html) page for more detailed installation instructions.  If the issue persists please submit [GitHub issue](https://github.com/samuel-marsh/scCustomize/issues).
+
+
+
+

@@ -1,0 +1,757 @@
+---
+title: "Plotting #1: Analysis Plots"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Plotting #1: Analysis Plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+# Customizing Plots for Enhanced/Simplified Visualization
+While the default plots from Seurat and other packages are often very good they are often modified from their original outputs after plotting.  scCustomize seeks to simplify this process and enhance some of the default visualizations.  
+
+Even simple things like adding the same two ggplot2 themeing options to every plot can be simplified for end user (and enhance reproducibility and code errors) by wrapping them inside a new function.
+
+For this tutorial, I will be utilizing microglia data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) the mouse microglia (Figure 1) referred to as `marsh_mouse_micro` and the human post-mortem snRNA-seq (Figure 3) referred to as `marsh_human_pm` in addition to the pbmc3k dataset from SeuratData package.
+
+```{r init}
+library(tidyverse)
+library(patchwork)
+library(viridis)
+library(Seurat)
+library(scCustomize)
+library(qs)
+
+# Load Marsh et al., 2022 datasets
+marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
+marsh_human_pm <- qread(file = "assets/marsh_human_pm.qs")
+
+# Load pbmc dataset
+pbmc <- pbmc3k.SeuratData::pbmc3k.final
+```
+
+```{r include=FALSE}
+# Update pbmc check
+pbmc <- UpdateSeuratObject(pbmc)
+
+MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
+```
+
+We'll add some random meta data variables to pbmc data form use in this vignette
+```{r}
+pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
+pbmc$treatment <- sample(c("Treatment1", "Treatment2", "Treatment3", "Treatment4"), size = ncol(pbmc), replace = TRUE)
+```
+
+
+
+```{r include=FALSE}
+marsh_mouse_micro <- FindVariableFeatures(object = marsh_mouse_micro, selection.method = "vst", nfeatures = 497)
+
+marsh_mouse_micro <- UpdateSeuratObject(object = marsh_mouse_micro)
+
+marsh_human_pm <- UpdateSeuratObject(marsh_human_pm)
+
+# Add misc data to objects
+marsh_mouse_micro[["sample_id"]] <- paste0("Sample ", marsh_mouse_micro@meta.data$orig.ident)
+
+marsh_mouse_micro@meta.data$sample_id <- factor(marsh_mouse_micro@meta.data$sample_id, levels = c("Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5", "Sample 6", "Sample 7", "Sample 8", "Sample 9", "Sample 10", "Sample 11", "Sample 12"))
+
+exAM_genes <- c("Rgs1", "Hist2h2aa1", "Hist1h4i", "Nfkbiz", "Klf2", "Junb", "Dusp1", "Ccl3", "Hspa1a", "Hsp90aa1", "Fos", "Hspa1b", "Jun", "Jund", "Nfkbid", "Gem", "Ccl4", "Ier5", "Txnip", "Hist1h2bc", "Zfp36", "Hist1h1c", "Egr1", "Atf3", "Rhob")
+
+micro_genes <- c("P2ry12", "Fcrls", "Trem2", "Tmem119", "Cx3cr1", "Hexb", "Tgfbr1", "Sparc", "P2ry13", "Olfml3", "Adgrg1", "C1qa", "C1qb", "C1qc", "Csf1r", "Fcgr3", "Ly86", "Laptm5")
+
+marsh_mouse_micro <- AddModuleScore(object = marsh_mouse_micro, features = list(exAM_genes), name = "exAM_Score")
+marsh_mouse_micro <- AddModuleScore(object = marsh_mouse_micro, features = list(micro_genes), name = "Microglia_Score")
+
+mouse_colors <- marsh_mouse_micro@misc$exp17_micro_colors
+```
+
+## General Notes  
+
+* Parameter names  
+    - Customized plots that take their origin from Seurat share many direct parameter names from their Seurat equivalents (i.e., `split.by`) but some others use the scCustomize convention so as to be universal throughout the package (i.e., Seurat=cols:scCustomize=colors_use).
+    - Many of the most used parameters for Seurat-based functions have implemented as direct parameter in scCustomize versions allowing for easy tab-completion when calling functions.
+    - However, for simplicity of function calls this is not comprehensive.  However, most scCustomize plotting functions contain `...` parameter to allow user to supply any of the parameters for the original Seurat (or other package) function that is being used under the hood.  
+* ggplot2/patchwork Modifications
+    - All scCustomize plotting functions return either ggplot2 or patchwork objects allowing for easy additional plot/theme modifications using ggplot2/patchwork grammar.  
+* Seurat Function Parameters
+    - Most scCustomize plotting functions contain `...` parameter to allow user to supply any of the parameters for the original Seurat function that is being used under the hood.
+
+
+## Plotting Highly Variable Genes & PC Loadings
+
+### Plotting highly variable genes 
+scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function.  `VariableFeaturePlot_scCustom()` also contains several additional parameters for customizing visualization.
+```{r eval=FALSE}
+# Default scCustomize plot
+VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
+# Can remove labels if not desired
+VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, label = FALSE)
+# Repel labels
+VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE)
+# Change the scale of y-axis from linear to log10
+VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE, y_axis_log = TRUE)
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width=13, fig.cap="***A.** Default for `VariableFeaturePlot_scCustom` labels features by default.  Plot can be modified by changing function parameters: **B.** Setting `label = FALSE`, **C.** Setting `repel=TRUE` for feature names, **D.** Setting `y_axis_log=TRUE` to plot y-axis in log scale.*"}
+p1 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
+p2 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, label = FALSE)
+p3 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE)
+p4 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE, y_axis_log = TRUE)
+
+wrap_plots(p1, p2, p3, p4) + plot_annotation(tag_levels = "A")
+```
+
+
+### Plotting PC heatmaps and loadings.
+For ease in evaluating PCA results scCustomize provides function `PC_Plotting()` which returns both PC heatmap and Feature Loading plot in single patchwork layout.
+```{r fig.height=8, fig.width=9, fig.align='center'}
+PC_Plotting(seurat_object = marsh_mouse_micro, dim_number = 2)
+```
+
+#### Iterate PC Plotting
+This function can be easily enhanced using iterative version `Iterate_PC_Loading_Plots()` to return a PDF document that contains plots for all desired PCs within object.  See function manual and [Iterative Plotting Vignette](https://samuel-marsh.github.io/scCustomize/articles/Iterative_Plotting.html) for more info.
+
+
+## Plot Gene Expression in 2D Space (PCA/tSNE/UMAP)
+scCustomize has few functions that improve on the default plotting options/parameters from Seurat and other packages.
+
+### FeaturePlots
+The default plots from`Seurat::FeaturePlot()` are very good but I find can be enhanced in few ways that scCustomize sets by default.  
+Issues with default Seurat settings:  
+  
+* Parameter `order = FALSE` is the default, resulting in potential for non-expressing cells to be plotted on top of expressing cells.
+* Using custom color palette with greater than 2 colors bins the expression by the total number of colors.  
+* Non-expressing cells are part of same color scale which can make it difficult to distinguish low expressing cells from non-expressing cells.
+
+```{r eval=FALSE}
+
+# Set color palette
+pal <- viridis(n = 10, option = "C", direction = -1)
+
+# Create Plots
+FeaturePlot(object = marsh_mouse_micro, features = "Jun")
+FeaturePlot(object = marsh_mouse_micro, features = "Jun", order = T)
+FeaturePlot(object = marsh_mouse_micro, features = "Jun", cols = pal, order = T)
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=13, fig.cap="*`FeaturePlot()` non-ideal results: **A.** default `order = FALSE` compared to **B.** `order = TRUE`, **C.** expression binning when attempting to set custom gradient using `cols` parameter.*", fig.align='center'}
+
+# Set color palette
+pal <- viridis(n = 10, option = "C", direction = -1)
+
+# Create Plots
+p1 <- FeaturePlot(object = marsh_mouse_micro, features = "Jun")
+p2 <- FeaturePlot(object = marsh_mouse_micro, features = "Jun", order = T)
+p3 <- FeaturePlot(object = marsh_mouse_micro, features = "Jun", cols = pal, order = T)
+wrap_plots(p1, p2, p3, ncol = 3) + plot_annotation(tag_levels = "A")
+```
+
+
+
+#### **`FeaturePlot_scCustom` solves these issues**
+```{r eval=FALSE}
+# Set color palette
+pal <- viridis(n = 10, option = "D")
+
+# Create Plots
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", order = F)
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun")
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", colors_use =  pal)
+
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=13, fig.cap="*`FeaturePlot_scCustom()` solves issues: **A.** Order can be set to FALSE with optional parameter when desired. **B.** However by default is set to TRUE so additional parameter call not required, **C.** `FeaturePlot_scCustom()` prevents expression binning when supplying custom color palette.*", fig.align='center'}
+# Set color palette
+pal <- viridis(n = 10, option = "D")
+
+# Create Plots
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", order = F)
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun")
+p3 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", colors_use =  pal)
+wrap_plots(p1, p2, p3, ncol = 3) + plot_annotation(tag_levels = "A")
+```
+
+Sometimes `order=TRUE` can be distracting though and so can always set it to `FALSE`
+*In some cases (especially likely in snRNA-seq), some of the low expression may simply represent ambient RNA and therefore plotting with `order=FALSE` may be advantageous for visualization (or using different plotting method).*
+```{r eval=FALSE}
+FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "P2RY12")
+FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "P2RY12", order = F)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
+# Create Plots
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "P2RY12")
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "P2RY12", order = F)
+wrap_plots(p1, p2, ncol = 2)
+```
+
+#### Plotting non-expressing cells as background. 
+As you can see above `FeaturePlot_scCustom()` has the ability to plot non-expressing cells in outside of color scale used for expressing cells.  However it is critical that users pay attention to the ***correctly setting the `na_cutoff` parameter*** in `FeaturePlot_scCustom`.  
+scCustomize contains a parameter called `na_cutoff` which tells the function which values to plot as background.  By default this is set to value that means background is treated as 0 or below.  Depending on what feature, assay, or value you are interested in this parameter should be modified appropriately.
+
+For instance if plotting module score which contains negative values you will probably want to remove the cutoff value entirely to avoid misconstruing results.
+```{r eval=FALSE}
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1")
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1", na_cutoff = NA)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1")
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Microglia_Score1", na_cutoff = NA)
+wrap_plots(p1, p2, ncol = 2)
+```
+  
+Other times you may actually want to set high na_cutoff value to enable better interpretation of the range of values in particular clusters of interest.
+```{r eval=FALSE}
+FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
+FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center'}
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA")
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_human_pm, features = "nFeature_RNA", na_cutoff = 6000)
+wrap_plots(p1, p2, ncol = 2)
+```
+
+### Split Feature Plots
+`Seurat::FeaturePlot()` has additional issues when splitting by object\@meta.data variable.
+
+* Specifying the number of columns in output is no longer possible which makes viewing plots from objects with large numbers of variables difficult.
+```{r, fig.height=4, fig.width=13, fig.cap="*`FeaturePlot()` when using `split.by` outputs with the number of columns equal to the number of levels in meta.data column.*", fig.align='center'}
+FeaturePlot(object = marsh_mouse_micro, features = "P2ry12", split.by = "orig.ident")
+```
+  
+**FeaturePlot_scCustom solves this issue and allows for setting the number of columns in FeaturePlots**
+```{r, fig.height=8, fig.width=13, fig.cap="*`Split_FeaturePlot()` solves this issue and restores ability to set column number using `ncolumns` parameter.*", fig.align='center'}
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "P2ry12", split.by = "sample_id", num_columns = 4)
+```
+
+
+### Change the transparency of points
+`FeaturePlot_scCustom` also allows for customization of the transparency (alpha) of both the points of expressing cells and non-expressing cells using optional parameters.
+```{r eval=FALSE}
+FeaturePlot_scCustom(object = marsh_mouse_micro, features = "Jun", alpha_exp = 0.75)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="*Example comparing **A.** default `FeaturePlot_scCustom` vs. **B.** plot with alpha of expressing cells adjusted `alpha_exp = 0.55`.*", fig.align='center'}
+
+# Create Plots
+p1 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", pt.size = 1)
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "Jun", pt.size = 1, alpha_exp = 0.55)
+wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
+```
+
+
+### Density Plots  
+
+The [Nebulosa package](https://github.com/powellgenomicslab/Nebulosa) provides really great functions for plotting gene expression via density  plots.
+
+scCustomize provides two functions to extend functionality of these plots and for ease of plotting "joint" density plots.  
+  
+#### Custom color palettes  
+  
+Currently Nebulosa only supports plotting using 1 of 5 viridis color palettes: "viridis", "magma", "cividis", "inferno", and "plasma").  `Plot_Density_Custom()` changes the default palette to "magma" and also allows for use of any custom gradient.
+```{r eval=FALSE, fig.height=4, fig.width=13, fig.align='center'}
+Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos")
+Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos", custom_palette = PurpleAndYellow())
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+p1 <- Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos")
+p2 <- Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos", custom_palette = PurpleAndYellow())
+
+wrap_plots(p1, p2, ncol = 2)
+```
+
+
+#### Joint Plots
+Often user may only want to return the "Joint" density plot when providing multiple features.  `Plot_Density_Joint_Only()` simplifies this requiring only single function and only returns the joint plot for the features provided.
+```{r, fig.height=4, fig.width=6, fig.align='center'}
+Plot_Density_Joint_Only(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun"))
+```
+
+
+### Dual Assay Plotting
+In certain situations returning a plot from two different assays within the same object may be advantageous.  For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference.  See Cell Bender Functionality vignette for more info.
+
+```{r}
+cell_bender_example <- qread("assets/astro_nuc_seq.qs")
+```
+
+
+```{r, fig.height=4, fig.width=13, fig.align='center'}
+FeaturePlot_DualAssay(seurat_object = cell_bender_example, features = "Syt1", assay1 = "RAW", assay2 = "RNA")
+```
+
+
+## Non-2D Gene Expression Plots (Violin, Dot, etc)
+
+### Stacked Violin Plots
+Often plotting many genes simultaneously using Violin plots is desired.  scCustomize provides `Stacked_VlnPlot()` for a more aesthetic stacked violin plot compared to stacked plots that can be made using default `Seurat::VlnPlot()`.  
+*The original version of this function was written by Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/).  Function is included with permission and authorship.*
+```{r, fig.height=10, fig.width=10, fig.align='center'}
+
+gene_list_plot <- c("SLC17A7", "GAD2", "AQP4", "MYT1", "COL1A2", "CLDN5", "OPALIN", "CX3CR1", "CD3E")
+human_colors_list <- c("dodgerblue", "navy", "forestgreen", "darkorange2", "darkorchid3", "orchid", "orange", "gold", "gray")
+
+# Create Plots
+Stacked_VlnPlot(seurat_object = marsh_human_pm, features = gene_list_plot, x_lab_rotate = TRUE, colors_use = human_colors_list)
+```
+
+#### `Stacked_VlnPlot` also supports any additional parameters that are part of `Seurat::VlnPlot()`
+For instance splitting plot by meta data feature.
+```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Example plot adding the `split.by` parameter to view expression by sample and cell type.*"}
+sample_colors <- c("dodgerblue", "forestgreen", "firebrick1")
+
+# Create Plots
+Stacked_VlnPlot(seurat_object = marsh_human_pm, features = gene_list_plot, x_lab_rotate = TRUE, colors_use = sample_colors, split.by = "orig.ident")
+```
+
+
+#### Adjust Vertical Plot Spacing  
+Depending on number of genes plotted and user preferences it may be helpful to change the vertical spacing between plots.  This can be done using the `plot_spacing` and `spacing_unit` parameters.
+
+```{r eval=FALSE}
+# Default plot spacing (plot_spacing = 0.15 and spacing_unit = "cm")
+Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE)
+
+# Double the space between plots
+Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE, plot_spacing = 0.3)
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=10}
+# Default plot spacing (plot_spacing = 0.15 and spacing_unit = "cm")
+p1 <- Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE)
+
+# Double the space between plots
+p2 <- Stacked_VlnPlot(seurat_object = pbmc, features = c("CD3E", "CD14", "MS4A1", "FCER1A", "PPBP"), x_lab_rotate = TRUE, plot_spacing = 0.5)
+
+wrap_plots(p1, p2, ncol = 2)
+```
+
+
+#### Adjusting Plot Size
+Please note that even more so than many other plots you will need to adjust the height and width of these plots significantly depending on the number of features and number of identities being plotted.
+
+#### `Stacked_VlnPlot` also supports plotting of object\@meta.data variables (i.e. mito% or module scores).
+```{r, fig.height=6, fig.width=13, fig.align='center'}
+Stacked_VlnPlot(seurat_object = marsh_human_pm, features = c("percent_mito", "percent_ribo"), x_lab_rotate = TRUE, colors_use = human_colors_list)
+```
+
+#### Point Size and Rasterization
+By default `Stacked_VlnPlot` sets the `pt.size` parameter to 0 to accelerate plotting/rendering which slow down dramatically depending on size of dataset and number of features plotted.
+
+If points are still desired then plotting/rendering can be sped up by using the `raster` parameter.  By default raster will be set to `TRUE` if `pt.size > 0` and `number of cells x number of features > 100,000`.
+
+### Custom VlnPlots
+In addition to `Stacked_VlnPlot` scCustomize also features a modified version of Seurat's `VlnPlot()`.
+
+#### `VlnPlot_scCustom` provides unified color palette plotting
+```{r eval=FALSE}
+VlnPlot(object = pbmc, features = "PTPRC")
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC")
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** Default `VlnPlot` with ggplot2 default color scheme.  **B.** `VlnPlot_scCustom` shares color palette choice with other scCustomize functions.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot(object = pbmc, features = "PTPRC")
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC")
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+#### Support for Rasterization
+Seurat `VlnPlot()` supports rasterization but does not alter it's plotting behavior by default.  Both `Stacked_VlnPlot` and `VlnPlot_scCustom` have a built in check to automatically rasterize the points if the: `number of cells x number of features > 100,000` to accelerate plotting when vector plots are not necessary.
+
+Rasterization can also be manually turned on or off using the `raster` parameter
+```{r eval=FALSE}
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = FALSE)
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** `raster = FALSE`.  **B.** `raster = TRUE`.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = FALSE)
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+### Custom DotPlots
+Seurat's `DotPlot()` function is really good but lacks the ability to provide custom color gradient of more than 2 colors.
+
+#### `DotPlot_scCustom()` allows for plotting with custom gradients.
+```{r eval=FALSE}
+micro_genes <- c("P2ry12", "Fcrls", "Trem2", "Tmem119", "Cx3cr1", "Hexb", "Tgfbr1", "Sparc", "P2ry13", "Olfml3", "Adgrg1", "C1qa", "C1qb", "C1qc", "Csf1r", "Fcgr3", "Ly86", "Laptm5")
+
+DotPlot(object = marsh_mouse_micro, features = micro_genes[1:6], cols = viridis_plasma_dark_high)
+DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], colors_use = viridis_plasma_dark_high)
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** Default `DotPlot` only takes the first few colors when a gradient is provided.  **B.** `DotPlot_scCustom` allows for use of gradients in full while maintaining visualization.*", fig.align='center'}
+# Create Plots
+p1 <- DotPlot(object = marsh_mouse_micro, features = micro_genes[1:6], cols = viridis_plasma_dark_high)
+p2 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], colors_use = viridis_plasma_dark_high)
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+#### `DotPlot_scCustom()` also contains additional parameters for easy manipulations of axes for better plotting.
+These allow for:  
+
+* `x_lab_rotate` rotating x-axis text Default is FALSE.
+* `y_lab_rotate` rotating y-axis text Default is FALSE.
+* `flip_axes` flip the axes. Default is FALSE.
+* `remove_axis_titles` remove the x- and y-axis labels.  Default is TRUE
+
+```{r eval=FALSE}
+DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], x_lab_rotate = TRUE)
+DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], y_lab_rotate = TRUE)
+DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], flip_axes = T, x_lab_rotate = TRUE)
+DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], flip_axes = T, remove_axis_titles = FALSE)
+```
+
+```{r echo=FALSE, fig.height=8, fig.width=13, fig.cap="***A.** Rotate x-axis text, **B.** Rotate y-axis text, **C.** flip axes and rotate x-axis text, and **D.** Add axis labels (removed by default).*", fig.align='center'}
+# Create Plots
+p1 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], x_lab_rotate = TRUE)
+p2 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], y_lab_rotate = TRUE)
+p3 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], flip_axes = T, x_lab_rotate = TRUE)
+p4 <- DotPlot_scCustom(seurat_object = marsh_mouse_micro, features = micro_genes[1:6], flip_axes = T, x_lab_rotate = TRUE, remove_axis_titles = FALSE)
+
+wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = "A")
+```
+
+### Clustered DotPlots
+For a more advanced take on the `DotPlot` scCustomize contains a separate function `Clustered_DotPlot()`.  This function allows for clustering of both gene expression patterns and identities in the final plot.
+*The original version of this function was written by Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/).  Function is included with permission, authorship, and assistance.*
+
+```{r eval=FALSE}
+all_markers <- FindAllMarkers(object = pbmc)
+
+top5_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, named_vector = FALSE, make_unique = TRUE)
+
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers)
+```
+
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+all_markers <- FindAllMarkers(object = pbmc)
+
+top5_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, named_vector = FALSE, make_unique = TRUE)
+
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots[[2]]
+```
+
+
+#### Cluster Plot on Gene Expression Patterns
+By default `Clustered_DotPlot` performs k-means clustering with k value set to 1.  However, users can change this value to enable better visualization of expression patterns.
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 9)
+```
+
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots[[2]]
+```
+
+#### Clustered_DotPlot() k-means Clustering Optional Parameters
+  
+**Determining Optimal k Value**  
+There are many methods that can be used to aid in determining an optimal value for k in k-means clustering.  One of the simplest is to the look at the elbow in sum of squares error plot.  By default `Clustered_DotPlot` will return this plot when using the function.  However, it can be turned off by setting `plot_km_elbow = FALSE`.
+```{r echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
+plots[[1]]
+```
+
+The number of k values plotted must be 1 less than number of features.  Default is to plot 20 values but users can customize number of k values plotted using `elbow_kmax` parameter.
+  
+**Consensus k-means Clustering**  
+By default `Clustered_DotPlot` uses consensus k-means clustering with 1000 repeats for both the columns and rows.  However, user can reduce or increase these values as desired by supplying new value to either or both of `row_km_repeats`/`column_km_repeats`
+
+#### Clustered_DotPlot() Expression Scale Optional Parameters
+There are a number of optional parameters that can be modified by user depending on the desired resulting plot.
+
+- `colors_use_exp` to provide custom color scale
+- `exp_color_min`/`exp_color_max` can be used to clip the min and max values on the expression scale.
+- `print_exp_quantiles` can be set to TRUE to print the expression quantiles to aid in setting new `exp_color_min`/`exp_color_max`.
+- `exp_color_middle` can be used to change what value is used for the middle of the color scale.  By default is set to the middle of `exp_color_min`/`exp_color_max` but can be modified if a skewed visualization is desired.
+
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, print_exp_quantiles = T)
+```
+
+```{r eval=FALSE}
+Quantiles of gene expression data are:
+       10%        50%        90%        99% 
+-0.6555988 -0.3595223  1.7742718  2.6666597
+```
+
+Here we can adjust the expression clipping based on the range of the data in this specific dataset and list of features and change the color scale to use `Seurat::PurpleAndYellow()`
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots[[2]]
+```
+
+#### Clustered_DotPlot() Other Optional Parameters
+  
+- `colors_use_idents` Colors to use for the identities (columns) plotted.  
+- `x_lab_rotate` Logical or Integer.  Default is TRUE (45 degree column label rotation).  FALSE (0 degree rotation).  Integer for custom text rotation value.  
+- `row_label_size` Change size of row text (gene symbols).  
+- `raster` Whether to rasterize the plot (faster and smaller file size). Default is FALSE.  
+
+### `Split_FeatureScatter()` 
+This is simple function to add functionality that `Seurat::FeatureScatter()` lacks.  
+
+`FeatureScatter()` plots can be very useful when comparing between two genes/features or comparing module scores.  However, Seurat's implementation lacks the ability to split the plot by a meta data variable.
+
+```{r, fig.height=10, fig.width=13, fig.cap="*`Split_FeatureScatter()` solves this issue and allows for splitting of `FeatureScatter` plots by meta variable.*", fig.align='center'}
+# Create Plots
+Split_FeatureScatter(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, split.by = "Transcription_Method", group.by = "ident", num_columns = 2, pt.size = 1)
+```
+
+## DimPlots: Plot Meta Data in 2D Space (PCA/tSNE/UMAP)
+scCustomize has a few functions that improve on the default plotting options available in Seurat
+
+### DimPlots
+The scCustomize function `DimPlot_scCustom()` is a slightly modified version of `Seurat::DimPlot()` with some different default settings and parameter options.
+
+#### New default color palettes
+The default ggplot2 hue palette becomes very hard to distinguish between at even a moderate number of clusters for a scRNA-seq experiment.  scCustomize's function `DimPlot_scCustom` sets new default color palettes:  
+
+* If less than or equal to 36 groups plotted then the "polychrome" palette will be used.
+* If more than 36 groups the "varibow" palette will be used with `shuffle_pal = TRUE`.
+* If user wants to use ggplot2 hue palette then set parameter `ggplot_default_colors = TRUE`.
+
+To best demonstrate rationale for this I'm going to use over-clustered version of the `marsh_mouse_micro` object.
+
+```{r include=FALSE}
+# Let's create over-clustered object to use as example
+marsh_mouse_over <- FindNeighbors(object = marsh_mouse_micro, dims = 1:15)
+marsh_mouse_over <- FindClusters(object = marsh_mouse_over, resolution = 0.8)
+```
+
+
+```{r eval=FALSE}
+DimPlot(object = marsh_mouse_over)
+DimPlot_scCustom(seurat_object = marsh_mouse_over)
+```
+
+
+```{r echo=FALSE, fig.height=4, fig.width=13, fig.align='center', fig.cap="*`DimPlot_scCustom` also sets `label = TRUE` if `group.by = NULL` by default.*"}
+p1 <- DimPlot(object = marsh_mouse_over)
+p2 <- DimPlot_scCustom(seurat_object = marsh_mouse_over)
+wrap_plots(p1, p2, ncol = 2)
+```
+
+#### Shuffle Points
+By default Seurat's `DimPlot()` plots each group on top of the next which can make plots harder to interpret.  `DimPlot_scCustom` sets `shuffle = TRUE` by default as I believe this setting is more often the visualization that provides the most clarity.
+
+Here is example when plotting by donor in the human dataset to determine how well the dataset integration worked.
+```{r eval=FALSE}
+DimPlot(object = marsh_human_pm, group.by = "sample_id")
+DimPlot_scCustom(seurat_object = marsh_human_pm, group.by = "sample_id")
+```
+
+
+```{r echo=FALSE, fig.height=4, fig.width=13, fig.align='center', fig.cap="***A.** Cannot tell how well integrated the samples are due to plotting one on top of the other.  **B.** Default plot using scCustomize `DimPlot_scCustom`.*"}
+p1 <- DimPlot(object = marsh_human_pm, group.by = "sample_id")
+p2 <- DimPlot_scCustom(seurat_object = marsh_human_pm, group.by = "sample_id")
+wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
+```
+
+#### Split DimPlots
+When plotting a split plot `Seurat::DimPlot()` simplifies the axes by implementing shared axes depending on the number of columns specified.
+```{r eval=FALSE}
+DimPlot(object = pbmc, split.by = "treatment")
+DimPlot(object = pbmc, split.by = "sample_id", ncol = 4)
+```
+
+```{r echo=FALSE, fig.height=8, fig.width=13, fig.align='center', fig.cap="***A.** The default Seurat split.by looks ok when plots are all present on single row.  **B.** However, the visualization isn't so good when you starting wrapping plots into multiple rows.*"}
+p1 <- DimPlot(object = pbmc, split.by = "treatment")
+p2 <- DimPlot(object = pbmc, split.by = "sample_id", ncol = 4)
+
+wrap_plots(p1, p2, ncol = 1) + plot_annotation(tag_levels = "A")
+```
+
+By default when using `split.by` with `DimPlot_scCustom` the layout is returned with an axes for each plot to make visualization of large numbers of splits easier.
+```{r eval=FALSE}
+DimPlot_scCustom(seurat_object = pbmc, split.by = "treatment", num_columns = 4, repel = TRUE)
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=13, fig.cap="*Simplified visualization without having to think about the number of variables that are being plotted.*"}
+DimPlot_scCustom(seurat_object = pbmc, split.by = "treatment", num_columns = 4, repel = TRUE)
+```
+
+Can also return to the default Seurat method of splitting plots while maintaining all of the other modifications in `DimPlot_scCustom` by supplying `split_seurat = TRUE`
+```{r fig.height=4, fig.width=13}
+DimPlot_scCustom(seurat_object = pbmc, split.by = "treatment", num_columns = 4, repel = TRUE, split_seurat = TRUE)
+```
+
+
+#### Figure Plotting
+Some times when creating plots for figures it is desirable to remove the axes from the plot and simply add an axis legend.  To do this with `DimPlot_scCustom` simply set `figure_plot = TRUE`.
+```{r eval=FALSE}
+DimPlot_scCustom(seurat_object = pbmc, figure_plot = TRUE)
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=6}
+DimPlot_scCustom(seurat_object = pbmc, figure_plot = TRUE)
+```
+
+
+### Highlight Cluster(s)
+Even with an optimized color palette it can still be difficult to determine the boundaries of clusters when plotting all clusters at once.  
+scCustomize provides easy of use function `Cluster_Highlight_Plot()` to highlight a select cluster or clusters vs. the remainder of cells to determine where they lie on the plot.  
+*NOTE: While named `Cluster_Highlight_Plot` this function will simply pull from seurat_object\@active.ident slot which may or may not be cluster results depending on user settings.  For creating highlight plots of meta data variables see next section on `Meta_Highlight_Plot`.*
+
+```{r eval=FALSE}
+Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = "7", highlight_color = "navy", background_color = "lightgray")
+
+Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = "8", highlight_color = "forestgreen", background_color = "lightgray")
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.align='center', fig.cap="*`Cluster_Highlight_Plot` takes identity or vector of identities and plots them in front of remaining unselected cells.*"}
+p1 <- Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = "7", highlight_color = "navy", background_color = "lightgray")
+
+p2 <- Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = "8", highlight_color = "forestgreen", background_color = "lightgray")
+
+wrap_plots(p1, p2, ncol = 2)
+```
+
+#### Highlight 2+ clusters in the same plot
+`Cluster_Highlight_Plot()` also supports the ability to plot multiple identities in the same plot.
+```{r eval=FALSE}
+Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = c("7", "8"), highlight_color = c("navy", "forestgreen"))
+```
+
+```{r echo=FALSE, fig.height=4, fig.width=6}
+Cluster_Highlight_Plot(seurat_object = marsh_mouse_over, cluster_name = c("7", "8"), highlight_color = c("navy", "forestgreen"))
+```
+
+*NOTE: If no value is provided to `highlight_color` then all clusters provided to `cluster_name` will be plotted using single default color (navy).*
+
+### Highlight Meta Data
+scCustomize also contains an analogous function `Meta_Highlight_Plot()` that allows for quick highlight plots of any valid \@meta.data variable.  Meta data variables must be one of class(): "factor", "character", or "logical" to be highlighted.  
+*Numeric variables representing things like "batch" can be converted using `as.character` or `as.factor` first to allow for plotting.*
+
+```{r, fig.height=4, fig.width=6, fig.align='center'}
+Meta_Highlight_Plot(seurat_object = marsh_mouse_micro, meta_data_column = "Transcription_Method", meta_data_highlight = "ENZYMATIC_NONE", highlight_color = "firebrick", background_color = "lightgray")
+```
+
+#### Highlight 2+ factor levels in the same plot
+`Meta_Highlight_Plot()` also supports plotting two or more levels from the same meta data column in the same plot, similar to plotting multiple identities with `Cluster_Highlight_Plot()`
+
+```{r, fig.height=4, fig.width=6, fig.align='center'}
+Meta_Highlight_Plot(seurat_object = marsh_mouse_micro, meta_data_column = "Transcription_Method", meta_data_highlight = c("ENZYMATIC_NONE", "DOUNCE_NONE"), highlight_color = c("firebrick", "dodgerblue"), background_color = "lightgray")
+```
+
+
+### Highlight Cells  
+Sometimes the cells that you want to highlight on a plot may not be represented by an active.ident or meta.data column.  In this scenario you can use `Cell_Highlight_Plot`.  
+
+
+*NOTE: Values of cell names provided to `cells_highlight` parameter must be a named list.*  
+
+
+Let's say we want to highlight cells with expression of *MS4A1* above certain threshold.  
+```{r, eval=FALSE}
+# Get cell names
+MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+
+# Make into list
+cells <- list("MS4A1" = MS4A1)
+
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+
+```{r, echo = FALSE, fig.height=4, fig.width=6, fig.align='center'}
+# Make into list
+cells <- list("MS4A1" = MS4A1)
+
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+#### Highlight 2+ sets of cells in the same plot
+`Cell_Highlight_Plot()` also supports plotting two or more sets of cells in the same plot, similar to plotting multiple identities with `Cluster_Highlight_Plot()`/`Meta_Highlight_Plot()`.  
+
+```{r, eval=FALSE}
+# Get cell names and make list
+MS4A1 <- WhichCells(object = pbmc, expression = MS4A1 > 3)
+GZMB <- WhichCells(object = pbmc, expression = GZMB > 3)
+
+cells <- list("MS4A1" = MS4A1,
+              "GZMB" = GZMB)
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+```{r, echo = FALSE, fig.height=4, fig.width=6, fig.align='center'}
+# Get cell names and make list
+cells <- list("MS4A1" = MS4A1,
+              "GZMB" = GZMB)
+# Plot
+Cell_Highlight_Plot(seurat_object = pbmc, cells_highlight = cells)
+```
+
+
+### DimPlot Layout Plots
+Sometimes can be beneficial to create layouts where there is no grouping variable and plots are simply colored by the split variable.
+```{r, fig.height=11, fig.width=13, fig.align='center', fig.cap="*Visualize all samples in simple plot layout.*"}
+DimPlot_All_Samples(seurat_object = pbmc, meta_data_column = "sample_id", num_col = 3, pt.size = 0.5)
+```
+
+Can unique color each plot by providing a vector of colors instead of single value
+```{r, fig.height=6, fig.width=13, fig.align='center'}
+DimPlot_All_Samples(seurat_object = marsh_mouse_micro, meta_data_column = "Transcription", num_col = 2, pt.size = 0.5, color = c("firebrick3", "dodgerblue3"))
+```

@@ -5,6 +5,7 @@
 \title{Modified ggprism theme}
 \usage{
 theme_ggprism_mod(
+  palette = "black_and_white",
   base_size = 14,
   base_family = "sans",
   base_fontface = "bold",
@@ -15,6 +16,9 @@ theme_ggprism_mod(
 )
 }
 \arguments{
+\item{palette}{\code{string}. Palette name, use
+\code{names(ggprism_data$themes)} to show all valid palette names.}
+
 \item{base_size}{\code{numeric}. Base font size, given in \code{"pt"}.}
 
 \item{base_family}{\code{string}. Base font family, default is \code{"sans"}.}
@@ -30,9 +34,6 @@ One of: \verb{0, 45, 90, 270}.}
 
 \item{border}{\code{logical}. Should a border be drawn around the plot?
 Clipping will occur unless e.g. \code{coord_cartesian(clip = "off")} is used.}
-
-\item{palette}{\code{string}. Palette name, use
-\code{names(ggprism_data$themes)} to show all valid palette names.}
 }
 \value{
 Returns a list-like object of class \emph{theme}.
@@ -41,16 +42,17 @@ Returns a list-like object of class \emph{theme}.
 Modified ggprism theme which restores the legend title.
 }
 \examples{
-\dontrun{
+# Generate a plot and customize theme
 library(ggplot2)
-p <- FeaturePlot(object = obj, features = "Cx3cr1")
+df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
+p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
 p + theme_ggprism_mod()
-}
+
 }
 \references{
-theme is a modified version of \code{theme_prism} from ggprism package (https://github.com/csdaw/ggprism)
-(Licence: GPL-3).  Param text is from \code{ggprism:theme_prism()} documentation \code{\link[ggprism]{theme_prism}}.
+theme is a modified version of \code{theme_prism} from ggprism package \url{https://github.com/csdaw/ggprism}
+(License: GPL-3).  Param text is from \code{ggprism:theme_prism()} documentation \code{\link[ggprism]{theme_prism}}.
 Theme adaptation based on ggprism vignette
-(https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1).
+\url{https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1}.
 }
 \concept{themes}

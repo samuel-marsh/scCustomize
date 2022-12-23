@@ -14,9 +14,12 @@ Setup_scRNAseq_Project(
 \item{custom_dir_file}{file to file containing desired directory structure.  Default is NULL and
 will provide generic built-in directory structure.}
 
-\item{cluster_annotation_file_name}{name to use for annotation file if created (optional).}
+\item{cluster_annotation_path}{path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.}
 
-\item{cluster_annotation_path:}{path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.}
+\item{cluster_annotation_file_name}{name to use for annotation file if created (optional).}
+}
+\value{
+no return value.  Creates system folders.
 }
 \description{
 Create reproducible project directory organization when initiating a new analysis.

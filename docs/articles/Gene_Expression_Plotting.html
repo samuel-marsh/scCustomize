@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -129,9 +129,9 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #1: Analysis Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 22, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: December 19, 2022</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Gene_Expression_Plotting.Rmd" class="external-link"><code>vignettes/Gene_Expression_Plotting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Gene_Expression_Plotting.Rmd" class="external-link"><code>vignettes/articles/Gene_Expression_Plotting.Rmd</code></a></small>
       <div class="hidden name"><code>Gene_Expression_Plotting.Rmd</code></div>
 
     </div>
@@ -168,7 +168,7 @@ p.caption {
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc</span><span class="op">$</span><span class="va">sample_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample1"</span>, <span class="st">"sample2"</span>, <span class="st">"sample3"</span>, <span class="st">"sample4"</span>, <span class="st">"sample5"</span>, <span class="st">"sample6"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,</span>
 <span>    replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">pbmc</span><span class="op">$</span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Treatment1"</span>, <span class="st">"Treatment"</span>, <span class="st">"Treatment3"</span>, <span class="st">"Treatment4"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,</span>
+<span><span class="va">pbmc</span><span class="op">$</span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Treatment1"</span>, <span class="st">"Treatment2"</span>, <span class="st">"Treatment3"</span>, <span class="st">"Treatment4"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span>,</span>
 <span>    replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="general-notes">General Notes<a class="anchor" aria-label="anchor" href="#general-notes"></a>
@@ -609,7 +609,7 @@ By default <code>Clustered_DotPlot</code> uses consensus k-means clustering with
 </div>
 </div>
 <div class="section level3">
-<h3 id="plot-meta-data-in-2d-space-pcatsneumap">Plot Meta Data in 2D Space (PCA/tSNE/UMAP)<a class="anchor" aria-label="anchor" href="#plot-meta-data-in-2d-space-pcatsneumap"></a>
+<h3 id="dimplots-plot-meta-data-in-2d-space-pcatsneumap">DimPlots: Plot Meta Data in 2D Space (PCA/tSNE/UMAP)<a class="anchor" aria-label="anchor" href="#dimplots-plot-meta-data-in-2d-space-pcatsneumap"></a>
 </h3>
 <p>scCustomize has a few functions that improve on the default plotting options available in Seurat</p>
 <div class="section level4">
@@ -730,21 +730,52 @@ scCustomize provides easy of use function <code><a href="../reference/Cluster_Hi
 </div>
 </div>
 <div class="section level4">
+<h4 id="highlight-cells">Highlight Cells<a class="anchor" aria-label="anchor" href="#highlight-cells"></a>
+</h4>
+<p>Sometimes the cells that you want to highlight on a plot may not be represented by an active.ident or meta.data column. In this scenario you can use <code>Cell_Highlight_Plot</code>.</p>
+<p><em>NOTE: Values of cell names provided to <code>cells_highlight</code> parameter must be a named list.</em></p>
+<p>Let’s say we want to highlight cells with expression of <em>MS4A1</em> above certain threshold.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get cell names</span></span>
+<span><span class="va">MS4A1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/WhichCells.html" class="external-link">WhichCells</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, expression <span class="op">=</span> <span class="va">MS4A1</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Make into list</span></span>
+<span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>MS4A1 <span class="op">=</span> <span class="va">MS4A1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot</span></span>
+<span><span class="fu"><a href="../reference/Cell_Highlight_Plot.html">Cell_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, cells_highlight <span class="op">=</span> <span class="va">cells</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-71-1.png" width="576" style="display: block; margin: auto;"></p>
+<div class="section level5">
+<h5 id="highlight-2-sets-of-cells-in-the-same-plot">Highlight 2+ sets of cells in the same plot<a class="anchor" aria-label="anchor" href="#highlight-2-sets-of-cells-in-the-same-plot"></a>
+</h5>
+<p><code><a href="../reference/Cell_Highlight_Plot.html">Cell_Highlight_Plot()</a></code> also supports plotting two or more sets of cells in the same plot, similar to plotting multiple identities with <code><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot()</a></code>/<code><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot()</a></code>.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get cell names and make list</span></span>
+<span><span class="va">MS4A1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/WhichCells.html" class="external-link">WhichCells</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, expression <span class="op">=</span> <span class="va">MS4A1</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">GZMB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/WhichCells.html" class="external-link">WhichCells</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, expression <span class="op">=</span> <span class="va">GZMB</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>MS4A1 <span class="op">=</span> <span class="va">MS4A1</span>, GZMB <span class="op">=</span> <span class="va">GZMB</span><span class="op">)</span></span>
+<span><span class="co"># Plot</span></span>
+<span><span class="fu"><a href="../reference/Cell_Highlight_Plot.html">Cell_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, cells_highlight <span class="op">=</span> <span class="va">cells</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-73-1.png" width="576" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div class="section level4">
 <h4 id="dimplot-layout-plots">DimPlot Layout Plots<a class="anchor" aria-label="anchor" href="#dimplot-layout-plots"></a>
 </h4>
 <p>Sometimes can be beneficial to create layouts where there is no grouping variable and plots are simply colored by the split variable.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_All_Samples.html">DimPlot_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, meta_data_column <span class="op">=</span> <span class="st">"sample_id"</span>, num_col <span class="op">=</span> <span class="fl">3</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-70-1.png" alt="*Visualize all samples in simple plot layout.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-74-1.png" alt="*Visualize all samples in simple plot layout.*" width="1248"><p class="caption">
 <em>Visualize all samples in simple plot layout.</em>
 </p>
 </div>
 <p>Can unique color each plot by providing a vector of colors instead of single value</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_All_Samples.html">DimPlot_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription"</span>, num_col <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    pt.size <span class="op">=</span> <span class="fl">0.5</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"firebrick3"</span>, <span class="st">"dodgerblue3"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-71-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-75-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
@@ -767,7 +798,7 @@ scCustomize provides easy of use function <code><a href="../reference/Cluster_Hi
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

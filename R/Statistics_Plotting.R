@@ -18,7 +18,7 @@
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -26,9 +26,12 @@
 #' @concept stats_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Plot_Median_Genes(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-#' }
+#' library(Seurat)
+#' # Create example groups
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' # Plot
+#' Plot_Median_Genes(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 #'
 
 Plot_Median_Genes <- function(
@@ -57,7 +60,7 @@ Plot_Median_Genes <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -95,7 +98,7 @@ Plot_Median_Genes <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = Median_nFeature_RNA)) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_nFeature_RNA"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -103,7 +106,7 @@ Plot_Median_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Median_nFeature_RNA, fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nFeature_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -151,7 +154,7 @@ Plot_Median_Genes <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -159,9 +162,12 @@ Plot_Median_Genes <- function(
 #' @concept stats_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Plot_Median_UMIs(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-#' }
+#' library(Seurat)
+#' # Create example groups
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' # Plot
+#' Plot_Median_UMIs(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
 #'
 
 Plot_Median_UMIs <- function(
@@ -190,7 +196,7 @@ Plot_Median_UMIs <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -228,7 +234,7 @@ Plot_Median_UMIs <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = Median_nCount_RNA)) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_nCount_RNA"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -236,7 +242,7 @@ Plot_Median_UMIs <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Median_nCount_RNA, fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -284,7 +290,7 @@ Plot_Median_UMIs <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -293,8 +299,12 @@ Plot_Median_UMIs <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
-#' }
+#' # Add mito
+#' obj <- Add_Mito_Ribo_Seurat(seurat_object = obj, species = "human")
+#'
+#' # Plot
+#' Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "sample_id")
+#'}
 #'
 
 Plot_Median_Mito <- function(
@@ -323,7 +333,7 @@ Plot_Median_Mito <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -361,7 +371,7 @@ Plot_Median_Mito <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = Median_percent_mito)) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_percent_mito"]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -369,7 +379,7 @@ Plot_Median_Mito <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Median_percent_mito, fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_percent_mito"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center') +
       scale_fill_manual(values = colors_use) +
@@ -418,7 +428,7 @@ Plot_Median_Mito <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr select slice left_join
+#' @importFrom dplyr n select slice left_join
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -427,7 +437,15 @@ Plot_Median_Mito <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Plot_Median_Other(seurat_object = obj, median_var = "module_score", sample_col = "orig.ident", group_by = "Treatment")
+#' library(Seurat)
+#' cd_features <- list(c('CD79B', 'CD79A', 'CD19', 'CD180', 'CD200', 'CD3D', 'CD2','CD3E',
+#' 'CD7','CD8A', 'CD14', 'CD1C', 'CD68', 'CD9', 'CD247'))
+#'
+#' pbmc_small <- AddModuleScore(object = pbmc_small, features = cd_features, ctrl = 5,
+#' name = 'CD_Features')
+#'
+#' Plot_Median_Other(seurat_object = pbmc_small, median_var = "CD_Features1",
+#' sample_col = "orig.ident", group_by = "Treatment")
 #' }
 #'
 
@@ -467,7 +485,7 @@ Plot_Median_Other <- function(
     slice(-n()) %>%
     droplevels()
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
@@ -505,7 +523,7 @@ Plot_Median_Other <- function(
   if (is.null(x = group_by)) {
     merged$samples_plotting <- "Samples"
 
-    plot <- ggplot(merged, aes(x = samples_plotting, y = .data[[paste0("Median_", median_var)]])) +
+    plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[[paste0("Median_", median_var)]])) +
       geom_boxplot(fill = "white", outlier.color = NA) +
       geom_quasirandom() +
       ggtitle(plot_title) +
@@ -561,7 +579,8 @@ Plot_Median_Other <- function(
 #'
 #' @import cli
 #' @import ggplot2
-#' @importFrom dplyr select slice left_join rename
+#' @import rlang
+#' @importFrom dplyr select slice left_join rename all_of
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -603,12 +622,12 @@ Plot_Cells_per_Sample <- function(
   # Calculate total cells and merge with meta.data
   total_cells <- table(seurat_object@meta.data[[sample_col]]) %>%
     data.frame() %>%
-    rename(!!sample_col := Var1, Number_of_Cells = Freq)
+    rename(!!sample_col := .data[["Var1"]], Number_of_Cells = .data[["Freq"]])
 
-  meta <- seurat_object@meta.data
+  meta <- Fetch_Meta(object = seurat_object)
 
   meta <- meta %>%
-    select(.data[[sample_col]], .data[[group_by]])
+    select(all_of(c(sample_col, group_by)))
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
 
@@ -631,7 +650,7 @@ Plot_Cells_per_Sample <- function(
   }
 
   # Generate base plot
-  plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = Number_of_Cells, fill = .data[[group_by]])) +
+  plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Number_of_Cells"]], fill = .data[[group_by]])) +
     geom_boxplot(fill = "white") +
     geom_dotplot(binaxis ='y', stackdir = 'center') +
     scale_fill_manual(values = colors_use) +
@@ -662,7 +681,11 @@ Plot_Cells_per_Sample <- function(
 #'
 #' Plot of total cell or nuclei number per sample grouped by another meta data variable.
 #'
-#' @param feature_diff_df name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}
+#' @param feature_diff_df name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}.
+#' @param pct_diff_threshold threshold to use for feature plotting.  Resulting plot will only contain
+#' features which exhibit percent change >= value.  Default is 25.
+#' @param num_features Number of features to plot.  Will ignore `pct_diff_threshold` and return
+#' plot with specified number of features.  Default is NULL.
 #' @param label logical, whether or not to label the features that have largest percent difference
 #' between raw and CellBender counts (Default is TRUE).
 #' @param num_labels Number of features to label if `label = TRUE`, (default is 20).
@@ -734,7 +757,7 @@ CellBender_Diff_Plot <- function(
 ) {
   # Remove unshared features
   feature_diff_df_filtered <- feature_diff_df %>%
-    drop_na(Raw_Counts, CellBender_Counts)
+    drop_na(.data[["Raw_Counts"]], .data[["CellBender_Counts"]])
 
   diff_features <- symdiff(x = rownames(feature_diff_df), y = rownames(feature_diff_df_filtered))
 
@@ -755,7 +778,7 @@ CellBender_Diff_Plot <- function(
   # Filter plot
   if (!is.null(x = pct_diff_threshold)) {
     feature_diff_df_filtered <- feature_diff_df_filtered %>%
-      filter(Pct_Diff >= pct_diff_threshold)
+      filter(.data[["Pct_Diff"]] >= pct_diff_threshold)
   } else {
     feature_diff_df_filtered <- feature_diff_df_filtered[1:num_features, ]
   }
@@ -766,7 +789,7 @@ CellBender_Diff_Plot <- function(
   axis_lim <- max(feature_diff_df_filtered$Raw_Counts)
 
   # Make plot
-  plot <- ggplot(feature_diff_df_filtered, aes(x = Raw_Counts, y = CellBender_Counts)) +
+  plot <- ggplot(feature_diff_df_filtered, aes(x = .data[["Raw_Counts"]], y = .data[["CellBender_Counts"]])) +
     geom_point() +
     scale_x_log10(limits = c(1, axis_lim)) +
     scale_y_log10(limits = c(1, axis_lim)) +

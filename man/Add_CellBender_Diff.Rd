@@ -21,7 +21,8 @@ Calculate the difference in features and UMIs per cell when both cell bender and
 }
 \examples{
 \dontrun{
-object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
+cell_bender_assay_name = "RNA")
 }
 
 }

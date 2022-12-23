@@ -14,6 +14,7 @@
 #'
 #' @import patchwork
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -93,10 +94,10 @@ Iterate_PC_Loading_Plots <- function(
 
 #' Iterate DimPlot By Sample
 #'
-#' Iterate Dimplot by orig.ident column from Seurat object metadata
+#' Iterate DimPlot by orig.ident column from Seurat object metadata
 #'
 #' @param seurat_object Seurat object name.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
@@ -110,6 +111,7 @@ Iterate_PC_Loading_Plots <- function(
 #' @return A ggplot object
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -267,6 +269,7 @@ Iterate_DimPlot_bySample <- function(
 #' @return Saved plots
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pbmapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -279,8 +282,9 @@ Iterate_DimPlot_bySample <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_Cluster_Highlight_Plot(seurat_object = object, highlight_color = "navy", background_color = "lightgray",
-#' file_path = "path/", file_name = "name", file_type = "pdf", single_pdf = TRUE)
+#' Iterate_Cluster_Highlight_Plot(seurat_object = object, highlight_color = "navy",
+#' background_color = "lightgray", file_path = "path/", file_name = "name", file_type = "pdf",
+#' single_pdf = TRUE)
 #' }
 #'
 
@@ -461,6 +465,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' @return Saved plots
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom forcats fct_relevel
 #' @importFrom pbapply pbmapply pboptions
 #' @importFrom Seurat DimPlot
@@ -474,8 +479,9 @@ Iterate_Cluster_Highlight_Plot <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id", highlight_color = "navy",
-#' background_color = "lightgray", file_path = "path/", file_name = "name", file_type = "pdf", single_pdf = TRUE)
+#' Iterate_Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id",
+#' highlight_color = "navy", background_color = "lightgray", file_path = "path/",
+#' file_name = "name", file_type = "pdf", single_pdf = TRUE)
 #' }
 #'
 
@@ -664,7 +670,7 @@ Iterate_Meta_Highlight_Plot <- function(
 }
 
 
-#' Iterative Plotting of Gene Lists using Custom Featureplots
+#' Iterative Plotting of Gene Lists using Custom FeaturePlots
 #'
 #' Create and Save plots for Gene list with Single Command
 #'
@@ -677,7 +683,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param return_plots logical. Whether to return plots to list instead of saving them to file(s).  Default is FALSE.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
@@ -693,11 +699,14 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @return Saved plots
 #'
 #' @export
 #'
@@ -705,8 +714,9 @@ Iterate_Meta_Highlight_Plot <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_FeaturePlot_scCustom(seurat_object = object, gene_list = DEG_list, colors_use = viridis_plasma_dark_high,
-#' na_color = "lightgray", file_path = "plots/", file_name = "tsne", file_type = ".jpg", dpi = 600)
+#' Iterate_FeaturePlot_scCustom(seurat_object = object, gene_list = DEG_list,
+#' colors_use = viridis_plasma_dark_high, na_color = "lightgray", file_path = "plots/",
+#' file_name = "tsne", file_type = ".jpg", dpi = 600)
 #' }
 #'
 
@@ -889,7 +899,7 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param group.by Name of one or more metadata columns to group (color) plot by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
@@ -903,10 +913,13 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat VlnPlot
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @return Saved plots
 #'
 #' @export
 #'
@@ -914,8 +927,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list, file_path = "plots/",
-#' file_name = "_vln", file_type = ".jpg", dpi = 600)
+#' Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list,
+#' file_path = "plots/", file_name = "_vln", file_type = ".jpg", dpi = 600)
 #' }
 #'
 
@@ -1065,22 +1078,25 @@ Iterate_VlnPlot_scCustom <- function(
 #' will be incorporated into plot title if `single_pdf = TRUE` or into file name if `FALSE`.
 #' @param viridis_palette color scheme to use.
 #' @param custom_palette color for non-expressed cells.
-#' #' @param pt.size Adjust point size for plotting.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param pt.size Adjust point size for plotting.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
-#' #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
+#' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
-#' @importFrom SeuratObject DefaultDimReduc
+#' @importFrom SeuratObject DefaultDimReduc PackageCheck
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @return Saved plots
 #'
 #' @export
 #'
@@ -1256,25 +1272,28 @@ Iterate_Plot_Density_Custom <- function(
 #' into file name if `FALSE`.
 #' @param viridis_palette color scheme to use.
 #' @param custom_palette color for non-expressed cells.
-#' #' @param pt.size Adjust point size for plotting.
-#' @param file_path/prefix directory file path and/or file name prefix.  Defaults to current wd.
+#' @param pt.size Adjust point size for plotting.
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
-#' #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
+#' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
 #' @import ggplot2
+#' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom purrr discard keep
-#' @importFrom SeuratObject DefaultDimReduc
+#' @importFrom SeuratObject DefaultDimReduc PackageCheck
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
 #' @export
+#'
+#' @return Saved plots
 #'
 #' @concept iterative_plotting
 #'
@@ -1319,7 +1338,7 @@ Iterate_Plot_Density_Joint <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check gene list is in list form
-  if (class(x = gene_list) != "list") {
+  if (!inherits(x = gene_list, what = "list")) {
     stop("For 'Iterate_Plot_Density_Joint' the 'gene_list' must be of class() 'list', please reformat from current class(): ", '"', class(x = gene_list), '"', ".")
   }
 

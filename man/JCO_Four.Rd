@@ -13,14 +13,13 @@ JCO_Four()
 Shortcut to a specific JCO 4 color palette from ggsci package.
 }
 \examples{
-\dontrun{
 cols <- JCO_Four()
-}
+PalettePlot(palette = cols)
 
 }
 \references{
 Selection of colors from the JCO palette from ggsci being called through paletteer.
 See ggsci for more info on palettes
-\url{https://cran.r-project.org/web/packages/ggsci/index.html}
+\url{https://CRAN.R-project.org/package=ggsci}
 }
 \concept{palettes}

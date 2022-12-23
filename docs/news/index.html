@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -104,6 +104,30 @@
       <small>Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.0" id="sccustomize-110-2022-xx-xx">scCustomize 1.1.0 (2022-XX-XX)<a class="anchor" aria-label="anchor" href="#sccustomize-110-2022-xx-xx"></a></h2>
+<div class="section level3">
+<h3 id="added-1-1-0">Added<a class="anchor" aria-label="anchor" href="#added-1-1-0"></a></h3>
+<ul><li>Added <code>merge</code> parameter to <code>Read10X_GEO</code>, <code>Read10X_h5_GEO</code>, <code>Read_GEO_Delim</code> and <code>Read_CellBender_h5_Multi_File</code>.<br></li>
+<li>Added <code>raster.dpi</code> parameter to <code>DimPlot_LIGER</code>.<br></li>
+<li>Added <code>label</code> parameter to <code>FeaturePlot_scCustom</code> to avoid error collision (<a href="https://github.com/samuel-marsh/scCustomize/issues/80" class="external-link">#80</a>).<br></li>
+<li>Added <code>vln_linewidth</code> parameter to control violin outline line width (<a href="https://github.com/samuel-marsh/scCustomize/issues/32" class="external-link">#32</a>).<br></li>
+<li>Added quick meta data getter function <code>Fetch_Meta</code> for returning data.frame of object meta data.<br></li>
+<li>Added <code>Extract_Sample_Meta</code> to extract sample-level meta data from object.<br></li>
+<li>Added <code>Cell_Highlight_Plot</code> for highlight plots of custom cells not in active ident or meta data.<br></li>
+<li>Added <code>flip</code> parameter to <code>Clustered_DotPlot</code> to enable axes flipping (<a href="https://github.com/samuel-marsh/scCustomize/issues/69" class="external-link">#69</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-1-1-0">Changed<a class="anchor" aria-label="anchor" href="#changed-1-1-0"></a></h3>
+<ul><li>Updated Imports/Suggests for CRAN compatibility.</li>
+<li>Rearrange base R code within <code>R/</code> scripts for better organization.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-1-1-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-1-1-0"></a></h3>
+<ul><li>Fixed missing documentation for number of package functions.<br></li>
+<li>Typo/styling fixes.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.2" id="sccustomize-102-2022-11-22">scCustomize 1.0.2 (2022-11-22)<a class="anchor" aria-label="anchor" href="#sccustomize-102-2022-11-22"></a></h2>
 <div class="section level3">
@@ -282,7 +306,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>DimPlot LIGER Version</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/LIGER_Plotting.R" class="external-link"><code>R/LIGER_Plotting.R</code></a></small>
     <div class="hidden name"><code>DimPlot_LIGER.Rd</code></div>
     </div>
 
@@ -127,6 +127,7 @@
 <span>  label_color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>  combination <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raster.dpi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span>,</span>
 <span>  num_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  color_seed <span class="op">=</span> <span class="fl">123</span></span>
@@ -142,6 +143,10 @@
 <dt>group_by</dt>
 <dd><p>Variable to be plotted.  If <code>NULL</code> will plot clusters from <code>liger@clusters</code> slot.
 If <code>combination = TRUE</code> will plot both clusters and meta data variable.</p></dd>
+
+
+<dt>split_by</dt>
+<dd><p>Variable to split plots by.</p></dd>
 
 
 <dt>colors_use_cluster</dt>
@@ -205,6 +210,11 @@ Default is FALSE.</p></dd>
 greater than 200,000 cells.</p></dd>
 
 
+<dt>raster.dpi</dt>
+<dd><p>Pixel resolution for rasterized plots, passed to geom_scattermore().
+Default is c(512, 512).</p></dd>
+
+
 <dt>num_columns</dt>
 <dd><p>Number of columns in plot layout.  Only valid if <code>split.by != NULL</code>.</p></dd>
 
@@ -246,7 +256,7 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

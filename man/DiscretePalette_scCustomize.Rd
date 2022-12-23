@@ -28,15 +28,20 @@ A vector of colors
 \description{
 Helper function to return a number of discrete color palettes.
 }
+\examples{
+pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
+PalettePlot(palette = pal)
+
+}
 \references{
-This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
+This function uses the paletteer package \url{https://github.com/EmilHvitfeldt/paletteer} to
 provide simplified access to color palettes from many different R package sources while
 minimizing scCustomize current and future dependencies.
 
 The following packages & palettes are called by this function (see individual packages for
 palette references/citations):
 \enumerate{
-\item pals (via paletteer) \url{https://cran.r-project.org/web/packages/pals/index.html}
+\item pals (via paletteer) \url{https://CRAN.R-project.org/package=pals}
 \itemize{
 \item alphabet, alphabet2, glasbey, polychrome, and stepped.
 }
@@ -50,7 +55,7 @@ palette references/citations):
 }
 }
 
-Function name and implementation modified from Seurat (Licence: GPL-3).
+Function name and implementation modified from Seurat (License: GPL-3).
 \url{https://github.com/satijalab/seurat}
 }
 \concept{palettes}

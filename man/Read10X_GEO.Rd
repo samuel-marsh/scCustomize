@@ -13,7 +13,8 @@ Read10X_GEO(
   unique.features = TRUE,
   strip.suffix = FALSE,
   parallel = FALSE,
-  num_cores = NULL
+  num_cores = NULL,
+  merge = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,10 @@ set names to the file name of each sample.}
 Only possible on Linux based systems.}
 
 \item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
+
+\item{merge}{logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from \code{sample_names}.}
 }
 \value{
 If features.csv indicates the data has multiple data types, a list
@@ -45,7 +50,8 @@ containing a sparse matrix of the data from each type will be returned.
 Otherwise a sparse matrix containing the expression data will be returned.
 }
 \description{
-Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes added to them by NCBI GEO or other repos.
+Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes
+added to them by NCBI GEO or other repos.
 }
 \examples{
 \dontrun{
@@ -58,7 +64,7 @@ seurat_object = CreateSeuratObject(counts = expression_matrices[[1]])
 }
 \references{
 Code used in function has been slightly modified from \code{Seurat::Read10X} function of
-Seurat package (https://github.com/satijalab/seurat) (Licence: GPL-3).  Function was modified to
+Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).  Function was modified to
 support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 potential PR to Seurat GitHub).
 }

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -111,6 +111,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">theme_ggprism_mod</span><span class="op">(</span></span>
+<span>  palette <span class="op">=</span> <span class="st">"black_and_white"</span>,</span>
 <span>  base_size <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>  base_family <span class="op">=</span> <span class="st">"sans"</span>,</span>
 <span>  base_fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
@@ -123,7 +124,12 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>base_size</dt>
+    <dl><dt>palette</dt>
+<dd><p><code>string</code>. Palette name, use
+<code>names(ggprism_data$themes)</code> to show all valid palette names.</p></dd>
+
+
+<dt>base_size</dt>
 <dd><p><code>numeric</code>. Base font size, given in <code>"pt"</code>.</p></dd>
 
 
@@ -151,11 +157,6 @@ One of: <code>0, 45, 90, 270</code>.</p></dd>
 <dt>border</dt>
 <dd><p><code>logical</code>. Should a border be drawn around the plot?
 Clipping will occur unless e.g. <code>coord_cartesian(clip = "off")</code> is used.</p></dd>
-
-
-<dt>palette</dt>
-<dd><p><code>string</code>. Palette name, use
-<code>names(ggprism_data$themes)</code> to show all valid palette names.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -193,7 +194,7 @@ Theme adaptation based on ggprism vignette
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

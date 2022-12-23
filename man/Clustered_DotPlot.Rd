@@ -14,9 +14,12 @@ Clustered_DotPlot(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  flip = FALSE,
   k = 1,
-  row_km_repeats = 1000,
-  column_km_repeats = 1000,
+  feature_km_repeats = 1000,
+  ident_km_repeats = 1000,
+  row_km_repeats = deprecated(),
+  column_km_repeats = deprecated(),
   row_label_size = 8,
   raster = FALSE,
   plot_km_elbow = TRUE,
@@ -57,17 +60,24 @@ will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomi
 \item{x_lab_rotate}{How to rotate column labels.  By default set to \code{TRUE} which rotates labels 45 degrees.
 If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.}
 
-\item{k}{Value to use for k-means clustering on rows.  Sets (km) parameter in \code{ComplexHeatmap::Heatmap()}.
+\item{flip}{logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
+columns = idents.}
+
+\item{k}{Value to use for k-means clustering on features  Sets (km) parameter in \code{ComplexHeatmap::Heatmap()}.
 From \code{ComplexHeatmap::Heatmap()}: Apply k-means clustering on rows. If the value is larger than 1, the
 heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
 clustering is still applied with parameters above.}
 
-\item{row_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Note if row_km_repeats
-is set to more than one, the final number of groups might be smaller than row_km, but this might
-mean the original row_km is not a good choice.  Default is 1000.}
+\item{feature_km_repeats}{Number of k-means runs to get a consensus k-means clustering for features.
+Note if \code{feature_km_repeats} is set to value greater than one, the final number of groups might be
+smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.}
 
-\item{column_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
-Default is 100.}
+\item{ident_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar to
+\code{feature_km_repeats}.  Default is 1000.}
+
+\item{row_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{feature_km_repeats}}
+
+\item{column_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{ident_km_repeats}}
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
@@ -75,7 +85,7 @@ Default is 100.}
 
 \item{plot_km_elbow}{Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 Estimating elbow of this plot is one way to determine "optimal" value for \code{k}.
-Based on: https://stackoverflow.com/a/15376462/15568251.}
+Based on: \url{https://stackoverflow.com/a/15376462/15568251}.}
 
 \item{elbow_kmax}{The maximum value of k to use for \code{plot_km_elbow}.  Suggest setting larger value so the
 true shape of plot can be observed.  Value must be 1 less than number of features provided.  If NULL parameter
@@ -106,16 +116,17 @@ A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and
 Clustered DotPlots using ComplexHeatmap
 }
 \examples{
-\dontrun{
-Clustered_DotPlot(seurat_object = object, features = gene_list)
+\donttest{
+library(Seurat)
+Clustered_DotPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
 }
 
 }
 \references{
-https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/
+\url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
 }
 \seealso{
-https://twitter.com/tangming2005
+\url{https://twitter.com/tangming2005}
 }
 \author{
 Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)

@@ -4,9 +4,9 @@
 \name{scCustomize-package}
 \alias{scCustomize}
 \alias{scCustomize-package}
-\title{scCustomize: An R package for custom visualization & analyses of single cell sequencing.}
+\title{scCustomize: Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing}
 \description{
-Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
+Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using 'R'. 'scCustomize' aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions. For citation please use: Marsh SE (2021) "Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing" \doi{10.5281/zenodo.5706430}.
 }
 \section{Package options}{
 
@@ -21,7 +21,7 @@ due to large file sizes.}
 \code{\link{DimPlot_LIGER}} due to new functionality compared to LIGER.}
 \item{\code{scCustomize_warn_na_cutoff}}{Show message about properly setting \code{na_cutoff} parameter in \code{\link{FeaturePlot_scCustom}}.}
 #'   \item{\code{scCustomize_warn_zero_na_cutoff}}{Show message about properly setting \code{na_cutoff} parameter in \code{\link{FeaturePlot_scCustom}} if \code{na_cutoff} is set to exactly zero.}
-\item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot}}
+\item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot_scCustom}}
 when \code{pt.size > 0} due to current lack of raster support in \code{\link[Seurat]{VlnPlot}}}
 \item{\code{scCustomize_warn_LIGER_dim_labels}}{Show message about \code{\link{DimPlot_LIGER}}
 parameter \code{reduction_label} as LIGER objects do not store dimensionality reduction name and
@@ -39,7 +39,7 @@ and therefore needs to be set manually.}
 Useful links:
 \itemize{
   \item \url{https://github.com/samuel-marsh/scCustomize}
-  \item \url{https://samuel-marsh.github.io/scCustomize}
+  \item \url{https://samuel-marsh.github.io/scCustomize/}
   \item \doi{10.5281/zenodo.5706431}
   \item Report bugs at \url{https://github.com/samuel-marsh/scCustomize/issues}
 }
@@ -52,7 +52,7 @@ Other contributors:
 \itemize{
   \item Ming Tang \email{tangming2005@gmail.com} [contributor]
   \item Velina Kozareva [contributor]
-  \item Tim Stuart \email{tstuart@nygenome.org} [contributor]
+  \item Lucas Graybuck \email{lucasg@alleninstitute.org} [contributor]
 }
 
 }

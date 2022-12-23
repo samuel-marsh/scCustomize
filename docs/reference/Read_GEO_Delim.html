@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -119,7 +119,8 @@
 <span>  sample_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  barcode_suffix_period <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  num_cores <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  num_cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  merge <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -169,6 +170,12 @@ Only possible on Linux based systems.</p></dd>
 <dt>num_cores</dt>
 <dd><p>if <code>parallel = TRUE</code> indicates the number of cores to use for multicore processing.</p></dd>
 
+
+<dt>merge</dt>
+<dd><p>logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from <code>sample_names</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -198,7 +205,7 @@ Only possible on Linux based systems.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

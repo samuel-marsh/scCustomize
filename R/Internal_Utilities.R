@@ -1,3 +1,7 @@
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### Operators ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 #' Set a default value if an object is NOT null
 #'
 #' @param lhs An object to set if it's NOT null
@@ -6,7 +10,7 @@
 #' @return lhs if lhs is null, else rhs
 #'
 #' @author Hadley Wickham
-#' @references https://adv-r.hadley.nz/functions.html#missing-arguments
+#' @references \url{https://adv-r.hadley.nz/functions.html#missing-arguments}
 #'
 #' @noRd
 #'
@@ -28,7 +32,7 @@
 #' @return rhs if lhs is null, else lhs
 #'
 #' @author Hadley Wickham
-#' @references https://adv-r.hadley.nz/functions.html#missing-arguments
+#' @references \url{https://adv-r.hadley.nz/functions.html#missing-arguments}
 #'
 #' @noRd
 #'
@@ -41,25 +45,15 @@
   }
 }
 
-#' Stop function without error message
-#'
-#' Modifies R options within the function call only to hide the error message from `stop` while
-#' keeping global options preserved outside of function.
-#'
-#' @return stops function without error message
-#'
-#' @author Stibu
-#' @references https://stackoverflow.com/a/42945293/15568251
-#' @details https://creativecommons.org/licenses/by-sa/3.0/
-#'
-#' @noRd
-#'
 
-stop_quietly <- function() {
-  opt <- options(show.error.messages = FALSE)
-  on.exit(options(opt))
-  stop()
-}
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### Object Checks ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
 
 
 #' Check Seurat Object
@@ -70,7 +64,7 @@ stop_quietly <- function() {
 #'
 #' @import cli
 #'
-#' @return stops function without error message
+#' @return error if not Seurat object.
 #'
 #' @noRd
 #'
@@ -78,7 +72,7 @@ stop_quietly <- function() {
 Is_Seurat <- function(
   seurat_object
 ) {
-  if (class(x = seurat_object)[[1]] != "Seurat") {
+  if (!inherits(what = "Seurat", x = seurat_object)) {
     cli_abort(message = "'seurat_object' provided is not an object of class: Seurat.")
   }
 }
@@ -92,7 +86,7 @@ Is_Seurat <- function(
 #'
 #' @import cli
 #'
-#' @return stops function without error message
+#' @return error is not LIGER object
 #'
 #' @noRd
 #'
@@ -102,41 +96,6 @@ Is_LIGER <- function(
 ) {
   if (class(x = liger_object)[[1]] != "liger") {
     cli_abort(message = "'liger_object' provided is not an object of class: liger")
-  }
-}
-
-
-#' Automatically calculate a point size for ggplot2-based scatter plots
-#
-#' It happens to look good
-#'
-#' @param data a single value length vector corresponding to the number of cells.
-#' @param raster If TRUE, point size is set to 1
-#'
-#' @return The "optimal" point size for visualizing these data
-#'
-#' @noRd
-#'
-#' @references This function and documentation text are modified versions of the `AutoPointSize` function
-#' and documentation from Seurat (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
-#' This version has been modified to take single value length input instead of data.frame input.
-#'
-
-AutoPointSize_scCustom <- function(data, raster = NULL) {
-  # for single value
-  if (is.null(x = nrow(x = data)) && length(x = data) == 1 && is.numeric(x = data)) {
-    return(ifelse(
-      test = isTRUE(x = raster),
-      yes = 1,
-      no = min(1583 / data, 1)
-    ))
-  } else {
-    # for data frame/object based values (from Seurat, see documentation)
-    return(ifelse(
-      test = isTRUE(x = raster),
-      yes = 1,
-      no = min(1583 / nrow(x = data), 1)
-    ))
   }
 }
 
@@ -207,6 +166,32 @@ Assay_Present <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### WARN/ERROR MESSAGING ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Stop function without error message
+#'
+#' Modifies R options within the function call only to hide the error message from `stop` while
+#' keeping global options preserved outside of function.
+#'
+#' @return stops function without error message
+#'
+#' @author Stibu
+#' @references \url{https://stackoverflow.com/a/42945293/15568251}
+#' @details \url{https://creativecommons.org/licenses/by-sa/3.0/}
+#'
+#' @noRd
+#'
+
+stop_quietly <- function() {
+  opt <- options(show.error.messages = FALSE)
+  on.exit(options(opt))
+  stop()
+}
+
+
 #' Custom glue collapse
 #
 #' Customized glue_collapse that is based on the number of items in input list
@@ -243,6 +228,11 @@ glue_collapse_scCustom <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### GENERAL HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Calculate the percentage of a vector above some threshold
 #'
 #' @param x Vector of values
@@ -251,7 +241,7 @@ glue_collapse_scCustom <- function(
 #' @return Returns the percentage of `x` values above the given threshold
 #'
 #' @author Satija Lab & all co-Authors of Seurat Package
-#' @references See Utilities.R in source code of Seurat https://github.com/satijalab/seurat/blob/master/R/utilities.R  (Licence: GPL-3).
+#' @references See Utilities.R in source code of Seurat \url{https://github.com/satijalab/seurat/blob/master/R/utilities.R}  (Licence: GPL-3).
 #'
 #' @note modified from Seurat version to return a percentage instead of proportion/decimal as part of `Percent_Expressing` function.  To be replaced following next Seurat version update.
 #'
@@ -265,6 +255,32 @@ PercentAbove_Seurat <- function(x, threshold) {
 }
 
 
+#' Extract delimiter information from a string.
+#'
+#' Parses a string (usually a cell name) and extracts fields based on a delimiter
+#'
+#' @param string String to parse.
+#' @param field Integer(s) indicating which field(s) to extract. Can be a vector multiple numbers.
+#' @param delim Delimiter to use, set to underscore by default.
+#'
+#' @return A new string, that parses out the requested fields, and (if multiple), rejoins them with the same delimiter
+#'
+#' @references See Utilities.R in source code of Seurat \url{https://github.com/satijalab/seurat/blob/master/R/utilities.R}  (Licence: GPL-3).
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+ExtractField <- function(string, field = 1, delim = "_") {
+  fields <- as.numeric(x = unlist(x = strsplit(x = as.character(x = field), split = ",")))
+  if (length(x = fields) == 1) {
+    return(strsplit(x = string, split = delim)[[1]][field])
+  }
+  return(paste(strsplit(x = string, split = delim)[[1]][fields], collapse = delim))
+}
+
+
 #' Calculate the middle value between two numbers
 #'
 #' @param min Lower value.
@@ -272,7 +288,7 @@ PercentAbove_Seurat <- function(x, threshold) {
 #'
 #' @return Returns number in middle of two provided values.
 #'
-#' @references Code to calculate middle value from: adapted from: https://stackoverflow.com/a/54147509/15568251.
+#' @references Code to calculate middle value from: adapted from: \url{https://stackoverflow.com/a/54147509/15568251}.
 #' Renamed and wrapped into function by Samuel Marsh.
 #'
 #' @keywords internal
@@ -287,6 +303,31 @@ Middle_Number <- function(
   min_max <- c(min, max)
   middle <- min_max[-length(min_max)] + diff(min_max) / 2
   return(middle)
+}
+
+
+#' Symmetrical setdiff
+#'
+#' tests for differences between two vectors symmetrically.
+#'
+#' @param x first vector to test
+#' @param y second vector to test
+#'
+#' @return vector differences x vs. y and y vs. x
+#'
+#' @references Function name and code from R-bloggers post:
+#' \url{https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/}
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+symdiff <- function(
+  x,
+  y
+) {
+  setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
 }
 
 
@@ -329,7 +370,7 @@ Retrieve_Ensembl_Mito <- function(
   macaque_options <- accepted_names$Macaque_Options
 
   if (species %in% marmoset_options) {
-    cli::cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
+    cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
   }
 
   if (species %in% mouse_options) {
@@ -416,65 +457,4 @@ Retrieve_Ensembl_Ribo <- function(
   }
 
   return(ribo_ensembl)
-}
-
-
-#' Remove Right Y Axis
-#'
-#' Shortcut for removing right y axis from ggplot2 object
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @references Shortcut slightly modified from Seurat (https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048)
-#'
-#' @keywords internal
-#'
-#' @noRd
-#'
-#' @examples
-#' \dontrun{
-#' # Generate a plot without axes, labels, or grid lines
-#' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
-#' p + No_Right()
-#' }
-
-No_Right <- function() {
-  no.right <- theme(
-    axis.line.y.right = element_blank(),
-    axis.ticks.y.right = element_blank(),
-    axis.text.y.right = element_blank(),
-    axis.title.y.right = element_text(
-      face = "bold",
-      size = 14,
-      margin = margin(r = 7),
-      angle = 270
-    )
-  )
-  return(no.right)
-}
-
-
-#' Symetrical setdiff
-#'
-#' tests for differences between two vectors symmetrically.
-#'
-#' @param x first vector to test
-#' @param y second vector to test
-#'
-#' @return vector differences x vs. y and y vs. x
-#'
-#' @references Function name and code from R-bloggers post:
-#' (https://www.r-bloggers.com/2013/06/symmetric-set-differences-in-r/)
-#'
-#' @keywords internal
-#'
-#' @noRd
-#'
-
-symdiff <- function(
-  x,
-  y
-) {
-  setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
 }

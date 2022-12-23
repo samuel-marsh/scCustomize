@@ -20,10 +20,10 @@ Median_Stats(
 "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo" in addition to variables supplied to \code{median_var}.}
 
 \item{median_var}{Column(s) in \verb{@meta.data} to calculate medians for in addition to defaults.
-Must be of `class()`` integer or numeric.}
+Must be of \code{class()} integer or numeric.}
 }
 \value{
-A data frame.
+A data.frame.
 }
 \description{
 Get quick values for median Genes, UMIs, \%mito per cell grouped by meta.data variable.

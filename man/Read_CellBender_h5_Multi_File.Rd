@@ -12,6 +12,7 @@ Read_CellBender_h5_Multi_File(
   sample_names = NULL,
   parallel = FALSE,
   num_cores = NULL,
+  merge = FALSE,
   ...
 )
 }
@@ -32,6 +33,10 @@ set names to the subdirectory name of each sample.}
 \item{parallel}{logical (default FALSE) whether or not to use multi core processing to read in matrices.}
 
 \item{num_cores}{how many cores to use for parallel processing.}
+
+\item{merge}{logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from \code{sample_names}.}
 
 \item{...}{Extra parameters passed to \code{\link[scCustomize]{Read_CellBender_h5_Mat}}.}
 }

@@ -51,10 +51,8 @@ A ggplot object
 Create Plot with cluster of interest highlighted
 }
 \examples{
-\dontrun{
-Cluster_Highlight_Plot(seurat_object = object, cluster_name = "Microglia", highlight_color = "gold",
+Cluster_Highlight_Plot(seurat_object = pbmc_small, cluster_name = "1", highlight_color = "gold",
 background_color = "lightgray",  pt.size = 2)
-}
 
 }
 \concept{seurat_plotting}

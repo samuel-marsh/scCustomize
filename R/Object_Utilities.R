@@ -31,7 +31,7 @@
 #' rhesus macaque).  Default is FALSE.
 #'
 #' @import cli
-#' @importFrom dplyr mutate select intersect
+#' @importFrom dplyr mutate select intersect all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -43,9 +43,8 @@
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' object <- Add_Mito_Ribo_Seurat(seurat_object = object, species = "mouse")
-#' }
+#' library(Seurat)
+#' pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
 #'
 
 Add_Mito_Ribo_Seurat <- function(
@@ -208,10 +207,10 @@ Add_Mito_Ribo_Seurat <- function(
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
-      mutate(percent_mito_ribo = percent_mito + percent_ribo)
+      mutate(percent_mito_ribo = .data[["percent_mito"]] + .data[["percent_ribo"]])
 
     object_meta <- object_meta %>%
-      select(barcodes, percent_mito_ribo) %>%
+      select(all_of(c("barcodes", "percent_mito_ribo"))) %>%
       column_to_rownames("barcodes")
 
     seurat_object <- AddMetaData(object = seurat_object, metadata = object_meta)
@@ -242,9 +241,8 @@ Add_Mito_Ribo_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
-#' }
+#' library(Seurat)
+#' pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
 #'
 
 Add_Cell_Complexity_Seurat <- function(
@@ -301,7 +299,6 @@ Add_Cell_Complexity_Seurat <- function(
 #' @importFrom dplyr select
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
-#' @importFrom tidyselect all_of
 #'
 #' @return data.frame with only new columns.
 #'
@@ -371,8 +368,8 @@ Meta_Remove_Seurat <- function(
 #' @importFrom data.table fread
 #' @importFrom dplyr select left_join
 #' @importFrom magrittr "%>%"
+#' @importFrom stats setNames
 #' @importFrom tibble column_to_rownames rownames_to_column
-#' @importFrom tidyselect all_of
 #'
 #' @return Seurat object with new `@meta.data` columns
 #'
@@ -384,12 +381,12 @@ Meta_Remove_Seurat <- function(
 #' \dontrun{
 #' # meta_data present in environment
 #' sample_level_meta <- data.frame(...)
-#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta, join_by_seurat = "orig.ident",
-#' join_by_meta = "sample_ID")
+#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_level_meta,
+#' join_by_seurat = "orig.ident", join_by_meta = "sample_ID")
 #'
 #' # from meta data file
-#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv", join_by_seurat = "orig.ident",
-#' join_by_meta = "sample_ID")
+#' obj <- Add_Sample_Meta(seurat_object = obj, meta_data = "meta_data/sample_level_meta.csv",
+#' join_by_seurat = "orig.ident", join_by_meta = "sample_ID")
 #' }
 #'
 
@@ -419,7 +416,7 @@ Add_Sample_Meta <- function(
   }
 
   # Check meta data structure
-  if (!class(meta_data)[1] %in% c("tbl_df", "data.frame")) {
+  if (!inherits(x = meta_data, what = "data.frame")) {
     cli_abort(message = c("`meta_data` not in correct format",
                           "*" = "`meta_data` must be a data.frame or tibble.",
                           "i" = "Change format and re-run function.")
@@ -498,6 +495,158 @@ Add_Sample_Meta <- function(
 }
 
 
+#' Extract sample level meta.data
+#'
+#' Returns a by identity meta.data data.frame with one row per sample.  Useful for downstream
+#' quick view of sample breakdown, meta data table creation, and/or use in pseudobulk analysis
+#'
+#' @param object Seurat object
+#' @param sample_name meta.data column to use as sample.  Output data.frame will contain one row per
+#' level or unique value in this variable.
+#' @param variables_include `@meta.data` columns to keep in final data.frame.  All other columns will
+#' be discarded.  Default is NULL.
+#' @param variables_exclude columns to discard in final data.frame.  Many cell level columns are
+#' irrelevant at the sample level (e.g., nFeature_RNA, percent_mito).
+#' \itemize{
+#' \item Default parameter value is `NULL` but internally will set to discard nFeature_ASSAY(s),
+#' nCount_ASSAY(s), percent_mito, percent_ribo, percent_mito_ribo, and log10GenesPerUMI.
+#' \item If sample level median values are desired for these type of variables the output of this
+#' function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.
+#' \item Set parameter to `include_all = TRUE` to prevent any columns from being excluded.
+#' }
+#' @param include_all logical, whether or not to include all object meta data columns in output data.frame.
+#' Default is FALSE.
+#'
+#' @return Returns a data.frame with one row per `sample_name`.
+#'
+#' @import cli
+#' @importFrom dplyr any_of grouped_df select slice
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' library(Seurat)
+#' pbmc_small$batch <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident")
+#'
+#' # Only return specific columns from meta data (orig.ident and batch)
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' variables_include = "batch")
+#'
+#' # Return all columns from meta data
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' include_all = TRUE)
+#'
+
+Extract_Sample_Meta <- function(
+  object,
+  sample_name = "orig.ident",
+  variables_include = NULL,
+  variables_exclude = NULL,
+  include_all = FALSE
+) {
+  # Pull meta data
+  meta_df <- Fetch_Meta(object = object)
+
+  # Check sample name parameter is present
+  if (!sample_name %in% colnames(x = meta_df)) {
+    cli_abort(message = "The `sample_name` parameter: '{sample_name}' was not found in object meta.data")
+  }
+
+  if (!is.null(x = variables_include) && !is.null(x = variables_exclude) && include_all) {
+    cli_abort(message = "If `include_all = TRUE` then `varibles_include` and `variables_exclude` must be NULL.")
+  }
+
+  # Generate nCount and nFeature variable vectors for exclusion
+  if (is.null(x = variables_exclude)) {
+    nFeature_cols <- grep(x = colnames(object@meta.data), pattern = "^nFeature", value = TRUE)
+
+    nCount_cols <- grep(x = colnames(object@meta.data), pattern = "^nCount", value = TRUE)
+
+    combined_exclude <- c(nFeature_cols, nCount_cols, "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
+
+    variables_exclude <- Meta_Present(seurat_object = object, meta_col_names = combined_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+  }
+
+  # Ensure include exclude are unique
+  if (!is.null(x = variables_include) && !is.null(x = variables_exclude)) {
+    variable_intersect <- intersect(x = variables_include, y = variables_exclude)
+    if (length(x = variable_intersect > 0)) {
+      cli_abort(message = c("Following varible is present in both `variable_include` and `variable_exclude` parameters.",
+                            "i" = "{variable_intersect}")
+      )
+    }
+  }
+
+  # Check variables include/exclude are present
+  if (!is.null(x = variables_include)) {
+    include_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_include, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  } else {
+    include_meta_list <- NULL
+  }
+
+  if (!is.null(x = variables_exclude)) {
+    exclude_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  } else {
+    exclude_meta_list <- NULL
+  }
+
+  all_not_found_features <- c(include_meta_list[[2]], exclude_meta_list[[2]])
+
+  all_found_features <- c(include_meta_list[[1]], exclude_meta_list[[1]])
+
+  # Stop if no features found
+  if (length(x = all_found_features) < 1) {
+    cli_abort(message = c("No features were found.",
+                          "*" = "The following are not present in object meta data:",
+                          "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
+  # Return message of features not found
+  if (length(x = all_not_found_features) > 0) {
+    op <- options(warn = 1)
+    on.exit(options(op))
+    cli_warn(message = c("The following meta data variables were omitted as they were not found:",
+                         "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+    )
+  }
+
+  # Create by sample data.frame
+  sample_meta_df <- meta_df %>%
+    grouped_df(vars = sample_name) %>%
+    slice(1)
+
+  # remove rownames
+  rownames(sample_meta_df) <- NULL
+
+  # Filter data.frame
+  if (include_all) {
+    sample_meta_df_filtered <- sample_meta_df
+  } else {
+    if (length(x = include_meta_list[[1]]) > 0) {
+      sample_meta_df_filtered <- sample_meta_df %>%
+        select(any_of(c(include_meta_list[[1]], sample_name)))
+      if (length(x = exclude_meta_list[[1]]) > 0) {
+        sample_meta_df_filtered <- sample_meta_df_filtered %>%
+          select(-any_of(exclude_meta_list[[1]]))
+      }
+    } else {
+      if (length(x = exclude_meta_list[[1]]) > 0) {
+        sample_meta_df_filtered <- sample_meta_df %>%
+          select(-any_of(exclude_meta_list[[1]]))
+      }
+    }
+  }
+
+  # return data
+  return(sample_meta_df_filtered)
+}
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
@@ -517,7 +666,8 @@ Add_Sample_Meta <- function(
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW", cell_bender_assay_name = "RNA")
+#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
+#' cell_bender_assay_name = "RNA")
 #' }
 #'
 
@@ -584,9 +734,11 @@ Add_CellBender_Diff <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data, data_name = "rd1_colors")
-#' }
+#' library(Seurat)
+#' clu_pal <- c("red", "green", "blue")
+#'
+#' pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
+#' data_name = "rd1_colors")
 #'
 
 Store_Misc_Info_Seurat <- function(
@@ -620,7 +772,7 @@ Store_Misc_Info_Seurat <- function(
   # }
 
   # Check class of data
-  if (class(x = data_to_store) == "list") {
+  if (inherits(x = data_to_store, what = "list")) {
     if (list_as_list) {
       # Check length of name
       if (length(x = data_name) != 1) {
@@ -672,7 +824,7 @@ Store_Misc_Info_Seurat <- function(
 #' Wrapper function around `Store_Misc_Info_Seurat` to store color palettes.
 #'
 #' @param seurat_object object name.
-#' @param palette(s) vector or list of vectors containing color palettes to store.  If list of palettes
+#' @param palette vector or list of vectors containing color palettes to store.  If list of palettes
 #' see `list_as_list` parameter for control over data storage.
 #' @param palette_name name to give the palette(s) in `@misc` slot.  Must be of equal length to the number
 #' of data items being stored.
@@ -688,9 +840,12 @@ Store_Misc_Info_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \dontrun{
-#' obj <- Store_Palette_Seurat(seurat_object = obj_name, data_to_store = colors_vector, data_name = "rd1_colors")
-#' }
+#' library(Seurat)
+#' clu_pal <- c("red", "green", "blue")
+#'
+#' pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
+#' data_name = "rd1_colors")
+#'
 #'
 
 Store_Palette_Seurat <- function(
@@ -729,7 +884,8 @@ Store_Palette_Seurat <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec, meta_col_name = "Round01_Res0.6_Idents")
+#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
+#' meta_col_name = "Round01_Res0.6_Idents")
 #' }
 #'
 
@@ -773,15 +929,15 @@ Rename_Clusters <- function(
 
 #' Merge a list of Seurat Objects
 #'
-#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[Seurat]{merge}} for more information,
+#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
 #'
 #' @param list_seurat list composed of multiple Seurat Objects.
 #' @param add.cell.ids A character vector of length(x = c(x, y)). Appends the corresponding values
-#' to the start of each objects' cell names.  See \code{\link[Seurat]{merge}}.
+#' to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
 #' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
 #' This is recommended if the same normalization approach was applied to all objects.
-#' See \code{\link[Seurat]{merge}}.
-#' @param project Project name for the Seurat object. See \code{\link[Seurat]{merge}}.
+#' See \code{\link[SeuratObject]{merge}}.
+#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
 #'
 #' @importFrom purrr reduce
 #'
@@ -808,177 +964,3 @@ Merge_Seurat_List <- function(
     merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
   })
 }
-
-
-#' Create a Seurat object containing the data from a liger object
-#'
-#' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
-#' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
-#'
-#' Stores original dataset identity by default in new object metadata if dataset names are passed
-#' in nms. iNMF factorization is stored in dim.reduction object with key "iNMF".
-#'
-#' @param object \code{liger} object.
-#' @param nms By default, labels cell names with dataset of origin (this is to account for cells in
-#' different datasets which may have same name). Other names can be passed here as vector, must have
-#' same length as the number of datasets. (default names(H)).
-#' @param renormalize Whether to log-normalize raw data using Seurat defaults (default TRUE).
-#' @param use.liger.genes Whether to carry over variable genes (default TRUE).
-#' @param by.dataset Include dataset of origin in cluster identity in Seurat object (default FALSE).
-#' @param keep.meta logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
-#' to new Seurat Object.  Default is TRUE.
-#' @param reduction_label Name of dimensionality reduction technique used.  Enables accurate transfer
-#' or name to Seurat object instead of defaulting to "tSNE".
-#' @param seurat_assay Name to set for assay in Seurat Object.  Default is "RNA".
-#'
-#' @return Seurat object with raw.data, scale.data, dr$reduction_label, dr$inmf, and ident slots set.
-#'
-#' @references Original function is part of LIGER package (https://github.com/welch-lab/liger) (Licence: GPL-3).
-#' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
-#' PR to liger GitHub.
-#'
-#' @import cli
-#' @import Matrix
-#' @importFrom dplyr pull select
-#' @importFrom methods new
-#' @importFrom utils packageVersion
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' seurat_object <- Liger_to_Seurat(liger_object = LIGER_OBJ, reduction_label = "UMAP")
-#' }
-
-Liger_to_Seurat <- function(
-  liger_object,
-  nms = names(liger_object@H),
-  renormalize = TRUE,
-  use.liger.genes = TRUE,
-  by.dataset = FALSE,
-  keep_meta = TRUE,
-  reduction_label = NULL,
-  seurat_assay = "RNA"
-) {
-  if (is.null(x = reduction_label)) {
-    cli_abort(message = c("`reduction_label` parameter was not set.",
-                          "*" = " LIGER objects do not store name of dimensionality reduction technique used.",
-                          "i" = "In order to retain proper labels in Seurat object please set `reduction_label` to 'tSNE', 'UMAP', etc."))
-  }
-
-  # get Seurat version
-  maj_version <- packageVersion('Seurat')$major
-  if (class(liger_object@raw.data[[1]])[1] != 'dgCMatrix') {
-    # mat <- as(x, 'CsparseMatrix')
-    liger_object@raw.data <- lapply(liger_object@raw.data, function(x) {
-      as(x, 'CsparseMatrix')
-    })
-  }
-
-  key_name <- paste0(reduction_label, "_")
-
-  raw.data <- Merge_Sparse_Data_All(liger_object@raw.data, nms)
-  scale.data <- do.call(rbind, liger_object@scale.data)
-  rownames(scale.data) <- colnames(raw.data)
-  if (maj_version < 3) {
-    var.genes <- liger_object@var.genes
-    inmf.obj <- new(
-      Class = "dim.reduction", gene.loadings = t(liger_object@W),
-      cell.embeddings = liger_object@H.norm, key = "iNMF_"
-    )
-    rownames(inmf.obj@gene.loadings) <- var.genes
-
-    tsne.obj <- new(
-      Class = "dim.reduction", cell.embeddings = liger_object@tsne.coords,
-      key = key_name
-    )
-  } else {
-    var.genes <- liger_object@var.genes
-    if (any(grepl('_', var.genes))) {
-      print("Warning: Seurat v3 genes cannot have underscores, replacing with dashes ('-')")
-      var.genes <- gsub("_", replacement = "-", var.genes)
-    }
-    inmf.loadings <- t(x = liger_object@W)
-    inmf.embeddings <- liger_object@H.norm
-    ncol_Hnorm <- ncol(x = liger_object@H.norm)
-    colnames(inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
-
-    tsne.embeddings <- liger_object@tsne.coords
-    colnames(tsne.embeddings) <- paste0(key_name, 1:2)
-    rownames(x = inmf.loadings) <- var.genes
-    rownames(x = inmf.embeddings) <-
-      rownames(x = tsne.embeddings) <-
-      rownames(x = scale.data)
-    inmf.obj <- CreateDimReducObject(
-      embeddings = inmf.embeddings,
-      loadings = inmf.loadings,
-      key = "iNMF_",
-      global = TRUE,
-      assay = seurat_assay
-    )
-    tsne.obj <- CreateDimReducObject(
-      embeddings = tsne.embeddings,
-      key = key_name,
-      global = TRUE,
-      assay = seurat_assay
-    )
-  }
-  new.seurat <- CreateSeuratObject(raw.data)
-  if (renormalize) {
-    new.seurat <- NormalizeData(new.seurat)
-  }
-  if (by.dataset) {
-    ident.use <- as.character(unlist(lapply(1:length(liger_object@raw.data), function(i) {
-      dataset.name <- names(liger_object@raw.data)[i]
-      paste0(dataset.name, as.character(liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
-    })))
-  } else {
-    if (maj_version < 3) {
-      ident.use <- as.character(liger_object@clusters)
-    } else {
-      ident.use <- liger_object@clusters
-    }
-  }
-
-  if (maj_version < 3) {
-    if (use.liger.genes) {
-      new.seurat@var.genes <- var.genes
-    }
-    new.seurat@scale.data <- t(scale.data)
-    new.seurat@dr[[reduction_label]] <- tsne.obj
-    new.seurat@dr$inmf <- inmf.obj
-    new.seurat <- SetIdent(new.seurat, ident.use = ident.use)
-
-  } else {
-    if (use.liger.genes) {
-      VariableFeatures(new.seurat) <- var.genes
-    }
-    SetAssayData(new.seurat, slot = "scale.data",  t(scale.data), assay = "RNA")
-    new.seurat[[reduction_label]] <- tsne.obj
-    new.seurat[['inmf']] <- inmf.obj
-    Idents(new.seurat) <- ident.use
-  }
-  if (keep_meta){
-    # extract meta data from liger object
-    liger_meta <- liger_object@cell.data
-    # remove meta data values already transferred
-    liger_meta <- liger_meta %>%
-      select(-nUMI, -nGene, -dataset)
-    # extract meta data names
-    meta_names <- colnames(liger_meta)
-    # add meta data to new seurat object
-    for (meta_var in meta_names){
-      meta_transfer <- liger_meta %>%
-        pull(meta_var)
-      names(meta_transfer) <- colnames(x = new.seurat)
-      new.seurat <- AddMetaData(object = new.seurat,
-                                metadata = meta_transfer,
-                                col.name = meta_var)
-    }
-  }
-
-  return(new.seurat)
-}
-

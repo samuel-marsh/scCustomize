@@ -18,7 +18,7 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a Seurat object containing the data from a liger object</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Object_Utilities.R" class="external-link"><code>R/Object_Utilities.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/LIGER_Utilities.R" class="external-link"><code>R/LIGER_Utilities.R</code></a></small>
     <div class="hidden name"><code>Liger_to_Seurat.Rd</code></div>
     </div>
 
@@ -126,7 +126,11 @@ tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>nms</dt>
+    <dl><dt>liger_object</dt>
+<dd><p><code>liger</code> object.</p></dd>
+
+
+<dt>nms</dt>
 <dd><p>By default, labels cell names with dataset of origin (this is to account for cells in
 different datasets which may have same name). Other names can be passed here as vector, must have
 same length as the number of datasets. (default names(H)).</p></dd>
@@ -144,6 +148,11 @@ same length as the number of datasets. (default names(H)).</p></dd>
 <dd><p>Include dataset of origin in cluster identity in Seurat object (default FALSE).</p></dd>
 
 
+<dt>keep_meta</dt>
+<dd><p>logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
+to new Seurat Object.  Default is TRUE.</p></dd>
+
+
 <dt>reduction_label</dt>
 <dd><p>Name of dimensionality reduction technique used.  Enables accurate transfer
 or name to Seurat object instead of defaulting to "tSNE".</p></dd>
@@ -151,15 +160,6 @@ or name to Seurat object instead of defaulting to "tSNE".</p></dd>
 
 <dt>seurat_assay</dt>
 <dd><p>Name to set for assay in Seurat Object.  Default is "RNA".</p></dd>
-
-
-<dt>object</dt>
-<dd><p><code>liger</code> object.</p></dd>
-
-
-<dt>keep.meta</dt>
-<dd><p>logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
-to new Seurat Object.  Default is TRUE.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -199,7 +199,7 @@ PR to liger GitHub.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

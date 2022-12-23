@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -125,6 +125,11 @@
 <dd><p>object name.</p></dd>
 
 
+<dt>palette</dt>
+<dd><p>vector or list of vectors containing color palettes to store.  If list of palettes
+see <code>list_as_list</code> parameter for control over data storage.</p></dd>
+
+
 <dt>palette_name</dt>
 <dd><p>name to give the palette(s) in <code>@misc</code> slot.  Must be of equal length to the number
 of data items being stored.</p></dd>
@@ -139,11 +144,6 @@ as list (TRUE) or whether to store each entry in the list separately (FALSE).  D
 <dd><p>Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
 that function will abort if item with <code>data_name</code> is present in misc slot.</p></dd>
 
-
-<dt>palette(s)</dt>
-<dd><p>vector or list of vectors containing color palettes to store.  If list of palettes
-see <code>list_as_list</code> parameter for control over data storage.</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -155,7 +155,8 @@ see <code>list_as_list</code> parameter for control over data storage.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">Store_Palette_Seurat</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj_name</span>, data_to_store <span class="op">=</span> <span class="va">colors_vector</span>, data_name <span class="op">=</span> <span class="st">"rd1_colors"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">Store_Palette_Seurat</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj_name</span>, data_to_store <span class="op">=</span> <span class="va">colors_vector</span>,</span></span>
+<span class="r-in"><span>data_name <span class="op">=</span> <span class="st">"rd1_colors"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -172,7 +173,7 @@ see <code>list_as_list</code> parameter for control over data storage.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

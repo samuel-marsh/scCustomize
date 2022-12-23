@@ -17,6 +17,7 @@ Stacked_VlnPlot(
   ggplot_default_colors = FALSE,
   plot_spacing = 0.15,
   spacing_unit = "cm",
+  vln_linewidth = NULL,
   pt.size = NULL,
   raster = NULL,
   add.noise = TRUE,
@@ -53,8 +54,10 @@ Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_uni
 
 \item{spacing_unit}{Unit to use in specifying vertical spacing between plots.  Default is "cm".}
 
+\item{vln_linewidth}{Adjust the linewidth of violin outline.  Must be numeric.}
+
 \item{pt.size}{Adjust point size for plotting.  Default for \code{StackedVlnPlot} is 0 to avoid issues with
-rendering so many points in vector form.  Alteratively, see \code{raster} parameter.}
+rendering so many points in vector form.  Alternatively, see \code{raster} parameter.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 total points plotted (# Cells x # of features).}
@@ -70,16 +73,16 @@ A ggplot object
 Code for creating stacked violin plot gene expression.
 }
 \examples{
-\dontrun{
-Stacked_VlnPlot(seurat_object = object, features = gene_list, x_lab_rotate = TRUE)
-}
+library(Seurat)
+Stacked_VlnPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"),
+x_lab_rotate = TRUE)
 
 }
 \references{
-https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
+\url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
 }
 \seealso{
-https://twitter.com/tangming2005
+\url{https://twitter.com/tangming2005}
 }
 \author{
 Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)

@@ -67,9 +67,10 @@ A ggplot object
 Custom VlnPlot for initial QC checks including lines for thresholding
 }
 \examples{
-\dontrun{
-QC_Plots_Complexity(seurat_object = object)
-}
+library(Seurat)
+pbmc_small <- Add_Cell_Complexity_Seurat(pbmc_small)
+
+QC_Plots_Complexity(seurat_object = pbmc_small)
 
 }
 \concept{object_qc_plotting}

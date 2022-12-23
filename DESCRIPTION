@@ -1,71 +1,69 @@
 Package: scCustomize
 Type: Package
-Title: An R package for custom visualization & analyses of single cell sequencing.
-Version: 1.0.2
-Date: 2022-11-22
+Title: Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing
+Description: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using 'R'.  'scCustomize' aims to provide 1) Customized visualizations for aid in ease of use and to create more aesthetic and functional visuals. 2) Improve speed/reproducibility of common tasks/pieces of code in scRNA-seq analysis with a single or group of functions.  For citation please use: Marsh SE (2021) "Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing" <doi:10.5281/zenodo.5706430>.
+Version: 1.1.0
+Date: 2022-12-22
 Authors@R: c(
     person(given = "Samuel", family = "Marsh", email = "samuel.marsh@childrens.harvard.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-3012-6945")),
     person(given = "Ming", family = "Tang", role = c("ctb"), email = "tangming2005@gmail.com"),
     person(given = 'Velina', family = 'Kozareva', role = c('ctb')),
-    person(given = "Tim", family = "Stuart", email = "tstuart@nygenome.org", role = "ctb")
+    person("Lucas", "Graybuck", email = "lucasg@alleninstitute.org", role = c('ctb'))
     )
-Description: Collection of functions created and/or curated to aid in the visualization and analysis of single-cell data using R.
-URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize, https://doi.org/10.5281/zenodo.5706431
+URL: https://cran.r-project.org/package=scCustomize https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize/, https://doi.org/10.5281/zenodo.5706431
 BugReports: https://github.com/samuel-marsh/scCustomize/issues
 Depends: R (>= 4.0.0),
          Seurat (>= 4.3.0)
 Imports: 
     circlize,
     cli (>= 3.2.0),
-    colorway (>= 0.2.0),
     cowplot,
     data.table,
     dplyr,
     forcats,
     ggbeeswarm,
     ggplot2,
-    ggpubr,
     ggprism,
     ggrastr,
     ggrepel,
     glue,
+    grDevices,
     grid,
     janitor,
+    lifecycle,
     magrittr,
     Matrix (>= 1.5.0),
+    methods,
     paletteer,
     patchwork,
     pbapply,
     purrr,
-    remotes (>= 2.4.0),
     rlang (>= 1.0.1),
     scales,
     scattermore (>= 0.7), 
-    Seurat (>= 4.2.0),
     SeuratObject (>= 4.1.2),
+    stats,
     stringi,
     stringr,
     tibble,
     tidyr,
-    tidyselect,
     viridis
-Remotes: 
-    hypercompetent/colorway,
-    csdaw/ggprism
 Suggests:
     ComplexHeatmap,
     dittoSeq,
     DropletUtils,
+    ggpubr,
     hdf5r,
     knitr,
     Nebulosa,
+    remotes,
     rliger,
     rmarkdown,
+    tidyselect,
     tidyverse, 
     qs
-VignetteBuilder: knitr, rmarkdown
-License: GPL (>= 3) | file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3

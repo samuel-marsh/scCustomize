@@ -15,6 +15,7 @@
 #' @importFrom Matrix readMM
 # #' @importFrom DropletUtils write10xCounts
 #' @importFrom Seurat Read10X
+#' @importFrom SeuratObject PackageCheck
 #'
 #' @return A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.
 #'
@@ -66,7 +67,7 @@ Create_10X_H5 <- function(
   temp_file <- tempfile(pattern = paste(save_name, "_", sep = ""),
                         tmpdir = save_file_path,
                         fileext=".h5")
-  write10xCounts(path = temp_file,
+  DropletUtils::write10xCounts(path = temp_file,
                  x = count_matrix,
                  barcodes = colnames(count_matrix),
                  gene.symbol = rownames(count_matrix),
@@ -102,7 +103,8 @@ Create_10X_H5 <- function(
 #'
 #' @examples
 #' \dontrun{
-#' seurat_obj <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cb_matrix, raw_counts_matrix = cr_matrix)
+#' seurat_obj <- Create_CellBender_Merged_Seurat(raw_cell_bender_matrix = cb_matrix,
+#' raw_counts_matrix = cr_matrix)
 #' }
 #'
 
@@ -152,7 +154,8 @@ Create_CellBender_Merged_Seurat <- function(
 
 #' Load in NCBI GEO data from 10X
 #'
-#' Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes added to them by NCBI GEO or other repos.
+#' Enables easy loading of sparse data matrices provided by 10X genomics. That have file prefixes
+#' added to them by NCBI GEO or other repos.
 #'
 #' @param data_dir Directory containing the matrix.mtx, genes.tsv (or features.tsv), and barcodes.tsv
 #' files provided by 10X.
@@ -167,20 +170,23 @@ Create_CellBender_Merged_Seurat <- function(
 #' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
 #' Only possible on Linux based systems.
 #' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
 #'
 #' @return If features.csv indicates the data has multiple data types, a list
 #'   containing a sparse matrix of the data from each type will be returned.
 #'   Otherwise a sparse matrix containing the expression data will be returned.
 #'
 #' @references Code used in function has been slightly modified from `Seurat::Read10X` function of
-#' Seurat package (https://github.com/satijalab/seurat) (Licence: GPL-3).  Function was modified to
+#' Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).  Function was modified to
 #' support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 #' potential PR to Seurat GitHub).
 #'
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
-#' @importFrom utils read.delim txtProgressBar setTxtProgressBar
+#' @importFrom utils read.delim txtProgressBar setTxtProgressBar read.table
 #'
 #' @export
 #'
@@ -204,8 +210,8 @@ Read10X_GEO <- function(
   unique.features = TRUE,
   strip.suffix = FALSE,
   parallel = FALSE,
-  num_cores = NULL#,
-  #single.matrix = FALSE
+  num_cores = NULL,
+  merge = FALSE
 ) {
   if (!dir.exists(paths = data_dir)) {
     stop("Directory provided does not exist")
@@ -456,6 +462,12 @@ Read10X_GEO <- function(
     names(raw_data_list) <- sample_list
   }
 
+  # Merge data
+  if (merge) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    return(raw_data_merged)
+  }
+
   # return list
   return(raw_data_list)
 }
@@ -471,9 +483,14 @@ Read10X_GEO <- function(
 #' will load all samples in given directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL`
 #' will set names to the file name of each sample.
+#' @param shared_suffix a suffix and file extension shared by all samples.
 #' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
 #' Only possible on Linux based systems.
 #' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
+#' @param ... Additional arguments passed to \code{\link[Seurat]{Read10X_h5}}
 #'
 #' @return If the data has multiple data types, a list
 #'   containing a sparse matrix of the data from each type will be returned.
@@ -504,6 +521,7 @@ Read10X_h5_GEO <- function(
   shared_suffix = NULL,
   parallel = FALSE,
   num_cores = NULL,
+  merge = FALSE,
   ...
 ) {
   if (!dir.exists(paths = data_dir)) {
@@ -556,6 +574,12 @@ Read10X_h5_GEO <- function(
     names(raw_data_list) <- sample_names
   }
 
+  # Merge data
+  if (merge) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    return(raw_data_merged)
+  }
+
   # return object
   return(raw_data_list)
 }
@@ -577,8 +601,9 @@ Read10X_h5_GEO <- function(
 #' set names to the subdirectory name of each sample.
 #' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
 #' @param num_cores how many cores to use for parallel processing.
-#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return list of
-#' matrices.
+#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{Read10X}}.
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
@@ -701,7 +726,8 @@ Read10X_Multi_Directory <- function(
 #' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
 #' @param num_cores how many cores to use for parallel processing.
 #' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
-#' list of matrices.  Will use the `sample_names` parameter to add prefix to cell barcodes.
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{Read10X_h5}}.
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
@@ -867,6 +893,9 @@ Read10X_h5_Multi_Directory <- function(
 #' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
 #' Only possible on Linux based systems.
 #' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
 #'
 #' @return List of gene x cell matrices in list format named by sample name.
 #'
@@ -875,6 +904,7 @@ Read10X_h5_Multi_Directory <- function(
 #' @import pbapply
 #' @importFrom data.table fread
 #' @importFrom magrittr "%>%"
+#' @importFrom methods as
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom utils read.delim
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -899,7 +929,8 @@ Read_GEO_Delim <- function(
   sample_names = NULL,
   barcode_suffix_period = FALSE,
   parallel = FALSE,
-  num_cores = NULL
+  num_cores = NULL,
+  merge = FALSE
 ) {
   # Create list of all files in directory
   possible_file_list <- list.files(path = data_dir, pattern = file_suffix, full.names = FALSE)
@@ -998,6 +1029,12 @@ Read_GEO_Delim <- function(
     CheckMatrix_scCustom(object = raw_data_list[[i]])
   }
 
+  # Merge data
+  if (merge) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    return(raw_data_merged)
+  }
+
   # return list
   return(raw_data_list)
 }
@@ -1019,7 +1056,7 @@ Read_GEO_Delim <- function(
 #' @return sparse matrix
 #'
 #' @references Code used in function has been modified from `Seurat::Read10X_h5` function of
-#' Seurat package (https://github.com/satijalab/seurat) (Licence: GPL-3).
+#' Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).
 #'
 #' @import cli
 #' @import Matrix
@@ -1110,7 +1147,8 @@ Read_CellBender_h5_Mat <- function(
 #' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
 #' @param num_cores how many cores to use for parallel processing.
 #' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
-#' list of matrices.  Will use the `sample_names` parameter to add prefix to cell barcodes.
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
 #' @param ... Extra parameters passed to \code{\link[scCustomize]{Read_CellBender_h5_Mat}}.
 #'
 #' @return list of sparse matrices
@@ -1258,6 +1296,9 @@ Read_CellBender_h5_Multi_Directory <- function(
 #' set names to the subdirectory name of each sample.
 #' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
 #' @param num_cores how many cores to use for parallel processing.
+#' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
+#' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+#' will be taken from `sample_names`.
 #' @param ... Extra parameters passed to \code{\link[scCustomize]{Read_CellBender_h5_Mat}}.
 #'
 #' @return list of sparse matrices
@@ -1286,6 +1327,7 @@ Read_CellBender_h5_Multi_File <- function(
   sample_names = NULL,
   parallel = FALSE,
   num_cores = NULL,
+  merge = FALSE,
   ...
 ) {
   if (!dir.exists(paths = data_dir)) {
@@ -1349,6 +1391,12 @@ Read_CellBender_h5_Multi_File <- function(
     names(raw_data_list) <- sample_names
   }
 
+  # Merge data
+  if (merge) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    return(raw_data_merged)
+  }
+
   # return object
   return(raw_data_list)
 }
@@ -1376,7 +1424,7 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' @import pbapply
 #' @importFrom dplyr bind_rows
-#' @importFrom utils txtProgressBar setTxtProgressBar
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @export
 #'

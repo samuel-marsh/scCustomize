@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -129,9 +129,9 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Read &amp; Write Data Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 22, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: December 19, 2022</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/Read_and_Write_Functions.Rmd" class="external-link"><code>vignettes/Read_and_Write_Functions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Read_and_Write_Functions.Rmd" class="external-link"><code>vignettes/articles/Read_and_Write_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Read_and_Write_Functions.Rmd</code></div>
 
     </div>
@@ -177,9 +177,9 @@ p.caption {
 <p>The function <code>Read10X_GEO</code> can be used to iteratively read all sets of 10X style files within single directory.</p>
 <p>For this example I will be utilizing data from Marsh et al., 2022 (<a href="https://doi.org/10.1038/s41593-022-01022-8" class="external-link"><em>Nature Neuroscience</em></a>), which were downloaded from <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152183" class="external-link">NCBI GEO GSE152183</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"../man/figures/assets/GSE152183_RAW_Marsh/"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"assets/GSE152183_RAW_Marsh/"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">GEO_10X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_GEO.html">Read10X_GEO</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"../man/figures/assets/GSE152183_RAW_Marsh/"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">GEO_10X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_GEO.html">Read10X_GEO</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/GSE152183_RAW_Marsh/"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level5">
 <h5 id="read10x_geo-additional-parameters">
 <code>Read10X_GEO</code> Additional Parameters<a class="anchor" aria-label="anchor" href="#read10x_geo-additional-parameters"></a>
@@ -201,7 +201,7 @@ p.caption {
 </h5>
 <p><code>Read10X_GEO</code> will return list of matrices (single modality data) or list of list of matrices (multi-modal data).</p>
 <div class="figure" style="text-align: center">
-<img src="../reference/figures/assets/Read10X_GEO.png" alt="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*" width="49%"><img src="../reference/figures/assets/multimodal.png" alt="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*" width="49%"><p class="caption">
+<img src="../../docs/reference/figures/assets/Read10X_GEO.png" alt="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*" width="49%"><img src="../../docs/reference/figures/assets/multimodal.png" alt="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*" width="49%"><p class="caption">
 <em>Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO</em>
 </p>
 </div>
@@ -235,13 +235,13 @@ p.caption {
 <p><code>Read_GEO_Delim</code> uses fread function for automatic detection of file delimiter and fast read times and then converts objects to sparse matrices to save memory</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read in and use file names to name the list (default)</span></span>
-<span><span class="va">GEO_Single</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_GEO_Delim.html">Read_GEO_Delim</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"../man/figures/assets/GSE121654_RAW_Hammond/"</span>, file_suffix <span class="op">=</span> <span class="st">".dge.txt.gz"</span><span class="op">)</span></span>
+<span><span class="va">GEO_Single</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_GEO_Delim.html">Read_GEO_Delim</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/GSE121654_RAW_Hammond/GSE121654_RAW_Hammond/"</span>, file_suffix <span class="op">=</span> <span class="st">".dge.txt.gz"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read in and use new sample names to name the list</span></span>
-<span><span class="va">GEO_Single</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_GEO_Delim.html">Read_GEO_Delim</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"../man/figures/assets/GSE121654_RAW_Hammond/"</span>, file_suffix <span class="op">=</span> <span class="st">".dge.txt.gz"</span>,</span>
+<span><span class="va">GEO_Single</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_GEO_Delim.html">Read_GEO_Delim</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/GSE121654_RAW_Hammond/GSE121654_RAW_Hammond/"</span>, file_suffix <span class="op">=</span> <span class="st">".dge.txt.gz"</span>,</span>
 <span>    sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample01"</span>, <span class="st">"sample02"</span>, <span class="st">"sample03"</span>, <span class="st">"sample04"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="../reference/figures/assets/delim_default.png" alt="*Example outputs with default naming based on file name or providing `sample_names` parameter.*" width="49%"><img src="../reference/figures/assets/renamed.png" alt="*Example outputs with default naming based on file name or providing `sample_names` parameter.*" width="49%"><p class="caption">
+<img src="../../docs/reference/figures/assets/delim_default.png" alt="*Example outputs with default naming based on file name or providing `sample_names` parameter.*" width="49%"><img src="../../docs/reference/figures/assets/renamed.png" alt="*Example outputs with default naming based on file name or providing `sample_names` parameter.*" width="49%"><p class="caption">
 <em>Example outputs with default naming based on file name or providing <code>sample_names</code> parameter.</em>
 </p>
 </div>
@@ -341,7 +341,7 @@ p.caption {
 <span></span>
 <span><span class="va">GEO_Merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Sparse_Data_All.html">Merge_Sparse_Data_All</a></span><span class="op">(</span>matrix_list <span class="op">=</span> <span class="va">GEO_Single</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="../reference/figures/assets/geo_merged.png" alt="*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*" width="98%"><p class="caption">
+<img src="../../docs/reference/figures/assets/geo_merged.png" alt="*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*" width="98%"><p class="caption">
 <em>Progress bar outputs in <code>Merge_Sparse_Data_All</code> function through scCustomize.</em>
 </p>
 </div>
@@ -398,7 +398,7 @@ p.caption {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

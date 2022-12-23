@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -144,8 +144,15 @@ will be incorporated into plot title if <code>single_pdf = TRUE</code> or into f
 
 
 <dt>custom_palette</dt>
-<dd><p>color for non-expressed cells.
-#' @param pt.size Adjust point size for plotting.</p></dd>
+<dd><p>color for non-expressed cells.</p></dd>
+
+
+<dt>pt.size</dt>
+<dd><p>Adjust point size for plotting.</p></dd>
+
+
+<dt>file_path</dt>
+<dd><p>directory file path and/or file name prefix.  Defaults to current wd.</p></dd>
 
 
 <dt>file_name</dt>
@@ -165,20 +172,19 @@ will be incorporated into plot title if <code>single_pdf = TRUE</code> or into f
 
 
 <dt>reduction</dt>
-<dd><p>Dimensionality Reduction to use (if NULL then defaults to Object default)
-#' @param joint NULL.  This function only supports <code>joint = FALSE</code>.  Leave as NULL to generate plots.  To iterate joint plots see function: <code>Iterate_Plot_Density_Joint</code>.</p></dd>
+<dd><p>Dimensionality Reduction to use (if NULL then defaults to Object default)</p></dd>
 
 
 <dt>combine</dt>
 <dd><p>Create a single plot? If FALSE, a list with ggplot objects is returned.</p></dd>
 
 
+<dt>joint</dt>
+<dd><p>NULL.  This function only supports <code>joint = FALSE</code>.  Leave as NULL to generate plots.  To iterate joint plots see function: <code>Iterate_Plot_Density_Joint</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://rdrr.io/pkg/Nebulosa/man/plot_density.html" class="external-link">plot_density</a></code>.</p></dd>
-
-
-<dt>file_path/prefix</dt>
-<dd><p>directory file path and/or file name prefix.  Defaults to current wd.</p></dd>
 
 </dl></div>
 
@@ -203,7 +209,7 @@ will be incorporated into plot title if <code>single_pdf = TRUE</code> or into f
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

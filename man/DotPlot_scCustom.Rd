@@ -42,8 +42,9 @@ A ggplot object
 Code for creating customized DotPlot
 }
 \examples{
-\dontrun{
-DotPlot_scCustom(seurat_object = object, features = gene_list)
+\donttest{
+library(Seurat)
+DotPlot_scCustom(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
 }
 
 }

@@ -18,7 +18,7 @@ within the same directory."><!-- mathjax --><script src="https://cdnjs.cloudflar
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -120,6 +120,7 @@ within the same directory.</p>
 <span>  sample_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  num_cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  merge <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -157,6 +158,12 @@ set names to the subdirectory name of each sample.</p></dd>
 <dd><p>how many cores to use for parallel processing.</p></dd>
 
 
+<dt>merge</dt>
+<dd><p>logical (default FALSE) whether or not to merge samples into a single matrix or return
+list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
+will be taken from <code>sample_names</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="Read_CellBender_h5_Mat.html">Read_CellBender_h5_Mat</a></code>.</p></dd>
 
@@ -189,7 +196,7 @@ set names to the subdirectory name of each sample.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

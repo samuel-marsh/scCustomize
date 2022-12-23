@@ -28,7 +28,13 @@ CellBender_Diff_Plot(
 )
 }
 \arguments{
-\item{feature_diff_df}{name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}}
+\item{feature_diff_df}{name of data.frame created using \code{\link[scCustomize]{CellBender_Feature_Diff}}.}
+
+\item{pct_diff_threshold}{threshold to use for feature plotting.  Resulting plot will only contain
+features which exhibit percent change >= value.  Default is 25.}
+
+\item{num_features}{Number of features to plot.  Will ignore \code{pct_diff_threshold} and return
+plot with specified number of features.  Default is NULL.}
 
 \item{label}{logical, whether or not to label the features that have largest percent difference
 between raw and CellBender counts (Default is TRUE).}

@@ -20,6 +20,7 @@ FeaturePlot_scCustom(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  label = FALSE,
   label_feature_yaxis = FALSE,
   combine = TRUE,
   ...
@@ -62,6 +63,8 @@ value between 0-1.}
 \item{alpha_na_exp}{new alpha level to apply to non-expressing cell color palette (\code{na_color}).  Must be
 value between 0-1.}
 
+\item{label}{logical, whether to label the clusters.  Default is FALSE.}
+
 \item{label_feature_yaxis}{logical, whether to place feature labels on secondary y-axis as opposed to
 above legend key.  Default is FALSE.  When setting \code{label_feature_yaxis = TRUE} the number of columns
 in plot output will automatically be set to the number of levels in \verb{split.by'}}
@@ -78,10 +81,9 @@ A ggplot object
 Create Custom FeaturePlots and preserve scale (no binning)
 }
 \examples{
-\dontrun{
-FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1", colors_use = viridis_plasma_dark_high,
-na_color = "lightgray")
-}
+library(Seurat)
+FeaturePlot_scCustom(seurat_object = pbmc_small, features = "CD3E",
+colors_use = viridis_plasma_dark_high, na_color = "lightgray")
 
 }
 \concept{seurat_plotting}

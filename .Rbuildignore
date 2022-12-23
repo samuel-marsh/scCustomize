@@ -11,3 +11,7 @@
 ^\.github$
 vignettes/*.orig$
 ^vignettes$
+^index\.Rmd$
+^README\.Rmd$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

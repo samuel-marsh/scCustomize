@@ -6,16 +6,19 @@
 \usage{
 UnRotate_X(...)
 }
+\arguments{
+\item{...}{extra arguments passed to \code{ggplot2::theme()}.}
+}
+\value{
+Returns a list-like object of class \emph{theme}.
+}
 \description{
 Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnPlot is rotated by default).
 }
 \examples{
-\dontrun{
-# Generate a plot and unrotate the x-axis label
-library(ggplot2)
-p <- VlnPlot(object = obj, features = "Cx3cr1")
-p + UnRotate_X
-}
+library(Seurat)
+p <- VlnPlot(object = pbmc_small, features = "CD3E")
+p + UnRotate_X()
 
 }
 \concept{themes}

@@ -12,7 +12,7 @@
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
 #'
-#' @return A Data Frame
+#' @return A data.frame
 #'
 #' @export
 #'
@@ -40,12 +40,12 @@ Cluster_Stats_All_Samples <- function(
   # Extract total percents
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
-    rename(Cluster = Var1)
+    rename(Cluster = .data[["Var1"]])
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
-    rename(Cluster = Var1, Number = Freq)
+    rename(Cluster = .data[["Var1"]], Number = .data[["Freq"]])
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
@@ -53,10 +53,10 @@ Cluster_Stats_All_Samples <- function(
   # Extract cells per metadata column per cluster
   cells_per_cluster_2 <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
   cells_per_cluster_2 <- data.frame(cells_per_cluster_2) %>%
-    rename(Cluster = Var1, group_by_var = Var2, cell_number = Freq)
+    rename(Cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], cell_number = .data[["Freq"]])
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = cell_number)
+    pivot_wider(names_from = group_by_var, values_from = .data[["cell_number"]])
 
   # Merge cells per metadata column per cluster with cluster stats
   cluster_stats_2 <- suppressMessages(left_join(cluster_stats, cells_per_cluster_2))
@@ -64,9 +64,9 @@ Cluster_Stats_All_Samples <- function(
   # Calculate and extract percents of cells per cluster per
   percent_per_cluster_2 <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var]), margin = 2) * 100
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
-    rename(cluster = Var1, group_by_var = Var2, percent = Freq)
+    rename(cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], percent = .data[["Freq"]])
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = percent) %>%
+    pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
     column_to_rownames("cluster")
   colnames(percent_per_cluster_2) <- paste(colnames(percent_per_cluster_2), "%", sep = "_")
 
@@ -93,11 +93,11 @@ Cluster_Stats_All_Samples <- function(
 #' @param assay Assay to pull feature data from.  Default is active assay.
 #' @param slot Slot to pull feature data for.  Default is "data".
 #'
-#' @return A Data Frame
+#' @return A data.frame
 #'
 #' @references Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
 #' to generate values to use for plotting.  Source code can be found here:
-#' (https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391) (Licence: GPL-3).
+#' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
 #'
 #' @import cli
 #'
@@ -203,12 +203,13 @@ Percent_Expressing <- function(
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 #' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo" in addition to variables supplied to `median_var`.
 #' @param median_var Column(s) in `@meta.data` to calculate medians for in addition to defaults.
-#' Must be of `class()`` integer or numeric.
+#' Must be of `class()` integer or numeric.
 #'
-#' @return A data frame.
+#' @return A data.frame.
 #'
-#' @importFrom dplyr group_by select_at summarise_at
+#' @importFrom dplyr group_by one_of select_at summarise_at
 #' @importFrom magrittr "%>%"
+#' @importFrom stats median
 #'
 #' @export
 #'
@@ -244,7 +245,7 @@ Median_Stats <- function(
   all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
 
   # Filter meta data for columns of interest
-  meta_numeric_check <- seurat_object@meta.data %>%
+  meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
     select_at(all_variables)
 
   all_variables <- Meta_Numeric(data = meta_numeric_check)
@@ -253,7 +254,7 @@ Median_Stats <- function(
   all_variable_col_names <- c(group_by_var, paste0("Median_", all_variables))
 
   # Calculate medians for each group_by
-  meta_data <- seurat_object@meta.data
+  meta_data <- Fetch_Meta(object = seurat_object)
 
   median_by_group <- meta_data %>%
     group_by(.data[[group_by_var]]) %>%
@@ -288,7 +289,7 @@ Median_Stats <- function(
 #' @param raw_assay Name of the assay containing the raw count data.
 #' @param cell_bender_assay Name of the assay containing the CellBender count data.
 #'
-#' @return A data frame containing summed raw counts, CellBender counts, count difference, and
+#' @return A data.frame containing summed raw counts, CellBender counts, count difference, and
 #' percent difference in counts.
 #'
 #' @import cli
@@ -355,9 +356,9 @@ CellBender_Feature_Diff <- function(
 
   # Add diff and % diff
   merged_counts <- merged_counts %>%
-    mutate(Count_Diff = Raw_Counts - CellBender_Counts,
-           Pct_Diff = 100 - ((CellBender_Counts / Raw_Counts) * 100)) %>%
-    arrange(desc(Pct_Diff)) %>%
+    mutate(Count_Diff = .data[["Raw_Counts"]] - .data[["CellBender_Counts"]],
+           Pct_Diff = 100 - ((.data[["CellBender_Counts"]] / .data[["Raw_Counts"]]) * 100)) %>%
+    arrange(desc(.data[["Pct_Diff"]])) %>%
     column_to_rownames("Feature_Names")
 
   # return data

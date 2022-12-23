@@ -29,8 +29,11 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 
 \item{viridis_palette}{color scheme to use.}
 
-\item{custom_palette}{color for non-expressed cells.
-#' @param pt.size Adjust point size for plotting.}
+\item{custom_palette}{color for non-expressed cells.}
+
+\item{pt.size}{Adjust point size for plotting.}
+
+\item{file_path}{directory file path and/or file name prefix.  Defaults to current wd.}
 
 \item{file_name}{name suffix and file extension.}
 
@@ -40,14 +43,16 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 
 \item{dpi}{dpi for image saving.}
 
-\item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default)
-#' @param joint NULL.  This function only supports \code{joint = FALSE}.  Leave as NULL to generate plots.  To iterate joint plots see function: \code{Iterate_Plot_Density_Joint}.}
+\item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default)}
 
 \item{combine}{Create a single plot? If FALSE, a list with ggplot objects is returned.}
 
-\item{...}{Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.}
+\item{joint}{NULL.  This function only supports \code{joint = FALSE}.  Leave as NULL to generate plots.  To iterate joint plots see function: \code{Iterate_Plot_Density_Joint}.}
 
-\item{file_path/prefix}{directory file path and/or file name prefix.  Defaults to current wd.}
+\item{...}{Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.}
+}
+\value{
+Saved plots
 }
 \description{
 Create and save plots for gene list with single command.  Requires Nebulosa package from Bioconductor.

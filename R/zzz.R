@@ -10,7 +10,7 @@
 #'   \code{\link{DimPlot_LIGER}} due to new functionality compared to LIGER.}
 #'   \item{\code{scCustomize_warn_na_cutoff}}{Show message about properly setting `na_cutoff` parameter in \code{\link{FeaturePlot_scCustom}}.}
 #'   #'   \item{\code{scCustomize_warn_zero_na_cutoff}}{Show message about properly setting `na_cutoff` parameter in \code{\link{FeaturePlot_scCustom}} if `na_cutoff` is set to exactly zero.}
-#'   \item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot}}
+#'   \item{\code{scCustomize_warn_vln_raster_iterative}}{Show message about \code{\link{Iterate_VlnPlot_scCustom}}
 #'    when `pt.size > 0` due to current lack of raster support in \code{\link[Seurat]{VlnPlot}}}
 #'    \item{\code{scCustomize_warn_LIGER_dim_labels}}{Show message about \code{\link{DimPlot_LIGER}}
 #'    parameter `reduction_label` as LIGER objects do not store dimensionality reduction name and
@@ -22,6 +22,8 @@
 #'    parameter `reduction_label` as LIGER objects do not store dimensionality reduction name and
 #'    and therefore needs to be set manually.}
 #' }
+#'
+#' @importFrom lifecycle deprecated
 #'
 #' @keywords internal
 #' @docType package
@@ -45,9 +47,9 @@ scCustomize_default_options <- list(
 
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("scCustomize v", packageVersion(pkg = "scCustomize"), "\n",
-                        "If you find the scCustomize useful please cite. \n",
-                        "See 'samuel-marsh.github.io/scCustomize/articles/FAQ.html' for citation info.")
+  packageStartupMessage(cli::format_message(c("scCustomize v{packageVersion(pkg = 'scCustomize')}",
+                                              "If you find the scCustomize useful please cite.",
+                                              "See 'samuel-marsh.github.io/scCustomize/articles/FAQ.html' for citation info.")))
 }
 
 .onLoad <- function(libname, pkgname) {

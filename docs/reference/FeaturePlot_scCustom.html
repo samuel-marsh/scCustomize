@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -126,6 +126,7 @@
 <span>  slot <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>  alpha_exp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha_na_exp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  label_feature_yaxis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -200,6 +201,10 @@ value between 0-1.</p></dd>
 value between 0-1.</p></dd>
 
 
+<dt>label</dt>
+<dd><p>logical, whether to label the clusters.  Default is FALSE.</p></dd>
+
+
 <dt>label_feature_yaxis</dt>
 <dd><p>logical, whether to place feature labels on secondary y-axis as opposed to
 above legend key.  Default is FALSE.  When setting <code>label_feature_yaxis = TRUE</code> the number of columns
@@ -225,8 +230,8 @@ If FALSE, return a list of ggplot objects.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">FeaturePlot_scCustom</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, features <span class="op">=</span> <span class="st">"Cx3cr1"</span>, colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,</span></span>
-<span class="r-in"><span>na_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">FeaturePlot_scCustom</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, features <span class="op">=</span> <span class="st">"Cx3cr1"</span>,</span></span>
+<span class="r-in"><span>colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>, na_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -243,7 +248,7 @@ If FALSE, return a list of ggplot objects.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

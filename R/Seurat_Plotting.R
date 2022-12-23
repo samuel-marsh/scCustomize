@@ -23,6 +23,7 @@
 #' value between 0-1.
 #' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
 #' value between 0-1.
+#' @param label logical, whether to label the clusters.  Default is FALSE.
 #' @param label_feature_yaxis logical, whether to place feature labels on secondary y-axis as opposed to
 #' above legend key.  Default is FALSE.  When setting `label_feature_yaxis = TRUE` the number of columns
 #' in plot output will automatically be set to the number of levels in `split.by'`
@@ -44,10 +45,9 @@
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' FeaturePlot_scCustom(seurat_object = object, features = "Cx3cr1", colors_use = viridis_plasma_dark_high,
-#' na_color = "lightgray")
-#' }
+#' library(Seurat)
+#' FeaturePlot_scCustom(seurat_object = pbmc_small, features = "CD3E",
+#' colors_use = viridis_plasma_dark_high, na_color = "lightgray")
 #'
 
 FeaturePlot_scCustom <- function(
@@ -66,6 +66,7 @@ FeaturePlot_scCustom <- function(
   slot = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
+  label = FALSE,
   label_feature_yaxis = FALSE,
   combine = TRUE,
   ...
@@ -186,12 +187,12 @@ FeaturePlot_scCustom <- function(
 
   # plot no split & combined
   if (is.null(x = split.by) && combine) {
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && !combine) {
-    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, ...))
+    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
 
     plot <- lapply(1:length(x = plot_list), function(i) {
       p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
@@ -210,7 +211,7 @@ FeaturePlot_scCustom <- function(
     max_exp_value <- max(feature_data)
     min_exp_value <- min(feature_data)
 
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
     if (label_feature_yaxis) {
       plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
@@ -233,7 +234,7 @@ FeaturePlot_scCustom <- function(
       max_exp_value <- max(feature_data)
       min_exp_value <- min(feature_data)
 
-      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
       if (label_feature_yaxis) {
         single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
@@ -427,16 +428,18 @@ FeaturePlot_DualAssay <- function(
 #' @import patchwork
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat FeatureScatter
+#' @importFrom stats cor
 #'
 #' @export
 #'
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Split_FeatureScatter(seurat_object = object, features1= "nCount_RNA", feature2 = "nFeature_RNA",
-#' split.by = "orig.ident", colors_use = "navy")
-#' }
+#' library(Seurat)
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' Split_FeatureScatter(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
+#' split.by = "sample_id")
 #'
 
 Split_FeatureScatter <- function(
@@ -510,7 +513,7 @@ Split_FeatureScatter <- function(
   }
 
   # Extract split.by list of values
-  if (class(x = seurat_object@meta.data[, split.by]) == "factor") {
+  if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
     meta_sample_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
   } else {
     meta_sample_list <- as.character(unique(seurat_object@meta.data[, split.by]))
@@ -572,7 +575,7 @@ Split_FeatureScatter <- function(
       xlim(min_feature1, max_feature1) +
       ylim(min_feature2, max_feature2)
     if (plot_cor) {
-      plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[i]))
+      plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[j]))
     } else {
       plot + ggtitle(paste(meta_sample_list[[j]]))
     }
@@ -613,10 +616,8 @@ Split_FeatureScatter <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Cluster_Highlight_Plot(seurat_object = object, cluster_name = "Microglia", highlight_color = "gold",
+#' Cluster_Highlight_Plot(seurat_object = pbmc_small, cluster_name = "1", highlight_color = "gold",
 #' background_color = "lightgray",  pt.size = 2)
-#' }
 #'
 
 Cluster_Highlight_Plot <- function(
@@ -700,6 +701,7 @@ Cluster_Highlight_Plot <- function(
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
 #' @param label Whether to label the highlighted meta data variable(s).  Default is FALSE.
+#' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
@@ -715,10 +717,12 @@ Cluster_Highlight_Plot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' Meta_Highlight_Plot(seurat_object = object, meta_data_column = "orig.ident", meta_data_highlight = "sample_01",
-#' highlight_color = "gold", background_color = "lightgray",  pt.size = 2)
-#' }
+#' library(Seurat)
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' Meta_Highlight_Plot(seurat_object = pbmc_small, meta_data_column = "sample_id",
+#' meta_data_highlight = "sample1", highlight_color = "gold", background_color = "lightgray",
+#' pt.size = 2)
 #'
 
 Meta_Highlight_Plot <- function(
@@ -816,6 +820,139 @@ Meta_Highlight_Plot <- function(
 }
 
 
+#' Meta Highlight Plot
+#'
+#' Create Plot with meta data variable of interest highlighted
+#'
+#' @param seurat_object Seurat object name.
+#' @param cells_highlight Cell names to highlight in named list.
+#' @param highlight_color Color to highlight cells.
+#' @param background_color non-highlighted cell colors (default is "lightgray")..
+#' @param pt.size point size for both highlighted cluster and background.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
+#' @param label Whether to label the highlighted meta data variable(s).  Default is FALSE.
+#' @param split.by Variable in `@meta.data` to split the plot by.
+#' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+#' individual plots in layout.  Default is FALSE.
+#' @param ggplot_default_colors logical.  If `highlight_color = NULL`, Whether or not to return plot
+#' using default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#'
+#' @export
+#'
+#' @concept seurat_plotting
+#'
+#' @examples
+#' library(Seurat)
+#'
+#' # Creating example non-overlapping vectors of cells
+#' MS4A1 <- WhichCells(object = pbmc_small, expression = MS4A1 > 4)
+#' GZMB <- WhichCells(object = pbmc_small, expression = GZMB > 4)
+#'
+#' # Format as named list
+#' cells <- list("MS4A1" = MS4A1,
+#'               "GZMB" = GZMB)
+#'
+#' Cell_Highlight_Plot(seurat_object = pbmc_small, cells_highlight = cells)
+#'
+
+Cell_Highlight_Plot <- function(
+  seurat_object,
+  cells_highlight,
+  highlight_color = NULL,
+  background_color = "lightgray",
+  pt.size = NULL,
+  raster = NULL,
+  raster.dpi = c(512, 512),
+  label = FALSE,
+  split.by = NULL,
+  split_seurat = FALSE,
+  ggplot_default_colors = FALSE,
+  ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  if (!inherits(x = cells_highlight, what = "list")) {
+    cli_abort(message = "`cells_highlight` must be a `list()`.")
+  }
+
+  if (is.null(x = names(x = cells_highlight))) {
+    cli_abort(message = "Entries in `cells_highlight` list must be named.")
+  }
+
+  # Check duplicates
+  if (any(duplicated(x = unlist(x = cells_highlight)))) {
+    cli_abort(message = c("The list of `cells_highlight` contains duplicate cell names.",
+                          "i" = "Ensure all cell names are unique before plotting."
+                          )
+              )
+  }
+
+  # Check all cells are present in object
+  if (!all(unlist(x = cells_highlight) %in% colnames(x = seurat_object))) {
+    cli_abort(message = c("Some of cells in `cells_highlight` are not present in object.",
+                          "i" = "Ensure all cells are present in object before plotting."
+                          )
+              )
+  }
+
+  # Add raster check for scCustomize
+  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+
+  # set point size
+  if (is.null(x = pt.size)) {
+    pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_highlight)), raster = raster)
+  }
+
+  # Check right number of colors provided
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = highlight_color) && ggplot_default_colors) {
+    cli_abort(message = "Cannot provide both `highlight_color` and specify `ggplot_default_colors = TRUE`.")
+  }
+
+  if (!is.null(x = highlight_color)) {
+    if (length(x = highlight_color) != length(x = cells_highlight)) {
+      cli_abort(message = c("Incorrect number of highlight colors provided. Number of colors and groups must be equal.",
+                            "i" = "`cells_highlight` contains: {length(x = cells_highlight)} groups but `highlight_color` contains: {length(x = highlight_color)} colors."
+                            )
+                )
+    }
+  } else {
+    highlight_color <- scCustomize_Palette(num_groups = length(x = cells_highlight), ggplot_default_colors = ggplot_default_colors)
+  }
+
+  # plot
+  plot <- DimPlot_scCustom(seurat_object = seurat_object,
+                           cells.highlight = cells_highlight,
+                           cols.highlight = highlight_color,
+                           colors_use = background_color,
+                           sizes.highlight = pt.size,
+                           pt.size = pt.size,
+                           order = TRUE,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           split.by = split.by,
+                           split_seurat = split_seurat,
+                           label = label,
+                           ...)
+
+  # Edit plot legend
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_highlight), values = c(highlight_color, background_color), na.value = background_color))
+
+  return(plot)
+}
+
+
 #' VlnPlot with modified default settings
 #'
 #' Creates DimPlot with some of the settings modified from their Seurat defaults (colors_use, shuffle, label).
@@ -844,19 +981,19 @@ Meta_Highlight_Plot <- function(
 #'
 #' @import cli
 #' @import patchwork
+#' @import ggrastr
 #' @importFrom Seurat VlnPlot
 #'
 #' @export
 #'
 #' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
-#' this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
+#' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
 #'
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' VlnPlot_scCustom(seurat_object = object, features = "Cx3cr1")
-#' }
+#' library(Seurat)
+#' VlnPlot_scCustom(seurat_object = pbmc_small, features = "CD3E")
 #'
 
 VlnPlot_scCustom <- function(
@@ -948,8 +1085,9 @@ VlnPlot_scCustom <- function(
 #' @param plot_spacing Numerical value specifying the vertical spacing between each plot in the stack.
 #' Default is 0.15 ("cm").  Spacing dependent on unit provided to `spacing_unit`.
 #' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
+#' @param vln_linewidth Adjust the linewidth of violin outline.  Must be numeric.
 #' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with
-#' rendering so many points in vector form.  Alteratively, see `raster` parameter.
+#' rendering so many points in vector form.  Alternatively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
 #' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
@@ -968,13 +1106,13 @@ VlnPlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
-#' \dontrun{
-#' Stacked_VlnPlot(seurat_object = object, features = gene_list, x_lab_rotate = TRUE)
-#' }
+#' library(Seurat)
+#' Stacked_VlnPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"),
+#' x_lab_rotate = TRUE)
 #'
 
 Stacked_VlnPlot <- function(
@@ -990,6 +1128,7 @@ Stacked_VlnPlot <- function(
   ggplot_default_colors = FALSE,
   plot_spacing = 0.15,
   spacing_unit = "cm",
+  vln_linewidth = NULL,
   pt.size = NULL,
   raster = NULL,
   add.noise = TRUE,
@@ -1090,6 +1229,15 @@ Stacked_VlnPlot <- function(
     plot_return <- plot_return + plot_layout(guides = 'collect')
   }
 
+  if (!is.null(x = vln_linewidth)) {
+    if (!is.numeric(x = vln_linewidth)) {
+      cli_abort(message = "`vln_linewidth` must be numeric.")
+    }
+    for (j in 1:length(plot_list)) {
+      plot_return[[j]]$layers[[1]]$aes_params$linewidth <- vln_linewidth
+    }
+  }
+
   # return plot
   return(plot_return)
 }
@@ -1120,9 +1268,10 @@ Stacked_VlnPlot <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' DotPlot_scCustom(seurat_object = object, features = gene_list)
-#' }
+#' \donttest{
+#' library(Seurat)
+#' DotPlot_scCustom(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
+#'}
 #'
 
 DotPlot_scCustom <- function(
@@ -1221,20 +1370,24 @@ DotPlot_scCustom <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
-#' @param k Value to use for k-means clustering on rows.  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
+#' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
+#' columns = idents.
+#' @param k Value to use for k-means clustering on features  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: Apply k-means clustering on rows. If the value is larger than 1, the
 #' heatmap will be split by rows according to the k-means clustering. For each row slice, hierarchical
 #' clustering is still applied with parameters above.
-#' @param row_km_repeats Number of k-means runs to get a consensus k-means clustering. Note if row_km_repeats
-#' is set to more than one, the final number of groups might be smaller than row_km, but this might
-#' mean the original row_km is not a good choice.  Default is 1000.
-#' @param column_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar as row_km_repeats.
-#' Default is 100.
+#' @param feature_km_repeats Number of k-means runs to get a consensus k-means clustering for features.
+#' Note if `feature_km_repeats` is set to value greater than one, the final number of groups might be
+#' smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.
+#' @param row_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `feature_km_repeats`
+#' @param ident_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar to
+#' `feature_km_repeats`.  Default is 1000.
+#' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
-#' Based on: https://stackoverflow.com/a/15376462/15568251.
+#' Based on: \url{https://stackoverflow.com/a/15376462/15568251}.
 #' @param elbow_kmax The maximum value of k to use for `plot_km_elbow`.  Suggest setting larger value so the
 #' true shape of plot can be observed.  Value must be 1 less than number of features provided.  If NULL parameter
 #' will be set dependent on length of feature list up to `elbow_kmax = 20`.
@@ -1255,10 +1408,12 @@ DotPlot_scCustom <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
-#' @importFrom dplyr filter select
+#' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat DotPlot
+#' @importFrom SeuratObject PackageCheck
+#' @importFrom stats quantile
 #' @importFrom tidyr pivot_wider
 #'
 #' @export
@@ -1266,13 +1421,14 @@ DotPlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
-#' @references https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/
-#' @seealso https://twitter.com/tangming2005
+#' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
+#' @seealso \url{https://twitter.com/tangming2005}
 #'
 #' @examples
-#' \dontrun{
-#' Clustered_DotPlot(seurat_object = object, features = gene_list)
-#' }
+#' \donttest{
+#' library(Seurat)
+#' Clustered_DotPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB", "MS4A1"))
+#'}
 #'
 
 Clustered_DotPlot <- function(
@@ -1285,9 +1441,12 @@ Clustered_DotPlot <- function(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  flip = FALSE,
   k = 1,
-  row_km_repeats = 1000,
-  column_km_repeats = 1000,
+  feature_km_repeats = 1000,
+  ident_km_repeats = 1000,
+  row_km_repeats = deprecated(),
+  column_km_repeats = deprecated(),
   row_label_size = 8,
   raster = FALSE,
   plot_km_elbow = TRUE,
@@ -1314,6 +1473,27 @@ Clustered_DotPlot <- function(
     )
   }
 
+  if (lifecycle::is_present(row_km_repeats)) {
+    lifecycle::deprecate_warn(when = "1.1.0",
+                              what = "Clustered_DotPlot(row_km_repeats)",
+                              with = "Clustered_DotPlot(feature_km_repeats)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    feature_km_repeats <- row_km_repeats
+  }
+
+  if (lifecycle::is_present(column_km_repeats)) {
+    lifecycle::deprecate_warn(when = "1.1.0",
+                              what = "Clustered_DotPlot(column_km_repeats)",
+                              with = "Clustered_DotPlot(ident_km_repeats)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    ident_km_repeats <- column_km_repeats
+  }
+
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -1338,8 +1518,8 @@ Clustered_DotPlot <- function(
 
   # Get expression data
   exp_mat <- data %>%
-    select(-pct.exp, -avg.exp) %>%
-    pivot_wider(names_from = id, values_from = avg.exp.scaled) %>%
+    select(-any_of(c("pct.exp", "avg.exp"))) %>%
+    pivot_wider(names_from = .data[["id"]], values_from = .data[["avg.exp.scaled"]]) %>%
     as.data.frame()
 
   row.names(x = exp_mat) <- exp_mat$features.plot
@@ -1359,7 +1539,7 @@ Clustered_DotPlot <- function(
 
     # Remove rows with NAs
     exp_mat <- exp_mat %>%
-      filter(features.plot %in% good_features)
+      filter(.data[["features.plot"]] %in% good_features)
   }
 
   exp_mat <- exp_mat[,-1] %>%
@@ -1367,8 +1547,8 @@ Clustered_DotPlot <- function(
 
   # Get percent expressed data
   percent_mat <- data %>%
-    select(-avg.exp, -avg.exp.scaled) %>%
-    pivot_wider(names_from = id, values_from = pct.exp) %>%
+    select(-any_of(c("avg.exp", "avg.exp.scaled"))) %>%
+    pivot_wider(names_from = .data[["id"]], values_from = .data[["pct.exp"]]) %>%
     as.data.frame()
 
   row.names(x = percent_mat) <- percent_mat$features.plot
@@ -1376,7 +1556,7 @@ Clustered_DotPlot <- function(
   # Subset dataframe for NAs if idents so that exp_mat and percent_mat match
   if (!is.null(x = idents)) {
     percent_mat <- percent_mat %>%
-      filter(features.plot %in% good_features)
+      filter(.data[["features.plot"]] %in% good_features)
   }
 
   percent_mat <- percent_mat[,-1] %>%
@@ -1411,7 +1591,7 @@ Clustered_DotPlot <- function(
   colors_use_idents <- colors_use_idents[1:group_by_length]
 
   # Modify if class = "colors"
-  if (class(x = colors_use_idents) == "colors") {
+  if (inherits(x = colors_use_idents, what = "colors")) {
     colors_use_idents <- as.vector(colors_use_idents)
   }
 
@@ -1423,12 +1603,21 @@ Clustered_DotPlot <- function(
   identity_colors_list <- list(Identity = identity_colors)
 
   # Create identity annotation
-  column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
-                                                 col =  identity_colors_list,
-                                                 na_col = "grey",
-                                                 name = "Identity",
-                                                 show_legend = FALSE
-  )
+  if (flip) {
+    column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
+                                               col =  identity_colors_list,
+                                               na_col = "grey",
+                                               name = "Identity",
+                                               show_legend = FALSE
+    )
+  } else {
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
+                                                   col =  identity_colors_list,
+                                                   na_col = "grey",
+                                                   name = "Identity",
+                                                   show_legend = FALSE
+    )
+  }
 
   # Set middle of color scale if not specified
   if (is.null(x = exp_color_middle)) {
@@ -1465,19 +1654,37 @@ Clustered_DotPlot <- function(
   }
 
   # prep heatmap
-  if (raster) {
-    layer_fun = function(j, i, x, y, w, h, fill) {
-      grid.rect(x = x, y = y, width = w, height = h,
-                      gp = gpar(col = NA, fill = NA))
-      grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
-                        gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+  if (flip) {
+    if (raster) {
+      layer_fun_flip = function(i, j, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+      }
+    } else {
+      cell_fun_flip = function(i, j, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+      }
     }
   } else {
-    cell_fun = function(j, i, x, y, w, h, fill) {
-      grid.rect(x = x, y = y, width = w, height = h,
-                      gp = gpar(col = NA, fill = NA))
-      grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
-                        gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+    if (raster) {
+      layer_fun = function(j, i, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
+      }
+    } else {
+      cell_fun = function(j, i, x, y, w, h, fill) {
+        grid.rect(x = x, y = y, width = w, height = h,
+                  gp = gpar(col = NA, fill = NA))
+        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
+                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
+      }
     }
   }
 
@@ -1487,13 +1694,13 @@ Clustered_DotPlot <- function(
     ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.5) * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                                    gp = gpar(fill = "black")))
+                                                              gp = gpar(fill = "black")))
     )
   )
 
@@ -1509,33 +1716,65 @@ Clustered_DotPlot <- function(
   # Create Plot
   set.seed(seed = seed)
   if (raster) {
-    cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                heatmap_legend_param=list(title="Expression"),
-                                                col=col_fun,
-                                                rect_gp = gpar(type = "none"),
-                                                layer_fun = layer_fun,
-                                                row_names_gp = gpar(fontsize = row_label_size),
-                                                row_km = k,
-                                                row_km_repeats = row_km_repeats,
-                                                border = "black",
-                                                top_annotation = column_ha,
-                                                column_km_repeats = column_km_repeats,
-                                                show_parent_dend_line = show_parent_dend_line,
-                                                column_names_rot = x_lab_rotate)
+    if (flip) {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  layer_fun = layer_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  column_km = k,
+                                                  row_km_repeats = ident_km_repeats,
+                                                  border = "black",
+                                                  left_annotation = column_ha,
+                                                  column_km_repeats = feature_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    } else {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  layer_fun = layer_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_km = k,
+                                                  row_km_repeats = feature_km_repeats,
+                                                  border = "black",
+                                                  top_annotation = column_ha,
+                                                  column_km_repeats = ident_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    }
   } else {
-    cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                heatmap_legend_param=list(title="Expression"),
-                                                col=col_fun,
-                                                rect_gp = gpar(type = "none"),
-                                                cell_fun = cell_fun,
-                                                row_names_gp = gpar(fontsize = row_label_size),
-                                                row_km = k,
-                                                row_km_repeats = row_km_repeats,
-                                                border = "black",
-                                                top_annotation = column_ha,
-                                                column_km_repeats = column_km_repeats,
-                                                show_parent_dend_line = show_parent_dend_line,
-                                                column_names_rot = x_lab_rotate)
+    if (flip) {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  cell_fun = cell_fun_flip,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  column_km = k,
+                                                  row_km_repeats = ident_km_repeats,
+                                                  border = "black",
+                                                  left_annotation = column_ha,
+                                                  column_km_repeats = feature_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    } else {
+      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
+                                                  heatmap_legend_param=list(title="Expression"),
+                                                  col=col_fun,
+                                                  rect_gp = gpar(type = "none"),
+                                                  cell_fun = cell_fun,
+                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_km = k,
+                                                  row_km_repeats = feature_km_repeats,
+                                                  border = "black",
+                                                  top_annotation = column_ha,
+                                                  column_km_repeats = ident_km_repeats,
+                                                  show_parent_dend_line = show_parent_dend_line,
+                                                  column_names_rot = x_lab_rotate)
+    }
   }
 
   # Add pt.size legend & return plots
@@ -1595,15 +1834,14 @@ Clustered_DotPlot <- function(
 #' @export
 #'
 #' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
-#' this is simply a wrapper to alter some of the default parameters (https://github.com/satijalab/seurat/blob/master/R/visualization.R) (Licence: GPL-3).
-#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: (https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg).
+#' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
+#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
 #'
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' DimPlot_scCustom(seurat_object = object)
-#' }
+#' library(Seurat)
+#' DimPlot_scCustom(seurat_object = pbmc_small)
 #'
 
 DimPlot_scCustom <- function(
@@ -1704,7 +1942,7 @@ DimPlot_scCustom <- function(
 
       plot <- plot & NoAxes()
 
-      axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
+      axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
         geom_point() +
         xlim(c(0, 10)) + ylim(c(0, 10)) +
         theme_classic() +
@@ -1742,7 +1980,7 @@ DimPlot_scCustom <- function(
 
         plot <- plot & NoAxes()
 
-        axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = x, y = y)) +
+        axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
           geom_point() +
           xlim(c(0, 10)) + ylim(c(0, 10)) +
           theme_classic() +
@@ -1785,7 +2023,7 @@ DimPlot_scCustom <- function(
 
       # Extract cell names per meta data list of values
       # Extract split.by list of values
-      if (class(x = seurat_object@meta.data[, split.by]) == "factor") {
+      if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
         split_by_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
       } else {
         split_by_list <- as.character(unique(seurat_object@meta.data[, split.by]))
@@ -1862,10 +2100,12 @@ DimPlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' DimPlot_All_Samples(seurat_object = object, meta_data_column = "orig.ident", color = "black",
-#' num_columns = 2, reduction = "tsne")
-#' }
+#' library(Seurat)
+#'
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' DimPlot_All_Samples(seurat_object = pbmc_small, meta_data_column = "sample_id", color = "black",
+#' num_columns = 2)
 #'
 
 DimPlot_All_Samples <- function(
@@ -1905,7 +2145,7 @@ DimPlot_All_Samples <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract meta_data_column list of values
-  if (class(x = seurat_object@meta.data[, meta_data_column]) == "factor") {
+  if (inherits(x = seurat_object@meta.data[, meta_data_column], what = "factor")) {
     meta_sample_list <- levels(x = seurat_object@meta.data[, meta_data_column])
   } else {
     meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
@@ -1978,9 +2218,8 @@ DimPlot_All_Samples <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
-#' VariableFeaturePlot_scCustom(seurat_object = object, num_features = 10)
-#' }
+#' library(Seurat)
+#' VariableFeaturePlot_scCustom(seurat_object = pbmc_small, num_features = 10)
 #'
 
 VariableFeaturePlot_scCustom <- function(

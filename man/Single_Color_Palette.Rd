@@ -12,13 +12,18 @@ Single_Color_Palette(pal_color, num_colors = NULL, seed_use = 123)
 
 \item{num_colors}{set number of colors (max = 7).}
 
-\item{seed}{set seed for reproducibility (default: 123).}
+\item{seed_use}{set seed for reproducibility (default: 123).}
 }
 \value{
 A vector of colors
 }
 \description{
 Selects colors from modified versions of RColorBrewer single colors palettes
+}
+\examples{
+pal <- Single_Color_Palette(pal_color = "reds", num_colors = 7)
+PalettePlot(palette = pal)
+
 }
 \references{
 See RColorBrewer for more info on palettes

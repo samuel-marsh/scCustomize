@@ -9,16 +9,19 @@ Change_Delim_Prefix(data, current_delim, new_delim)
 \arguments{
 \item{data}{Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.}
 
-\item{new_delim}{a single value of new delimiter desired.}
+\item{current_delim}{a single value of current delimiter.}
 
-\item{currnet_delim}{a single value of current delimiter.}
+\item{new_delim}{a single value of new delimiter desired.}
+}
+\value{
+matrix or data.frame with new column names.
 }
 \description{
 Change barcode prefix delimiter from list of data.frames/matrices or single data.frame/matrix
 }
 \examples{
 \dontrun{
-dge_matrix <- Change_Delim_Prefix(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+dge_matrix <- Change_Delim_Prefix(data = dge_matrix, current_delim = ".", new_delim = "-")
 }
 
 }

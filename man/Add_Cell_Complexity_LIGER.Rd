@@ -26,7 +26,7 @@ Add measure of cell complexity/novelty (log10PerUMI) for data QC.
 }
 \examples{
 \dontrun{
-object <- Add_Cell_Complexity_Seurat(seurat_object = object)
+object <- Add_Cell_Complexity_LIGER(liger_object = object)
 }
 
 }

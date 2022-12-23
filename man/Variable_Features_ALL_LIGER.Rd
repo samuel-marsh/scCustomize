@@ -11,7 +11,7 @@ Variable_Features_ALL_LIGER(
   alpha.thresh = 0.99,
   tol = 1e-04,
   do.plot = FALSE,
-  cex.use = 0.3,
+  pt.size = 0.3,
   chunk = 1000
 )
 }
@@ -33,9 +33,9 @@ expression (lower threshold -> higher upper bound). (default 0.99)}
 \item{do.plot}{Display log plot of gene variance vs. gene expression. Selected genes are
 plotted in green. (Default FALSE)}
 
-\item{chunk}{size of chunks in hdf5 file. (Default 1000)}
-
 \item{pt.size}{Point size for plot.}
+
+\item{chunk}{size of chunks in hdf5 file. (Default 1000)}
 }
 \value{
 A LIGER Object with variable genes in correct slot.
@@ -53,6 +53,6 @@ liger_obj <- Variable_Features_ALL_LIGER(liger_object = liger_obj, num_genes = 2
 \references{
 Matching function parameter text descriptions are taken from \code{rliger::selectGenes}
 which is called by this function after creating new temporary object/dataset.
-(https://github.com/welch-lab/liger). (Licence: GPL-3).
+\url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 }
 \concept{liger_object_util}

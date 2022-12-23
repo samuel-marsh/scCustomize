@@ -47,9 +47,8 @@ A ggplot object
 Creates variable features plot with N number of features already labeled by default.
 }
 \examples{
-\dontrun{
-VariableFeaturePlot_scCustom(seurat_object = object, num_features = 10)
-}
+library(Seurat)
+VariableFeaturePlot_scCustom(seurat_object = pbmc_small, num_features = 10)
 
 }
 \concept{seurat_plotting}

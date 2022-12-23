@@ -52,7 +52,7 @@ Gene_Present <- function(
   # Check object type
   # Seurat
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
-  if ((class(x = data)[[1]] == "Seurat")) {
+  if (inherits(x = data, what = "Seurat")) {
     # set assay (if null set to active assay)
     assay <- seurat_assay %||% DefaultAssay(object = data)
 
@@ -320,13 +320,13 @@ Meta_Numeric <- function(
   # Pull results into vectors
   invalid_variables <- all_numeric %>%
     rownames_to_column("variables") %>%
-    filter(Is_Numeric == FALSE) %>%
-    pull(variables)
+    filter(.data[["Is_Numeric"]] == FALSE) %>%
+    pull(.data[["variables"]])
 
   valid_variables <- all_numeric %>%
     rownames_to_column("variables") %>%
-    filter(Is_Numeric == TRUE) %>%
-    pull(variables)
+    filter(.data[["Is_Numeric"]] == TRUE) %>%
+    pull(.data[["variables"]])
 
   # Warn if columns are not numeric
   if (length(x = invalid_variables) > 0) {
@@ -338,26 +338,20 @@ Meta_Numeric <- function(
 }
 
 
-#' Check Matrix Validity
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### DATA ACCESS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Get meta data from object
 #'
-#' Native implementation of SeuratObjects CheckMatrix but with modified warning messages.
+#' Quick function to properly pull meta.data from objects.
 #'
-#' @param object A matrix
-#' @param checks Type of checks to perform, choose one or more from:
-#' \itemize{
-#'  \item \dQuote{\code{infinite}}: Emit a warning if any value is infinite
-#'  \item \dQuote{\code{logical}}: Emit a warning if any value is a logical
-#'  \item \dQuote{\code{integer}}: Emit a warning if any value is \emph{not}
-#'   an integer
-#'  \item \dQuote{\code{na}}: Emit a warning if any value is an \code{NA}
-#'   or \code{NaN}
-#' }
+#' @param object list of matrices to merge.
 #'
-#' @return Emits warnings for each test and invisibly returns \code{NULL}
+#' @importFrom methods slot
 #'
-#' @import cli
-#'
-#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject (https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650) (License: MIT).
+#' @return A data.frame
 #'
 #' @export
 #'
@@ -365,40 +359,26 @@ Meta_Numeric <- function(
 #'
 #' @examples
 #' \dontrun{
-#' mat <- Read10X(...)
-#' CheckMatrix_scCustom(object = mat)
+#' meta_data <- Fetch_Meta(object = pbmc)
 #' }
 #'
 
-CheckMatrix_scCustom <- function(
-  object,
-  checks = c('infinite', 'logical', 'integer', 'na'),
-  ...
+Fetch_Meta <- function(
+  object
 ) {
-  checks <- match.arg(arg = checks, several.ok = TRUE)
-  x <- slot(object = object, name = 'x')
-  for (i in checks) {
-    switch(
-      EXPR = i,
-      'infinite' = if (any(is.infinite(x = x))) {
-        cli_warn(message = "Input matrix contains infinite values")
-      },
-      'logical' = if (any(is.logical(x = x))) {
-        cli_warn(message = "Input matrix contains logical values")
-      },
-      'integer' = if (!all(round(x = x) == x, na.rm = TRUE)) {
-        cli_warn(message = c("Input matrix contains non-integer values.",
-                             "*" = "Data may represent normalized or scaled values.",
-                             "i" = "Take into account when performing analysis.")
-        )
-      },
-      'na' = if (anyNA(x = x)) {
-        cli_warn(message = "Input matrix contains NA/NaN values")
-      },
-    )
-  }
-  return(invisible(x = NULL))
+  # Check Seurat
+  Is_Seurat(seurat_object = object)
+
+  # Pull meta data
+  object_meta <- slot(object = object, name = "meta.data")
+
+  return(object_meta)
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### MATRIX HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Merge a list of Sparse Matrices
@@ -412,7 +392,7 @@ CheckMatrix_scCustom <- function(
 #' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
 #'
 #' @references Original function is part of LIGER package as non-exported function
-#' (https://github.com/welch-lab/liger/blob/master/R/utilities.R) (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (License: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
 #' @import Matrix
@@ -428,8 +408,8 @@ CheckMatrix_scCustom <- function(
 #' @examples
 #' \dontrun{
 #' data_list <- Read10X_GEO(...)
-#' merged <- Merge_Sparse_Data_All(matrix_list = data_list, add_cell_ids = names(data_list), prefix = TRUE,
-#' cell_id_delimiter = "_")
+#' merged <- Merge_Sparse_Data_All(matrix_list = data_list, add_cell_ids = names(data_list),
+#' prefix = TRUE, cell_id_delimiter = "_")
 #' }
 #'
 
@@ -535,6 +515,74 @@ Merge_Sparse_Data_All <- function(
 }
 
 
+#' Check Matrix Validity
+#'
+#' Native implementation of SeuratObjects CheckMatrix but with modified warning messages.
+#'
+#' @param object A matrix
+#' @param checks Type of checks to perform, choose one or more from:
+#' \itemize{
+#'  \item \dQuote{\code{infinite}}: Emit a warning if any value is infinite
+#'  \item \dQuote{\code{logical}}: Emit a warning if any value is a logical
+#'  \item \dQuote{\code{integer}}: Emit a warning if any value is \emph{not}
+#'   an integer
+#'  \item \dQuote{\code{na}}: Emit a warning if any value is an \code{NA}
+#'   or \code{NaN}
+#' }
+#'
+#' @return Emits warnings for each test and invisibly returns \code{NULL}
+#'
+#' @import cli
+#' @importFrom methods slot
+#'
+#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject \url{https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650} (License: MIT).
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' mat <- Read10X(...)
+#' CheckMatrix_scCustom(object = mat)
+#' }
+#'
+
+CheckMatrix_scCustom <- function(
+  object,
+  checks = c('infinite', 'logical', 'integer', 'na')
+) {
+  checks <- match.arg(arg = checks, several.ok = TRUE)
+  x <- slot(object = object, name = 'x')
+  for (i in checks) {
+    switch(
+      EXPR = i,
+      'infinite' = if (any(is.infinite(x = x))) {
+        cli_warn(message = "Input matrix contains infinite values")
+      },
+      'logical' = if (any(is.logical(x = x))) {
+        cli_warn(message = "Input matrix contains logical values")
+      },
+      'integer' = if (!all(round(x = x) == x, na.rm = TRUE)) {
+        cli_warn(message = c("Input matrix contains non-integer values.",
+                             "*" = "Data may represent normalized or scaled values.",
+                             "i" = "Take into account when performing analysis.")
+        )
+      },
+      'na' = if (anyNA(x = x)) {
+        cli_warn(message = "Input matrix contains NA/NaN values")
+      },
+    )
+  }
+  return(invisible(x = NULL))
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### BARCODE UTILS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Replace barcode suffixes
 #'
 #' Replace barcode suffixes in matrix, data.frame, or list of matrices/data.frames
@@ -547,6 +595,8 @@ Merge_Sparse_Data_All <- function(
 #' If no suffix is desired set `new_suffix = ""`.`
 #'
 #' @export
+#'
+#' @return matrix or data.frame with new column names.
 #'
 #' @concept helper_util
 #'
@@ -562,7 +612,7 @@ Replace_Suffix <- function(
   new_suffix
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -639,18 +689,20 @@ Replace_Suffix <- function(
 #' Change barcode suffix delimiter from list of data.frames/matrices or single data.frame/matrix
 #'
 #' @param data Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.
-#' @param currnet_delim a single value of current delimiter.
+#' @param current_delim a single value of current delimiter.
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @importFrom stringi stri_replace_last_fixed
 #'
 #' @export
 #'
+#' @return matrix or data.frame with new column names.
+#'
 #' @concept helper_util
 #'
 #' @examples
 #' \dontrun{
-#' dge_matrix <- Change_Delim_Suffix(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+#' dge_matrix <- Change_Delim_Suffix(data = dge_matrix, current_delim = ".", new_delim = "-")
 #' }
 #'
 
@@ -660,7 +712,7 @@ Change_Delim_Suffix <- function(
   new_delim
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -713,18 +765,20 @@ Change_Delim_Suffix <- function(
 #' Change barcode prefix delimiter from list of data.frames/matrices or single data.frame/matrix
 #'
 #' @param data Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.
-#' @param currnet_delim a single value of current delimiter.
+#' @param current_delim a single value of current delimiter.
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @importFrom stringi stri_replace_first_fixed
 #'
 #' @export
 #'
+#' @return matrix or data.frame with new column names.
+#'
 #' @concept helper_util
 #'
 #' @examples
 #' \dontrun{
-#' dge_matrix <- Change_Delim_Prefix(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+#' dge_matrix <- Change_Delim_Prefix(data = dge_matrix, current_delim = ".", new_delim = "-")
 #' }
 #'
 
@@ -734,7 +788,7 @@ Change_Delim_Prefix <- function(
   new_delim
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -787,16 +841,18 @@ Change_Delim_Prefix <- function(
 #' Change all instances of delimiter in cell names from list of data.frames/matrices or single data.frame/matrix
 #'
 #' @param data Either matrix/data.frame or list of matrices/data.frames with the cell barcodes in the column names.
-#' @param currnet_delim a single value of current delimiter.
+#' @param current_delim a single value of current delimiter.
 #' @param new_delim a single value of new delimiter desired.
 #'
 #' @export
+#'
+#' @return matrix or data.frame with new column names.
 #'
 #' @concept helper_util
 #'
 #' @examples
 #' \dontrun{
-#' dge_matrix <- Change_Delim_All(data = dge_matrix, currnet_delim = ".", new_delim = "-")
+#' dge_matrix <- Change_Delim_All(data = dge_matrix, current_delim = ".", new_delim = "-")
 #' }
 #'
 
@@ -806,7 +862,7 @@ Change_Delim_All <- function(
   new_delim
 ) {
   # is data a list
-  if (class(x = data) == "list") {
+  if (inherits(x = data, what = "list")) {
     # Make list of current names
     current_cell_names <- lapply(X = 1:length(x = data), function(x) {
       cell_names <- colnames(x = data[[x]])
@@ -1049,8 +1105,11 @@ Extract_Top_Markers <- function(
 #' Default is "cluster_annotation".
 #'
 #' @import cli
+#' @importFrom utils write.csv
 #'
 #' @export
+#'
+#' @return No value returned.  Creates .csv file.
 #'
 #' @concept marker_annotation_util
 #'
@@ -1095,6 +1154,8 @@ Create_Cluster_Annotation_File <- function(
 #' "cluster" with values 0-32, and blank columns: "cell_type", "sub_type", "notes".
 #'
 #' @importFrom tibble tribble
+#'
+#' @keywords internal
 #'
 #' @noRd
 #'
@@ -1147,7 +1208,7 @@ Cluster_Annotation_Tibble <- function(
 #' by default but also any other csv file.
 #'
 #' @param annotation name of the data.frame/tibble or path to CSV file containing cluster annotation.
-#' @param cluster_name_col: name of column containing cluster names/numbers (default is "cluster").
+#' @param cluster_name_col name of column containing cluster names/numbers (default is "cluster").
 #' @param cell_type_col name of column contain the cell type annotation (default is "cell_type").
 #'
 #' @return a list of named vectors for every cell type in the `cell_type_col` column of the annotation table and
@@ -1156,6 +1217,7 @@ Cluster_Annotation_Tibble <- function(
 #' @import cli
 #' @importFrom dplyr filter pull
 #' @importFrom magrittr "%>%"
+#' @importFrom utils read.csv
 #'
 #' @export
 #'
@@ -1164,8 +1226,8 @@ Cluster_Annotation_Tibble <- function(
 #' @examples
 #' \dontrun{
 #' # If pulling from a data.frame/tibble
-#' cluster_annotation <- Pull_Cluster_Annotation(annotation = annotation_df, cluster_name_col = "cluster",
-#' cell_type_col = "cell_type")
+#' cluster_annotation <- Pull_Cluster_Annotation(annotation = annotation_df,
+#' cluster_name_col = "cluster", cell_type_col = "cell_type")
 #'
 #' # If pulling from csv file
 #' cluster_annotation <- Pull_Cluster_Annotation(annotation = "file_path/file_name.csv",
@@ -1189,6 +1251,15 @@ Pull_Cluster_Annotation <- function(
     annotation_table <- read.csv(file = annotation, stringsAsFactors = FALSE)
   }
 
+  # Check that cluster and cell type columns are present
+  if (!cluster_name_col %in% colnames(x = annotation_table)) {
+    cli_abort(message = "`cluster_name_col`: '{cluster_name_col}' not found in annotation data.frame.")
+  }
+
+  if (!cell_type_col %in% colnames(x = annotation_table)) {
+    cli_abort(message = "`cell_type_col`: '{cell_type_col}' not found in annotation data.frame.")
+  }
+
   # Create list elements per cluster
   cell_type_list <- unique(annotation_table[[cell_type_col]])
   cluster_annotation_list <- lapply(c(1:length(cell_type_list)), function(x){
@@ -1200,7 +1271,7 @@ Pull_Cluster_Annotation <- function(
 
   # Create list elements for renaming idents
   new_cluster_ids <- annotation_table %>%
-    pull(cell_type)
+    pull(cell_type_col)
   secondary_ids <- annotation_table[, 3]
 
   new_cluster_ids_list <- list(new_cluster_ids)
@@ -1226,7 +1297,7 @@ Pull_Cluster_Annotation <- function(
 #'
 #' @param custom_dir_file file to file containing desired directory structure.  Default is NULL and
 #' will provide generic built-in directory structure.
-#' @param cluster_annotation_path: path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
+#' @param cluster_annotation_path path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
 #' @param cluster_annotation_file_name name to use for annotation file if created (optional).
 #'
 #' @import cli
@@ -1235,6 +1306,8 @@ Pull_Cluster_Annotation <- function(
 #' @importFrom magrittr "%>%"
 #'
 #' @export
+#'
+#' @return no return value.  Creates system folders.
 #'
 #' @concept organization_util
 #'
@@ -1309,6 +1382,8 @@ Setup_scRNAseq_Project <- function(
 #'
 #' @export
 #'
+#' @return No return value.  Performs system copy to GCP bucket.
+#'
 #' @concept organization_util
 #'
 #' @examples
@@ -1343,6 +1418,8 @@ Copy_To_GCP <- function(
 #' @import cli
 #'
 #' @export
+#'
+#' @return No return value.  Performs system copy from GCP bucket.
 #'
 #' @concept organization_util
 #'

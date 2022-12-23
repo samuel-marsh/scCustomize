@@ -62,10 +62,11 @@ A ggplot object
 Create FeatureScatter using split.by
 }
 \examples{
-\dontrun{
-Split_FeatureScatter(seurat_object = object, features1= "nCount_RNA", feature2 = "nFeature_RNA",
-split.by = "orig.ident", colors_use = "navy")
-}
+library(Seurat)
+pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+
+Split_FeatureScatter(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
+split.by = "sample_id")
 
 }
 \concept{seurat_plotting}

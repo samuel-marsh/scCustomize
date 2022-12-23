@@ -15,6 +15,9 @@ Create_Cluster_Annotation_File(
 \item{file_name}{name to use for annotation file.  Function automatically adds file type ".csv" suffix.
 Default is "cluster_annotation".}
 }
+\value{
+No value returned.  Creates .csv file.
+}
 \description{
 create annotation file
 }

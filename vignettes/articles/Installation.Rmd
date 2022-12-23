@@ -1,0 +1,76 @@
+---
+title: "Installation Instructions for scCustomize"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Installation Instructions for scCustomize}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+scCustomize requires [R](https://www.r-project.org/) version 4.0 or greater. Highly recommend installing [R Studio](https://www.rstudio.com/).
+
+## Install from CRAN  
+scCustomize can be installed from [CRAN](https://cran.r-project.org/package=scCustomize) for all platforms using standard installation methods:
+```
+# Base R
+install.packages("scCustomize")
+
+# Using pak
+pak::pkg_install("scCustomize")
+```
+
+### Non-CRAN packages  
+A small number of functions in scCustomize rely on packages from Bioconductor and are not installed by default.  To enable these functions make sure to install the following packages:
+```
+install.packages("BiocManager")
+
+BiocmManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
+```
+
+## Release Notes  
+A full copy of the changes in each version can be found in the [NEWS/ChangeLog](https://samuel-marsh.github.io/scCustomize/news/index.html).
+
+
+## Develop branch    
+I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.yyyy.  
+
+```
+devtools::install_github(repo = "samuel-marsh/scCustomize", ref = "develop")
+
+remotes::install_github(repo = "samuel-marsh/scCustomize", ref = "develop")
+```
+
+<sup>\*</sup>*Note: While this branch is typically mostly stable it may contain breaking issues/bugs.*  
+I do try and keep [development ChangeLog](https://github.com/samuel-marsh/scCustomize/blob/develop/NEWS.md) up to date so it's easier to follow changes than reading commit history.

@@ -40,6 +40,8 @@ Default is c(512, 512).}
 
 \item{label}{Whether to label the highlighted meta data variable(s).  Default is FALSE.}
 
+\item{split.by}{Variable in \verb{@meta.data} to split the plot by.}
+
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
 
@@ -52,10 +54,12 @@ A ggplot object
 Create Plot with meta data variable of interest highlighted
 }
 \examples{
-\dontrun{
-Meta_Highlight_Plot(seurat_object = object, meta_data_column = "orig.ident", meta_data_highlight = "sample_01",
-highlight_color = "gold", background_color = "lightgray",  pt.size = 2)
-}
+library(Seurat)
+pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+
+Meta_Highlight_Plot(seurat_object = pbmc_small, meta_data_column = "sample_id",
+meta_data_highlight = "sample1", highlight_color = "gold", background_color = "lightgray",
+pt.size = 2)
 
 }
 \concept{seurat_plotting}

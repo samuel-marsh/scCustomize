@@ -16,13 +16,12 @@ Plot of all colors in supplied palette/vector
 Plots given color vector/palette in viewer to evaluate palette before plotting on data.
 }
 \examples{
-\dontrun{
-PalettePlot(palette = varibow(n_colors = 36))
-}
+pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
+PalettePlot(palette = pal)
 
 }
 \references{
-Adapted from colorway package \code{build_palette} internals (Licence: GPL-3).
+Adapted from colorway package \code{build_palette} internals (License: GPL-3).
 \url{https://github.com/hypercompetent/colorway}.
 }
 \concept{palettes}

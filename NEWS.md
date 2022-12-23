@@ -1,3 +1,24 @@
+# scCustomize 1.1.0 (2022-12-22)  
+## Added  
+- Added `merge` parameter to `Read10X_GEO`, `Read10X_h5_GEO`, `Read_GEO_Delim` and `Read_CellBender_h5_Multi_File`.  
+- Added `raster.dpi` parameter to `DimPlot_LIGER`.  
+- Added `label` parameter to `FeaturePlot_scCustom` to avoid error collision ([#80](https://github.com/samuel-marsh/scCustomize/issues/80)).  
+- Added `vln_linewidth` parameter to control violin outline line width ([#32](https://github.com/samuel-marsh/scCustomize/issues/32)).  
+- Added quick meta data getter function `Fetch_Meta` for returning data.frame of object meta data.  
+- Added `Extract_Sample_Meta` to extract sample-level meta data from object.  
+- Added `Cell_Highlight_Plot` for highlight plots of custom cells not in active ident or meta data.  
+- Added `flip` parameter to `Clustered_DotPlot` to enable axes flipping ([#69](https://github.com/samuel-marsh/scCustomize/issues/69)).  
+
+## Changed  
+- Updated Imports/Suggests for CRAN compatibility.  
+- Under the hood code updates for CRAN compatibility.  
+- Rearrange base R code within `R/` scripts for better organization.  
+
+## Fixes  
+- Fixed missing documentation for number of package functions.  
+- Typo/styling fixes.  
+
+ 
 # scCustomize 1.0.2 (2022-11-22)  
 ## Added  
 - None. 

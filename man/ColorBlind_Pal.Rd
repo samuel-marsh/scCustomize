@@ -13,13 +13,12 @@ modified/reordered color palette (8 colors) based on ditto-seq
 Shortcut ta a modified 8 color palette based on Color Universal Design (CUD) colorblindness friendly palette.
 }
 \examples{
-\dontrun{
 cols <- ColorBlind_Pal()
-}
+PalettePlot(palette = cols)
 
 }
 \references{
 palette is slightly modified version of the Color Universal Design (CUD) colorblindness
-friendly palette (https://jfly.uni-koeln.de/color/).
+friendly palette \url{https://jfly.uni-koeln.de/color/}.
 }
 \concept{palettes}

@@ -7,7 +7,7 @@
 Hue_Pal(num_colors)
 }
 \arguments{
-\item{num_colors}{}
+\item{num_colors}{number of colors to return in palette.}
 }
 \value{
 hue color palette (as many colors as desired)
@@ -16,9 +16,8 @@ hue color palette (as many colors as desired)
 Shortcut to hue_pal to return to ggplot2 defaults if user desires, from scales package.
 }
 \examples{
-\dontrun{
 cols <- Hue_Pal(num_colors = 8)
-}
+PalettePlot(palette = cols)
 
 }
 \concept{palettes}

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -137,7 +137,17 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>feature_diff_df</dt>
-<dd><p>name of data.frame created using <code><a href="CellBender_Feature_Diff.html">CellBender_Feature_Diff</a></code></p></dd>
+<dd><p>name of data.frame created using <code><a href="CellBender_Feature_Diff.html">CellBender_Feature_Diff</a></code>.</p></dd>
+
+
+<dt>pct_diff_threshold</dt>
+<dd><p>threshold to use for feature plotting.  Resulting plot will only contain
+features which exhibit percent change &gt;= value.  Default is 25.</p></dd>
+
+
+<dt>num_features</dt>
+<dd><p>Number of features to plot.  Will ignore <code>pct_diff_threshold</code> and return
+plot with specified number of features.  Default is NULL.</p></dd>
 
 
 <dt>label</dt>
@@ -245,7 +255,7 @@ overlap too many things. Defaults to 100.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

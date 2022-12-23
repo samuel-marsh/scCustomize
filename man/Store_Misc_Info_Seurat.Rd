@@ -34,9 +34,11 @@ Seurat Object with new entries in the \verb{@misc} slot.
 Wrapper function save variety of data types to the \code{object@misc} slot of Seurat object.
 }
 \examples{
-\dontrun{
-obj <- Store_Misc_Info_Seurat(seurat_object = obj_name, data_to_store = data, data_name = "rd1_colors")
-}
+library(Seurat)
+clu_pal <- c("red", "green", "blue")
+
+pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
+data_name = "rd1_colors")
 
 }
 \concept{object_util}

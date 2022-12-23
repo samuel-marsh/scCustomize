@@ -16,6 +16,9 @@ If suffix is the same for all matrices/data.frames in list only single value is 
 If desired suffix is the same for all matrices/data.frames in list only single value is required.
 If no suffix is desired set \code{new_suffix = ""}.`}
 }
+\value{
+matrix or data.frame with new column names.
+}
 \description{
 Replace barcode suffixes in matrix, data.frame, or list of matrices/data.frames
 }

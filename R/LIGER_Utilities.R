@@ -16,7 +16,7 @@
 #' if species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes (will set automatically
 #' if species is mouse, human, or marmoset).
-#' @param mito_features A list of mitochrondial gene names to be used instead of using regex pattern.
+#' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
@@ -238,7 +238,7 @@ Add_Mito_Ribo_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Cell_Complexity_Seurat(seurat_object = object)
+#' object <- Add_Cell_Complexity_LIGER(liger_object = object)
 #' }
 #'
 
@@ -277,7 +277,7 @@ Add_Cell_Complexity_LIGER <- function(
 #' Check if meta data columns are present in object and return vector of found columns  Return warning
 #' messages for meta data columns not found.
 #'
-#' @param seurat_object object name.
+#' @param liger_object object name.
 #' @param meta_col_names vector of column names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #'
@@ -289,7 +289,7 @@ Add_Cell_Complexity_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' meta_variables <- Meta_Present_LIGER(seurat_object = obj_name, gene_list = DEG_list, print_msg = TRUE)
+#' meta_variables <- Meta_Present_LIGER(liger_object = obj, gene_list = DEG_list, print_msg = TRUE)
 #' }
 #'
 
@@ -399,7 +399,7 @@ Top_Genes_Factor <- function(
 #' @references This function is encompasses the first part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to allow plotting other meta data variables.  In this case the function
 #' just returns the data.frame needed for plotting rather than plots themselves.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @noRd
 #'
@@ -478,6 +478,8 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @param new.order What should the new ident order be if `reorder.idents = TRUE`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -486,13 +488,16 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @return A ggplot/patchwork object
 #'
 #' @import ggplot2
-#' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom cowplot theme_cowplot
+#' @importFrom dplyr summarize
+#' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom patchwork wrap_plots
+#' @importFrom scattermore geom_scattermore
+#' @importFrom stats median
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @noRd
 #'
@@ -519,6 +524,7 @@ Plot_By_Cluster_LIGER <- function(
   reorder.idents = FALSE,
   new.order = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
@@ -567,9 +573,9 @@ Plot_By_Cluster_LIGER <- function(
   if (raster) {
     if (!is.null(x = split_by)) {
       p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
           theme_cowplot() +
-          geom_scattermore(pointsize = pt_size) +
+          geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
           ggtitle(list_of_splits[x]) +
           scale_color_manual(values = colors_use) +
@@ -584,14 +590,14 @@ Plot_By_Cluster_LIGER <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (label) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -599,9 +605,9 @@ Plot_By_Cluster_LIGER <- function(
         }
       })
     } else {
-      p2 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+      p2 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
         theme_cowplot() +
-        geom_scattermore(pointsize = pt_size) +
+        geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
         scale_color_manual(values = colors_use) +
         theme(legend.position = "right",
@@ -615,14 +621,14 @@ Plot_By_Cluster_LIGER <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (label) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -633,7 +639,7 @@ Plot_By_Cluster_LIGER <- function(
   } else {
     if (!is.null(x = split_by)) {
       p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -650,14 +656,14 @@ Plot_By_Cluster_LIGER <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (label) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -665,7 +671,7 @@ Plot_By_Cluster_LIGER <- function(
         }
       })
     } else {
-      p2 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = 'Cluster')) +
+      p2 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -681,14 +687,14 @@ Plot_By_Cluster_LIGER <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster', fill = 'Cluster'), size = label_size,
+          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (label) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes_string(label = 'Cluster'), size = label_size, color = label_color,
+          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -732,6 +738,8 @@ Plot_By_Cluster_LIGER <- function(
 #' @param new.order What should the new ident order be if `reorder.idents = TRUE`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -742,10 +750,12 @@ Plot_By_Cluster_LIGER <- function(
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom patchwork wrap_plots
+#' @importFrom rlang sym
+#' @importFrom scattermore geom_scattermore
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @noRd
 #'
@@ -767,6 +777,7 @@ Plot_By_Meta_LIGER <- function(
   reorder.idents = FALSE,
   new.order = NULL,
   raster = NULL,
+  raster.dpi = c(512, 512),
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
@@ -806,12 +817,14 @@ Plot_By_Meta_LIGER <- function(
   x_axis_label <- paste0(reduction_label, "_1")
   y_axis_label <- paste0(reduction_label, "_2")
 
+  group_by <- sym(group_by)
+
   if (raster) {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
           theme_cowplot() +
-          geom_scattermore(pointsize = pt_size) +
+          geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
           ggtitle(list_of_splits[x]) +
           scale_color_manual(values = colors_use) +
@@ -823,9 +836,9 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
         theme_cowplot() +
-        geom_scattermore(pointsize = pt_size) +
+        geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
         scale_color_manual(values = colors_use) +
         theme(legend.position = "right",
@@ -839,7 +852,7 @@ Plot_By_Meta_LIGER <- function(
   } else {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -853,7 +866,7 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes_string(x = 'tsne1', y = 'tsne2', color = group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -904,7 +917,7 @@ Plot_By_Meta_LIGER <- function(
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
 #' which is called by this function after creating new temporary object/dataset.
-#' (https://github.com/welch-lab/liger). (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
 #'
 #' @export
 #'
@@ -923,7 +936,7 @@ Variable_Features_ALL_LIGER <- function(
   alpha.thresh = 0.99,
   tol = 0.0001,
   do.plot = FALSE,
-  cex.use = 0.3,
+  pt.size = 0.3,
   chunk=1000
 ) {
   Is_LIGER(liger_object = liger_object)
@@ -949,3 +962,177 @@ Variable_Features_ALL_LIGER <- function(
   liger_object@var.genes <- var_genes
   return(liger_object)
 }
+
+
+#' Create a Seurat object containing the data from a liger object
+#'
+#' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
+#' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
+#'
+#' Stores original dataset identity by default in new object metadata if dataset names are passed
+#' in nms. iNMF factorization is stored in dim.reduction object with key "iNMF".
+#'
+#' @param liger_object \code{liger} object.
+#' @param nms By default, labels cell names with dataset of origin (this is to account for cells in
+#' different datasets which may have same name). Other names can be passed here as vector, must have
+#' same length as the number of datasets. (default names(H)).
+#' @param renormalize Whether to log-normalize raw data using Seurat defaults (default TRUE).
+#' @param use.liger.genes Whether to carry over variable genes (default TRUE).
+#' @param by.dataset Include dataset of origin in cluster identity in Seurat object (default FALSE).
+#' @param keep_meta logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
+#' to new Seurat Object.  Default is TRUE.
+#' @param reduction_label Name of dimensionality reduction technique used.  Enables accurate transfer
+#' or name to Seurat object instead of defaulting to "tSNE".
+#' @param seurat_assay Name to set for assay in Seurat Object.  Default is "RNA".
+#'
+#' @return Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
+#'
+#' @references Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
+#' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
+#' PR to liger GitHub.
+#'
+#' @import cli
+#' @import Matrix
+#' @importFrom dplyr any_of pull select
+#' @importFrom methods as new
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' seurat_object <- Liger_to_Seurat(liger_object = LIGER_OBJ, reduction_label = "UMAP")
+#' }
+
+Liger_to_Seurat <- function(
+  liger_object,
+  nms = names(liger_object@H),
+  renormalize = TRUE,
+  use.liger.genes = TRUE,
+  by.dataset = FALSE,
+  keep_meta = TRUE,
+  reduction_label = NULL,
+  seurat_assay = "RNA"
+) {
+  if (is.null(x = reduction_label)) {
+    cli_abort(message = c("`reduction_label` parameter was not set.",
+                          "*" = " LIGER objects do not store name of dimensionality reduction technique used.",
+                          "i" = "In order to retain proper labels in Seurat object please set `reduction_label` to 'tSNE', 'UMAP', etc."))
+  }
+
+  # get Seurat version
+  maj_version <- packageVersion('Seurat')$major
+  if (class(liger_object@raw.data[[1]])[1] != 'dgCMatrix') {
+    # mat <- as(x, 'CsparseMatrix')
+    liger_object@raw.data <- lapply(liger_object@raw.data, function(x) {
+      as(x, 'CsparseMatrix')
+    })
+  }
+
+  key_name <- paste0(reduction_label, "_")
+
+  raw.data <- Merge_Sparse_Data_All(liger_object@raw.data, nms)
+  scale.data <- do.call(rbind, liger_object@scale.data)
+  rownames(scale.data) <- colnames(raw.data)
+  if (maj_version < 3) {
+    var.genes <- liger_object@var.genes
+    inmf.obj <- new(
+      Class = "dim.reduction", gene.loadings = t(liger_object@W),
+      cell.embeddings = liger_object@H.norm, key = "iNMF_"
+    )
+    rownames(inmf.obj@gene.loadings) <- var.genes
+
+    tsne.obj <- new(
+      Class = "dim.reduction", cell.embeddings = liger_object@tsne.coords,
+      key = key_name
+    )
+  } else {
+    var.genes <- liger_object@var.genes
+    if (any(grepl('_', var.genes))) {
+      print("Warning: Seurat v3 genes cannot have underscores, replacing with dashes ('-')")
+      var.genes <- gsub("_", replacement = "-", var.genes)
+    }
+    inmf.loadings <- t(x = liger_object@W)
+    inmf.embeddings <- liger_object@H.norm
+    ncol_Hnorm <- ncol(x = liger_object@H.norm)
+    colnames(inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
+
+    tsne.embeddings <- liger_object@tsne.coords
+    colnames(tsne.embeddings) <- paste0(key_name, 1:2)
+    rownames(x = inmf.loadings) <- var.genes
+    rownames(x = inmf.embeddings) <-
+      rownames(x = tsne.embeddings) <-
+      rownames(x = scale.data)
+    inmf.obj <- CreateDimReducObject(
+      embeddings = inmf.embeddings,
+      loadings = inmf.loadings,
+      key = "iNMF_",
+      global = TRUE,
+      assay = seurat_assay
+    )
+    tsne.obj <- CreateDimReducObject(
+      embeddings = tsne.embeddings,
+      key = key_name,
+      global = TRUE,
+      assay = seurat_assay
+    )
+  }
+  new.seurat <- CreateSeuratObject(raw.data)
+  if (renormalize) {
+    new.seurat <- NormalizeData(new.seurat)
+  }
+  if (by.dataset) {
+    ident.use <- as.character(unlist(lapply(1:length(liger_object@raw.data), function(i) {
+      dataset.name <- names(liger_object@raw.data)[i]
+      paste0(dataset.name, as.character(liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
+    })))
+  } else {
+    if (maj_version < 3) {
+      ident.use <- as.character(liger_object@clusters)
+    } else {
+      ident.use <- liger_object@clusters
+    }
+  }
+
+  if (maj_version < 3) {
+    if (use.liger.genes) {
+      new.seurat@var.genes <- var.genes
+    }
+    new.seurat@scale.data <- t(scale.data)
+    new.seurat@dr[[reduction_label]] <- tsne.obj
+    new.seurat@dr$inmf <- inmf.obj
+    new.seurat <- SetIdent(new.seurat, ident.use = ident.use)
+
+  } else {
+    if (use.liger.genes) {
+      VariableFeatures(new.seurat) <- var.genes
+    }
+    SetAssayData(new.seurat, slot = "scale.data",  t(scale.data), assay = "RNA")
+    new.seurat[[reduction_label]] <- tsne.obj
+    new.seurat[['inmf']] <- inmf.obj
+    Idents(new.seurat) <- ident.use
+  }
+  if (keep_meta){
+    # extract meta data from liger object
+    liger_meta <- liger_object@cell.data
+    # remove meta data values already transferred
+    liger_meta <- liger_meta %>%
+      select(-any_of(c("nUMI", "nGene", "dataset")))
+    # extract meta data names
+    meta_names <- colnames(liger_meta)
+    # add meta data to new seurat object
+    for (meta_var in meta_names){
+      meta_transfer <- liger_meta %>%
+        pull(meta_var)
+      names(meta_transfer) <- colnames(x = new.seurat)
+      new.seurat <- AddMetaData(object = new.seurat,
+                                metadata = meta_transfer,
+                                col.name = meta_var)
+    }
+  }
+
+  return(new.seurat)
+}
+

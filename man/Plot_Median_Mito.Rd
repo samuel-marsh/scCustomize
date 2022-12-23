@@ -47,7 +47,11 @@ Plot of median percent mito per cell per sample grouped by desired meta data var
 }
 \examples{
 \dontrun{
-Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "Treatment")
+# Add mito
+obj <- Add_Mito_Ribo_Seurat(seurat_object = obj, species = "human")
+
+# Plot
+Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "sample_id")
 }
 
 }

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -166,6 +166,10 @@ Default is c(512, 512).</p></dd>
 <dd><p>Whether to label the highlighted meta data variable(s).  Default is FALSE.</p></dd>
 
 
+<dt>split.by</dt>
+<dd><p>Variable in <code>@meta.data</code> to split the plot by.</p></dd>
+
+
 <dt>split_seurat</dt>
 <dd><p>logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.</p></dd>
@@ -185,8 +189,9 @@ individual plots in layout.  Default is FALSE.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">Meta_Highlight_Plot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, meta_data_column <span class="op">=</span> <span class="st">"orig.ident"</span>, meta_data_highlight <span class="op">=</span> <span class="st">"sample_01"</span>,</span></span>
-<span class="r-in"><span>highlight_color <span class="op">=</span> <span class="st">"gold"</span>, background_color <span class="op">=</span> <span class="st">"lightgray"</span>,  pt.size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Meta_Highlight_Plot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, meta_data_column <span class="op">=</span> <span class="st">"orig.ident"</span>,</span></span>
+<span class="r-in"><span>meta_data_highlight <span class="op">=</span> <span class="st">"sample_01"</span>, highlight_color <span class="op">=</span> <span class="st">"gold"</span>, background_color <span class="op">=</span> <span class="st">"lightgray"</span>,</span></span>
+<span class="r-in"><span>pt.size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -203,7 +208,7 @@ individual plots in layout.  Default is FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

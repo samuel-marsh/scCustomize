@@ -21,6 +21,8 @@ Iterate_DimPlot_bySample(
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
+\item{file_path}{directory file path and/or file name prefix.  Defaults to current wd.}
+
 \item{file_name}{name suffix to append after sample name.}
 
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
@@ -38,14 +40,12 @@ Iterate_DimPlot_bySample(
 \item{pt.size}{Adjust point size for plotting.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
-
-\item{file_path/prefix}{directory file path and/or file name prefix.  Defaults to current wd.}
 }
 \value{
 A ggplot object
 }
 \description{
-Iterate Dimplot by orig.ident column from Seurat object metadata
+Iterate DimPlot by orig.ident column from Seurat object metadata
 }
 \examples{
 \dontrun{

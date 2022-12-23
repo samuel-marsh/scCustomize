@@ -18,7 +18,7 @@ by default but also any other csv file."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -125,12 +125,12 @@ by default but also any other csv file.</p>
 <dd><p>name of the data.frame/tibble or path to CSV file containing cluster annotation.</p></dd>
 
 
+<dt>cluster_name_col</dt>
+<dd><p>name of column containing cluster names/numbers (default is "cluster").</p></dd>
+
+
 <dt>cell_type_col</dt>
 <dd><p>name of column contain the cell type annotation (default is "cell_type").</p></dd>
-
-
-<dt>cluster_name_col:</dt>
-<dd><p>name of column containing cluster names/numbers (default is "cluster").</p></dd>
 
 </dl></div>
     <div id="value">
@@ -145,8 +145,8 @@ vectors new cluster names (for use with <code>Rename_Clusters</code> function or
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># If pulling from a data.frame/tibble</span></span></span>
-<span class="r-in"><span><span class="va">cluster_annotation</span> <span class="op">&lt;-</span> <span class="fu">Pull_Cluster_Annotation</span><span class="op">(</span>annotation <span class="op">=</span> <span class="va">annotation_df</span>, cluster_name_col <span class="op">=</span> <span class="st">"cluster"</span>,</span></span>
-<span class="r-in"><span>cell_type_col <span class="op">=</span> <span class="st">"cell_type"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cluster_annotation</span> <span class="op">&lt;-</span> <span class="fu">Pull_Cluster_Annotation</span><span class="op">(</span>annotation <span class="op">=</span> <span class="va">annotation_df</span>,</span></span>
+<span class="r-in"><span>cluster_name_col <span class="op">=</span> <span class="st">"cluster"</span>, cell_type_col <span class="op">=</span> <span class="st">"cell_type"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># If pulling from csv file</span></span></span>
 <span class="r-in"><span><span class="va">cluster_annotation</span> <span class="op">&lt;-</span> <span class="fu">Pull_Cluster_Annotation</span><span class="op">(</span>annotation <span class="op">=</span> <span class="st">"file_path/file_name.csv"</span>,</span></span>
@@ -167,7 +167,7 @@ vectors new cluster names (for use with <code>Rename_Clusters</code> function or
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
