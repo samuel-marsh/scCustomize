@@ -41,25 +41,27 @@ knitr::opts_chunk$set(
 
 scCustomize requires [R](https://www.r-project.org/) version 4.0 or greater. Highly recommend installing [R Studio](https://www.rstudio.com/).
 
-# Install from GitHub  
-scCustomize can be installed from GitHub using either devtools or remotes package:
-
-## Package Requirements
-scCustomize has one import dependency requirement that needs to be updated if previously installed (if not installed they will be automatically installed during scCustomize installation).
-  
-* [colorway](https://github.com/hypercompetent/colorway) >= v0.2.0.
-
-## Install
-scCustomize can be installed using either devtools or remotes package
+## Install from CRAN  
+scCustomize can be installed from [CRAN](https://cran.r-project.org/package=scCustomize) for all platforms using standard installation methods:
 ```
-devtools::install_github(repo = "samuel-marsh/scCustomize")
+# Base R
+install.packages("scCustomize")
 
-remotes::install_github(repo = "samuel-marsh/scCustomize")
+# Using pak
+pak::pkg_install("scCustomize")
 ```
 
-## Master branch    
-Full releases will be available on the master branch with version scheme vX.X.X.  
-See [NEWS/ChangeLog](https://samuel-marsh.github.io/scCustomize/news/index.html) file for ChangeLog with additions, changes, and fixes contained in each release.
+### Non-CRAN packages  
+A small number of functions in scCustomize rely on packages from Bioconductor and are not installed by default.  To enable these functions make sure to install the following packages:
+```
+install.packages("BiocManager")
+
+BiocmManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
+```
+
+## Release Notes  
+A full copy of the changes in each version can be found in the [NEWS/ChangeLog](https://samuel-marsh.github.io/scCustomize/news/index.html).
+
 
 ## Develop branch    
 I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.yyyy.  
