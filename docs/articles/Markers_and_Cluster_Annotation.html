@@ -128,9 +128,11 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Marker Identification &amp; Cluster Annotation Helpers</h1>
+      <h1 data-toc-skip>Marker Identification &amp; Cluster Annotation
+Helpers</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: December 23,
+2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Markers_and_Cluster_Annotation.Rmd" class="external-link"><code>vignettes/articles/Markers_and_Cluster_Annotation.Rmd</code></a></small>
       <div class="hidden name"><code>Markers_and_Cluster_Annotation.Rmd</code></div>
@@ -148,12 +150,14 @@ p.caption {
 <div class="section level2">
 <h2 id="marker-identification-cluster-annotation">Marker Identification &amp; Cluster Annotation<a class="anchor" aria-label="anchor" href="#marker-identification-cluster-annotation"></a>
 </h2>
-<p>scCustomize has several helper functions to assist with identification of marker genes and annotation of clusters. Load packages &amp; Data</p>
+<p>scCustomize has several helper functions to assist with
+identification of marker genes and annotation of clusters. Load packages
+&amp; Data</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cran.r-project.org/package=scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load example dataset for tutorial</span></span>
@@ -163,20 +167,27 @@ p.caption {
 </h3>
 <ul>
 <li>
-<code><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code>: Extract either a filtered data.frame or vector of gene IDs (with option to export named vector) containing top N markers from data.frame.</li>
+<code><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code>: Extract either a filtered
+data.frame or vector of gene IDs (with option to export named vector)
+containing top N markers from data.frame.</li>
 <li>
-<code><a href="../reference/Create_Cluster_Annotation_File.html">Create_Cluster_Annotation_File()</a></code>: Create simple csv file for use in annotating clusters.</li>
+<code><a href="../reference/Create_Cluster_Annotation_File.html">Create_Cluster_Annotation_File()</a></code>: Create simple csv
+file for use in annotating clusters.</li>
 <li>
-<code><a href="../reference/Pull_Cluster_Annotation.html">Pull_Cluster_Annotation()</a></code>: Pull cluster annotation information quickly from data.frame/tibble or annotation csv file.</li>
+<code><a href="../reference/Pull_Cluster_Annotation.html">Pull_Cluster_Annotation()</a></code>: Pull cluster annotation
+information quickly from data.frame/tibble or annotation csv file.</li>
 <li>
-<code><a href="../reference/Rename_Clusters.html">Rename_Clusters()</a></code>: Wrapper function to easily rename clusters.</li>
+<code><a href="../reference/Rename_Clusters.html">Rename_Clusters()</a></code>: Wrapper function to easily rename
+clusters.</li>
 </ul>
-<p>We will use pbmc3K dataset from SeuratData package as example for this vignette.</p>
+<p>We will use pbmc3K dataset from SeuratData package as example for
+this vignette.</p>
 </div>
 <div class="section level3">
 <h3 id="percent-difference-in-expression">Percent Difference in Expression<a class="anchor" aria-label="anchor" href="#percent-difference-in-expression"></a>
 </h3>
-<p>If we run <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers()</a></code> like normal, this is the output.</p>
+<p>If we run <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers()</a></code> like normal, this is the
+output.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run basic FindAllMarkers DE test</span></span>
 <span><span class="va">all_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
@@ -344,8 +355,15 @@ PRKCQ-AS1
 </tr>
 </tbody>
 </table>
-<p>While <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code>returns the percent of cells in identity 1 (pct.1) and identity 2 (pct.2) that express a marker it can be helpful to view the difference in these two measures in addition to the values alone.</p>
-<p>scCustomize contains helper function: <code><a href="../reference/Add_Pct_Diff.html">Add_Pct_Diff()</a></code> to add the percent difference between two clusters. <code>Add_Pct_Diff</code> can be used with any output from Seurat, SeuratWrappers, or other DE tests and can be piped with the function itself.</p>
+<p>While <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code>returns the percent of
+cells in identity 1 (pct.1) and identity 2 (pct.2) that express a marker
+it can be helpful to view the difference in these two measures in
+addition to the values alone.</p>
+<p>scCustomize contains helper function: <code><a href="../reference/Add_Pct_Diff.html">Add_Pct_Diff()</a></code> to
+add the percent difference between two clusters.
+<code>Add_Pct_Diff</code> can be used with any output from Seurat,
+SeuratWrappers, or other DE tests and can be piped with the function
+itself.</p>
 <div class="section level4">
 <h4 id="use-add_pct_diff-piped-with-the-marker-function-">Use <code>Add_Pct_Diff</code> piped with the marker function.<a class="anchor" aria-label="anchor" href="#use-add_pct_diff-piped-with-the-marker-function-"></a>
 </h4>
@@ -539,22 +557,28 @@ PRKCQ-AS1
 <div class="section level4">
 <h4 id="use-add_pct_diff-post-hoc">Use <code>Add_Pct_Diff</code> post-hoc<a class="anchor" aria-label="anchor" href="#use-add_pct_diff-post-hoc"></a>
 </h4>
-<p><code>Add_Pct_Diff</code> can also simply be run after generating marker data.frame:</p>
+<p><code>Add_Pct_Diff</code> can also simply be run after generating
+marker data.frame:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_markers_pct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Pct_Diff.html">Add_Pct_Diff</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="use-with-non-seurat-data-frames">Use with non-Seurat data.frames<a class="anchor" aria-label="anchor" href="#use-with-non-seurat-data-frames"></a>
 </h4>
-<p><code>Add_Pct_Diff</code> can be used with any data.frame as long as the column names that specify percent expressed in the 2 groups are provided</p>
+<p><code>Add_Pct_Diff</code> can be used with any data.frame as long as
+the column names that specify percent expressed in the 2 groups are
+provided</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_markers_pct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Pct_Diff.html">Add_Pct_Diff</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, pct.1_name <span class="op">=</span> <span class="st">"percent1"</span>, pct.2_name <span class="op">=</span> <span class="st">"percent2"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc">Extract the top N marker genes per cluster, identity, treatment etc<a class="anchor" aria-label="anchor" href="#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc"></a>
+<h3 id="extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc">Extract the top N marker genes per cluster, identity, treatment
+etc<a class="anchor" aria-label="anchor" href="#extract-the-top-n-marker-genes-per-cluster-identity-treatment-etc"></a>
 </h3>
-<p>scCustomize contains function <code>Extract_Top_Markers</code> to get the top N genes from each cluster (or other group of choice). It has the option to return either a vector of genes or a filtered data.frame.</p>
+<p>scCustomize contains function <code>Extract_Top_Markers</code> to get
+the top N genes from each cluster (or other group of choice). It has the
+option to return either a vector of genes or a filtered data.frame.</p>
 <div class="section level4">
 <h4 id="returns-a-named-vector-default">Returns a Named Vector (Default)<a class="anchor" aria-label="anchor" href="#returns-a-named-vector-default"></a>
 </h4>
@@ -869,7 +893,11 @@ IL7R
 <div class="section level4">
 <h4 id="use-with-non-seurat-data-frames-1">Use with non-Seurat data.frames<a class="anchor" aria-label="anchor" href="#use-with-non-seurat-data-frames-1"></a>
 </h4>
-<p><code>Extract_Top_Markers</code> uses the data.frame output of <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code> by default but can be used with any data.frame by supplying few extra parameters. Let’s use the function on the output from <a href="https://github.com/immunogenomics/presto" class="external-link">presto package</a> and order the results by auc instead of log2FC.</p>
+<p><code>Extract_Top_Markers</code> uses the data.frame output of
+<code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code> by default but can be used with
+any data.frame by supplying few extra parameters. Let’s use the function
+on the output from <a href="https://github.com/immunogenomics/presto" class="external-link">presto package</a> and
+order the results by auc instead of log2FC.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read in pre-computed data.frame results</span></span>
 <span><span class="va">presto_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"assets/presto_markers.qs"</span><span class="op">)</span></span>
@@ -886,7 +914,11 @@ IL7R
 <div class="section level4">
 <h4 id="unique-vectors">Unique Vectors<a class="anchor" aria-label="anchor" href="#unique-vectors"></a>
 </h4>
-<p>When returning an unnamed vector you may want to return a unique list without any duplicate features. This is often true when supplying a list of features to plotting function like <code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap()</a></code> or <code>Cluster_DotPlot()</code>. You can do this by setting parameter <code>make_unique = TRUE</code>.</p>
+<p>When returning an unnamed vector you may want to return a unique list
+without any duplicate features. This is often true when supplying a list
+of features to plotting function like <code><a href="https://satijalab.org/seurat/reference/DoHeatmap.html" class="external-link">DoHeatmap()</a></code> or
+<code>Cluster_DotPlot()</code>. You can do this by setting parameter
+<code>make_unique = TRUE</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Default parameters</span></span>
 <span><span class="va">top_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">5</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span>,</span>
@@ -904,24 +936,34 @@ IL7R
 </div>
 </div>
 <div class="section level3">
-<h3 id="pairing-extract_top_markers-with-iterate_featureplot_sccustom">Pairing <code>Extract_Top_Markers</code> with <code>Iterate_FeaturePlot_scCustom()</code><a class="anchor" aria-label="anchor" href="#pairing-extract_top_markers-with-iterate_featureplot_sccustom"></a>
+<h3 id="pairing-extract_top_markers-with-iterate_featureplot_sccustom">Pairing <code>Extract_Top_Markers</code> with
+<code>Iterate_FeaturePlot_scCustom()</code><a class="anchor" aria-label="anchor" href="#pairing-extract_top_markers-with-iterate_featureplot_sccustom"></a>
 </h3>
-<p>The advantage of exporting a named vector from <code>Extract_Top_Markers</code> is that <code>Iterate_FeaturePlot_scCustom</code> can detect the names and either add those to the title of the plot (if <code>single_pdf = TRUE</code>) or the file names if <code>FALSE</code>.</p>
+<p>The advantage of exporting a named vector from
+<code>Extract_Top_Markers</code> is that
+<code>Iterate_FeaturePlot_scCustom</code> can detect the names and
+either add those to the title of the plot (if
+<code>single_pdf = TRUE</code>) or the file names if
+<code>FALSE</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Iterate_FeaturePlot_scCustom.html">Iterate_FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">top_5_presto</span>, single_pdf <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="../../docs/reference/figures/assets/Iterate_named_plots.png" alt="*Example plot showing the gene name and additional name of the plot.*" width="49%"><p class="caption">
-<em>Example plot showing the gene name and additional name of the plot.</em>
+<em>Example plot showing the gene name and additional name of the
+plot.</em>
 </p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="create-simple-annotation-files">Create simple annotation files<a class="anchor" aria-label="anchor" href="#create-simple-annotation-files"></a>
 </h3>
-<p>Now for a simple helper we can use <code>Create_Cluster_Annotation_File</code> to create simple csv file to use for annotation.</p>
+<p>Now for a simple helper we can use
+<code>Create_Cluster_Annotation_File</code> to create simple csv file to
+use for annotation.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Create_Cluster_Annotation_File.html">Create_Cluster_Annotation_File</a></span><span class="op">(</span>file_path <span class="op">=</span> <span class="st">"data/"</span>, file_name <span class="op">=</span> <span class="st">"ExpXX_Round01_Annotation"</span><span class="op">)</span></span></code></pre></div>
-<p>Here is an example that has already been filled out (using Excel, Numbers, or other editor program).</p>
+<p>Here is an example that has already been filled out (using Excel,
+Numbers, or other editor program).</p>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1024,18 +1066,28 @@ oligo
 <div class="section level3">
 <h3 id="extract-annotation-information">Extract annotation information<a class="anchor" aria-label="anchor" href="#extract-annotation-information"></a>
 </h3>
-<p>There is also complementary function to pull information back out of the this (or other) csv files or data.frames regarding clustering annotation.</p>
+<p>There is also complementary function to pull information back out of
+the this (or other) csv files or data.frames regarding clustering
+annotation.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">annotation_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pull_Cluster_Annotation.html">Pull_Cluster_Annotation</a></span><span class="op">(</span>annotation <span class="op">=</span> <span class="st">"assets/ExpXX_Round01_Annotation_Completed.csv"</span><span class="op">)</span></span></code></pre></div>
-<p>By default the function expects data.frame or file in same format as <code>Create_Cluster_Annotation_File</code> but has optional parameters that can be adjusted to file/data.frame with different column headers (see <code>cluster_name_col</code> and <code>cell_type_col</code>).</p>
+<p>By default the function expects data.frame or file in same format as
+<code>Create_Cluster_Annotation_File</code> but has optional parameters
+that can be adjusted to file/data.frame with different column headers
+(see <code>cluster_name_col</code> and <code>cell_type_col</code>).</p>
 <div class="section level4">
 <h4 id="pull_cluster_annotation-results">
 <code>Pull_Cluster_Annotation</code> results<a class="anchor" aria-label="anchor" href="#pull_cluster_annotation-results"></a>
 </h4>
-<p>The result of <code>Pull_Cluster_Annotation</code> is a list that contains:</p>
+<p>The result of <code>Pull_Cluster_Annotation</code> is a list that
+contains:</p>
 <ul>
-<li>One entry for each unique cell type. The entry is named for the cell type and is a vector of the numbered clustered that correspond to that cell type.</li>
-<li>One entry called “new_cluster_idents” containing a vector of idents in order that can be used for renaming clusters either using <code>Rename_Clusters</code> function (see below) or manually.</li>
+<li>One entry for each unique cell type. The entry is named for the cell
+type and is a vector of the numbered clustered that correspond to that
+cell type.</li>
+<li>One entry called “new_cluster_idents” containing a vector of idents
+in order that can be used for renaming clusters either using
+<code>Rename_Clusters</code> function (see below) or manually.</li>
 <li>One entry containing vector of cell sub-types (if present).
 <div class="figure" style="text-align: center">
 <img src="../../docs/reference/figures/assets/annotation_info.png" alt="*Example output of `Pull_Cluster_Annotation*" width="831"><p class="caption">
@@ -1049,14 +1101,24 @@ oligo
 <div class="section level3">
 <h3 id="renaming-clusters">Renaming Clusters<a class="anchor" aria-label="anchor" href="#renaming-clusters"></a>
 </h3>
-<p>Finally can use <code>Rename_Clusters</code> to easily rename and set active.ident in Seurat Object. This is simple wrapper around Seurat commands but adds additional checks/warnings and is simple one-liner.</p>
+<p>Finally can use <code>Rename_Clusters</code> to easily rename and set
+active.ident in Seurat Object. This is simple wrapper around Seurat
+commands but adds additional checks/warnings and is simple
+one-liner.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obj_renamed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Rename_Clusters.html">Rename_Clusters</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, new_idents <span class="op">=</span> <span class="va">annotation_info</span><span class="op">$</span><span class="va">new_cluster_idents</span><span class="op">)</span></span></code></pre></div>
-<p><code>Rename_Clusters</code> can take input from either <code>Pull_Cluster_Annotation</code> “new_cluster_idents” or any correctly ordered vector of new idents.</p>
+<p><code>Rename_Clusters</code> can take input from either
+<code>Pull_Cluster_Annotation</code> “new_cluster_idents” or any
+correctly ordered vector of new idents.</p>
 <ul>
-<li>If vector is not yet named (with the current levels of the Seurat Object) then <code>Rename_Clusters</code> will perform that step. If already named this step will be omitted.</li>
+<li>If vector is not yet named (with the current levels of the Seurat
+Object) then <code>Rename_Clusters</code> will perform that step. If
+already named this step will be omitted.</li>
 <li>
-<code>Rename_Clusters</code> contains optional parameter to create new column in meta.data slot to store the old idents. Simply supply desired meta.data column name to <code>meta_col_name</code> parameter.</li>
+<code>Rename_Clusters</code> contains optional parameter to create
+new column in meta.data slot to store the old idents. Simply supply
+desired meta.data column name to <code>meta_col_name</code>
+parameter.</li>
 </ul>
 </div>
 </div>

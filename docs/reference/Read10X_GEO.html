@@ -185,7 +185,7 @@ Otherwise a sparse matrix containing the expression data will be returned.</p>
     <div id="references">
     <h2>References</h2>
     <p>Code used in function has been slightly modified from <code><a href="https://satijalab.org/seurat/reference/Read10X.html" class="external-link">Seurat::Read10X</a></code> function of
-Seurat package (https://github.com/satijalab/seurat) (Licence: GPL-3).  Function was modified to
+Seurat package <a href="https://github.com/satijalab/seurat" class="external-link">https://github.com/satijalab/seurat</a> (License: GPL-3).  Function was modified to
 support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 potential PR to Seurat GitHub).</p>
     </div>
@@ -196,7 +196,7 @@ potential PR to Seurat GitHub).</p>
 <span class="r-in"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">'path/to/data/directory'</span></span></span>
 <span class="r-in"><span><span class="va">expression_matrices</span> <span class="op">&lt;-</span> <span class="fu">Read10X_GEO</span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">data_dir</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># To create object from single file</span></span></span>
-<span class="r-in"><span><span class="va">seurat_object</span> <span class="op">=</span> <span class="fu">CreateSeuratObject</span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expression_matrices</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seurat_object</span> <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expression_matrices</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

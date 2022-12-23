@@ -154,10 +154,14 @@ that function will abort if item with <code>data_name</code> is present in misc 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">Store_Palette_Seurat</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj_name</span>, data_to_store <span class="op">=</span> <span class="va">colors_vector</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">clu_pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pbmc_small</span> <span class="op">&lt;-</span> <span class="fu"><a href="Store_Misc_Info_Seurat.html">Store_Misc_Info_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, data_to_store <span class="op">=</span> <span class="va">clu_pal</span>,</span></span>
 <span class="r-in"><span>data_name <span class="op">=</span> <span class="st">"rd1_colors"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Seurat Object now contains the following items in @misc slot:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 'rd1_colors'</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

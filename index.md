@@ -14,7 +14,7 @@ Downloads](https://cranlogs.r-pkg.org/badges/scCustomize)](https://cran.r-projec
 [![license](https://img.shields.io/github/license/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE.md)
 [![R-CMD-check](https://github.com/samuel-marsh/scCustomize/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/samuel-marsh/scCustomize/actions/workflows/R-CMD-check.yaml)
 [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/issues)
-[![DOI](https://zenodo.org/badge/411807769.svg)](https://zenodo.org/badge/latestdoi/411807769)
+[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.5706430-blue)](https://doi.org/10.5281/zenodo.5706430)
 
 scCustomize is a collection of functions created and/or curated to aid
 in the visualization and analysis of single-cell data using R.
@@ -23,7 +23,7 @@ in the visualization and analysis of single-cell data using R.
 
 Please see
 [Installation](https://samuel-marsh.github.io/scCustomize/articles/Installation.html)
-page for full installation instructions and GitHub branch information.
+page for full installation instructions.
 
 ## Vignettes/Tutorials
 

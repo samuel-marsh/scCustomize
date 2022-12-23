@@ -130,7 +130,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Statistics Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: December 23,
+2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Statistics.Rmd" class="external-link"><code>vignettes/articles/Statistics.Rmd</code></a></small>
       <div class="hidden name"><code>Statistics.Rmd</code></div>
@@ -148,13 +149,15 @@ p.caption {
 <div class="section level2">
 <h2 id="statistics-functions">Statistics Functions<a class="anchor" aria-label="anchor" href="#statistics-functions"></a>
 </h2>
-<p>scCustomize contains a couple simple helper functions to return metrics of interest.</p>
-<p>For this vignette I will be utilizing pbmc3k dataset from the SeuratData package.</p>
+<p>scCustomize contains a couple simple helper functions to return
+metrics of interest.</p>
+<p>For this vignette I will be utilizing pbmc3k dataset from the
+SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cran.r-project.org/package=scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load example dataset for tutorial</span></span>
@@ -174,8 +177,10 @@ p.caption {
 <div class="section level3">
 <h3 id="cells-per-identity">Cells Per Identity<a class="anchor" aria-label="anchor" href="#cells-per-identity"></a>
 </h3>
-<p>It can be really helpful to know the number and percentage of cells per identity/cluster during analysis.<br>
-scCustomize provides the <code>Cluster_Stats_All_Samples</code> function to make this easy.</p>
+<p>It can be really helpful to know the number and percentage of cells
+per identity/cluster during analysis.<br>
+scCustomize provides the <code>Cluster_Stats_All_Samples</code> function
+to make this easy.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
@@ -228,28 +233,28 @@ Naive CD4 T
 26.4215315
 </td>
 <td style="text-align:right;">
-188
+170
 </td>
 <td style="text-align:right;">
-181
+172
 </td>
 <td style="text-align:right;">
-162
+168
 </td>
 <td style="text-align:right;">
-166
+187
 </td>
 <td style="text-align:right;">
-27.647059
+25.449102
 </td>
 <td style="text-align:right;">
-26.9345238
+26.3399694
 </td>
 <td style="text-align:right;">
-25.8373206
+25.9659969
 </td>
 <td style="text-align:right;">
-25.1896813
+27.9104478
 </td>
 </tr>
 <tr>
@@ -263,28 +268,28 @@ Memory CD4 T
 18.3093252
 </td>
 <td style="text-align:right;">
-136
+129
 </td>
 <td style="text-align:right;">
-113
-</td>
-<td style="text-align:right;">
-123
+117
 </td>
 <td style="text-align:right;">
 111
 </td>
 <td style="text-align:right;">
-20.000000
+126
 </td>
 <td style="text-align:right;">
-16.8154762
+19.311377
 </td>
 <td style="text-align:right;">
-19.6172249
+17.9173047
 </td>
 <td style="text-align:right;">
-16.8437026
+17.1561051
+</td>
+<td style="text-align:right;">
+18.8059701
 </td>
 </tr>
 <tr>
@@ -298,28 +303,28 @@ CD14+ Mono
 18.1956027
 </td>
 <td style="text-align:right;">
-118
+119
 </td>
 <td style="text-align:right;">
-132
+128
 </td>
 <td style="text-align:right;">
-106
+105
 </td>
 <td style="text-align:right;">
-124
+128
 </td>
 <td style="text-align:right;">
-17.352941
+17.814371
 </td>
 <td style="text-align:right;">
-19.6428571
+19.6018377
 </td>
 <td style="text-align:right;">
-16.9059011
+16.2287481
 </td>
 <td style="text-align:right;">
-18.8163885
+19.1044776
 </td>
 </tr>
 <tr>
@@ -333,28 +338,28 @@ B
 13.0401820
 </td>
 <td style="text-align:right;">
-88
+97
+</td>
+<td style="text-align:right;">
+86
 </td>
 <td style="text-align:right;">
 85
 </td>
 <td style="text-align:right;">
-80
+76
 </td>
 <td style="text-align:right;">
-91
+14.520958
 </td>
 <td style="text-align:right;">
-12.941176
+13.1699847
 </td>
 <td style="text-align:right;">
-12.6488095
+13.1375580
 </td>
 <td style="text-align:right;">
-12.7591707
-</td>
-<td style="text-align:right;">
-13.8088012
+11.3432836
 </td>
 </tr>
 <tr>
@@ -368,28 +373,28 @@ CD8 T
 10.2729340
 </td>
 <td style="text-align:right;">
-65
+71
 </td>
 <td style="text-align:right;">
-72
+59
 </td>
 <td style="text-align:right;">
-69
+83
 </td>
 <td style="text-align:right;">
-65
+58
 </td>
 <td style="text-align:right;">
-9.558824
+10.628742
 </td>
 <td style="text-align:right;">
-10.7142857
+9.0352221
 </td>
 <td style="text-align:right;">
-11.0047847
+12.8284389
 </td>
 <td style="text-align:right;">
-9.8634294
+8.6567164
 </td>
 </tr>
 <tr>
@@ -403,28 +408,28 @@ FCGR3A+ Mono
 6.1410159
 </td>
 <td style="text-align:right;">
-40
+31
 </td>
 <td style="text-align:right;">
-36
+39
 </td>
 <td style="text-align:right;">
-43
+47
 </td>
 <td style="text-align:right;">
-43
+45
 </td>
 <td style="text-align:right;">
-5.882353
+4.640719
 </td>
 <td style="text-align:right;">
-5.3571429
+5.9724349
 </td>
 <td style="text-align:right;">
-6.8580542
+7.2642968
 </td>
 <td style="text-align:right;">
-6.5250379
+6.7164179
 </td>
 </tr>
 <tr>
@@ -441,25 +446,25 @@ NK
 36
 </td>
 <td style="text-align:right;">
-38
+44
 </td>
 <td style="text-align:right;">
 36
 </td>
 <td style="text-align:right;">
-45
+39
 </td>
 <td style="text-align:right;">
-5.294118
+5.389222
 </td>
 <td style="text-align:right;">
-5.6547619
+6.7381317
 </td>
 <td style="text-align:right;">
-5.7416268
+5.5641422
 </td>
 <td style="text-align:right;">
-6.8285281
+5.8208955
 </td>
 </tr>
 <tr>
@@ -473,28 +478,28 @@ DC
 1.2130402
 </td>
 <td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
 9
 </td>
 <td style="text-align:right;">
-10
+1.497006
 </td>
 <td style="text-align:right;">
-3
+0.9188361
 </td>
 <td style="text-align:right;">
-10
+1.0819165
 </td>
 <td style="text-align:right;">
-1.323529
-</td>
-<td style="text-align:right;">
-1.4880952
-</td>
-<td style="text-align:right;">
-0.4784689
-</td>
-<td style="text-align:right;">
-1.5174507
+1.3432836
 </td>
 </tr>
 <tr>
@@ -508,28 +513,28 @@ Platelet
 0.5307051
 </td>
 <td style="text-align:right;">
-0
+5
+</td>
+<td style="text-align:right;">
+2
 </td>
 <td style="text-align:right;">
 5
 </td>
 <td style="text-align:right;">
-5
+2
 </td>
 <td style="text-align:right;">
-4
+0.748503
 </td>
 <td style="text-align:right;">
-0.000000
+0.3062787
 </td>
 <td style="text-align:right;">
-0.7440476
+0.7727975
 </td>
 <td style="text-align:right;">
-0.7974482
-</td>
-<td style="text-align:right;">
-0.6069803
+0.2985075
 </td>
 </tr>
 <tr>
@@ -543,16 +548,16 @@ Total
 100.0000000
 </td>
 <td style="text-align:right;">
-680
+668
 </td>
 <td style="text-align:right;">
-672
+653
 </td>
 <td style="text-align:right;">
-627
+647
 </td>
 <td style="text-align:right;">
-659
+670
 </td>
 <td style="text-align:right;">
 100.000000
@@ -569,7 +574,9 @@ Total
 </tr>
 </tbody>
 </table>
-<p>By default <code>Cluster_Stats_All_Samples</code> uses “orig.ident” as the group variable but user can specify any <code>@meta.data</code> slot variable.</p>
+<p>By default <code>Cluster_Stats_All_Samples</code> uses “orig.ident”
+as the group variable but user can specify any <code>@meta.data</code>
+slot variable.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span></span>
@@ -610,16 +617,16 @@ Naive CD4 T
 26.4215315
 </td>
 <td style="text-align:right;">
-350
+338
 </td>
 <td style="text-align:right;">
-347
+359
 </td>
 <td style="text-align:right;">
-26.7788829
+25.7034221
 </td>
 <td style="text-align:right;">
-26.0706236
+27.1352986
 </td>
 </tr>
 <tr>
@@ -633,16 +640,16 @@ Memory CD4 T
 18.3093252
 </td>
 <td style="text-align:right;">
-259
+240
 </td>
 <td style="text-align:right;">
-224
+243
 </td>
 <td style="text-align:right;">
-19.8163734
+18.2509506
 </td>
 <td style="text-align:right;">
-16.8294515
+18.3673469
 </td>
 </tr>
 <tr>
@@ -662,10 +669,10 @@ CD14+ Mono
 256
 </td>
 <td style="text-align:right;">
-17.1384851
+17.0342205
 </td>
 <td style="text-align:right;">
-19.2336589
+19.3499622
 </td>
 </tr>
 <tr>
@@ -679,16 +686,16 @@ B
 13.0401820
 </td>
 <td style="text-align:right;">
-168
+182
 </td>
 <td style="text-align:right;">
-176
+162
 </td>
 <td style="text-align:right;">
-12.8538638
+13.8403042
 </td>
 <td style="text-align:right;">
-13.2231405
+12.2448980
 </td>
 </tr>
 <tr>
@@ -702,16 +709,16 @@ CD8 T
 10.2729340
 </td>
 <td style="text-align:right;">
-134
+154
 </td>
 <td style="text-align:right;">
-137
+117
 </td>
 <td style="text-align:right;">
-10.2524866
+11.7110266
 </td>
 <td style="text-align:right;">
-10.2930128
+8.8435374
 </td>
 </tr>
 <tr>
@@ -725,16 +732,16 @@ FCGR3A+ Mono
 6.1410159
 </td>
 <td style="text-align:right;">
-83
+78
 </td>
 <td style="text-align:right;">
-79
+84
 </td>
 <td style="text-align:right;">
-6.3504208
+5.9315589
 </td>
 <td style="text-align:right;">
-5.9353869
+6.3492063
 </td>
 </tr>
 <tr>
@@ -754,10 +761,10 @@ NK
 83
 </td>
 <td style="text-align:right;">
-5.5087988
+5.4752852
 </td>
 <td style="text-align:right;">
-6.2359128
+6.2736206
 </td>
 </tr>
 <tr>
@@ -771,16 +778,16 @@ DC
 1.2130402
 </td>
 <td style="text-align:right;">
-12
+17
 </td>
 <td style="text-align:right;">
-20
+15
 </td>
 <td style="text-align:right;">
-0.9181331
+1.2927757
 </td>
 <td style="text-align:right;">
-1.5026296
+1.1337868
 </td>
 </tr>
 <tr>
@@ -794,16 +801,16 @@ Platelet
 0.5307051
 </td>
 <td style="text-align:right;">
-5
+10
 </td>
 <td style="text-align:right;">
-9
+4
 </td>
 <td style="text-align:right;">
-0.3825555
+0.7604563
 </td>
 <td style="text-align:right;">
-0.6761833
+0.3023432
 </td>
 </tr>
 <tr>
@@ -817,10 +824,10 @@ Total
 100.0000000
 </td>
 <td style="text-align:right;">
-1307
+1315
 </td>
 <td style="text-align:right;">
-1331
+1323
 </td>
 <td style="text-align:right;">
 100.0000000
@@ -835,8 +842,10 @@ Total
 <div class="section level3">
 <h3 id="percent-of-cells-expressing-features">Percent of Cells Expressing Feature(s)<a class="anchor" aria-label="anchor" href="#percent-of-cells-expressing-features"></a>
 </h3>
-<p>It can also be informative to understand the percent of cells/nuclei that express a given feature or set of features.<br>
-scCustomize provides the <code>Percent_Expressing</code> function to return these results.</p>
+<p>It can also be informative to understand the percent of cells/nuclei
+that express a given feature or set of features.<br>
+scCustomize provides the <code>Percent_Expressing</code> function to
+return these results.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -941,7 +950,9 @@ CD8A
 <div class="section level4">
 <h4 id="change-grouping-variable">Change grouping variable<a class="anchor" aria-label="anchor" href="#change-grouping-variable"></a>
 </h4>
-<p>By default the function groups expression across <code>@active.ident</code> (see above) but user can specify difference variable if desired.</p>
+<p>By default the function groups expression across
+<code>@active.ident</code> (see above) but user can specify difference
+variable if desired.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, group_by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -949,16 +960,16 @@ CD8A
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-sample2
-</th>
-<th style="text-align:right;">
-sample3
+sample1
 </th>
 <th style="text-align:right;">
 sample4
 </th>
 <th style="text-align:right;">
-sample1
+sample2
+</th>
+<th style="text-align:right;">
+sample3
 </th>
 </tr></thead>
 <tbody>
@@ -967,16 +978,16 @@ sample1
 CD4
 </td>
 <td style="text-align:right;">
-11.01190
+10.32934
 </td>
 <td style="text-align:right;">
-11.80223
+14.626866
 </td>
 <td style="text-align:right;">
-13.657056
+10.10720
 </td>
 <td style="text-align:right;">
-10.44118
+11.74652
 </td>
 </tr>
 <tr>
@@ -984,16 +995,16 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-12.35119
+12.87425
 </td>
 <td style="text-align:right;">
-13.07815
+9.104478
 </td>
 <td style="text-align:right;">
-9.711684
+11.33231
 </td>
 <td style="text-align:right;">
-12.05882
+13.91036
 </td>
 </tr>
 </tbody>
@@ -1002,7 +1013,8 @@ CD8A
 <div class="section level4">
 <h4 id="split-within-groups">Split within groups<a class="anchor" aria-label="anchor" href="#split-within-groups"></a>
 </h4>
-<p>User can also supply a <code>split_by</code> variable to quantify expression within group split by meta data variable</p>
+<p>User can also supply a <code>split_by</code> variable to quantify
+expression within group split by meta data variable</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, split_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -1010,10 +1022,10 @@ CD8A
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-Naive.CD4.T_Group.2
+Naive.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
-Naive.CD4.T_Group.1
+Naive.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
 Memory.CD4.T_Group.1
@@ -1022,10 +1034,10 @@ Memory.CD4.T_Group.1
 Memory.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
-CD14..Mono_Group.1
+CD14..Mono_Group.2
 </th>
 <th style="text-align:right;">
-CD14..Mono_Group.2
+CD14..Mono_Group.1
 </th>
 <th style="text-align:right;">
 B_Group.2
@@ -1034,16 +1046,16 @@ B_Group.2
 B_Group.1
 </th>
 <th style="text-align:right;">
-CD8.T_Group.1
-</th>
-<th style="text-align:right;">
 CD8.T_Group.2
 </th>
 <th style="text-align:right;">
-FCGR3A..Mono_Group.1
+CD8.T_Group.1
 </th>
 <th style="text-align:right;">
 FCGR3A..Mono_Group.2
+</th>
+<th style="text-align:right;">
+FCGR3A..Mono_Group.1
 </th>
 <th style="text-align:right;">
 NK_Group.2
@@ -1052,16 +1064,16 @@ NK_Group.2
 NK_Group.1
 </th>
 <th style="text-align:right;">
-DC_Group.2
-</th>
-<th style="text-align:right;">
 DC_Group.1
 </th>
 <th style="text-align:right;">
-Platelet_Group.2
+DC_Group.2
 </th>
 <th style="text-align:right;">
 Platelet_Group.1
+</th>
+<th style="text-align:right;">
+Platelet_Group.2
 </th>
 </tr></thead>
 <tbody>
@@ -1070,40 +1082,40 @@ Platelet_Group.1
 CD4
 </td>
 <td style="text-align:right;">
-7.492795
+5.91716
 </td>
 <td style="text-align:right;">
-6.00000
+7.520891
 </td>
 <td style="text-align:right;">
-15.05792
+14.58333
 </td>
 <td style="text-align:right;">
-16.964286
+17.283951
 </td>
 <td style="text-align:right;">
-23.660714
+25.39062
 </td>
 <td style="text-align:right;">
-25.0000
+23.21429
 </td>
 <td style="text-align:right;">
-1.136364
+1.234568
 </td>
 <td style="text-align:right;">
-1.785714
+1.648352
 </td>
 <td style="text-align:right;">
-3.731343
+1.709402
 </td>
 <td style="text-align:right;">
-1.459854
+3.246753
 </td>
 <td style="text-align:right;">
-22.891566
+23.809524
 </td>
 <td style="text-align:right;">
-31.645570
+30.769231
 </td>
 <td style="text-align:right;">
 0.000000
@@ -1112,10 +1124,10 @@ CD4
 1.388889
 </td>
 <td style="text-align:right;">
-35
+29.411765
 </td>
 <td style="text-align:right;">
-33.33333
+40
 </td>
 <td style="text-align:right;">
 0
@@ -1129,52 +1141,52 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-13.256484
+13.01775
 </td>
 <td style="text-align:right;">
-13.42857
+13.649025
 </td>
 <td style="text-align:right;">
-10.03861
+10.83333
 </td>
 <td style="text-align:right;">
-7.589286
+6.995885
 </td>
 <td style="text-align:right;">
-2.232143
+0.78125
 </td>
 <td style="text-align:right;">
-1.5625
+3.12500
 </td>
 <td style="text-align:right;">
-3.409091
+3.086420
 </td>
 <td style="text-align:right;">
-1.785714
+2.197802
 </td>
 <td style="text-align:right;">
-53.731343
+44.444444
 </td>
 <td style="text-align:right;">
-47.445256
+55.194805
 </td>
 <td style="text-align:right;">
-3.614458
+3.571429
 </td>
 <td style="text-align:right;">
-3.797468
+3.846154
 </td>
 <td style="text-align:right;">
-6.024096
+8.433735
 </td>
 <td style="text-align:right;">
-11.111111
+8.333333
 </td>
 <td style="text-align:right;">
-5
+5.882353
 </td>
 <td style="text-align:right;">
-0.00000
+0
 </td>
 <td style="text-align:right;">
 0
@@ -1189,7 +1201,11 @@ CD8A
 <div class="section level4">
 <h4 id="set-threshold-of-expression">Set threshold of expression<a class="anchor" aria-label="anchor" href="#set-threshold-of-expression"></a>
 </h4>
-<p>Users can also supply a threshold value to quantify percent of cells expressing feature(s) above a certain threshold (be sure to note which slot is being used to quantify expression when setting thresholds).<br><em>NOTE: <code>Percent_Expressing</code> currently only supports single threshold across all features</em></p>
+<p>Users can also supply a threshold value to quantify percent of cells
+expressing feature(s) above a certain threshold (be sure to note which
+slot is being used to quantify expression when setting
+thresholds).<br><em>NOTE: <code>Percent_Expressing</code> currently only supports single
+threshold across all features</em></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -1296,11 +1312,15 @@ CD8A
 <div class="section level3">
 <h3 id="calculate-summary-median-values">Calculate Summary Median Values<a class="anchor" aria-label="anchor" href="#calculate-summary-median-values"></a>
 </h3>
-<p>scCustomize contains function <code>Median_Stats</code> to quickly calculate the medians for basic QC stats (Genes/, UMIs/, % Mito/Cell).</p>
+<p>scCustomize contains function <code>Median_Stats</code> to quickly
+calculate the medians for basic QC stats (Genes/, UMIs/, %
+Mito/Cell).</p>
 <div class="section level4">
 <h4 id="basic-use">Basic Use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
 </h4>
-<p>By default <code>Median_Stats</code> will calculate medians for the following meta data columns (if present): “nCount_RNA”, “nFeature_RNA”, “percent_mito”, “percent_ribo”, “percent_mito_ribo”.</p>
+<p>By default <code>Median_Stats</code> will calculate medians for the
+following meta data columns (if present): “nCount_RNA”, “nFeature_RNA”,
+“percent_mito”, “percent_ribo”, “percent_mito_ribo”.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -1330,19 +1350,19 @@ Median_percent_mito_ribo
 sample1
 </td>
 <td style="text-align:right;">
-2187.5
+2184.5
 </td>
 <td style="text-align:right;">
-816
+820.0
 </td>
 <td style="text-align:right;">
-2.000742
+1.932060
 </td>
 <td style="text-align:right;">
-37.91893
+36.81153
 </td>
 <td style="text-align:right;">
-40.06064
+39.01757
 </td>
 </tr>
 <tr>
@@ -1350,19 +1370,19 @@ sample1
 sample2
 </td>
 <td style="text-align:right;">
-2198.5
+2228.0
 </td>
 <td style="text-align:right;">
-807
+823.0
 </td>
 <td style="text-align:right;">
-2.059597
+2.058889
 </td>
 <td style="text-align:right;">
-36.64747
+37.15385
 </td>
 <td style="text-align:right;">
-38.67765
+39.20863
 </td>
 </tr>
 <tr>
@@ -1370,19 +1390,19 @@ sample2
 sample3
 </td>
 <td style="text-align:right;">
-2228.0
+2187.0
 </td>
 <td style="text-align:right;">
-824
+808.0
 </td>
 <td style="text-align:right;">
-1.989529
+2.029721
 </td>
 <td style="text-align:right;">
-36.90902
+36.82731
 </td>
 <td style="text-align:right;">
-39.08555
+38.83721
 </td>
 </tr>
 <tr>
@@ -1390,19 +1410,19 @@ sample3
 sample4
 </td>
 <td style="text-align:right;">
-2231.0
+2258.0
 </td>
 <td style="text-align:right;">
-827
+822.5
 </td>
 <td style="text-align:right;">
-1.977066
+2.022255
 </td>
 <td style="text-align:right;">
-36.17021
+37.37228
 </td>
 <td style="text-align:right;">
-38.46154
+39.30791
 </td>
 </tr>
 <tr>
@@ -1413,7 +1433,7 @@ Totals (All Cells)
 2213.0
 </td>
 <td style="text-align:right;">
-819
+819.0
 </td>
 <td style="text-align:right;">
 2.010702
@@ -1431,7 +1451,10 @@ Totals (All Cells)
 <div class="section level4">
 <h4 id="additional-variables">Additional Variables<a class="anchor" aria-label="anchor" href="#additional-variables"></a>
 </h4>
-<p>In addition to default variables, users can supply their own additional meta data columns to calculate medians using the <code>median_var</code> parameter.<br><em>NOTE: The meta data column must be in numeric format (e.g., integer, numeric, dbl)</em></p>
+<p>In addition to default variables, users can supply their own
+additional meta data columns to calculate medians using the
+<code>median_var</code> parameter.<br><em>NOTE: The meta data column must be in numeric format (e.g., integer,
+numeric, dbl)</em></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -1464,22 +1487,22 @@ Median_module_score1
 sample1
 </td>
 <td style="text-align:right;">
-2187.5
+2184.5
 </td>
 <td style="text-align:right;">
-816
+820.0
 </td>
 <td style="text-align:right;">
-2.000742
+1.932060
 </td>
 <td style="text-align:right;">
-37.91893
+36.81153
 </td>
 <td style="text-align:right;">
-40.06064
+39.01757
 </td>
 <td style="text-align:right;">
--0.1493719
+-0.1348544
 </td>
 </tr>
 <tr>
@@ -1487,22 +1510,22 @@ sample1
 sample2
 </td>
 <td style="text-align:right;">
-2198.5
+2228.0
 </td>
 <td style="text-align:right;">
-807
+823.0
 </td>
 <td style="text-align:right;">
-2.059597
+2.058889
 </td>
 <td style="text-align:right;">
-36.64747
+37.15385
 </td>
 <td style="text-align:right;">
-38.67765
+39.20863
 </td>
 <td style="text-align:right;">
--0.1360108
+-0.2093162
 </td>
 </tr>
 <tr>
@@ -1510,22 +1533,22 @@ sample2
 sample3
 </td>
 <td style="text-align:right;">
-2228.0
+2187.0
 </td>
 <td style="text-align:right;">
-824
+808.0
 </td>
 <td style="text-align:right;">
-1.989529
+2.029721
 </td>
 <td style="text-align:right;">
-36.90902
+36.82731
 </td>
 <td style="text-align:right;">
-39.08555
+38.83721
 </td>
 <td style="text-align:right;">
--0.0460250
+-0.0741373
 </td>
 </tr>
 <tr>
@@ -1533,22 +1556,22 @@ sample3
 sample4
 </td>
 <td style="text-align:right;">
-2231.0
+2258.0
 </td>
 <td style="text-align:right;">
-827
+822.5
 </td>
 <td style="text-align:right;">
-1.977066
+2.022255
 </td>
 <td style="text-align:right;">
-36.17021
+37.37228
 </td>
 <td style="text-align:right;">
-38.46154
+39.30791
 </td>
 <td style="text-align:right;">
--0.0919290
+-0.0343519
 </td>
 </tr>
 <tr>
@@ -1559,7 +1582,7 @@ Totals (All Cells)
 2213.0
 </td>
 <td style="text-align:right;">
-819
+819.0
 </td>
 <td style="text-align:right;">
 2.010702
@@ -1581,7 +1604,8 @@ Totals (All Cells)
 <div class="section level3">
 <h3 id="plotting-median-data">Plotting Median Data<a class="anchor" aria-label="anchor" href="#plotting-median-data"></a>
 </h3>
-<p>scCustomize also contains series of functions for plotting the results of these median calculations:</p>
+<p>scCustomize also contains series of functions for plotting the
+results of these median calculations:</p>
 <ul>
 <li><code><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes()</a></code></li>
 <li><code><a href="../reference/Plot_Median_UMIs.html">Plot_Median_UMIs()</a></code></li>

@@ -192,7 +192,7 @@ Default is 0.15 ("cm").  Spacing dependent on unit provided to <code>spacing_uni
 
 <dt>pt.size</dt>
 <dd><p>Adjust point size for plotting.  Default for <code>StackedVlnPlot</code> is 0 to avoid issues with
-rendering so many points in vector form.  Alteratively, see <code>raster</code> parameter.</p></dd>
+rendering so many points in vector form.  Alternatively, see <code>raster</code> parameter.</p></dd>
 
 
 <dt>raster</dt>
@@ -216,11 +216,11 @@ greater than 100,000 total points plotted (# Cells x # of features).</p></dd>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/</p>
+    <p><a href="https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/" class="external-link">https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/</a></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>https://twitter.com/tangming2005</p></div>
+    <div class="dont-index"><p><a href="https://twitter.com/tangming2005" class="external-link">https://twitter.com/tangming2005</a></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -229,9 +229,12 @@ greater than 100,000 total points plotted (# Cells x # of features).</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">Stacked_VlnPlot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, features <span class="op">=</span> <span class="va">gene_list</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Stacked_VlnPlot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD8"</span>, <span class="st">"GZMB"</span>, <span class="st">"MS4A1"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following features were omitted as they were not found:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> CD8</span>
+<span class="r-plt img"><img src="Stacked_VlnPlot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

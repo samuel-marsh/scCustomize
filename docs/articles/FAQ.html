@@ -129,7 +129,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Frequently Asked Questions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19, 2022</h4>
+            <h4 data-toc-skip class="date">Compiled: December 23,
+2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/FAQ.Rmd" class="external-link"><code>vignettes/articles/FAQ.Rmd</code></a></small>
       <div class="hidden name"><code>FAQ.Rmd</code></div>
@@ -148,46 +149,74 @@ p.caption {
 <h3 id="can-i-cite-sccustomize">
 <em>Can I cite scCustomize?</em><a class="anchor" aria-label="anchor" href="#can-i-cite-sccustomize"></a>
 </h3>
-<p>Yes! If you use scCustomize in your research I would really appreciate citing the package. The package can be cited as:</p>
-<p><strong><em>Samuel Marsh (2021). scCustomize: An R package for custom visualization &amp; analyses of single cell sequencing. <a href="https://doi.org/10.5281/zenodo.5706430" class="external-link uri">https://doi.org/10.5281/zenodo.5706430</a>.</em></strong></p>
+<p>Yes! If you use scCustomize in your research I would really
+appreciate citing the package. The package can be cited as:</p>
+<p><strong><em>Samuel Marsh (2021). scCustomize: An R package for custom
+visualization &amp; analyses of single cell sequencing. <a href="https://doi.org/10.5281/zenodo.5706430" class="external-link uri">https://doi.org/10.5281/zenodo.5706430</a>.</em></strong></p>
 </div>
 <div class="section level3">
 <h3 id="something-isnt-working">
 <em>Something isn’t working</em><a class="anchor" aria-label="anchor" href="#something-isnt-working"></a>
 </h3>
-<p>If you run into any issues or bugs please submit a <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub Issue</a> with details of the issue.</p>
+<p>If you run into any issues or bugs please submit a <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub
+Issue</a> with details of the issue.</p>
 <ul>
-<li>Please incude the code that you are running and the full text of the error message.</li>
-<li>If possible please include a reproducible example. Suggest using <a href="https://github.com/satijalab/seurat-data" class="external-link">SeuratData package</a> pbmc3k dataset for lightweight example.</li>
+<li>Please include the code that you are running and the full text of
+the error message.</li>
+<li>If possible please include a reproducible example. Suggest using <a href="https://github.com/satijalab/seurat-data" class="external-link">SeuratData package</a>
+pbmc3k dataset for lightweight example.</li>
 </ul>
-<p>Please note though scCustomize is currently one-person operation and I may not respond right away. I’m going to aim to respond to all issues posted during the week by Friday of that week so please be patient and know that I will work to solve your issue.</p>
+<p>Please note though scCustomize is currently one-person operation and
+I may not respond right away. I’m going to aim to respond to all issues
+posted during the week by Friday of that week so please be patient and
+know that I will work to solve your issue.</p>
 </div>
 <div class="section level3">
 <h3 id="new-featuresenhancements">
 <em>New Features/Enhancements</em><a class="anchor" aria-label="anchor" href="#new-featuresenhancements"></a>
 </h3>
-<p>New features and enhancing current functions are always in my mind but again my bandwidth on other projects will dictate how quickly I can implement new features/enhancements.</p>
-<p><strong><em>If you have idea and code to implement new feature/enhancement <a href="https://github.com/samuel-marsh/scCustomize/pulls" class="external-link">Pull Requests</a> are welcome for bug fixes, new features, or enhancements.</em></strong></p>
+<p>New features and enhancing current functions are always in my mind
+but again my bandwidth on other projects will dictate how quickly I can
+implement new features/enhancements.</p>
+<p><strong><em>If you have idea and code to implement new
+feature/enhancement <a href="https://github.com/samuel-marsh/scCustomize/pulls" class="external-link">Pull
+Requests</a> are welcome for bug fixes, new features, or
+enhancements.</em></strong></p>
 <ul>
-<li>Please set PR to merge with “develop” branch and provide description of what the PR contains (referencing existing issue(s) if appropriate).</li>
+<li>Please set PR to merge with “develop” branch and provide description
+of what the PR contains (referencing existing issue(s) if
+appropriate).</li>
 </ul>
-<p><strong><em>I have idea for new feature/enhancement but don’t know how to accomplish/write code for it.</em></strong><br>
-That’s totally fine! Post your idea as a <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub Issue</a> and I will get back to you.</p>
+<p><strong><em>I have idea for new feature/enhancement but don’t know
+how to accomplish/write code for it.</em></strong><br>
+That’s totally fine! Post your idea as a <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub
+Issue</a> and I will get back to you.</p>
 </div>
 <div class="section level3">
 <h3 id="does-sccustomize-support-formats-other-than-seurat-objects">
-<em>Does scCustomize support formats other than Seurat Objects?</em><a class="anchor" aria-label="anchor" href="#does-sccustomize-support-formats-other-than-seurat-objects"></a>
+<em>Does scCustomize support formats other than Seurat
+Objects?</em><a class="anchor" aria-label="anchor" href="#does-sccustomize-support-formats-other-than-seurat-objects"></a>
 </h3>
-<p>Yes, though not extensively. Currently the package is primarily centered around interactivity with Seurat Objects with some functionality with LIGER objects (see <a href="LINK">LIGER Vignette</a>) as well as some functions which can interact with raw data, base R data.frames, tibbles, and ggplot2 objects.</p>
+<p>Yes, though not extensively. Currently the package is primarily
+centered around interactivity with Seurat Objects with some
+functionality with LIGER objects (see <a href="LINK">LIGER Vignette</a>)
+as well as some functions which can interact with raw data, base R
+data.frames, tibbles, and ggplot2 objects.</p>
 <ul>
-<li><strong>If users are interested in adapting functions (or creating separate functions) to provide comparable functionality with SCE or other object formats I would be happy to add them. See above for more info on PRs.</strong></li>
+<li><strong>If users are interested in adapting functions (or creating
+separate functions) to provide comparable functionality with SCE or
+other object formats I would be happy to add them. See above for more
+info on PRs.</strong></li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="installation-issues">
 <em>Installation Issues</em><a class="anchor" aria-label="anchor" href="#installation-issues"></a>
 </h3>
-<p>Please see <a href="https://samuel-marsh.github.io/scCustomize/articles/Installation.html">Installation</a> page for more detailed installation instructions. If the issue persists please submit <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub issue</a>.</p>
+<p>Please see <a href="https://samuel-marsh.github.io/scCustomize/articles/Installation.html">Installation</a>
+page for more detailed installation instructions. If the issue persists
+please submit <a href="https://github.com/samuel-marsh/scCustomize/issues" class="external-link">GitHub
+issue</a>.</p>
 </div>
   </div>
 

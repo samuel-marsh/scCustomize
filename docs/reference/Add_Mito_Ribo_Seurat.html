@@ -204,9 +204,10 @@ rhesus macaque).  Default is FALSE.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu">Add_Mito_Ribo_Seurat</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pbmc_small</span> <span class="op">&lt;-</span> <span class="fu">Add_Mito_Ribo_Seurat</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No Mito features found in object using pattern/feature list provided.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> No column will be added to meta.data.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

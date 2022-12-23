@@ -124,7 +124,7 @@
 <span>  meta_gradient_na_color <span class="op">=</span> <span class="st">"lightgray"</span>,</span>
 <span>  meta_gradient_low_cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cells <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  combination <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  combination <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -245,10 +245,10 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">QC_Plot_UMIvsGene</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, x_axis_label <span class="op">=</span> <span class="st">"UMIs per Cell/Nucleus"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">QC_Plot_UMIvsGene</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, x_axis_label <span class="op">=</span> <span class="st">"UMIs per Cell/Nucleus"</span>,</span></span>
 <span class="r-in"><span>y_axis_label <span class="op">=</span> <span class="st">"Genes per Cell/Nucleus"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-plt img"><img src="QC_Plot_UMIvsGene-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

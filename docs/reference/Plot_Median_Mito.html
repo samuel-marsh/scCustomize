@@ -177,7 +177,11 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">Plot_Median_Mito</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,  group_by <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Add mito</span></span></span>
+<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plot</span></span></span>
+<span class="r-in"><span><span class="fu">Plot_Median_Mito</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,  group_by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

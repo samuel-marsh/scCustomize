@@ -228,7 +228,7 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 <dt>plot_km_elbow</dt>
 <dd><p>Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 Estimating elbow of this plot is one way to determine "optimal" value for <code>k</code>.
-Based on: https://stackoverflow.com/a/15376462/15568251.</p></dd>
+Based on: <a href="https://stackoverflow.com/a/15376462/15568251" class="external-link">https://stackoverflow.com/a/15376462/15568251</a>.</p></dd>
 
 
 <dt>elbow_kmax</dt>
@@ -277,11 +277,11 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/</p>
+    <p><a href="https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/" class="external-link">https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/</a></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>https://twitter.com/tangming2005</p></div>
+    <div class="dont-index"><p><a href="https://twitter.com/tangming2005" class="external-link">https://twitter.com/tangming2005</a></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -290,9 +290,19 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">Clustered_DotPlot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, features <span class="op">=</span> <span class="va">gene_list</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Clustered_DotPlot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD8"</span>, <span class="st">"GZMB"</span>, <span class="st">"MS4A1"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The following requested variables were not found: CD8</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Scaling data with a low number of groups may produce misleading results</span>
+<span class="r-plt img"><img src="Clustered_DotPlot-1.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-plt img"><img src="Clustered_DotPlot-2.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-plt img"><img src="Clustered_DotPlot-3.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

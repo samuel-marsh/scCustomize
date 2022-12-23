@@ -146,7 +146,7 @@ that is normally an ordered palette.</p></dd>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>This function uses the paletteer package (https://github.com/EmilHvitfeldt/paletteer) to
+    <p>This function uses the paletteer package <a href="https://github.com/EmilHvitfeldt/paletteer" class="external-link">https://github.com/EmilHvitfeldt/paletteer</a> to
 provide simplified access to color palettes from many different R package sources while
 minimizing scCustomize current and future dependencies.</p>
 <p>The following packages &amp; palettes are called by this function (see individual packages for
@@ -156,10 +156,18 @@ palette references/citations):</p><ol><li><p>pals (via paletteer) <a href="https
 </ul></li>
 <li><p>colorway <a href="https://github.com/hypercompetent/colorway" class="external-link">https://github.com/hypercompetent/colorway</a></p><ul><li><p>varibow</p></li>
 </ul></li>
-</ol><p>Function name and implementation modified from Seurat (Licence: GPL-3).
+</ol><p>Function name and implementation modified from Seurat (License: GPL-3).
 <a href="https://github.com/satijalab/seurat" class="external-link">https://github.com/satijalab/seurat</a></p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu">DiscretePalette_scCustomize</span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">36</span>, palette <span class="op">=</span> <span class="st">"varibow"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="PalettePlot.html">PalettePlot</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="va">pal</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="DiscretePalette_scCustomize-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
