@@ -1,8 +1,10 @@
 
 # scCustomize <img src="man/figures/scCustomize_Logo.svg" align="right" width="150"/>
 
-[![GitHub release (latest by
-date)](https://img.shields.io/github/v/release/samuel-marsh/scCustomize?color=gree)](https://github.com/samuel-marsh/scCustomize/releases)
+[![CRAN
+Version](https://img.shields.io/cran/v/scCustomize?color=green&label=CRAN)](https://cran.r-project.org/package=scCustomize)
+[![CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/scCustomize)](https://cran.r-project.org/package=scCustomize)
 [![R-CMD-check](https://github.com/samuel-marsh/scCustomize/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/samuel-marsh/scCustomize/actions/workflows/R-CMD-check.yaml)
 [![license](https://img.shields.io/github/license/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/blob/master/LICENSE.md)
 [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/issues)
@@ -19,19 +21,21 @@ tutorials of all aspects of scCustomize functionality.
 
 ## Installing scCustomize
 
-scCustomize can be installed from CRAN on all platforms. For more
-detailed instructions see
+scCustomize can be installed from
+[CRAN](https://cran.r-project.org/package=scCustomize) on all platforms.
+For more detailed instructions see
 [Installation](https://samuel-marsh.github.io/scCustomize/articles/Installation.html).
 
+    # Base R
     install.packages("scCustomize")
 
-**Master branch**  
-Full releases will be available from CRAN or GitHub via the master
-branch with version scheme vX.X.X.  
-See
-[NEWS.md](https://github.com/samuel-marsh/scCustomize/blob/master/NEWS.md)
-file for ChangeLog with additions, changes, and fixes contained in each
-release.
+    # Using pak
+    pak::pkg_install("scCustomize")
+
+## Release Notes
+
+A full copy of the changes in each version can be found in the
+[NEWS/ChangeLog](https://samuel-marsh.github.io/scCustomize/news/index.html).
 
 **Develop branch**  
 I also maintain a separate development branch<sup>\*</sup> that can be
@@ -47,17 +51,17 @@ up to date so it’s easier to follow changes than reading commit history.
 
 #### If you run into any issues or bugs please submit a [GitHub issue](https://github.com/samuel-marsh/scCustomize/issues) with details of the issue.
 
--   If possible please include a reproducible example (suggest using
-    [SeuratData package](https://github.com/satijalab/seurat-data) pbmc
-    dataset for lightweight examples.)
+- If possible please include a reproducible example (suggest using
+  [SeuratData package](https://github.com/satijalab/seurat-data) pbmc
+  dataset for lightweight examples.)
 
 #### Any requests for new features or enhancements can also be submitted as [GitHub issues](https://github.com/samuel-marsh/scCustomize/issues).
 
--   Even if you don’t know how to implement/incorporate with current
-    package go ahead a submit!
+- Even if you don’t know how to implement/incorporate with current
+  package go ahead a submit!
 
 #### [Pull Requests](https://github.com/samuel-marsh/scCustomize/pulls) are welcome for bug fixes, new features, or enhancements.
 
--   Please set PR to merge with “develop” branch and provide description
-    of what the PR contains (referencing existing issue(s) if
-    appropriate).
+- Please set PR to merge with “develop” branch and provide description
+  of what the PR contains (referencing existing issue(s) if
+  appropriate).
