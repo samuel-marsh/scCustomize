@@ -208,7 +208,7 @@ Add_Mito_Ribo_Seurat <- function(
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
-    object_meta <- seurat_object@meta.data %>%
+    object_meta <- Fetch_Meta(object = seurat_object) %>%
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
