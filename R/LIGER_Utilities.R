@@ -80,6 +80,11 @@ Add_Mito_Ribo_LIGER <- function(
   # LIGER object check
   Is_LIGER(liger_object = liger_object)
 
+  # Check name collision
+  if (mito_name == ribo_name) {
+    cli_abort(message = "Value provided to `mito_name` and `ribo_name` cannot be identical.")
+  }
+
   # Overwrite check
   if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
     if (!overwrite) {
