@@ -81,8 +81,8 @@ Add_Mito_Ribo_LIGER <- function(
   Is_LIGER(liger_object = liger_object)
 
   # Check name collision
-  if (mito_name == ribo_name) {
-    cli_abort(message = "Value provided to `mito_name` and `ribo_name` cannot be identical.")
+  if (any(duplicated(x = c(mito_name, ribo_name, mito_ribo_name)))) {
+    cli_abort(message = "One or more of values provided to `mito_name`, `ribo_name`, `mito_ribo_name` are identical.")
   }
 
   # Overwrite check
