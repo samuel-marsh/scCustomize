@@ -82,6 +82,11 @@ Add_Mito_Ribo_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Check name collision
+  if (mito_name == ribo_name) {
+    cli_abort(message = "Value provided to `mito_name` and `ribo_name` cannot be identical.")
+  }
+
   # Overwrite check
   if (mito_name %in% colnames(x = seurat_object@meta.data) || ribo_name %in% colnames(x = seurat_object@meta.data) || mito_ribo_name %in% colnames(x = seurat_object@meta.data)) {
     if (!overwrite) {
