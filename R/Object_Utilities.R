@@ -199,11 +199,11 @@ Add_Mito_Ribo_Seurat <- function(
   # Add mito and ribo columns
   if (length_mito_features > 0) {
     good_mito <- mito_features[mito_features %in% rownames(x = seurat_object)]
-    seurat_object[["percent_mito"]] <- PercentageFeatureSet(object = seurat_object, features = good_mito, assay = assay)
+    seurat_object[[mito_name]] <- PercentageFeatureSet(object = seurat_object, features = good_mito, assay = assay)
   }
   if (length_ribo_features > 0) {
     good_ribo <- ribo_features[ribo_features %in% rownames(x = seurat_object)]
-    seurat_object[["percent_ribo"]] <- PercentageFeatureSet(object = seurat_object, features = good_ribo, assay = assay)
+    seurat_object[[ribo_name]] <- PercentageFeatureSet(object = seurat_object, features = good_ribo, assay = assay)
   }
 
   # Create combined mito ribo column if both present
@@ -212,7 +212,7 @@ Add_Mito_Ribo_Seurat <- function(
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
-      mutate(percent_mito_ribo = .data[["percent_mito"]] + .data[["percent_ribo"]])
+      mutate(percent_mito_ribo = .data[[mito_name]] + .data[[ribo_name]])
 
     object_meta <- object_meta %>%
       select(all_of(c("barcodes", "percent_mito_ribo"))) %>%
