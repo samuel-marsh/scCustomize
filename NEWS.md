@@ -1,3 +1,16 @@
+# scCustomize 1.X.X (2023-XX-XX)  
+## Added  
+
+
+## Changed  
+
+
+## Fixes  
+- Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
+- Fixed `Add_Mito_Ribo_Seurat` to respect provide `mito_name`, `ribo_name` values.
+
+
+ 
 # scCustomize 1.1.0 (2022-12-22)  
 ## Added  
 - Added `merge` parameter to `Read10X_GEO`, `Read10X_h5_GEO`, `Read_GEO_Delim` and `Read_CellBender_h5_Multi_File`.  
