@@ -214,9 +214,9 @@ Add_Mito_Ribo_LIGER <- function(
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
-      mutate(percent_mito_ribo = percent_mito + percent_ribo)
+      mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
 
-    liger_object@cell.data[ , mito_ribo_name] <- object_meta$percent_mito_ribo
+    liger_object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
   }
 
   # return object
