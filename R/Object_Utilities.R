@@ -454,7 +454,7 @@ Add_Sample_Meta <- function(
 
     if (any(dup_columns %in% colnames(x = seurat_object@meta.data)) && !overwrite) {
       cli_abort(message = c(" Duplicate `meta_data contains column names in object @meta.data.",
-                            "i" = "`meta_data` and object@meta.data both contain columns: {scCustomize:::glue_collapse_scCustom(input_string = dup_columns)}.",
+                            "i" = "`meta_data` and object@meta.data both contain columns: {glue_collapse_scCustom(input_string = dup_columns)}.",
                             "*" = "To overwrite existing object @meta.data columns with those in `meta_data` set `overwrite = TRUE`.")
       )
     }
