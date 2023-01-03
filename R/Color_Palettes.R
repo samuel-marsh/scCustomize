@@ -537,7 +537,7 @@ scCustomize_Palette <- function(
 #'
 #' Plots given color vector/palette in viewer to evaluate palette before plotting on data.
 #'
-#' @param palette a vector of colors (either named colors of hex codes).
+#' @param pal a vector of colors (either named colors of hex codes).
 #'
 #' @import cli
 #' @import ggplot2
@@ -557,20 +557,41 @@ scCustomize_Palette <- function(
 #' PalettePlot(palette = pal)
 #'
 
-PalettePlot <- function(palette = NULL) {
+PalettePlot <- function(
+  pal = NULL,
+  label_color_num = NULL
+) {
   # Check palette
-  if (is.null(x = palette)) {
+  if (is.null(x = pal)) {
     cli_abort(message = "No value provided to `palette` parameter.")
   }
 
+  if (class(x = pal) == "colors") {
+    pal <- as.character(x = pal)
+  }
+
   # Generate data frame for plotting
-  palette_data <- data.frame(x = 1:length(palette), y = 1, fill = palette)
+  palette_data <- data.frame(x = 1:length(pal), y = 1, fill = pal)
+
+  # Decide color labeling
+  if (is.null(x = label_color_num)) {
+    if (length(x = pal) > 75) {
+      label_color_num <- FALSE
+    } else {
+      label_color_num <- TRUE
+    }
+  }
 
   # Plot
   palette_plot <- ggplot(palette_data) +
     geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
-    geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
     scale_fill_identity() +
     theme_void()
+
+  # Label plot
+  if (label_color_num) {
+    palette_plot + geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]]))
+  }
+
   return(palette_plot)
 }
