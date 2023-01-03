@@ -556,7 +556,7 @@ scCustomize_Palette <- function(
 #'
 #' @examples
 #' pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-#' PalettePlot(palette = pal)
+#' PalettePlot(pal = pal)
 #'
 
 PalettePlot <- function(
