@@ -585,14 +585,19 @@ PalettePlot <- function(
   }
 
   # Plot
-  palette_plot <- ggplot(palette_data) +
-    geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
-    scale_fill_identity() +
-    theme_void()
-
   # Label plot
   if (label_color_num) {
-    palette_plot + geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]]))
+    palette_plot <- ggplot(palette_data) +
+      geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
+      palette_plot + geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
+      scale_fill_identity() +
+      theme_void()
+  } else {
+    palette_plot <- ggplot(palette_data) +
+      geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
+      palette_plot + geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
+      scale_fill_identity() +
+      theme_void()
   }
 
   return(palette_plot)
