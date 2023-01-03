@@ -4,6 +4,8 @@
   
 ## Changed  
 - **BREAKING CHANGE** Parameter in `PalettePlot` has been changed from `palette` to `pal`.  
+- Updated `PalettePlot` to support `pal` of class "colors".  
+- Moved viridis package to Suggests and use paletteer package for viridis palette shortcut functions.  
 
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
