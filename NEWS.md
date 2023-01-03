@@ -1,9 +1,9 @@
 # scCustomize 1.X.X (2023-XX-XX)  
 ## Added  
-
-
+- Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
+  
 ## Changed  
-
+- **BREAKING CHANGE** Parameter in `PalettePlot` has been changed from `palette` to `pal`.  
 
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
