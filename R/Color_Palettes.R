@@ -9,7 +9,7 @@
 #'
 #' @return A color palette for plotting
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -23,11 +23,11 @@
 #' }
 #'
 
-viridis_plasma_dark_high <- viridis(n = 30, option = "C", direction = -1)
+viridis_plasma_dark_high <- as.vector(x = paletteer_c(palette = "viridis::plasma", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -35,11 +35,11 @@ viridis_plasma_dark_high <- viridis(n = 30, option = "C", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_plasma_light_high <- viridis(n = 30, option = "C", direction = 1)
+viridis_plasma_light_high <- as.vector(x = paletteer_c(palette = "viridis::plasma", n = 250, direction = 1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -47,11 +47,11 @@ viridis_plasma_light_high <- viridis(n = 30, option = "C", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_inferno_dark_high <- viridis(n = 30, option = "B", direction = -1)
+viridis_inferno_dark_high <- as.vector(x = paletteer_c(palette = "viridis::inferno", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -59,11 +59,11 @@ viridis_inferno_dark_high <- viridis(n = 30, option = "B", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_inferno_light_high <- viridis(n = 30, option = "B", direction = 1)
+viridis_inferno_light_high <- as.vector(x = paletteer_c(palette = "viridis::inferno", n = 250, direction = 1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -71,11 +71,11 @@ viridis_inferno_light_high <- viridis(n = 30, option = "B", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_magma_dark_high <- viridis(n = 30, option = "A", direction = -1)
+viridis_magma_dark_high <- as.vector(x = paletteer_c(palette = "viridis::magma", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -83,11 +83,11 @@ viridis_magma_dark_high <- viridis(n = 30, option = "A", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_magma_light_high <- viridis(n = 30, option = "A", direction = 1)
+viridis_magma_light_high <- as.vector(x = paletteer_c(palette = "viridis::magma", n = 250, direction = 1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -95,11 +95,11 @@ viridis_magma_light_high <- viridis(n = 30, option = "A", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
+viridis_dark_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -107,7 +107,7 @@ viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
+viridis_light_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n = 250, direction = 1))
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -569,7 +569,7 @@ PalettePlot <- function(
   }
 
   if (class(x = pal) == "colors") {
-    pal <- as.character(x = pal)
+    pal <- as.vector(x = pal)
   }
 
   # Generate data frame for plotting
