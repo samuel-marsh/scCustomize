@@ -623,7 +623,7 @@ Split_FeatureScatter <- function(
 Cluster_Highlight_Plot <- function(
   seurat_object,
   cluster_name,
-  highlight_color = "navy",
+  highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
@@ -647,7 +647,7 @@ Cluster_Highlight_Plot <- function(
     bad_idents <- cluster_name[!cluster_name %in% idents_list]
 
     if (length(x = bad_idents) > 0) {
-      cli_warn("The following 'cluster_name(s)' were not found the active.ident slot: {bad_idents}")
+      cli_warn("The following {.idents {bad_dents}}'cluster_name{?s}' were omitted as they were not found the active.ident slot: {bad_idents}")
     }
   }
 
@@ -658,6 +658,9 @@ Cluster_Highlight_Plot <- function(
   if (is.null(x = pt.size)) {
     pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_to_highlight)), raster = raster)
   }
+
+  # Set colors
+
 
   # Adjust colors if needed when length(cluster_name) > 1
   if (length(x = highlight_color) == 1 && length(x = cluster_name) > 1) {
@@ -729,7 +732,7 @@ Meta_Highlight_Plot <- function(
   seurat_object,
   meta_data_column,
   meta_data_highlight,
-  highlight_color = "navy",
+  highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
