@@ -589,13 +589,12 @@ PalettePlot <- function(
   if (label_color_num) {
     palette_plot <- ggplot(palette_data) +
       geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
-      palette_plot + geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
+      geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
       scale_fill_identity() +
       theme_void()
   } else {
     palette_plot <- ggplot(palette_data) +
       geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
-      palette_plot + geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
       scale_fill_identity() +
       theme_void()
   }
