@@ -538,6 +538,8 @@ scCustomize_Palette <- function(
 #' Plots given color vector/palette in viewer to evaluate palette before plotting on data.
 #'
 #' @param pal a vector of colors (either named colors of hex codes).
+#' @param label_color_num logical, whether or not to numerically label the colors in output plot.
+#' Default is TRUE is number of colors in `pal` is less than 75 and FALSE is greater than 75.
 #'
 #' @import cli
 #' @import ggplot2
