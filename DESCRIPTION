@@ -46,8 +46,7 @@ Imports:
     stringi,
     stringr,
     tibble,
-    tidyr,
-    viridis
+    tidyr
 Suggests:
     ComplexHeatmap,
     dittoSeq,
@@ -61,7 +60,8 @@ Suggests:
     rmarkdown,
     tidyselect,
     tidyverse, 
-    qs
+    qs,
+    viridis
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
