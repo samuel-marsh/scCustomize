@@ -20,7 +20,7 @@ Plots given color vector/palette in viewer to evaluate palette before plotting o
 }
 \examples{
 pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-PalettePlot(palette = pal)
+PalettePlot(pal = pal)
 
 }
 \references{
