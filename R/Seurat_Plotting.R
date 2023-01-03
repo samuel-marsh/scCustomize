@@ -592,7 +592,8 @@ Split_FeatureScatter <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param cluster_name Name(s) (or number(s)) identity of cluster to be highlighted.
-#' @param highlight_color Color(s) to highlight cells (default "navy").
+#' @param highlight_color Color(s) to highlight cells.  The default is NULL and plot will use
+#' `scCustomize_Palette()`.
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -603,6 +604,8 @@ Split_FeatureScatter <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
@@ -631,6 +634,7 @@ Cluster_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  ggplot_default_colors = FALSE,
   ...
 ) {
   # Check Seurat
@@ -647,7 +651,7 @@ Cluster_Highlight_Plot <- function(
     bad_idents <- cluster_name[!cluster_name %in% idents_list]
 
     if (length(x = bad_idents) > 0) {
-      cli_warn("The following {.idents {bad_dents}}'cluster_name{?s}' were omitted as they were not found the active.ident slot: {bad_idents}")
+      cli_warn("The following `cluster_name{?s}` were omitted as they were not found the active.ident slot: {bad_idents}")
     }
   }
 
@@ -660,11 +664,16 @@ Cluster_Highlight_Plot <- function(
   }
 
   # Set colors
-
-
   # Adjust colors if needed when length(cluster_name) > 1
   if (length(x = highlight_color) == 1 && length(x = cluster_name) > 1) {
     highlight_color <- rep(x = highlight_color, length(x = cluster_name))
+    cli_inform(message = c("NOTE: Only one color provided to but {length(x = cluster_name) clusters were provided.}",
+                           "i" = "Using the same color ({highlight_color}) for all clusters."))
+  }
+
+  # If NULL set using scCustomize_Palette
+  if (is.null(x = highlight_color)) {
+    highlight_color <- scCustomize_Palette(num_groups = length(x = cells_to_highlight), ggplot_default_colors = ggplot_default_colors)
   }
 
   # plot
