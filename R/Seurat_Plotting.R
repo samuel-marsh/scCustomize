@@ -716,6 +716,8 @@ Cluster_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
@@ -749,6 +751,7 @@ Meta_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  ggplot_default_colors = FALSE,
   ...
 ) {
   # Check Seurat
