@@ -546,7 +546,6 @@ QC_Plots_Combined_Vln <- function(
 #' @return A ggplot object
 #'
 #' @import ggplot2
-#' @import viridis
 #' @importFrom cowplot theme_cowplot
 #' @importFrom dplyr filter arrange
 #' @importFrom magrittr "%>%"
