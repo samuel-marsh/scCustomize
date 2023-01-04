@@ -11,8 +11,6 @@
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
 - Fixed `Add_Mito_Ribo_Seurat` to respect provided `mito_name`, `ribo_name` and `mito_ribo_name` values.  
-
-
  
 # scCustomize 1.1.0 (2022-12-22)  
 ## Added  
