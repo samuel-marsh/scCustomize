@@ -370,7 +370,7 @@ Meta_Numeric <- function(
 #'
 
 Fetch_Meta <- function(object) {
-  UseMethod(generic = 'Fetching_Meta')
+  UseMethod(generic = 'Fetch_Meta')
 }
 
 
