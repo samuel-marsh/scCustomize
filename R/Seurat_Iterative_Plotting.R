@@ -161,7 +161,7 @@ Iterate_DimPlot_bySample <- function(
 
   # Check if file name provided
   if (is.null(x = file_name)) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Set file type for single pdf option
@@ -322,7 +322,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 
   # Check if file name provided
   if (is.null(x = file_name)) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Set file type for single pdf option
@@ -541,7 +541,7 @@ Iterate_Meta_Highlight_Plot <- function(
 
   # Check if file name provided
   if (is.null(x = file_name)) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Set file type for single pdf option
@@ -777,7 +777,7 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Check if file name provided
   if (is.null(x = file_name) && !return_plots) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Extract default reduction
@@ -975,7 +975,7 @@ Iterate_VlnPlot_scCustom <- function(
 
   # Check if file name provided
   if (is.null(x = file_name)) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Set file type for single pdf option
@@ -1167,7 +1167,7 @@ Iterate_Plot_Density_Custom <- function(
 
   # Check if file name provided
   if (is.null(x = file_name)) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Extract default reduction
@@ -1367,7 +1367,7 @@ Iterate_Plot_Density_Joint <- function(
 
   # Check if file name provided
   if (is.null(x = file_name)) {
-    stop("No file name provided.  Please provide a file name using `file_name`.")
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
   # Extract default reduction
