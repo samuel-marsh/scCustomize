@@ -316,13 +316,16 @@ Meta_Present_LIGER <- function(
 
     # Return message of features not found
     if (length(x = found_meta) < 1) {
-      stop("No valid meta data column names found. The following @cell.data columns were omitted as they were not found",
-           ": ", glue_collapse_scCustom(input_string = bad_meta, and = TRUE))
+      cli_abort(message = c("No valid meta data column names found.",
+                            "*" = "None of the provided @cell.data columns were found:",
+                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
+      )
     }
 
     if (length(x = bad_meta) > 0) {
-      warning("The following @cell.data columns were omitted as they were not found",
-              ": ", glue_collapse_scCustom(input_string = bad_meta, and = TRUE))
+      cli_warn(message = c("The following @cell.data columns were omitted as they were not found:",
+                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
+      )
     }
 
     # Return the found features omitting the not found ones.
@@ -331,7 +334,7 @@ Meta_Present_LIGER <- function(
 
   # Print all found message if TRUE
   if (print_msg) {
-    message("All @cell.data columns present.")
+    cli_inform(message = "All @cell.data columns present.")
   }
 
   # Return full input gene list.
