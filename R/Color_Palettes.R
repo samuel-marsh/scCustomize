@@ -138,7 +138,7 @@ viridis_light_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n 
 #'
 #' @examples
 #' pal <- Single_Color_Palette(pal_color = "reds", num_colors = 7)
-#' PalettePlot(palette = pal)
+#' PalettePlot(pal= pal)
 #'
 
 Single_Color_Palette <- function(pal_color,
@@ -208,7 +208,7 @@ Single_Color_Palette <- function(pal_color,
 #'
 #' @examples
 #' cols <- NavyAndOrange()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 NavyAndOrange <- function(
@@ -241,7 +241,7 @@ NavyAndOrange <- function(
 #'
 #' @examples
 #' cols <- JCO_Four()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 JCO_Four <- function(
@@ -272,7 +272,7 @@ JCO_Four <- function(
 #'
 #' @examples
 #' cols <- Dark2_Pal()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 Dark2_Pal <- function(
@@ -299,7 +299,7 @@ Dark2_Pal <- function(
 #'
 #' @examples
 #' cols <- Hue_Pal(num_colors = 8)
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 Hue_Pal <- function(
@@ -326,7 +326,7 @@ Hue_Pal <- function(
 #'
 #' @examples
 #' cols <- ColorBlind_Pal()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal = cols)
 #'
 
 ColorBlind_Pal <- function(
@@ -411,7 +411,7 @@ varibow_scCustom <- function(
 #'
 #' @examples
 #' pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-#' PalettePlot(palette = pal)
+#' PalettePlot(pal= pal)
 #'
 
 DiscretePalette_scCustomize <- function(
@@ -498,7 +498,7 @@ DiscretePalette_scCustomize <- function(
 #'
 #' @examples
 #' cols <- scCustomize_Palette(num_groups = 24, ggplot_default_colors = FALSE)
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 scCustomize_Palette <- function(
