@@ -236,7 +236,7 @@ Read10X_GEO <- function(
 
   if (!is.null(x = sample_names)) {
     if (length(x = sample_names) != length(x = sample_list)) {
-      stop("The length of 'sample_names' provided (", length(x = sample_names), ") does not equal length of 'sample_list' (", length(x = sample_list), ").")
+      cli_abort(message = "Length of {.code sample_names} provided {.field {length(x = sample_names)}} does not equal length of {.code sample_list} {.field {length(x = sample_list)}}.")
     }
   }
 
@@ -255,13 +255,13 @@ Read10X_GEO <- function(
       # Flag to indicate if this data is from CellRanger >= 3.0
       pre_ver_3 <- file.exists(gene.loc)
       if (!file.exists(barcode.loc)) {
-        stop("Barcode file missing. Expecting ", basename(path = barcode.loc))
+        cli_abort(message = "Barcode file missing. Expecting {.field {basename(path = barcode.loc)}}")
       }
       if (!pre_ver_3 && !file.exists(features.loc) ) {
-        stop("Gene name or features file missing. Expecting ", basename(path = features.loc))
+        cli_abort(message = "Gene name or features file missing. Expecting {.field {basename(path = features.loc)}}")
       }
       if (!file.exists(matrix.loc)) {
-        stop("Expression matrix file missing. Expecting ", basename(path = matrix.loc))
+        cli_abort(message = "Expression matrix file missing. Expecting {.field {basename(path = matrix.loc)}}")
       }
       data <- readMM(file = matrix.loc)
       cell.barcodes <- read.table(file = barcode.loc, header = FALSE, sep = '\t', row.names = NULL)
@@ -305,9 +305,8 @@ Read10X_GEO <- function(
       if (unique.features) {
         fcols = ncol(x = feature.names)
         if (fcols < gene.column) {
-          stop(paste0("gene.column was set to ", gene.column,
-                      " but feature.tsv.gz (or genes.tsv) only has ", fcols, " columns.",
-                      " Try setting the gene.column argument to a value <= to ", fcols, "."))
+          cli_abort(message = c("{.code gene.column} was set to {.val {gene.column}}, but feature.tsv.gz (or genes.tsv) only has {.field {cols}} columns.",
+                                "i" = "Try setting the {.code gene.column} argument to a value <= to {.field {cols}}."))
         }
         rownames(x = data) <- make.unique(names = feature.names[, gene.column])
       }
@@ -349,13 +348,13 @@ Read10X_GEO <- function(
       # Flag to indicate if this data is from CellRanger >= 3.0
       pre_ver_3 <- file.exists(gene.loc)
       if (!file.exists(barcode.loc)) {
-        stop("Barcode file missing. Expecting ", basename(path = barcode.loc))
+        cli_abort(message = "Barcode file missing. Expecting {.field {basename(path = barcode.loc)}}")
       }
       if (!pre_ver_3 && !file.exists(features.loc) ) {
-        stop("Gene name or features file missing. Expecting ", basename(path = features.loc))
+        cli_abort(message = "Gene name or features file missing. Expecting {.field {basename(path = features.loc)}}")
       }
       if (!file.exists(matrix.loc)) {
-        stop("Expression matrix file missing. Expecting ", basename(path = matrix.loc))
+        cli_abort(message = "Expression matrix file missing. Expecting {.field {basename(path = matrix.loc)}}")
       }
       data <- readMM(file = matrix.loc)
       cell.barcodes <- read.table(file = barcode.loc, header = FALSE, sep = '\t', row.names = NULL)
