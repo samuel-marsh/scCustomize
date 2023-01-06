@@ -204,12 +204,12 @@ Iterate_DimPlot_bySample <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(cells_per_sample,function(cells) {DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
         xlim(x_axis) +
         ylim(y_axis)})
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
@@ -222,7 +222,7 @@ Iterate_DimPlot_bySample <- function(
   else{
     # Code for non-PDF figure
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
@@ -235,7 +235,7 @@ Iterate_DimPlot_bySample <- function(
       }
     # Code for PDF Version
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
@@ -366,7 +366,7 @@ Iterate_Cluster_Highlight_Plot <- function(
   }
   if (length(x = highlight_color) > 1) {
     if (length(x = highlight_color) != num_idents) {
-      stop("Number of colors provided to `highlight_color` (", length(highlight_color), ") is not equal to the number of clusters (", num_idents, ").")
+      cli_abort(message = "Number of colors provided to {.code highlight_color} ({.field {length(highlight_color)}}) is not equal to the number of clusters (({.field {num_idents}}).")
     } else {
       highlight_color <- highlight_color
     }
@@ -374,7 +374,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pbmapply(function(x, arg1) {
       cells_to_highlight <- CellsByIdentities(seurat_object, idents = x)
@@ -389,7 +389,7 @@ Iterate_Cluster_Highlight_Plot <- function(
               raster = raster,
               ...))
     }, list_idents, highlight_color, SIMPLIFY = FALSE)
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
@@ -402,7 +402,7 @@ Iterate_Cluster_Highlight_Plot <- function(
   else {
     # Code for non-PDF figure
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       cells_to_highlight <- CellsByIdentities(seurat_object)
       for (i in 1:length(cells_to_highlight)) {
@@ -423,7 +423,7 @@ Iterate_Cluster_Highlight_Plot <- function(
     }
     # Code for PDF Version
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       cells_to_highlight <- CellsByIdentities(seurat_object)
       for (i in 1:length(cells_to_highlight)) {
@@ -518,14 +518,15 @@ Iterate_Meta_Highlight_Plot <- function(
 
   # stop if none found
   if (length(x = meta_data_column) == 0) {
-    stop("The 'meta_data_column': ", meta_data_column, " was not found in object meta.data slot.")
+    cli_abort(message = "None of values provided to {.code meta_data_column} were found in the meta.data slot.")
   }
 
   # Check that meta data is factor or character
   accepted_meta_types <- c("factor", "character", "logical")
 
   if (!class(x = seurat_object@meta.data[[meta_data_column]]) %in% accepted_meta_types) {
-    stop("The 'meta_data_column': ", meta_data_column, " is of class: ", '"', class(x = seurat_object@meta.data[[meta_data_column]]), '"', " only meta data variables of classes: factor, character, or logical can be used with Meta_Highlight_Plot().")
+    cli_abort(message = c("The {.code meta_data_column}: {.val {meta_data_column}} is of class: {.field {class(x = seurat_object@meta.data[[meta_data_column]])}}",
+                          "i" = "Only meta data variables of classes: {.field factor, character, or logical} can be used with {.code Meta_Highlight_Plot()}."))
   }
 
   # Change active ident for plotting
@@ -600,7 +601,7 @@ Iterate_Meta_Highlight_Plot <- function(
   }
   if (length(x = highlight_color) > 1) {
     if (length(x = highlight_color) != num_idents) {
-      stop("Number of colors provided to `highlight_color` (", length(highlight_color), ") is not equal to the number of clusters (", num_idents, ").")
+      cli_abort(message = "Number of colors provided to {.code highlight_color} ({.field {length(highlight_color)}}) is not equal to the number of clusters (({.field {num_idents}}).")
     } else {
       highlight_color <- highlight_color
     }
@@ -608,7 +609,7 @@ Iterate_Meta_Highlight_Plot <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pbmapply(function(x, arg1) {
       cells_to_highlight <- CellsByIdentities(seurat_object, idents = x)
@@ -623,7 +624,7 @@ Iterate_Meta_Highlight_Plot <- function(
                                raster = raster,
                                ...))
     }, list_idents, highlight_color, SIMPLIFY = FALSE)
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
@@ -636,7 +637,7 @@ Iterate_Meta_Highlight_Plot <- function(
   else {
     # Code for non-PDF figure
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       cells_to_highlight <- CellsByIdentities(seurat_object)
       for (i in 1:length(cells_to_highlight)) {
@@ -657,7 +658,7 @@ Iterate_Meta_Highlight_Plot <- function(
     }
     # Code for PDF Version
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       cells_to_highlight <- CellsByIdentities(seurat_object)
       for (i in 1:length(cells_to_highlight)) {
@@ -820,7 +821,7 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Return plots instead of saving them
   if (return_plots) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)})
     return(all_plots)
@@ -828,10 +829,10 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = gene_list)) && is.null(x = split.by)) {
       pdf(paste(file_path, file_name, file_type, sep=""))
@@ -856,7 +857,7 @@ Iterate_FeaturePlot_scCustom <- function(
   }
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
         FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
@@ -870,7 +871,7 @@ Iterate_FeaturePlot_scCustom <- function(
       close(con = pb)
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
         FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
@@ -1042,10 +1043,10 @@ Iterate_VlnPlot_scCustom <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(gene_list,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
@@ -1057,7 +1058,7 @@ Iterate_VlnPlot_scCustom <- function(
   }
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
         VlnPlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
@@ -1067,7 +1068,7 @@ Iterate_VlnPlot_scCustom <- function(
       close(con = pb)
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
         VlnPlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
@@ -1214,11 +1215,11 @@ Iterate_Plot_Density_Custom <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(gene_list,function(gene) {
       Plot_Density_Custom(seurat_object = seurat_object, features = gene, joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)})
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = gene_list))) {
       pdf(paste(file_path, file_name, file_type, sep=""))
@@ -1243,7 +1244,7 @@ Iterate_Plot_Density_Custom <- function(
   }
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
         Plot_Density_Custom(seurat_object = seurat_object, features = gene_list[i], joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
@@ -1257,7 +1258,7 @@ Iterate_Plot_Density_Custom <- function(
       close(con = pb)
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
       for (i in 1:length(gene_list)) {
         Plot_Density_Custom(seurat_object = seurat_object, features = gene_list[i], joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
@@ -1434,11 +1435,11 @@ Iterate_Plot_Density_Joint <- function(
 
   # Single PDF option
   if (single_pdf == TRUE) {
-    message("Generating plots")
+    cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(1:length(final_gene_list),function(i) {
       plot <- Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)})
-    message("Saving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = final_gene_list))) {
       pdf(paste(file_path, file_name, file_type, sep=""))
@@ -1463,7 +1464,7 @@ Iterate_Plot_Density_Joint <- function(
   }
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(final_gene_list), style = 3, file = stderr())
       for (i in 1:length(final_gene_list)) {
         Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
@@ -1477,7 +1478,7 @@ Iterate_Plot_Density_Joint <- function(
       close(con = pb)
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
-      message("Generating plots and saving plots to file")
+      cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(final_gene_list), style = 3, file = stderr())
       for (i in 1:length(final_gene_list)) {
         Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
