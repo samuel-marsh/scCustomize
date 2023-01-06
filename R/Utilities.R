@@ -612,6 +612,50 @@ CheckMatrix_scCustom <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### OBJECT UTILS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Merge a list of Seurat Objects
+#'
+#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
+#'
+#' @param list_seurat list composed of multiple Seurat Objects.
+#' @param add.cell.ids A character vector of length(x = c(x, y)). Appends the corresponding values
+#' to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
+#' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
+#' This is recommended if the same normalization approach was applied to all objects.
+#' See \code{\link[SeuratObject]{merge}}.
+#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
+#'
+#' @importFrom purrr reduce
+#'
+#' @return A Seurat Object
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' object_list <- list(obj1, obj2, obj3, ...)
+#' merged_object <- Merge_Seurat_List(list_seurat = object_list)
+#' }
+#'
+
+Merge_Seurat_List <- function(
+  list_seurat,
+  add.cell.ids = NULL,
+  merge.data = TRUE,
+  project = "SeuratProject"
+) {
+  merged_object <- reduce(list_seurat, function(x, y) {
+    merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
+  })
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### BARCODE UTILS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
