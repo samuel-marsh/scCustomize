@@ -105,7 +105,6 @@ FeaturePlot_scCustom <- function(
     )
   }
 
-
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
     cli_abort(message = "Setting `label_feature_yaxis = TRUE` is only supported when also setting `split.by`.")
@@ -490,7 +489,7 @@ Split_FeatureScatter <- function(
   possible_features <- c(rownames(seurat_object), colnames(seurat_object@meta.data))
   check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
   if (length(x = check_features) > 0) {
-    cli_abort(message = "The following feature(s) were not present in Seurat object: '{check_features}'")
+    cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field check_features}'")
   }
 
   # Extract min/maxes of features
@@ -1172,7 +1171,7 @@ Stacked_VlnPlot <- function(
   if (length(x = all_found_features) < 1) {
     cli_abort(message = c("No features were found.",
                           "*" = "The following are not present in object:",
-                          "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
     )
   }
 
@@ -1181,7 +1180,7 @@ Stacked_VlnPlot <- function(
     op <- options(warn = 1)
     on.exit(options(op))
     cli_warn(message = c("The following features were omitted as they were not found:",
-                         "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
     )
   }
 
