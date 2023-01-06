@@ -431,7 +431,7 @@ DiscretePalette_scCustomize <- function(
     dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
     if (!dittoseq_check[1]) {
       cli_abort(message = c(
-        "Please install the dittoSeq package to `palette = 'ditto_seq'`",
+        "Please install the {.val dittoSeq} package to {.code palette = {symbol$dquote_left}ditto_seq{symbol$dquote_right}}",
         "i" = "This can be accomplished with the following commands:",
         "----------------------------------------",
         "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
