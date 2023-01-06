@@ -210,7 +210,7 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
-    object_meta <- liger_object@cell.data %>%
+    object_meta <- Fetch_Meta(object = liger_object) %>%
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
@@ -1124,7 +1124,7 @@ Liger_to_Seurat <- function(
   }
   if (keep_meta){
     # extract meta data from liger object
-    liger_meta <- liger_object@cell.data
+    liger_meta <- Fetch_Meta(object = liger_object)
     # remove meta data values already transferred
     liger_meta <- liger_meta %>%
       select(-any_of(c("nUMI", "nGene", "dataset")))
