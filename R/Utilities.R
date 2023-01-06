@@ -431,12 +431,14 @@ Merge_Sparse_Data_All <- function(
     any()
 
   if (duplicated_barcodes && is.null(x = add_cell_ids)) {
-    stop("There are overlapping cell barcodes present in the input matrices.  Please provide prefixes/suffixes to 'add_cell_ids' parameter to make unique.")
+    cli_abort(message = c("There are overlapping cell barcodes present in the input matrices.",
+                          "i" = "Please provide prefixes/suffixes to 'add_cell_ids' parameter to make unique.")
+    )
   }
 
   # Check right number of suffix/prefix ids are provided
   if (!is.null(x = add_cell_ids) && length(x = add_cell_ids) != length(x = matrix_list)) {
-    stop("The number of prefixes in `add_cell_ids` must be equal to the number of matrices supplied to `matrix_list`.")
+    cli_abort(message = "The number of prefixes in {.code add_cell_ids} must be equal to the number of matrices supplied to {.code matrix_list}.")
   }
 
   if (!is.null(x = add_cell_ids)) {
@@ -454,7 +456,9 @@ Merge_Sparse_Data_All <- function(
       any()
 
     if (are_duplicates) {
-      stop("Supplied 'add_cell_ids' will result in overlapping barcodes names.  If provided cell prefixes/suffixes are not unique please change and re-run.")
+      cli_abort(message = c("Supplied {.code add_cell_ids} will result in overlapping barcodes names if provided cell prefixes/suffixes are not unique.",
+                            "i" = "Please change and re-run.")
+      )
     }
   }
 
@@ -463,7 +467,7 @@ Merge_Sparse_Data_All <- function(
   col_offset <- 0
   allGenes <- unique(unlist(lapply(matrix_list, rownames)))
   allCells <- c()
-  message("Preparing & merging matrices.")
+  cli_inform(message = "Preparing & merging matrices.")
   pb <- txtProgressBar(min = 0, max = length(x = matrix_list), style = 3, file = stderr())
   for (i in 1:length(matrix_list)) {
     curr <- matrix_list[[i]]
@@ -501,7 +505,7 @@ Merge_Sparse_Data_All <- function(
     setTxtProgressBar(pb = pb, value = i)
   }
   close(con = pb)
-  message("Creating final sparse matrix.")
+  cli_inform(message = "Creating final sparse matrix.")
   M <- sparseMatrix(
     i = full_mat[, 1],
     j = full_mat[, 2],
