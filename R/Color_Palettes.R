@@ -374,7 +374,7 @@ varibow_scCustom <- function(
 #' @param seed random seed for the palette shuffle.  Default = 123.
 #'
 #' @import cli
-# #' @importFrom colorway varibow
+# #' @importFrom colorway varibow (now directly ported for CRAN compatibility)
 #' @importFrom paletteer paletteer_d
 #' @importFrom SeuratObject PackageCheck
 #'
@@ -430,15 +430,14 @@ DiscretePalette_scCustomize <- function(
   if (palette == "ditto_seq") {
     dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
     if (!dittoseq_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the dittoSeq package to `palette = 'ditto_seq'`",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('BiocManager')",
-        "\nBiocManager::install('dittoSeq')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands:",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+        "{.field `BiocManager::install({symbol$dquote_left}dittoSeq{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     } else {
       palette_list <- list(
         alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
