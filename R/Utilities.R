@@ -196,9 +196,9 @@ Case_Check <- function(
   # Additional messages if found.
   if (length(x = wrong_case_found_features) > 0) {
     if (case_check_msg) {
-      message("NOTE: However, the following features were found: ",
-              glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE), ".\n",
-              "      Please check intended case of features provided.")
+      cli_inform(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
+                            "i" = "Please check intended case of features provided.")
+      )
     }
     if (return_features) {
       return(wrong_case_found_features)
