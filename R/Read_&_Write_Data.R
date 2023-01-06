@@ -91,6 +91,7 @@ Create_10X_H5 <- function(
 #'  Default is 200.
 #' @param ... Extra parameters passed to \code{\link[SeuratObject]{CreateSeuratObject}}.
 #'
+#' @import cli
 #' @import Seurat
 #' @importFrom dplyr intersect
 #'
@@ -183,6 +184,7 @@ Create_CellBender_Merged_Seurat <- function(
 #' support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 #' potential PR to Seurat GitHub).
 #'
+#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
@@ -497,6 +499,7 @@ Read10X_GEO <- function(
 #'   containing a sparse matrix of the data from each type will be returned.
 #'   Otherwise a sparse matrix containing the expression data will be returned.
 #'
+#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
@@ -529,7 +532,7 @@ Read10X_h5_GEO <- function(
     cli_abort(message = "Directory provided does not exist")
   }
   if (length(x = data_dir) > 1) {
-    stop("Read10X_h5_GEO only supports reading from single data directory at a time.")
+    cli_abort(message = "{.code Read10X_h5_GEO} only supports reading from single data directory at a time.")
   }
 
   # Confirm num_cores specified
@@ -552,7 +555,7 @@ Read10X_h5_GEO <- function(
     stop("Length of `sample_names` must be equal to number of samples.")
   }
 
-  message("Reading 10X H5 files from directory")
+  cli_inform(message = "{.field Reading 10X H5 files from directory}")
   pboptions(char = "=")
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
@@ -610,6 +613,7 @@ Read10X_h5_GEO <- function(
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
 #'
+#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Seurat Read10X
@@ -643,7 +647,7 @@ Read10X_Multi_Directory <- function(
   }
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
-    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
   }
   # Detect libraries if sample_list is NULL
   if (is.null(x = sample_list)) {
@@ -651,7 +655,7 @@ Read10X_Multi_Directory <- function(
   }
   # Add file path for 10X default directories
   if (default_10X_path && !is.null(x = secondary_path)) {
-    stop("If 'default_10X_path = TRUE' then 'secondary_path' must be NULL.")
+    cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
   if (default_10X_path) {
     secondary_path <- "outs/filtered_feature_bc_matrix/"
@@ -663,11 +667,11 @@ Read10X_Multi_Directory <- function(
   for (i in 1:length(x = sample_list)) {
     full_directory_path <- file.path(base_path, sample_list[i], secondary_path)
     if (dir.exists(paths = full_directory_path) == FALSE) {
-      stop(paste0("Full Directory does not exist: ", full_directory_path, " was not found."))
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
     }
   }
   # read data
-  message("Reading gene expression files.")
+  cli_inform(message = "{.field Reading gene expression files.}")
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
@@ -735,6 +739,7 @@ Read10X_Multi_Directory <- function(
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
 #'
+#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Seurat Read10X_h5
@@ -769,7 +774,7 @@ Read10X_h5_Multi_Directory <- function(
 ) {
   # Check cell bender or default 10X
   if (cell_bender && default_10X_path) {
-    stop("Both `cell_bender` and `default_10X_path` cannot be simultaneously set to TRUE.")
+    cli_abort(message = "Both `cell_bender` and `default_10X_path` cannot be simultaneously set to TRUE.")
   }
 
   # Confirm num_cores specified
@@ -778,7 +783,7 @@ Read10X_h5_Multi_Directory <- function(
   }
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
-    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
   }
   # Detect libraries if sample_list is NULL
   if (is.null(x = sample_list)) {
@@ -787,7 +792,7 @@ Read10X_h5_Multi_Directory <- function(
 
   # Add file path for 10X default directories
   if (default_10X_path && !is.null(x = secondary_path)) {
-    stop("If 'default_10X_path = TRUE' then 'secondary_path' must be NULL.")
+    cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
   if (default_10X_path) {
     secondary_path <- "outs/"
@@ -799,12 +804,12 @@ Read10X_h5_Multi_Directory <- function(
   for (i in 1:length(x = sample_list)) {
     full_directory_path <- file.path(base_path, sample_list[i], secondary_path)
     if (dir.exists(paths = full_directory_path) == FALSE) {
-      stop(paste0("Full Directory does not exist: ", full_directory_path, " was not found."))
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
     }
   }
 
   # read data
-  message("Reading gene expression files.")
+  cli_inform(message = "{.field Reading gene expression files.}")
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
@@ -903,6 +908,7 @@ Read10X_h5_Multi_Directory <- function(
 #'
 #' @return List of gene x cell matrices in list format named by sample name.
 #'
+#' @import cli
 #' @import Matrix
 #' @import parallel
 #' @import pbapply
@@ -968,11 +974,11 @@ Read_GEO_Delim <- function(
       bad_file_list <- file_list[!file_list %in% possible_file_list]
       file_list <- file_list[file_list %in% possible_file_list]
       if (length(x = file_list) == 0) {
-        stop("No requested files found. Check that 'data_dir' and file_suffix' are correct \n
-             and `full_names` parameter is accurate.")
+        cli_abort(message = c("No requested files found.",
+                              "i" = "Check that {.code data_dir} and {.code file_suffix} are correct and {.code full_names} parameter is accurate."))
       }
-      warning("The following files were not imported as they were not found in specified directory",
-              ": ", glue_collapse_scCustom(input_string = bad_file_list, and = TRUE))
+      cli_warn(message = c("The following files were not imported as they were not found in specified directory:",
+                           "i" = "{.field {glue_collapse_scCustom(input_string = bad_file_list, and = TRUE)}}"))
     }
   }
 
@@ -984,7 +990,7 @@ Read_GEO_Delim <- function(
   }
 
   # Read in files
-  message("Reading gene expression files from directory")
+  cli_inform(message = "{.field Reading gene expression files from directory}")
   pboptions(char = "=")
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
@@ -1200,7 +1206,7 @@ Read_CellBender_h5_Multi_Directory <- function(
   }
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
-    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
   }
   # Detect libraries if sample_list is NULL
   if (is.null(x = sample_list)) {
@@ -1231,12 +1237,12 @@ Read_CellBender_h5_Multi_Directory <- function(
   for (i in 1:length(x = sample_list)) {
     full_directory_path <- file.path(base_path, sample_list[i], secondary_path)
     if (dir.exists(paths = full_directory_path) == FALSE) {
-      stop(paste0("Full Directory does not exist: ", full_directory_path, " was not found."))
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
     }
   }
 
   # read data
-  message("Reading gene expression files.")
+  cli_inform(message = "{.field Reading gene expression files.}")
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
@@ -1380,7 +1386,7 @@ Read_CellBender_h5_Multi_File <- function(
     stop("Length of `sample_names` must be equal to number of samples.")
   }
 
-  message("Reading Cell Bender H5 files from directory")
+  cli_inform(message = "{.field Reading Cell Bender H5 files from directory}")
   pboptions(char = "=")
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
@@ -1435,6 +1441,7 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' @return A data frame with sample metrics from cell ranger.
 #'
+#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
@@ -1458,7 +1465,7 @@ Read_Metrics_10X <- function(
 ) {
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
-    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
   }
   # Detect libraries if lib_list is NULL
   if (is.null(x = lib_list)) {
@@ -1467,7 +1474,7 @@ Read_Metrics_10X <- function(
 
   # Add file path for 10X default directories
   if (default_10X && !is.null(x = secondary_path)) {
-    stop("If 'default_10X = TRUE' then 'secondary_path' must be NULL.")
+    cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
   if (default_10X) {
     secondary_path <- "outs/"
@@ -1479,7 +1486,7 @@ Read_Metrics_10X <- function(
   for (i in 1:length(x = lib_list)) {
     full_directory_path <- file.path(base_path, lib_list[i], secondary_path)
     if (dir.exists(paths = full_directory_path) == FALSE) {
-      stop(paste0("Full Directory does not exist: ", full_directory_path, " was not found."))
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
     }
   }
 
@@ -1528,6 +1535,8 @@ Read_Metrics_10X <- function(
 #'
 #' @return A vector of sub-directories within `base_path`.
 #'
+#' @import cli
+#'
 #' @export
 #'
 #' @concept read_&_write
@@ -1544,7 +1553,7 @@ Pull_Directory_List <- function(
 ) {
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
-    stop(paste0("Directory: ", base_path, "specified by 'base_path' does not exist."))
+    cli_abort(message = "Directory: {.val base_path} specified by {.code base_path} does not exist.")
   }
 
   # Pull sub-directory list
