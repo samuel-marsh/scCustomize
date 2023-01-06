@@ -260,8 +260,9 @@ Meta_Present <- function(
 
     # Return message of features not found
     if (length(x = bad_meta) > 0 && omit_warn) {
-      warning("The following @meta.data columns were omitted as they were not found",
-              ": ", glue_collapse_scCustom(input_string = bad_meta, and = TRUE))
+      cli_warn(message = c("The following @meta.data columns were omitted as they were not found:",
+                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
+      )
     }
 
     # Return the found features omitting the not found ones.
@@ -275,7 +276,7 @@ Meta_Present <- function(
 
   # Print all found message if TRUE
   if (print_msg) {
-    message("All @meta.data columns present.")
+    cli_inform(message = "All @meta.data columns present.")
   }
 
   # Return full input gene list.
