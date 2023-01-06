@@ -219,7 +219,7 @@ Read10X_GEO <- function(
     cli_abort(message = "Directory provided does not exist")
   }
   if (length(x = data_dir) > 1) {
-    stop("Read10X_GEO only supports reading from single data directory at a time.")
+    cli_abort(message = "{.code Read10X_GEO} only supports reading from single data directory at a time.")
   }
 
   # Confirm num_cores specified
@@ -1276,7 +1276,7 @@ Read_CellBender_h5_Multi_Directory <- function(
   # Replace Suffixes
   if (replace_suffix) {
     if (is.null(x = new_suffix_list)) {
-      stop("No values provided to `new_suffix_list` but `replace_suffix = TRUE`.")
+      cli_abort(message = "No values provided to {.code new_suffix_list} but {.code replace_suffix = TRUE}.")
     }
 
     current_suffix_list <- sapply(1:length(raw_data_list), function(x) {
@@ -1284,7 +1284,8 @@ Read_CellBender_h5_Multi_Directory <- function(
     })
 
     if (length(x = new_suffix_list) != 1 & length(x = new_suffix_list) != length(x = current_suffix_list)) {
-      stop("`new_suffix_list` must be either single value or list of values equal to the number of samples.  Number of samples is: ", length(current_suffix_list), " and number of new_suffixes provided is:", length(x = new_suffix_list), ".")
+      cli_abort(message = c("`new_suffix_list` must be either single value or list of values equal to the number of samples.",
+                            "i" = "Number of samples is: {.field {length(current_suffix_list)}} and number of new_suffixes provided is: {.field {length(x = new_suffix_list)}}."))
     }
 
     raw_data_list <- Replace_Suffix(data = raw_data_list, current_suffix = current_suffix_list, new_suffix = new_suffix_list)
@@ -1352,7 +1353,7 @@ Read_CellBender_h5_Multi_File <- function(
     cli_abort(message = "Directory provided does not exist")
   }
   if (length(x = data_dir) > 1) {
-    stop("Read_CellBender_h5_Multi_File only supports reading from single data directory at a time.")
+    cli_abort(message = "{.code Read_CellBender_h5_Multi_File} only supports reading from single data directory at a time.")
   }
 
   # Confirm num_cores specified
@@ -1383,7 +1384,7 @@ Read_CellBender_h5_Multi_File <- function(
 
   # Check sample_names length is ok
   if (!is.null(x = sample_names) && length(x = sample_names) != length(x = sample_list)) {
-    stop("Length of `sample_names` must be equal to number of samples.")
+    cli_abort(message = "Length of {.code sample_names} {.field {length(x = sample_names)}} must be equal to number of samples {.field {length(x = sample_list)}}.")
   }
 
   cli_inform(message = "{.field Reading Cell Bender H5 files from directory}")
