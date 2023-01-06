@@ -12,6 +12,7 @@
 #' @param save_file_path file path to directory to save file.
 #' @param save_name name prefix for output H5 file.
 #'
+#' @import cli
 #' @importFrom Matrix readMM
 # #' @importFrom DropletUtils write10xCounts
 #' @importFrom Seurat Read10X
@@ -37,15 +38,14 @@ Create_10X_H5 <- function(
 ) {
   DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
   if (!DropletUtils_check[1]) {
-    stop(
+    cli_abort(message = c(
       "Please install the DropletUtils package to use Create_10X_H5",
-      "\nThis can be accomplished with the following commands: ",
-      "\n----------------------------------------",
-      "\ninstall.packages('BiocManager')",
-      "\nBiocManager::install('DropletUtils')",
-      "\n----------------------------------------",
-      call. = FALSE
-    )
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}DropletUtils{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
   }
   valid_source_types <- list(
     source_10X = c("10X", "10x"),
