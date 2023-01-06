@@ -1,6 +1,7 @@
 # scCustomize 1.X.X (2023-XX-XX)  
 ## Added  
 - Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
+- Added ability to rotate x-axis of `Stacked_VlnPlot` 90 degrees or 45 (previously possible) ([#84](https://github.com/samuel-marsh/scCustomize/issues/84)).  
   
 ## Changed  
 - **BREAKING CHANGE** Parameter in `PalettePlot` has been changed from `palette` to `pal`.  
