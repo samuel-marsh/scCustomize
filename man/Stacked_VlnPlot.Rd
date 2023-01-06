@@ -35,7 +35,8 @@ Stacked_VlnPlot(
 
 \item{idents}{Which classes to include in the plot (default is all).}
 
-\item{x_lab_rotate}{Rotate x-axis labels 45 degrees (Default is FALSE).}
+\item{x_lab_rotate}{logical or numeric.  If logical whether to rotate x-axis labels 45 degrees
+(Default is FALSE).  If numeric must be either 45 or 90.  Setting 45 is equivalent to setting TRUE.}
 
 \item{plot_legend}{logical.  Adds plot legend containing \code{idents} to the returned plot.}
 
