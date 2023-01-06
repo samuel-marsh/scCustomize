@@ -1495,15 +1495,14 @@ Clustered_DotPlot <- function(
   # Check for packages
   ComplexHeatmap_check <- PackageCheck("ComplexHeatmap", error = FALSE)
   if (!ComplexHeatmap_check[1]) {
-    stop(
+    cli_abort(message = c(
       "Please install the ComplexHeatmap package to use Clustered_DotPlot",
-      "\nThis can be accomplished with the following commands: ",
-      "\n----------------------------------------",
-      "\ninstall.packages('BiocManager')",
-      "\nBiocManager::install('ComplexHeatmap')",
-      "\n----------------------------------------",
-      call. = FALSE
-    )
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}ComplexHeatmap{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
   }
 
   if (lifecycle::is_present(row_km_repeats)) {
