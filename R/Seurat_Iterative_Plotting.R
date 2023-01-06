@@ -1135,15 +1135,14 @@ Iterate_Plot_Density_Custom <- function(
   # Check Nebulosa installed
   Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
   if (!Nebulosa_check[1]) {
-    stop(
-      "Please install the Nebulosa package to use 'Iterate_Plot_Density_Custom'",
-      "\nThis can be accomplished with the following commands: ",
-      "\n----------------------------------------",
-      "\ninstall.packages('BiocManager')",
-      "\nBiocManager::install('Nebulosa')",
-      "\n----------------------------------------",
-      call. = FALSE
-    )
+    cli_abort(message = c(
+      "Please install the {.val Nebulosa} package to use {.code Iterate_Plot_Density_Custom}",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
   }
 
   # Check Seurat
@@ -1331,15 +1330,14 @@ Iterate_Plot_Density_Joint <- function(
   # Check Nebulosa installed
   Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
   if (!Nebulosa_check[1]) {
-    stop(
-      "Please install the Nebulosa package to use 'Iterate_Plot_Density_Joint'",
-      "\nThis can be accomplished with the following commands: ",
-      "\n----------------------------------------",
-      "\ninstall.packages('BiocManager')",
-      "\nBiocManager::install('Nebulosa')",
-      "\n----------------------------------------",
-      call. = FALSE
-    )
+    cli_abort(message = c(
+      "Please install the {.val Nebulosa} package to use {.code Iterate_Plot_Density_Joint}",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
   }
 
   # Check Seurat
