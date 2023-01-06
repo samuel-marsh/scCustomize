@@ -812,7 +812,7 @@ Change_Delim_Prefix <- function(
     })
 
     if (all(check_prefix_delim) != TRUE) {
-      cli_abort(message = c("One or more 'current_delim' do not match cell names in data.",
+      cli_abort(message = c("One or more {.code current_delim} do not match cell names in data.",
                             "i" = "Check inputs.")
       )
     }
@@ -888,7 +888,9 @@ Change_Delim_All <- function(
     })
 
     if (all(check_prefix_delim) != TRUE) {
-      stop("One or more 'current_delim' does not match cell names in data.  Check inputs.")
+      cli_abort(message = c("One or more {.code current_delim} do not match cell names in data.",
+                            "i" = "Check inputs.")
+      )
     }
 
     # Create list of string of new names
@@ -911,7 +913,7 @@ Change_Delim_All <- function(
 
     # Is current prefix found in cell names
     if (all(grepl(pattern = current_delim, x = current_cell_names, fixed = TRUE)) != TRUE) {
-      stop("Supplied 'current_delim': ", current_delim, " was not found in the cell names of data provided.")
+      cli_abort(message = "Supplied {.code current_delim}: {.field {current_delim}} was not found in the cell names of data provided.")
     }
 
     # Create string of new names
