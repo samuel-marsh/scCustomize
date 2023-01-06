@@ -39,7 +39,7 @@ Create_10X_H5 <- function(
   DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
   if (!DropletUtils_check[1]) {
     cli_abort(message = c(
-      "Please install the DropletUtils package to use Create_10X_H5",
+      "Please install the {.val DropletUtils} package to use {.code Create_10X_H5}",
       "i" = "This can be accomplished with the following commands: ",
       "----------------------------------------",
       "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
@@ -1077,11 +1077,17 @@ Read_CellBender_h5_Mat <- function(
   unique.features = TRUE
 ) {
   # Check hdf5r installed
-  if (!requireNamespace('hdf5r', quietly = TRUE)) {
-    cli_abort(message = c("Please install hdf5r to read HDF5 files",
-                          "i" = "`install.packages('hdf5r')`")
-    )
+  hdf5r_check <- PackageCheck("hdf5r", error = FALSE)
+  if (!hdf5r_check[1]) {
+    cli_abort(message = c(
+      "Please install the {.val hdf5r} package to use {.code Read_CellBender_h5_Mat} and read HDF5 files.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}hdf5r{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
   }
+
   # Check file
   if (!file.exists(file_name)) {
     cli_abort(message = "File: {file_name} not found.")
