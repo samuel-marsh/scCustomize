@@ -398,9 +398,8 @@ Read10X_GEO <- function(
       if (unique.features) {
         fcols = ncol(x = feature.names)
         if (fcols < gene.column) {
-          stop(paste0("gene.column was set to ", gene.column,
-                      " but feature.tsv.gz (or genes.tsv) only has ", fcols, " columns.",
-                      " Try setting the gene.column argument to a value <= to ", fcols, "."))
+          cli_abort(message = c("{.code gene.column} was set to {.val {gene.column}}, but feature.tsv.gz (or genes.tsv) only has {.field {cols}} columns.",
+                                "i" = "Try setting the {.code gene.column} argument to a value <= to {.field {cols}}."))
         }
         rownames(x = data) <- make.unique(names = feature.names[, gene.column])
       }
