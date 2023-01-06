@@ -56,7 +56,7 @@ A small number of functions in scCustomize rely on packages from Bioconductor an
 ```
 install.packages("BiocManager")
 
-BiocmManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
+BiocManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
 ```
 
 ## Release Notes  
