@@ -766,7 +766,9 @@ Iterate_FeaturePlot_scCustom <- function(
   # Return plot check
   if (return_plots) {
     if (!is.null(x = file_type) | !is.null(x = file_path) | !is.null(x = file_name) | single_pdf) {
-      stop("Cannot return plots to list and save plots to file with single function call.  If saving plots please set 'return_plots = FALSE'.  If returning plots please leave 'file_type', 'file_path', 'file_name' and 'single_pdf' at their default settings.")
+      cli_abort(message = c("Cannot return plots to list and save plots to file with single function call.",
+                            "i" = "If {.field saving plots} please set {.code return_plots = FALSE}.",
+                            "i" = "If {.field returning plots} please leave {.code file_type}, {.code file_path}, {.code file_name} and {.code single_pdf} at their default settings."))
     }
   }
 
@@ -1019,7 +1021,7 @@ Iterate_VlnPlot_scCustom <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    stop("Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
   if (is.null(x = colors_use)) {
     # set default plot colors
