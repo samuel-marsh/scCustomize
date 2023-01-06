@@ -139,7 +139,7 @@ Gene_Present <- function(
 
   # Print all found message if TRUE
   if (print_msg) {
-    message("All features present.")
+    cli_inform(message = "All features present.")
   }
 
   # Return full input gene list.
