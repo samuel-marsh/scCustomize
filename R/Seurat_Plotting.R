@@ -1243,7 +1243,7 @@ Stacked_VlnPlot <- function(
   }
 
   if (!is.logical(x = x_lab_rotate) && !x_lab_rotate %in% c(45, 90)) {
-    cli_abort(message = "{.code x_lab_rotate} must be logical or numeric value of 45 or 90.")
+    cli_abort(message = "{.code x_lab_rotate} must be either a logical or a numeric value of 45 or 90.")
   }
 
 
