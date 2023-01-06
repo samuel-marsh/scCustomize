@@ -295,6 +295,70 @@ Add_Cell_Complexity_Seurat <- function(
 }
 
 
+#' Calculate and add differences post-cell bender analysis
+#'
+#' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
+#'
+#' @param seurat_object object name.
+#' @param raw_assay_name name of the assay containing the raw data.
+#' @param cell_bender_assay_name name of the assay containing the Cell Bender'ed data.
+#'
+#' @importFrom dplyr mutate
+#' @importFrom magrittr "%>%"
+#'
+#' @return Seurat object with 2 new columns in the meta.data slot.
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
+#' cell_bender_assay_name = "RNA")
+#' }
+#'
+
+Add_CellBender_Diff <- function(
+  seurat_object,
+  raw_assay_name,
+  cell_bender_assay_name
+) {
+  # Is Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check assays present
+  assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay_name, cell_bender_assay_name), print_msg = FALSE, omit_warn = TRUE)[[2]]
+
+  if (!is.null(x = assays_not_found)) {
+    stop_quietly()
+  }
+
+  # pull meta
+  meta_seurat <- seurat_object@meta.data
+
+  # Set variable names
+  raw_nFeature <- paste0("nFeature_", raw_assay_name)
+  raw_nCount <- paste0("nCount_", raw_assay_name)
+
+  cb_nFeature <- paste0("nFeature_", cell_bender_assay_name)
+  cb_nCount <- paste0("nCount_", cell_bender_assay_name)
+
+  # Mutate meta data
+  meta_modified <- meta_seurat %>%
+    mutate(nFeature_Diff = .data[[raw_nFeature]] - .data[[cb_nFeature]],
+           nCount_Diff = .data[[raw_nCount]] - .data[[cb_nCount]])
+
+  # Remove already in object meta data
+  meta_modified <- Meta_Remove_Seurat(meta_data = meta_modified, seurat_object = seurat_object)
+
+  # Add back to Seurat Object
+  seurat_object <- AddMetaData(object = seurat_object, metadata = meta_modified)
+
+  return(seurat_object)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### META DATA UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -662,70 +726,6 @@ Extract_Sample_Meta <- function(
 }
 
 
-#' Calculate and add differences post-cell bender analysis
-#'
-#' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
-#'
-#' @param seurat_object object name.
-#' @param raw_assay_name name of the assay containing the raw data.
-#' @param cell_bender_assay_name name of the assay containing the Cell Bender'ed data.
-#'
-#' @importFrom dplyr mutate
-#' @importFrom magrittr "%>%"
-#'
-#' @return Seurat object with 2 new columns in the meta.data slot.
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
-#' cell_bender_assay_name = "RNA")
-#' }
-#'
-
-Add_CellBender_Diff <- function(
-  seurat_object,
-  raw_assay_name,
-  cell_bender_assay_name
-) {
-  # Is Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # Check assays present
-  assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay_name, cell_bender_assay_name), print_msg = FALSE, omit_warn = TRUE)[[2]]
-
-  if (!is.null(x = assays_not_found)) {
-    stop_quietly()
-  }
-
-  # pull meta
-  meta_seurat <- seurat_object@meta.data
-
-  # Set variable names
-  raw_nFeature <- paste0("nFeature_", raw_assay_name)
-  raw_nCount <- paste0("nCount_", raw_assay_name)
-
-  cb_nFeature <- paste0("nFeature_", cell_bender_assay_name)
-  cb_nCount <- paste0("nCount_", cell_bender_assay_name)
-
-  # Mutate meta data
-  meta_modified <- meta_seurat %>%
-    mutate(nFeature_Diff = .data[[raw_nFeature]] - .data[[cb_nFeature]],
-           nCount_Diff = .data[[raw_nCount]] - .data[[cb_nCount]])
-
-  # Remove already in object meta data
-  meta_modified <- Meta_Remove_Seurat(meta_data = meta_modified, seurat_object = seurat_object)
-
-  # Add back to Seurat Object
-  seurat_object <- AddMetaData(object = seurat_object, metadata = meta_modified)
-
-  return(seurat_object)
-}
-
-
 #' Store misc data in Seurat object
 #'
 #' Wrapper function save variety of data types to the `object@misc` slot of Seurat object.
@@ -874,70 +874,6 @@ Store_Palette_Seurat <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite)
-  return(seurat_object)
-}
-
-
-#' Rename Cluster Seurat
-#'
-#' Wrapper function to rename active identities in Seurat Object with new idents.
-#'
-#' @param seurat_object object name.
-#' @param new_idents vector of new cluster names.  Must be equal to the length of current active.ident
-#' in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name (Optional).  Whether or not to create new named column in `Object@meta.data`
-#' to store the old identities.
-#' @param ... Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.
-#'
-#' @return Seurat Object with new identities placed in active.ident slot.
-#'
-#' @import cli
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
-#' meta_col_name = "Round01_Res0.6_Idents")
-#' }
-#'
-
-Rename_Clusters <- function(
-  seurat_object,
-  new_idents,
-  meta_col_name = NULL,
-  ...
-) {
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # Check equivalent lengths
-  if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
-    cli_abort(message = c("Length of `new_idents` must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "`new_idents` length: '{length(x = new_idents)}' Object@active.idents length: '{length(levels(x = seurat_object))}'.")
-    )
-  }
-
-  # Name the new idents vector
-  if (is.null(x = names(x = new_idents))) {
-    names(new_idents) <- levels(seurat_object)
-  }
-  # If named check that names are right length
-  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
-    cli_abort(message = c("The number of unique names for `new idents is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}.")
-    )
-  }
-
-  # Rename meta column for old ident information if desired
-  if (!is.null(x = meta_col_name)) {
-    seurat_object[[meta_col_name]] <- Idents(seurat_object)
-  }
-
-  # Add new idents & return object
-  seurat_object <- RenameIdents(object = seurat_object, new_idents)
   return(seurat_object)
 }
 
