@@ -111,14 +111,13 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -246,14 +245,13 @@ Seq_QC_Plot_Number_Cells <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -371,14 +369,13 @@ Seq_QC_Plot_Genes <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -496,14 +493,13 @@ Seq_QC_Plot_UMIs <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -621,14 +617,13 @@ Seq_QC_Plot_Total_Genes <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+        ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -753,14 +748,13 @@ Seq_QC_Plot_Saturation <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -885,14 +879,13 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -1016,14 +1009,13 @@ Seq_QC_Plot_Transcriptome <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -1147,14 +1139,13 @@ Seq_QC_Plot_Genome <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -1278,14 +1269,13 @@ Seq_QC_Plot_Intergenic <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -1409,14 +1399,13 @@ Seq_QC_Plot_Intronic <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -1540,14 +1529,13 @@ Seq_QC_Plot_Exonic <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
@@ -1671,14 +1659,13 @@ Seq_QC_Plot_Antisense <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
+      cli_abort(message = c(
         "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
