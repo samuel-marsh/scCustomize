@@ -2,23 +2,29 @@
 % Please edit documentation in R/Utilities.R
 \name{Fetch_Meta}
 \alias{Fetch_Meta}
+\alias{Fetch_Meta.Seurat}
+\alias{Fetch_Meta.liger}
 \title{Get meta data from object}
 \usage{
 Fetch_Meta(object)
+
+\method{Fetch_Meta}{Seurat}(object)
+
+\method{Fetch_Meta}{liger}(object)
 }
 \arguments{
-\item{object}{Seurat object}
+\item{object}{Object of class Seurat or liger.}
 }
 \value{
-A data.frame
+A data.frame containing cell-level meta data
 }
 \description{
 Quick function to properly pull meta.data from objects.
 }
 \examples{
-\dontrun{
-meta_data <- Fetch_Meta(object = pbmc)
-}
+library(Seurat)
+meta_data <- Fetch_Meta(object = pbmc_small)
+head(meta_data, 5)
 
 }
 \concept{helper_util}
