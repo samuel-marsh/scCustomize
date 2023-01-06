@@ -50,7 +50,7 @@ Iterate_PC_Loading_Plots <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -63,22 +63,22 @@ Iterate_PC_Loading_Plots <- function(
   # Check pca present
   reduc_present <- names(seurat_object@reductions)
   if (!"pca" %in% reduc_present) {
-    stop("Cannot find 'pca' in this Seurat Object.")
+    cli_abort(message = "Cannot find reduction 'pca' in this Seurat Object.")
   }
   # Check dims present in object
   if (dims_plot > num_pc_present) {
-    stop("The number of PCs specified to `dims_plot` (", dims_plot, ") is greater than number of PCs present in Seurat Object (", num_pc_present, ").")
+    cli_abort(message = "The number of PCs specified to {.code dims_plot} ({.field {dims_plot}}) is greater than number of PCs present in Seurat Object ({.field {num_pc_present}})")
   }
 
   dims_list <- 1:dims_plot
   # Create list of all plots
-  message("Generating plots")
+  cli_inform(message = "Generating plots")
   pboptions(char = "=")
   all_plots <- pblapply(dims_list, function(x) {
     PC_Plotting(seurat_object = seurat_object, dim_number = x)
   })
   # Save plots
-  message("Saving plots to file")
+  cli_inform(message = "Saving plots to file")
   pdf(file = paste(file_path, name_prefix, file_name, ".pdf", sep=""), height = 11, width = 8.5)
   pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
   for (i in 1:length(all_plots)) {
