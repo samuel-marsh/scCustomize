@@ -333,7 +333,8 @@ Meta_Numeric <- function(
 
   # Warn if columns are not numeric
   if (length(x = invalid_variables) > 0) {
-    warning("Some of the meta.data columns provided are not in numeric form and will be excluded from results: ", paste(shQuote(invalid_variables, type = "cmd"), collapse=", "))
+    cli_warn(message = c("Some of the meta.data columns provided are not in numeric form and will be excluded from results:",
+                         "i" = "{.field {paste(shQuote(invalid_variables, type = 'cmd'), collapse=', ')}}"))
   }
 
   # Return valid column names
