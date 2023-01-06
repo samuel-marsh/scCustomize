@@ -155,7 +155,7 @@ Iterate_DimPlot_bySample <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -316,7 +316,7 @@ Iterate_Cluster_Highlight_Plot <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -535,7 +535,7 @@ Iterate_Meta_Highlight_Plot <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -771,7 +771,7 @@ Iterate_FeaturePlot_scCustom <- function(
   # Check file path is valid
   if (!is.null(x = file_path) && !return_plots) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -969,7 +969,7 @@ Iterate_VlnPlot_scCustom <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -1161,7 +1161,7 @@ Iterate_Plot_Density_Custom <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
@@ -1361,7 +1361,7 @@ Iterate_Plot_Density_Joint <- function(
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
-      stop("Provided `file_path`: ", '"', file_path, '"', " does not exist.")
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
