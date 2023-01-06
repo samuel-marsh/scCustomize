@@ -550,7 +550,7 @@ Read10X_h5_GEO <- function(
 
   # Check sample_names length is ok
   if (!is.null(x = sample_names) && length(x = sample_names) != length(x = sample_list)) {
-    stop("Length of `sample_names` must be equal to number of samples.")
+    cli_abort(message = "Length of {.code sample_names} {.field {length(x = sample_names)}} must be equal to number of samples {.field {length(x = sample_list)}}.")
   }
 
   cli_inform(message = "{.field Reading 10X H5 files from directory}")
@@ -850,7 +850,7 @@ Read10X_h5_Multi_Directory <- function(
   # Replace Suffixes
   if (replace_suffix) {
     if (is.null(x = new_suffix_list)) {
-      stop("No values provided to `new_suffix_list` but `replace_suffix = TRUE`.")
+      cli_abort(message = "No values provided to {.code new_suffix_list} but {.code replace_suffix = TRUE}.")
     }
 
     current_suffix_list <- sapply(1:length(raw_data_list), function(x) {
@@ -858,7 +858,8 @@ Read10X_h5_Multi_Directory <- function(
     })
 
     if (length(x = new_suffix_list) != 1 & length(x = new_suffix_list) != length(x = current_suffix_list)) {
-      stop("`new_suffix_list` must be either single value or list of values equal to the number of samples.  Number of samples is: ", length(current_suffix_list), " and number of new_suffixes provided is:", length(x = new_suffix_list), ".")
+      cli_abort(message = c("`new_suffix_list` must be either single value or list of values equal to the number of samples.",
+                            "i" = "Number of samples is: {.field {length(current_suffix_list)}} and number of new_suffixes provided is: {.field {length(x = new_suffix_list)}}."))
     }
 
     raw_data_list <- Replace_Suffix(data = raw_data_list, current_suffix = current_suffix_list, new_suffix = new_suffix_list)
@@ -945,7 +946,7 @@ Read_GEO_Delim <- function(
 
   # Check files found
   if (is.null(x = possible_file_list)) {
-    stop("No files found.  Check that `data_dir` and `file_suffix` are correct.")
+    cli_abort(message = "No files found.  Check that {.code data_dir} and {.code file_suffix} are correct.")
   }
 
   # Set all files to be used if sample_list is NULL
@@ -1020,7 +1021,8 @@ Read_GEO_Delim <- function(
       # Check all columns numeric
       col_data_numeric <- sapply(data, is.numeric)
       if (!all(col_data_numeric)) {
-        stop("One or more columns in the file: ", '"', dge_loc, '"', " contains non-numeric data.  Please check original file and/or that parameter `move_genes_rownames` is set appropriately.")
+        cli_abort(message = c("One or more columns in the file: {.val {dge_loc}} contains non-numeric data.",
+                              "i" = "Please check original file and/or that parameter {.code move_genes_rownames} is set appropriately."))
       }
       if (barcode_suffix_period) {
         colnames(data) <- gsub("\\.", "-", colnames(data))
