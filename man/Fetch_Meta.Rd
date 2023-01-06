@@ -2,18 +2,12 @@
 % Please edit documentation in R/Utilities.R
 \name{Fetch_Meta}
 \alias{Fetch_Meta}
-\alias{Fetching_Meta.Seurat}
-\alias{Fetching_Meta.liger}
 \title{Get meta data from object}
 \usage{
 Fetch_Meta(object)
-
-Fetching_Meta.Seurat(object)
-
-Fetching_Meta.liger(object)
 }
 \arguments{
-\item{object}{list of matrices to merge.}
+\item{object}{Seurat object}
 }
 \value{
 A data.frame
