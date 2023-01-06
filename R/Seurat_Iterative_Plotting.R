@@ -1158,7 +1158,9 @@ Iterate_Plot_Density_Custom <- function(
 
   # joint check
   if (!is.null(x = joint)) {
-    stop("`Iterate_Plot_Density_Custom` only supports 'joint = FALSE'.  Leave as NULL to generate plots.  To iterate joint plots see function: 'Iterate_Plot_Density_Joint'.")
+    cli_abort(message = c("{.code Iterate_Plot_Density_Custom} only supports {.code joint = FALSE}.",
+                          "i" = "Leave as NULL to generate plots.",
+                          "i" = "To iterate joint plots see function: {.code Iterate_Plot_Density_Joint}."))
   }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
@@ -1206,7 +1208,8 @@ Iterate_Plot_Density_Custom <- function(
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
-    stop("Non-default values provided to both viridis_palette & custom_palette.  Please chose one non-default value.")
+    cli_abort(message = c("Non-default values provided to both {.code viridis_palette} & {.code custom_palette}.",
+                          "i" = "Please chose one non-default value."))
   }
 
   # Modify Cluster Labels names if needed for saving plots
@@ -1355,12 +1358,16 @@ Iterate_Plot_Density_Joint <- function(
 
   # Check gene list is in list form
   if (!inherits(x = gene_list, what = "list")) {
-    stop("For 'Iterate_Plot_Density_Joint' the 'gene_list' must be of class() 'list', please reformat from current class(): ", '"', class(x = gene_list), '"', ".")
+    cli_abort(message = c("For {.code Iterate_Plot_Density_Joint} the {.code gene_list} must be of class(): {.val list}",
+                          "i" = "Please reformat from current class(): {.val {class(x = gene_list)}}"
+    ))
   }
 
   # joint check
   if (!is.null(x = joint)) {
-    stop("`Iterate_Plot_Density_Joint` only supports 'joint = TRUE'.  Leave as NULL to generate plots.  To iterate individual plots see function: 'Iterate_Plot_Density_Custom'.")
+    cli_abort(message = c("{.code Iterate_Plot_Density_Joint} only supports {.code joint = FALSE}.",
+                          "i" = "Leave as NULL to generate plots.",
+                          "i" = "To iterate joint plots see function: {.code Iterate_Plot_Density_Custom}."))
   }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
@@ -1418,7 +1425,7 @@ Iterate_Plot_Density_Joint <- function(
   # Check for lists less than 2
   bad_gene_lists <- keep(checked_gene_list,  ~length(.x) < 2)
   if (length(x = bad_gene_lists) > 0) {
-    warning("A total of ", length(x = bad_gene_lists), " list entries from `gene_list contain less than two features and were excluded from plotting.")
+    cli_warn(message = "A total of {.field {length(x = bad_gene_lists)}} list entries from {.code gene_list} contain less than two features and were excluded from plotting.")
   }
 
   # Create final good gene list
@@ -1426,7 +1433,8 @@ Iterate_Plot_Density_Joint <- function(
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
-    stop("Non-default values provided to both viridis_palette & custom_palette.  Please chose one non-default value.")
+    cli_abort(message = c("Non-default values provided to both {.code viridis_palette} & {.code custom_palette}.",
+                          "i" = "Please chose one non-default value."))
   }
 
   # Modify Cluster Labels names if needed for saving plots
