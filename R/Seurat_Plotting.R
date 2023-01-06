@@ -79,36 +79,32 @@ FeaturePlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
-  # Check features and meta to determine which features present to plot to avoid error in split plots
-  if (!is.null(x = split.by)) {
-    features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+  # Check features and meta to determine which features present
+  features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
 
-    meta_list <- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  meta_list <- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
 
-    all_not_found_features <- meta_list[[2]]
+  all_not_found_features <- meta_list[[2]]
 
-    all_found_features <- c(features_list[[1]], meta_list[[1]])
+  all_found_features <- c(features_list[[1]], meta_list[[1]])
 
-    # Stop if no features found
-    if (length(x = all_found_features) < 1) {
-      cli_abort(message = c("No features were found.",
-                            "*" = "The following are not present in object:",
-                            "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
-      )
-    }
-
-    # Return message of features not found
-    if (length(x = all_not_found_features) > 0) {
-      op <- options(warn = 1)
-      on.exit(options(op))
-      cli_warn(message = c("The following features were omitted as they were not found:",
-                           "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
-      )
-    }
-
-    # set to features to match remainder code
-    features <- all_found_features
+  # Stop if no features found
+  if (length(x = all_found_features) < 1) {
+    cli_abort(message = c("No features were found.",
+                          "*" = "The following are not present in object:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
+    )
   }
+
+  # Return message of features not found
+  if (length(x = all_not_found_features) > 0) {
+    op <- options(warn = 1)
+    on.exit(options(op))
+    cli_warn(message = c("The following features were omitted as they were not found:",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
+    )
+  }
+
 
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
@@ -142,7 +138,7 @@ FeaturePlot_scCustom <- function(
     }
   }
 
-  if (any(features %in% colnames(x = seurat_object@meta.data))) {
+  if (any(all_found_features %in% colnames(x = seurat_object@meta.data))) {
     cli_warn(message = c("Some of the plotted features are from meta.data slot.",
                          "*" = "Please check that `na_cutoff` param is being set appropriately for those features.")
     )
@@ -187,12 +183,12 @@ FeaturePlot_scCustom <- function(
 
   # plot no split & combined
   if (is.null(x = split.by) && combine) {
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && !combine) {
-    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
+    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
 
     plot <- lapply(1:length(x = plot_list), function(i) {
       p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
@@ -201,45 +197,45 @@ FeaturePlot_scCustom <- function(
 
 
   # plotting split with single feature (allows column number setting)
-  if (!is.null(x = split.by) && length(x = features) == 1) {
+  if (!is.null(x = split.by) && length(x = all_found_features) == 1) {
     # Until Seurat is fixed pull feature data to set separately
     feature_data <- FetchData(
       object = seurat_object,
-      vars = features,
+      vars = all_found_features,
       slot = slot)
     # Pull min and max values
     max_exp_value <- max(feature_data)
     min_exp_value <- min(feature_data)
 
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
     if (label_feature_yaxis) {
       plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
       plot <- plot & theme(legend.title=element_blank())
-      plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = features))) + No_Right()
+      plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features))) + No_Right()
     } else {
       plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
     }
   }
 
   # plotting split multiple features
-  if (!is.null(x = split.by) && length(x = features) > 1) {
+  if (!is.null(x = split.by) && length(x = all_found_features) > 1) {
 
     plot_list <- lapply(1:length(x = features), function(i){
       feature_data <- FetchData(
         object = seurat_object,
-        vars = features[i],
+        vars = all_found_features[i],
         slot = slot)
       # Pull min and max values
       max_exp_value <- max(feature_data)
       min_exp_value <- min(feature_data)
 
-      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
       if (label_feature_yaxis) {
         single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
         single_plot <- single_plot & theme(legend.title=element_blank())
-        single_plot <- suppressMessages(single_plot + scale_y_continuous(sec.axis = dup_axis(name = features[i]))) + No_Right()
+        single_plot <- suppressMessages(single_plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features[i]))) + No_Right()
       } else {
         single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
       }
