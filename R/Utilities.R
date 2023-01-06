@@ -351,11 +351,11 @@ Meta_Numeric <- function(
 #'
 #' Quick function to properly pull meta.data from objects.
 #'
-#' @param object Seurat object
+#' @param object Object of class Seurat or liger.
 #'
 #' @importFrom methods slot
 #'
-#' @return A data.frame
+#' @return A data.frame containing cell-level meta data
 #'
 #' @export
 #'
@@ -364,19 +364,42 @@ Meta_Numeric <- function(
 #' @rdname Fetch_Meta
 #'
 #' @examples
-#' \dontrun{
-#' meta_data <- Fetch_Meta(object = pbmc)
-#' }
+#' library(Seurat)
+#' meta_data <- Fetch_Meta(object = pbmc_small)
+#' head(meta_data, 5)
 #'
 
-Fetch_Meta <- function(
+Fetch_Meta <- function(object) {
+  UseMethod(generic = 'Fetching_Meta')
+}
+
+
+#' @rdname Fetch_Meta
+#' @export
+#' @concept helper_util
+#' @method Fetch_Meta Seurat
+
+Fetch_Meta.Seurat <- function(
   object
 ) {
-  # Check Seurat
-  Is_Seurat(seurat_object = object)
+  # Pull meta data
+  object_meta <- object_meta <- slot(object = object, name = "meta.data")
+
+  return(object_meta)
+}
+
+
+#' @rdname Fetch_Meta
+#' @export
+#' @concept helper_util
+#' @method Fetch_Meta liger
+
+Fetch_Meta.liger <- function(
+  object
+) {
 
   # Pull meta data
-  object_meta <- slot(object = object, name = "meta.data")
+  object_meta <- object_meta <- slot(object = object, name = "cell.data")
 
   return(object_meta)
 }
