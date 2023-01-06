@@ -767,7 +767,9 @@ Meta_Highlight_Plot <- function(
   accepted_meta_types <- c("factor", "character", "logical")
 
   if (!class(x = seurat_object@meta.data[[good_meta_data_column]]) %in% accepted_meta_types) {
-    stop("The 'good_meta_data_column': ", good_meta_data_column, " is of class: ", '"', class(x = seurat_object@meta.data[[good_meta_data_column]]), '"', " only meta data variables of classes: factor, character, or logical can be used with Meta_Highlight_Plot().")
+    cli_abort(message = c("The {.code good_meta_data_column}: {good_meta_data_column} is of class: {class(x = seurat_object@meta.data[[good_meta_data_column]])}.",
+                          "i" = "Meta data variables must be of classes: factor, character, or logical to be used with Meta_Highlight_Plot().")
+              )
   }
 
   # Check meta_data_highlight
