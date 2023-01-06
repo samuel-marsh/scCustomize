@@ -2,6 +2,7 @@
 ## Added  
 - Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
 - Added ability to rotate x-axis of `Stacked_VlnPlot` 90 degrees or 45 (previously possible) ([#84](https://github.com/samuel-marsh/scCustomize/issues/84)).  
+- Added error checks to `Merge_Seurat_List` to avoid ambiguous error messages on failure.  
   
 ## Changed  
 - **BREAKING CHANGE** Parameter in `PalettePlot` has been changed from `palette` to `pal`.  
@@ -9,10 +10,13 @@
 - Moved viridis package to Suggests and use paletteer package for viridis palette shortcut functions.  
 - Fixed color palette continuity in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot`.  
 - `Fetch_Meta` is now S3 generic function that can handle either Seurat or LIGER objects.  
+- Rearrange base R code within `R/` scripts for better organization.  
 
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
 - Fixed `Add_Mito_Ribo_Seurat` to respect provided `mito_name`, `ribo_name` and `mito_ribo_name` values.  
+- Updated out-dated documentation for number of package functions.  
+- Typo/styling fixes.  
  
 # scCustomize 1.1.0 (2022-12-22)  
 ## Added  
