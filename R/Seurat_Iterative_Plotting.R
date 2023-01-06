@@ -583,7 +583,7 @@ Iterate_Meta_Highlight_Plot <- function(
   # Relevel idents to custom order
   if (single_pdf && !is.null(x = new_meta_order)) {
     if (length(x = new_meta_order) != length(x = levels(x = seurat_object@active.ident))) {
-      stop("The length of 'new_meta_order' (", length(x = new_meta_order), ") does not equal the number of levels in ", meta_data_column, " (", length(x = levels(x = seurat_object@active.ident)), ").")
+      cli_abort(message = c("The length of 'new_meta_order' ({.field {length(x = new_meta_order)}}) does not equal the number of levels in {.code meta_data_column}: {.val {meta_data_column}} ({.field {length(x = levels(x = seurat_object@active.ident))}})"))
     }
     Idents(seurat_object) <- factor(Idents(seurat_object), levels = new_meta_order)
   }
