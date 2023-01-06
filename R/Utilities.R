@@ -628,6 +628,7 @@ CheckMatrix_scCustom <- function(
 #' See \code{\link[SeuratObject]{merge}}.
 #' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
 #'
+#' @import cli
 #' @importFrom purrr reduce
 #'
 #' @return A Seurat Object
@@ -649,6 +650,18 @@ Merge_Seurat_List <- function(
   merge.data = TRUE,
   project = "SeuratProject"
 ) {
+  # Check list_seurat is list
+  if (!inherits(x = list_seurat, what = "list")) {
+    cli_abort(message = "{.code list_seurat} must be environmental variable of class {.val list}")
+  }
+
+  # Check list_seurat is only composed of Seurat objects
+  for (i in 1:length(x = list_seurat)) {
+    if (!inherits(x = list_seurat[[i]], what = "Seurat")) {
+      cli_abort("One or more of entries in {.code list_seurat} are not objects of class {.val Seurat}")
+    }
+  }
+
   merged_object <- reduce(list_seurat, function(x, y) {
     merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
   })
