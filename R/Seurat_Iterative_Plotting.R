@@ -169,17 +169,19 @@ Iterate_DimPlot_bySample <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
   if (is.null(x = file_type)) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
   if (!file_type %in% file_type_options) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Extract reduction coordinates
@@ -330,17 +332,19 @@ Iterate_Cluster_Highlight_Plot <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
   if (is.null(x = file_type)) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
   if (!file_type %in% file_type_options) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Extract default reduction
@@ -549,17 +553,19 @@ Iterate_Meta_Highlight_Plot <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
   if (is.null(x = file_type)) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
   if (!file_type %in% file_type_options) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Extract default reduction
@@ -788,17 +794,19 @@ Iterate_FeaturePlot_scCustom <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
-  if (is.null(x = file_type) && !return_plots) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+  if (is.null(x = file_type)) {
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
-  if (!file_type %in% file_type_options && !return_plots) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+  if (!file_type %in% file_type_options) {
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Check whether features are present in object
@@ -983,22 +991,19 @@ Iterate_VlnPlot_scCustom <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
   if (is.null(x = file_type)) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
   if (!file_type %in% file_type_options) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
-  }
-
-  # check for single pdf file type
-  if (single_pdf && str_detect(file_type, ".pdf") == FALSE) {
-    stop("File type set to non-PDF type but 'single_pdf = TRUE' also selected.  Confirm output desired and re-run function.")
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Check whether features are present in object
@@ -1178,17 +1183,19 @@ Iterate_Plot_Density_Custom <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
   if (is.null(x = file_type)) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
   if (!file_type %in% file_type_options) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Check whether features are present in object
@@ -1378,17 +1385,19 @@ Iterate_Plot_Density_Joint <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    message("WARNING: non-PDF 'file_type' specified but 'single_pdf = TRUE' selected.  Changing file_type to .pdf for output.")
+    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
   if (is.null(x = file_type)) {
-    stop("'file_type' not specified must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = c("{.code file_type} not specified.",
+                          "*" = "Must specify output file type format from the following:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
   if (!file_type %in% file_type_options) {
-    stop("'file_type' must be one of the following: '.pdf', '.png', '.tiff', '.jpeg', '.svg'")
+    cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
   # Check whether features are present in object
