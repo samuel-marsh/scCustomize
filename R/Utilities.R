@@ -351,7 +351,7 @@ Meta_Numeric <- function(
 #'
 #' Quick function to properly pull meta.data from objects.
 #'
-#' @param object list of matrices to merge.
+#' @param object Seurat object
 #'
 #' @importFrom methods slot
 #'
@@ -360,6 +360,8 @@ Meta_Numeric <- function(
 #' @export
 #'
 #' @concept helper_util
+#'
+#' @rdname Fetch_Meta
 #'
 #' @examples
 #' \dontrun{
