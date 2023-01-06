@@ -71,8 +71,9 @@ Gene_Present <- function(
     possible_features <- rownames(x = data)
   } else {
     all_accepted <- c(accepted_types, "Seurat", "liger")
-    stop("Input data is currently accepted only in the following formats: \n",
-         glue_collapse_scCustom(input_string = all_accepted, and = FALSE))
+    cli_abort(message = c("Input data is currently accepted only in the following formats:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_accepted, and = FALSE)}}.")
+    )
   }
 
   # If any features not found
@@ -89,14 +90,15 @@ Gene_Present <- function(
         )
         return(feature_list)
       } else {
-        stop("No requested features found.")
+        cli_abort(message ="No requested features found.")
       }
     }
 
     # Return message of features not found
     if (length(x = bad_features) > 0 && omit_warn) {
-      warning("The following features were omitted as they were not found",
-              ": ", glue_collapse_scCustom(input_string = bad_features, and = TRUE))
+      cli_warn(message = c("The following features were omitted as they were not found:",
+                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
+      )
     }
 
     # Check if features found if case is changed.
@@ -113,9 +115,9 @@ Gene_Present <- function(
       # Additional messages if found.
       if (length(x = wrong_case_found_features) > 0) {
         if (case_check_msg) {
-          warning("NOTE: However, the following features were found: ",
-                  glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE), ".\n",
-                  "        Please check intended case of features provided.")
+          cli_abort(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
+                                "i" = "Please check intended case of features provided.")
+          )
         }
         # Combine into list and return
         feature_list <- list(
