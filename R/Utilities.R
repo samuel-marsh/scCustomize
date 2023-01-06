@@ -635,7 +635,7 @@ Replace_Suffix <- function(
       })
     }
     if (length(x = current_suffix) != length(x = data) && length(x = current_suffix) != 1) {
-      stop("'current_suffix' must either be single value or a vector of values equal in length to number of datasets in 'data'.")
+      cli_abort(message = "{.code current_suffix} must either be single value or a vector of values equal in length to number of datasets in {.code data}.")
     }
 
     # Check new suffix
@@ -646,7 +646,7 @@ Replace_Suffix <- function(
       new_suffix <- new_suffix
     }
     if (length(x = new_suffix) != length(x = data) && length(x = new_suffix) != 1) {
-      stop("'new_suffix' must either be single value or a vector of values equal in length to number of datasets in 'data'.")
+      cli_abort(message = "{.code new_suffix} must either be single value or a vector of values equal in length to number of datasets in {.code data}.")
     }
 
     # Is current suffix found in all cell names
@@ -655,7 +655,9 @@ Replace_Suffix <- function(
     })
 
     if (all(check_suffixes) != TRUE) {
-      stop("One or more 'current_suffixes' do not match cell names in data.  Check inputs.")
+      cli_abort(message = c("One or more 'current_suffixes' do not match cell names in data.",
+                            "i" = "Check inputs.")
+                )
     }
 
     # Create list of string of new names
@@ -680,7 +682,7 @@ Replace_Suffix <- function(
     current_suffix_regexp <- paste0("\\", current_suffix, "$")
     # Is current suffix found in cell names
     if (all(grepl(pattern = current_suffix_regexp, x = current_cell_names)) == FALSE) {
-      stop("Supplied 'current_suffix': ", current_suffix, " was not found in the cell names of data provided.")
+      cli_abort(message = "Supplied {.code current_suffix}: {.field {current_suffix}} was not found in the cell names of data provided.")
     }
     # Create string of new names
     new_cell_names <- gsub(pattern = current_suffix_regexp, replacement = new_suffix, x = current_cell_names)
