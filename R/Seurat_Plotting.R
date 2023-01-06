@@ -1227,7 +1227,7 @@ Stacked_VlnPlot <- function(
 
   # Add back x-axis title to bottom plot. patchwork is going to support this?
   # Add ability to rotate the X axis labels to the function call
-  if (isTRUE(x = x_lab_rotate)) {
+  if (isTRUE(x = x_lab_rotate) || x_lab_rotate == 45) {
     plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1), axis.ticks.x = element_line())
   }
@@ -1235,11 +1235,6 @@ Stacked_VlnPlot <- function(
   if (x_lab_rotate == 90) {
     plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), axis.ticks.x = element_line())
-  }
-
-  if (x_lab_rotate == 45) {
-    plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1), axis.ticks.x = element_line())
   }
 
   if (!is.logical(x = x_lab_rotate) && !x_lab_rotate %in% c(45, 90)) {
