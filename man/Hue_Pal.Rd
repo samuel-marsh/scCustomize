@@ -17,7 +17,7 @@ Shortcut to hue_pal to return to ggplot2 defaults if user desires, from scales p
 }
 \examples{
 cols <- Hue_Pal(num_colors = 8)
-PalettePlot(palette = cols)
+PalettePlot(pal= cols)
 
 }
 \concept{palettes}

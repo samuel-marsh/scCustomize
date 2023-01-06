@@ -14,7 +14,7 @@ Shortcut to a specific JCO 4 color palette from ggsci package.
 }
 \examples{
 cols <- JCO_Four()
-PalettePlot(palette = cols)
+PalettePlot(pal= cols)
 
 }
 \references{

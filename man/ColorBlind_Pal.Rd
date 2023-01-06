@@ -14,7 +14,7 @@ Shortcut ta a modified 8 color palette based on Color Universal Design (CUD) col
 }
 \examples{
 cols <- ColorBlind_Pal()
-PalettePlot(palette = cols)
+PalettePlot(pal = cols)
 
 }
 \references{
