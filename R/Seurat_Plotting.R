@@ -112,7 +112,7 @@ FeaturePlot_scCustom <- function(
 
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
-    cli_abort(message = "Setting `label_feature_yaxis = TRUE` is only supported when also setting `split.by`.")
+    cli_abort(message = "Setting {.code label_feature_yaxis = TRUE} is only supported when also setting {.code split.by}.")
   }
 
   if (!is.null(x = split.by)) {
@@ -120,8 +120,8 @@ FeaturePlot_scCustom <- function(
 
     if (!is.null(x = num_columns) && label_feature_yaxis) {
 
-      cli_warn(message = c("Setting number of columns is not permitted if `label_feature_yaxis = TRUE`",
-                           "i" = "Number of columns be automatically set to number of levels in `split.by` ({split.by_length}).")
+      cli_warn(message = c("Setting number of columns is not permitted if {.code label_feature_yaxis = TRUE}",
+                           "i" = "Number of columns be automatically set to number of levels in `split.by` ({.field {split.by_length}}).")
       )
       num_columns <- split.by_length
     }
@@ -136,15 +136,15 @@ FeaturePlot_scCustom <- function(
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                        "*" = "{split.by} only contains {split.by_length} variables.",
-                        "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
+                        "*" = "{.val {split.by}} only contains {.field {split.by_length}} variables.",
+                        "i" = "Please adjust {.code num_columns} to be less than or equal to {.field {split.by_length}}.")
       )
     }
   }
 
   if (any(all_found_features %in% colnames(x = seurat_object@meta.data))) {
     cli_warn(message = c("Some of the plotted features are from meta.data slot.",
-                         "*" = "Please check that `na_cutoff` param is being set appropriately for those features.")
+                         "*" = "Please check that {.code na_cutoff} param is being set appropriately for those features.")
     )
   }
 
