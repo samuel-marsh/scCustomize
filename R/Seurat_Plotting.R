@@ -1500,7 +1500,7 @@ Cluster_Highlight_Plot <- function(
     bad_idents <- cluster_name[!cluster_name %in% idents_list]
 
     if (length(x = bad_idents) > 0) {
-      cli_warn("The following `cluster_name{?s}` were omitted as they were not found the active.ident slot: {bad_idents}")
+      cli_warn("The following `cluster_name{?s}` were omitted as they were not found the active.ident slot: {.field {bad_idents}}")
     }
   }
 
@@ -1516,8 +1516,8 @@ Cluster_Highlight_Plot <- function(
   # Adjust colors if needed when length(cluster_name) > 1
   if (length(x = highlight_color) == 1 && length(x = cluster_name) > 1) {
     highlight_color <- rep(x = highlight_color, length(x = cluster_name))
-    cli_inform(message = c("NOTE: Only one color provided to but {length(x = cluster_name) clusters were provided.}",
-                           "i" = "Using the same color ({highlight_color}) for all clusters."))
+    cli_inform(message = c("NOTE: Only one color provided to but {.field length(x = cluster_name)}} clusters were provided.",
+                           "i" = "Using the same color ({.val highlight_color}}) for all clusters."))
   }
 
   # If NULL set using scCustomize_Palette
