@@ -115,7 +115,7 @@ Gene_Present <- function(
       # Additional messages if found.
       if (length(x = wrong_case_found_features) > 0) {
         if (case_check_msg) {
-          cli_abort(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
+          cli_warn(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
                                 "i" = "Please check intended case of features provided.")
           )
         }
