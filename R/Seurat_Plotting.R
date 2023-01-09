@@ -1757,16 +1757,16 @@ Cell_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   if (!inherits(x = cells_highlight, what = "list")) {
-    cli_abort(message = "`cells_highlight` must be a `list()`.")
+    cli_abort(message = ".{code cells_highlight} must be of class: {.val list()}.")
   }
 
   if (is.null(x = names(x = cells_highlight))) {
-    cli_abort(message = "Entries in `cells_highlight` list must be named.")
+    cli_abort(message = "Entries in {.code cells_highlight} list must be named.")
   }
 
   # Check duplicates
   if (any(duplicated(x = unlist(x = cells_highlight)))) {
-    cli_abort(message = c("The list of `cells_highlight` contains duplicate cell names.",
+    cli_abort(message = c("The list of {.code cells_highlight} contains duplicate cell names.",
                           "i" = "Ensure all cell names are unique before plotting."
                           )
               )
@@ -1774,7 +1774,7 @@ Cell_Highlight_Plot <- function(
 
   # Check all cells are present in object
   if (!all(unlist(x = cells_highlight) %in% colnames(x = seurat_object))) {
-    cli_abort(message = c("Some of cells in `cells_highlight` are not present in object.",
+    cli_abort(message = c("Some of cells in {.code cells_highlight} are not present in object.",
                           "i" = "Ensure all cells are present in object before plotting."
                           )
               )
@@ -1791,13 +1791,13 @@ Cell_Highlight_Plot <- function(
   # Check right number of colors provided
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = highlight_color) && ggplot_default_colors) {
-    cli_abort(message = "Cannot provide both `highlight_color` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both {.code highlight_color} and specify {.code ggplot_default_colors = TRUE}.")
   }
 
   if (!is.null(x = highlight_color)) {
     if (length(x = highlight_color) != length(x = cells_highlight)) {
       cli_abort(message = c("Incorrect number of highlight colors provided. Number of colors and groups must be equal.",
-                            "i" = "`cells_highlight` contains: {length(x = cells_highlight)} groups but `highlight_color` contains: {length(x = highlight_color)} colors."
+                            "i" = "{.code cells_highlight} contains: {.field {length(x = cells_highlight)}} groups but {.code highlight_color} contains: {.field {length(x = highlight_color)}} colors."
                             )
                 )
     }
