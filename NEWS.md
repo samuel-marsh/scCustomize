@@ -1,4 +1,4 @@
-# scCustomize 1.X.X (2023-XX-XX)  
+# scCustomize 1.1.1 (2023-01-XX)  
 ## Added  
 - Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
 - Added ability to rotate x-axis of `Stacked_VlnPlot` 90 degrees or 45 (previously possible) ([#84](https://github.com/samuel-marsh/scCustomize/issues/84)).  
@@ -11,7 +11,7 @@
 - Fixed color palette continuity in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot`.  
 - `Fetch_Meta` is now S3 generic function that can handle either Seurat or LIGER objects.  
 - Rearrange base R code within `R/` scripts for better organization.  
-- Complete move of all scCustomize error/warning messgaes from base R to cli/rlang framework.  
+- Completed move of all scCustomize error/warning messgaes from base R to cli/rlang framework.  
 
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
