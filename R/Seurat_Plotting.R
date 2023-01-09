@@ -459,12 +459,12 @@ Split_FeatureScatter <- function(
 
   # split.by present
   if (is.null(x = split.by)) {
-    cli_abort(message = "No value supplied to `split.by`.")
+    cli_abort(message = "No value supplied to {.code split.by}.")
   }
 
   # Check split.by is valid
   if (split.by %in% colnames(seurat_object@meta.data) == FALSE) {
-    cli_abort(message = c("The meta data variable: '{split.by}' could not be found in object@meta.data.",
+    cli_abort(message = c("The meta data variable: {.val {split.by}} could not be found in object@meta.data.",
                           "i" = "Please check the spelling and column names of meta.data slot.")
     )
   }
@@ -481,8 +481,8 @@ Split_FeatureScatter <- function(
   # Check column and row compatibility
   if (num_columns > split.by_length) {
     cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                          "*" = "'{split.by}' only contains {split.by_length} variables.",
-                          "i" = "Please adjust `num_columns` to be less than or equal to {split.by_length}.")
+                          "*" = "{.val {split.by}} only contains {.field {split.by_length}} variables.",
+                          "i" = "Please adjust {.code num_columns} to be less than or equal to {.field {split.by_length}}.")
     )
   }
 
