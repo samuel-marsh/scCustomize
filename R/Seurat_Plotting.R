@@ -251,11 +251,12 @@ FeaturePlot_scCustom <- function(
   if (getOption(x = 'scCustomize_warn_na_cutoff', default = TRUE) && !is.na(x = na_cutoff) && na_cutoff == 0.000000001) {
     cli_inform(message = c("NOTE: {.field FeaturePlot_scCustom} uses a specified {.code na_cutoff} when plotting to",
                            "color cells with no expression as background color separate from color scale.",
-                           "Please ensure `na_cutoff` value is appropriate for feature being plotted.",
+                           "Please ensure {.code na_cutoff} value is appropriate for feature being plotted.",
                            "Default setting is appropriate for use when plotting from 'RNA' assay.\n",
-                           "When `na_cutoff` not appropriate (e.g., module scores) set to NULL to \n",
-                           "plot all cells in gradient color palette.
-       \n***This message will be shown once per session.***\n"))
+                           "When {.code na_cutoff} not appropriate (e.g., module scores) set to NULL to \n",
+                           "plot all cells in gradient color palette.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_na_cutoff = FALSE)
   }
 
@@ -264,8 +265,9 @@ FeaturePlot_scCustom <- function(
                            "with expression less than zero will be plotted with {.code na_color}: {.val {na_color}}.",
                            "To plot cells with expression values of zero using {.code na_color} leave",
                            "default {.code na_cutoff} value. If you want to plot full spectrum without",
-                           "{.code na_cutoff} (e.g., for module scores) then set {.code }na_cutoff = NULL`.
-                       \n***This message will be shown once per session.***\n"))
+                           "{.code na_cutoff} (e.g., for module scores) then set {.code na_cutoff = NULL`}.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_na_cutoff = FALSE)
   }
 
