@@ -51,11 +51,6 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-
-
-
-
 #' Check Seurat Object
 #'
 #' Checks if object is of class: Seurat and returns error message if not.
@@ -73,7 +68,7 @@ Is_Seurat <- function(
   seurat_object
 ) {
   if (!inherits(what = "Seurat", x = seurat_object)) {
-    cli_abort(message = "'seurat_object' provided is not an object of class: Seurat.")
+    cli_abort(message = "{.code seurat_object} provided is not an object of class: Seurat.")
   }
 }
 
@@ -95,7 +90,7 @@ Is_LIGER <- function(
   liger_object
 ) {
   if (class(x = liger_object)[[1]] != "liger") {
-    cli_abort(message = "'liger_object' provided is not an object of class: liger")
+    cli_abort(message = "{.code liger_object} provided is not an object of class: liger")
   }
 }
 
