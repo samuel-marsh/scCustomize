@@ -1,8 +1,8 @@
-## Resubmission  
-This is a resubmission. In this version I have:  
+## Minor Version Update 
+This is a minor update from v1.1.0 to v1.1.1. In this version I have:  
 
-- Fixed citation reference in DESCRIPTION.  
-- Fixed Unexecutable code in man/Plot_Median_Other.Rd.  
+- Combination of bug fixes, new features, code styling (see News.md).  
+- One package moved from Imports to Suggests.  
 
 
 ## R CMD check results
@@ -16,10 +16,8 @@ This is a resubmission. In this version I have:
 
 ## NOTES
 1. Maintainer: ‘Samuel Marsh <samuel.marsh@childrens.harvard.edu>’
-New submission
 
-
-2. Imports includes 29 non-default packages.
+2. Imports includes 28 non-default packages.
   Importing from so many packages makes the package vulnerable to any of
   them becoming unavailable.  Move as many as possible to Suggests and
   use conditionally.  
