@@ -65,7 +65,7 @@ Plot_Density_Custom <- function(
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
-    cli_abort(message = c("Non-default values provided to both viridis_palette & custom_palette.",
+    cli_abort(message = c("Non-default values provided to both {.code viridis_palette} & {.code custom_palette}.",
                           "i" = "Please chose one non-default value.")
     )
   }
@@ -157,7 +157,7 @@ Plot_Density_Joint_Only <- function(
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
-    cli_abort(message = c("Non-default values provided to both viridis_palette & custom_palette.",
+    cli_abort(message = c("Non-default values provided to both {.code viridis_palette} & {.code custom_palette}.",
                           "i" = "Please chose one non-default value.")
     )
   }
