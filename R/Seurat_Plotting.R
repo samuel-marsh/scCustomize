@@ -2173,7 +2173,7 @@ DimPlot_All_Samples <- function(
   # Check meta data column exists
   if (meta_data_column %in% colnames(seurat_object@meta.data) == FALSE) {
     cli_abort(message = c("Meta data variable not found.",
-                          "i" = "The `meta_data_column`: {meta_data_column}, could not be found in object@meta.data.")
+                          "i" = "The {.code meta_data_column}: {.val {meta_data_column}}, could not be found in object@meta.data.")
     )
   }
 
@@ -2218,7 +2218,7 @@ DimPlot_All_Samples <- function(
     colors_use <- rep(x = colors_use, num_plots)
   } else if (length(x = colors_use) != num_plots) {
     cli_abort(message = c("Not enough colors provided.",
-                          "i" = "Length of `colors_use` ({length(x = colors_use)}) does not equal number of plots ({num_plots}).")
+                          "i" = "Length of {.code colors_use} ({.field {length(x = colors_use)}}) does not equal number of plots ({.field {num_plots}}).")
     )
   }
 
