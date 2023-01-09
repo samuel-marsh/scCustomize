@@ -101,14 +101,13 @@ DimPlot_LIGER <- function(
 
   # Add one time dim label warning
   if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
-    message(
-      "NOTE: DimPlot_LIGER uses the `reduction_label` parameter to set axis labels \n",
-      "on the plot.\n",
-      "By default this is set to UMAP.\n",
-      "Please take note of this parameter as LIGER objects do not store the name\n",
-      "of reduction technique used and therefore this needs to be set manually. \n
-       \nThis message will be shown once per session.\n"
-    )
+    cli_inform(message = c("NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
+                           "on the plot.",
+                           "By default this is set to {.val UMAP}.",
+                           "Please take note of this parameter as LIGER objects do not store the name",
+                           "of reduction technique used and therefore this needs to be set manually.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_LIGER_dim_labels = FALSE)
   }
 
@@ -116,10 +115,10 @@ DimPlot_LIGER <- function(
   raster <- raster %||% (nrow(x = liger_object@cell.data) > 2e5)
 
   if (raster && (nrow(x = liger_object@cell.data) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
-    message("Rasterizing points since number of points exceeds 200,000.",
-            "\nTo disable this behavior set `raster=FALSE`
-            \nThis message will be shown once per session.\n"
-    )
+    cli_inform(message = c("Rasterizing points since number of points exceeds 200,000.",
+                           "To disable this behavior set {.code raster = FALSE}",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_raster_LIGER = FALSE)
   }
 
@@ -298,7 +297,7 @@ plotFactors_scCustom <- function(
     # Check file path is valid
     if (!is.null(x = file_path) && file_path != "") {
       if (!dir.exists(paths = file_path)) {
-        cli_abort(message = "Provided `file_path`: '{file_path}' does not exist.")
+        cli_abort(message = "Provided {.code file_path}: {.val {file_path}} does not exist.")
       }
     }
 
@@ -317,7 +316,7 @@ plotFactors_scCustom <- function(
 
     if (is.null(x = file_name)) {
       cli_abort(message = c("No file name provided.",
-                            "i" = "Please provide a file name using `file_name`.")
+                            "i" = "Please provide a file name using {.code file_name}.")
       )
     }
   }
@@ -326,12 +325,12 @@ plotFactors_scCustom <- function(
     # Check new order contains same dataset names and number of datasets
     if (length(x = levels(x = liger_object@cell.data$dataset)) != length(x = reorder_datasets)) {
       cli_abort(message = c("Error reordering datasets (number mismatch).",
-                            "i" = "The number of datasets provided to 'reorder_datasets' ({length(x = reorder_datasets)}) does not match number of datasets in LIGER object ({length(x = levels(x = levels(liger_object@cell.data$dataset)))}).")
+                            "i" = "The number of datasets provided to {.code reorder_datasets} ({.field {length(x = reorder_datasets)}}) does not match number of datasets in LIGER object ({.field {length(x = levels(x = levels(liger_object@cell.data$dataset)))}}).")
       )
     } else {
       if (!all(levels(liger_object@cell.data$dataset) %in% reorder_datasets)) {
         cli_abort(message = c("Error reordering datasets (name mismatch).",
-                              "*" = "Dataset names provided to 'reorder_datasets' do not match names of datasets in LIGER object.",
+                              "*" = "Dataset names provided to {.code reorder_datasets} do not match names of datasets in LIGER object.",
                               "i" = "Please check spelling.")
         )
       } else {
@@ -358,26 +357,25 @@ plotFactors_scCustom <- function(
 
   # Check valid number of colors for tsne/UMAP
   if (length(x = colors_use_dimreduc) < 2) {
-    cli_abort(message = c("Less than two values provided to `colors_use_dimreduc`.",
+    cli_abort(message = c("Less than two values provided to {.code colors_use_dimreduc}.",
                           "i" = "Must provided either two colors to use for creating a gradient or a larger color gradient.")
     )
   }
 
   # Add one time dim label warning
   if (getOption(x = 'scCustomize_warn_LIGER_dim_labels_plotFactors', default = TRUE)) {
-    message(
-      "NOTE: plotFactors_scCustom uses the `reduction_label` parameter to set axis labels \n",
-      "on the plot.\n",
-      "By default this is set to UMAP.\n",
-      "Please take note of this parameter as LIGER objects do not store the name\n",
-      "of reduction technique used and therefore this needs to be set manually. \n
-       \nThis message will be shown once per session.\n"
-    )
+    cli_inform(message = c("NOTE: {.field plotFactors_scCustom} uses the {.code reduction_label} parameter to set axis labels",
+                           "on the dimensionality reduction plots.",
+                           "By default this is set to {.val UMAP}.",
+                           "Please take note of this parameter as LIGER objects do not store the name",
+                           "of reduction technique used and therefore this needs to be set manually.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_LIGER_dim_labels_plotFactors = FALSE)
   }
 
   # Get Data and Plot Factors
-  cli_inform(message = "Generating plots")
+  cli_inform(message = "{.field Generating plots}")
   k <- ncol(liger_object@H.norm)
   pb <- txtProgressBar(min = 0, max = k, style = 3)
   W <- t(liger_object@W)
@@ -499,7 +497,7 @@ plotFactors_scCustom <- function(
 
   # save plots
   if (save_plots) {
-    cli_inform(message = "\nSaving plots to file")
+    cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, ".pdf", sep=""))
     pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
     for (i in 1:k) {
