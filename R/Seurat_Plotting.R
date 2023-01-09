@@ -947,7 +947,7 @@ DotPlot_scCustom <- function(
   if (length(x = all_found_features) < 1) {
     cli_abort(message = c("No features were found.",
                           "*" = "The following are not present in object:",
-                          "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
     )
   }
 
@@ -956,7 +956,7 @@ DotPlot_scCustom <- function(
     op <- options(warn = 1)
     on.exit(options(op))
     cli_warn(message = c("The following features were omitted as they were not found:",
-                         "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
     )
   }
 
@@ -1152,7 +1152,7 @@ Clustered_DotPlot <- function(
   # Check exp min/max set correctly
   if (!exp_color_min < exp_color_max) {
     cli_abort(message = c("Expression color min/max values are not compatible.",
-                          "i" = "The value for 'exp_color_min': {exp_color_min} must be less than the value for 'exp_color_max': {exp_color_max}.")
+                          "i" = "The value for {.code exp_color_min}: {.field {exp_color_min}} must be less than the value for {.code exp_color_max}: {.field {exp_color_max}}.")
     )
   }
 
@@ -1176,7 +1176,7 @@ Clustered_DotPlot <- function(
       rownames()
     cli_warn(message = c("Some scaled data missing.",
                          "*" = "The following features were removed as there is no scaled expression present in subset (`idents`) of object provided:",
-                         "i" = "{glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}.")
+                         "i" = "{.field {glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}}.")
     )
 
     # Extract good features
@@ -1280,8 +1280,8 @@ Clustered_DotPlot <- function(
     # if elbow_kmax not NULL check it is usable
     if (!is.null(x = elbow_kmax) && elbow_kmax > (nrow(x = exp_mat) - 1)) {
       elbow_kmax <- nrow(x = exp_mat) - 1
-      cli_warn(message = c("The value provided for 'elbow_kmax' is too large.",
-                           "i" = "Changing to (length(x = features)-1): {elbow_kmax}")
+      cli_warn(message = c("The value provided for {.code elbow_kmax} is too large.",
+                           "i" = "Changing to (length(x = features)-1): {.field {elbow_kmax}}.")
       )
     }
 
