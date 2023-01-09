@@ -666,7 +666,7 @@ VlnPlot_scCustom <- function(
       if (length(x = num_cells) * length(x = features) > 100000 && pt.size != 0) {
         raster <- TRUE
         cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
-                               "i" = "To plot in vector form set `raster=FALSE`")
+                               "i" = "To plot in vector form set {.code raster=FALSE}")
         )
       } else {
         raster <- FALSE
@@ -683,7 +683,7 @@ VlnPlot_scCustom <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
 
   # set default plot colors
@@ -825,7 +825,7 @@ Stacked_VlnPlot <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
   if (is.null(x = colors_use)) {
     # set default plot colors
@@ -1225,7 +1225,7 @@ Clustered_DotPlot <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use_idents) && ggplot_default_colors) {
-    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
   if (is.null(x = colors_use_idents)) {
     # set default plot colors
@@ -1955,7 +1955,7 @@ DimPlot_scCustom <- function(
 
   # Check colors use vs. ggplot2 color scale
   if (!is.null(x = colors_use) && ggplot_default_colors) {
-    cli_abort(message = "Cannot provide both custom palette to `colors_use` and specify `ggplot_default_colors = TRUE`.")
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
 
   # set default plot colors
