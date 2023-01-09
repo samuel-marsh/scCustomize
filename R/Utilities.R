@@ -253,7 +253,7 @@ Meta_Present <- function(
     if (abort) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
-                              "i" = "The following @meta.data columns were not found: {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}")
+                              "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
         )
       }
     }
@@ -457,7 +457,7 @@ Merge_Sparse_Data_All <- function(
 
   if (duplicated_barcodes && is.null(x = add_cell_ids)) {
     cli_abort(message = c("There are overlapping cell barcodes present in the input matrices.",
-                          "i" = "Please provide prefixes/suffixes to 'add_cell_ids' parameter to make unique.")
+                          "i" = "Please provide prefixes/suffixes to {.code add_cell_ids} parameter to make unique.")
     )
   }
 
@@ -492,7 +492,7 @@ Merge_Sparse_Data_All <- function(
   col_offset <- 0
   allGenes <- unique(unlist(lapply(matrix_list, rownames)))
   allCells <- c()
-  cli_inform(message = "Preparing & merging matrices.")
+  cli_inform(message = "{.field Preparing & merging matrices.}")
   pb <- txtProgressBar(min = 0, max = length(x = matrix_list), style = 3, file = stderr())
   for (i in 1:length(matrix_list)) {
     curr <- matrix_list[[i]]
@@ -530,7 +530,7 @@ Merge_Sparse_Data_All <- function(
     setTxtProgressBar(pb = pb, value = i)
   }
   close(con = pb)
-  cli_inform(message = "Creating final sparse matrix.")
+  cli_inform(message = "{.field Creating final sparse matrix.}")
   M <- sparseMatrix(
     i = full_mat[, 1],
     j = full_mat[, 2],
@@ -1022,14 +1022,14 @@ Change_Delim_All <- function(
 #' Default is Seurat default "pct.1".
 #' @param pct.2_name the name of data.frame column corresponding to percent expressed in group 2.
 #' Default is Seurat default "pct.2".
-#' @param overwrite logical.  If the `marker_dataframe` already contains column named "pct_diff" whether to
+#' @param overwrite logical.  If the {.code marker_dataframe} already contains column named "pct_diff" whether to
 #'  overwrite or return error message.  Default is FALSE.
 #'
 #' @import cli
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #'
-#' @return Returns input `marker_dataframe` with additional "pct_diff" column.
+#' @return Returns input {.code marker_dataframe} with additional "pct_diff" column.
 #'
 #' @export
 #'
@@ -1055,11 +1055,11 @@ Add_Pct_Diff <- function(
   if ("pct_diff" %in% colnames(marker_dataframe)) {
     df_name <- deparse(expr = substitute(expr = marker_dataframe))
     if (!overwrite) {
-      cli_abort(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+      cli_abort(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",
                             "i" = "To overwrite previous results set `overwrite = TRUE`.")
       )
     } else {
-      cli_inform(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+      cli_inform(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",
                             "i" = "Overwriting column as overwrite = TRUE.")
       )
     }
@@ -1078,11 +1078,11 @@ Add_Pct_Diff <- function(
 #'
 #' @param marker_dataframe data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.
 #' @param num_genes number of genes per group (e.g., cluster) to include in output list.
-#' @param group_by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
+#' @param group_by column name of {.code marker_dataframe} to group data by.  Default is "cluster" based on
 #'  \code{\link[Seurat]{FindAllMarkers}}.
-#' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group_by`.
+#' @param rank_by column name of {.code marker_dataframe} to rank data by when selecting `num_genes` per `group_by`.
 #' Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.
-#' @param gene_column column name of `marker_dataframe` that contains the gene IDs.  Default is "gene"
+#' @param gene_column column name of {.code marker_dataframe} that contains the gene IDs.  Default is "gene"
 #' based on \code{\link[Seurat]{FindAllMarkers}}.
 #' @param gene_rownames_to_column logical. Whether gene IDs are stored in rownames and should be moved to
 #' column.  Default is FALSE.
@@ -1124,20 +1124,20 @@ Extract_Top_Markers <- function(
 ) {
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
-    cli_abort(message = "`rank_by`: '{rank_by}' not found in column names of `marker_dataframe`.")
+    cli_abort(message = "{.code rank_by}: {.val {rank_by}} not found in column names of {.code marker_dataframe}.")
   }
 
   # Check grouping factor in marker data.frame
   if (!is.null(x = group_by)) {
     if (!group_by %in% colnames(x = marker_dataframe)) {
-      cli_abort(message = "`group_by`: '{group_by}' not found in column names of `marker_dataframe`.")
+      cli_abort(message = "{.code group_by}: {.val {group_by}} not found in column names of {.code marker_dataframe}.")
     }
   }
 
   # Check gene column is present
   if (!gene_column %in% colnames(x = marker_dataframe) && !gene_rownames_to_column) {
-    cli_abort(message = c("`gene_column`: '{gene_column}' not found in column names of `marker_dataframe.",
-                          "i" = "Set `gene_rownames_to_column` to move genes from rownames to column.")
+    cli_abort(message = c("{.code gene_column}: '{gene_column}' not found in column names of {.code marker_dataframe}.",
+                          "i" = "Set {.code gene_rownames_to_column} to move genes from rownames to column.")
     )
   }
 
@@ -1172,14 +1172,14 @@ Extract_Top_Markers <- function(
   # should gene list be named
   # check naming
   if (named_vector && is.null(x = group_by)) {
-    cli_warn(message = c("Cannot return named vector if `group_by` is NULL.",
+    cli_warn(message = c("Cannot return named vector if {.code group_by} is NULL.",
                          "i" = "Returning unnamed vector.")
     )
   }
 
   if (named_vector && !is.null(x = group_by)) {
     if (make_unique) {
-      cli_abort(message = "Cannot return unique list if 'named_vector = TRUE'.")
+      cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
     names(gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
@@ -1229,20 +1229,20 @@ Create_Cluster_Annotation_File <- function(
   }
   # Check directory path is exists
   if (!dir.exists(paths = dir_path)) {
-    cli_abort(message = c("Target directory '{dir_path}' does not exist.",
-                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory {.val {dir_path}} does not exist.",
+                          "i" = "Please create directory or fix {.code file_path} and re-run function.")
     )
   }
   # Confirm no files with same name in the same directory path.
   full_path <- file.path(dir_path, paste0(file_name, ".csv"))
   if (file.exists(full_path)) {
-    cli_abort(message = c("File with name {file_name} already exists in directory directory.",
-                          "i" = "Please supply a different file_name.")
+    cli_abort(message = c("File with name {.val {file_name}} already exists in directory directory.",
+                          "i" = "Please supply a different {.code file_name}.")
     )
   }
   # Save `Cluster_Annotation_Tibble`
   write.csv(Cluster_Annotation_Tibble(), full_path, row.names = F)
-  cli_inform("Cluster annotation file created in: {dir_path}.")
+  cli_inform("Cluster annotation file created in: {.val {dir_path}}.")
 }
 
 
@@ -1340,7 +1340,7 @@ Pull_Cluster_Annotation <- function(
 ) {
   # Check that annotation is in environment or a file that exists.
   if (!exists(x = deparse(expr = substitute(expr = annotation))) && !file.exists(annotation)) {
-    cli_abort(message = "No file or environmental variable: {annotation} exists.")
+    cli_abort(message = "No file or environmental variable: {.field {annotation}} exists.")
   }
   # Read or specify annotation table
   if (exists(x = deparse(expr = substitute(expr = annotation)))) {
@@ -1351,11 +1351,11 @@ Pull_Cluster_Annotation <- function(
 
   # Check that cluster and cell type columns are present
   if (!cluster_name_col %in% colnames(x = annotation_table)) {
-    cli_abort(message = "`cluster_name_col`: '{cluster_name_col}' not found in annotation data.frame.")
+    cli_abort(message = "{.code cluster_name_col}: {.val {cluster_name_col}} not found in annotation data.frame.")
   }
 
   if (!cell_type_col %in% colnames(x = annotation_table)) {
-    cli_abort(message = "`cell_type_col`: '{cell_type_col}' not found in annotation data.frame.")
+    cli_abort(message = "{.code cell_type_col}: {.val {cell_type_col}} not found in annotation data.frame.")
   }
 
   # Create list elements per cluster
@@ -1421,8 +1421,8 @@ Rename_Clusters <- function(
 
   # Check equivalent lengths
   if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
-    cli_abort(message = c("Length of `new_idents` must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "`new_idents` length: '{length(x = new_idents)}' Object@active.idents length: '{length(levels(x = seurat_object))}'.")
+    cli_abort(message = c("Length of {.code new_idents} must be equal to the number of active.idents in Seurat Object.",
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(levels(x = seurat_object))}}.")
     )
   }
 
@@ -1432,8 +1432,8 @@ Rename_Clusters <- function(
   }
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
-    cli_abort(message = c("The number of unique names for `new idents is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}.")
+    cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}}.")
     )
   }
 
@@ -1504,7 +1504,8 @@ Setup_scRNAseq_Project <- function(
   } else {
     # Check custom paths file exists
     if (!file.exists(custom_dir_file)) {
-      cli_abort(message = "`custom_dir_file` not found.  Please check file path and name provided.")
+      cli_abort(message = c("{.code custom_dir_file} {.val {custom_dir_file}} not found.",
+                            "i" = "Please check file path and name provided."))
     }
 
     # Read file and create directory list
@@ -1518,7 +1519,7 @@ Setup_scRNAseq_Project <- function(
     if (!dir.exists(dir_path)){
       dir.create(dir_path)
     } else {
-      cli_warn(message = "The directory {dir_path} aleady exists.  No new directory created.")
+      cli_warn(message = "The directory {.val {dir_path}} aleady exists.  No new directory created.")
     }
   })
 
@@ -1560,8 +1561,8 @@ Copy_To_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
-                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory {.val {folder_file_path}} does not exist.",
+                          "i" = "Please create directory or fix {.code file_path} and re-run function.")
     )
   }
 
@@ -1597,7 +1598,7 @@ Copy_From_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
+    cli_abort(message = c("Target directory {.val {folder_file_path}} does not exist.",
                           "i" = "Please create directory or fix `file_path` and re-run function.")
     )
   }
