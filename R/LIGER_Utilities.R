@@ -82,25 +82,25 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Check name collision
   if (any(duplicated(x = c(mito_name, ribo_name, mito_ribo_name)))) {
-    cli_abort(message = "One or more of values provided to `mito_name`, `ribo_name`, `mito_ribo_name` are identical.")
+    cli_abort(message = "One or more of values provided to {.code mito_name}, {.code ribo_name}, {.code mito_ribo_name} are identical.")
   }
 
   # Overwrite check
   if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
     if (!overwrite) {
-      cli_abort(message = c("Columns with {mito_name} and/or {ribo_name} already present in cell.data slot.",
-                            "i" = "*To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*")
+      cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
+                            "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}.*")
       )
     }
-    cli_inform(message = c("Columns with {mito_name} and/or {ribo_name} already present in cell.data slot.",
+    cli_inform(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
                            "i" = "Overwriting those columns as overwrite = TRUE.")
     )
   }
 
   # Checks species
   if (is.null(x = species)) {
-    cli_abort(message = c("No species name or abbreivation was provided to `species` parameter.",
-                          "i" = "If not using default species please set `species = other`.")
+    cli_abort(message = c("No species name or abbreivation was provided to {.code species} parameter.",
+                          "i" = "If not using default species please set {.code species = other}.")
     )
   }
 
@@ -115,15 +115,15 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Check ensembl vs patterns
   if (ensembl_ids && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
-    cli_warn(message = c("When using a default species and setting `ensembl_ids = TRUE` provided patterns or features are ignored.",
-                         "*" = "Supplied `mito_pattern`,`ribo_pattern`, `mito_features`,`ribo_features` will be disregarded.")
+    cli_warn(message = c("When using a default species and setting {.code ensembl_ids = TRUE} provided patterns or features are ignored.",
+                         "*" = "Supplied {.code mito_pattern}, {.code ribo_pattern}, {.code mito_features}, {.code ribo_features} will be disregarded.")
     )
   }
 
   # Assign mito/ribo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
-    cli_warn(message = c("Pattern expressions for included species (Human & Mouse) are set by default.",
-                         "*" = "Supplied `mito_pattern` and `ribo_pattern` will be disregarded.",
+    cli_warn(message = c("Pattern expressions for included species are set by default.",
+                         "*" = "Supplied {.code mito_pattern} and {.code ribo_pattern} will be disregarded.",
                          "i" = "To override defaults please supply a feature list for mito and/or ribo genes.")
     )
   }
@@ -258,11 +258,11 @@ Add_Cell_Complexity_LIGER <- function(
   # Check columns for overwrite
   if (meta_col_name %in% colnames(x = liger_object@cell.data)) {
     if (!overwrite) {
-      cli_abort(message = c("Column '{meta_col_name}' already present in cell.data slot.",
-                            "i" = "*To run function and overwrite column, set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+      cli_abort(message = c("Column {.val {meta_col_name}} already present in cell.data slot.",
+                            "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
       )
     }
-    cli_inform(message = c("Column '{meta_col_name}' already present in cell.data slot",
+    cli_inform(message = c("Column {.val {meta_col_name}} already present in cell.data slot",
                            "i" = "Overwriting those columns as `overwrite = TRUE`.")
     )
   }
@@ -273,8 +273,6 @@ Add_Cell_Complexity_LIGER <- function(
   #return object
   return(liger_object)
 }
-
-
 
 
 #' Check if meta data are present
@@ -374,8 +372,8 @@ Top_Genes_Factor <- function(
 
   # check number of factors present
   if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
-    cli_abort(message = c("'liger_factor' provided: {liger_factor} not found",
-                          "i" = "'liger_object' only contains {dim(x = liger_object@W)[[1]]} factors.")
+    cli_abort(message = c("{.code liger_factor} provided: {.field {liger_factor}} not found",
+                          "i" = "{.code liger_object} only contains {.field {dim(x = liger_object@W)[[1]]}} factors.")
     )
   }
 
@@ -553,8 +551,8 @@ Plot_By_Cluster_LIGER <- function(
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                            "*" = "'{split_by}' only contains: {split.by_length} variables.",
-                            "i" = "Please adjust `num_columns` to be less than or equal t: {split.by_length}.")
+                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
       )
     }
   }
@@ -806,8 +804,8 @@ Plot_By_Meta_LIGER <- function(
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                            "*" = "'{split_by}' only contains: {split.by_length} variables.",
-                            "i" = "Please adjust `num_columns` to be less than or equal t: {split.by_length}.")
+                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
       )
     }
   }
@@ -1025,9 +1023,9 @@ Liger_to_Seurat <- function(
   seurat_assay = "RNA"
 ) {
   if (is.null(x = reduction_label)) {
-    cli_abort(message = c("`reduction_label` parameter was not set.",
-                          "*" = " LIGER objects do not store name of dimensionality reduction technique used.",
-                          "i" = "In order to retain proper labels in Seurat object please set `reduction_label` to 'tSNE', 'UMAP', etc."))
+    cli_abort(message = c("{.code reduction_label} parameter was not set.",
+                          "*" = "LIGER objects do not store name of dimensionality reduction technique used.",
+                          "i" = "In order to retain proper labels in Seurat object please set {.code reduction_label} to {.val tSNE}, {.val UMAP}, {.val etc}."))
   }
 
   # get Seurat version
