@@ -1611,8 +1611,8 @@ Meta_Highlight_Plot <- function(
 
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
-    cli_abort(message = c("No 'meta_data_column' was not found.",
-              "i" = "No column found in object meta.data named: {meta_data_column}.")
+    cli_abort(message = c("{.code meta_data_column} was not found.",
+              "i" = "No column found in object meta.data named: {.field meta_data_column}}.")
     )
   }
 
@@ -1620,8 +1620,8 @@ Meta_Highlight_Plot <- function(
   accepted_meta_types <- c("factor", "character", "logical")
 
   if (!class(x = seurat_object@meta.data[[good_meta_data_column]]) %in% accepted_meta_types) {
-    cli_abort(message = c("The {.code good_meta_data_column}: {good_meta_data_column} is of class: {class(x = seurat_object@meta.data[[good_meta_data_column]])}.",
-                          "i" = "Meta data variables must be of classes: factor, character, or logical to be used with Meta_Highlight_Plot().")
+    cli_abort(message = c("The {.code good_meta_data_column}: {.field {good_meta_data_column}} is of class: {.val {class(x = seurat_object@meta.data[[good_meta_data_column]])}}.",
+                          "i" = "Meta data variables must be of classes: factor, character, or logical to be used with {.code Meta_Highlight_Plot()}.")
               )
   }
 
@@ -1635,14 +1635,14 @@ Meta_Highlight_Plot <- function(
   # Abort if no meta_data_highlight found
   if (length(x = found_meta_highlight) == 0) {
     cli_abort(message = c("No 'meta_data_highlight' value(s) were not found.",
-                          "i" = "The following 'meta_data_highlight' variables were not found in {good_meta_data_column}: {bad_meta_highlight}")
+                          "i" = "The following {.code meta_data_highlight} variables were not found in {.field {good_meta_data_column}} and were omitted: {.field {bad_meta_highlight}}")
     )
   }
 
   # warn if some meta_data_highlight not found
   if (length(x = found_meta_highlight) != length(x = meta_data_highlight)) {
-    cli_warn(message = c("Some 'meta_data_highlight' value(s) were not found.",
-                          "i" = "The following 'meta_data_highlight' variables were not found in {good_meta_data_column} and were omitted: {bad_meta_highlight}")
+    cli_warn(message = c("Some {.code meta_data_highlight} value(s) were not found.",
+                          "i" = "The following {.code meta_data_highlight} variables were not found in {.field {good_meta_data_column}} and were omitted: {.field {bad_meta_highlight}}")
     )
   }
 
