@@ -812,7 +812,7 @@ Stacked_VlnPlot <- function(
   if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
     cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
-                           "i" = "To plot in vector form set `raster=FALSE`")
+                           "i" = "To plot in vector form set {.code raster=FALSE}")
     )
   }
 
@@ -877,7 +877,7 @@ Stacked_VlnPlot <- function(
 
   if (!is.null(x = vln_linewidth)) {
     if (!is.numeric(x = vln_linewidth)) {
-      cli_abort(message = "`vln_linewidth` must be numeric.")
+      cli_abort(message = "{.code vln_linewidth} parameter must be numeric.")
     }
     for (j in 1:length(plot_list)) {
       plot_return[[j]]$layers[[1]]$aes_params$linewidth <- vln_linewidth
