@@ -34,7 +34,7 @@ Cluster_Stats_All_Samples <- function(
   # Check on meta data column
   possible_meta_col <- colnames(seurat_object@meta.data)
   if (!group_by_var %in% possible_meta_col) {
-    cli_abort(message = "'{group_by_var}' was not found in meta.data slot of Seurat Object.")
+    cli_abort(message = "{.val {group_by_var}} was not found in meta.data slot of Seurat Object.")
   }
 
   # Extract total percents
@@ -134,7 +134,7 @@ Percent_Expressing <- function(
   if (!is.null(x = group_by)) {
     possible_groups <- colnames(seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
-      cli_abort("Grouping variable '{group_by}' was not found in Seurat Object.")
+      cli_abort("Grouping variable {.val {group_by}} was not found in Seurat Object.")
     }
   }
 
@@ -142,7 +142,7 @@ Percent_Expressing <- function(
   if (!is.null(x = split_by)) {
     possible_groups <- colnames(seurat_object@meta.data)
     if (!split_by %in% possible_groups) {
-      cli_abort("Splitting variable '{split_by}' was not found in Seurat Object.")
+      cli_abort("Splitting variable {.val {split_by}} was not found in Seurat Object.")
     }
   }
 
@@ -346,7 +346,7 @@ CellBender_Feature_Diff <- function(
 
   if (length(x = diff_features > 0)) {
     cli_warn(message = c("The following features are not present in both assays:",
-                         "*" = "{diff_features}",
+                         "*" = "{.field {diff_features}}",
                          "i" = "Check matrices used to create object.")
              )
   }
