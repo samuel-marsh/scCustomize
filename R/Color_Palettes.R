@@ -147,11 +147,11 @@ Single_Color_Palette <- function(pal_color,
 ) {
   # Check number of colors available
   if (is.null(x = num_colors)) {
-    cli_abort(message = "No value provided to `num_colors`.")
+    cli_abort(message = "No value provided to {.code num_colors}.")
   }
   if (num_colors > 7 || num_colors < 1) {
     cli_abort(message = c("Not enough colors.",
-                          "i" = "Value provided to `num_colors` ({num_colors}) is greater than maximum number allowed (7).")
+                          "i" = "Value provided to {.code num_colors} ({.field {num_colors}}) is greater than maximum number allowed ({.field 7}).")
     )
   }
 
@@ -184,7 +184,7 @@ Single_Color_Palette <- function(pal_color,
   )
   if (!pal_color %in% names(brewer_single_modified)) {
     cli_abort(message = c("Paleete name not found.",
-                          "i" = "Palette name not found.  Please select one of following palette options: 'reds', 'blues', 'greens', 'purples', or 'grays'")
+                          "i" = "Palette name not found.  Please select one of following palette options: {.field 'reds', 'blues', 'greens', 'purples', or 'grays'}")
     )
   }
   set.seed(seed = seed_use)
@@ -422,7 +422,7 @@ DiscretePalette_scCustomize <- function(
 ) {
   if (is.null(x = palette)) {
     cli_abort(message = c("Must specify a palette to return colors.",
-                          "i" = "`palette` options are: {names(palette_list)}")
+                          "i" = "{.code palette} options are: {.field {names(palette_list)}}")
     )
   }
 
@@ -463,8 +463,8 @@ DiscretePalette_scCustomize <- function(
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
     cli_abort(message = c("Not enough colors in specified palette.",
-                          "*" = "{palette} only contains {length(x = palette_out)} colors.",
-                          "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
+                          "*" = "{.val {palette}} only contains {.field {length(x = palette_out)}} colors.",
+                          "i" = "Please adjust {.code num_colors} to be less than or equal to {.field {length(x = palette_out)}} or select a different {.code palette}.")
     )
   }
   if (shuffle_pal) {
@@ -564,7 +564,7 @@ PalettePlot <- function(
 ) {
   # Check palette
   if (is.null(x = pal)) {
-    cli_abort(message = "No value provided to `palette` parameter.")
+    cli_abort(message = "No value provided to {.code palette} parameter.")
   }
 
   if (class(x = pal) == "colors") {
