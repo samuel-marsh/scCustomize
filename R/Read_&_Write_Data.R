@@ -246,7 +246,7 @@ Read10X_GEO <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
       barcode.loc <- file.path(data_dir, paste0(sample_list[i], 'barcodes.tsv.gz'))
       gene.loc <- file.path(data_dir, paste0(sample_list[i], 'genes.tsv.gz'))
@@ -255,13 +255,13 @@ Read10X_GEO <- function(
       # Flag to indicate if this data is from CellRanger >= 3.0
       pre_ver_3 <- file.exists(gene.loc)
       if (!file.exists(barcode.loc)) {
-        cli_abort(message = "Barcode file missing. Expecting {.field {basename(path = barcode.loc)}}")
+        cli_abort(message = "Barcode file missing. Expecting {val {basename(path = barcode.loc)}}")
       }
       if (!pre_ver_3 && !file.exists(features.loc) ) {
-        cli_abort(message = "Gene name or features file missing. Expecting {.field {basename(path = features.loc)}}")
+        cli_abort(message = "Gene name or features file missing. Expecting {val {basename(path = features.loc)}}")
       }
       if (!file.exists(matrix.loc)) {
-        cli_abort(message = "Expression matrix file missing. Expecting {.field {basename(path = matrix.loc)}}")
+        cli_abort(message = "Expression matrix file missing. Expecting {val {basename(path = matrix.loc)}}")
       }
       data <- readMM(file = matrix.loc)
       cell.barcodes <- read.table(file = barcode.loc, header = FALSE, sep = '\t', row.names = NULL)
@@ -348,13 +348,13 @@ Read10X_GEO <- function(
       # Flag to indicate if this data is from CellRanger >= 3.0
       pre_ver_3 <- file.exists(gene.loc)
       if (!file.exists(barcode.loc)) {
-        cli_abort(message = "Barcode file missing. Expecting {.field {basename(path = barcode.loc)}}")
+        cli_abort(message = "Barcode file missing. Expecting {.val {basename(path = barcode.loc)}}")
       }
       if (!pre_ver_3 && !file.exists(features.loc) ) {
-        cli_abort(message = "Gene name or features file missing. Expecting {.field {basename(path = features.loc)}}")
+        cli_abort(message = "Gene name or features file missing. Expecting {.val {basename(path = features.loc)}}")
       }
       if (!file.exists(matrix.loc)) {
-        cli_abort(message = "Expression matrix file missing. Expecting {.field {basename(path = matrix.loc)}}")
+        cli_abort(message = "Expression matrix file missing. Expecting {.val {basename(path = matrix.loc)}}")
       }
       data <- readMM(file = matrix.loc)
       cell.barcodes <- read.table(file = barcode.loc, header = FALSE, sep = '\t', row.names = NULL)
@@ -558,7 +558,7 @@ Read10X_h5_GEO <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".h5"))
       data <- Read10X_h5(filename = h5_loc, ...)
@@ -673,7 +673,7 @@ Read10X_Multi_Directory <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       file_path <- file.path(base_path, sample_list[x], secondary_path)
@@ -811,7 +811,7 @@ Read10X_h5_Multi_Directory <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (cell_bender) {
@@ -994,7 +994,7 @@ Read_GEO_Delim <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
@@ -1246,7 +1246,7 @@ Read_CellBender_h5_Multi_Directory <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       # Create file path
@@ -1392,7 +1392,7 @@ Read_CellBender_h5_Multi_File <- function(
   if (parallel) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set 'parallel = FALSE' and re-run for informative error reporting.\n"))
+                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
       data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
