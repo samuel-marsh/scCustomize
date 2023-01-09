@@ -492,7 +492,7 @@ Split_FeatureScatter <- function(
   possible_features <- c(rownames(seurat_object), colnames(seurat_object@meta.data))
   check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
   if (length(x = check_features) > 0) {
-    cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field check_features}'")
+    cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field {check_features}}'")
   }
 
   # Extract min/maxes of features
@@ -1518,8 +1518,8 @@ Cluster_Highlight_Plot <- function(
   # Adjust colors if needed when length(cluster_name) > 1
   if (length(x = highlight_color) == 1 && length(x = cluster_name) > 1) {
     highlight_color <- rep(x = highlight_color, length(x = cluster_name))
-    cli_inform(message = c("NOTE: Only one color provided to but {.field length(x = cluster_name)}} clusters were provided.",
-                           "i" = "Using the same color ({.val highlight_color}}) for all clusters."))
+    cli_inform(message = c("NOTE: Only one color provided to but {.field {length(x = cluster_name)}} clusters were provided.",
+                           "i" = "Using the same color ({.val {highlight_color}}) for all clusters."))
   }
 
   # If NULL set using scCustomize_Palette
@@ -1614,7 +1614,7 @@ Meta_Highlight_Plot <- function(
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
     cli_abort(message = c("{.code meta_data_column} was not found.",
-              "i" = "No column found in object meta.data named: {.field meta_data_column}}.")
+              "i" = "No column found in object meta.data named: {.val {meta_data_column}}.")
     )
   }
 
