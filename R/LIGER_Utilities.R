@@ -93,7 +93,7 @@ Add_Mito_Ribo_LIGER <- function(
       )
     }
     cli_inform(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
-                           "i" = "Overwriting those columns as overwrite = TRUE.")
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE}.")
     )
   }
 
