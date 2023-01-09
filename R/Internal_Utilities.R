@@ -134,7 +134,7 @@ Assay_Present <- function(
     # Return message of assays not found
     if (length(x = bad_assays) > 0 && omit_warn) {
       cli_warn(message = c("The following assays were omitted as they were not found:",
-                           "i" = "{glue_collapse_scCustom(input_string = bad_assays, and = TRUE)}.")
+                           "i" = "{.field {glue_collapse_scCustom(input_string = bad_assays, and = TRUE)}}.")
       )
     }
 
