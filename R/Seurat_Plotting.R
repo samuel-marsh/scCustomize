@@ -351,14 +351,14 @@ FeaturePlot_DualAssay <- function(
 
   # Raw normalize check
   if (!paste0("NormalizeData.", assay1) %in% commands) {
-    cli_abort(message = c("Assay 1: '{assay1}' has not been normalized.",
-                          "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."))
+    cli_abort(message = c("Assay 1: {.val {assay1}} has not been normalized.",
+                          "i" = "Please run {.code NormalizeData} on this assay before proceeding to visualization."))
   }
 
   # Cell Bender normalize check
   if (!paste0("NormalizeData.", assay2) %in% commands) {
-    cli_abort(message = c("Assay 2: '{assay2}' has not been normalized.",
-                      "i" = "Please run `NormalizeData` on this assay before proceeding to visualization."))
+    cli_abort(message = c("Assay 2: {.val {assay2}} has not been normalized.",
+                      "i" = "Please run {.code NormalizeData} on this assay before proceeding to visualization."))
   }
 
   # Set columns if single feature
@@ -373,7 +373,7 @@ FeaturePlot_DualAssay <- function(
   }
 
   if (num_columns > 2 && num_features > 1) {
-    cli_warn("When plotting more than one feature `num_columns` refers to patchwork columns and must either be 1 (vertical) or 2 (horizontal).")
+    cli_warn("When plotting more than one feature {.code num_columns} refers to patchwork columns and must either be 1 (vertical) or 2 (horizontal).")
   }
 
   # Change assay and plot raw
