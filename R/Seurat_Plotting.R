@@ -1924,12 +1924,11 @@ DimPlot_scCustom <- function(
 
   # Add one time split_seurat warning
   if (!is.null(x = split.by) && !split_seurat && getOption(x = 'scCustomize_warn_DimPlot_split_type', default = TRUE)) {
-    message(
-      "NOTE: DimPlot_scCustom returns split plots as layout of all plots each \n",
-      "with their own axes as opposed to Seurat which returns with shared x or y axis.\n",
-      "To return to Seurat behvaior set `split_seurat = TRUE`.
-       \nThis message will be shown once per session.\n"
-    )
+    cli_inform(c("NOTE: {.field DimPlot_scCustom} returns split plots as layout of all plots each",
+                 "with their own axes as opposed to Seurat which returns with shared x or y axis.",
+                 "To return to Seurat behvaior set {.code split_seurat = TRUE}.",
+                 "",
+                 "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_DimPlot_split_type = FALSE)
   }
 
@@ -1945,7 +1944,7 @@ DimPlot_scCustom <- function(
 
   # figure_plot check
   if (figure_plot && !split_seurat) {
-    cli_abort(message = "'figure_plot' can only be TRUE if split_seurat is FALSE.")
+    cli_abort(message = "{.code figure_plot} can only be TRUE if {.code split_seurat = FALSE}.")
   }
 
   # Set default color palette based on number of levels being plotted
