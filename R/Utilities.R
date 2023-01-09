@@ -1022,14 +1022,14 @@ Change_Delim_All <- function(
 #' Default is Seurat default "pct.1".
 #' @param pct.2_name the name of data.frame column corresponding to percent expressed in group 2.
 #' Default is Seurat default "pct.2".
-#' @param overwrite logical.  If the {.code marker_dataframe} already contains column named "pct_diff" whether to
+#' @param overwrite logical.  If the `marker_dataframe` already contains column named "pct_diff" whether to
 #'  overwrite or return error message.  Default is FALSE.
 #'
 #' @import cli
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #'
-#' @return Returns input {.code marker_dataframe} with additional "pct_diff" column.
+#' @return Returns input `marker_dataframe` with additional "pct_diff" column.
 #'
 #' @export
 #'
@@ -1078,11 +1078,11 @@ Add_Pct_Diff <- function(
 #'
 #' @param marker_dataframe data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.
 #' @param num_genes number of genes per group (e.g., cluster) to include in output list.
-#' @param group_by column name of {.code marker_dataframe} to group data by.  Default is "cluster" based on
+#' @param group_by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
 #'  \code{\link[Seurat]{FindAllMarkers}}.
-#' @param rank_by column name of {.code marker_dataframe} to rank data by when selecting `num_genes` per `group_by`.
+#' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group_by`.
 #' Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.
-#' @param gene_column column name of {.code marker_dataframe} that contains the gene IDs.  Default is "gene"
+#' @param gene_column column name of `marker_dataframe` that contains the gene IDs.  Default is "gene"
 #' based on \code{\link[Seurat]{FindAllMarkers}}.
 #' @param gene_rownames_to_column logical. Whether gene IDs are stored in rownames and should be moved to
 #' column.  Default is FALSE.
