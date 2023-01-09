@@ -249,27 +249,23 @@ FeaturePlot_scCustom <- function(
 
   # Add one time na_cutoff warning
   if (getOption(x = 'scCustomize_warn_na_cutoff', default = TRUE) && !is.na(x = na_cutoff) && na_cutoff == 0.000000001) {
-    message(
-      "NOTE: FeaturePlot_scCustom uses a specified `na_cutoff` when plotting to \n",
-      "color cells with no expression differently.\n",
-      "Please ensure `na_cutoff` value is appropriate for feature being plotted.\n",
-      "Default setting is appropriate for use when plotting from 'RNA' assay.\n",
-      "When `na_cutoff` not appropriate (e.g., module scores) set to NULL to \n",
-      "plot all cells in gradiant color palette.
-       \nThis message will be shown once per session.\n"
-    )
+    cli_inform(message = c("NOTE: {.field FeaturePlot_scCustom} uses a specified {.code na_cutoff} when plotting to",
+                           "color cells with no expression as background color separate from color scale.",
+                           "Please ensure `na_cutoff` value is appropriate for feature being plotted.",
+                           "Default setting is appropriate for use when plotting from 'RNA' assay.\n",
+                           "When `na_cutoff` not appropriate (e.g., module scores) set to NULL to \n",
+                           "plot all cells in gradient color palette.
+       \n***This message will be shown once per session.***\n"))
     options(scCustomize_warn_na_cutoff = FALSE)
   }
 
   if (getOption(x = 'scCustomize_warn_zero_na_cutoff', default = TRUE) && !is.na(x = na_cutoff) && na_cutoff == 0) {
-    message(
-      "NOTE: Specified `na_cutoff` is set to zero. This means that only cells/nuclei\n",
-      "with expression less than zero will be plotted with `na_color`.\n",
-      "To plot cells with expression values of zero using `na_color` leave \n",
-      "default `na_cutoff` value. If you want to plot full spectrum without \n",
-      "`na_cutoff` (e.g., for module scores) then set `na_cutoff = NULL`.
-       \nThis message will be shown once per session.\n"
-    )
+    cli_inform(message = c("NOTE: Specified {.code na_cutoff} is set to {.field zero (0)}. This means that only cells/nuclei",
+                           "with expression less than zero will be plotted with {.code na_color}: {.val {na_color}}.",
+                           "To plot cells with expression values of zero using {.code na_color} leave",
+                           "default {.code na_cutoff} value. If you want to plot full spectrum without",
+                           "{.code na_cutoff} (e.g., for module scores) then set {.code }na_cutoff = NULL`.
+                       \n***This message will be shown once per session.***\n"))
     options(scCustomize_warn_na_cutoff = FALSE)
   }
 
