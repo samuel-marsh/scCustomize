@@ -169,7 +169,7 @@ Iterate_DimPlot_bySample <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
@@ -332,7 +332,7 @@ Iterate_Cluster_Highlight_Plot <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
@@ -554,7 +554,7 @@ Iterate_Meta_Highlight_Plot <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
@@ -797,7 +797,7 @@ Iterate_FeaturePlot_scCustom <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
@@ -994,7 +994,7 @@ Iterate_VlnPlot_scCustom <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
@@ -1031,15 +1031,14 @@ Iterate_VlnPlot_scCustom <- function(
   }
 
   # Add one time raster warning
-  if (single_pdf && pt.size != 0 && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {
-    message(
-      "NOTE: `single_pdf = TRUE` and `pt.size` > 0, so all points are plotted.\n",
-      "Seurat::VlnPlot does not currently support raster plotting and therefore\n",
-      "Saving large numbers of plots in vector form can result in very large\n",
-      "file sizes. Suggest setting `pt.size = 0` or splitting in small batches\n",
-      "when plotting large numbers of features in single output file.
-      \nThis message will be shown once per session.\n"
-    )
+  if (single_pdf && pt.size != 0 && !raster && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {
+    cli_inform(message = c("NOTE: {.code single_pdf = TRUE} and {.code pt.size} > 0 and {.code raster = FALSE},",
+                           "so all points are plotted.",
+                           "Saving large numbers of plots in vector form can result in very large",
+                           "file sizes. Suggest setting {.code pt.size = 0} or {.code raster = TRUE}\n",
+                           "when plotting large numbers of features in single output file.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_vln_raster_iterative = FALSE)
   }
 
@@ -1188,7 +1187,7 @@ Iterate_Plot_Density_Custom <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
@@ -1395,7 +1394,7 @@ Iterate_Plot_Density_Joint <- function(
     file_type <- ".pdf"
   }
   if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
-    cli_inform(message = "WARNING: non-PDF 'file_type' specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
+    cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
 
