@@ -110,6 +110,9 @@ FeaturePlot_scCustom <- function(
     )
   }
 
+  # Return case check message
+  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE)
+
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
     cli_abort(message = "Setting {.code label_feature_yaxis = TRUE} is only supported when also setting {.code split.by}.")
