@@ -12,7 +12,7 @@
 - Fixed color palette continuity in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot`.  
 - `Fetch_Meta` is now S3 generic function that can handle either Seurat or LIGER objects.  
 - Rearrange base R code within `R/` scripts for better organization.  
-- Completed move of all scCustomize error/warning messgaes from base R to cli/rlang framework.  
+- Completed move of all scCustomize error/warning messages from base R to cli/rlang framework.  
 
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
