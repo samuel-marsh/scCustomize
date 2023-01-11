@@ -235,7 +235,7 @@ scCustomize provides easy function to add sample-level meta data to object witho
 In order to add meta data you will need to specify:  
 
 * Seurat Object with `@meta.data` column that matches sample-level meta data (often "orig.ident").  
-* Sample-level meta data/file.  Can be either a data.frame or tibble in environemnt or a path to file to read.  
+* Sample-level meta data/file.  Can be either a data.frame or tibble in environment or a path to file to read.  
 * Joining parameters.  Define the column names the specify matching information in Seurat object and sample-level meta data.  
 
 This is example command:
