@@ -111,7 +111,7 @@ FeaturePlot_scCustom <- function(
   }
 
   # Return case check message
-  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE)
+  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE, return_features = FALSE)
 
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
@@ -687,7 +687,7 @@ VlnPlot_scCustom <- function(
   }
 
   # Return case check message
-  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE)
+  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE, return_features = FALSE)
 
   # set size if NULL
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
@@ -891,7 +891,6 @@ Stacked_VlnPlot <- function(
   if (!is.logical(x = x_lab_rotate) && !x_lab_rotate %in% c(45, 90)) {
     cli_abort(message = "{.code x_lab_rotate} must be either a logical or a numeric value of 45 or 90.")
   }
-
 
   plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
     theme(axis.text.x = element_text(), axis.ticks.x = element_line())
