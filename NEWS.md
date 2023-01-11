@@ -3,6 +3,7 @@
 - Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
 - Added ability to rotate x-axis of `Stacked_VlnPlot` 90 degrees or 45 (previously possible) ([#84](https://github.com/samuel-marsh/scCustomize/issues/84)).  
 - Added error checks to `Merge_Seurat_List` to avoid ambiguous error messages on failure.  
+- Added `Case_Check` checks/messages to all feature-based plotting functions.  
   
 ## Changed  
 - **BREAKING CHANGE** Parameter in `PalettePlot` has been changed from `palette` to `pal`.  
