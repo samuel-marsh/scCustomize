@@ -890,7 +890,8 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # One warning rastering
   if (!raster && single_pdf && getOption(x = 'scCustomize_warn_raster_iterative', default = TRUE)) {
-    cli_inform(message = c("NOTE: {.code single_pdf = TRUE} and {.code raster = FALSE},",
+    cli_inform(message = c("",
+                           "NOTE: {.code single_pdf = TRUE} and {.code raster = FALSE},",
                            "Saving large numbers of plots in vector form can result in very large file sizes.",
                            "Suggest setting {.code raster = TRUE} when plotting large numbers of features in",
                            "single output file.",
@@ -1031,7 +1032,8 @@ Iterate_VlnPlot_scCustom <- function(
 
   # Add one time raster warning
   if (single_pdf && pt.size != 0 && !raster && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {
-    cli_inform(message = c("NOTE: {.code single_pdf = TRUE} and {.code pt.size} > 0 and {.code raster = FALSE},",
+    cli_inform(message = c("",
+                           "NOTE: {.code single_pdf = TRUE} and {.code pt.size} > 0 and {.code raster = FALSE},",
                            "so all points are plotted.",
                            "Saving large numbers of plots in vector form can result in very large",
                            "file sizes. Suggest setting {.code pt.size = 0} or {.code raster = TRUE}\n",
