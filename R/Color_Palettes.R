@@ -567,7 +567,7 @@ PalettePlot <- function(
     cli_abort(message = "No value provided to {.code palette} parameter.")
   }
 
-  if (class(x = pal) == "colors") {
+  if (inherits(x = pal, what = "colors")) {
     pal <- as.vector(x = pal)
   }
 
