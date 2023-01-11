@@ -101,7 +101,8 @@ DimPlot_LIGER <- function(
 
   # Add one time dim label warning
   if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
-    cli_inform(message = c("NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
+    cli_inform(message = c("",
+                           "NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
                            "on the plot.",
                            "By default this is set to {.val UMAP}.",
                            "Please take note of this parameter as LIGER objects do not store the name",
@@ -115,7 +116,8 @@ DimPlot_LIGER <- function(
   raster <- raster %||% (nrow(x = liger_object@cell.data) > 2e5)
 
   if (raster && (nrow(x = liger_object@cell.data) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
-    cli_inform(message = c("Rasterizing points since number of points exceeds 200,000.",
+    cli_inform(message = c("",
+                           "Rasterizing points since number of points exceeds 200,000.",
                            "To disable this behavior set {.code raster = FALSE}",
                            "",
                            "-----This message will be shown once per session.-----"))
@@ -364,7 +366,8 @@ plotFactors_scCustom <- function(
 
   # Add one time dim label warning
   if (getOption(x = 'scCustomize_warn_LIGER_dim_labels_plotFactors', default = TRUE)) {
-    cli_inform(message = c("NOTE: {.field plotFactors_scCustom} uses the {.code reduction_label} parameter to set axis labels",
+    cli_inform(message = c("",
+                           "NOTE: {.field plotFactors_scCustom} uses the {.code reduction_label} parameter to set axis labels",
                            "on the dimensionality reduction plots.",
                            "By default this is set to {.val UMAP}.",
                            "Please take note of this parameter as LIGER objects do not store the name",
