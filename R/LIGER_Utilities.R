@@ -405,7 +405,7 @@ Top_Genes_Factor <- function(
 #' @references This function is encompasses the first part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to allow plotting other meta data variables.  In this case the function
 #' just returns the data.frame needed for plotting rather than plots themselves.
-#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (License: GPL-3).
 #'
 #' @noRd
 #'
@@ -923,7 +923,7 @@ Plot_By_Meta_LIGER <- function(
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
 #' which is called by this function after creating new temporary object/dataset.
-#' \url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
+#' \url{https://github.com/welch-lab/liger}. (License: GPL-3).
 #'
 #' @export
 #'
