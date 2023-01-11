@@ -249,7 +249,8 @@ FeaturePlot_scCustom <- function(
 
   # Add one time na_cutoff warning
   if (getOption(x = 'scCustomize_warn_na_cutoff', default = TRUE) && !is.na(x = na_cutoff) && na_cutoff == 0.000000001) {
-    cli_inform(message = c("NOTE: {.field FeaturePlot_scCustom} uses a specified {.code na_cutoff} when plotting to",
+    cli_inform(message = c("",
+                           "NOTE: {.field FeaturePlot_scCustom} uses a specified {.code na_cutoff} when plotting to",
                            "color cells with no expression as background color separate from color scale.",
                            "Please ensure {.code na_cutoff} value is appropriate for feature being plotted.",
                            "Default setting is appropriate for use when plotting from 'RNA' assay.\n",
@@ -261,7 +262,8 @@ FeaturePlot_scCustom <- function(
   }
 
   if (getOption(x = 'scCustomize_warn_zero_na_cutoff', default = TRUE) && !is.na(x = na_cutoff) && na_cutoff == 0) {
-    cli_inform(message = c("NOTE: Specified {.code na_cutoff} is set to {.field zero (0)}. This means that only cells/nuclei",
+    cli_inform(message = c("",
+                           "NOTE: Specified {.code na_cutoff} is set to {.field zero (0)}. This means that only cells/nuclei",
                            "with expression less than zero will be plotted with {.code na_color}: {.val {na_color}}.",
                            "To plot cells with expression values of zero using {.code na_color} leave",
                            "default {.code na_cutoff} value. If you want to plot full spectrum without",
@@ -1924,7 +1926,8 @@ DimPlot_scCustom <- function(
 
   # Add one time split_seurat warning
   if (!is.null(x = split.by) && !split_seurat && getOption(x = 'scCustomize_warn_DimPlot_split_type', default = TRUE)) {
-    cli_inform(c("NOTE: {.field DimPlot_scCustom} returns split plots as layout of all plots each",
+    cli_inform(c("",
+                 "NOTE: {.field DimPlot_scCustom} returns split plots as layout of all plots each",
                  "with their own axes as opposed to Seurat which returns with shared x or y axis.",
                  "To return to Seurat behvaior set {.code split_seurat = TRUE}.",
                  "",
