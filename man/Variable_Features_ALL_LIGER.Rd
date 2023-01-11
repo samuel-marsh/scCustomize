@@ -53,6 +53,6 @@ liger_obj <- Variable_Features_ALL_LIGER(liger_object = liger_obj, num_genes = 2
 \references{
 Matching function parameter text descriptions are taken from \code{rliger::selectGenes}
 which is called by this function after creating new temporary object/dataset.
-\url{https://github.com/welch-lab/liger}. (Licence: GPL-3).
+\url{https://github.com/welch-lab/liger}. (License: GPL-3).
 }
 \concept{liger_object_util}
