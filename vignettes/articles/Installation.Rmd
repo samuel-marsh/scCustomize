@@ -64,7 +64,7 @@ A full copy of the changes in each version can be found in the [NEWS/ChangeLog](
 
 
 ## Develop branch    
-I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.yyyy.  
+I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.9yyy.  
 
 ```
 devtools::install_github(repo = "samuel-marsh/scCustomize", ref = "develop")

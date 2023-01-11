@@ -142,8 +142,20 @@ liger_obj <- Add_Mito_Ribo_Seurat(seurat_object = liger_obj, species = "human")
 ```
 
 
+## Add Cell Complexity/Novelty QC Metric
+scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
+```{r eval = FALSE}
+# These defaults can be run just by providing accepted species name
+pbmc <- Add_Cell_Complexity_Seurat(seurat_object = pbmc)
+```
+*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER()`).*
+
+
+
+
+
 ## Meta Data  
-scCustomize contains a set of functions to add in use of meta data both within and outside of objects.  
+scCustomize contains a set of functions to aid in use of meta data both within and outside of objects.  
 
 ```{r, include = FALSE}
 pbmc <- pbmc3k.SeuratData::pbmc3k

@@ -50,13 +50,20 @@ While the default Seurat and ggplot2 plots work well they can often be enhanced 
 library(tidyverse)
 library(patchwork)
 library(scCustomize)
+library(qs)
 
+# Load Marsh et al., 2022 datasets
+marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
+
+# Load PBMC example dataset
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
 ```
 
 
 ```{r include=FALSE}
 pbmc <- UpdateSeuratObject(pbmc)
+
+marsh_mouse_micro <- UpdateSeuratObject(object = marsh_mouse_micro)
 ```
 
 ```{r include=FALSE}
@@ -74,29 +81,38 @@ The continuous palettes from the [viridis package](https://sjmgarnier.github.io/
 PalettePlot(pal = paletteer::paletteer_c(palette = "viridis::plasma", n = 250, direction = -1)) + ggtitle("Viridis Plasma Palette (reversed).")
 ```
 
-```{r echo=FALSE, fig.align='center', fig.cap="*These palettes provided better contrast for continuous palettes.\n In scCustomize the default is `viridis_plasma_dark_high`*", fig.dim=c(10, 2.5)}
-wrap_plots(p1, p2, p3, p4, ncol = 4) + plot_annotation(tag_levels = 'A')
+```{r echo=FALSE, fig.align='center', fig.cap="*These palettes provided better contrast for continuous palettes.\n In scCustomize the default is `viridis_plasma_dark_high`*", fig.dim=c(10, 7.5)}
+wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = 'A')
+```
+
+There is one exception to this in that `Plot_Density_Custom()` and `Plot_Density_Joint()` use the "magma" palette by default.  This choice was made as I believe that the magma palette provides better color scale for these plots.
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="*Example comparing **A.** default `Plot_Density_Custom` which uses 'magma' palette vs. **B.** plot using the 'plasma' palette.*", fig.align='center'}
+# Create Plots
+p1 <- Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos")
+p2 <- Plot_Density_Custom(seurat_object = marsh_mouse_micro, features = "Fos", viridis_palette = "plasma")
+wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
 ### Plotting Discrete Variables
 To provide better visualizations using default parameters scCustomize sets a series of defaults for plots with discrete palettes using `scCustomize_Palette()` function.
 
-* If only one identity is being plotted will use: "dodgerblue".
-* If only two identities are being plotted will use: `NavyAndOrange()`
+* If only **one identity** is being plotted will use: "dodgerblue".
+* If only *two identities* are being plotted will use: `NavyAndOrange()`
 * If greater than 2 identities but less than or equal to 36 will use: `DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")`
 * If greater than 36 identities will use dynamic varibow palette: `DiscretePalette_scCustomize(num_colors = *Number of identities*, palette = "varibow", shuffle_pal = TRUE)`
 
 ```{r echo=FALSE, fig.height=1,fig.width=11}
 PalettePlot(pal = "dodgerblue", label_color_num = FALSE) + ggtitle("'dodgerblue' (1 color)")
-PalettePlot(pal = NavyAndOrange()) + ggtitle("NavyAndOrange() (2 colors)")
-PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")) + ggtitle("polychrome (36 colors)")
-PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 50, palette = "varibow", shuffle_pal = TRUE)) + ggtitle("varibow (50 color version)")
+PalettePlot(pal = NavyAndOrange(), label_color_num = FALSE) + ggtitle("NavyAndOrange() (2 colors)")
+PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome"), label_color_num = FALSE) + ggtitle("polychrome (36 colors)")
+PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 50, palette = "varibow", shuffle_pal = TRUE), label_color_num = FALSE) + ggtitle("varibow (50 color version)")
 ```
 
 ## Helper Functions & Shortcuts  
 
 ## Continuous Palettes
-scCustomize has a number of quick helpers for access to palettes from viridis package.  For more information on viridis palettes and what they are see [Intro to Viridis](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) package vignette.
+scCustomize has a number of quick helpers for access to palettes from viridis package.  For more information on viridis palettes.  These can be supplied to any appropriate plotting function in scCustomize or any other plot in R.
 
 * viridis_plasma_dark_high
 * viridis_plasma_light_high
@@ -108,15 +124,15 @@ scCustomize has a number of quick helpers for access to palettes from viridis pa
 * viridis_light_high
 
 
-```{r include=FALSE}
-p1 <- FeaturePlot(object = pbmc, features = "CD3E", order = T)
-p2 <- FeaturePlot_scCustom(seurat_object = pbmc, features = "CD3E", order = T)
-p3 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_magma_dark_high, features = "CD3E", order = T)
-p4 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_light_high, features = "CD3E", order = T)
+```{r}
+p1 <- FeaturePlot_scCustom(seurat_object = pbmc, features = "CD3E")
+p2 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_magma_dark_high, features = "CD3E")
+p3 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_inferno_dark_high, features = "CD3E")
+p4 <- FeaturePlot_scCustom(seurat_object = pbmc, colors_use = viridis_light_high, features = "CD3E")
 ```
 
-```{r echo=FALSE, fig.align='center', fig.cap="*These palettes provided better contrast for continuous palettes.\n In scCustomize the default is `viridis_plasma_dark_high`*", fig.dim=c(10, 2.5)}
-wrap_plots(p1, p2, p3, p4, ncol = 4) + plot_annotation(tag_levels = 'A')
+```{r echo=FALSE, fig.align='center', fig.cap="*These palettes provided better contrast for continuous palettes.\n In scCustomize the default is `viridis_plasma_dark_high`*", fig.dim=c(10, 7.5)}
+wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = 'A')
 ```
 
 
@@ -138,7 +154,7 @@ The function `DiscretePalette_scCustomize` is function inspired and modified fro
 polychrome_pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")
 
 # Call within another function
-DimPlot(object = obj_name, cols = DiscretePalette_scCustomize(num_colors = 26, palette = "polychrome"))
+DimPlot_scCustom(seurat_object = obj_name, colors_use = DiscretePalette_scCustomize(num_colors = 26, palette = "polychrome"))
 ```
 
 ### The "polychrome" palette is the new default for plots with <36 levels and "varibow" when more than 36 levels
@@ -148,7 +164,7 @@ DimPlot_scCustom(seurat_object = pbmc)
 
 
 ### Visualize Palettes
-To visualize these or any other palettes you can use the `PalettePlot()` function.
+To visualize these or any other palette you can use the `PalettePlot()` function.
 ```{r eval=FALSE}
 PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 26, palette = "alphabet"))
 
