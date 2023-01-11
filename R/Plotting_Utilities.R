@@ -249,7 +249,7 @@ Test_Integer <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-#' Unrotate x axis on VlnPLot
+#' Unrotate x axis on VlnPlot
 #'
 #' Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnPlot is rotated by default).
 #'
