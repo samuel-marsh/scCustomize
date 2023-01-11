@@ -660,6 +660,35 @@ VlnPlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
+  # Check features and meta to determine which features present
+  features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+
+  meta_list <- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+
+  all_not_found_features <- meta_list[[2]]
+
+  all_found_features <- c(features_list[[1]], meta_list[[1]])
+
+  # Stop if no features found
+  if (length(x = all_found_features) < 1) {
+    cli_abort(message = c("No features were found.",
+                          "*" = "The following are not present in object:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
+    )
+  }
+
+  # Return message of features not found
+  if (length(x = all_not_found_features) > 0) {
+    op <- options(warn = 1)
+    on.exit(options(op))
+    cli_warn(message = c("The following features were omitted as they were not found:",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
+    )
+  }
+
+  # Return case check message
+  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE)
+
   # set size if NULL
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
@@ -670,7 +699,7 @@ VlnPlot_scCustom <- function(
     if (pt.size == 0) {
       raster <- FALSE
     } else {
-      if (length(x = num_cells) * length(x = features) > 100000 && pt.size != 0) {
+      if (length(x = num_cells) * length(x = all_found_features) > 100000 && pt.size != 0) {
         raster <- TRUE
         cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
                                "i" = "To plot in vector form set {.code raster=FALSE}")
@@ -699,7 +728,7 @@ VlnPlot_scCustom <- function(
   }
 
   # Plot
-  plot <- VlnPlot(object = seurat_object, features = features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster, add.noise = add.noise, ...)
+  plot <- VlnPlot(object = seurat_object, features = all_found_features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster, add.noise = add.noise, ...)
 
   return(plot)
 }
