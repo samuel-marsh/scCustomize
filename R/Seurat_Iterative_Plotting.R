@@ -890,13 +890,12 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # One warning rastering
   if (!raster && single_pdf && getOption(x = 'scCustomize_warn_raster_iterative', default = TRUE)) {
-    message(
-      "NOTE: The raster parameter is currently set to FALSE and `single_pdf = TRUE`.\n",
-      "Saving large numbers of plots in vector form can result in very large\n",
-      "file sizes. Suggest setting `raster = TRUE` when plotting large numbers \n",
-      "of features in single output file.
-      \nThis message will be shown once per session.\n"
-    )
+    cli_inform(message = c("NOTE: {.code single_pdf = TRUE} and {.code raster = FALSE},",
+                           "Saving large numbers of plots in vector form can result in very large file sizes.",
+                           "Suggest setting {.code raster = TRUE} when plotting large numbers of features in",
+                           "single output file.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
     options(scCustomize_warn_raster_iterative = FALSE)
   }
 }
