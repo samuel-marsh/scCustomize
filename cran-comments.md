@@ -7,7 +7,7 @@ This is a minor update from v1.1.0 to v1.1.1. In this version I have:
 
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 1 notes
 
 ### Test environments  
 - Run locally, R4.1.2, Platform: x86_64-apple-darwin17.0 (64-bit) with `devtools:check()`.  
