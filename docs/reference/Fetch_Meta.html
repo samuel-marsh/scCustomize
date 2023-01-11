@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0.9014</span>
       </span>
     </div>
 
@@ -53,6 +53,9 @@
     <li class="divider">
     <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
+      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    </li>
+    <li>
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
@@ -60,9 +63,6 @@
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -110,27 +110,45 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for Seurat</span></span>
+<span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for liger</span></span>
+<span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
-<dd><p>list of matrices to merge.</p></dd>
+<dd><p>Object of class Seurat or liger.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A data.frame</p>
+<p>A data.frame containing cell-level meta data</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">meta_data</span> <span class="op">&lt;-</span> <span class="fu">Fetch_Meta</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">meta_data</span> <span class="op">&lt;-</span> <span class="fu">Fetch_Meta</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_small</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">meta_data</span>, <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   orig.ident nCount_RNA nFeature_RNA RNA_snn_res.0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ATGCCAGAACGACT SeuratProject         70           47               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CATGGCCTGTGCAT SeuratProject         85           52               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GAACCTGATGAACC SeuratProject         87           50               1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TGACTGGATTCTCA SeuratProject        127           56               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AGTCAGACTGCACA SeuratProject        173           53               0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                letter.idents groups RNA_snn_res.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ATGCCAGAACGACT             A     g2             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CATGGCCTGTGCAT             A     g1             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GAACCTGATGAACC             B     g2             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TGACTGGATTCTCA             A     g2             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AGTCAGACTGCACA             A     g2             0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

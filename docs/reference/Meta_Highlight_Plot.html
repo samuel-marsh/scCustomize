@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0.9014</span>
       </span>
     </div>
 
@@ -53,6 +53,9 @@
     <li class="divider">
     <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
+      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    </li>
+    <li>
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
@@ -60,9 +63,6 @@
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -114,7 +114,7 @@
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">meta_data_column</span>,</span>
 <span>  <span class="va">meta_data_highlight</span>,</span>
-<span>  highlight_color <span class="op">=</span> <span class="st">"navy"</span>,</span>
+<span>  highlight_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  background_color <span class="op">=</span> <span class="st">"lightgray"</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -122,6 +122,7 @@
 <span>  label <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  split_seurat <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -173,6 +174,11 @@ Default is c(512, 512).</p></dd>
 <dt>split_seurat</dt>
 <dd><p>logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.</p></dd>
+
+
+<dt>ggplot_default_colors</dt>
+<dd><p>logical.  If <code>colors_use = NULL</code>, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.</p></dd>
 
 
 <dt>...</dt>

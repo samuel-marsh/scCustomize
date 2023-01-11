@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0.9014</span>
       </span>
     </div>
 
@@ -72,6 +72,9 @@
     </li>
 <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
+      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    </li>
+    <li>
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
@@ -79,9 +82,6 @@
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -129,8 +129,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Customized Color Palettes &amp; Themes</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 23,
-2022</h4>
+            <h4 data-toc-skip class="date">Compiled: January 11,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Color_Palettes.Rmd" class="external-link"><code>vignettes/articles/Color_Palettes.Rmd</code></a></small>
       <div class="hidden name"><code>Color_Palettes.Rmd</code></div>
@@ -150,24 +150,89 @@ p.caption {
 </h2>
 <p>While the default Seurat and ggplot2 plots work well they can often
 be enhanced by customizing color palettes and themeing options used. To
-simplify/streamline this process for end users scCustomize contains a
-number of shortcut or helper functions for quick access to color
-palettes and themes that are frequently used.</p>
+simplify/streamline this process for end users scCustomize:</p>
+<p><strong>1. Sets default discrete and continuous variables that are
+consistent across the package and are customized to plotting
+conditions.</strong><br><strong>2. Contains a number of shortcuts or helper functions for quick
+access to color palettes and themes that are frequently
+used.</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cran.r-project.org/package=scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Load Marsh et al., 2022 datasets</span></span>
+<span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load PBMC example dataset</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="package-default-palettes">Package Default Palettes<a class="anchor" aria-label="anchor" href="#package-default-palettes"></a>
+</h2>
+<div class="section level3">
+<h3 id="plotting-continuous-variables">Plotting Continuous Variables<a class="anchor" aria-label="anchor" href="#plotting-continuous-variables"></a>
+</h3>
+<p>The continuous palettes from the <a href="https://sjmgarnier.github.io/viridis/" class="external-link">viridis package</a> improve
+plot readability and are more colorblind friendly than some commonly
+used continuous palettes. When plotting continuous variables (e.g., gene
+expression) scCustomize uses the reverse “plasma” palette by
+default.</p>
+<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-3-1.png" width="1056"></p>
+<div class="figure" style="text-align: center">
+<img src="Color_Palettes_files/figure-html/unnamed-chunk-4-1.png" alt="*These palettes provided better contrast for continuous palettes.
+ In scCustomize the default is `viridis_plasma_dark_high`*" width="960"><p class="caption">
+<em>These palettes provided better contrast for continuous palettes. In
+scCustomize the default is <code>viridis_plasma_dark_high</code></em>
+</p>
+</div>
+<p>There is one exception to this in that
+<code><a href="../reference/Plot_Density_Custom.html">Plot_Density_Custom()</a></code> and <code>Plot_Density_Joint()</code>
+use the “magma” palette by default. This choice was made as I believe
+that the magma palette provides better color scale for these plots.</p>
+<div class="figure" style="text-align: center">
+<img src="Color_Palettes_files/figure-html/unnamed-chunk-5-1.png" alt="*Example comparing **A.** default `Plot_Density_Custom` which uses 'magma' palette vs. **B.** plot using the 'plasma' palette.*" width="1248"><p class="caption">
+<em>Example comparing <strong>A.</strong> default
+<code>Plot_Density_Custom</code> which uses ‘magma’ palette
+vs. <strong>B.</strong> plot using the ‘plasma’ palette.</em>
+</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="plotting-discrete-variables">Plotting Discrete Variables<a class="anchor" aria-label="anchor" href="#plotting-discrete-variables"></a>
+</h3>
+<p>To provide better visualizations using default parameters scCustomize
+sets a series of defaults for plots with discrete palettes using
+<code><a href="../reference/scCustomize_Palette.html">scCustomize_Palette()</a></code> function.</p>
+<ul>
+<li>If only <strong>one identity</strong> is being plotted will use:
+“dodgerblue”.</li>
+<li>If only <em>two identities</em> are being plotted will use:
+<code><a href="../reference/NavyAndOrange.html">NavyAndOrange()</a></code>
+</li>
+<li>If greater than 2 identities but less than or equal to 36 will use:
+<code>DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")</code>
+</li>
+<li>If greater than 36 identities will use dynamic varibow palette:
+<code>DiscretePalette_scCustomize(num_colors = *Number of identities*, palette = "varibow", shuffle_pal = TRUE)</code>
+</li>
+</ul>
+<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-4.png" width="1056"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="helper-functions-shortcuts">Helper Functions &amp; Shortcuts<a class="anchor" aria-label="anchor" href="#helper-functions-shortcuts"></a>
+</h2>
 </div>
 <div class="section level2">
 <h2 id="continuous-palettes">Continuous Palettes<a class="anchor" aria-label="anchor" href="#continuous-palettes"></a>
 </h2>
 <p>scCustomize has a number of quick helpers for access to palettes from
-viridis package. For more information on viridis palettes and what they
-are see <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html" class="external-link">Intro
-to Viridis</a> package vignette.</p>
+viridis package. For more information on viridis palettes. These can be
+supplied to any appropriate plotting function in scCustomize or any
+other plot in R.</p>
 <ul>
 <li>viridis_plasma_dark_high</li>
 <li>viridis_plasma_light_high</li>
@@ -178,8 +243,13 @@ to Viridis</a> package vignette.</p>
 <li>viridis_dark_high</li>
 <li>viridis_light_high</li>
 </ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"CD3E"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, colors_use <span class="op">=</span> <span class="va">viridis_magma_dark_high</span>, features <span class="op">=</span> <span class="st">"CD3E"</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, colors_use <span class="op">=</span> <span class="va">viridis_inferno_dark_high</span>, features <span class="op">=</span> <span class="st">"CD3E"</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, colors_use <span class="op">=</span> <span class="va">viridis_light_high</span>, features <span class="op">=</span> <span class="st">"CD3E"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Color_Palettes_files/figure-html/unnamed-chunk-3-1.png" alt="*These palettes provided better contrast for continuous palettes.
+<img src="Color_Palettes_files/figure-html/unnamed-chunk-8-1.png" alt="*These palettes provided better contrast for continuous palettes.
  In scCustomize the default is `viridis_plasma_dark_high`*" width="960"><p class="caption">
 <em>These palettes provided better contrast for continuous palettes. In
 scCustomize the default is <code>viridis_plasma_dark_high</code></em>
@@ -212,30 +282,31 @@ palettes can be specified:</p>
 <h3 id="palettes-can-either-be-saved-to-global-environment-as-variable-or-called-directly-within-other-functions">Palettes can either be saved to global environment as variable or
 called directly within other functions:<a class="anchor" aria-label="anchor" href="#palettes-can-either-be-saved-to-global-environment-as-variable-or-called-directly-within-other-functions"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save as variable to global environment</span></span>
 <span><span class="va">polychrome_pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">36</span>, palette <span class="op">=</span> <span class="st">"polychrome"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Call within another function</span></span>
-<span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj_name</span>, cols <span class="op">=</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">26</span>, palette <span class="op">=</span> <span class="st">"polychrome"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj_name</span>, colors_use <span class="op">=</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">26</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"polychrome"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-polychrome-palette-is-the-new-default-for-plots-with-36-levels-and-varibow-when-more-than-36-levels">The “polychrome” palette is the new default for plots with &lt;36
 levels and “varibow” when more than 36 levels<a class="anchor" aria-label="anchor" href="#the-polychrome-palette-is-the-new-default-for-plots-with-36-levels-and-varibow-when-more-than-36-levels"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-5-1.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-10-1.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="visualize-palettes">Visualize Palettes<a class="anchor" aria-label="anchor" href="#visualize-palettes"></a>
 </h3>
-<p>To visualize these or any other palettes you can use the
+<p>To visualize these or any other palette you can use the
 <code><a href="../reference/PalettePlot.html">PalettePlot()</a></code> function.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PalettePlot</span>(<span class="at">palette =</span> <span class="fu">DiscretePalette_scCustomize</span>(<span class="at">num_colors =</span> <span class="dv">26</span>, <span class="at">palette =</span> <span class="st">"alphabet"</span>))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">PalettePlot</span>(<span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"color1"</span>, <span class="st">"color2"</span>, ...)</span></code></pre></div>
-<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-4.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-5.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-6.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-7-7.png" width="1056"></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PalettePlot</span>(<span class="at">pal =</span> <span class="fu">DiscretePalette_scCustomize</span>(<span class="at">num_colors =</span> <span class="dv">26</span>, <span class="at">palette =</span> <span class="st">"alphabet"</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">PalettePlot</span>(<span class="at">pal =</span> <span class="fu">c</span>(<span class="st">"color1"</span>, <span class="st">"color2"</span>, ...)</span></code></pre></div>
+<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-4.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-5.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-6.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-7.png" width="1056"></p>
 </div>
 <div class="section level3">
 <h3 id="dynamic-palettes">Dynamic Palettes<a class="anchor" aria-label="anchor" href="#dynamic-palettes"></a>
@@ -243,7 +314,7 @@ levels and “varibow” when more than 36 levels<a class="anchor" aria-label="a
 <p>Among the discrete palettes provide the “varibow” palette is actually
 a dynamic palette whose colors will adjust across the rainbow according
 to <code>num_colors</code> provided:
-<img src="Color_Palettes_files/figure-html/unnamed-chunk-8-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-8-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-8-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-8-4.png" width="1056"></p>
+<img src="Color_Palettes_files/figure-html/unnamed-chunk-13-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-13-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-13-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-13-4.png" width="1056"></p>
 </div>
 <div class="section level3">
 <h3 id="shuffle-palettes">Shuffle Palettes<a class="anchor" aria-label="anchor" href="#shuffle-palettes"></a>
@@ -254,11 +325,11 @@ true with “varibow” sometimes). <code>DiscretePalette_scCustomize</code>
 has optional parameter that will randomly shuffle the returned palette
 (see <code>shuffle_pal</code> and <code>seed</code> parameter to allow
 for reproducible shuffling.)</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/PalettePlot.html">PalettePlot</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">30</span>, palette <span class="op">=</span> <span class="st">"varibow"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"varibow (normal)"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/PalettePlot.html">PalettePlot</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">30</span>, palette <span class="op">=</span> <span class="st">"varibow"</span><span class="op">)</span>, shuffle_pal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/PalettePlot.html">PalettePlot</a></span><span class="op">(</span>pal <span class="op">=</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">30</span>, palette <span class="op">=</span> <span class="st">"varibow"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"varibow (normal)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/PalettePlot.html">PalettePlot</a></span><span class="op">(</span>pal <span class="op">=</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">30</span>, palette <span class="op">=</span> <span class="st">"varibow"</span><span class="op">)</span>, shuffle_pal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"varibow (shuffled)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-10-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-10-2.png" width="1056"></p>
+<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-15-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-15-2.png" width="1056"></p>
 </div>
 </div>
 <div class="section level2">
@@ -267,29 +338,10 @@ for reproducible shuffling.)</p>
 <p>Finally scCustomize contains shortcuts for some shorter discrete
 palettes that can be useful for plotting groups, treatments, genotypes,
 etc.
-<img src="Color_Palettes_files/figure-html/unnamed-chunk-11-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-11-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-11-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-11-4.png" width="1056"></p>
+<img src="Color_Palettes_files/figure-html/unnamed-chunk-16-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-16-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-16-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-16-4.png" width="1056"></p>
 </div>
 <div class="section level2">
-<h2 id="sccustomize-color-palette-defaults">scCustomize Color Palette Defaults<a class="anchor" aria-label="anchor" href="#sccustomize-color-palette-defaults"></a>
-</h2>
-<p>To provide better visualizations using default parameters scCustomize
-sets a series of defaults for plots with discrete palettes using
-<code><a href="../reference/scCustomize_Palette.html">scCustomize_Palette()</a></code> function.</p>
-<ul>
-<li>If only two identities are being plotted will use:
-<code><a href="../reference/NavyAndOrange.html">NavyAndOrange()</a></code>
-</li>
-<li>If greater than 2 identities but less than or equal to 36 will use:
-<code>DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")</code>
-</li>
-<li>If greater than 36 identities will use dynamic varibow palette:
-<code>DiscretePalette_scCustomize(num_colors = 50, palette = "varibow", shuffle_pal = TRUE)</code>
-</li>
-</ul>
-<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-12-3.png" width="1056"></p>
-</div>
-<div class="section level2">
-<h2 id="plotting-themes-helpers">Plotting Themes &amp; Helpers<a class="anchor" aria-label="anchor" href="#plotting-themes-helpers"></a>
+<h2 id="themes-plot-helpers">Themes &amp; Plot Helpers<a class="anchor" aria-label="anchor" href="#themes-plot-helpers"></a>
 </h2>
 <p>ggplot2 themeing works absolutely great but can also be simplified by
 wrapping commonly used post-plot themes into less verbose functions.</p>
