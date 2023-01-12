@@ -85,33 +85,7 @@ FeaturePlot_scCustom <- function(
   }
 
   # Check features and meta to determine which features present
-  features_list <- Gene_Present(data = seurat_object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
-
-  meta_list <- Meta_Present(seurat_object = seurat_object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
-
-  all_not_found_features <- meta_list[[2]]
-
-  all_found_features <- c(features_list[[1]], meta_list[[1]])
-
-  # Stop if no features found
-  if (length(x = all_found_features) < 1) {
-    cli_abort(message = c("No features were found.",
-                          "*" = "The following are not present in object:",
-                          "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
-    )
-  }
-
-  # Return message of features not found
-  if (length(x = all_not_found_features) > 0) {
-    op <- options(warn = 1)
-    on.exit(options(op))
-    cli_warn(message = c("The following features were omitted as they were not found:",
-                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
-    )
-  }
-
-  # Return case check message
-  Case_Check(seurat_object = seurat_object, gene_list = all_not_found_features, case_check_msg = TRUE, return_features = FALSE)
+  all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Get length of meta data feature
   if (is.null(x = split.by) && label_feature_yaxis) {
