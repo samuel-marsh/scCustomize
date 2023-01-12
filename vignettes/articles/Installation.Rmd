@@ -58,6 +58,12 @@ install.packages("BiocManager")
 
 BiocManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
 ```
+  
+### Optional CRAN packages  
+There are a few other CRAN packages that are needed to enable some optional functionality of scCustomize.  To enable these functions make sure to install the following packages:
+```
+install.packages(c("ggpubr", "hdf5r", "rliger"))
+```
 
 ## Release Notes  
 A full copy of the changes in each version can be found in the [NEWS/ChangeLog](https://samuel-marsh.github.io/scCustomize/news/index.html).
