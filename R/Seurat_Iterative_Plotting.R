@@ -813,7 +813,7 @@ Iterate_FeaturePlot_scCustom <- function(
   }
 
   # Check whether features are present in object
-  gene_list <- Feature_PreCheck(object = seurat_object, features = features)
+  gene_list <- Feature_PreCheck(object = seurat_object, features = gene_list)
 
    # Modify Cluster Labels names if needed for saving plots
   if (!is.null(x = names(gene_list)) && !single_pdf) {
