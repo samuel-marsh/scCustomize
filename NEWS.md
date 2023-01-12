@@ -13,6 +13,7 @@
 - `Fetch_Meta` is now S3 generic function that can handle either Seurat or LIGER objects.  
 - Rearrange base R code within `R/` scripts for better organization.  
 - Completed move of all scCustomize error/warning messages from base R to cli/rlang framework.  
+- Move feature checking to internal function.  
 
 ## Fixes  
 - Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
