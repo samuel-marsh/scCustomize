@@ -1,3 +1,14 @@
+# scCustomize 1.X.X (2023-XX-XX)  
+## Added  
+  
+  
+## Changed  
+   
+
+## Fixes  
+   
+
+
 # scCustomize 1.1.1 (2023-01-13)  
 ## Added  
 - Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
@@ -20,6 +31,7 @@
 - Fixed `Add_Mito_Ribo_Seurat` to respect provided `mito_name`, `ribo_name` and `mito_ribo_name` values.  
 - Updated out-dated documentation for number of package functions.  
 - Typo/styling fixes.  
+ 
  
 # scCustomize 1.1.0 (2022-12-22)  
 ## Added  
