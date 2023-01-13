@@ -8,7 +8,7 @@ Meta_Highlight_Plot(
   seurat_object,
   meta_data_column,
   meta_data_highlight,
-  highlight_color = "navy",
+  highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
@@ -16,6 +16,7 @@ Meta_Highlight_Plot(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  ggplot_default_colors = FALSE,
   ...
 )
 }
@@ -44,6 +45,9 @@ Default is c(512, 512).}
 
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
+
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
 
 \item{...}{Extra parameters passed to\code{\link[Seurat]{DimPlot}}.}
 }

@@ -39,7 +39,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-scCustomize requires [R](https://www.r-project.org/) version 4.0 or greater. Highly recommend installing [R Studio](https://www.rstudio.com/).
+scCustomize requires [R](https://www.r-project.org/) version 4.0 or greater. Highly recommend installing [R Studio](https://posit.co/downloads/).
 
 ## Install from CRAN  
 scCustomize can be installed from [CRAN](https://cran.r-project.org/package=scCustomize) for all platforms using standard installation methods:
@@ -56,7 +56,13 @@ A small number of functions in scCustomize rely on packages from Bioconductor an
 ```
 install.packages("BiocManager")
 
-BiocmManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
+BiocManager::install(c("ComplexHeatmap", "dittoSeq", "DropletUtils", "Nebulosa"))
+```
+  
+### Optional CRAN packages  
+There are a few other CRAN packages that are needed to enable some optional functionality of scCustomize.  To enable these functions make sure to install the following packages:
+```
+install.packages(c("ggpubr", "hdf5r", "rliger"))
 ```
 
 ## Release Notes  
@@ -64,7 +70,7 @@ A full copy of the changes in each version can be found in the [NEWS/ChangeLog](
 
 
 ## Develop branch    
-I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.yyyy.  
+I also maintain a separate development branch<sup>\*</sup> that can be installed by supplying `ref = "develop"` in the devtools or remotes installation command.  Version scheme vX.X.X.9yyy.  
 
 ```
 devtools::install_github(repo = "samuel-marsh/scCustomize", ref = "develop")

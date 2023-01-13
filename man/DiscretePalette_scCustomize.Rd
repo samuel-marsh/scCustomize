@@ -30,7 +30,7 @@ Helper function to return a number of discrete color palettes.
 }
 \examples{
 pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-PalettePlot(palette = pal)
+PalettePlot(pal= pal)
 
 }
 \references{

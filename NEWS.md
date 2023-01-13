@@ -1,3 +1,26 @@
+# scCustomize 1.1.1 (2023-01-13)  
+## Added  
+- Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
+- Added ability to rotate x-axis of `Stacked_VlnPlot` 90 degrees or 45 (previously possible) ([#84](https://github.com/samuel-marsh/scCustomize/issues/84)).  
+- Added error checks to `Merge_Seurat_List` to avoid ambiguous error messages on failure.  
+- Added `Case_Check` checks/messages to all feature-based plotting functions.  
+  
+## Changed  
+- **BREAKING CHANGE** Parameter in `PalettePlot` has been changed from `palette` to `pal`.  
+- Updated `PalettePlot` to support `pal` of class "colors".  
+- Moved viridis package to Suggests and use paletteer package for viridis palette shortcut functions.  
+- Fixed color palette continuity in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot`.  
+- `Fetch_Meta` is now S3 generic function that can handle either Seurat or LIGER objects.  
+- Rearrange base R code within `R/` scripts for better organization.  
+- Completed move of all scCustomize error/warning messages from base R to cli/rlang framework.  
+- Move feature checking to internal function.  
+
+## Fixes  
+- Fixed potential for column name collision error in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
+- Fixed `Add_Mito_Ribo_Seurat` to respect provided `mito_name`, `ribo_name` and `mito_ribo_name` values.  
+- Updated out-dated documentation for number of package functions.  
+- Typo/styling fixes.  
+ 
 # scCustomize 1.1.0 (2022-12-22)  
 ## Added  
 - Added `merge` parameter to `Read10X_GEO`, `Read10X_h5_GEO`, `Read_GEO_Delim` and `Read_CellBender_h5_Multi_File`.  
@@ -121,7 +144,7 @@
 
 # scCustomize 0.6.3 (2021-12-16)  
 ## Fixes
-- Fixed `Read_Metrics_10X` errors that occured due to differing outputs depending on Cell Ranger version or type of assay.
+- Fixed `Read_Metrics_10X` errors that occurred due to differing outputs depending on Cell Ranger version or type of assay.
 - Added direct `importFrom` for `DefaultDimReduc` from SeuratObject to avoid potential errors.
  
 

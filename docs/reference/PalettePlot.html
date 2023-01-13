@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -53,6 +53,9 @@
     <li class="divider">
     <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
+      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    </li>
+    <li>
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
@@ -60,9 +63,6 @@
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -110,13 +110,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">PalettePlot</span><span class="op">(</span>palette <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">PalettePlot</span><span class="op">(</span>pal <span class="op">=</span> <span class="cn">NULL</span>, label_color_num <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>palette</dt>
+    <dl><dt>pal</dt>
 <dd><p>a vector of colors (either named colors of hex codes).</p></dd>
+
+
+<dt>label_color_num</dt>
+<dd><p>logical, whether or not to numerically label the colors in output plot.
+Default is TRUE is number of colors in <code>pal</code> is less than 75 and FALSE is greater than 75.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -134,7 +139,7 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">36</span>, palette <span class="op">=</span> <span class="st">"varibow"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">PalettePlot</span><span class="op">(</span>palette <span class="op">=</span> <span class="va">pal</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">PalettePlot</span><span class="op">(</span>pal <span class="op">=</span> <span class="va">pal</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="PalettePlot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

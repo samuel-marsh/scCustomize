@@ -22,7 +22,7 @@ Selects colors from modified versions of RColorBrewer single colors palettes
 }
 \examples{
 pal <- Single_Color_Palette(pal_color = "reds", num_colors = 7)
-PalettePlot(palette = pal)
+PalettePlot(pal= pal)
 
 }
 \references{

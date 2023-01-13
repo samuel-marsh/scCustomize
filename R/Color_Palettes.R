@@ -9,7 +9,7 @@
 #'
 #' @return A color palette for plotting
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -23,11 +23,11 @@
 #' }
 #'
 
-viridis_plasma_dark_high <- viridis(n = 30, option = "C", direction = -1)
+viridis_plasma_dark_high <- as.vector(x = paletteer_c(palette = "viridis::plasma", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -35,11 +35,11 @@ viridis_plasma_dark_high <- viridis(n = 30, option = "C", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_plasma_light_high <- viridis(n = 30, option = "C", direction = 1)
+viridis_plasma_light_high <- as.vector(x = paletteer_c(palette = "viridis::plasma", n = 250, direction = 1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -47,11 +47,11 @@ viridis_plasma_light_high <- viridis(n = 30, option = "C", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_inferno_dark_high <- viridis(n = 30, option = "B", direction = -1)
+viridis_inferno_dark_high <- as.vector(x = paletteer_c(palette = "viridis::inferno", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -59,11 +59,11 @@ viridis_inferno_dark_high <- viridis(n = 30, option = "B", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_inferno_light_high <- viridis(n = 30, option = "B", direction = 1)
+viridis_inferno_light_high <- as.vector(x = paletteer_c(palette = "viridis::inferno", n = 250, direction = 1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -71,11 +71,11 @@ viridis_inferno_light_high <- viridis(n = 30, option = "B", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_magma_dark_high <- viridis(n = 30, option = "A", direction = -1)
+viridis_magma_dark_high <- as.vector(x = paletteer_c(palette = "viridis::magma", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -83,11 +83,11 @@ viridis_magma_dark_high <- viridis(n = 30, option = "A", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_magma_light_high <- viridis(n = 30, option = "A", direction = 1)
+viridis_magma_light_high <- as.vector(x = paletteer_c(palette = "viridis::magma", n = 250, direction = 1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -95,11 +95,11 @@ viridis_magma_light_high <- viridis(n = 30, option = "A", direction = 1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
+viridis_dark_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n = 250, direction = -1))
 
 #' Viridis Shortcuts
 #'
-#' @import viridis
+#' @importFrom paletteer paletteer_c
 #'
 #' @export
 #'
@@ -107,7 +107,7 @@ viridis_dark_high <- viridis(n = 30, option = "D", direction = -1)
 #' @rdname viridis_shortcut
 #'
 
-viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
+viridis_light_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n = 250, direction = 1))
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,7 +138,7 @@ viridis_light_high <- viridis(n = 30, option = "D", direction = 1)
 #'
 #' @examples
 #' pal <- Single_Color_Palette(pal_color = "reds", num_colors = 7)
-#' PalettePlot(palette = pal)
+#' PalettePlot(pal= pal)
 #'
 
 Single_Color_Palette <- function(pal_color,
@@ -147,11 +147,11 @@ Single_Color_Palette <- function(pal_color,
 ) {
   # Check number of colors available
   if (is.null(x = num_colors)) {
-    cli_abort(message = "No value provided to `num_colors`.")
+    cli_abort(message = "No value provided to {.code num_colors}.")
   }
   if (num_colors > 7 || num_colors < 1) {
     cli_abort(message = c("Not enough colors.",
-                          "i" = "Value provided to `num_colors` ({num_colors}) is greater than maximum number allowed (7).")
+                          "i" = "Value provided to {.code num_colors} ({.field {num_colors}}) is greater than maximum number allowed ({.field 7}).")
     )
   }
 
@@ -184,7 +184,7 @@ Single_Color_Palette <- function(pal_color,
   )
   if (!pal_color %in% names(brewer_single_modified)) {
     cli_abort(message = c("Paleete name not found.",
-                          "i" = "Palette name not found.  Please select one of following palette options: 'reds', 'blues', 'greens', 'purples', or 'grays'")
+                          "i" = "Palette name not found.  Please select one of following palette options: {.field 'reds', 'blues', 'greens', 'purples', or 'grays'}")
     )
   }
   set.seed(seed = seed_use)
@@ -208,7 +208,7 @@ Single_Color_Palette <- function(pal_color,
 #'
 #' @examples
 #' cols <- NavyAndOrange()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 NavyAndOrange <- function(
@@ -241,7 +241,7 @@ NavyAndOrange <- function(
 #'
 #' @examples
 #' cols <- JCO_Four()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 JCO_Four <- function(
@@ -272,7 +272,7 @@ JCO_Four <- function(
 #'
 #' @examples
 #' cols <- Dark2_Pal()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 Dark2_Pal <- function(
@@ -299,7 +299,7 @@ Dark2_Pal <- function(
 #'
 #' @examples
 #' cols <- Hue_Pal(num_colors = 8)
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 Hue_Pal <- function(
@@ -326,7 +326,7 @@ Hue_Pal <- function(
 #'
 #' @examples
 #' cols <- ColorBlind_Pal()
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal = cols)
 #'
 
 ColorBlind_Pal <- function(
@@ -374,7 +374,7 @@ varibow_scCustom <- function(
 #' @param seed random seed for the palette shuffle.  Default = 123.
 #'
 #' @import cli
-# #' @importFrom colorway varibow
+# #' @importFrom colorway varibow (now directly ported for CRAN compatibility)
 #' @importFrom paletteer paletteer_d
 #' @importFrom SeuratObject PackageCheck
 #'
@@ -411,7 +411,7 @@ varibow_scCustom <- function(
 #'
 #' @examples
 #' pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-#' PalettePlot(palette = pal)
+#' PalettePlot(pal= pal)
 #'
 
 DiscretePalette_scCustomize <- function(
@@ -422,7 +422,7 @@ DiscretePalette_scCustomize <- function(
 ) {
   if (is.null(x = palette)) {
     cli_abort(message = c("Must specify a palette to return colors.",
-                          "i" = "`palette` options are: {names(palette_list)}")
+                          "i" = "{.code palette} options are: {.field {names(palette_list)}}")
     )
   }
 
@@ -430,15 +430,14 @@ DiscretePalette_scCustomize <- function(
   if (palette == "ditto_seq") {
     dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
     if (!dittoseq_check[1]) {
-      stop(
-        "Please install the dittoSeq package to `palette = 'ditto_seq'`",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('BiocManager')",
-        "\nBiocManager::install('dittoSeq')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val dittoSeq} package to {.code palette = {symbol$dquote_left}ditto_seq{symbol$dquote_right}}",
+        "i" = "This can be accomplished with the following commands:",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+        "{.field `BiocManager::install({symbol$dquote_left}dittoSeq{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     } else {
       palette_list <- list(
         alphabet = as.vector(x = paletteer_d("pals::alphabet", 26)),
@@ -464,8 +463,8 @@ DiscretePalette_scCustomize <- function(
   palette_out <- palette_list[[palette]]
   if (num_colors > length(x = palette_out)) {
     cli_abort(message = c("Not enough colors in specified palette.",
-                          "*" = "{palette} only contains {length(x = palette_out)} colors.",
-                          "i" = "Please adjust `num_colors` to be less than or equal to {length(x = palette_out)} or select a different `palette`.")
+                          "*" = "{.val {palette}} only contains {.field {length(x = palette_out)}} colors.",
+                          "i" = "Please adjust {.code num_colors} to be less than or equal to {.field {length(x = palette_out)}} or select a different {.code palette}.")
     )
   }
   if (shuffle_pal) {
@@ -499,7 +498,7 @@ DiscretePalette_scCustomize <- function(
 #'
 #' @examples
 #' cols <- scCustomize_Palette(num_groups = 24, ggplot_default_colors = FALSE)
-#' PalettePlot(palette = cols)
+#' PalettePlot(pal= cols)
 #'
 
 scCustomize_Palette <- function(
@@ -537,7 +536,9 @@ scCustomize_Palette <- function(
 #'
 #' Plots given color vector/palette in viewer to evaluate palette before plotting on data.
 #'
-#' @param palette a vector of colors (either named colors of hex codes).
+#' @param pal a vector of colors (either named colors of hex codes).
+#' @param label_color_num logical, whether or not to numerically label the colors in output plot.
+#' Default is TRUE is number of colors in `pal` is less than 75 and FALSE is greater than 75.
 #'
 #' @import cli
 #' @import ggplot2
@@ -554,23 +555,48 @@ scCustomize_Palette <- function(
 #'
 #' @examples
 #' pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-#' PalettePlot(palette = pal)
+#' PalettePlot(pal = pal)
 #'
 
-PalettePlot <- function(palette = NULL) {
+PalettePlot <- function(
+  pal = NULL,
+  label_color_num = NULL
+) {
   # Check palette
-  if (is.null(x = palette)) {
-    cli_abort(message = "No value provided to `palette` parameter.")
+  if (is.null(x = pal)) {
+    cli_abort(message = "No value provided to {.code palette} parameter.")
+  }
+
+  if (inherits(x = pal, what = "colors")) {
+    pal <- as.vector(x = pal)
   }
 
   # Generate data frame for plotting
-  palette_data <- data.frame(x = 1:length(palette), y = 1, fill = palette)
+  palette_data <- data.frame(x = 1:length(pal), y = 1, fill = pal)
+
+  # Decide color labeling
+  if (is.null(x = label_color_num)) {
+    if (length(x = pal) > 75) {
+      label_color_num <- FALSE
+    } else {
+      label_color_num <- TRUE
+    }
+  }
 
   # Plot
-  palette_plot <- ggplot(palette_data) +
-    geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
-    geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
-    scale_fill_identity() +
-    theme_void()
+  # Label plot
+  if (label_color_num) {
+    palette_plot <- ggplot(palette_data) +
+      geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
+      geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
+      scale_fill_identity() +
+      theme_void()
+  } else {
+    palette_plot <- ggplot(palette_data) +
+      geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
+      scale_fill_identity() +
+      theme_void()
+  }
+
   return(palette_plot)
 }

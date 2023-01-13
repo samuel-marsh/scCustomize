@@ -33,14 +33,14 @@ navbar:
           href: articles/Color_Palettes.html
         - text: -------
         - text: Helpers & Utilities
+        - text: "General Helpers & Utilities"
+          href: articles/Helpers_and_Utilities.html
         - text: "Read & Write Data Functions"
           href: articles/Read_and_Write_Functions.html
         - text: "Marker Identification & Cluster Annotation Helpers"
           href: articles/Markers_and_Cluster_Annotation.html
         - text: "Statistics Functions"
           href: articles/Statistics.html
-        - text: "General Helpers & Utilities"
-          href: articles/Helpers_and_Utilities.html
         - text: "Misc Functions"
           href: articles/Misc_Functions.html
         - text: -------

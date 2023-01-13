@@ -17,7 +17,7 @@ Shortcut to navy orange color plot
 }
 \examples{
 cols <- NavyAndOrange()
-PalettePlot(palette = cols)
+PalettePlot(pal= cols)
 
 }
 \concept{palettes}

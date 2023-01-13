@@ -71,8 +71,9 @@ Gene_Present <- function(
     possible_features <- rownames(x = data)
   } else {
     all_accepted <- c(accepted_types, "Seurat", "liger")
-    stop("Input data is currently accepted only in the following formats: \n",
-         glue_collapse_scCustom(input_string = all_accepted, and = FALSE))
+    cli_abort(message = c("Input data is currently accepted only in the following formats:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_accepted, and = FALSE)}}.")
+    )
   }
 
   # If any features not found
@@ -89,14 +90,15 @@ Gene_Present <- function(
         )
         return(feature_list)
       } else {
-        stop("No requested features found.")
+        cli_abort(message ="No requested features found.")
       }
     }
 
     # Return message of features not found
     if (length(x = bad_features) > 0 && omit_warn) {
-      warning("The following features were omitted as they were not found",
-              ": ", glue_collapse_scCustom(input_string = bad_features, and = TRUE))
+      cli_warn(message = c("The following features were omitted as they were not found:",
+                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
+      )
     }
 
     # Check if features found if case is changed.
@@ -113,9 +115,9 @@ Gene_Present <- function(
       # Additional messages if found.
       if (length(x = wrong_case_found_features) > 0) {
         if (case_check_msg) {
-          warning("NOTE: However, the following features were found: ",
-                  glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE), ".\n",
-                  "        Please check intended case of features provided.")
+          cli_warn(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
+                                "i" = "Please check intended case of features provided.")
+          )
         }
         # Combine into list and return
         feature_list <- list(
@@ -137,7 +139,7 @@ Gene_Present <- function(
 
   # Print all found message if TRUE
   if (print_msg) {
-    message("All features present.")
+    cli_inform(message = "All features present.")
   }
 
   # Return full input gene list.
@@ -194,9 +196,9 @@ Case_Check <- function(
   # Additional messages if found.
   if (length(x = wrong_case_found_features) > 0) {
     if (case_check_msg) {
-      message("NOTE: However, the following features were found: ",
-              glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE), ".\n",
-              "      Please check intended case of features provided.")
+      cli_inform(message = c("{col_cyan('*NOTE*')}: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
+                             "i" = "Please check intended case of features provided.")
+      )
     }
     if (return_features) {
       return(wrong_case_found_features)
@@ -251,15 +253,16 @@ Meta_Present <- function(
     if (abort) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
-                              "i" = "The following @meta.data columns were not found: {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}")
+                              "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
         )
       }
     }
 
     # Return message of features not found
     if (length(x = bad_meta) > 0 && omit_warn) {
-      warning("The following @meta.data columns were omitted as they were not found",
-              ": ", glue_collapse_scCustom(input_string = bad_meta, and = TRUE))
+      cli_warn(message = c("The following @meta.data columns were omitted as they were not found:",
+                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
+      )
     }
 
     # Return the found features omitting the not found ones.
@@ -273,7 +276,7 @@ Meta_Present <- function(
 
   # Print all found message if TRUE
   if (print_msg) {
-    message("All @meta.data columns present.")
+    cli_inform(message = "All @meta.data columns present.")
   }
 
   # Return full input gene list.
@@ -283,6 +286,7 @@ Meta_Present <- function(
   )
   return(meta_list)
 }
+
 
 #' Check if meta data columns are numeric
 #'
@@ -330,7 +334,8 @@ Meta_Numeric <- function(
 
   # Warn if columns are not numeric
   if (length(x = invalid_variables) > 0) {
-    warning("Some of the meta.data columns provided are not in numeric form and will be excluded from results: ", paste(shQuote(invalid_variables, type = "cmd"), collapse=", "))
+    cli_warn(message = c("Some of the meta.data columns provided are not in numeric form and will be excluded from results:",
+                         "i" = "{.field {paste(shQuote(invalid_variables, type = 'cmd'), collapse=', ')}}"))
   }
 
   # Return valid column names
@@ -347,30 +352,55 @@ Meta_Numeric <- function(
 #'
 #' Quick function to properly pull meta.data from objects.
 #'
-#' @param object list of matrices to merge.
+#' @param object Object of class Seurat or liger.
 #'
 #' @importFrom methods slot
 #'
-#' @return A data.frame
+#' @return A data.frame containing cell-level meta data
 #'
 #' @export
 #'
 #' @concept helper_util
 #'
+#' @rdname Fetch_Meta
+#'
 #' @examples
-#' \dontrun{
-#' meta_data <- Fetch_Meta(object = pbmc)
-#' }
+#' library(Seurat)
+#' meta_data <- Fetch_Meta(object = pbmc_small)
+#' head(meta_data, 5)
 #'
 
-Fetch_Meta <- function(
+Fetch_Meta <- function(object) {
+  UseMethod(generic = 'Fetch_Meta')
+}
+
+
+#' @rdname Fetch_Meta
+#' @export
+#' @concept helper_util
+#' @method Fetch_Meta Seurat
+
+Fetch_Meta.Seurat <- function(
   object
 ) {
-  # Check Seurat
-  Is_Seurat(seurat_object = object)
+  # Pull meta data
+  object_meta <- object_meta <- slot(object = object, name = "meta.data")
+
+  return(object_meta)
+}
+
+
+#' @rdname Fetch_Meta
+#' @export
+#' @concept helper_util
+#' @method Fetch_Meta liger
+
+Fetch_Meta.liger <- function(
+  object
+) {
 
   # Pull meta data
-  object_meta <- slot(object = object, name = "meta.data")
+  object_meta <- object_meta <- slot(object = object, name = "cell.data")
 
   return(object_meta)
 }
@@ -427,12 +457,14 @@ Merge_Sparse_Data_All <- function(
     any()
 
   if (duplicated_barcodes && is.null(x = add_cell_ids)) {
-    stop("There are overlapping cell barcodes present in the input matrices.  Please provide prefixes/suffixes to 'add_cell_ids' parameter to make unique.")
+    cli_abort(message = c("There are overlapping cell barcodes present in the input matrices.",
+                          "i" = "Please provide prefixes/suffixes to {.code add_cell_ids} parameter to make unique.")
+    )
   }
 
   # Check right number of suffix/prefix ids are provided
   if (!is.null(x = add_cell_ids) && length(x = add_cell_ids) != length(x = matrix_list)) {
-    stop("The number of prefixes in `add_cell_ids` must be equal to the number of matrices supplied to `matrix_list`.")
+    cli_abort(message = "The number of prefixes in {.code add_cell_ids} must be equal to the number of matrices supplied to {.code matrix_list}.")
   }
 
   if (!is.null(x = add_cell_ids)) {
@@ -450,7 +482,9 @@ Merge_Sparse_Data_All <- function(
       any()
 
     if (are_duplicates) {
-      stop("Supplied 'add_cell_ids' will result in overlapping barcodes names.  If provided cell prefixes/suffixes are not unique please change and re-run.")
+      cli_abort(message = c("Supplied {.code add_cell_ids} will result in overlapping barcodes names if provided cell prefixes/suffixes are not unique.",
+                            "i" = "Please change and re-run.")
+      )
     }
   }
 
@@ -459,7 +493,7 @@ Merge_Sparse_Data_All <- function(
   col_offset <- 0
   allGenes <- unique(unlist(lapply(matrix_list, rownames)))
   allCells <- c()
-  message("Preparing & merging matrices.")
+  cli_inform(message = "{.field Preparing & merging matrices.}")
   pb <- txtProgressBar(min = 0, max = length(x = matrix_list), style = 3, file = stderr())
   for (i in 1:length(matrix_list)) {
     curr <- matrix_list[[i]]
@@ -497,7 +531,7 @@ Merge_Sparse_Data_All <- function(
     setTxtProgressBar(pb = pb, value = i)
   }
   close(con = pb)
-  message("Creating final sparse matrix.")
+  cli_inform(message = "{.field Creating final sparse matrix.}")
   M <- sparseMatrix(
     i = full_mat[, 1],
     j = full_mat[, 2],
@@ -579,6 +613,63 @@ CheckMatrix_scCustom <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### OBJECT UTILS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Merge a list of Seurat Objects
+#'
+#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
+#'
+#' @param list_seurat list composed of multiple Seurat Objects.
+#' @param add.cell.ids A character vector of length(x = c(x, y)). Appends the corresponding values
+#' to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
+#' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
+#' This is recommended if the same normalization approach was applied to all objects.
+#' See \code{\link[SeuratObject]{merge}}.
+#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
+#'
+#' @import cli
+#' @importFrom purrr reduce
+#'
+#' @return A Seurat Object
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' object_list <- list(obj1, obj2, obj3, ...)
+#' merged_object <- Merge_Seurat_List(list_seurat = object_list)
+#' }
+#'
+
+Merge_Seurat_List <- function(
+  list_seurat,
+  add.cell.ids = NULL,
+  merge.data = TRUE,
+  project = "SeuratProject"
+) {
+  # Check list_seurat is list
+  if (!inherits(x = list_seurat, what = "list")) {
+    cli_abort(message = "{.code list_seurat} must be environmental variable of class {.val list}")
+  }
+
+  # Check list_seurat is only composed of Seurat objects
+  for (i in 1:length(x = list_seurat)) {
+    if (!inherits(x = list_seurat[[i]], what = "Seurat")) {
+      cli_abort("One or more of entries in {.code list_seurat} are not objects of class {.val Seurat}")
+    }
+  }
+
+  merged_object <- reduce(list_seurat, function(x, y) {
+    merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
+  })
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### BARCODE UTILS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -627,7 +718,7 @@ Replace_Suffix <- function(
       })
     }
     if (length(x = current_suffix) != length(x = data) && length(x = current_suffix) != 1) {
-      stop("'current_suffix' must either be single value or a vector of values equal in length to number of datasets in 'data'.")
+      cli_abort(message = "{.code current_suffix} must either be single value or a vector of values equal in length to number of datasets in {.code data}.")
     }
 
     # Check new suffix
@@ -638,7 +729,7 @@ Replace_Suffix <- function(
       new_suffix <- new_suffix
     }
     if (length(x = new_suffix) != length(x = data) && length(x = new_suffix) != 1) {
-      stop("'new_suffix' must either be single value or a vector of values equal in length to number of datasets in 'data'.")
+      cli_abort(message = "{.code new_suffix} must either be single value or a vector of values equal in length to number of datasets in {.code data}.")
     }
 
     # Is current suffix found in all cell names
@@ -647,7 +738,9 @@ Replace_Suffix <- function(
     })
 
     if (all(check_suffixes) != TRUE) {
-      stop("One or more 'current_suffixes' do not match cell names in data.  Check inputs.")
+      cli_abort(message = c("One or more {.code current_suffixes} do not match cell names in data.",
+                            "i" = "Check inputs.")
+                )
     }
 
     # Create list of string of new names
@@ -672,7 +765,7 @@ Replace_Suffix <- function(
     current_suffix_regexp <- paste0("\\", current_suffix, "$")
     # Is current suffix found in cell names
     if (all(grepl(pattern = current_suffix_regexp, x = current_cell_names)) == FALSE) {
-      stop("Supplied 'current_suffix': ", current_suffix, " was not found in the cell names of data provided.")
+      cli_abort(message = "Supplied {.code current_suffix}: {.field {current_suffix}} was not found in the cell names of data provided.")
     }
     # Create string of new names
     new_cell_names <- gsub(pattern = current_suffix_regexp, replacement = new_suffix, x = current_cell_names)
@@ -724,7 +817,9 @@ Change_Delim_Suffix <- function(
     })
 
     if (all(check_suffix_delim) != TRUE) {
-      stop("One or more 'current_delim' does not match cell names in data.  Check inputs.")
+      cli_abort(message = c("One or more {.code current_delim} do not match cell names in data.",
+                            "i" = "Check inputs.")
+      )
     }
 
     # Create list of string of new names
@@ -747,7 +842,7 @@ Change_Delim_Suffix <- function(
 
     # Is current suffix found in cell names
     if (all(grepl(pattern = current_delim, x = current_cell_names, fixed = TRUE)) != TRUE) {
-      stop("Supplied 'current_delim': ", current_delim, " was not found in the cell names of data provided.")
+      cli_abort(message = "Supplied {.code current_delim}: {.field {current_delim}} was not found in the cell names of data provided.")
     }
 
     # Create string of new names
@@ -800,7 +895,9 @@ Change_Delim_Prefix <- function(
     })
 
     if (all(check_prefix_delim) != TRUE) {
-      stop("One or more 'current_delim' does not match cell names in data.  Check inputs.")
+      cli_abort(message = c("One or more {.code current_delim} do not match cell names in data.",
+                            "i" = "Check inputs.")
+      )
     }
 
     # Create list of string of new names
@@ -823,7 +920,7 @@ Change_Delim_Prefix <- function(
 
     # Is current prefix found in cell names
     if (all(grepl(pattern = current_delim, x = current_cell_names, fixed = TRUE)) != TRUE) {
-      stop("Supplied 'current_delim': ", current_delim, " was not found in the cell names of data provided.")
+      cli_abort(message = "Supplied {.code current_delim}: {.field {current_delim}} was not found in the cell names of data provided.")
     }
 
     # Create string of new names
@@ -874,7 +971,9 @@ Change_Delim_All <- function(
     })
 
     if (all(check_prefix_delim) != TRUE) {
-      stop("One or more 'current_delim' does not match cell names in data.  Check inputs.")
+      cli_abort(message = c("One or more {.code current_delim} do not match cell names in data.",
+                            "i" = "Check inputs.")
+      )
     }
 
     # Create list of string of new names
@@ -897,7 +996,7 @@ Change_Delim_All <- function(
 
     # Is current prefix found in cell names
     if (all(grepl(pattern = current_delim, x = current_cell_names, fixed = TRUE)) != TRUE) {
-      stop("Supplied 'current_delim': ", current_delim, " was not found in the cell names of data provided.")
+      cli_abort(message = "Supplied {.code current_delim}: {.field {current_delim}} was not found in the cell names of data provided.")
     }
 
     # Create string of new names
@@ -957,11 +1056,11 @@ Add_Pct_Diff <- function(
   if ("pct_diff" %in% colnames(marker_dataframe)) {
     df_name <- deparse(expr = substitute(expr = marker_dataframe))
     if (!overwrite) {
-      cli_abort(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+      cli_abort(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",
                             "i" = "To overwrite previous results set `overwrite = TRUE`.")
       )
     } else {
-      cli_inform(message = c("'pct_diff' column already present in `marker_dataframe: '{name}'.",
+      cli_inform(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",
                             "i" = "Overwriting column as overwrite = TRUE.")
       )
     }
@@ -1026,20 +1125,20 @@ Extract_Top_Markers <- function(
 ) {
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
-    cli_abort(message = "`rank_by`: '{rank_by}' not found in column names of `marker_dataframe`.")
+    cli_abort(message = "{.code rank_by}: {.val {rank_by}} not found in column names of {.code marker_dataframe}.")
   }
 
   # Check grouping factor in marker data.frame
   if (!is.null(x = group_by)) {
     if (!group_by %in% colnames(x = marker_dataframe)) {
-      cli_abort(message = "`group_by`: '{group_by}' not found in column names of `marker_dataframe`.")
+      cli_abort(message = "{.code group_by}: {.val {group_by}} not found in column names of {.code marker_dataframe}.")
     }
   }
 
   # Check gene column is present
   if (!gene_column %in% colnames(x = marker_dataframe) && !gene_rownames_to_column) {
-    cli_abort(message = c("`gene_column`: '{gene_column}' not found in column names of `marker_dataframe.",
-                          "i" = "Set `gene_rownames_to_column` to move genes from rownames to column.")
+    cli_abort(message = c("{.code gene_column}: '{gene_column}' not found in column names of {.code marker_dataframe}.",
+                          "i" = "Set {.code gene_rownames_to_column} to move genes from rownames to column.")
     )
   }
 
@@ -1074,14 +1173,14 @@ Extract_Top_Markers <- function(
   # should gene list be named
   # check naming
   if (named_vector && is.null(x = group_by)) {
-    cli_warn(message = c("Cannot return named vector if `group_by` is NULL.",
+    cli_warn(message = c("Cannot return named vector if {.code group_by} is NULL.",
                          "i" = "Returning unnamed vector.")
     )
   }
 
   if (named_vector && !is.null(x = group_by)) {
     if (make_unique) {
-      cli_abort(message = "Cannot return unique list if 'named_vector = TRUE'.")
+      cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
     names(gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
@@ -1131,20 +1230,20 @@ Create_Cluster_Annotation_File <- function(
   }
   # Check directory path is exists
   if (!dir.exists(paths = dir_path)) {
-    cli_abort(message = c("Target directory '{dir_path}' does not exist.",
-                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory {.val {dir_path}} does not exist.",
+                          "i" = "Please create directory or fix {.code file_path} and re-run function.")
     )
   }
   # Confirm no files with same name in the same directory path.
   full_path <- file.path(dir_path, paste0(file_name, ".csv"))
   if (file.exists(full_path)) {
-    cli_abort(message = c("File with name {file_name} already exists in directory directory.",
-                          "i" = "Please supply a different file_name.")
+    cli_abort(message = c("File with name {.val {file_name}} already exists in directory directory.",
+                          "i" = "Please supply a different {.code file_name}.")
     )
   }
   # Save `Cluster_Annotation_Tibble`
   write.csv(Cluster_Annotation_Tibble(), full_path, row.names = F)
-  cli_inform("Cluster annotation file created in: {dir_path}.")
+  cli_inform("Cluster annotation file created in: {.val {dir_path}}.")
 }
 
 
@@ -1242,7 +1341,7 @@ Pull_Cluster_Annotation <- function(
 ) {
   # Check that annotation is in environment or a file that exists.
   if (!exists(x = deparse(expr = substitute(expr = annotation))) && !file.exists(annotation)) {
-    cli_abort(message = "No file or environmental variable: {annotation} exists.")
+    cli_abort(message = "No file or environmental variable: {.field {annotation}} exists.")
   }
   # Read or specify annotation table
   if (exists(x = deparse(expr = substitute(expr = annotation)))) {
@@ -1253,11 +1352,11 @@ Pull_Cluster_Annotation <- function(
 
   # Check that cluster and cell type columns are present
   if (!cluster_name_col %in% colnames(x = annotation_table)) {
-    cli_abort(message = "`cluster_name_col`: '{cluster_name_col}' not found in annotation data.frame.")
+    cli_abort(message = "{.code cluster_name_col}: {.val {cluster_name_col}} not found in annotation data.frame.")
   }
 
   if (!cell_type_col %in% colnames(x = annotation_table)) {
-    cli_abort(message = "`cell_type_col`: '{cell_type_col}' not found in annotation data.frame.")
+    cli_abort(message = "{.code cell_type_col}: {.val {cell_type_col}} not found in annotation data.frame.")
   }
 
   # Create list elements per cluster
@@ -1283,6 +1382,70 @@ Pull_Cluster_Annotation <- function(
   # Combine and return both lists as single list
   final_cluster_annotation_list <- c(cluster_annotation_list, new_cluster_ids_list, secondary_ids_list)
   return(final_cluster_annotation_list)
+}
+
+
+#' Rename Cluster Seurat
+#'
+#' Wrapper function to rename active identities in Seurat Object with new idents.
+#'
+#' @param seurat_object object name.
+#' @param new_idents vector of new cluster names.  Must be equal to the length of current active.ident
+#' in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
+#' @param meta_col_name (Optional).  Whether or not to create new named column in `Object@meta.data`
+#' to store the old identities.
+#' @param ... Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.
+#'
+#' @return Seurat Object with new identities placed in active.ident slot.
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
+#' meta_col_name = "Round01_Res0.6_Idents")
+#' }
+#'
+
+Rename_Clusters <- function(
+  seurat_object,
+  new_idents,
+  meta_col_name = NULL,
+  ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check equivalent lengths
+  if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
+    cli_abort(message = c("Length of {.code new_idents} must be equal to the number of active.idents in Seurat Object.",
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(levels(x = seurat_object))}}.")
+    )
+  }
+
+  # Name the new idents vector
+  if (is.null(x = names(x = new_idents))) {
+    names(new_idents) <- levels(seurat_object)
+  }
+  # If named check that names are right length
+  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
+    cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}}.")
+    )
+  }
+
+  # Rename meta column for old ident information if desired
+  if (!is.null(x = meta_col_name)) {
+    seurat_object[[meta_col_name]] <- Idents(seurat_object)
+  }
+
+  # Add new idents & return object
+  seurat_object <- RenameIdents(object = seurat_object, new_idents)
+  return(seurat_object)
 }
 
 
@@ -1342,7 +1505,8 @@ Setup_scRNAseq_Project <- function(
   } else {
     # Check custom paths file exists
     if (!file.exists(custom_dir_file)) {
-      cli_abort(message = "`custom_dir_file` not found.  Please check file path and name provided.")
+      cli_abort(message = c("{.code custom_dir_file} {.val {custom_dir_file}} not found.",
+                            "i" = "Please check file path and name provided."))
     }
 
     # Read file and create directory list
@@ -1356,7 +1520,7 @@ Setup_scRNAseq_Project <- function(
     if (!dir.exists(dir_path)){
       dir.create(dir_path)
     } else {
-      cli_warn(message = "The directory {dir_path} aleady exists.  No new directory created.")
+      cli_warn(message = "The directory {.val {dir_path}} aleady exists.  No new directory created.")
     }
   })
 
@@ -1398,8 +1562,8 @@ Copy_To_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
-                          "i" = "Please create directory or fix `file_path` and re-run function.")
+    cli_abort(message = c("Target directory {.val {folder_file_path}} does not exist.",
+                          "i" = "Please create directory or fix {.code file_path} and re-run function.")
     )
   }
 
@@ -1435,7 +1599,7 @@ Copy_From_GCP <- function(
 ) {
   # Check directory path is exists
   if (!dir.exists(paths = folder_file_path)) {
-    cli_abort(message = c("Target directory '{folder_file_path}' does not exist.",
+    cli_abort(message = c("Target directory {.val {folder_file_path}} does not exist.",
                           "i" = "Please create directory or fix `file_path` and re-run function.")
     )
   }

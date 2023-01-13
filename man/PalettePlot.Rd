@@ -4,10 +4,13 @@
 \alias{PalettePlot}
 \title{Plot color palette in viewer}
 \usage{
-PalettePlot(palette = NULL)
+PalettePlot(pal = NULL, label_color_num = NULL)
 }
 \arguments{
-\item{palette}{a vector of colors (either named colors of hex codes).}
+\item{pal}{a vector of colors (either named colors of hex codes).}
+
+\item{label_color_num}{logical, whether or not to numerically label the colors in output plot.
+Default is TRUE is number of colors in \code{pal} is less than 75 and FALSE is greater than 75.}
 }
 \value{
 Plot of all colors in supplied palette/vector
@@ -17,7 +20,7 @@ Plots given color vector/palette in viewer to evaluate palette before plotting o
 }
 \examples{
 pal <- DiscretePalette_scCustomize(num_colors = 36, palette = "varibow")
-PalettePlot(palette = pal)
+PalettePlot(pal = pal)
 
 }
 \references{

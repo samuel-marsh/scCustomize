@@ -610,7 +610,7 @@ Plot_Cells_per_Sample <- function(
 
   # Check grouping variable is present
   if (is.null(x = group_by)) {
-    cli_abort(message = "Must provide meta data variable to `group_by` in order to plot data.")
+    cli_abort(message = "Must provide meta data variable to {.code group_by} in order to plot data.")
   }
 
   # Check group by is valid
@@ -763,7 +763,7 @@ CellBender_Diff_Plot <- function(
 
   if (length(x = diff_features > 0)) {
     cli_warn(message = c("The following features are not present in both assays and were omitted:",
-                         "*" = "{diff_features}")
+                         "*" = "{.field diff_features}}")
     )
   }
 
@@ -771,8 +771,8 @@ CellBender_Diff_Plot <- function(
 
   # Check how to filter data.frame
   if (!is.null(x = pct_diff_threshold) && !is.null(x = num_features)) {
-    cli_abort(message = c("`pct_diff_threshold` and `num_features` cannot both have values.",
-                          "i" = "Set undesired parameter to 'NULL'."))
+    cli_abort(message = c("{.code pct_diff_threshold} and {.code num_features} cannot both have values.",
+                          "i" = "Set undesired parameter to NULL."))
   }
 
   # Filter plot
@@ -816,8 +816,8 @@ CellBender_Diff_Plot <- function(
 
       # Stop if no features found
       if (length(x = all_found_features) < 1) {
-        cli_abort(message = c("None of features in `custom_labels` were found in plot data.",
-                              "i" = "Check both raw data and adjust `pct_diff_threshold` if needed.")
+        cli_abort(message = c("None of features in {.code custom_labels} were found in plot data.",
+                              "i" = "Check both raw data and adjust {.code pct_diff_threshold} if needed.")
         )
       }
 
@@ -825,9 +825,9 @@ CellBender_Diff_Plot <- function(
       if (length(x = all_not_found_features) > 0) {
         op <- options(warn = 1)
         on.exit(options(op))
-        cli_warn(message = c("The following features in `custom_labels` were omitted as they were not found:",
-                             "*" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}",
-                             "i" = "Check both raw data and adjust `pct_diff_threshold` if needed.")
+        cli_warn(message = c("The following features in {.code custom_labels} were omitted as they were not found:",
+                             "*" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}",
+                             "i" = "Check both raw data and adjust {.code pct_diff_threshold} if needed.")
         )
       }
       # plot with custom labels

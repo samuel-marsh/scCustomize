@@ -2,7 +2,7 @@
 % Please edit documentation in R/Plotting_Utilities.R
 \name{UnRotate_X}
 \alias{UnRotate_X}
-\title{Unrotate x axis on VlnPLot}
+\title{Unrotate x axis on VlnPlot}
 \usage{
 UnRotate_X(...)
 }

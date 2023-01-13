@@ -1,3 +1,8 @@
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### QC UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Add Mito and Ribo percentages
 #'
 #' Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
@@ -82,22 +87,27 @@ Add_Mito_Ribo_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Check name collision
+  if (any(duplicated(x = c(mito_name, ribo_name, mito_ribo_name)))) {
+    cli_abort(message = "One or more of values provided to {.code mito_name}, {.code ribo_name}, {.code mito_ribo_name} are identical.")
+  }
+
   # Overwrite check
   if (mito_name %in% colnames(x = seurat_object@meta.data) || ribo_name %in% colnames(x = seurat_object@meta.data) || mito_ribo_name %in% colnames(x = seurat_object@meta.data)) {
     if (!overwrite) {
-      cli_abort(message = c("Columns with {mito_name} and/or {ribo_name} already present in meta.data slot.",
-                            "i" = "*To run function and overwrite columns set parameter `overwrite = TRUE` or change respective 'mito_name', 'ribo_name', or mito_ribo_name'*")
+      cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}*")
       )
     }
-    cli_inform(message = c("Columns with {mito_name} and/or {ribo_name} already present in meta.data slot.",
-                           "i" = "Overwriting those columns as overwrite = TRUE.")
+    cli_inform(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
     )
   }
 
   # Checks species
   if (is.null(x = species)) {
-    cli_abort(message = c("No species name or abbreivation was provided to `species` parameter.",
-                          "i" = "If not using default species please set `species = other`.")
+    cli_abort(message = c("No species name or abbreivation was provided to {.code species} parameter.",
+                          "i" = "If not using default species please set {.code species = other}.")
     )
   }
 
@@ -115,15 +125,15 @@ Add_Mito_Ribo_Seurat <- function(
 
   # Check ensembl vs patterns
   if (ensembl_ids && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
-    cli_warn(message = c("When using a default species and setting `ensembl_ids = TRUE` provided patterns or features are ignored.",
-                         "*" = "Supplied `mito_pattern`,`ribo_pattern`, `mito_features`,`ribo_features` will be disregarded.")
+    cli_warn(message = c("When using a default species and setting {.code ensembl_ids = TRUE} provided patterns or features are ignored.",
+                         "*" = "Supplied {.code mito_pattern}, {.code ribo_pattern}, {.code mito_features}, {.code ribo_features} will be disregarded.")
     )
   }
 
   # Assign mito/ribo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
-    cli_warn(message = c("Pattern expressions for included species (Human & Mouse) are set by default.",
-                         "*" = "Supplied `mito_pattern` and `ribo_pattern` will be disregarded.",
+    cli_warn(message = c("Pattern expressions for included species are set by default.",
+                         "*" = "Supplied {.code mito_pattern} and {.code ribo_pattern} will be disregarded.",
                          "i" = "To override defaults please supply a feature list for mito and/or ribo genes.")
     )
   }
@@ -194,23 +204,23 @@ Add_Mito_Ribo_Seurat <- function(
   # Add mito and ribo columns
   if (length_mito_features > 0) {
     good_mito <- mito_features[mito_features %in% rownames(x = seurat_object)]
-    seurat_object[["percent_mito"]] <- PercentageFeatureSet(object = seurat_object, features = good_mito, assay = assay)
+    seurat_object[[mito_name]] <- PercentageFeatureSet(object = seurat_object, features = good_mito, assay = assay)
   }
   if (length_ribo_features > 0) {
     good_ribo <- ribo_features[ribo_features %in% rownames(x = seurat_object)]
-    seurat_object[["percent_ribo"]] <- PercentageFeatureSet(object = seurat_object, features = good_ribo, assay = assay)
+    seurat_object[[ribo_name]] <- PercentageFeatureSet(object = seurat_object, features = good_ribo, assay = assay)
   }
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
-    object_meta <- seurat_object@meta.data %>%
+    object_meta <- Fetch_Meta(object = seurat_object) %>%
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
-      mutate(percent_mito_ribo = .data[["percent_mito"]] + .data[["percent_ribo"]])
+      mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
 
     object_meta <- object_meta %>%
-      select(all_of(c("barcodes", "percent_mito_ribo"))) %>%
+      select(all_of(c("barcodes", mito_ribo_name))) %>%
       column_to_rownames("barcodes")
 
     seurat_object <- AddMetaData(object = seurat_object, metadata = object_meta)
@@ -256,7 +266,7 @@ Add_Cell_Complexity_Seurat <- function(
 
   # Add assay warning message
   if (assay != "RNA") {
-    cli_warn(message = "Assay is set to value other than 'RNA'. This should only be done in rare instances.  See documentation for more info (`?Add_Cell_Complexity_Seurat`).",
+    cli_warn(message = "Assay is set to value other than 'RNA'. This should only be done in rare instances.  See documentation for more info ({.code ?Add_Cell_Complexity_Seurat}).",
              .frequency = "once",
              .frequency_id = "assay_warn")
   }
@@ -264,12 +274,12 @@ Add_Cell_Complexity_Seurat <- function(
   # Check columns for overwrite
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
     if (!overwrite) {
-      cli_abort(message = c("Column '{meta_col_name}' already present in meta.data slot.",
-                            "i" = "*To run function and overwrite column, set parameter `overwrite = TRUE` or change respective 'meta_col_name'*.")
+      cli_abort(message = c("Column {.val {meta_col_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
       )
     }
-    cli_inform(message = c("Column '{meta_col_name}' already present in meta.data slot",
-                           "i" = "Overwriting those columns as `overwrite = TRUE`.")
+    cli_inform(message = c("Column {.val {meta_col_name}} already present in meta.data slot",
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE}.")
     )
   }
 
@@ -283,6 +293,75 @@ Add_Cell_Complexity_Seurat <- function(
   #return object
   return(seurat_object)
 }
+
+
+#' Calculate and add differences post-cell bender analysis
+#'
+#' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
+#'
+#' @param seurat_object object name.
+#' @param raw_assay_name name of the assay containing the raw data.
+#' @param cell_bender_assay_name name of the assay containing the Cell Bender'ed data.
+#'
+#' @importFrom dplyr mutate
+#' @importFrom magrittr "%>%"
+#'
+#' @return Seurat object with 2 new columns in the meta.data slot.
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
+#' cell_bender_assay_name = "RNA")
+#' }
+#'
+
+Add_CellBender_Diff <- function(
+  seurat_object,
+  raw_assay_name,
+  cell_bender_assay_name
+) {
+  # Is Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check assays present
+  assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay_name, cell_bender_assay_name), print_msg = FALSE, omit_warn = TRUE)[[2]]
+
+  if (!is.null(x = assays_not_found)) {
+    stop_quietly()
+  }
+
+  # pull meta
+  meta_seurat <- seurat_object@meta.data
+
+  # Set variable names
+  raw_nFeature <- paste0("nFeature_", raw_assay_name)
+  raw_nCount <- paste0("nCount_", raw_assay_name)
+
+  cb_nFeature <- paste0("nFeature_", cell_bender_assay_name)
+  cb_nCount <- paste0("nCount_", cell_bender_assay_name)
+
+  # Mutate meta data
+  meta_modified <- meta_seurat %>%
+    mutate(nFeature_Diff = .data[[raw_nFeature]] - .data[[cb_nFeature]],
+           nCount_Diff = .data[[raw_nCount]] - .data[[cb_nCount]])
+
+  # Remove already in object meta data
+  meta_modified <- Meta_Remove_Seurat(meta_data = meta_modified, seurat_object = seurat_object)
+
+  # Add back to Seurat Object
+  seurat_object <- AddMetaData(object = seurat_object, metadata = meta_modified)
+
+  return(seurat_object)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### META DATA UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Remove meta data columns containing Seurat Defaults
@@ -332,7 +411,7 @@ Meta_Remove_Seurat <- function(
   if (barcodes_to_rownames) {
     # Check barcodes colname exists
     if (!barcodes_colname %in% colnames(x = meta_data)) {
-      cli_abort(message = "`barcodes_colname`: '{barcodes_colname}' was not present in the column names of meta_data data.frame provided.")
+      cli_abort(message = "{.code barcodes_colname}: {.val {barcodes_colname}} was not present in the column names of meta_data data.frame provided.")
     }
     # Move barcodes to rownames
     meta_data_filtered <- meta_data_filtered %>%
@@ -408,8 +487,8 @@ Add_Sample_Meta <- function(
     if (file.exists(meta_data)) {
       meta_data <- fread(file = meta_data, data.table = FALSE)
     } else {
-      cli_abort(message = c("Could not find `meta_data` {deparse(expr = substitute(expr = meta_data))}.",
-                            "*" = "If providing environmental variable please check `meta_data` name.",
+      cli_abort(message = c("Could not find {.code meta_data} {.field {deparse(expr = substitute(expr = meta_data))}}.",
+                            "*" = "If providing environmental variable please check {.code meta_data} name.",
                             "i" = "If providing path to file please check path is correct.")
       )
     }
@@ -417,27 +496,27 @@ Add_Sample_Meta <- function(
 
   # Check meta data structure
   if (!inherits(x = meta_data, what = "data.frame")) {
-    cli_abort(message = c("`meta_data` not in correct format",
-                          "*" = "`meta_data` must be a data.frame or tibble.",
+    cli_abort(message = c("{.code meta_data} not in correct format",
+                          "*" = "{.code meta_data} must be a data.frame or tibble.",
                           "i" = "Change format and re-run function.")
     )
   }
 
   # Check NA in meta data
   if (anyNA(x = meta_data)) {
-    cli_abort(message = c("`meta_data` contains NA values.",
-                          "i" = "If you would like NA values added to Seurat meta data please set `na_ok = TRUE`.")
+    cli_abort(message = c("{.code meta_data} contains NA values.",
+                          "i" = "If you would like NA values added to Seurat meta data please set {.code na_ok = TRUE}.")
     )
   }
 
   # Check join variables exist
   if (!join_by_seurat %in% colnames(x = seurat_object@meta.data)) {
-    cli_abort(message = "The column {join_by_seurat} was not found in object @meta.data slot."
+    cli_abort(message = "The column {.val {join_by_seurat}} was not found in object @meta.data slot."
     )
   }
 
   if (!join_by_meta %in% colnames(x = meta_data)) {
-    cli_abort(message = "The column {join_by_meta} was not found in supplied `meta_data`."
+    cli_abort(message = "The column {.val {join_by_meta}} was not found in supplied `meta_data`."
     )
   }
 
@@ -448,9 +527,9 @@ Add_Sample_Meta <- function(
     dup_columns <- dup_columns[!dup_columns %in% c(join_by_seurat, join_by_meta)]
 
     if (any(dup_columns %in% colnames(x = seurat_object@meta.data)) && !overwrite) {
-      cli_abort(message = c(" Duplicate `meta_data contains column names in object @meta.data.",
-                            "i" = "`meta_data` and object@meta.data both contain columns: {scCustomize:::glue_collapse_scCustom(input_string = dup_columns)}.",
-                            "*" = "To overwrite existing object @meta.data columns with those in `meta_data` set `overwrite = TRUE`.")
+      cli_abort(message = c(" Duplicate {.code meta_data} contains column names in object @meta.data.",
+                            "i" = "{.code meta_data} and object@meta.data both contain columns: {.field {glue_collapse_scCustom(input_string = dup_columns)}}.",
+                            "*" = "To overwrite existing object @meta.data columns with those in {.code meta_data} set {.code overwrite = TRUE}.")
       )
     }
   }
@@ -553,11 +632,11 @@ Extract_Sample_Meta <- function(
 
   # Check sample name parameter is present
   if (!sample_name %in% colnames(x = meta_df)) {
-    cli_abort(message = "The `sample_name` parameter: '{sample_name}' was not found in object meta.data")
+    cli_abort(message = "The {.code sample_name} parameter: {.val {sample_name}} was not found in object meta.data")
   }
 
   if (!is.null(x = variables_include) && !is.null(x = variables_exclude) && include_all) {
-    cli_abort(message = "If `include_all = TRUE` then `varibles_include` and `variables_exclude` must be NULL.")
+    cli_abort(message = "If {.code include_all = TRUE} then {.code variables_include} and {.code variables_exclude} must be NULL.")
   }
 
   # Generate nCount and nFeature variable vectors for exclusion
@@ -575,8 +654,8 @@ Extract_Sample_Meta <- function(
   if (!is.null(x = variables_include) && !is.null(x = variables_exclude)) {
     variable_intersect <- intersect(x = variables_include, y = variables_exclude)
     if (length(x = variable_intersect > 0)) {
-      cli_abort(message = c("Following varible is present in both `variable_include` and `variable_exclude` parameters.",
-                            "i" = "{variable_intersect}")
+      cli_abort(message = c("Following variable is present in both {.code variables_include} and {.code variables_exclude} parameters.",
+                            "i" = "{.field {variable_intersect}}")
       )
     }
   }
@@ -602,7 +681,7 @@ Extract_Sample_Meta <- function(
   if (length(x = all_found_features) < 1) {
     cli_abort(message = c("No features were found.",
                           "*" = "The following are not present in object meta data:",
-                          "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
     )
   }
 
@@ -611,7 +690,7 @@ Extract_Sample_Meta <- function(
     op <- options(warn = 1)
     on.exit(options(op))
     cli_warn(message = c("The following meta data variables were omitted as they were not found:",
-                         "i" = "{glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}")
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}")
     )
   }
 
@@ -647,68 +726,9 @@ Extract_Sample_Meta <- function(
 }
 
 
-#' Calculate and add differences post-cell bender analysis
-#'
-#' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
-#'
-#' @param seurat_object object name.
-#' @param raw_assay_name name of the assay containing the raw data.
-#' @param cell_bender_assay_name name of the assay containing the Cell Bender'ed data.
-#'
-#' @importFrom dplyr mutate
-#' @importFrom magrittr "%>%"
-#'
-#' @return Seurat object with 2 new columns in the meta.data slot.
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' object <- Add_CellBender_Diff(seurat_object = obj, raw_assay_name = "RAW",
-#' cell_bender_assay_name = "RNA")
-#' }
-#'
-
-Add_CellBender_Diff <- function(
-  seurat_object,
-  raw_assay_name,
-  cell_bender_assay_name
-) {
-  # Is Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # Check assays present
-  assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay_name, cell_bender_assay_name), print_msg = FALSE, omit_warn = TRUE)[[2]]
-
-  if (!is.null(x = assays_not_found)) {
-    stop_quietly()
-  }
-
-  # pull meta
-  meta_seurat <- seurat_object@meta.data
-
-  # Set variable names
-  raw_nFeature <- paste0("nFeature_", raw_assay_name)
-  raw_nCount <- paste0("nCount_", raw_assay_name)
-
-  cb_nFeature <- paste0("nFeature_", cell_bender_assay_name)
-  cb_nCount <- paste0("nCount_", cell_bender_assay_name)
-
-  # Mutate meta data
-  meta_modified <- meta_seurat %>%
-    mutate(nFeature_Diff = .data[[raw_nFeature]] - .data[[cb_nFeature]],
-           nCount_Diff = .data[[raw_nCount]] - .data[[cb_nCount]])
-
-  # Remove already in object meta data
-  meta_modified <- Meta_Remove_Seurat(meta_data = meta_modified, seurat_object = seurat_object)
-
-  # Add back to Seurat Object
-  seurat_object <- AddMetaData(object = seurat_object, metadata = meta_modified)
-
-  return(seurat_object)
-}
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### MISC SLOT UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Store misc data in Seurat object
@@ -755,11 +775,11 @@ Store_Misc_Info_Seurat <- function(
   misc_present <- names(x = seurat_object@misc)
   if (data_name %in% misc_present) {
     if (!overwrite) {
-      cli_abort(message = c("Item(s) named: {data_name} already present in @misc slot.",
-                            "i" = "*To run function and overwrite items set parameter `overwrite = TRUE` or change 'data_name'*")
+      cli_abort(message = c("Item(s) named: {.val {data_name}} already present in @misc slot.",
+                            "i" = "*To run function and overwrite items set parameter {.code overwrite = TRUE} or change {.code data_name}*")
       )
     } else {
-      cli_inform(message = c("Items named {data_name} already present in @misc slot.",
+      cli_inform(message = c("Items named {.val {data_name}} already present in @misc slot.",
                              "i" = "Overwriting those items as overwrite = TRUE.")
       )
     }
@@ -776,13 +796,13 @@ Store_Misc_Info_Seurat <- function(
     if (list_as_list) {
       # Check length of name
       if (length(x = data_name) != 1) {
-        cli_abort(message = "When storing as list the length 'data_name' must be 1.")
+        cli_abort(message = "When storing as list the length {.code data_name} must be {.field 1 (one)}.")
       }
 
       # Add data
       seurat_object@misc[[data_name]] <- data_to_store
       cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                             "i" = "{paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}")
+                             "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}}")
       )
       return(seurat_object)
     }
@@ -791,7 +811,7 @@ Store_Misc_Info_Seurat <- function(
     data_list_length <- length(x = data_to_store)
 
     if (length(x = data_name) != data_list_length) {
-      cli_abort(message = "The lengths of 'data_to_store' ({data_list_length}) and 'data_name' ({length(x = data_name)}) must be equal.")
+      cli_abort(message = "The lengths of {.code data_to_store} ({.field {data_list_length}}) and {.code data_name} ({.field {length(x = data_name)}}) must be equal.")
     }
 
     # Add data
@@ -799,20 +819,20 @@ Store_Misc_Info_Seurat <- function(
       seurat_object@misc[[data_name[i]]] <- data_to_store[[i]]
     }
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}")
+                           "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}}")
     )
     return(seurat_object)
   } else {
     # Check length of name
     if (length(x = data_name) != 1) {
-      cli_abort(message = "When storing a string/vector the length 'data_name' must be 1.")
+      cli_abort(message = "When storing a string/vector the length {.code data_name} must be {.field 1 (one)}.")
     }
 
     # Add data
     seurat_object@misc[[data_name]] <- data_to_store
     misc_names <- shQuote(string = names(x = seurat_object@misc))
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{glue_collapse_scCustom(input_string = misc_names, and = TRUE)}")
+                           "i" = "{.field {glue_collapse_scCustom(input_string = misc_names, and = TRUE)}}")
     )
     return(seurat_object)
   }
@@ -860,107 +880,4 @@ Store_Palette_Seurat <- function(
 
   seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite)
   return(seurat_object)
-}
-
-
-#' Rename Cluster Seurat
-#'
-#' Wrapper function to rename active identities in Seurat Object with new idents.
-#'
-#' @param seurat_object object name.
-#' @param new_idents vector of new cluster names.  Must be equal to the length of current active.ident
-#' in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name (Optional).  Whether or not to create new named column in `Object@meta.data`
-#' to store the old identities.
-#' @param ... Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.
-#'
-#' @return Seurat Object with new identities placed in active.ident slot.
-#'
-#' @import cli
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
-#' meta_col_name = "Round01_Res0.6_Idents")
-#' }
-#'
-
-Rename_Clusters <- function(
-  seurat_object,
-  new_idents,
-  meta_col_name = NULL,
-  ...
-) {
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # Check equivalent lengths
-  if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
-    cli_abort(message = c("Length of `new_idents` must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "`new_idents` length: '{length(x = new_idents)}' Object@active.idents length: '{length(levels(x = seurat_object))}'.")
-    )
-  }
-
-  # Name the new idents vector
-  if (is.null(x = names(x = new_idents))) {
-    names(new_idents) <- levels(seurat_object)
-  }
-  # If named check that names are right length
-  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
-    cli_abort(message = c("The number of unique names for `new idents is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}.")
-    )
-  }
-
-  # Rename meta column for old ident information if desired
-  if (!is.null(x = meta_col_name)) {
-    seurat_object[[meta_col_name]] <- Idents(seurat_object)
-  }
-
-  # Add new idents & return object
-  seurat_object <- RenameIdents(object = seurat_object, new_idents)
-  return(seurat_object)
-}
-
-
-#' Merge a list of Seurat Objects
-#'
-#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
-#'
-#' @param list_seurat list composed of multiple Seurat Objects.
-#' @param add.cell.ids A character vector of length(x = c(x, y)). Appends the corresponding values
-#' to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
-#' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
-#' This is recommended if the same normalization approach was applied to all objects.
-#' See \code{\link[SeuratObject]{merge}}.
-#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
-#'
-#' @importFrom purrr reduce
-#'
-#' @return A Seurat Object
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' object_list <- list(obj1, obj2, obj3, ...)
-#' merged_object <- Merge_Seurat_List(list_seurat = object_list)
-#' }
-#'
-
-Merge_Seurat_List <- function(
-  list_seurat,
-  add.cell.ids = NULL,
-  merge.data = TRUE,
-  project = "SeuratProject"
-) {
-  merged_object <- reduce(list_seurat, function(x, y) {
-    merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
-  })
 }

@@ -26,7 +26,7 @@ Function to return package default discrete palettes depending on number of grou
 }
 \examples{
 cols <- scCustomize_Palette(num_groups = 24, ggplot_default_colors = FALSE)
-PalettePlot(palette = cols)
+PalettePlot(pal= cols)
 
 }
 \concept{palettes}

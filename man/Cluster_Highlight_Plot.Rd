@@ -7,7 +7,7 @@
 Cluster_Highlight_Plot(
   seurat_object,
   cluster_name,
-  highlight_color = "navy",
+  highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
   raster = NULL,
@@ -15,6 +15,7 @@ Cluster_Highlight_Plot(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  ggplot_default_colors = FALSE,
   ...
 )
 }
@@ -23,7 +24,8 @@ Cluster_Highlight_Plot(
 
 \item{cluster_name}{Name(s) (or number(s)) identity of cluster to be highlighted.}
 
-\item{highlight_color}{Color(s) to highlight cells (default "navy").}
+\item{highlight_color}{Color(s) to highlight cells.  The default is NULL and plot will use
+\code{scCustomize_Palette()}.}
 
 \item{background_color}{non-highlighted cell colors.}
 
@@ -41,6 +43,9 @@ Default is c(512, 512).}
 
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
+
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
 }

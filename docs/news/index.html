@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -53,6 +53,9 @@
     <li class="divider">
     <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
+      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    </li>
+    <li>
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
@@ -60,9 +63,6 @@
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
-    </li>
-    <li>
-      <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -104,6 +104,36 @@
       <small>Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.1" id="sccustomize-111-2023-01-12">scCustomize 1.1.1 (2023-01-12)<a class="anchor" aria-label="anchor" href="#sccustomize-111-2023-01-12"></a></h2>
+<div class="section level3">
+<h3 id="added-1-1-1">Added<a class="anchor" aria-label="anchor" href="#added-1-1-1"></a></h3>
+<ul><li>Added <code>label_color_num</code> parameter to <code>PalettePlot</code> allow control of color labeling.<br></li>
+<li>Added ability to rotate x-axis of <code>Stacked_VlnPlot</code> 90 degrees or 45 (previously possible) (<a href="https://github.com/samuel-marsh/scCustomize/issues/84" class="external-link">#84</a>).<br></li>
+<li>Added error checks to <code>Merge_Seurat_List</code> to avoid ambiguous error messages on failure.<br></li>
+<li>Added <code>Case_Check</code> checks/messages to all feature-based plotting functions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-1-1-1">Changed<a class="anchor" aria-label="anchor" href="#changed-1-1-1"></a></h3>
+<ul><li>
+<strong>BREAKING CHANGE</strong> Parameter in <code>PalettePlot</code> has been changed from <code>palette</code> to <code>pal</code>.<br></li>
+<li>Updated <code>PalettePlot</code> to support <code>pal</code> of class “colors”.<br></li>
+<li>Moved viridis package to Suggests and use paletteer package for viridis palette shortcut functions.<br></li>
+<li>Fixed color palette continuity in <code>Cluster_Highlight_Plot</code> and <code>Meta_Highlight_Plot</code>.<br></li>
+<li>
+<code>Fetch_Meta</code> is now S3 generic function that can handle either Seurat or LIGER objects.<br></li>
+<li>Rearrange base R code within <code>R/</code> scripts for better organization.<br></li>
+<li>Completed move of all scCustomize error/warning messages from base R to cli/rlang framework.<br></li>
+<li>Move feature checking to internal function.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-1-1-1">Fixes<a class="anchor" aria-label="anchor" href="#fixes-1-1-1"></a></h3>
+<ul><li>Fixed potential for column name collision error in <code>Add_Mito_Ribo_Seurat</code> and <code>Add_Mito_Ribo_LIGER</code>.<br></li>
+<li>Fixed <code>Add_Mito_Ribo_Seurat</code> to respect provided <code>mito_name</code>, <code>ribo_name</code> and <code>mito_ribo_name</code> values.<br></li>
+<li>Updated out-dated documentation for number of package functions.<br></li>
+<li>Typo/styling fixes.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.0" id="sccustomize-110-2022-12-22">scCustomize 1.1.0 (2022-12-22)<small>2022-12-23</small><a class="anchor" aria-label="anchor" href="#sccustomize-110-2022-12-22"></a></h2>
 <div class="section level3">
@@ -259,7 +289,7 @@
 <h2 class="page-header" data-toc-text="0.6.3" id="sccustomize-063-2021-12-16">scCustomize 0.6.3 (2021-12-16)<a class="anchor" aria-label="anchor" href="#sccustomize-063-2021-12-16"></a></h2>
 <div class="section level3">
 <h3 id="fixes-0-6-3">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-6-3"></a></h3>
-<ul><li>Fixed <code>Read_Metrics_10X</code> errors that occured due to differing outputs depending on Cell Ranger version or type of assay.</li>
+<ul><li>Fixed <code>Read_Metrics_10X</code> errors that occurred due to differing outputs depending on Cell Ranger version or type of assay.</li>
 <li>Added direct <code>importFrom</code> for <code>DefaultDimReduc</code> from SeuratObject to avoid potential errors.</li>
 </ul></div>
 </div>

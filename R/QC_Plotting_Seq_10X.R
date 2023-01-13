@@ -43,7 +43,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -66,7 +66,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -111,18 +111,17 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -178,7 +177,7 @@ Seq_QC_Plot_Number_Cells <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -201,7 +200,7 @@ Seq_QC_Plot_Number_Cells <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -246,18 +245,17 @@ Seq_QC_Plot_Number_Cells <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -313,7 +311,7 @@ Seq_QC_Plot_Genes <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = " is not a column in the provided `metrics_dataframe`.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -336,7 +334,7 @@ Seq_QC_Plot_Genes <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -371,18 +369,17 @@ Seq_QC_Plot_Genes <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -438,7 +435,7 @@ Seq_QC_Plot_UMIs <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -461,7 +458,7 @@ Seq_QC_Plot_UMIs <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -496,18 +493,17 @@ Seq_QC_Plot_UMIs <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -563,7 +559,7 @@ Seq_QC_Plot_Total_Genes <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -586,7 +582,7 @@ Seq_QC_Plot_Total_Genes <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -621,18 +617,17 @@ Seq_QC_Plot_Total_Genes <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+        ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -689,7 +684,7 @@ Seq_QC_Plot_Saturation <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -712,7 +707,7 @@ Seq_QC_Plot_Saturation <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -753,18 +748,17 @@ Seq_QC_Plot_Saturation <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -821,7 +815,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -844,7 +838,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -885,18 +879,17 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -953,7 +946,7 @@ Seq_QC_Plot_Transcriptome <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -976,7 +969,7 @@ Seq_QC_Plot_Transcriptome <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1016,18 +1009,17 @@ Seq_QC_Plot_Transcriptome <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1084,7 +1076,7 @@ Seq_QC_Plot_Genome <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1107,7 +1099,7 @@ Seq_QC_Plot_Genome <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1147,18 +1139,17 @@ Seq_QC_Plot_Genome <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1215,7 +1206,7 @@ Seq_QC_Plot_Intergenic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1238,7 +1229,7 @@ Seq_QC_Plot_Intergenic <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1278,18 +1269,17 @@ Seq_QC_Plot_Intergenic <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1346,7 +1336,7 @@ Seq_QC_Plot_Intronic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1369,7 +1359,7 @@ Seq_QC_Plot_Intronic <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1409,18 +1399,17 @@ Seq_QC_Plot_Intronic <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1477,7 +1466,7 @@ Seq_QC_Plot_Exonic <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1500,7 +1489,7 @@ Seq_QC_Plot_Exonic <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1540,18 +1529,17 @@ Seq_QC_Plot_Exonic <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 
@@ -1608,7 +1596,7 @@ Seq_QC_Plot_Antisense <- function(
   ...
 ) {
   if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "'{plot_by}' is not a column in the provided `metrics_dataframe`.")
+    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
   }
 
   # Change plot_by to character vector to make significance functions show all comparisons
@@ -1631,7 +1619,7 @@ Seq_QC_Plot_Antisense <- function(
   } else {
     if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {length(x = colors_use)}, is less than the number of groups in '{plot_by}' column: {length_plotby}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1671,18 +1659,17 @@ Seq_QC_Plot_Antisense <- function(
   if (significance) {
     ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
     if (!ggpubr_check[1]) {
-      stop(
-        "Please install the ggpubr package to calculate/plot significance values.",
-        "\nThis can be accomplished with the following commands: ",
-        "\n----------------------------------------",
-        "\ninstall.packages('ggpubr')",
-        "\n----------------------------------------",
-        call. = FALSE
-      )
+      cli_abort(message = c(
+        "Please install the {.val ggpubr} package to calculate/plot significance values.",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}ggpubr{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
     }
 
     if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when '{plot_by}' column contains less than 2 groups.")
+      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
     }
     groups <- unique(x = stats_dataframe[[plot_by]])
 

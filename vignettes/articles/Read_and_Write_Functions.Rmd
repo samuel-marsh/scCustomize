@@ -62,7 +62,7 @@ cell_bender_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered
 ```
 
 
-## Import Mutliple Data Files from Single Directory  
+## Import Multiple Data Files from Single Directory  
 Often when downloading files from NCBI GEO or other repos all of the files are contained in single directory and contain non-standard file names.
 However, functions like `Seurat::Read10X()` expect non-prefixed files (i.e. Cell Ranger outputs).  
   

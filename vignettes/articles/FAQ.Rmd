@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 ### *Can I cite scCustomize?*
 Yes!  If you use scCustomize in your research I would really appreciate citing the package.  The package can be cited as:  
 
-***Samuel Marsh (2021). scCustomize: An R package for custom visualization & analyses of single cell sequencing.  https://doi.org/10.5281/zenodo.5706430.***
+***Marsh SE (2021). scCustomize: Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing.  https://doi.org/10.5281/zenodo.5706430.***
 
 ### *Something isn't working*
 If you run into any issues or bugs please submit a [GitHub Issue](https://github.com/samuel-marsh/scCustomize/issues) with details of the issue.   
