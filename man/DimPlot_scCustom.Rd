@@ -13,6 +13,7 @@ DimPlot_scCustom(
   split.by = NULL,
   split_seurat = FALSE,
   figure_plot = FALSE,
+  aspect_ratio = NULL,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -50,6 +51,9 @@ individual plots in layout.  Default is FALSE.}
 
 \item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting
 axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{shuffle}{logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 plots if points of interest are being buried. (Default is TRUE).}
