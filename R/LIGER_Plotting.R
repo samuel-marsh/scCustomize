@@ -18,6 +18,8 @@
 #' @param shuffle_seed Sets the seed if randomly shuffling the order of points.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
 #' technique and therefore needs to be set manually.  Default is "UMAP".
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
@@ -61,6 +63,7 @@ DimPlot_LIGER <- function(
   shuffle = TRUE,
   shuffle_seed = 1,
   reduction_label = "UMAP",
+  aspect_ratio = NULL,
   label = TRUE,
   label_size = NA,
   label_repel = FALSE,
@@ -170,6 +173,15 @@ DimPlot_LIGER <- function(
                              shuffle_seed = shuffle_seed)
 
     p3 <- wrap_plots(p1 + p2)
+
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      p3 <- p3 & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(p3)
   }
 
@@ -192,6 +204,14 @@ DimPlot_LIGER <- function(
                                 label_color = label_color,
                                 label = label,
                                 color_seed = color_seed)
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      p1 <- p1 & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(p1)
   }
 
@@ -210,6 +230,14 @@ DimPlot_LIGER <- function(
                              split_by = split_by,
                              shuffle_seed = shuffle_seed,
                              color_seed = color_seed)
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      p2 <- p2 & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(p2)
   }
 }
