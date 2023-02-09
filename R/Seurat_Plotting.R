@@ -67,6 +67,7 @@ FeaturePlot_scCustom <- function(
   raster = NULL,
   raster.dpi = c(512, 512),
   split.by = NULL,
+  aspect_ratio = NULL,
   num_columns = NULL,
   slot = "data",
   alpha_exp = NULL,
@@ -250,6 +251,14 @@ FeaturePlot_scCustom <- function(
     options(scCustomize_warn_na_cutoff = FALSE)
   }
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -369,6 +378,14 @@ FeaturePlot_DualAssay <- function(
 
   # Assemble plots & return plots
   plots <- wrap_plots(plot_raw, plot_cell_bender, ncol = num_columns)
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plots <- plots & theme(aspect.ratio = aspect_ratio)
+  }
 
   return(plots)
 }
@@ -559,7 +576,17 @@ Split_FeatureScatter <- function(
   })
 
   # Wrap Plots into single output
-  wrap_plots(plots, ncol = num_columns, nrow = num_rows) + plot_layout(guides = 'collect')
+  plot_comb <- wrap_plots(plots, ncol = num_columns, nrow = num_rows) + plot_layout(guides = 'collect')
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot_comb <- plot_comb & theme(aspect.ratio = aspect_ratio)
+  }
+
+  return(plot_comb)
 }
 
 
@@ -1942,8 +1969,25 @@ DimPlot_scCustom <- function(
 
       plot_figure <- plot + axis_plot +
         plot_layout(design = figure_layout)
+
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
+      }
+
       return(plot_figure)
     } else {
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plot <- plot & theme(aspect.ratio = aspect_ratio)
+      }
+
       return(plot)
     }
 
@@ -1980,8 +2024,25 @@ DimPlot_scCustom <- function(
 
         plot_figure <- plot + axis_plot +
           plot_layout(design = figure_layout)
+
+        # Aspect ratio changes
+        if (!is.null(x = aspect_ratio)) {
+          if (!is.numeric(x = aspect_ratio)) {
+            cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+          }
+          plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
+        }
+
         return(plot_figure)
       } else {
+        # Aspect ratio changes
+        if (!is.null(x = aspect_ratio)) {
+          if (!is.numeric(x = aspect_ratio)) {
+            cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+          }
+          plot <- plot & theme(aspect.ratio = aspect_ratio)
+        }
+
         return(plot)
       }
     } else {
@@ -2043,6 +2104,15 @@ DimPlot_scCustom <- function(
 
       # Wrap Plots into single output
       plots <- wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plots <- plots & theme(aspect.ratio = aspect_ratio)
+      }
+
       return(plots)
     }
   }
@@ -2166,7 +2236,17 @@ DimPlot_All_Samples <- function(
   })
 
   # Wrap Plots into single output
-  wrap_plots(plots, ncol = num_columns)
+  plot_comb <- wrap_plots(plots, ncol = num_columns)
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot_comb <- plot_comb & theme(aspect.ratio = aspect_ratio)
+  }
+
+  return(plot_comb)
 }
 
 
