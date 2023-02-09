@@ -1506,6 +1506,14 @@ Cluster_Highlight_Plot <- function(
   # Edit plot legend
   plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -1653,6 +1661,14 @@ Meta_Highlight_Plot <- function(
   # Update legend and return plot
   plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -1785,6 +1801,14 @@ Cell_Highlight_Plot <- function(
 
   # Edit plot legend
   plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_highlight), values = c(highlight_color, background_color), na.value = background_color))
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
 
   return(plot)
 }
