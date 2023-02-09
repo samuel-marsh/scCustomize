@@ -22,6 +22,8 @@
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
 #' @param split.by Variable in `@meta.data` to split the plot by.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param num_columns Number of columns in plot layout.
 #' @param slot Which slot to pull expression data from?  Default is "data".
 #' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
@@ -276,6 +278,8 @@ FeaturePlot_scCustom <- function(
 #' @param na_color color to use for points below lower limit.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param na_cutoff Value to use as minimum expression cutoff.  To set no cutoff set to `NA`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -404,6 +408,8 @@ FeaturePlot_DualAssay <- function(
 #' Use 'ident' to group.by active.ident class.
 #' @param colors_use color for the points on plot.
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param title_size size for plot title labels.
 #' @param num_columns number of columns in final layout plot.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -1408,6 +1414,8 @@ Clustered_DotPlot <- function(
 #' `scCustomize_Palette()`.
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1529,6 +1537,8 @@ Cluster_Highlight_Plot <- function(
 #' @param highlight_color Color to highlight cells (default "navy").
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1684,6 +1694,8 @@ Meta_Highlight_Plot <- function(
 #' @param highlight_color Color to highlight cells.
 #' @param background_color non-highlighted cell colors (default is "lightgray")..
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1837,6 +1849,8 @@ Cell_Highlight_Plot <- function(
 #' individual plots in layout.  Default is FALSE.
 #' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
 #' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
@@ -2157,6 +2171,8 @@ DimPlot_scCustom <- function(
 #' @param meta_data_column Meta data column to split plots by.
 #' @param colors_use single color to use for all plots or a vector of colors equal to the number of plots.
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param title_size size for plot title labels.
 #' @param num_columns number of columns in final layout plot.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
