@@ -323,7 +323,7 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
-  plot <- VlnPlot(object = seurat_object, features = feature, group.by = group.by, pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
