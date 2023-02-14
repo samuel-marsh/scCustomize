@@ -4,9 +4,11 @@
   
   
 ## Changed  
+- Moved `QC_Plots_Feature` to use `VlnPlot_scCustom` under the hood like rest of `QC_Plots_*` functions.  
    
 
 ## Fixes  
+- Fixed `QC_Plots_Feature` to respect parameters when passing to `VlnPlot` ([#91](https://github.com/samuel-marsh/scCustomize/issues/91)).  
    
 
 
