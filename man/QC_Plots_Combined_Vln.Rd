@@ -12,6 +12,8 @@ QC_Plots_Combined_Vln(
   mito_cutoffs = NULL,
   mito_name = "percent_mito",
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,

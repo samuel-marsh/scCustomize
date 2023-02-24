@@ -13,6 +13,8 @@ QC_Plots_Genes(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -38,7 +40,11 @@ default is the current active.ident of the object.}
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
 
-\item{pt.size}{Point size for plotting}
+\item{pt.size}{Point size for plotting.}
+
+\item{plot_median}{logical, whether to plot median for each ident on the plot (Default is FALSE).}
+
+\item{median_size}{Shape size for the median is plotted.}
 
 \item{colors_use}{vector of colors to use for plot.}
 

@@ -14,6 +14,8 @@ QC_Plots_Complexity(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
