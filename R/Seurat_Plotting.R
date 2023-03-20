@@ -23,7 +23,7 @@
 #' Default is c(512, 512).
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_collect logical, whether to collect the legends/guides when plotting with `split.by`.
-#' Default is TRUE.
+#' Default is TRUE if one value is provided to `features` otherwise is set to FALSE.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param num_columns Number of columns in plot layout.
@@ -72,7 +72,7 @@ FeaturePlot_scCustom <- function(
   raster = NULL,
   raster.dpi = c(512, 512),
   split.by = NULL,
-  split_collect = TRUE,
+  split_collect = NULL,
   aspect_ratio = NULL,
   num_columns = NULL,
   slot = "data",
@@ -89,6 +89,21 @@ FeaturePlot_scCustom <- function(
   # Check meta
   if (!is.null(x = split.by)) {
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Set or check split_collect values
+  if (is.null(x = split_collect)) {
+    if (length(x = features) == 1) {
+      split_collect <- TRUE
+    } else {
+      split_collect <- FALSE
+    }
+  }
+
+  if (!is.null(x = split_collect)) {
+    if (length(x = features) > 1 && split_collect) {
+      cli_abort(message = "{.code split_collect} cannot be set to {.field TRUE} if the number of features is greater than 1.")
+    }
   }
 
   # Check features and meta to determine which features present
