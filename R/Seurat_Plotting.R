@@ -22,6 +22,8 @@
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
 #' @param split.by Variable in `@meta.data` to split the plot by.
+#' @param split_collect logical, whether to collect the legends/guides when plotting with `split.by`.
+#' Default is TRUE.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param num_columns Number of columns in plot layout.
@@ -43,6 +45,7 @@
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom methods hasArg
 #' @importFrom scales alpha
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -69,6 +72,7 @@ FeaturePlot_scCustom <- function(
   raster = NULL,
   raster.dpi = c(512, 512),
   split.by = NULL,
+  split_collect = TRUE,
   aspect_ratio = NULL,
   num_columns = NULL,
   slot = "data",
@@ -198,7 +202,14 @@ FeaturePlot_scCustom <- function(
       plot <- plot & theme(legend.title=element_blank())
       plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features))) + No_Right()
     } else {
-      plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      if (split_collect) {
+        if (hasArg(keep.scale)) {
+          cli_abort(message = "The parameter {.code keep.scale} cannot be set different from default if {.code split_collect - TRUE}.")
+        }
+        plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns, guides = "collect")
+      } else {
+        plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      }
     }
   }
 
