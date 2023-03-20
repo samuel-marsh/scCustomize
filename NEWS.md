@@ -2,6 +2,7 @@
 ## Added  
 - Added `aspect_ratio` parameter to all dimensionality reduction plots to control axes ratio of output plot.  
 - Added `plot_median` and `median_size` parameters to `QC_Plots_*` functions.  
+- Added `split_collect` parameter to `FeaturePlot_scCustom` to collect all guides when using `split.by` for a single feature.
   
   
 ## Changed  
