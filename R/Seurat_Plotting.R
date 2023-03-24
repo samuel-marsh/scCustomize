@@ -1022,6 +1022,9 @@ DotPlot_scCustom <- function(
 #' `feature_km_repeats`.  Default is 1000.
 #' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
+#' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
+#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1330,7 +1333,7 @@ Clustered_DotPlot <- function(
 
   # Create legend for point size
   lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]])),
+    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
     ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
@@ -1340,7 +1343,9 @@ Clustered_DotPlot <- function(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
                                                               gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")))
+                                                              gp = gpar(fill = "black"))),
+                           labels_gp = gpar(fontsize = legend_label_size),
+                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
     )
   )
 
@@ -1358,11 +1363,12 @@ Clustered_DotPlot <- function(
   if (raster) {
     if (flip) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
@@ -1372,11 +1378,12 @@ Clustered_DotPlot <- function(
                                                   column_names_rot = x_lab_rotate)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   row_km = k,
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
@@ -1388,11 +1395,12 @@ Clustered_DotPlot <- function(
   } else {
     if (flip) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun_flip,
                                                   row_names_gp = gpar(fontsize = row_label_size),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
@@ -1402,11 +1410,12 @@ Clustered_DotPlot <- function(
                                                   column_names_rot = x_lab_rotate)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun,
                                                   row_names_gp = gpar(fontsize = row_label_size),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   row_km = k,
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
