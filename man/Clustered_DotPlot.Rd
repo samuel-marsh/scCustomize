@@ -108,6 +108,12 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 groups plotted is greater than 36.  Default = 123.}
 
 \item{seed}{Sets seed for reproducible plotting (ComplexHeatmap plot).}
+
+\item{column_label_size}{Size of the feature labels.  Provided to \code{column_names_gp} in Heatmap call.}
+
+\item{legend_label_size}{Size of the legend text labels.  Provided to \code{labels_gp} in Heatmap legend call.}
+
+\item{legend_title_size}{Sise of the legend title text labels.  Provided to \code{title_gp} in Heatmap legend call.}
 }
 \value{
 A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
