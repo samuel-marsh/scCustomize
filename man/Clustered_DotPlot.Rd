@@ -21,6 +21,9 @@ Clustered_DotPlot(
   row_km_repeats = deprecated(),
   column_km_repeats = deprecated(),
   row_label_size = 8,
+  column_label_size = 8,
+  legend_label_size = 10,
+  legend_title_size = 10,
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -81,6 +84,12 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
+\item{column_label_size}{Size of the feature labels.  Provided to \code{column_names_gp} in Heatmap call.}
+
+\item{legend_label_size}{Size of the legend text labels.  Provided to \code{labels_gp} in Heatmap legend call.}
+
+\item{legend_title_size}{Sise of the legend title text labels.  Provided to \code{title_gp} in Heatmap legend call.}
+
 \item{raster}{Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.}
 
 \item{plot_km_elbow}{Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
@@ -108,12 +117,6 @@ default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palet
 groups plotted is greater than 36.  Default = 123.}
 
 \item{seed}{Sets seed for reproducible plotting (ComplexHeatmap plot).}
-
-\item{column_label_size}{Size of the feature labels.  Provided to \code{column_names_gp} in Heatmap call.}
-
-\item{legend_label_size}{Size of the legend text labels.  Provided to \code{labels_gp} in Heatmap legend call.}
-
-\item{legend_title_size}{Sise of the legend title text labels.  Provided to \code{title_gp} in Heatmap legend call.}
 }
 \value{
 A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
