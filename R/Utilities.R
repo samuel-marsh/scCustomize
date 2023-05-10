@@ -633,10 +633,10 @@ Merge_Sparse_Multimodal_All <- function(
   }
 
   # Extract matrices
-  mat_list <<- Extract_Modality(matrix_list = matrix_list)
+  mat_list <- Extract_Modality(matrix_list = matrix_list)
 
   # Merge and return
-  modality_names <<- names(mat_list)
+  modality_names <- names(mat_list)
 
   merged_list <- lapply(1:length(x = modality_names), function(x) {
     cli_inform(message = "Merging {.val {modality_names[x]}} matrices.")
