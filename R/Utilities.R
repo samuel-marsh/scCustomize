@@ -549,6 +549,51 @@ Merge_Sparse_Data_All <- function(
 }
 
 
+#' Extract multi-modal data into list by modality
+#'
+#' Reorganize multi-modal data after import with `Read10X()` or scCustomize read functions.
+#' Organizes sub-lists by data modality instead of by sample.
+#'
+#' @param matrix_list list of matrices to split by modality
+#'
+#' @return list of lists, with one sublist per data modality.  Sub-list contain 1 matrix entry per sample
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' multi_mat <- Read10X(...)
+#' new_multi_mat <- Extract_Modality(matrix_list = multi_mat)
+#' }
+#'
+
+Extract_Modality <- function(
+    matrix_list
+) {
+  modality_names <- names(x = matrix_list[[1]])
+
+  unlist_mat <- unlist(x = matrix_list)
+
+  index_list <- lapply(1:length(x = modality_names), function(x) {
+    modality_index <- grep(x = names(x = unlist_mat), pattern = modality_names[x])
+  })
+
+  split_list <- lapply(1:length(x = modality_names), function(i) {
+    modality_list <- unlist_mat[index_list[[i]]]
+    sample_name <- gsub(pattern = paste0("_.", modality_names[i]), x = names(x = modality_list), replacement = "")
+    names(x = modality_list) <- sample_name
+    return(modality_list)
+  })
+
+  names(split_list) <- modality_names
+  return(split_list)
+}
+
+
 #' Check Matrix Validity
 #'
 #' Native implementation of SeuratObjects CheckMatrix but with modified warning messages.
