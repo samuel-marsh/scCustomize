@@ -425,6 +425,7 @@ Fetch_Meta.liger <- function(
 #' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (License: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
+#' @import cli
 #' @import Matrix
 #' @importFrom dplyr intersect
 #' @importFrom magrittr "%>%"
@@ -591,6 +592,60 @@ Extract_Modality <- function(
 
   names(split_list) <- modality_names
   return(split_list)
+}
+
+
+#' Merge a list of Sparse Matrices contain multi-modal data.
+#'
+#' Enables easy merge of a list of sparse matrices for multi-modal data.
+#'
+#' @param matrix_list list of matrices to merge.
+#' @param add_cell_ids a vector of sample ids to add as prefix to cell barcode during merge.
+#' @param prefix logical.  Whether `add_cell_ids` should be added as prefix to current cell barcodes/names
+#' or as suffix to current cell barcodes/names.  Default is TRUE, add as prefix.
+#' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
+#'
+#' @import cli
+#'
+#' @return A list containing one sparse matrix for each modality
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' data_list <- Read10X_GEO(...)
+#' merged_list <- Merge_Sparse_Multimodal_All(matrix_list = data_list, add_cell_ids = names(data_list),
+#' prefix = TRUE, cell_id_delimiter = "_")
+#' }
+#'
+
+Merge_Sparse_Multimodal_All <- function(
+    matrix_list,
+    add_cell_ids = NULL,
+    prefix = TRUE,
+    cell_id_delimiter = "_"
+) {
+  # Check matrix_list is list of lists
+  if (!inherits(x = matrix_list[[1]], what = "list")) {
+    cli_abort(message = "{.code matrix_list} is not multimodal, please use {.field Merge_Sparse_Data_All}.")
+  }
+
+  # Extract matrices
+  mat_list <<- Extract_Modality(matrix_list = matrix_list)
+
+  # Merge and return
+  modality_names <<- names(mat_list)
+
+  merged_list <- lapply(1:length(x = modality_names), function(x) {
+    cli_inform(message = "Merging {.val {modality_names[x]}} matrices.")
+    merged <- Merge_Sparse_Data_All(matrix_list = mat_list[[x]], add_cell_ids = add_cell_ids, prefix = prefix, cell_id_delimiter = cell_id_delimiter)
+  })
+
+  names(merged_list) <- modality_names
+
+  return(merged_list)
 }
 
 
