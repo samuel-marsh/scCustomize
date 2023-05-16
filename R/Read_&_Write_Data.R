@@ -1063,6 +1063,10 @@ Read_GEO_Delim <- function(
 #' @param file_name Path to h5 file.
 #' @param use.names Label row names with feature names rather than ID numbers (default TRUE).
 #' @param unique.features Make feature names unique (default TRUE).
+#' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
+#' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
+#' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
+#' "features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".
 #'
 #' @return sparse matrix
 #'
@@ -1082,7 +1086,7 @@ Read_GEO_Delim <- function(
 #' }
 #'
 
-Read_CellBender_h5_Mat2 <- function(
+Read_CellBender_h5_Mat <- function(
     file_name,
     use.names = TRUE,
     unique.features = TRUE,
@@ -1184,7 +1188,7 @@ Read_CellBender_h5_Mat2 <- function(
   }
 
   # Create sparse matrix
-  sparse.mat <- Matrix::sparseMatrix(
+  sparse.mat <- sparseMatrix(
     i = indices[] + 1,
     p = indptr[],
     x = as.numeric(x = counts[]),
@@ -1220,6 +1224,10 @@ Read_CellBender_h5_Mat2 <- function(
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
 #' set names to the subdirectory name of each sample.
+#' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
+#' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
+#' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
+#' "features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".
 #' @param replace_suffix logical (default FALSE).  Whether or not to replace the barcode suffixes of matrices
 #' using \code{\link{Replace_Suffix}}.
 #' @param new_suffix_list a vector of new suffixes to replace existing suffixes if `replace_suffix = TRUE`.
