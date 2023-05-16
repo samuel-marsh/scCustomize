@@ -1082,10 +1082,12 @@ Read_GEO_Delim <- function(
 #' }
 #'
 
-Read_CellBender_h5_Mat <- function(
-  file_name,
-  use.names = TRUE,
-  unique.features = TRUE
+Read_CellBender_h5_Mat2 <- function(
+    file_name,
+    use.names = TRUE,
+    unique.features = TRUE,
+    h5_group_name = NULL,
+    feature_slot_name = "features"
 ) {
   # Check hdf5r installed
   hdf5r_check <- PackageCheck("hdf5r", error = FALSE)
@@ -1101,27 +1103,77 @@ Read_CellBender_h5_Mat <- function(
 
   # Check file
   if (!file.exists(file_name)) {
-    cli_abort(message = "File: {file_name} not found.")
+    cli_abort(message = "File: {.val {file_name}} not found.")
   }
 
-  if (use.names) {
-    feature_slot <- 'features/name'
-  } else {
-    feature_slot <- 'features/id'
+  if (!feature_slot_name %in% c("features", "genes")) {
+    cli_abort(message = c("{.code feature_slot_name} must be one of {.val features} or {.val genes}.",
+                               "i" = "If unsure, check contents of H5 file {.code rhdf5::h5ls('{file_name}')}."))
+  }
+
+  if (feature_slot_name == "features") {
+    if (use.names) {
+      feature_slot <- 'features/name'
+    }
+    else {
+      feature_slot <- 'features/id'
+    }
+  }
+
+  if (feature_slot_name == "features") {
+    if (use.names) {
+      feature_slot <- 'gene_names'
+    }
+    else {
+      feature_slot <- 'genes'
+    }
   }
 
   # Read file
   infile <- hdf5r::H5File$new(filename = file_name, mode = "r")
 
-  counts <- infile[["matrix/data"]]
-  indices <- infile[["matrix/indices"]]
-  indptr <- infile[["matrix/indptr"]]
-  shp <- infile[["matrix/shape"]]
-  features <- infile[[paste0("matrix/", feature_slot)]][]
-  barcodes <- infile[["matrix/barcodes"]]
+  # add name check
+  group_names <- names(x = infile)
 
+  if (!is.null(x = h5_group_name) && !h5_group_name %in% group_names) {
+    cli::cli_abort(message = c("{.code h5_group_name} {.val {h5_group_name}} not found.",
+                               "i" = "Check H5 file group names {.code rhdf5::h5ls('{file_name}')}."))
+  }
 
-  sparse.mat <- sparseMatrix(
+  # Read in data
+  if ("matrix" %in% group_names) {
+    counts <- infile[["matrix/data"]]
+    indices <- infile[["matrix/indices"]]
+    indptr <- infile[["matrix/indptr"]]
+    shp <- infile[["matrix/shape"]]
+    features <- infile[[paste0("matrix/", feature_slot)]][]
+    barcodes <- infile[["matrix/barcodes"]]
+  } else {
+    if (length(x = group_names) == 1) {
+      counts <- infile[[paste0(group_names, '/data')]]
+      indices <- infile[[paste0(group_names, '/indices')]]
+      indptr <- infile[[paste0(group_names, '/indptr')]]
+      shp <- infile[[paste0(group_names, '/shape')]]
+      features <- infile[[paste0(group_names, '/', feature_slot)]][]
+      barcodes <- infile[[paste0(group_names, '/barcodes')]]
+    } else {
+      # check subgroups
+      if (is.null(x = h5_group_name)) {
+        cli::cli_abort(message = c("H5 file contains multiple sub-groups.",
+                                   "i" = "Please provide {.code h5_group_name} specifying which subgroup contains count data."))
+      } else {
+        counts <- infile[[paste0(h5_group_name, '/data')]]
+        indices <- infile[[paste0(h5_group_name, '/indices')]]
+        indptr <- infile[[paste0(h5_group_name, '/indptr')]]
+        shp <- infile[[paste0(h5_group_name, '/shape')]]
+        features <- infile[[paste0(h5_group_name, '/', feature_slot)]][]
+        barcodes <- infile[[paste0(h5_group_name, '/barcodes')]]
+      }
+    }
+  }
+
+  # Create sparse matrix
+  sparse.mat <- Matrix::sparseMatrix(
     i = indices[] + 1,
     p = indptr[],
     x = as.numeric(x = counts[]),
@@ -1193,6 +1245,8 @@ Read_CellBender_h5_Multi_Directory <- function(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  h5_group_name = NULL,
+  feature_slot_name = "features",
   replace_suffix = FALSE,
   new_suffix_list = NULL,
   parallel = FALSE,
@@ -1344,6 +1398,8 @@ Read_CellBender_h5_Multi_File <- function(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  h5_group_name = NULL,
+  feature_slot_name = "features"
   parallel = FALSE,
   num_cores = NULL,
   merge = FALSE,
