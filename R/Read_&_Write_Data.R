@@ -1326,7 +1326,7 @@ Read_CellBender_h5_Multi_Directory <- function(
       file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
 
       # read and return data
-      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, ...)
+      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
       return(raw_data)
     })
   } else {
@@ -1335,7 +1335,7 @@ Read_CellBender_h5_Multi_Directory <- function(
       file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
 
       # read and return data
-      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, ...)
+      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
       return(raw_data)
     })
   }
@@ -1474,12 +1474,12 @@ Read_CellBender_h5_Multi_File <- function(
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
-      data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
+      data <- Read_CellBender_h5_Mat(file_name = h5_loc, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
     })
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
-      data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
+      data <- Read_CellBender_h5_Mat(file_name = h5_loc, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
     })
   }
 
