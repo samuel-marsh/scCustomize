@@ -1106,11 +1106,22 @@ Read_CellBender_h5_Mat2 <- function(
     cli_abort(message = "File: {.val {file_name}} not found.")
   }
 
+  # Check feature_slot_name is acceptable
   if (!feature_slot_name %in% c("features", "genes")) {
     cli_abort(message = c("{.code feature_slot_name} must be one of {.val features} or {.val genes}.",
                                "i" = "If unsure, check contents of H5 file {.code rhdf5::h5ls('{file_name}')}."))
   }
 
+  # Get list of H5 contents
+  h5_dataset_list <- hdf5r::list.datasets(infile)
+
+  # Check feature_slot_name is correct
+  if (!length(x = grep(pattern = feature_slot_name, x = h5_dataset_list, value = TRUE)) > 0) {
+    cli::cli_abort(message = c("{.code feature_slot_name}: {.val {feature_slot_name}} not found in H5 file.",
+                               "i" = "Check contents of H5 file {.code rhdf5::h5ls('{file_name}')} to confirm correct {.code feature_slot_name}."))
+  }
+
+  # Assign feature slot name
   if (feature_slot_name == "features") {
     if (use.names) {
       feature_slot <- 'features/name'
@@ -1120,7 +1131,7 @@ Read_CellBender_h5_Mat2 <- function(
     }
   }
 
-  if (feature_slot_name == "features") {
+  if (feature_slot_name == "genes") {
     if (use.names) {
       feature_slot <- 'gene_names'
     }
@@ -1367,7 +1378,11 @@ Read_CellBender_h5_Multi_Directory <- function(
 #' read in all files within `data_dir` directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
 #' set names to the subdirectory name of each sample.
-#' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
+#' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
+#' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
+#' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
+#' "features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".
+#' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices
 #' @param num_cores how many cores to use for parallel processing.
 #' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
 #' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
@@ -1399,7 +1414,7 @@ Read_CellBender_h5_Multi_File <- function(
   sample_list = NULL,
   sample_names = NULL,
   h5_group_name = NULL,
-  feature_slot_name = "features"
+  feature_slot_name = "features",
   parallel = FALSE,
   num_cores = NULL,
   merge = FALSE,
