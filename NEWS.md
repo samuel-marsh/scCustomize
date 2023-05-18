@@ -5,7 +5,7 @@
 - Added `split_collect` parameter to `FeaturePlot_scCustom` to collect all guides when using `split.by` for a single feature ([#94](https://github.com/samuel-marsh/scCustomize/issues/94)).  
 - Added new parameters to `Clustered_DotPlot` to allow modification of sizes of column text labels, legend text labels, and legend title labels ([#96](https://github.com/samuel-marsh/scCustomize/issues/96)).  
 - Added new function `Merge_Sparse_Multimodal_All` for merging multi-modal data (1 matrix per modality) ([#104](https://github.com/samuel-marsh/scCustomize/issues/104)).  
-- Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels.  
+- Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels ([#103](https://github.com/samuel-marsh/scCustomize/issues/103)).  
   
   
 ## Changed  
