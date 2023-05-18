@@ -21,6 +21,7 @@ Clustered_DotPlot(
   row_km_repeats = deprecated(),
   column_km_repeats = deprecated(),
   row_label_size = 8,
+  row_label_fontface = "plain",
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
@@ -83,6 +84,8 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{column_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{ident_km_repeats}}
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
+
+\item{row_label_fontface}{Fontface to use for row labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
 \item{column_label_size}{Size of the feature labels.  Provided to \code{column_names_gp} in Heatmap call.}
 
