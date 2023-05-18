@@ -1089,6 +1089,7 @@ Clustered_DotPlot <- function(
   row_km_repeats = deprecated(),
   column_km_repeats = deprecated(),
   row_label_size = 8,
+  row_label_fontface = "plain",
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
@@ -1139,6 +1140,12 @@ Clustered_DotPlot <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Check acceptable fontface
+  if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
+    cli_abort(message = c("{.code row_label_face} {.val {row_label_face}} not recognized.",
+                          "i" = "Must be one of {.val plain}, {.val bold}, {.val italic}, {.val olique}, or {.val bold.italic}."))
+  }
 
   # Check unique features
   features_unique <- unique(x = features)
@@ -1370,7 +1377,7 @@ Clustered_DotPlot <- function(
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
                                                   column_names_gp = gpar(fontsize = column_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
@@ -1385,7 +1392,7 @@ Clustered_DotPlot <- function(
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
                                                   column_names_gp = gpar(fontsize = column_label_size),
                                                   row_km = k,
                                                   row_km_repeats = feature_km_repeats,
@@ -1402,7 +1409,7 @@ Clustered_DotPlot <- function(
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun_flip,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
                                                   column_names_gp = gpar(fontsize = column_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
@@ -1417,7 +1424,7 @@ Clustered_DotPlot <- function(
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
                                                   column_names_gp = gpar(fontsize = column_label_size),
                                                   row_km = k,
                                                   row_km_repeats = feature_km_repeats,
