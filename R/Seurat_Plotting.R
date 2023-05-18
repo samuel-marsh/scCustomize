@@ -1022,6 +1022,7 @@ DotPlot_scCustom <- function(
 #' `feature_km_repeats`.  Default is 1000.
 #' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param row_label_fontface Fontface to use for row labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
 #' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
