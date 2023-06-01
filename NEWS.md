@@ -7,6 +7,7 @@
 - Added new function `Merge_Sparse_Multimodal_All` for merging multi-modal data (1 matrix per modality) ([#104](https://github.com/samuel-marsh/scCustomize/issues/104)).  
 - Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels ([#103](https://github.com/samuel-marsh/scCustomize/issues/103)).  
 - Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom`.  
+- Added ability to turn feature/ident clustering off in `Clustered_DotPlot` using new parameters: `cluster_feature`, `cluster_ident` ([#106](https://github.com/samuel-marsh/scCustomize/issues/106)).  
   
   
 ## Changed  
