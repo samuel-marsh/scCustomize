@@ -225,8 +225,8 @@ glue_collapse_scCustom <- function(
 
 #' Perform Feature and Meta Checks before plotting
 #'
-#' Wraps the `Gene_Present`, `Meta_Present`, and `Case_Check` into single function to perform feature
-#' checks before plotting.
+#' Wraps the `Gene_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
+#' single function to perform feature checks before plotting.
 #'
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
