@@ -217,7 +217,7 @@ Case_Check <- function(
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object. Default is TRUE.
 #' @param return_none logical. Whether list of found vs. bad features should still be returned if no
-#' `meta_col_names` are found.  Default is TRUE.
+#' `meta_col_names` are found.  Default is FALSE.
 #'
 #' @return vector of meta data columns that are present
 #'
@@ -238,7 +238,7 @@ Meta_Present <- function(
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
-  return_none = TRUE
+  return_none = FALSE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
