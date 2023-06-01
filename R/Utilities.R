@@ -251,7 +251,7 @@ Meta_Present <- function(
     bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
     found_meta <- meta_col_names[meta_col_names %in% possible_features]
 
-    if (return_none) {
+    if (!return_none) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
                               "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
