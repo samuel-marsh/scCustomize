@@ -387,7 +387,7 @@ Reduction_Loading_Present <- function(
   )
 
   # If any features not found
-  if (any(!reduction_name %in% possible_reduction_names)) {
+  if (any(!reduction_names %in% possible_reduction_names)) {
     bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
     found_features <- reduction_names[reduction_names %in% possible_reduction_names]
     if (length(x = found_features) == 0) {
