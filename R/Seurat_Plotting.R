@@ -1173,7 +1173,7 @@ Clustered_DotPlot <- function(
   # Get expression data
   exp_mat <- data %>%
     select(-any_of(c("pct.exp", "avg.exp"))) %>%
-    pivot_wider(names_from = .data[["id"]], values_from = .data[["avg.exp.scaled"]]) %>%
+    pivot_wider(names_from = any_of("id"), values_from = any_of("avg.exp.scaled")) %>%
     as.data.frame()
 
   row.names(x = exp_mat) <- exp_mat$features.plot
@@ -1202,7 +1202,7 @@ Clustered_DotPlot <- function(
   # Get percent expressed data
   percent_mat <- data %>%
     select(-any_of(c("avg.exp", "avg.exp.scaled"))) %>%
-    pivot_wider(names_from = .data[["id"]], values_from = .data[["pct.exp"]]) %>%
+    pivot_wider(names_from = any_of("id"), values_from = any_of("pct.exp")) %>%
     as.data.frame()
 
   row.names(x = percent_mat) <- percent_mat$features.plot
