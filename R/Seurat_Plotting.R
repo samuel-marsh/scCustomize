@@ -1023,6 +1023,8 @@ DotPlot_scCustom <- function(
 #' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param row_label_fontface Fontface to use for row labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param cluster_feature logical, whether to cluster and reorder feature axis.  Default is TRUE.
+#' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
 #' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
@@ -1091,6 +1093,8 @@ Clustered_DotPlot <- function(
   column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
+  cluster_feature = TRUE,
+  cluster_ident = TRUE,
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
@@ -1386,7 +1390,9 @@ Clustered_DotPlot <- function(
                                                   left_annotation = column_ha,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_ident,
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1401,7 +1407,9 @@ Clustered_DotPlot <- function(
                                                   top_annotation = column_ha,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_feature,
+                                                  cluster_columns = cluster_ident)
     }
   } else {
     if (flip) {
@@ -1418,7 +1426,9 @@ Clustered_DotPlot <- function(
                                                   left_annotation = column_ha,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_ident,
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1433,7 +1443,9 @@ Clustered_DotPlot <- function(
                                                   top_annotation = column_ha,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_feature,
+                                                  cluster_columns = cluster_ident)
     }
   }
 
