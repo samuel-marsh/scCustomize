@@ -343,6 +343,95 @@ Meta_Numeric <- function(
 }
 
 
+#' Check if reduction loadings are present
+#'
+#' Check if reduction loadings are present in object and return vector of found loading names.  Return
+#' warning messages for genes not found.
+#'
+#' @param seurat_object object name.
+#' @param reduction_names vector of genes to check.
+#' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
+#' @param omit_warn logical. Whether to print message about features that are not found in current object.
+#'  Default is TRUE.
+#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
+#' features are found.  Default is FALSE.
+#'
+#' @importFrom purrr reduce
+#' @importFrom stringr str_to_upper str_to_sentence
+#'
+#' @return A list of length 3 containing 1) found features, 2) not found features.
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' reductions <- Reduction_Loading_Present(seurat_object = obj_name, reduction_name = "PC_1")
+#' found_features <- features[[1]]
+#' }
+#'
+
+Reduction_Loading_Present <- function(
+    seurat_object,
+    reduction_names,
+    print_msg = TRUE,
+    omit_warn = TRUE,
+    return_none = FALSE
+) {
+  # Get all reduction names
+  possible_reduction_names <- unlist(x = lapply(1:length(seurat_object@reductions), function(z) {
+    names <- names(seurat_object@reductions[[z]])
+  })
+  )
+
+  # If any features not found
+  if (any(!reduction_name %in% possible_reduction_names)) {
+    bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
+    found_features <- reduction_names[reduction_names %in% possible_reduction_names]
+    if (length(x = found_features) == 0) {
+      if (return_none) {
+        # Combine into list and return
+        feature_list <- list(
+          found_features = NULL,
+          bad_features = bad_features
+        )
+        return(feature_list)
+      } else {
+        cli_abort(message ="No requested features found.")
+      }
+    }
+
+    # Return message of features not found
+    if (length(x = bad_features) > 0 && omit_warn) {
+      cli_warn(message = c("The following features were omitted as they were not found:",
+                           "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
+      )
+    }
+
+    # Combine into list and return
+    feature_list <- list(
+      found_features = found_features,
+      bad_features = bad_features
+    )
+    return(feature_list)
+  }
+
+  # Print all found message if TRUE
+  if (print_msg) {
+    cli_inform(message = "All features present.")
+  }
+
+  # Return full input gene list.
+  # Combine into list and return
+  feature_list <- list(
+    found_features = reduction_names,
+    bad_features = NULL
+  )
+  return(feature_list)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### DATA ACCESS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
