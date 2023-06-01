@@ -6,10 +6,12 @@
 - Added new parameters to `Clustered_DotPlot` to allow modification of sizes of column text labels, legend text labels, and legend title labels ([#96](https://github.com/samuel-marsh/scCustomize/issues/96)).  
 - Added new function `Merge_Sparse_Multimodal_All` for merging multi-modal data (1 matrix per modality) ([#104](https://github.com/samuel-marsh/scCustomize/issues/104)).  
 - Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels ([#103](https://github.com/samuel-marsh/scCustomize/issues/103)).  
+- Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom`.  
   
   
 ## Changed  
 - Moved `QC_Plots_Feature` to use `VlnPlot_scCustom` under the hood like rest of `QC_Plots_*` functions.  
+- Renamed parameter `abort` in `Meta_Present` to `return_none` to align with `Gene_Present` and `Reduction_Loading_Present`.  
    
 
 ## Fixes  
