@@ -394,6 +394,8 @@ QC_Plots_Feature <- function(
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
 #' @param pt.size Point size for plotting
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -460,6 +462,8 @@ QC_Plots_Complexity <- function(
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
 #' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
 #' @param pt.size Point size for plotting
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
