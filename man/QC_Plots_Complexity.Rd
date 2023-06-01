@@ -45,6 +45,10 @@ default is the current active.ident of the object.}
 
 \item{pt.size}{Point size for plotting}
 
+\item{plot_median}{logical, whether to plot median for each ident on the plot (Default is FALSE).}
+
+\item{median_size}{Shape size for the median is plotted.}
+
 \item{colors_use}{vector of colors to use for plot.}
 
 \item{x_lab_rotate}{Rotate x-axis labels 45 degrees (Default is TRUE).}
