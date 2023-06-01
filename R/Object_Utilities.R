@@ -647,7 +647,7 @@ Extract_Sample_Meta <- function(
 
     combined_exclude <- c(nFeature_cols, nCount_cols, "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
 
-    variables_exclude <- Meta_Present(seurat_object = object, meta_col_names = combined_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+    variables_exclude <- Meta_Present(seurat_object = object, meta_col_names = combined_exclude, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
   }
 
   # Ensure include exclude are unique
@@ -662,13 +662,13 @@ Extract_Sample_Meta <- function(
 
   # Check variables include/exclude are present
   if (!is.null(x = variables_include)) {
-    include_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_include, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+    include_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_include, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
   } else {
     include_meta_list <- NULL
   }
 
   if (!is.null(x = variables_exclude)) {
-    exclude_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+    exclude_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
   } else {
     exclude_meta_list <- NULL
   }

@@ -1636,7 +1636,7 @@ Meta_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check meta data
-  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
