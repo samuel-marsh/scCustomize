@@ -216,7 +216,8 @@ Case_Check <- function(
 #' @param meta_col_names vector of column names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object. Default is TRUE.
-#' @param abort logical. Whether or not to stop function and print stop message if no input `meta_col_names` are found.  Default is TRUE.
+#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
+#' `meta_col_names` are found.  Default is TRUE.
 #'
 #' @return vector of meta data columns that are present
 #'
@@ -237,7 +238,7 @@ Meta_Present <- function(
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
-  abort = TRUE
+  return_none = TRUE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -250,7 +251,7 @@ Meta_Present <- function(
     bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
     found_meta <- meta_col_names[meta_col_names %in% possible_features]
 
-    if (abort) {
+    if (return_none) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
                               "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
