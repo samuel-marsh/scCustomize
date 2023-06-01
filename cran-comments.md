@@ -1,8 +1,7 @@
 ## Minor Version Update 
-This is a minor update from v1.1.0 to v1.1.1. In this version I have:  
+This is a minor update from v1.1.1 to v1.1.2. In this version I have:  
 
 - Combination of bug fixes, new features, code styling (see News.md).  
-- One package (viridis) moved from Imports to Suggests.  
 
 
 ## R CMD check results
