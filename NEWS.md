@@ -17,6 +17,7 @@
 ## Fixes  
 - Fixed `QC_Plots_Feature` to respect parameters when passing to `VlnPlot` ([#91](https://github.com/samuel-marsh/scCustomize/issues/91)).  
 - Fixed `Read_CellBender_h5_*` functions to support CellBender outputs from STARsolo- or Cell Ranger (pre-V3)-processed data ([#99](https://github.com/samuel-marsh/scCustomize/issues/99)).  
+- Fixed `FeaturePlot_scCustom` to allow for plotting of dimensionality reduction loadings ([#97](https://github.com/samuel-marsh/scCustomize/issues/97)).  
    
 
 
