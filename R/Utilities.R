@@ -59,7 +59,7 @@ Gene_Present <- function(
     possible_features <- rownames(x = GetAssayData(object = data, assay = assay))
   } else if ((class(x = data)[[1]] == "liger")) {
     # get complete gene list
-    length_liger <- length(data@raw.data)
+    length_liger <- length(x = data@raw.data)
 
     list_genes <- lapply(1:length_liger, function(x){
       rownames(x = data@raw.data[[x]])
@@ -320,7 +320,7 @@ Meta_Numeric <- function(
     is.numeric(x = data[[x]])
   }))
 
-  colnames(all_numeric) <- "Is_Numeric"
+  colnames(x = all_numeric) <- "Is_Numeric"
 
   # Pull results into vectors
   invalid_variables <- all_numeric %>%
@@ -382,7 +382,7 @@ Reduction_Loading_Present <- function(
 ) {
   # Get all reduction names
   possible_reduction_names <- unlist(x = lapply(1:length(seurat_object@reductions), function(z) {
-    names <- names(seurat_object@reductions[[z]])
+    names <- names(x = seurat_object@reductions[[z]])
   })
   )
 
@@ -561,14 +561,14 @@ Merge_Sparse_Data_All <- function(
   if (!is.null(x = add_cell_ids)) {
     # check barcodes will be unique after adding prefixes/suffixes
     all_names <- lapply(1:length(x = matrix_list), function(i){
-      cell_names <- colnames(matrix_list[[i]])
+      cell_names <- colnames(x = matrix_list[[i]])
     })
 
     new_names <- lapply(X = 1:length(x = matrix_list), function(x){
-      colnames(matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
+      colnames(x = matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
     })
 
-    are_duplicates <- unlist(new_names) %>%
+    are_duplicates <- unlist(x = new_names) %>%
       duplicated() %>%
       any()
 
@@ -582,11 +582,11 @@ Merge_Sparse_Data_All <- function(
   # Use summary to convert the sparse matrices into three-column indexes where i are the
   # row numbers, j are the column numbers, and x are the nonzero entries
   col_offset <- 0
-  allGenes <- unique(unlist(lapply(matrix_list, rownames)))
+  allGenes <- unique(x = unlist(x = lapply(matrix_list, rownames)))
   allCells <- c()
   cli_inform(message = "{.field Preparing & merging matrices.}")
   pb <- txtProgressBar(min = 0, max = length(x = matrix_list), style = 3, file = stderr())
-  for (i in 1:length(matrix_list)) {
+  for (i in 1:length(x = matrix_list)) {
     curr <- matrix_list[[i]]
     curr_s <- summary(curr)
 
@@ -602,13 +602,13 @@ Merge_Sparse_Data_All <- function(
         cellnames <- paste0(colnames(curr), cell_id_delimiter, add_cell_ids [i])
       }
     } else {
-      cellnames <- colnames(curr)
+      cellnames <- colnames(x = curr)
     }
     allCells <- c(allCells, cellnames)
 
     # Next, change the row (gene) indexes so that they index on the union of the gene sets,
     # so that proper merging can occur.
-    idx <- match(rownames(curr), allGenes)
+    idx <- match(x = rownames(x = curr), allGenes)
     newgenescurr <- idx[curr_s[, 1]]
     curr_s[, 1] <- newgenescurr
 
@@ -726,14 +726,14 @@ Merge_Sparse_Multimodal_All <- function(
   mat_list <- Extract_Modality(matrix_list = matrix_list)
 
   # Merge and return
-  modality_names <- names(mat_list)
+  modality_names <- names(x = mat_list)
 
   merged_list <- lapply(1:length(x = modality_names), function(x) {
     cli_inform(message = "Merging {.val {modality_names[x]}} matrices.")
     merged <- Merge_Sparse_Data_All(matrix_list = mat_list[[x]], add_cell_ids = add_cell_ids, prefix = prefix, cell_id_delimiter = cell_id_delimiter)
   })
 
-  names(merged_list) <- modality_names
+  names(x = merged_list) <- modality_names
 
   return(merged_list)
 }
@@ -946,7 +946,7 @@ Replace_Suffix <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
 
   } else {
@@ -1024,7 +1024,7 @@ Change_Delim_Suffix <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
   } else {
     # for data.frames and individual matrices
@@ -1102,7 +1102,7 @@ Change_Delim_Prefix <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
   } else {
     # for data.frames and individual matrices
@@ -1178,7 +1178,7 @@ Change_Delim_All <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
   } else {
     # for data.frames and individual matrices
@@ -1550,7 +1550,7 @@ Pull_Cluster_Annotation <- function(
   }
 
   # Create list elements per cluster
-  cell_type_list <- unique(annotation_table[[cell_type_col]])
+  cell_type_list <- unique(x = annotation_table[[cell_type_col]])
   cluster_annotation_list <- lapply(c(1:length(cell_type_list)), function(x){
     cluster <- annotation_table %>%
       filter(.data[[cell_type_col]] == cell_type_list[x]) %>%
@@ -1566,8 +1566,8 @@ Pull_Cluster_Annotation <- function(
   new_cluster_ids_list <- list(new_cluster_ids)
   secondary_ids_list <- list(secondary_ids)
   # Name the new cluster ids list
-  names(new_cluster_ids_list) <- "new_cluster_idents"
-  names(secondary_ids_list) <- colnames(annotation_table)[[3]]
+  names(x = new_cluster_ids_list) <- "new_cluster_idents"
+  names(x = secondary_ids_list) <- colnames(annotation_table)[[3]]
 
   # Combine and return both lists as single list
   final_cluster_annotation_list <- c(cluster_annotation_list, new_cluster_ids_list, secondary_ids_list)
@@ -1619,7 +1619,7 @@ Rename_Clusters <- function(
 
   # Name the new idents vector
   if (is.null(x = names(x = new_idents))) {
-    names(new_idents) <- levels(seurat_object)
+    names(x = new_idents) <- levels(x = seurat_object)
   }
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
@@ -1630,7 +1630,7 @@ Rename_Clusters <- function(
 
   # Rename meta column for old ident information if desired
   if (!is.null(x = meta_col_name)) {
-    seurat_object[[meta_col_name]] <- Idents(seurat_object)
+    seurat_object[[meta_col_name]] <- Idents(object = seurat_object)
   }
 
   # Add new idents & return object
@@ -1708,7 +1708,7 @@ Setup_scRNAseq_Project <- function(
   # Check for directories and create new ones
   lapply(output_dirs, function(dir_path){
     if (!dir.exists(dir_path)){
-      dir.create(dir_path)
+      dir.create(path = dir_path)
     } else {
       cli_warn(message = "The directory {.val {dir_path}} aleady exists.  No new directory created.")
     }
