@@ -218,7 +218,7 @@ FeaturePlot_scCustom <- function(
       plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features))) + No_Right()
     } else {
       if (split_collect) {
-        if (hasArg(keep.scale)) {
+        if (hasArg("keep.scale")) {
           cli_abort(message = "The parameter {.code keep.scale} cannot be set different from default if {.code split_collect - TRUE}.")
         }
         plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns, guides = "collect")
