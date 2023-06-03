@@ -32,7 +32,7 @@ Cluster_Stats_All_Samples <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  possible_meta_col <- colnames(seurat_object@meta.data)
+  possible_meta_col <- colnames(x = seurat_object@meta.data)
   if (!group_by_var %in% possible_meta_col) {
     cli_abort(message = "{.val {group_by_var}} was not found in meta.data slot of Seurat Object.")
   }
@@ -132,7 +132,7 @@ Percent_Expressing <- function(
 
   # Check group_by is in object
   if (!is.null(x = group_by)) {
-    possible_groups <- colnames(seurat_object@meta.data)
+    possible_groups <- colnames(x = seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
       cli_abort("Grouping variable {.val {group_by}} was not found in Seurat Object.")
     }
@@ -140,7 +140,7 @@ Percent_Expressing <- function(
 
   # Check split_by is in object
   if (!is.null(x = split_by)) {
-    possible_groups <- colnames(seurat_object@meta.data)
+    possible_groups <- colnames(x = seurat_object@meta.data)
     if (!split_by %in% possible_groups) {
       cli_abort("Splitting variable {.val {split_by}} was not found in Seurat Object.")
     }
@@ -187,7 +187,7 @@ Percent_Expressing <- function(
 
   # Convert & return data.frame
   row_dim_names <- features_list
-  col_dim_names <- names(percent_expressing)
+  col_dim_names <- names(x = percent_expressing)
   mat_dims <- list(row_dim_names, col_dim_names)
   final_df <- data.frame(matrix(unlist(percent_expressing), nrow = length(features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
   return(final_df)
@@ -266,7 +266,7 @@ Median_Stats <- function(
 
   # Create data.frame with group_by_var as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
-  colnames(meta_col_name_df) <- group_by_var
+  colnames(x = meta_col_name_df) <- group_by_var
   # Merge with overall median data.frame
   median_overall <- cbind(meta_col_name_df, median_overall)
 
@@ -274,7 +274,7 @@ Median_Stats <- function(
   median_all <- rbind(median_by_group, median_overall)
 
   # Rename columns and return data.frame
-  colnames(median_all) <- all_variable_col_names
+  colnames(x = median_all) <- all_variable_col_names
 
   return(median_all)
 }
@@ -339,7 +339,7 @@ CellBender_Feature_Diff <- function(
     data.frame() %>%
     rownames_to_column("Feature_Names")
 
-  colnames(cb_counts)[2] <- "CellBender_Counts"
+  colnames(x = cb_counts)[2] <- "CellBender_Counts"
 
   # Check features identical
   diff_features <- symdiff(x = raw_counts$Feature_Names, y = cb_counts$Feature_Names)

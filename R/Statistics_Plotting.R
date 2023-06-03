@@ -75,7 +75,7 @@ Plot_Median_Genes <- function(
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
   if (is.null(x = group_by)) {
-    colnames(meta) <- sample_col
+    colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
@@ -211,7 +211,7 @@ Plot_Median_UMIs <- function(
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
   if (is.null(x = group_by)) {
-    colnames(meta) <- sample_col
+    colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
@@ -348,7 +348,7 @@ Plot_Median_Mito <- function(
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
   if (is.null(x = group_by)) {
-    colnames(meta) <- sample_col
+    colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
@@ -500,7 +500,7 @@ Plot_Median_Other <- function(
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
   if (is.null(x = group_by)) {
-    colnames(meta) <- sample_col
+    colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
