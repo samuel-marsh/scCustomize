@@ -398,12 +398,12 @@ FeaturePlot_DualAssay <- function(
   }
 
   # Change assay and plot raw
-  DefaultAssay(seurat_object) <- assay1
+  DefaultAssay(object = seurat_object) <- assay1
 
   plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
 
   # Change to cell bender and plot
-  DefaultAssay(seurat_object) <- assay2
+  DefaultAssay(object = seurat_object) <- assay2
 
   plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
 
@@ -508,7 +508,7 @@ Split_FeatureScatter <- function(
     num_columns <- split.by_length
   }
   # Calculate number of rows for selected number of columns
-  num_rows <- ceiling(split.by_length/num_columns)
+  num_rows <- ceiling(x = split.by_length/num_columns)
 
   # Check column and row compatibility
   if (num_columns > split.by_length) {
@@ -519,7 +519,7 @@ Split_FeatureScatter <- function(
   }
 
   # Check features are present
-  possible_features <- c(rownames(seurat_object), colnames(seurat_object@meta.data))
+  possible_features <- c(rownames(x = seurat_object), colnames(x = seurat_object@meta.data))
   check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
   if (length(x = check_features) > 0) {
     cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field {check_features}}'")
@@ -542,14 +542,14 @@ Split_FeatureScatter <- function(
 
   # Extract split.by list of values
   if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-    meta_sample_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
+    meta_sample_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
   } else {
-    meta_sample_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+    meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
   }
 
   # Extract cell names per meta data list of values
   cell_names <- lapply(meta_sample_list, function(x) {
-    row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[, split.by] == x)]})
 
   # raster check
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
@@ -702,7 +702,7 @@ VlnPlot_scCustom <- function(
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Add raster check for scCustomize
-  num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
+  num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
 
   if (is.null(x = raster)) {
     if (pt.size == 0) {
@@ -826,7 +826,7 @@ Stacked_VlnPlot <- function(
   }
 
   # Set rasterization
-  num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
+  num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
 
   if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
@@ -897,7 +897,7 @@ Stacked_VlnPlot <- function(
     if (!is.numeric(x = vln_linewidth)) {
       cli_abort(message = "{.code vln_linewidth} parameter must be numeric.")
     }
-    for (j in 1:length(plot_list)) {
+    for (j in 1:length(x = plot_list)) {
       plot_return[[j]]$layers[[1]]$aes_params$linewidth <- vln_linewidth
     }
   }
@@ -1193,7 +1193,7 @@ Clustered_DotPlot <- function(
     )
 
     # Extract good features
-    good_features <- rownames(exp_mat)
+    good_features <- rownames(x = exp_mat)
 
     # Remove rows with NAs
     exp_mat <- exp_mat %>%
@@ -1250,14 +1250,14 @@ Clustered_DotPlot <- function(
 
   # Modify if class = "colors"
   if (inherits(x = colors_use_idents, what = "colors")) {
-    colors_use_idents <- as.vector(colors_use_idents)
+    colors_use_idents <- as.vector(x = colors_use_idents)
   }
 
   # Pull Annotation and change colors to ComplexHeatmap compatible format
-  Identity <- colnames(exp_mat)
+  Identity <- colnames(x = exp_mat)
 
   identity_colors <- colors_use_idents
-  names(identity_colors) <- Identity
+  names(x = identity_colors) <- Identity
   identity_colors_list <- list(Identity = identity_colors)
 
   # Create identity annotation
@@ -1282,7 +1282,7 @@ Clustered_DotPlot <- function(
     exp_color_middle <- Middle_Number(min = exp_color_min, max = exp_color_max)
   }
 
-  palette_length <- length(colors_use_exp)
+  palette_length <- length(x = colors_use_exp)
   palette_middle <- Middle_Number(min = 0, max = palette_length)
 
   # Create palette
@@ -1667,7 +1667,7 @@ Meta_Highlight_Plot <- function(
   }
 
   # Check meta_data_highlight
-  meta_var_list <- as.character(unique(seurat_object@meta.data[, good_meta_data_column]))
+  meta_var_list <- as.character(x = unique(x = seurat_object@meta.data[, good_meta_data_column]))
 
   # Check good and bad highlight values
   bad_meta_highlight <- meta_var_list[!meta_var_list %in% meta_data_highlight]
@@ -1837,7 +1837,7 @@ Cell_Highlight_Plot <- function(
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_highlight)), raster = raster)
+    pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_highlight)), raster = raster)
   }
 
   # Check right number of colors provided
@@ -2166,13 +2166,13 @@ DimPlot_scCustom <- function(
       # Extract cell names per meta data list of values
       # Extract split.by list of values
       if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-        split_by_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
+        split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
       } else {
-        split_by_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+        split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
       }
 
       cell_names <- lapply(split_by_list, function(x) {
-        row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+        row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
 
       # Unify colors across plots
       if (is.null(x = group.by)) {
@@ -2183,7 +2183,7 @@ DimPlot_scCustom <- function(
 
       colors_overall <- colors_use
 
-      names(colors_overall) <- levels_overall
+      names(x = colors_overall) <- levels_overall
 
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
@@ -2302,12 +2302,12 @@ DimPlot_All_Samples <- function(
   if (inherits(x = seurat_object@meta.data[, meta_data_column], what = "factor")) {
     meta_sample_list <- levels(x = seurat_object@meta.data[, meta_data_column])
   } else {
-    meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
+    meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, meta_data_column]))
   }
 
   # Extract cell names per meta data list of values
   cell_names <- lapply(meta_sample_list, function(x) {
-    row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, meta_data_column] == x)]})
+    row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, meta_data_column] == x)]})
 
   # Set uniform point size is pt.size = NULL (based on plot with most cells)
   if (is.null(x = pt.size)) {
