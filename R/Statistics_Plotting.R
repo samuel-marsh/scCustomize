@@ -18,7 +18,7 @@
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr n select slice left_join
+#' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -64,10 +64,10 @@ Plot_Median_Genes <- function(
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
-      select(.data[[sample_col]], .data[[group_by]])
+      select(any_of(c(sample_col, group_by)))
   } else {
     meta <- meta %>%
-      select(.data[[sample_col]])
+      select(any_of(sample_col))
   }
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
@@ -200,10 +200,10 @@ Plot_Median_UMIs <- function(
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
-      select(.data[[sample_col]], .data[[group_by]])
+      select(any_of(c(sample_col, group_by)))
   } else {
     meta <- meta %>%
-      select(.data[[sample_col]])
+      select(any_of(sample_col))
   }
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
@@ -337,10 +337,10 @@ Plot_Median_Mito <- function(
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
-      select(.data[[sample_col]], .data[[group_by]])
+      select(any_of(c(sample_col, group_by)))
   } else {
     meta <- meta %>%
-      select(.data[[sample_col]])
+      select(any_of(sample_col))
   }
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
@@ -489,10 +489,10 @@ Plot_Median_Other <- function(
 
   if (!is.null(x = group_by)) {
     meta <- meta %>%
-      select(.data[[sample_col]], .data[[group_by]])
+      select(any_of(c(sample_col, group_by)))
   } else {
     meta <- meta %>%
-      select(.data[[sample_col]])
+      select(any_of(sample_col))
   }
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
