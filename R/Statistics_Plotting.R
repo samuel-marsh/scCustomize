@@ -154,7 +154,7 @@ Plot_Median_Genes <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr n select slice left_join
+#' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -290,7 +290,7 @@ Plot_Median_UMIs <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr n select slice left_join
+#' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -428,7 +428,7 @@ Plot_Median_Mito <- function(
 #'
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom dplyr n select slice left_join
+#' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
 #'
 #' @export
