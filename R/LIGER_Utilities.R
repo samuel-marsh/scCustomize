@@ -379,8 +379,8 @@ Top_Genes_Factor <- function(
 
   # Extract genes
   W <- t(liger_object@W)
-  rownames(W) <- colnames(liger_object@scale.data[[1]])
-  top_genes <- rownames(W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
+  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
+  top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
   return(top_genes)
 }
 
@@ -422,31 +422,31 @@ Generate_Plotting_df_LIGER <- function(object,
                                        split_by = NULL
 ) {
   tsne_df <- data.frame(object@tsne.coords)
-  colnames(tsne_df) <- c("tsne1", "tsne2")
+  colnames(x = tsne_df) <- c("tsne1", "tsne2")
   tsne_df[[group_by]] <- object@cell.data[[group_by]]
   if (!is.null(x = split_by)) {
     tsne_df[[split_by]] <- object@cell.data[[split_by]]
   }
 
   if (reorder.idents == TRUE){
-    tsne_df[[group_by]]  <- factor(tsne_df[[group_by]], levels = new.order)
+    tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
   }
   c_names <- names(object@clusters)
-  if (is.null(clusters)) {
+  if (is.null(x = clusters)) {
     # if clusters have not been set yet
-    if (length(object@clusters) == 0) {
-      clusters <- rep(1, nrow(object@tsne.coords))
-      names(clusters) <- c_names <- rownames(object@tsne.coords)
+    if (length(x = object@clusters) == 0) {
+      clusters <- rep(1, nrow(x = object@tsne.coords))
+      names(x = clusters) <- c_names <- rownames(x = object@tsne.coords)
     } else {
       clusters <- object@clusters
-      c_names <- names(object@clusters)
+      c_names <- names(x = object@clusters)
     }
   }
   tsne_df[['Cluster']] <- clusters[c_names]
 
   if (shuffle) {
     set.seed(shuffle_seed)
-    idx <- sample(1:nrow(tsne_df))
+    idx <- sample(x = 1:nrow(tsne_df))
     tsne_df <- tsne_df[idx, ]
   }
   return(tsne_df)
@@ -538,15 +538,15 @@ Plot_By_Cluster_LIGER <- function(
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
   if (!is.null(x = split_by)) {
-    list_of_splits <- unique(tsne_df[[split_by]])
+    list_of_splits <- unique(x = tsne_df[[split_by]])
   }
 
   # Get length of meta data feature
   if (!is.null(x = split_by) && !is.null(x = num_columns)) {
-    split.by_length <- length(list_of_splits)
+    split.by_length <- length(x = list_of_splits)
 
     # Calculate number of rows for selected number of columns
-    num_rows <- ceiling(split.by_length/num_columns)
+    num_rows <- ceiling(x = split.by_length/num_columns)
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
@@ -791,15 +791,15 @@ Plot_By_Meta_LIGER <- function(
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
   if (!is.null(x = split_by)) {
-    list_of_splits <- unique(tsne_df[[split_by]])
+    list_of_splits <- unique(x = tsne_df[[split_by]])
   }
 
   # Get length of meta data feature
   if (!is.null(x = split_by) && !is.null(x = num_columns)) {
-    split.by_length <- length(list_of_splits)
+    split.by_length <- length(x = list_of_splits)
 
     # Calculate number of rows for selected number of columns
-    num_rows <- ceiling(split.by_length/num_columns)
+    num_rows <- ceiling(x = split.by_length/num_columns)
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
@@ -823,7 +823,7 @@ Plot_By_Meta_LIGER <- function(
   x_axis_label <- paste0(reduction_label, "_1")
   y_axis_label <- paste0(reduction_label, "_2")
 
-  group_by <- sym(group_by)
+  group_by <- sym(x = group_by)
 
   if (raster) {
     if (!is.null(x = split_by)) {
@@ -958,7 +958,7 @@ Variable_Features_ALL_LIGER <- function(
 
   cli_inform(message = "Normalizing and identifying variable features.")
 
-  temp_liger <- rliger::normalize(temp_liger)
+  temp_liger <- rliger::normalize(object = temp_liger)
   temp_liger <- rliger::selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
   var_genes <- temp_liger@var.genes
 
@@ -1041,14 +1041,14 @@ Liger_to_Seurat <- function(
 
   raw.data <- Merge_Sparse_Data_All(liger_object@raw.data, nms)
   scale.data <- do.call(rbind, liger_object@scale.data)
-  rownames(scale.data) <- colnames(raw.data)
+  rownames(x = scale.data) <- colnames(x = raw.data)
   if (maj_version < 3) {
     var.genes <- liger_object@var.genes
     inmf.obj <- new(
       Class = "dim.reduction", gene.loadings = t(liger_object@W),
       cell.embeddings = liger_object@H.norm, key = "iNMF_"
     )
-    rownames(inmf.obj@gene.loadings) <- var.genes
+    rownames(x = inmf.obj@gene.loadings) <- var.genes
 
     tsne.obj <- new(
       Class = "dim.reduction", cell.embeddings = liger_object@tsne.coords,
@@ -1063,10 +1063,10 @@ Liger_to_Seurat <- function(
     inmf.loadings <- t(x = liger_object@W)
     inmf.embeddings <- liger_object@H.norm
     ncol_Hnorm <- ncol(x = liger_object@H.norm)
-    colnames(inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
+    colnames(x = inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
 
     tsne.embeddings <- liger_object@tsne.coords
-    colnames(tsne.embeddings) <- paste0(key_name, 1:2)
+    colnames(x = tsne.embeddings) <- paste0(key_name, 1:2)
     rownames(x = inmf.loadings) <- var.genes
     rownames(x = inmf.embeddings) <-
       rownames(x = tsne.embeddings) <-
@@ -1090,13 +1090,13 @@ Liger_to_Seurat <- function(
     new.seurat <- NormalizeData(new.seurat)
   }
   if (by.dataset) {
-    ident.use <- as.character(unlist(lapply(1:length(liger_object@raw.data), function(i) {
-      dataset.name <- names(liger_object@raw.data)[i]
-      paste0(dataset.name, as.character(liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
+    ident.use <- as.character(x = unlist(x = lapply(1:length(liger_object@raw.data), function(i) {
+      dataset.name <- names(x = liger_object@raw.data)[i]
+      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
     })))
   } else {
     if (maj_version < 3) {
-      ident.use <- as.character(liger_object@clusters)
+      ident.use <- as.character(x = liger_object@clusters)
     } else {
       ident.use <- liger_object@clusters
     }
@@ -1118,7 +1118,7 @@ Liger_to_Seurat <- function(
     SetAssayData(new.seurat, slot = "scale.data",  t(scale.data), assay = "RNA")
     new.seurat[[reduction_label]] <- tsne.obj
     new.seurat[['inmf']] <- inmf.obj
-    Idents(new.seurat) <- ident.use
+    Idents(object = new.seurat) <- ident.use
   }
   if (keep_meta){
     # extract meta data from liger object
@@ -1127,12 +1127,12 @@ Liger_to_Seurat <- function(
     liger_meta <- liger_meta %>%
       select(-any_of(c("nUMI", "nGene", "dataset")))
     # extract meta data names
-    meta_names <- colnames(liger_meta)
+    meta_names <- colnames(x = liger_meta)
     # add meta data to new seurat object
     for (meta_var in meta_names){
       meta_transfer <- liger_meta %>%
         pull(meta_var)
-      names(meta_transfer) <- colnames(x = new.seurat)
+      names(x = meta_transfer) <- colnames(x = new.seurat)
       new.seurat <- AddMetaData(object = new.seurat,
                                 metadata = meta_transfer,
                                 col.name = meta_var)
