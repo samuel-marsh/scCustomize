@@ -375,7 +375,7 @@ Add_CellBender_Diff <- function(
 #' @param barcodes_colname name of barcodes column in meta_data.  Required if `barcodes_to_rownames = TRUE`.
 #'
 #' @import cli
-#' @importFrom dplyr select
+#' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
 #'
@@ -445,7 +445,7 @@ Meta_Remove_Seurat <- function(
 #'
 #' @import cli
 #' @importFrom data.table fread
-#' @importFrom dplyr select left_join
+#' @importFrom dplyr select left_join all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom stats setNames
 #' @importFrom tibble column_to_rownames rownames_to_column
@@ -700,7 +700,7 @@ Extract_Sample_Meta <- function(
     slice(1)
 
   # remove rownames
-  rownames(sample_meta_df) <- NULL
+  rownames(x = sample_meta_df) <- NULL
 
   # Filter data.frame
   if (include_all) {
