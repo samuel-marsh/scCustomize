@@ -182,14 +182,14 @@ Single_Color_Palette <- function(pal_color,
       "#000000"
     )
   )
-  if (!pal_color %in% names(brewer_single_modified)) {
+  if (!pal_color %in% names(x = brewer_single_modified)) {
     cli_abort(message = c("Paleete name not found.",
                           "i" = "Palette name not found.  Please select one of following palette options: {.field 'reds', 'blues', 'greens', 'purples', or 'grays'}")
     )
   }
   set.seed(seed = seed_use)
   pal_use <- brewer_single_modified[[pal_color]]
-  output_pal <- sample(pal_use, size = num_colors)
+  output_pal <- sample(x = pal_use, size = num_colors)
   return(output_pal)
 }
 
@@ -216,7 +216,7 @@ NavyAndOrange <- function(
 ) {
   navy_orange <- c("navy", "orange")
   if (flip_order) {
-    navy_orange <- rev(navy_orange)
+    navy_orange <- rev(x = navy_orange)
   }
   return(navy_orange)
 }
@@ -356,8 +356,8 @@ ColorBlind_Pal <- function(
 varibow_scCustom <- function(
   n_colors
 ) {
-  sats <- rep_len(c(0.55,0.7,0.85,1),length.out = n_colors)
-  vals <- rep_len(c(1,0.8,0.6),length.out = n_colors)
+  sats <- rep_len(x = c(0.55,0.7,0.85,1), length.out = n_colors)
+  vals <- rep_len(x = c(1,0.8,0.6), length.out = n_colors)
   rainbow(n_colors, s = sats, v = vals)
 }
 
@@ -469,7 +469,7 @@ DiscretePalette_scCustomize <- function(
   }
   if (shuffle_pal) {
     set.seed(seed = seed)
-    palette_out <- sample(palette_out[1:num_colors])
+    palette_out <- sample(x = palette_out[1:num_colors])
   } else {
     palette_out <- palette_out[1:num_colors]
   }
