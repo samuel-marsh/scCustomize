@@ -207,7 +207,7 @@ Percent_Expressing <- function(
 #'
 #' @return A data.frame.
 #'
-#' @importFrom dplyr group_by one_of select_at summarise_at
+#' @importFrom dplyr group_by one_of select summarise_at any_of
 #' @importFrom magrittr "%>%"
 #' @importFrom stats median
 #'
@@ -246,7 +246,7 @@ Median_Stats <- function(
 
   # Filter meta data for columns of interest
   meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
-    select_at(all_variables)
+    select(any_of(all_variables))
 
   all_variables <- Meta_Numeric(data = meta_numeric_check)
 
