@@ -331,7 +331,7 @@ CellBender_Feature_Diff <- function(
     data.frame() %>%
     rownames_to_column("Feature_Names")
 
-  colnames(raw_counts)[2] <- "Raw_Counts"
+  colnames(x = raw_counts)[2] <- "Raw_Counts"
 
   # Pull Cell Bender Counts
   cb_counts <- pluck(seurat_object, "assays", cell_bender_assay, "counts") %>%
