@@ -13,6 +13,7 @@
 ## Changed  
 - Moved `QC_Plots_Feature` to use `VlnPlot_scCustom` under the hood like rest of `QC_Plots_*` functions.  
 - Renamed parameter `abort` in `Meta_Present` to `return_none` to align with `Gene_Present` and `Reduction_Loading_Present`.  
+- Repalce superceded dplyr functions `summarise_at` and `select(.data[[var]])` with current dplyr syntax.  
    
 
 ## Fixes  
