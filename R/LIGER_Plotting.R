@@ -358,7 +358,7 @@ plotFactors_scCustom <- function(
                             "i" = "The number of datasets provided to {.code reorder_datasets} ({.field {length(x = reorder_datasets)}}) does not match number of datasets in LIGER object ({.field {length(x = levels(x = levels(liger_object@cell.data$dataset)))}}).")
       )
     } else {
-      if (!all(levels(liger_object@cell.data$dataset) %in% reorder_datasets)) {
+      if (!all(levels(x = liger_object@cell.data$dataset) %in% reorder_datasets)) {
         cli_abort(message = c("Error reordering datasets (name mismatch).",
                               "*" = "Dataset names provided to {.code reorder_datasets} do not match names of datasets in LIGER object.",
                               "i" = "Please check spelling.")
@@ -407,16 +407,16 @@ plotFactors_scCustom <- function(
 
   # Get Data and Plot Factors
   cli_inform(message = "{.field Generating plots}")
-  k <- ncol(liger_object@H.norm)
+  k <- ncol(x = liger_object@H.norm)
   pb <- txtProgressBar(min = 0, max = k, style = 3)
-  W <- t(liger_object@W)
-  rownames(W) <- colnames(liger_object@scale.data[[1]])
+  W <- t(x = liger_object@W)
+  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
   Hs_norm <- liger_object@H.norm
   H_raw = do.call(rbind, liger_object@H)
   plot_list = list()
   tsne_list = list()
   for (i in 1:k) {
-    top_genes.W <- rownames(W)[order(W[, i], decreasing = T)[1:num_genes]]
+    top_genes.W <- rownames(x = W)[order(W[, i], decreasing = T)[1:num_genes]]
     top_genes.W.string <- paste0(top_genes.W, collapse = ", ")
     factor_textstring <- paste0("Factor", i)
     plot_title1 <- paste(factor_textstring, "\n", top_genes.W.string, "\n")
@@ -489,7 +489,7 @@ plotFactors_scCustom <- function(
     if (plot_dimreduc) {
       tsne_df <- data.frame(Hs_norm[, i], liger_object@tsne.coords)
       factorlab <- paste0("Factor", i)
-      colnames(tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
+      colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
 
       if (order) {
         tsne_df <- tsne_df[order(tsne_df[,1], decreasing = FALSE),]
