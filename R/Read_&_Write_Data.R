@@ -735,11 +735,13 @@ Read10X_Multi_Directory <- function(
 #' @param secondary_path path from the parent directory to count matrix files for each sample.
 #' @param default_10X_path logical (default TRUE) sets the secondary path variable to the default 10X
 #' directory structure.
+#' @param cellranger_multi logical, whether samples were processed with Cell Ranger `multi`, default is FALSE.
 #' @param h5_filename name of h5 file (including .h5 suffix).  If all h5 files have same name (i.e. Cell Ranger output)
 #' then use full file name.  By default function uses Cell Ranger name: "filtered_feature_bc_matrix.h5".
 #' If h5 files have sample specific prefixes (i.e. from Cell Bender) then use only the shared part of file
 #' name (e.g., "_filtered_out.h5").
-#' @param cell_bender logical (default FALSE).  Is the h5 file from cell bender output, needed to set correct file names.
+#' @param cell_bender `r lifecycle::badge("deprecated")` CellBender read functions are now independent family of functions.
+#' See `Read_CellBender_*` functions.
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
@@ -779,8 +781,9 @@ Read10X_h5_Multi_Directory <- function(
   base_path,
   secondary_path = NULL,
   default_10X_path = TRUE,
+  cellranger_multi = FALSE,
   h5_filename = "filtered_feature_bc_matrix.h5",
-  cell_bender = FALSE,
+  cell_bender = deprecated(),
   sample_list = NULL,
   sample_names = NULL,
   replace_suffix = FALSE,
@@ -790,6 +793,16 @@ Read10X_h5_Multi_Directory <- function(
   merge = FALSE,
   ...
 ) {
+  # Deprecated
+  if (lifecycle::is_present(cell_bender)) {
+    lifecycle::deprecate_stop(when = "1.1.2",
+                              what = "Read10X_h5_Multi_Directory(cell_bender)",
+                              with = "Read_CellBender_h5_Multi_Directory()",
+                              details = c("v" = "CellBender read capabilities are now indepdent functions. See `Read_CellBender_h5_Multi_Directory`",
+                                          "i" = "Parameter and warning will be fully removed in v1.2.0.")
+    )
+  }
+
   # Check cell bender or default 10X
   if (cell_bender && default_10X_path) {
     cli_abort(message = "Both `cell_bender` and `default_10X_path` cannot be simultaneously set to TRUE.")
@@ -812,9 +825,20 @@ Read10X_h5_Multi_Directory <- function(
   if (default_10X_path && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
-  if (default_10X_path) {
-    secondary_path <- "outs/"
+
+  if (!default_10X_path && !is.null(x = secondary_path) && cellranger_multi) {
+    cli_abort(message = "If {.code cellranger_multi = TRUE} then {.code default_10X_path} must be TRUE")
   }
+
+  if (default_10X_path) {
+    if (cellranger_multi) {
+      secondary_path <- "/outs/per_sample_outs/"
+      multi_extra_path <- "count/"
+    } else {
+      secondary_path <- "outs/"
+    }
+  }
+
   if (is.null(x = secondary_path)) {
     secondary_path <- ""
   }
@@ -834,8 +858,8 @@ Read10X_h5_Multi_Directory <- function(
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
-      if (cell_bender) {
-        file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], h5_filename))
+      if (cellranger_multi) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
       } else {
         file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
       }
@@ -845,17 +869,13 @@ Read10X_h5_Multi_Directory <- function(
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
       if (is.null(x = secondary_path)) {
-        if (cell_bender) {
-          file_path <- file.path(base_path, sample_list[x], paste0(sample_list[x], h5_filename))
+        if (cellranger_multi) {
+          file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
         } else {
           file_path <- file.path(base_path, sample_list[x], h5_filename)
         }
       } else {
-        if (cell_bender) {
-          file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], h5_filename))
-        } else {
-          file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
-        }
+        file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
       }
       raw_data <- Read10X_h5(filename = file_path, ...)
     })
