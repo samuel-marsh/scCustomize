@@ -598,6 +598,7 @@ Read10X_h5_GEO <- function(
 #' @param secondary_path path from the parent directory to count matrix files for each sample.
 #' @param default_10X_path logical (default TRUE) sets the secondary path variable to the default 10X
 #' directory structure.
+#' @param cellranger_multi logical, whether samples were processed with Cell Ranger `multi`, default is FALSE.
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
@@ -632,6 +633,7 @@ Read10X_Multi_Directory <- function(
   base_path,
   secondary_path = NULL,
   default_10X_path = TRUE,
+  cellranger_multi = FALSE,
   sample_list = NULL,
   sample_names = NULL,
   parallel = FALSE,
@@ -655,8 +657,18 @@ Read10X_Multi_Directory <- function(
   if (default_10X_path && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
+
+  if (!default_10X_path && !is.null(x = secondary_path) && cellranger_multi) {
+    cli_abort(message = "If {.code cellranger_multi = TRUE} then {.code default_10X_path} must be TRUE")
+  }
+
   if (default_10X_path) {
-    secondary_path <- "outs/filtered_feature_bc_matrix/"
+    if (cellranger_multi) {
+      secondary_path <- "/outs/per_sample_outs/"
+      multi_extra_path <- "count/sample_filtered_feature_bc_matrix"
+    } else {
+      secondary_path <- "outs/filtered_feature_bc_matrix/"
+    }
   }
   if (is.null(x = secondary_path)) {
     secondary_path <- ""
@@ -676,7 +688,11 @@ Read10X_Multi_Directory <- function(
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
-      file_path <- file.path(base_path, sample_list[x], secondary_path)
+      if (cellranger_multi) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
+      } else {
+        file_path <- file.path(base_path, sample_list[x], secondary_path)
+      }
       raw_data <- Read10X(data.dir = file_path, ...)
       return(raw_data)
     })
@@ -685,7 +701,11 @@ Read10X_Multi_Directory <- function(
       if (is.null(x = secondary_path)) {
         file_path <- file.path(base_path, sample_list[x])
       } else {
-        file_path <- file.path(base_path, sample_list[x], secondary_path)
+        if (cellranger_multi) {
+          file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
+        } else {
+          file_path <- file.path(base_path, sample_list[x], secondary_path)
+        }
       }
       raw_data <- Read10X(data.dir = file_path, ...)
     })
