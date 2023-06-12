@@ -8,6 +8,7 @@ Read10X_Multi_Directory(
   base_path,
   secondary_path = NULL,
   default_10X_path = TRUE,
+  cellranger_multi = FALSE,
   sample_list = NULL,
   sample_names = NULL,
   parallel = FALSE,
@@ -23,6 +24,8 @@ Read10X_Multi_Directory(
 
 \item{default_10X_path}{logical (default TRUE) sets the secondary path variable to the default 10X
 directory structure.}
+
+\item{cellranger_multi}{logical, whether samples were processed with Cell Ranger \code{multi}, default is FALSE.}
 
 \item{sample_list}{a vector of sample directory names if only specific samples are desired.  If \code{NULL} will
 read in subdirectories in parent directory.}
