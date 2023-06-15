@@ -139,6 +139,7 @@ Iterate_DimPlot_bySample <- function(
   single_pdf = FALSE,
   dpi = 600,
   color = "black",
+  legend = TRUE,
   reduction = NULL,
   dims = c(1, 2),
   pt.size = NULL,
@@ -206,9 +207,18 @@ Iterate_DimPlot_bySample <- function(
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(cells_per_sample,function(cells) {DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
-        xlim(x_axis) +
-        ylim(y_axis)})
+    all_plots <- pblapply(cells_per_sample,function(cells) {
+      if (legend) {
+        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          xlim(x_axis) +
+          ylim(y_axis)
+      } else {
+        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          xlim(x_axis) +
+          ylim(y_axis) +
+          NoLegend()
+      }
+      })
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
@@ -225,9 +235,16 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
-          xlim(x_axis) +
-          ylim(y_axis)
+        if (legend) {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis)
+        } else {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis) +
+            NoLegend()
+        }
         suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
         }
@@ -238,9 +255,16 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
-          xlim(x_axis) +
-          ylim(y_axis)
+        if (legend) {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis)
+        } else {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis) +
+            NoLegend()
+        }
         suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
         }
