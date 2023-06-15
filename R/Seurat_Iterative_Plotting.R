@@ -103,6 +103,7 @@ Iterate_PC_Loading_Plots <- function(
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
 #' @param color color scheme to use.
+#' @param legend logical, whether or not to include plot legend, default is TRUE.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (default is object default).
 #' @param dims Dimensions to plot.
