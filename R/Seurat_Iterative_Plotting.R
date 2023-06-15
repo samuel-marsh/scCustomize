@@ -195,11 +195,11 @@ Iterate_DimPlot_bySample <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract orig.ident
-  column_list <- as.character(unique(seurat_object@meta.data$orig.ident))
+  column_list <- as.character(x = unique(x = seurat_object@meta.data$orig.ident))
 
   # Create list of cells per sample
   cells_per_sample <- lapply(column_list, function(sample) {
-    row.names(seurat_object@meta.data)[which(seurat_object@meta.data$orig.ident == sample)]
+    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data$orig.ident == sample)]
   })
 
   # Single PDF option
