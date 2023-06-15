@@ -622,7 +622,7 @@ Plot_Cells_per_Sample <- function(
   # Calculate total cells and merge with meta.data
   total_cells <- table(seurat_object@meta.data[[sample_col]]) %>%
     data.frame() %>%
-    rename(!!sample_col := .data[["Var1"]], Number_of_Cells = .data[["Freq"]])
+    rename(!!sample_col := all_of("Var1"), Number_of_Cells = all_of("Freq"))
 
   meta <- Fetch_Meta(object = seurat_object)
 
