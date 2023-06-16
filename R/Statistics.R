@@ -6,7 +6,7 @@
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
 #'
 #' @import cli
-#' @importFrom dplyr left_join rename
+#' @importFrom dplyr left_join rename all_of
 #' @importFrom janitor adorn_totals
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -40,12 +40,12 @@ Cluster_Stats_All_Samples <- function(
   # Extract total percents
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
-    rename(Cluster = .data[["Var1"]])
+    rename(Cluster = all_of("Var1"))
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
-    rename(Cluster = .data[["Var1"]], Number = .data[["Freq"]])
+    rename(Cluster = all_of("Var1"), Number = all_of("Freq"))
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
@@ -53,7 +53,7 @@ Cluster_Stats_All_Samples <- function(
   # Extract cells per metadata column per cluster
   cells_per_cluster_2 <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
   cells_per_cluster_2 <- data.frame(cells_per_cluster_2) %>%
-    rename(Cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], cell_number = .data[["Freq"]])
+    rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
     pivot_wider(names_from = group_by_var, values_from = .data[["cell_number"]])
@@ -64,7 +64,7 @@ Cluster_Stats_All_Samples <- function(
   # Calculate and extract percents of cells per cluster per
   percent_per_cluster_2 <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var]), margin = 2) * 100
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
-    rename(cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], percent = .data[["Freq"]])
+    rename(cluster = all_of("Var1"), group_by_var = all_of("Var2"), percent = all_of("Freq"))
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
     pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
     column_to_rownames("cluster")
