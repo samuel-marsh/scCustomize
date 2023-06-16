@@ -6,6 +6,7 @@
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
+#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -39,6 +40,7 @@ Plot_Median_Genes <- function(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = "Median Genes/Cell per Sample",
   y_axis_label = "Median Genes",
   x_axis_label = NULL,
@@ -72,7 +74,7 @@ Plot_Median_Genes <- function(
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
 
-  meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
+  meta <- data.frame(meta[!duplicated(x = meta[,sample_col]),])
 
   if (is.null(x = group_by)) {
     colnames(x = meta) <- sample_col
@@ -108,7 +110,7 @@ Plot_Median_Genes <- function(
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nFeature_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       theme_ggprism_mod() +
       ggtitle(plot_title) +
@@ -142,6 +144,7 @@ Plot_Median_Genes <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
+#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -175,6 +178,7 @@ Plot_Median_UMIs <- function(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = "Median UMIs/Cell per Sample",
   y_axis_label = "Median UMIs",
   x_axis_label = NULL,
@@ -244,7 +248,7 @@ Plot_Median_UMIs <- function(
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       theme_ggprism_mod() +
       ggtitle(plot_title) +
@@ -278,6 +282,7 @@ Plot_Median_UMIs <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
+#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -312,6 +317,7 @@ Plot_Median_Mito <- function(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = "Median % Mito per Sample",
   y_axis_label = "Percent Mitochondrial Reads",
   x_axis_label = NULL,
@@ -381,7 +387,7 @@ Plot_Median_Mito <- function(
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_percent_mito"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       theme_ggprism_mod() +
       ggtitle(plot_title) +
@@ -416,6 +422,7 @@ Plot_Median_Mito <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
+#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -455,6 +462,7 @@ Plot_Median_Other <- function(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = NULL,
   y_axis_label = NULL,
   x_axis_label = NULL,
@@ -533,7 +541,7 @@ Plot_Median_Other <- function(
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[[paste0("Median_", median_var)]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       theme_ggprism_mod() +
       ggtitle(plot_title) +
@@ -567,6 +575,7 @@ Plot_Median_Other <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.
+#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -598,6 +607,7 @@ Plot_Cells_per_Sample <- function(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = "Cells/Nuclei per Sample",
   y_axis_label = "Number of Cells",
   x_axis_label = NULL,
@@ -652,7 +662,7 @@ Plot_Cells_per_Sample <- function(
   # Generate base plot
   plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Number_of_Cells"]], fill = .data[[group_by]])) +
     geom_boxplot(fill = "white") +
-    geom_dotplot(binaxis ='y', stackdir = 'center') +
+    geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
     scale_fill_manual(values = colors_use) +
     theme_ggprism_mod() +
     ggtitle(plot_title) +
