@@ -318,7 +318,7 @@ Iterate_DimPlot_bySample <- function(
 #' }
 #'
 
-Iterate_Cluster_Highlight_Plot2 <- function(
+Iterate_Cluster_Highlight_Plot <- function(
     seurat_object,
     highlight_color = "dodgerblue",
     background_color = "lightgray",
