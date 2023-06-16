@@ -370,7 +370,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                           "*" = "Must specify output file type format from the following:",
                           "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
-  file_check <<- file_type
+
   if (!file_type %in% file_type_options) {
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
@@ -549,7 +549,7 @@ Iterate_Meta_Highlight_Plot <- function(
   }
 
   # Change active ident for plotting
-  Idents(seurat_object) <- meta_data_column
+  Idents(object = seurat_object) <- meta_data_column
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
@@ -596,7 +596,7 @@ Iterate_Meta_Highlight_Plot <- function(
 
   # Relevel idents for plotting to sorted order
   if (single_pdf && is.null(x = new_meta_order) && meta_data_sort) {
-    Idents(seurat_object) <- fct_relevel(Idents(seurat_object), sort)
+    Idents(object = seurat_object) <- fct_relevel(Idents(object = seurat_object), sort)
   }
 
   # Relevel idents to custom order
@@ -604,7 +604,7 @@ Iterate_Meta_Highlight_Plot <- function(
     if (length(x = new_meta_order) != length(x = levels(x = seurat_object@active.ident))) {
       cli_abort(message = c("The length of 'new_meta_order' ({.field {length(x = new_meta_order)}}) does not equal the number of levels in {.code meta_data_column}: {.val {meta_data_column}} ({.field {length(x = levels(x = seurat_object@active.ident))}})"))
     }
-    Idents(seurat_object) <- factor(Idents(seurat_object), levels = new_meta_order)
+    Idents(object = seurat_object) <- factor(Idents(object = seurat_object), levels = new_meta_order)
   }
 
   # Get number of clusters/identities

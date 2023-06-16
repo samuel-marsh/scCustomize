@@ -1691,7 +1691,7 @@ Meta_Highlight_Plot <- function(
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
 
   # Change default ident and pull cells to highlight in plot
-  Idents(seurat_object) <- good_meta_data_column
+  Idents(object = seurat_object) <- good_meta_data_column
 
   cells_to_highlight <- CellsByIdentities(seurat_object, idents = found_meta_highlight)
 
