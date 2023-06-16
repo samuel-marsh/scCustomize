@@ -8,12 +8,14 @@
 - Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels ([#103](https://github.com/samuel-marsh/scCustomize/issues/103)).  
 - Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom`.  
 - Added ability to turn off feature/ident clustering in `Clustered_DotPlot` using new parameters: `cluster_feature`, `cluster_ident` ([#106](https://github.com/samuel-marsh/scCustomize/issues/106)).  
+- Added `dot_size` parameter to statistics plotting functions `Plot_Cells_per_Sample` and `Plot_Median_*` family.  
   
   
 ## Changed  
 - Moved `QC_Plots_Feature` to use `VlnPlot_scCustom` under the hood like rest of `QC_Plots_*` functions.  
 - Renamed parameter `abort` in `Meta_Present` to `return_none` to align with `Gene_Present` and `Reduction_Loading_Present`.  
-- Repalce superceded dplyr functions `summarise_at` and `select(.data[[var]])` with current dplyr syntax.  
+- Repalce superceded dplyr syntax/functionality `summarise_at`, `select(.data[[var]])`, and `rename(.data[[var]])` with current dplyr syntax.  
+- Internal rewrite of plotting sections within `Iterate_Cluster_Highlight_Plot` to align with recent updates to base `Cluster_Highlight_Plot` function.  
    
 
 ## Fixes  
