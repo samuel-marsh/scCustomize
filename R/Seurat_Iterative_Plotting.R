@@ -300,7 +300,7 @@ Iterate_DimPlot_bySample <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
-#' @importFrom pbapply pbmapply pboptions
+#' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
