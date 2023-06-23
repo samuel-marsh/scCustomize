@@ -340,8 +340,6 @@ Iterate_Cluster_Highlight_Plot <- function(
     file_path <- NULL
   }
 
-
-
   # Check file path is valid
   if (!is.null(x = file_path)) {
     if (!dir.exists(paths = file_path)) {
