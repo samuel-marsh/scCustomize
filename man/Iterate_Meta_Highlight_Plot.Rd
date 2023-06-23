@@ -12,6 +12,8 @@ Iterate_Meta_Highlight_Plot(
   highlight_color = "navy",
   background_color = "lightgray",
   pt.size = NULL,
+  no_legend = FALSE,
+  title_prefix = NULL,
   reduction = NULL,
   file_path = NULL,
   file_name = NULL,
