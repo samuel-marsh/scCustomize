@@ -478,6 +478,9 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' all clusters/plots or a vector of colors equal to the number of clusters to use (in order) for the clusters/plots.
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param no_legend logical, whether or not to remove plot legend and move to plot title.  Default is FALSE.
+#' @param title_prefix Value that should be used for plot title prefix if `no_legend = TRUE`.
+#' If NULL the value of `meta_data_column` will be used.  Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
