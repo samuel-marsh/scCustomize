@@ -41,6 +41,11 @@ all clusters/plots or a vector of colors equal to the number of clusters to use 
 
 \item{pt.size}{point size for both highlighted cluster and background.}
 
+\item{no_legend}{logical, whether or not to remove plot legend and move to plot title.  Default is FALSE.}
+
+\item{title_prefix}{Value that should be used for plot title prefix if \code{no_legend = TRUE}.
+If NULL the value of \code{meta_data_column} will be used.  Default is NULL.}
+
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
 \item{file_path}{directory file path and/or file name prefix.  Defaults to current wd.}
