@@ -9,6 +9,7 @@
 - Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom`.  
 - Added ability to turn off feature/ident clustering in `Clustered_DotPlot` using new parameters: `cluster_feature`, `cluster_ident` ([#106](https://github.com/samuel-marsh/scCustomize/issues/106)).  
 - Added `dot_size` parameter to statistics plotting functions `Plot_Cells_per_Sample` and `Plot_Median_*` family.  
+- Added new parameter `no_legend` to `Iterate_Meta_Highlight_Plot` to allow for plotting with a plot title instead of plot legend ([#108](https://github.com/samuel-marsh/scCustomize/issues/108)).  
   
   
 ## Changed  
