@@ -520,6 +520,8 @@ Iterate_Meta_Highlight_Plot <- function(
   highlight_color = "navy",
   background_color = "lightgray",
   pt.size = NULL,
+  no_legend = FALSE,
+  title_prefix = NULL,
   reduction = NULL,
   file_path = NULL,
   file_name = NULL,
@@ -625,21 +627,55 @@ Iterate_Meta_Highlight_Plot <- function(
       highlight_color <- highlight_color
     }
   }
+  # Create plot titles if needed.
+  if (!is.null(x = title_prefix) && !no_legend) {
+    cli_warn(message = "{.code title_prefix} was omitted as {.code no_legend = FALSE}.")
+  }
+
+  if (is.null(x = title_prefix) && no_legend) {
+    plot_title <- lapply(1:num_idents, function(z) {
+      paste0(meta_data_column, ": ", list_idents[z])
+    })
+  } else {
+    plot_title <- lapply(1:num_idents, function(z) {
+      paste0(title_prefix, ": ", list_idents[z])
+    })
+  }
+
+  if (!is.null(x = title_prefix) && length(x = title_prefix) != 1 && no_legend) {
+    cli_abort(message = "{.field `title_prefix`} must be vector of length 1.")
+  }
 
   # Single PDF option
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(1:num_idents, function(x) {
-      suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
-                                           meta_data_column = meta_data_column,
-                                           meta_data_highlight = list_idents[x],
-                                           highlight_color = highlight_color[x],
-                                           background_color = background_color,
-                                           pt.size = pt.size,
-                                           reduction = reduction,
-                                           raster = raster,
-                                           ...))
+      if (no_legend) {
+        suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                             meta_data_column = meta_data_column,
+                                             meta_data_highlight = list_idents[x],
+                                             highlight_color = highlight_color[x],
+                                             background_color = background_color,
+                                             pt.size = pt.size,
+                                             reduction = reduction,
+                                             raster = raster,
+                                             ...) +
+                           NoLegend() +
+                           ggtitle(plot_title[x]) +
+                           CenterTitle())
+      } else {
+        suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                             meta_data_column = meta_data_column,
+                                             meta_data_highlight = list_idents[x],
+                                             highlight_color = highlight_color[x],
+                                             background_color = background_color,
+                                             pt.size = pt.size,
+                                             reduction = reduction,
+                                             raster = raster,
+                                             ...))
+      }
+
     })
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
@@ -657,15 +693,31 @@ Iterate_Meta_Highlight_Plot <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       for (i in 1:num_idents) {
-        suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
-                                             meta_data_column = meta_data_column,
-                                             meta_data_highlight = list_idents[i],
-                                             highlight_color = highlight_color[i],
-                                             background_color = background_color,
-                                             pt.size = pt.size,
-                                             reduction = reduction,
-                                             raster = raster,
-                                             ...))
+        if (no_legend) {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...) +
+                             NoLegend() +
+                             ggtitle(plot_title[i]) +
+                             CenterTitle())
+        } else {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...))
+        }
+
         suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -676,15 +728,31 @@ Iterate_Meta_Highlight_Plot <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       for (i in 1:num_idents) {
-        suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
-                                             meta_data_column = meta_data_column,
-                                             meta_data_highlight = list_idents[i],
-                                             highlight_color = highlight_color[i],
-                                             background_color = background_color,
-                                             pt.size = pt.size,
-                                             reduction = reduction,
-                                             raster = raster,
-                                             ...))
+        if (no_legend) {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...) +
+                             NoLegend() +
+                             ggtitle(plot_title[i]) +
+                             CenterTitle())
+        } else {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...))
+        }
+
         suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
       }
