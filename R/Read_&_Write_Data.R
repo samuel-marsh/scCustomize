@@ -803,11 +803,6 @@ Read10X_h5_Multi_Directory <- function(
     )
   }
 
-  # Check cell bender or default 10X
-  if (cell_bender && default_10X_path) {
-    cli_abort(message = "Both `cell_bender` and `default_10X_path` cannot be simultaneously set to TRUE.")
-  }
-
   # Confirm num_cores specified
   if (parallel && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
