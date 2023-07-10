@@ -15,7 +15,7 @@
 ## Changed  
 - Moved `QC_Plots_Feature` to use `VlnPlot_scCustom` under the hood like rest of `QC_Plots_*` functions.  
 - Renamed parameter `abort` in `Meta_Present` to `return_none` to align with `Gene_Present` and `Reduction_Loading_Present`.  
-- Replace superceded dplyr syntax/functionality `summarise_at`, `select(.data[[var]])`, and `rename(.data[[var]])` with current dplyr syntax.  
+- Replace superseded dplyr syntax/functionality `summarise_at`, `select(.data[[var]])`, and `rename(.data[[var]])` with current dplyr syntax.  
 - Internal rewrite of plotting sections within `Iterate_Cluster_Highlight_Plot` and `Iterate_Meta_Highlight_Plot` to align with recent updates to base `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` functions.  
    
 
