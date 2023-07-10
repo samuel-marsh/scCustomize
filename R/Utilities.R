@@ -380,6 +380,20 @@ Reduction_Loading_Present <- function(
     omit_warn = TRUE,
     return_none = FALSE
 ) {
+  # If no reductions are present
+  if (length(x = seurat_object@reductions) == 0) {
+    if (return_none) {
+      # Combine into list and return
+      feature_list <- list(
+        found_features = NULL,
+        bad_features = NULL
+      )
+      return(feature_list)
+    } else {
+      cli_abort(message ="No requested features found.")
+    }
+  }
+
   # Get all reduction names
   possible_reduction_names <- unlist(x = lapply(1:length(seurat_object@reductions), function(z) {
     names <- names(x = seurat_object@reductions[[z]])
