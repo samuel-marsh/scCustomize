@@ -171,6 +171,15 @@ wrap_plots(p1, p2, ncol = 2)
 
 ```
 
+```{r, fig.height=5, fig.width=13, fig.align='center', fig.cap="*Plotting median values by setting the `plot_median = TRUE` parameter.*"}
+p1 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0, plot_median = TRUE)
+p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0, y_axis_log = TRUE, plot_median = TRUE)
+
+wrap_plots(p1, p2, ncol = 2)
+
+```
+
+
 ### Combined Plotting Function
 As a shortcut you can return single patchwork plot of the 3 main QC Plots (Genes, UMIs, %Mito) by using single function, `QC_Plots_Combined_Vln()`.
 
