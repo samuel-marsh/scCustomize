@@ -159,7 +159,8 @@ In addition to being able to supply Seurat parameters with `...` these plots lik
 * `plot_title`: Change plot title
 * `x_axis_label`/`y_axis_label`: Change axis labels.
 * `x_lab_rotate`: Should x-axis label be rotated 45 degrees?
-* `y_axis_log`: Should y-axis in linear or log10 scale.
+* `y_axis_log`: Should y-axis in linear or log10 scale.  
+* `plot_median` & `median_size`: Plot a line at the median of each x-axis identity.
 
 
 ```{r, fig.height=5, fig.width=13, fig.align='center', fig.cap="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*"}
