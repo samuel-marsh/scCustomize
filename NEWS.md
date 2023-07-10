@@ -6,7 +6,7 @@
 - Added new parameters to `Clustered_DotPlot` to allow modification of sizes of column text labels, legend text labels, and legend title labels ([#96](https://github.com/samuel-marsh/scCustomize/issues/96)).  
 - Added new function `Merge_Sparse_Multimodal_All` for merging multi-modal data (1 matrix per modality) ([#104](https://github.com/samuel-marsh/scCustomize/issues/104)).  
 - Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels ([#103](https://github.com/samuel-marsh/scCustomize/issues/103)).  
-- Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom`.  
+- Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom` and internal feature checking.  
 - Added ability to turn off feature/ident clustering in `Clustered_DotPlot` using new parameters: `cluster_feature`, `cluster_ident` ([#106](https://github.com/samuel-marsh/scCustomize/issues/106)).  
 - Added `dot_size` parameter to statistics plotting functions `Plot_Cells_per_Sample` and `Plot_Median_*` family.  
 - Added new parameter `no_legend` to `Iterate_Meta_Highlight_Plot` to allow for plotting with a plot title instead of plot legend ([#108](https://github.com/samuel-marsh/scCustomize/issues/108)).  
