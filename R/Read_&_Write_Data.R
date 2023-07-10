@@ -1157,7 +1157,7 @@ Read_CellBender_h5_Mat <- function(
   }
 
   # Get list of H5 contents
-  h5_dataset_list <- hdf5r::list.datasets(infile)
+  h5_dataset_list <- hdf5r::list.datasets(file_name)
 
   # Check feature_slot_name is correct
   if (!length(x = grep(pattern = feature_slot_name, x = h5_dataset_list, value = TRUE)) > 0) {
