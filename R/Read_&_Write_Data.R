@@ -1156,8 +1156,11 @@ Read_CellBender_h5_Mat <- function(
                                "i" = "If unsure, check contents of H5 file {.code rhdf5::h5ls('{file_name}')}."))
   }
 
+  # Read file
+  infile <- hdf5r::H5File$new(filename = file_name, mode = "r")
+
   # Get list of H5 contents
-  h5_dataset_list <- hdf5r::list.datasets(file_name)
+  h5_dataset_list <- hdf5r::list.datasets(infile)
 
   # Check feature_slot_name is correct
   if (!length(x = grep(pattern = feature_slot_name, x = h5_dataset_list, value = TRUE)) > 0) {
@@ -1183,9 +1186,6 @@ Read_CellBender_h5_Mat <- function(
       feature_slot <- 'genes'
     }
   }
-
-  # Read file
-  infile <- hdf5r::H5File$new(filename = file_name, mode = "r")
 
   # add name check
   group_names <- names(x = infile)
