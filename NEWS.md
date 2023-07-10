@@ -1,4 +1,4 @@
-# scCustomize 1.X.X (2023-XX-XX)  
+# scCustomize 1.1.2 (2023-07-11)  
 ## Added  
 - Added `aspect_ratio` parameter to all dimensionality reduction plots to control axes ratio of output plot.  
 - Added `plot_median` and `median_size` parameters to `QC_Plots_*` functions.  
