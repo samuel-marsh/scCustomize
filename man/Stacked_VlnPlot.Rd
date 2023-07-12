@@ -57,7 +57,7 @@ Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_uni
 
 \item{vln_linewidth}{Adjust the linewidth of violin outline.  Must be numeric.}
 
-\item{pt.size}{Adjust point size for plotting.  Default for \code{StackedVlnPlot} is 0 to avoid issues with
+\item{pt.size}{Adjust point size for plotting.  Default for \code{Stacked_VlnPlot} is 0 to avoid issues with
 rendering so many points in vector form.  Alternatively, see \code{raster} parameter.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
