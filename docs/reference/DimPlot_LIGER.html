@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -120,6 +120,7 @@
 <span>  shuffle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  shuffle_seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  reduction_label <span class="op">=</span> <span class="st">"UMAP"</span>,</span>
+<span>  aspect_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  label_size <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  label_repel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -177,6 +178,11 @@ if points of interest are being buried. (Default is TRUE).</p></dd>
 <dt>reduction_label</dt>
 <dd><p>What to label the x and y axes of resulting plots.  LIGER does not store name of
 technique and therefore needs to be set manually.  Default is "UMAP".</p></dd>
+
+
+<dt>aspect_ratio</dt>
+<dd><p>Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.</p></dd>
 
 
 <dt>label</dt>

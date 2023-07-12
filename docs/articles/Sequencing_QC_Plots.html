@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -130,8 +130,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #3: Sequencing QC Plots/Analysis</h1>
             
-            <h4 data-toc-skip class="date">Compiled: January 12,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: July 12, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Sequencing_QC_Plots.Rmd" class="external-link"><code>vignettes/articles/Sequencing_QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>Sequencing_QC_Plots.Rmd</code></div>
@@ -794,7 +793,7 @@ B
 <p>Now we join the two data.frames before plotting.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metrics_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">raw_metrics</span>, <span class="va">meta_metrics</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Joining, by = "sample_id"</span></span></code></pre>
+<pre><code><span><span class="co">## Joining with `by = join_by(sample_id)`</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -832,14 +831,6 @@ parameter to calculate significance between all groups using
 make sure the right test is being used for your data.</em></strong></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Seq_QC_Plot_Basic_Combined.html">Seq_QC_Plot_Basic_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span>, significance <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## [1] FALSE</span></span></code></pre>
 <p><img src="Sequencing_QC_Plots_files/figure-html/unnamed-chunk-9-1.png" width="1248"></p>
 </div>
 </div>

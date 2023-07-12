@@ -19,7 +19,7 @@ custom directory structure."><!-- mathjax --><script src="https://cdnjs.cloudfla
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -118,6 +118,7 @@ custom directory structure.</p>
 <span>  <span class="va">base_path</span>,</span>
 <span>  secondary_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  default_10X_path <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cellranger_multi <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sample_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -140,6 +141,10 @@ custom directory structure.</p>
 <dt>default_10X_path</dt>
 <dd><p>logical (default TRUE) sets the secondary path variable to the default 10X
 directory structure.</p></dd>
+
+
+<dt>cellranger_multi</dt>
+<dd><p>logical, whether samples were processed with Cell Ranger <code>multi</code>, default is FALSE.</p></dd>
 
 
 <dt>sample_list</dt>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -110,7 +110,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Read_CellBender_h5_Mat</span><span class="op">(</span><span class="va">file_name</span>, use.names <span class="op">=</span> <span class="cn">TRUE</span>, unique.features <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Read_CellBender_h5_Mat</span><span class="op">(</span></span>
+<span>  <span class="va">file_name</span>,</span>
+<span>  use.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  unique.features <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  h5_group_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  feature_slot_name <span class="op">=</span> <span class="st">"features"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -125,6 +131,16 @@
 
 <dt>unique.features</dt>
 <dd><p>Make feature names unique (default TRUE).</p></dd>
+
+
+<dt>h5_group_name</dt>
+<dd><p>Name of the group within H5 file that contains count data.  This is only
+required if H5 file contains multiple subgroups and non-default names.  Default is <code>NULL</code>.</p></dd>
+
+
+<dt>feature_slot_name</dt>
+<dd><p>Name of the slot contain feature names/ids.  Must be one of:
+"features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".</p></dd>
 
 </dl></div>
     <div id="value">
