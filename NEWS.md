@@ -1,4 +1,4 @@
-# scCustomize 1.1.2 (2023-07-14)  
+# scCustomize 1.1.2 (2023-07-18)  
 ## Added  
 - Added `aspect_ratio` parameter to all dimensionality reduction plots to control axes ratio of output plot.  
 - Added `plot_median` and `median_size` parameters to `QC_Plots_*` functions.  
@@ -24,6 +24,7 @@
 - Fixed `Read_CellBender_h5_*` functions to support CellBender outputs from STARsolo- or Cell Ranger (pre-V3)-processed data ([#99](https://github.com/samuel-marsh/scCustomize/issues/99)).  
 - Fixed `FeaturePlot_scCustom` to allow for plotting of dimensionality reduction loadings ([#97](https://github.com/samuel-marsh/scCustomize/issues/97)).  
 - Fixed `Read10X_Multi_Directory` and `Read10X_h5_Multi_Directory` to support files processed with Cell Ranger `multi` pipeline.  
+- Fixed bug in `Merge_Seurat_List` that prevented `add.cell.id` from adding correct cell name prefixes ([#113](https://github.com/samuel-marsh/scCustomize/issues/113)).  
    
 
 
