@@ -12,6 +12,8 @@ Iterate_Meta_Highlight_Plot(
   highlight_color = "navy",
   background_color = "lightgray",
   pt.size = NULL,
+  no_legend = FALSE,
+  title_prefix = NULL,
   reduction = NULL,
   file_path = NULL,
   file_name = NULL,
@@ -38,6 +40,11 @@ all clusters/plots or a vector of colors equal to the number of clusters to use 
 \item{background_color}{non-highlighted cell colors.}
 
 \item{pt.size}{point size for both highlighted cluster and background.}
+
+\item{no_legend}{logical, whether or not to remove plot legend and move to plot title.  Default is FALSE.}
+
+\item{title_prefix}{Value that should be used for plot title prefix if \code{no_legend = TRUE}.
+If NULL the value of \code{meta_data_column} will be used.  Default is NULL.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 

@@ -22,6 +22,10 @@
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
 #' @param split.by Variable in `@meta.data` to split the plot by.
+#' @param split_collect logical, whether to collect the legends/guides when plotting with `split.by`.
+#' Default is TRUE if one value is provided to `features` otherwise is set to FALSE.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param num_columns Number of columns in plot layout.
 #' @param slot Which slot to pull expression data from?  Default is "data".
 #' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
@@ -41,6 +45,7 @@
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom methods hasArg
 #' @importFrom scales alpha
 #' @importFrom Seurat FeaturePlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -67,6 +72,8 @@ FeaturePlot_scCustom <- function(
   raster = NULL,
   raster.dpi = c(512, 512),
   split.by = NULL,
+  split_collect = NULL,
+  aspect_ratio = NULL,
   num_columns = NULL,
   slot = "data",
   alpha_exp = NULL,
@@ -82,6 +89,21 @@ FeaturePlot_scCustom <- function(
   # Check meta
   if (!is.null(x = split.by)) {
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Set or check split_collect values
+  if (is.null(x = split_collect)) {
+    if (length(x = features) == 1) {
+      split_collect <- TRUE
+    } else {
+      split_collect <- FALSE
+    }
+  }
+
+  if (!is.null(x = split_collect)) {
+    if (length(x = features) > 1 && split_collect) {
+      cli_abort(message = "{.code split_collect} cannot be set to {.field TRUE} if the number of features is greater than 1.")
+    }
   }
 
   # Check features and meta to determine which features present
@@ -195,7 +217,14 @@ FeaturePlot_scCustom <- function(
       plot <- plot & theme(legend.title=element_blank())
       plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features))) + No_Right()
     } else {
-      plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      if (split_collect) {
+        if (hasArg("keep.scale")) {
+          cli_abort(message = "The parameter {.code keep.scale} cannot be set different from default if {.code split_collect - TRUE}.")
+        }
+        plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns, guides = "collect")
+      } else {
+        plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
+      }
     }
   }
 
@@ -250,6 +279,14 @@ FeaturePlot_scCustom <- function(
     options(scCustomize_warn_na_cutoff = FALSE)
   }
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -267,6 +304,8 @@ FeaturePlot_scCustom <- function(
 #' @param na_color color to use for points below lower limit.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param na_cutoff Value to use as minimum expression cutoff.  To set no cutoff set to `NA`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -310,6 +349,7 @@ FeaturePlot_DualAssay <- function(
   na_color = "lightgray",
   order = TRUE,
   pt.size = NULL,
+  aspect_ratio = NULL,
   reduction = NULL,
   na_cutoff = 0.000000001,
   raster = NULL,
@@ -358,17 +398,25 @@ FeaturePlot_DualAssay <- function(
   }
 
   # Change assay and plot raw
-  DefaultAssay(seurat_object) <- assay1
+  DefaultAssay(object = seurat_object) <- assay1
 
   plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
 
   # Change to cell bender and plot
-  DefaultAssay(seurat_object) <- assay2
+  DefaultAssay(object = seurat_object) <- assay2
 
   plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
 
   # Assemble plots & return plots
   plots <- wrap_plots(plot_raw, plot_cell_bender, ncol = num_columns)
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plots <- plots & theme(aspect.ratio = aspect_ratio)
+  }
 
   return(plots)
 }
@@ -386,6 +434,8 @@ FeaturePlot_DualAssay <- function(
 #' Use 'ident' to group.by active.ident class.
 #' @param colors_use color for the points on plot.
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param title_size size for plot title labels.
 #' @param num_columns number of columns in final layout plot.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -427,6 +477,7 @@ Split_FeatureScatter <- function(
   group.by = NULL,
   colors_use = NULL,
   pt.size = NULL,
+  aspect_ratio = NULL,
   title_size = 15,
   num_columns = NULL,
   raster = NULL,
@@ -457,7 +508,7 @@ Split_FeatureScatter <- function(
     num_columns <- split.by_length
   }
   # Calculate number of rows for selected number of columns
-  num_rows <- ceiling(split.by_length/num_columns)
+  num_rows <- ceiling(x = split.by_length/num_columns)
 
   # Check column and row compatibility
   if (num_columns > split.by_length) {
@@ -468,7 +519,7 @@ Split_FeatureScatter <- function(
   }
 
   # Check features are present
-  possible_features <- c(rownames(seurat_object), colnames(seurat_object@meta.data))
+  possible_features <- c(rownames(x = seurat_object), colnames(x = seurat_object@meta.data))
   check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
   if (length(x = check_features) > 0) {
     cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field {check_features}}'")
@@ -491,14 +542,14 @@ Split_FeatureScatter <- function(
 
   # Extract split.by list of values
   if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-    meta_sample_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
+    meta_sample_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
   } else {
-    meta_sample_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+    meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
   }
 
   # Extract cell names per meta data list of values
   cell_names <- lapply(meta_sample_list, function(x) {
-    row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[, split.by] == x)]})
 
   # raster check
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
@@ -559,7 +610,17 @@ Split_FeatureScatter <- function(
   })
 
   # Wrap Plots into single output
-  wrap_plots(plots, ncol = num_columns, nrow = num_rows) + plot_layout(guides = 'collect')
+  plot_comb <- wrap_plots(plots, ncol = num_columns, nrow = num_rows) + plot_layout(guides = 'collect')
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot_comb <- plot_comb & theme(aspect.ratio = aspect_ratio)
+  }
+
+  return(plot_comb)
 }
 
 
@@ -641,7 +702,7 @@ VlnPlot_scCustom <- function(
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Add raster check for scCustomize
-  num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
+  num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
 
   if (is.null(x = raster)) {
     if (pt.size == 0) {
@@ -705,7 +766,7 @@ VlnPlot_scCustom <- function(
 #' Default is 0.15 ("cm").  Spacing dependent on unit provided to `spacing_unit`.
 #' @param spacing_unit Unit to use in specifying vertical spacing between plots.  Default is "cm".
 #' @param vln_linewidth Adjust the linewidth of violin outline.  Must be numeric.
-#' @param pt.size Adjust point size for plotting.  Default for `StackedVlnPlot` is 0 to avoid issues with
+#' @param pt.size Adjust point size for plotting.  Default for `Stacked_VlnPlot` is 0 to avoid issues with
 #' rendering so many points in vector form.  Alternatively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
@@ -765,7 +826,7 @@ Stacked_VlnPlot <- function(
   }
 
   # Set rasterization
-  num_cells <- unlist(CellsByIdentities(object = seurat_object, idents = idents))
+  num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
 
   if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
@@ -836,7 +897,7 @@ Stacked_VlnPlot <- function(
     if (!is.numeric(x = vln_linewidth)) {
       cli_abort(message = "{.code vln_linewidth} parameter must be numeric.")
     }
-    for (j in 1:length(plot_list)) {
+    for (j in 1:length(x = plot_list)) {
       plot_return[[j]]$layers[[1]]$aes_params$linewidth <- vln_linewidth
     }
   }
@@ -961,6 +1022,12 @@ DotPlot_scCustom <- function(
 #' `feature_km_repeats`.  Default is 1000.
 #' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param row_label_fontface Fontface to use for row labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param cluster_feature logical, whether to cluster and reorder feature axis.  Default is TRUE.
+#' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
+#' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
+#' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
+#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1025,6 +1092,12 @@ Clustered_DotPlot <- function(
   row_km_repeats = deprecated(),
   column_km_repeats = deprecated(),
   row_label_size = 8,
+  row_label_fontface = "plain",
+  cluster_feature = TRUE,
+  cluster_ident = TRUE,
+  column_label_size = 8,
+  legend_label_size = 10,
+  legend_title_size = 10,
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -1073,6 +1146,12 @@ Clustered_DotPlot <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Check acceptable fontface
+  if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
+    cli_abort(message = c("{.code row_label_face} {.val {row_label_face}} not recognized.",
+                          "i" = "Must be one of {.val plain}, {.val bold}, {.val italic}, {.val olique}, or {.val bold.italic}."))
+  }
+
   # Check unique features
   features_unique <- unique(x = features)
 
@@ -1098,7 +1177,7 @@ Clustered_DotPlot <- function(
   # Get expression data
   exp_mat <- data %>%
     select(-any_of(c("pct.exp", "avg.exp"))) %>%
-    pivot_wider(names_from = .data[["id"]], values_from = .data[["avg.exp.scaled"]]) %>%
+    pivot_wider(names_from = any_of("id"), values_from = any_of("avg.exp.scaled")) %>%
     as.data.frame()
 
   row.names(x = exp_mat) <- exp_mat$features.plot
@@ -1114,7 +1193,7 @@ Clustered_DotPlot <- function(
     )
 
     # Extract good features
-    good_features <- rownames(exp_mat)
+    good_features <- rownames(x = exp_mat)
 
     # Remove rows with NAs
     exp_mat <- exp_mat %>%
@@ -1127,7 +1206,7 @@ Clustered_DotPlot <- function(
   # Get percent expressed data
   percent_mat <- data %>%
     select(-any_of(c("avg.exp", "avg.exp.scaled"))) %>%
-    pivot_wider(names_from = .data[["id"]], values_from = .data[["pct.exp"]]) %>%
+    pivot_wider(names_from = any_of("id"), values_from = any_of("pct.exp")) %>%
     as.data.frame()
 
   row.names(x = percent_mat) <- percent_mat$features.plot
@@ -1171,14 +1250,14 @@ Clustered_DotPlot <- function(
 
   # Modify if class = "colors"
   if (inherits(x = colors_use_idents, what = "colors")) {
-    colors_use_idents <- as.vector(colors_use_idents)
+    colors_use_idents <- as.vector(x = colors_use_idents)
   }
 
   # Pull Annotation and change colors to ComplexHeatmap compatible format
-  Identity <- colnames(exp_mat)
+  Identity <- colnames(x = exp_mat)
 
   identity_colors <- colors_use_idents
-  names(identity_colors) <- Identity
+  names(x = identity_colors) <- Identity
   identity_colors_list <- list(Identity = identity_colors)
 
   # Create identity annotation
@@ -1203,7 +1282,7 @@ Clustered_DotPlot <- function(
     exp_color_middle <- Middle_Number(min = exp_color_min, max = exp_color_max)
   }
 
-  palette_length <- length(colors_use_exp)
+  palette_length <- length(x = colors_use_exp)
   palette_middle <- Middle_Number(min = 0, max = palette_length)
 
   # Create palette
@@ -1269,7 +1348,7 @@ Clustered_DotPlot <- function(
 
   # Create legend for point size
   lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]])),
+    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
     ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
@@ -1279,7 +1358,9 @@ Clustered_DotPlot <- function(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
                                                               gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")))
+                                                              gp = gpar(fill = "black"))),
+                           labels_gp = gpar(fontsize = legend_label_size),
+                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
     )
   )
 
@@ -1297,62 +1378,74 @@ Clustered_DotPlot <- function(
   if (raster) {
     if (flip) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_ident,
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   row_km = k,
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_feature,
+                                                  cluster_columns = cluster_ident)
     }
   } else {
     if (flip) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun_flip,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   column_km = k,
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_ident,
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression"),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size),
+                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
+                                                  column_names_gp = gpar(fontsize = column_label_size),
                                                   row_km = k,
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate)
+                                                  column_names_rot = x_lab_rotate,
+                                                  cluster_rows = cluster_feature,
+                                                  cluster_columns = cluster_ident)
     }
   }
 
@@ -1379,6 +1472,8 @@ Clustered_DotPlot <- function(
 #' `scCustomize_Palette()`.
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1412,6 +1507,7 @@ Cluster_Highlight_Plot <- function(
   highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
+  aspect_ratio = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -1477,6 +1573,14 @@ Cluster_Highlight_Plot <- function(
   # Edit plot legend
   plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -1491,6 +1595,8 @@ Cluster_Highlight_Plot <- function(
 #' @param highlight_color Color to highlight cells (default "navy").
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1529,6 +1635,7 @@ Meta_Highlight_Plot <- function(
   highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
+  aspect_ratio = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -1541,7 +1648,7 @@ Meta_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check meta data
-  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
@@ -1560,7 +1667,7 @@ Meta_Highlight_Plot <- function(
   }
 
   # Check meta_data_highlight
-  meta_var_list <- as.character(unique(seurat_object@meta.data[, good_meta_data_column]))
+  meta_var_list <- as.character(x = unique(x = seurat_object@meta.data[, good_meta_data_column]))
 
   # Check good and bad highlight values
   bad_meta_highlight <- meta_var_list[!meta_var_list %in% meta_data_highlight]
@@ -1584,7 +1691,7 @@ Meta_Highlight_Plot <- function(
   raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
 
   # Change default ident and pull cells to highlight in plot
-  Idents(seurat_object) <- good_meta_data_column
+  Idents(object = seurat_object) <- good_meta_data_column
 
   cells_to_highlight <- CellsByIdentities(seurat_object, idents = found_meta_highlight)
 
@@ -1624,6 +1731,14 @@ Meta_Highlight_Plot <- function(
   # Update legend and return plot
   plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -1637,6 +1752,8 @@ Meta_Highlight_Plot <- function(
 #' @param highlight_color Color to highlight cells.
 #' @param background_color non-highlighted cell colors (default is "lightgray")..
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1679,6 +1796,7 @@ Cell_Highlight_Plot <- function(
   highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
+  aspect_ratio = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -1719,7 +1837,7 @@ Cell_Highlight_Plot <- function(
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_highlight)), raster = raster)
+    pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_highlight)), raster = raster)
   }
 
   # Check right number of colors provided
@@ -1757,6 +1875,14 @@ Cell_Highlight_Plot <- function(
   # Edit plot legend
   plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
   return(plot)
 }
 
@@ -1781,6 +1907,8 @@ Cell_Highlight_Plot <- function(
 #' individual plots in layout.  Default is FALSE.
 #' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
 #' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
@@ -1832,6 +1960,7 @@ DimPlot_scCustom <- function(
   split.by = NULL,
   split_seurat = FALSE,
   figure_plot = FALSE,
+  aspect_ratio = NULL,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -1942,8 +2071,25 @@ DimPlot_scCustom <- function(
 
       plot_figure <- plot + axis_plot +
         plot_layout(design = figure_layout)
+
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
+      }
+
       return(plot_figure)
     } else {
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plot <- plot & theme(aspect.ratio = aspect_ratio)
+      }
+
       return(plot)
     }
 
@@ -1980,8 +2126,25 @@ DimPlot_scCustom <- function(
 
         plot_figure <- plot + axis_plot +
           plot_layout(design = figure_layout)
+
+        # Aspect ratio changes
+        if (!is.null(x = aspect_ratio)) {
+          if (!is.numeric(x = aspect_ratio)) {
+            cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+          }
+          plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
+        }
+
         return(plot_figure)
       } else {
+        # Aspect ratio changes
+        if (!is.null(x = aspect_ratio)) {
+          if (!is.numeric(x = aspect_ratio)) {
+            cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+          }
+          plot <- plot & theme(aspect.ratio = aspect_ratio)
+        }
+
         return(plot)
       }
     } else {
@@ -2003,13 +2166,13 @@ DimPlot_scCustom <- function(
       # Extract cell names per meta data list of values
       # Extract split.by list of values
       if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-        split_by_list <- as.character(x = levels(seurat_object@meta.data[, split.by]))
+        split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
       } else {
-        split_by_list <- as.character(unique(seurat_object@meta.data[, split.by]))
+        split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
       }
 
       cell_names <- lapply(split_by_list, function(x) {
-        row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+        row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
 
       # Unify colors across plots
       if (is.null(x = group.by)) {
@@ -2020,7 +2183,7 @@ DimPlot_scCustom <- function(
 
       colors_overall <- colors_use
 
-      names(colors_overall) <- levels_overall
+      names(x = colors_overall) <- levels_overall
 
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
@@ -2043,6 +2206,15 @@ DimPlot_scCustom <- function(
 
       # Wrap Plots into single output
       plots <- wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plots <- plots & theme(aspect.ratio = aspect_ratio)
+      }
+
       return(plots)
     }
   }
@@ -2057,6 +2229,8 @@ DimPlot_scCustom <- function(
 #' @param meta_data_column Meta data column to split plots by.
 #' @param colors_use single color to use for all plots or a vector of colors equal to the number of plots.
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param title_size size for plot title labels.
 #' @param num_columns number of columns in final layout plot.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
@@ -2092,6 +2266,7 @@ DimPlot_All_Samples <- function(
   meta_data_column = "orig.ident",
   colors_use = "black",
   pt.size = NULL,
+  aspect_ratio = NULL,
   title_size = 15,
   num_columns = NULL,
   reduction = NULL,
@@ -2127,12 +2302,12 @@ DimPlot_All_Samples <- function(
   if (inherits(x = seurat_object@meta.data[, meta_data_column], what = "factor")) {
     meta_sample_list <- levels(x = seurat_object@meta.data[, meta_data_column])
   } else {
-    meta_sample_list <- as.character(unique(seurat_object@meta.data[, meta_data_column]))
+    meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, meta_data_column]))
   }
 
   # Extract cell names per meta data list of values
   cell_names <- lapply(meta_sample_list, function(x) {
-    row.names(seurat_object@meta.data)[which(seurat_object@meta.data[, meta_data_column] == x)]})
+    row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, meta_data_column] == x)]})
 
   # Set uniform point size is pt.size = NULL (based on plot with most cells)
   if (is.null(x = pt.size)) {
@@ -2166,7 +2341,17 @@ DimPlot_All_Samples <- function(
   })
 
   # Wrap Plots into single output
-  wrap_plots(plots, ncol = num_columns)
+  plot_comb <- wrap_plots(plots, ncol = num_columns)
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot_comb <- plot_comb & theme(aspect.ratio = aspect_ratio)
+  }
+
+  return(plot_comb)
 }
 
 

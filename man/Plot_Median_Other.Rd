@@ -10,6 +10,7 @@ Plot_Median_Other(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = NULL,
   y_axis_label = NULL,
   x_axis_label = NULL,
@@ -28,6 +29,8 @@ Plot_Median_Other(
 \item{group_by}{Column in meta.data slot to group results by (i.e. "Treatment").}
 
 \item{colors_use}{List of colors or color palette to use.  Only applicable if \code{group_by} is not NULL.}
+
+\item{dot_size}{size of the dots plotted if \code{group_by} is not NULL.  Default is 1.}
 
 \item{plot_title}{Plot title.}
 

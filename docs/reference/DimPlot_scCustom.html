@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -119,6 +119,7 @@
 <span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  split_seurat <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figure_plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  aspect_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  shuffle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -173,6 +174,11 @@ individual plots in layout.  Default is FALSE.</p></dd>
 <dt>figure_plot</dt>
 <dd><p>logical.  Whether to remove the axes and plot with legend on left of plot denoting
 axes labels.  (Default is FALSE).  Requires <code>split_seurat = TRUE</code>.</p></dd>
+
+
+<dt>aspect_ratio</dt>
+<dd><p>Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.</p></dd>
 
 
 <dt>shuffle</dt>

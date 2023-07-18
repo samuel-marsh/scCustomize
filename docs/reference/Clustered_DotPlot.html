@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -127,6 +127,12 @@
 <span>  row_km_repeats <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  column_km_repeats <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  row_label_size <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  row_label_fontface <span class="op">=</span> <span class="st">"plain"</span>,</span>
+<span>  cluster_feature <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cluster_ident <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  column_label_size <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  legend_label_size <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  legend_title_size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plot_km_elbow <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  elbow_kmax <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -219,6 +225,30 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 
 <dt>row_label_size</dt>
 <dd><p>Size of the feature labels.  Provided to <code>row_names_gp</code> in Heatmap call.</p></dd>
+
+
+<dt>row_label_fontface</dt>
+<dd><p>Fontface to use for row labels.  Provided to <code>row_names_gp</code> in Heatmap call.</p></dd>
+
+
+<dt>cluster_feature</dt>
+<dd><p>logical, whether to cluster and reorder feature axis.  Default is TRUE.</p></dd>
+
+
+<dt>cluster_ident</dt>
+<dd><p>logical, whether to cluster and reorder identity axis.  Default is TRUE.</p></dd>
+
+
+<dt>column_label_size</dt>
+<dd><p>Size of the feature labels.  Provided to <code>column_names_gp</code> in Heatmap call.</p></dd>
+
+
+<dt>legend_label_size</dt>
+<dd><p>Size of the legend text labels.  Provided to <code>labels_gp</code> in Heatmap legend call.</p></dd>
+
+
+<dt>legend_title_size</dt>
+<dd><p>Sise of the legend title text labels.  Provided to <code>title_gp</code> in Heatmap legend call.</p></dd>
 
 
 <dt>raster</dt>

@@ -18,7 +18,7 @@ within the same directory."><!-- mathjax --><script src="https://cdnjs.cloudflar
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -118,6 +118,8 @@ within the same directory.</p>
 <span>  custom_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  h5_group_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  feature_slot_name <span class="op">=</span> <span class="st">"features"</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  num_cores <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  merge <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -150,8 +152,18 @@ read in all files within <code>data_dir</code> directory.</p></dd>
 set names to the subdirectory name of each sample.</p></dd>
 
 
+<dt>h5_group_name</dt>
+<dd><p>Name of the group within H5 file that contains count data.  This is only
+required if H5 file contains multiple subgroups and non-default names.  Default is <code>NULL</code>.</p></dd>
+
+
+<dt>feature_slot_name</dt>
+<dd><p>Name of the slot contain feature names/ids.  Must be one of:
+"features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".</p></dd>
+
+
 <dt>parallel</dt>
-<dd><p>logical (default FALSE) whether or not to use multi core processing to read in matrices.</p></dd>
+<dd><p>logical (default FALSE) whether or not to use multi core processing to read in matrices</p></dd>
 
 
 <dt>num_cores</dt>

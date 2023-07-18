@@ -1,3 +1,33 @@
+# scCustomize 1.1.2 (2023-07-18)  
+## Added  
+- Added `aspect_ratio` parameter to all dimensionality reduction plots to control axes ratio of output plot.  
+- Added `plot_median` and `median_size` parameters to `QC_Plots_*` functions.  
+- Added `split_collect` parameter to `FeaturePlot_scCustom` to collect all guides when using `split.by` for a single feature ([#94](https://github.com/samuel-marsh/scCustomize/issues/94)).  
+- Added new parameters to `Clustered_DotPlot` to allow modification of sizes of column text labels, legend text labels, and legend title labels ([#96](https://github.com/samuel-marsh/scCustomize/issues/96)).  
+- Added new function `Merge_Sparse_Multimodal_All` for merging multi-modal data (1 matrix per modality) ([#104](https://github.com/samuel-marsh/scCustomize/issues/104)).  
+- Added new parameter to `Clustered_DotPlot` named `row_label_fontface` to allow control of fontface used for row labels ([#103](https://github.com/samuel-marsh/scCustomize/issues/103)).  
+- Added helper utility `Reduction_Loading_Present`, in part to fix issue with `FeaturePlot_scCustom` and internal feature checking.  
+- Added ability to turn off feature/ident clustering in `Clustered_DotPlot` using new parameters: `cluster_feature`, `cluster_ident` ([#106](https://github.com/samuel-marsh/scCustomize/issues/106)).  
+- Added `dot_size` parameter to statistics plotting functions `Plot_Cells_per_Sample` and `Plot_Median_*` family.  
+- Added new parameter `no_legend` to `Iterate_Meta_Highlight_Plot` to allow for plotting with a plot title instead of plot legend ([#108](https://github.com/samuel-marsh/scCustomize/issues/108)).  
+  
+  
+## Changed  
+- Moved `QC_Plots_Feature` to use `VlnPlot_scCustom` under the hood like rest of `QC_Plots_*` functions.  
+- Renamed parameter `abort` in `Meta_Present` to `return_none` to align with `Gene_Present` and `Reduction_Loading_Present`.  
+- Replace superseded dplyr syntax/functionality `summarise_at`, `select(.data[[var]])`, and `rename(.data[[var]])` with current dplyr syntax.  
+- Internal rewrite of plotting sections within `Iterate_Cluster_Highlight_Plot` and `Iterate_Meta_Highlight_Plot` to align with recent updates to base `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` functions.  
+   
+
+## Fixes  
+- Fixed `QC_Plots_Feature` to respect parameters when passing to `VlnPlot` ([#91](https://github.com/samuel-marsh/scCustomize/issues/91)).  
+- Fixed `Read_CellBender_h5_*` functions to support CellBender outputs from STARsolo- or Cell Ranger (pre-V3)-processed data ([#99](https://github.com/samuel-marsh/scCustomize/issues/99)).  
+- Fixed `FeaturePlot_scCustom` to allow for plotting of dimensionality reduction loadings ([#97](https://github.com/samuel-marsh/scCustomize/issues/97)).  
+- Fixed `Read10X_Multi_Directory` and `Read10X_h5_Multi_Directory` to support files processed with Cell Ranger `multi` pipeline.  
+- Fixed bug in `Merge_Seurat_List` that prevented `add.cell.id` from adding correct cell name prefixes ([#113](https://github.com/samuel-marsh/scCustomize/issues/113)).  
+   
+
+
 # scCustomize 1.1.1 (2023-01-13)  
 ## Added  
 - Added `label_color_num` parameter to `PalettePlot` allow control of color labeling.  
@@ -20,6 +50,7 @@
 - Fixed `Add_Mito_Ribo_Seurat` to respect provided `mito_name`, `ribo_name` and `mito_ribo_name` values.  
 - Updated out-dated documentation for number of package functions.  
 - Typo/styling fixes.  
+ 
  
 # scCustomize 1.1.0 (2022-12-22)  
 ## Added  

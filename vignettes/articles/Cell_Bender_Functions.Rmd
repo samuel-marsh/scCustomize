@@ -70,6 +70,19 @@ cell_bender_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered
 ```
 
 
+### Importing CellBender data based on STARsolo or pre-V3 Cell Ranger inputs  
+If the input that CellBender uses is based on STARsolo or pre-V3 Cell Ranger data then some of the slot name which stores feature/gene ids in the H5 file is different.  These files can be read by specifying the optional `feature_slot_name` parameter.
+```{r eval=FALSE}
+cell_bender_starsolo_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered.h5", feature_slot_name = "genes")
+```
+
+### Importing CellBender data with non-standard group names  
+If CellBender H5 file contains non-standard H5 group names then `Read_CellBender_h5_Mat` will error.  To circumvent this simply supply the name of the H5 group that contains the count data.
+```{r eval=FALSE}
+cell_bender_name_mat <- Read_CellBender_h5_Mat(file_name = "PATH/SampleA_out_filtered.h5", h5_group_name = "background_removed")
+```
+
+
 ## Reading multiple CellBender files with single function    
 scCustomize also contains two wrapper functions to easily read multiple CellBender files stored either in single directory or in multiple sub-directories `Read_CellBender_h5_Multi_File` and `Read_CellBender_h5_Multi_Directory`.  
 

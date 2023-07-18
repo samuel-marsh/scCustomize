@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -118,6 +118,8 @@
 <span>  highlight_color <span class="op">=</span> <span class="st">"navy"</span>,</span>
 <span>  background_color <span class="op">=</span> <span class="st">"lightgray"</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  no_legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  title_prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reduction <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -159,6 +161,15 @@ all clusters/plots or a vector of colors equal to the number of clusters to use 
 
 <dt>pt.size</dt>
 <dd><p>point size for both highlighted cluster and background.</p></dd>
+
+
+<dt>no_legend</dt>
+<dd><p>logical, whether or not to remove plot legend and move to plot title.  Default is FALSE.</p></dd>
+
+
+<dt>title_prefix</dt>
+<dd><p>Value that should be used for plot title prefix if <code>no_legend = TRUE</code>.
+If NULL the value of <code>meta_data_column</code> will be used.  Default is NULL.</p></dd>
 
 
 <dt>reduction</dt>

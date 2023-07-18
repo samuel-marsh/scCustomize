@@ -375,7 +375,7 @@ Add_CellBender_Diff <- function(
 #' @param barcodes_colname name of barcodes column in meta_data.  Required if `barcodes_to_rownames = TRUE`.
 #'
 #' @import cli
-#' @importFrom dplyr select
+#' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
 #'
@@ -445,7 +445,7 @@ Meta_Remove_Seurat <- function(
 #'
 #' @import cli
 #' @importFrom data.table fread
-#' @importFrom dplyr select left_join
+#' @importFrom dplyr select left_join all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom stats setNames
 #' @importFrom tibble column_to_rownames rownames_to_column
@@ -647,7 +647,7 @@ Extract_Sample_Meta <- function(
 
     combined_exclude <- c(nFeature_cols, nCount_cols, "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
 
-    variables_exclude <- Meta_Present(seurat_object = object, meta_col_names = combined_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)[[1]]
+    variables_exclude <- Meta_Present(seurat_object = object, meta_col_names = combined_exclude, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
   }
 
   # Ensure include exclude are unique
@@ -662,13 +662,13 @@ Extract_Sample_Meta <- function(
 
   # Check variables include/exclude are present
   if (!is.null(x = variables_include)) {
-    include_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_include, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+    include_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_include, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
   } else {
     include_meta_list <- NULL
   }
 
   if (!is.null(x = variables_exclude)) {
-    exclude_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+    exclude_meta_list <- Meta_Present(seurat_object = object, meta_col_names = variables_exclude, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
   } else {
     exclude_meta_list <- NULL
   }
@@ -700,7 +700,7 @@ Extract_Sample_Meta <- function(
     slice(1)
 
   # remove rownames
-  rownames(sample_meta_df) <- NULL
+  rownames(x = sample_meta_df) <- NULL
 
   # Filter data.frame
   if (include_all) {

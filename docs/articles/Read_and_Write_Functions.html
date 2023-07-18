@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -129,8 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Read &amp; Write Data Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: January 13,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: July 18, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Read_and_Write_Functions.Rmd" class="external-link"><code>vignettes/articles/Read_and_Write_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Read_and_Write_Functions.Rmd</code></div>
@@ -425,6 +424,17 @@ through scCustomize.</em>
 </div>
 </div>
 <div class="section level4">
+<h4 id="multimodal-data">Multimodal Data<a class="anchor" aria-label="anchor" href="#multimodal-data"></a>
+</h4>
+<p>If you have multimodal data (each entry in list contains sub-list
+with matrices) then you can use
+<code><a href="../reference/Merge_Sparse_Multimodal_All.html">Merge_Sparse_Multimodal_All()</a></code>. This function will return a
+list with each entry representing a merged matrix for single
+modality.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">GEO_Merged_Multimodal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Sparse_Multimodal_All.html">Merge_Sparse_Multimodal_All</a></span><span class="op">(</span>matrix_list <span class="op">=</span> <span class="va">GEO_Multimodal</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
 <h4 id="add-barcode-prefixsuffix">Add Barcode Prefix/Suffix<a class="anchor" aria-label="anchor" href="#add-barcode-prefixsuffix"></a>
 </h4>
 <p><code>Merge_Sparse_Data_All</code> contains a number of optional
@@ -448,7 +458,7 @@ using <code>cell_id_delimiter</code> parameter.</li>
 </h3>
 <p>To easily merge many Seurat objects contained in a list scCustomize
 contains simple function.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Merge a list of compatible Seurat objects of any length and add cell prefixes if desired</span></span>
 <span><span class="va">Seurat_Merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Seurat_List.html">Merge_Seurat_List</a></span><span class="op">(</span>list_seurat <span class="op">=</span> <span class="va">list_of_objects</span>, add.cell.ids <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cell"</span>, <span class="st">"prefixes"</span>,</span>
 <span>    <span class="st">"to"</span>, <span class="st">"add"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -461,7 +471,7 @@ contains simple function.</p>
 be easily read in using <code><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Seurat::Read10X_h5()</a></code> or LIGER’s
 <code><a href="https://rdrr.io/pkg/rliger/man/createLiger.html" class="external-link">createLiger()</a></code> (which assumes H5 file is formatted as if
 from Cell Ranger).</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Provide file path and specify type of files as either cell ranger triplicate files, matrix,</span></span>
 <span><span class="co"># or data.frame</span></span>
 <span><span class="fu"><a href="../reference/Create_10X_H5.html">Create_10X_H5</a></span><span class="op">(</span>raw_data_file_path <span class="op">=</span> <span class="st">"/path/matrix.mtx"</span>, source_type <span class="op">=</span> <span class="st">"Matrix"</span>, save_file_path <span class="op">=</span> <span class="st">"/path/"</span>,</span>

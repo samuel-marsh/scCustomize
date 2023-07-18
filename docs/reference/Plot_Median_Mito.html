@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -115,6 +115,7 @@
 <span>  sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
 <span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dot_size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  plot_title <span class="op">=</span> <span class="st">"Median % Mito per Sample"</span>,</span>
 <span>  y_axis_label <span class="op">=</span> <span class="st">"Percent Mitochondrial Reads"</span>,</span>
 <span>  x_axis_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -140,6 +141,10 @@
 
 <dt>colors_use</dt>
 <dd><p>List of colors or color palette to use.  Only applicable if <code>group_by</code> is not NULL.</p></dd>
+
+
+<dt>dot_size</dt>
+<dd><p>size of the dots plotted if <code>group_by</code> is not NULL.  Default is 1.</p></dd>
 
 
 <dt>plot_title</dt>

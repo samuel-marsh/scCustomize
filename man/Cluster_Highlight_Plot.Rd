@@ -10,6 +10,7 @@ Cluster_Highlight_Plot(
   highlight_color = NULL,
   background_color = "lightgray",
   pt.size = NULL,
+  aspect_ratio = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -30,6 +31,9 @@ Cluster_Highlight_Plot(
 \item{background_color}{non-highlighted cell colors.}
 
 \item{pt.size}{point size for both highlighted cluster and background.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}

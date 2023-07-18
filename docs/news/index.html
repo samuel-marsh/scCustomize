@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -105,7 +105,38 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.1.1" id="sccustomize-111-2023-01-13">scCustomize 1.1.1 (2023-01-13)<a class="anchor" aria-label="anchor" href="#sccustomize-111-2023-01-13"></a></h2>
+<h2 class="page-header" data-toc-text="1.1.2" id="sccustomize-112-2023-07-18">scCustomize 1.1.2 (2023-07-18)<small>2023-07-18</small><a class="anchor" aria-label="anchor" href="#sccustomize-112-2023-07-18"></a></h2>
+<div class="section level3">
+<h3 id="added-1-1-2">Added<a class="anchor" aria-label="anchor" href="#added-1-1-2"></a></h3>
+<ul><li>Added <code>aspect_ratio</code> parameter to all dimensionality reduction plots to control axes ratio of output plot.<br></li>
+<li>Added <code>plot_median</code> and <code>median_size</code> parameters to <code>QC_Plots_*</code> functions.<br></li>
+<li>Added <code>split_collect</code> parameter to <code>FeaturePlot_scCustom</code> to collect all guides when using <code>split.by</code> for a single feature (<a href="https://github.com/samuel-marsh/scCustomize/issues/94" class="external-link">#94</a>).<br></li>
+<li>Added new parameters to <code>Clustered_DotPlot</code> to allow modification of sizes of column text labels, legend text labels, and legend title labels (<a href="https://github.com/samuel-marsh/scCustomize/issues/96" class="external-link">#96</a>).<br></li>
+<li>Added new function <code>Merge_Sparse_Multimodal_All</code> for merging multi-modal data (1 matrix per modality) (<a href="https://github.com/samuel-marsh/scCustomize/issues/104" class="external-link">#104</a>).<br></li>
+<li>Added new parameter to <code>Clustered_DotPlot</code> named <code>row_label_fontface</code> to allow control of fontface used for row labels (<a href="https://github.com/samuel-marsh/scCustomize/issues/103" class="external-link">#103</a>).<br></li>
+<li>Added helper utility <code>Reduction_Loading_Present</code>, in part to fix issue with <code>FeaturePlot_scCustom</code> and internal feature checking.<br></li>
+<li>Added ability to turn off feature/ident clustering in <code>Clustered_DotPlot</code> using new parameters: <code>cluster_feature</code>, <code>cluster_ident</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/106" class="external-link">#106</a>).<br></li>
+<li>Added <code>dot_size</code> parameter to statistics plotting functions <code>Plot_Cells_per_Sample</code> and <code>Plot_Median_*</code> family.<br></li>
+<li>Added new parameter <code>no_legend</code> to <code>Iterate_Meta_Highlight_Plot</code> to allow for plotting with a plot title instead of plot legend (<a href="https://github.com/samuel-marsh/scCustomize/issues/108" class="external-link">#108</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-1-1-2">Changed<a class="anchor" aria-label="anchor" href="#changed-1-1-2"></a></h3>
+<ul><li>Moved <code>QC_Plots_Feature</code> to use <code>VlnPlot_scCustom</code> under the hood like rest of <code>QC_Plots_*</code> functions.<br></li>
+<li>Renamed parameter <code>abort</code> in <code>Meta_Present</code> to <code>return_none</code> to align with <code>Gene_Present</code> and <code>Reduction_Loading_Present</code>.<br></li>
+<li>Replace superseded dplyr syntax/functionality <code>summarise_at</code>, <code>select(.data[[var]])</code>, and <code>rename(.data[[var]])</code> with current dplyr syntax.<br></li>
+<li>Internal rewrite of plotting sections within <code>Iterate_Cluster_Highlight_Plot</code> and <code>Iterate_Meta_Highlight_Plot</code> to align with recent updates to base <code>Cluster_Highlight_Plot</code> and <code>Meta_Highlight_Plot</code> functions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-1-1-2">Fixes<a class="anchor" aria-label="anchor" href="#fixes-1-1-2"></a></h3>
+<ul><li>Fixed <code>QC_Plots_Feature</code> to respect parameters when passing to <code>VlnPlot</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/91" class="external-link">#91</a>).<br></li>
+<li>Fixed <code>Read_CellBender_h5_*</code> functions to support CellBender outputs from STARsolo- or Cell Ranger (pre-V3)-processed data (<a href="https://github.com/samuel-marsh/scCustomize/issues/99" class="external-link">#99</a>).<br></li>
+<li>Fixed <code>FeaturePlot_scCustom</code> to allow for plotting of dimensionality reduction loadings (<a href="https://github.com/samuel-marsh/scCustomize/issues/97" class="external-link">#97</a>).<br></li>
+<li>Fixed <code>Read10X_Multi_Directory</code> and <code>Read10X_h5_Multi_Directory</code> to support files processed with Cell Ranger <code>multi</code> pipeline.<br></li>
+<li>Fixed bug in <code>Merge_Seurat_List</code> that prevented <code>add.cell.id</code> from adding correct cell name prefixes (<a href="https://github.com/samuel-marsh/scCustomize/issues/113" class="external-link">#113</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.1.1" id="sccustomize-111-2023-01-13">scCustomize 1.1.1 (2023-01-13)<small>2023-01-13</small><a class="anchor" aria-label="anchor" href="#sccustomize-111-2023-01-13"></a></h2>
 <div class="section level3">
 <h3 id="added-1-1-1">Added<a class="anchor" aria-label="anchor" href="#added-1-1-1"></a></h3>
 <ul><li>Added <code>label_color_num</code> parameter to <code>PalettePlot</code> allow control of color labeling.<br></li>

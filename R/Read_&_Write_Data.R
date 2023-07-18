@@ -598,6 +598,7 @@ Read10X_h5_GEO <- function(
 #' @param secondary_path path from the parent directory to count matrix files for each sample.
 #' @param default_10X_path logical (default TRUE) sets the secondary path variable to the default 10X
 #' directory structure.
+#' @param cellranger_multi logical, whether samples were processed with Cell Ranger `multi`, default is FALSE.
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
@@ -632,6 +633,7 @@ Read10X_Multi_Directory <- function(
   base_path,
   secondary_path = NULL,
   default_10X_path = TRUE,
+  cellranger_multi = FALSE,
   sample_list = NULL,
   sample_names = NULL,
   parallel = FALSE,
@@ -655,8 +657,18 @@ Read10X_Multi_Directory <- function(
   if (default_10X_path && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
+
+  if (!default_10X_path && !is.null(x = secondary_path) && cellranger_multi) {
+    cli_abort(message = "If {.code cellranger_multi = TRUE} then {.code default_10X_path} must be TRUE")
+  }
+
   if (default_10X_path) {
-    secondary_path <- "outs/filtered_feature_bc_matrix/"
+    if (cellranger_multi) {
+      secondary_path <- "/outs/per_sample_outs/"
+      multi_extra_path <- "count/sample_filtered_feature_bc_matrix"
+    } else {
+      secondary_path <- "outs/filtered_feature_bc_matrix/"
+    }
   }
   if (is.null(x = secondary_path)) {
     secondary_path <- ""
@@ -676,7 +688,11 @@ Read10X_Multi_Directory <- function(
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
-      file_path <- file.path(base_path, sample_list[x], secondary_path)
+      if (cellranger_multi) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
+      } else {
+        file_path <- file.path(base_path, sample_list[x], secondary_path)
+      }
       raw_data <- Read10X(data.dir = file_path, ...)
       return(raw_data)
     })
@@ -685,7 +701,11 @@ Read10X_Multi_Directory <- function(
       if (is.null(x = secondary_path)) {
         file_path <- file.path(base_path, sample_list[x])
       } else {
-        file_path <- file.path(base_path, sample_list[x], secondary_path)
+        if (cellranger_multi) {
+          file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
+        } else {
+          file_path <- file.path(base_path, sample_list[x], secondary_path)
+        }
       }
       raw_data <- Read10X(data.dir = file_path, ...)
     })
@@ -715,11 +735,13 @@ Read10X_Multi_Directory <- function(
 #' @param secondary_path path from the parent directory to count matrix files for each sample.
 #' @param default_10X_path logical (default TRUE) sets the secondary path variable to the default 10X
 #' directory structure.
+#' @param cellranger_multi logical, whether samples were processed with Cell Ranger `multi`, default is FALSE.
 #' @param h5_filename name of h5 file (including .h5 suffix).  If all h5 files have same name (i.e. Cell Ranger output)
 #' then use full file name.  By default function uses Cell Ranger name: "filtered_feature_bc_matrix.h5".
 #' If h5 files have sample specific prefixes (i.e. from Cell Bender) then use only the shared part of file
 #' name (e.g., "_filtered_out.h5").
-#' @param cell_bender logical (default FALSE).  Is the h5 file from cell bender output, needed to set correct file names.
+#' @param cell_bender `r lifecycle::badge("deprecated")` CellBender read functions are now independent family of functions.
+#' See `Read_CellBender_*` functions.
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
@@ -759,8 +781,9 @@ Read10X_h5_Multi_Directory <- function(
   base_path,
   secondary_path = NULL,
   default_10X_path = TRUE,
+  cellranger_multi = FALSE,
   h5_filename = "filtered_feature_bc_matrix.h5",
-  cell_bender = FALSE,
+  cell_bender = deprecated(),
   sample_list = NULL,
   sample_names = NULL,
   replace_suffix = FALSE,
@@ -770,9 +793,14 @@ Read10X_h5_Multi_Directory <- function(
   merge = FALSE,
   ...
 ) {
-  # Check cell bender or default 10X
-  if (cell_bender && default_10X_path) {
-    cli_abort(message = "Both `cell_bender` and `default_10X_path` cannot be simultaneously set to TRUE.")
+  # Deprecated
+  if (lifecycle::is_present(cell_bender)) {
+    lifecycle::deprecate_stop(when = "1.1.2",
+                              what = "Read10X_h5_Multi_Directory(cell_bender)",
+                              with = "Read_CellBender_h5_Multi_Directory()",
+                              details = c("v" = "CellBender read capabilities are now indepdent functions. See `Read_CellBender_h5_Multi_Directory`",
+                                          "i" = "Parameter and warning will be fully removed in v1.2.0.")
+    )
   }
 
   # Confirm num_cores specified
@@ -792,9 +820,20 @@ Read10X_h5_Multi_Directory <- function(
   if (default_10X_path && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
-  if (default_10X_path) {
-    secondary_path <- "outs/"
+
+  if (!default_10X_path && !is.null(x = secondary_path) && cellranger_multi) {
+    cli_abort(message = "If {.code cellranger_multi = TRUE} then {.code default_10X_path} must be TRUE")
   }
+
+  if (default_10X_path) {
+    if (cellranger_multi) {
+      secondary_path <- "/outs/per_sample_outs/"
+      multi_extra_path <- "count/"
+    } else {
+      secondary_path <- "outs/"
+    }
+  }
+
   if (is.null(x = secondary_path)) {
     secondary_path <- ""
   }
@@ -814,8 +853,8 @@ Read10X_h5_Multi_Directory <- function(
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
-      if (cell_bender) {
-        file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], h5_filename))
+      if (cellranger_multi) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
       } else {
         file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
       }
@@ -825,17 +864,13 @@ Read10X_h5_Multi_Directory <- function(
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
       if (is.null(x = secondary_path)) {
-        if (cell_bender) {
-          file_path <- file.path(base_path, sample_list[x], paste0(sample_list[x], h5_filename))
+        if (cellranger_multi) {
+          file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
         } else {
           file_path <- file.path(base_path, sample_list[x], h5_filename)
         }
       } else {
-        if (cell_bender) {
-          file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], h5_filename))
-        } else {
-          file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
-        }
+        file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
       }
       raw_data <- Read10X_h5(filename = file_path, ...)
     })
@@ -1063,6 +1098,10 @@ Read_GEO_Delim <- function(
 #' @param file_name Path to h5 file.
 #' @param use.names Label row names with feature names rather than ID numbers (default TRUE).
 #' @param unique.features Make feature names unique (default TRUE).
+#' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
+#' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
+#' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
+#' "features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".
 #'
 #' @return sparse matrix
 #'
@@ -1083,9 +1122,11 @@ Read_GEO_Delim <- function(
 #'
 
 Read_CellBender_h5_Mat <- function(
-  file_name,
-  use.names = TRUE,
-  unique.features = TRUE
+    file_name,
+    use.names = TRUE,
+    unique.features = TRUE,
+    h5_group_name = NULL,
+    feature_slot_name = "features"
 ) {
   # Check hdf5r installed
   hdf5r_check <- PackageCheck("hdf5r", error = FALSE)
@@ -1101,26 +1142,87 @@ Read_CellBender_h5_Mat <- function(
 
   # Check file
   if (!file.exists(file_name)) {
-    cli_abort(message = "File: {file_name} not found.")
+    cli_abort(message = "File: {.val {file_name}} not found.")
   }
 
-  if (use.names) {
-    feature_slot <- 'features/name'
-  } else {
-    feature_slot <- 'features/id'
+  # Check feature_slot_name is acceptable
+  if (!feature_slot_name %in% c("features", "genes")) {
+    cli_abort(message = c("{.code feature_slot_name} must be one of {.val features} or {.val genes}.",
+                               "i" = "If unsure, check contents of H5 file {.code rhdf5::h5ls('{file_name}')}."))
   }
 
   # Read file
   infile <- hdf5r::H5File$new(filename = file_name, mode = "r")
 
-  counts <- infile[["matrix/data"]]
-  indices <- infile[["matrix/indices"]]
-  indptr <- infile[["matrix/indptr"]]
-  shp <- infile[["matrix/shape"]]
-  features <- infile[[paste0("matrix/", feature_slot)]][]
-  barcodes <- infile[["matrix/barcodes"]]
+  # Get list of H5 contents
+  h5_dataset_list <- hdf5r::list.datasets(infile)
 
+  # Check feature_slot_name is correct
+  if (!length(x = grep(pattern = feature_slot_name, x = h5_dataset_list, value = TRUE)) > 0) {
+    cli::cli_abort(message = c("{.code feature_slot_name}: {.val {feature_slot_name}} not found in H5 file.",
+                               "i" = "Check contents of H5 file {.code rhdf5::h5ls('{file_name}')} to confirm correct {.code feature_slot_name}."))
+  }
 
+  # Assign feature slot name
+  if (feature_slot_name == "features") {
+    if (use.names) {
+      feature_slot <- 'features/name'
+    }
+    else {
+      feature_slot <- 'features/id'
+    }
+  }
+
+  if (feature_slot_name == "genes") {
+    if (use.names) {
+      feature_slot <- 'gene_names'
+    }
+    else {
+      feature_slot <- 'genes'
+    }
+  }
+
+  # add name check
+  group_names <- names(x = infile)
+
+  if (!is.null(x = h5_group_name) && !h5_group_name %in% group_names) {
+    cli::cli_abort(message = c("{.code h5_group_name} {.val {h5_group_name}} not found.",
+                               "i" = "Check H5 file group names {.code rhdf5::h5ls('{file_name}')}."))
+  }
+
+  # Read in data
+  if ("matrix" %in% group_names) {
+    counts <- infile[["matrix/data"]]
+    indices <- infile[["matrix/indices"]]
+    indptr <- infile[["matrix/indptr"]]
+    shp <- infile[["matrix/shape"]]
+    features <- infile[[paste0("matrix/", feature_slot)]][]
+    barcodes <- infile[["matrix/barcodes"]]
+  } else {
+    if (length(x = group_names) == 1) {
+      counts <- infile[[paste0(group_names, '/data')]]
+      indices <- infile[[paste0(group_names, '/indices')]]
+      indptr <- infile[[paste0(group_names, '/indptr')]]
+      shp <- infile[[paste0(group_names, '/shape')]]
+      features <- infile[[paste0(group_names, '/', feature_slot)]][]
+      barcodes <- infile[[paste0(group_names, '/barcodes')]]
+    } else {
+      # check subgroups
+      if (is.null(x = h5_group_name)) {
+        cli::cli_abort(message = c("H5 file contains multiple sub-groups.",
+                                   "i" = "Please provide {.code h5_group_name} specifying which subgroup contains count data."))
+      } else {
+        counts <- infile[[paste0(h5_group_name, '/data')]]
+        indices <- infile[[paste0(h5_group_name, '/indices')]]
+        indptr <- infile[[paste0(h5_group_name, '/indptr')]]
+        shp <- infile[[paste0(h5_group_name, '/shape')]]
+        features <- infile[[paste0(h5_group_name, '/', feature_slot)]][]
+        barcodes <- infile[[paste0(h5_group_name, '/barcodes')]]
+      }
+    }
+  }
+
+  # Create sparse matrix
   sparse.mat <- sparseMatrix(
     i = indices[] + 1,
     p = indptr[],
@@ -1157,6 +1259,10 @@ Read_CellBender_h5_Mat <- function(
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
 #' set names to the subdirectory name of each sample.
+#' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
+#' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
+#' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
+#' "features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".
 #' @param replace_suffix logical (default FALSE).  Whether or not to replace the barcode suffixes of matrices
 #' using \code{\link{Replace_Suffix}}.
 #' @param new_suffix_list a vector of new suffixes to replace existing suffixes if `replace_suffix = TRUE`.
@@ -1193,6 +1299,8 @@ Read_CellBender_h5_Multi_Directory <- function(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  h5_group_name = NULL,
+  feature_slot_name = "features",
   replace_suffix = FALSE,
   new_suffix_list = NULL,
   parallel = FALSE,
@@ -1253,7 +1361,7 @@ Read_CellBender_h5_Multi_Directory <- function(
       file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
 
       # read and return data
-      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, ...)
+      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
       return(raw_data)
     })
   } else {
@@ -1262,7 +1370,7 @@ Read_CellBender_h5_Multi_Directory <- function(
       file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
 
       # read and return data
-      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, ...)
+      raw_data <- Read_CellBender_h5_Mat(file_name = file_path, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
       return(raw_data)
     })
   }
@@ -1313,7 +1421,11 @@ Read_CellBender_h5_Multi_Directory <- function(
 #' read in all files within `data_dir` directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
 #' set names to the subdirectory name of each sample.
-#' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices.
+#' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
+#' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
+#' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
+#' "features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".
+#' @param parallel logical (default FALSE) whether or not to use multi core processing to read in matrices
 #' @param num_cores how many cores to use for parallel processing.
 #' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
 #' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
@@ -1344,6 +1456,8 @@ Read_CellBender_h5_Multi_File <- function(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  h5_group_name = NULL,
+  feature_slot_name = "features",
   parallel = FALSE,
   num_cores = NULL,
   merge = FALSE,
@@ -1395,12 +1509,12 @@ Read_CellBender_h5_Multi_File <- function(
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
-      data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
+      data <- Read_CellBender_h5_Mat(file_name = h5_loc, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
     })
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
-      data <- Read_CellBender_h5_Mat(file_name = h5_loc, ...)
+      data <- Read_CellBender_h5_Mat(file_name = h5_loc, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
     })
   }
 

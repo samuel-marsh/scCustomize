@@ -226,6 +226,13 @@ GEO_Merged <- Merge_Sparse_Data_All(matrix_list = GEO_Single)
 knitr::include_graphics(c("../../docs/reference/figures/assets/geo_merged.png")) 
 ```
 
+### Multimodal Data  
+If you have multimodal data (each entry in list contains sub-list with matrices) then you can use `Merge_Sparse_Multimodal_All()`.  This function will return a list with each entry representing a merged matrix for single modality.  
+```{r eval=FALSE}
+GEO_Merged_Multimodal <- Merge_Sparse_Multimodal_All(matrix_list = GEO_Multimodal)
+```
+
+
 ### Add Barcode Prefix/Suffix  
 `Merge_Sparse_Data_All` contains a number of optional parameters to control modification to the cell barcodes.  
 *NOTE: If any of the barcodes in the input matrix list overlap and no prefixes/suffixes are provided the function will error.*

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -183,36 +183,36 @@ Goal is to both speed up and simplify coding and reduce the use of copy/paste of
 <ul>
 <li>
 <p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Add_Mito_Ribo_Seurat</span>(<span class="at">seurat_object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">Add_Mito_Ribo_Seurat</span>(<span class="at">seurat_object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
 <ul>
 <li>Function already knows the defaults for Human, Mouse, Rat, Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit a PR if you would like more species added!).</li>
 </ul>
 </li>
 <li>
 <p><em>Example of wrapping many lines to one:</em> Extracting the top 10 (or 15, 20, 25, etc) genes per identity after running <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">Seurat::FindAllMarkers()</a></code> is very common and scCustomize provides <code><a href="reference/Extract_Top_Markers.html">Extract_Top_Markers()</a></code> function to simplify process.<br><em>Using scCustomize function:</em></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>markers_df <span class="ot">&lt;-</span> <span class="fu">FindAllMarkers</span>(<span class="at">object =</span> obj_name)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Get vector/string</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>top10_list <span class="ot">&lt;-</span> <span class="fu">Extract_Top_Markers</span>(<span class="at">marker_dataframe =</span> markers_df)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># or for data.frame</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>top10_df <span class="ot">&lt;-</span> <span class="fu">Extract_Top_Markers</span>(<span class="at">marker_dataframe =</span> markers_df, <span class="at">dataframe =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>markers_df <span class="ot">&lt;-</span> <span class="fu">FindAllMarkers</span>(<span class="at">object =</span> obj_name)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># Get vector/string</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>top10_list <span class="ot">&lt;-</span> <span class="fu">Extract_Top_Markers</span>(<span class="at">marker_dataframe =</span> markers_df)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># or for data.frame</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>top10_df <span class="ot">&lt;-</span> <span class="fu">Extract_Top_Markers</span>(<span class="at">marker_dataframe =</span> markers_df, <span class="at">dataframe =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><em>Instead of tidyverse/base R:</em></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>markers_df <span class="ot">&lt;-</span> <span class="fu">FindAllMarkers</span>(<span class="at">object =</span> obj_name)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Get vector/string</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>top10_list <span class="ot">&lt;-</span> markers_df <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"rownames"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">order_by =</span> avg_log2FC) <span class="sc">%&gt;%</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(<span class="st">"gene"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># or for data.frame</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>top10_df <span class="ot">&lt;-</span> markers_df <span class="sc">%&gt;%</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"rownames"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">order_by =</span> avg_log2FC) <span class="sc">%&gt;%</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"rownames"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>markers_df <span class="ot">&lt;-</span> <span class="fu">FindAllMarkers</span>(<span class="at">object =</span> obj_name)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Get vector/string</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>top10_list <span class="ot">&lt;-</span> markers_df <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"rownames"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">order_by =</span> avg_log2FC) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">pull</span>(<span class="st">"gene"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># or for data.frame</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>top10_df <span class="ot">&lt;-</span> markers_df <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"rownames"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">order_by =</span> avg_log2FC) <span class="sc">%&gt;%</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">"rownames"</span>)</span></code></pre></div>
 </li>
 </ul>
 </li>

@@ -14,7 +14,9 @@
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param pt.size Point size for plotting
+#' @param pt.size Point size for plotting.
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -50,6 +52,8 @@ QC_Plots_Genes <- function(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -81,6 +85,11 @@ QC_Plots_Genes <- function(
     plot <- plot + scale_y_log10()
   }
 
+  # plot median
+  if (plot_median) {
+    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
+  }
+
   return(plot)
 }
 
@@ -97,7 +106,9 @@ QC_Plots_Genes <- function(
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param pt.size Point size for plotting
+#' @param pt.size Point size for plotting.
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -133,6 +144,8 @@ QC_Plots_UMIs <- function(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -164,6 +177,11 @@ QC_Plots_UMIs <- function(
     plot <- plot + scale_y_log10()
   }
 
+  # plot median
+  if (plot_median) {
+    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
+  }
+
   return(plot)
 }
 
@@ -182,7 +200,9 @@ QC_Plots_UMIs <- function(
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param pt.size Point size for plotting
+#' @param pt.size Point size for plotting.
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -219,6 +239,8 @@ QC_Plots_Mito <- function(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -250,6 +272,11 @@ QC_Plots_Mito <- function(
     plot <- plot + scale_y_log10()
   }
 
+  # plot median
+  if (plot_median) {
+    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
+  }
+
   return(plot)
 }
 
@@ -267,7 +294,9 @@ QC_Plots_Mito <- function(
 #' @param plot_title Plot Title.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param pt.size Point size for plotting
+#' @param pt.size Point size for plotting.
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -306,6 +335,8 @@ QC_Plots_Feature <- function(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -323,7 +354,7 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
-  plot <- VlnPlot(object = seurat_object, features = feature, group.by = group.by, pt.size = pt.size, cols = colors_use, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -338,6 +369,11 @@ QC_Plots_Feature <- function(
   # return log10 y axis
   if (y_axis_log) {
     plot <- plot + scale_y_log10()
+  }
+
+  # plot median
+  if (plot_median) {
+    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -358,6 +394,8 @@ QC_Plots_Feature <- function(
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
 #' @param pt.size Point size for plotting
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -395,6 +433,8 @@ QC_Plots_Complexity <- function(
   low_cutoff = NULL,
   high_cutoff = NULL,
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -403,7 +443,9 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
-  QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+
+  return(plot)
 }
 
 
@@ -420,6 +462,8 @@ QC_Plots_Complexity <- function(
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
 #' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
 #' @param pt.size Point size for plotting
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -456,6 +500,8 @@ QC_Plots_Combined_Vln <- function(
   mito_cutoffs = NULL,
   mito_name = "percent_mito",
   pt.size = NULL,
+  plot_median = FALSE,
+  median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -488,11 +534,11 @@ QC_Plots_Combined_Vln <- function(
   }
 
   # Create Individual Plots
-  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
 
-  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
 
-  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
 
   # wrap plots
   plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)

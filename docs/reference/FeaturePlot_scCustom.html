@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -122,6 +122,8 @@
 <span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raster.dpi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span>,</span>
 <span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  split_collect <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  aspect_ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  num_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  slot <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>  alpha_exp <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -181,6 +183,16 @@ Default is c(512, 512).</p></dd>
 
 <dt>split.by</dt>
 <dd><p>Variable in <code>@meta.data</code> to split the plot by.</p></dd>
+
+
+<dt>split_collect</dt>
+<dd><p>logical, whether to collect the legends/guides when plotting with <code>split.by</code>.
+Default is TRUE if one value is provided to <code>features</code> otherwise is set to FALSE.</p></dd>
+
+
+<dt>aspect_ratio</dt>
+<dd><p>Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.</p></dd>
 
 
 <dt>num_columns</dt>

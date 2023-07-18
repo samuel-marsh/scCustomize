@@ -4,7 +4,13 @@
 \alias{Read_CellBender_h5_Mat}
 \title{Load CellBender h5 matrices (corrected)}
 \usage{
-Read_CellBender_h5_Mat(file_name, use.names = TRUE, unique.features = TRUE)
+Read_CellBender_h5_Mat(
+  file_name,
+  use.names = TRUE,
+  unique.features = TRUE,
+  h5_group_name = NULL,
+  feature_slot_name = "features"
+)
 }
 \arguments{
 \item{file_name}{Path to h5 file.}
@@ -12,6 +18,12 @@ Read_CellBender_h5_Mat(file_name, use.names = TRUE, unique.features = TRUE)
 \item{use.names}{Label row names with feature names rather than ID numbers (default TRUE).}
 
 \item{unique.features}{Make feature names unique (default TRUE).}
+
+\item{h5_group_name}{Name of the group within H5 file that contains count data.  This is only
+required if H5 file contains multiple subgroups and non-default names.  Default is \code{NULL}.}
+
+\item{feature_slot_name}{Name of the slot contain feature names/ids.  Must be one of:
+"features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".}
 }
 \value{
 sparse matrix

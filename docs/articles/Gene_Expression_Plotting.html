@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -129,8 +129,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #1: Analysis Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: January 13,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: July 18, 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Gene_Expression_Plotting.Rmd" class="external-link"><code>vignettes/articles/Gene_Expression_Plotting.Rmd</code></a></small>
       <div class="hidden name"><code>Gene_Expression_Plotting.Rmd</code></div>
@@ -733,9 +732,9 @@ modified if a skewed visualization is desired.</li>
 </ul>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top5_markers</span>, k <span class="op">=</span> <span class="fl">7</span>, print_exp_quantiles <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Quantiles of gene expression data are<span class="sc">:</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>       <span class="dv">10</span><span class="sc">%        50%</span>        <span class="dv">90</span><span class="sc">%        99%</span> </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">0.6555988</span> <span class="sc">-</span><span class="fl">0.3595223</span>  <span class="fl">1.7742718</span>  <span class="fl">2.6666597</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>Quantiles of gene expression data are<span class="sc">:</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>       <span class="dv">10</span><span class="sc">%        50%</span>        <span class="dv">90</span><span class="sc">%        99%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="sc">-</span><span class="fl">0.6555988</span> <span class="sc">-</span><span class="fl">0.3595223</span>  <span class="fl">1.7742718</span>  <span class="fl">2.6666597</span></span></code></pre></div>
 <p>Here we can adjust the expression clipping based on the range of the
 data in this specific dataset and list of features and change the color
 scale to use <code><a href="https://satijalab.org/seurat/reference/CustomPalette.html" class="external-link">Seurat::PurpleAndYellow()</a></code></p>

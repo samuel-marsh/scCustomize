@@ -12,6 +12,7 @@ Split_FeatureScatter(
   group.by = NULL,
   colors_use = NULL,
   pt.size = NULL,
+  aspect_ratio = NULL,
   title_size = 15,
   num_columns = NULL,
   raster = NULL,
@@ -36,6 +37,9 @@ Use 'ident' to group.by active.ident class.}
 \item{colors_use}{color for the points on plot.}
 
 \item{pt.size}{Adjust point size for plotting.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{title_size}{size for plot title labels.}
 

@@ -16,6 +16,8 @@ FeaturePlot_scCustom(
   raster = NULL,
   raster.dpi = c(512, 512),
   split.by = NULL,
+  split_collect = NULL,
+  aspect_ratio = NULL,
   num_columns = NULL,
   slot = "data",
   alpha_exp = NULL,
@@ -52,6 +54,12 @@ greater than 200,000 cells.}
 Default is c(512, 512).}
 
 \item{split.by}{Variable in \verb{@meta.data} to split the plot by.}
+
+\item{split_collect}{logical, whether to collect the legends/guides when plotting with \code{split.by}.
+Default is TRUE if one value is provided to \code{features} otherwise is set to FALSE.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{num_columns}{Number of columns in plot layout.}
 

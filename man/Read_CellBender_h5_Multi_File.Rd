@@ -10,6 +10,8 @@ Read_CellBender_h5_Multi_File(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  h5_group_name = NULL,
+  feature_slot_name = "features",
   parallel = FALSE,
   num_cores = NULL,
   merge = FALSE,
@@ -30,7 +32,13 @@ read in all files within \code{data_dir} directory.}
 \item{sample_names}{a set of sample names to use for each sample entry in returned list.  If \code{NULL} will
 set names to the subdirectory name of each sample.}
 
-\item{parallel}{logical (default FALSE) whether or not to use multi core processing to read in matrices.}
+\item{h5_group_name}{Name of the group within H5 file that contains count data.  This is only
+required if H5 file contains multiple subgroups and non-default names.  Default is \code{NULL}.}
+
+\item{feature_slot_name}{Name of the slot contain feature names/ids.  Must be one of:
+"features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".}
+
+\item{parallel}{logical (default FALSE) whether or not to use multi core processing to read in matrices}
 
 \item{num_cores}{how many cores to use for parallel processing.}
 

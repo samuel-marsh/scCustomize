@@ -11,6 +11,8 @@ Read_CellBender_h5_Multi_Directory(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  h5_group_name = NULL,
+  feature_slot_name = "features",
   replace_suffix = FALSE,
   new_suffix_list = NULL,
   parallel = FALSE,
@@ -34,6 +36,12 @@ read in subdirectories in parent directory.}
 
 \item{sample_names}{a set of sample names to use for each sample entry in returned list.  If \code{NULL} will
 set names to the subdirectory name of each sample.}
+
+\item{h5_group_name}{Name of the group within H5 file that contains count data.  This is only
+required if H5 file contains multiple subgroups and non-default names.  Default is \code{NULL}.}
+
+\item{feature_slot_name}{Name of the slot contain feature names/ids.  Must be one of:
+"features"(Cell Ranger v3+) or "genes" (Cell Ranger v1/v2 or STARsolo).  Default is "features".}
 
 \item{replace_suffix}{logical (default FALSE).  Whether or not to replace the barcode suffixes of matrices
 using \code{\link{Replace_Suffix}}.}
