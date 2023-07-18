@@ -16,11 +16,7 @@ articles:
   Read_and_Write_Functions: Read_and_Write_Functions.html
   Sequencing_QC_Plots: Sequencing_QC_Plots.html
   Statistics: Statistics.html
-<<<<<<< HEAD
-last_built: 2023-07-12T19:32Z
-=======
-last_built: 2023-01-13T16:52Z
->>>>>>> d08268dcbacc3814f2458206f94c7a923950ca6a
+last_built: 2023-07-18T22:55Z
 urls:
   reference: https://samuel-marsh.github.io/scCustomize/reference
   article: https://samuel-marsh.github.io/scCustomize/articles
