@@ -867,8 +867,32 @@ Merge_Seurat_List <- function(
     }
   }
 
+  # Check all barcodes are unique to begin with
+  duplicated_barcodes <- list_seurat %>%
+    lapply(colnames) %>%
+    unlist() %>%
+    duplicated() %>%
+    any()
+
+  if (duplicated_barcodes && is.null(x = add_cell_ids)) {
+    cli_abort(message = c("There are overlapping cell barcodes present in the input objects",
+                          "i" = "Please rename cells or provide prefixes to {.code add.cell.ids} parameter to make unique.")
+    )
+  }
+
+  # Check right number of suffix/prefix ids are provided
+  if (!is.null(x = add_cell_ids) && length(x = add_cell_ids) != length(x = list_seurat)) {
+    cli_abort(message = "The number of prefixes in {.code add.cell.ids} must be equal to the number of objects supplied to {.code list_seurat}.")
+  }
+
+  # Rename cells if provided
+  list_seurat <- lapply(1:length(list_seurat), function(x) {
+    list_seurat[[x]] <- RenameCells(object = list_seurat[[x]], add.cell.id = add.cell.ids[x])
+  })
+
+  # Merge objects
   merged_object <- reduce(list_seurat, function(x, y) {
-    merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
+    merge(x = x, y = y, merge.data = merge.data, project = project)
   })
 }
 
