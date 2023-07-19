@@ -9,7 +9,7 @@ Meta_Present(
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
-  abort = TRUE
+  return_none = FALSE
 )
 }
 \arguments{
@@ -21,7 +21,8 @@ Meta_Present(
 
 \item{omit_warn}{logical. Whether to print message about features that are not found in current object. Default is TRUE.}
 
-\item{abort}{logical. Whether or not to stop function and print stop message if no input \code{meta_col_names} are found.  Default is TRUE.}
+\item{return_none}{logical. Whether list of found vs. bad features should still be returned if no
+\code{meta_col_names} are found.  Default is FALSE.}
 }
 \value{
 vector of meta data columns that are present

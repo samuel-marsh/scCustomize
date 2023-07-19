@@ -9,6 +9,7 @@ DimPlot_All_Samples(
   meta_data_column = "orig.ident",
   colors_use = "black",
   pt.size = NULL,
+  aspect_ratio = NULL,
   title_size = 15,
   num_columns = NULL,
   reduction = NULL,
@@ -26,6 +27,9 @@ DimPlot_All_Samples(
 \item{colors_use}{single color to use for all plots or a vector of colors equal to the number of plots.}
 
 \item{pt.size}{Adjust point size for plotting.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{title_size}{size for plot title labels.}
 

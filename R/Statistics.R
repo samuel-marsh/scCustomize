@@ -6,7 +6,7 @@
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
 #'
 #' @import cli
-#' @importFrom dplyr left_join rename
+#' @importFrom dplyr left_join rename all_of
 #' @importFrom janitor adorn_totals
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -32,7 +32,7 @@ Cluster_Stats_All_Samples <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  possible_meta_col <- colnames(seurat_object@meta.data)
+  possible_meta_col <- colnames(x = seurat_object@meta.data)
   if (!group_by_var %in% possible_meta_col) {
     cli_abort(message = "{.val {group_by_var}} was not found in meta.data slot of Seurat Object.")
   }
@@ -40,12 +40,12 @@ Cluster_Stats_All_Samples <- function(
   # Extract total percents
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
-    rename(Cluster = .data[["Var1"]])
+    rename(Cluster = all_of("Var1"))
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
-    rename(Cluster = .data[["Var1"]], Number = .data[["Freq"]])
+    rename(Cluster = all_of("Var1"), Number = all_of("Freq"))
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
@@ -53,7 +53,7 @@ Cluster_Stats_All_Samples <- function(
   # Extract cells per metadata column per cluster
   cells_per_cluster_2 <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
   cells_per_cluster_2 <- data.frame(cells_per_cluster_2) %>%
-    rename(Cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], cell_number = .data[["Freq"]])
+    rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
     pivot_wider(names_from = group_by_var, values_from = .data[["cell_number"]])
@@ -64,7 +64,7 @@ Cluster_Stats_All_Samples <- function(
   # Calculate and extract percents of cells per cluster per
   percent_per_cluster_2 <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var]), margin = 2) * 100
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
-    rename(cluster = .data[["Var1"]], group_by_var = .data[["Var2"]], percent = .data[["Freq"]])
+    rename(cluster = all_of("Var1"), group_by_var = all_of("Var2"), percent = all_of("Freq"))
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
     pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
     column_to_rownames("cluster")
@@ -132,7 +132,7 @@ Percent_Expressing <- function(
 
   # Check group_by is in object
   if (!is.null(x = group_by)) {
-    possible_groups <- colnames(seurat_object@meta.data)
+    possible_groups <- colnames(x = seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
       cli_abort("Grouping variable {.val {group_by}} was not found in Seurat Object.")
     }
@@ -140,7 +140,7 @@ Percent_Expressing <- function(
 
   # Check split_by is in object
   if (!is.null(x = split_by)) {
-    possible_groups <- colnames(seurat_object@meta.data)
+    possible_groups <- colnames(x = seurat_object@meta.data)
     if (!split_by %in% possible_groups) {
       cli_abort("Splitting variable {.val {split_by}} was not found in Seurat Object.")
     }
@@ -187,7 +187,7 @@ Percent_Expressing <- function(
 
   # Convert & return data.frame
   row_dim_names <- features_list
-  col_dim_names <- names(percent_expressing)
+  col_dim_names <- names(x = percent_expressing)
   mat_dims <- list(row_dim_names, col_dim_names)
   final_df <- data.frame(matrix(unlist(percent_expressing), nrow = length(features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
   return(final_df)
@@ -207,7 +207,7 @@ Percent_Expressing <- function(
 #'
 #' @return A data.frame.
 #'
-#' @importFrom dplyr group_by one_of select_at summarise_at
+#' @importFrom dplyr group_by select summarise any_of across
 #' @importFrom magrittr "%>%"
 #' @importFrom stats median
 #'
@@ -246,7 +246,7 @@ Median_Stats <- function(
 
   # Filter meta data for columns of interest
   meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
-    select_at(all_variables)
+    select(any_of(all_variables))
 
   all_variables <- Meta_Numeric(data = meta_numeric_check)
 
@@ -258,15 +258,15 @@ Median_Stats <- function(
 
   median_by_group <- meta_data %>%
     group_by(.data[[group_by_var]]) %>%
-    summarise_at(vars(one_of(all_variables)), median)
+    summarise(across(all_variables, median))
 
   # Calculate overall medians
   median_overall <- meta_data %>%
-    summarise_at(vars(one_of(all_variables)), median)
+    summarise(across(all_variables, median))
 
   # Create data.frame with group_by_var as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
-  colnames(meta_col_name_df) <- group_by_var
+  colnames(x = meta_col_name_df) <- group_by_var
   # Merge with overall median data.frame
   median_overall <- cbind(meta_col_name_df, median_overall)
 
@@ -274,7 +274,7 @@ Median_Stats <- function(
   median_all <- rbind(median_by_group, median_overall)
 
   # Rename columns and return data.frame
-  colnames(median_all) <- all_variable_col_names
+  colnames(x = median_all) <- all_variable_col_names
 
   return(median_all)
 }
@@ -331,7 +331,7 @@ CellBender_Feature_Diff <- function(
     data.frame() %>%
     rownames_to_column("Feature_Names")
 
-  colnames(raw_counts)[2] <- "Raw_Counts"
+  colnames(x = raw_counts)[2] <- "Raw_Counts"
 
   # Pull Cell Bender Counts
   cb_counts <- pluck(seurat_object, "assays", cell_bender_assay, "counts") %>%
@@ -339,7 +339,7 @@ CellBender_Feature_Diff <- function(
     data.frame() %>%
     rownames_to_column("Feature_Names")
 
-  colnames(cb_counts)[2] <- "CellBender_Counts"
+  colnames(x = cb_counts)[2] <- "CellBender_Counts"
 
   # Check features identical
   diff_features <- symdiff(x = raw_counts$Feature_Names, y = cb_counts$Feature_Names)

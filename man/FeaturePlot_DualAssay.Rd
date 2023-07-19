@@ -13,6 +13,7 @@ FeaturePlot_DualAssay(
   na_color = "lightgray",
   order = TRUE,
   pt.size = NULL,
+  aspect_ratio = NULL,
   reduction = NULL,
   na_cutoff = 1e-09,
   raster = NULL,
@@ -40,6 +41,9 @@ FeaturePlot_DualAssay(
 \item{order}{whether to move positive cells to the top (default = TRUE).}
 
 \item{pt.size}{Adjust point size for plotting.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 

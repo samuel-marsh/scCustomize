@@ -196,6 +196,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/DotPlot_scCustom.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Extract_Modality.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Extract_Sample_Meta.html</loc>
   </url>
   <url>
@@ -254,6 +257,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Merge_Sparse_Data_All.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Merge_Sparse_Multimodal_All.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Meta_Highlight_Plot.html</loc>
@@ -365,6 +371,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_Metrics_10X.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Reduction_Loading_Present.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Rename_Clusters.html</loc>

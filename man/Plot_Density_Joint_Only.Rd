@@ -10,6 +10,7 @@ Plot_Density_Joint_Only(
   viridis_palette = "magma",
   custom_palette = NULL,
   pt.size = 1,
+  aspect_ratio = NULL,
   reduction = NULL,
   ...
 )
@@ -25,6 +26,9 @@ Plot_Density_Joint_Only(
 \item{custom_palette}{non-default color palette to be used in place of default viridis options.}
 
 \item{pt.size}{Adjust point size for plotting.}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 

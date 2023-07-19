@@ -126,7 +126,7 @@ kMeans_Elbow <- function(
 ) {
   # Calculate the within squares
   # code from @Ben https://stackoverflow.com/a/15376462/15568251
-  wss <- (nrow(data)-1)*sum(apply(data,2,var))
+  wss <- (nrow(x = data)-1)*sum(apply(data,2,var))
   for (i in 2:k_max) wss[i] <- sum(kmeans(data,
                                           centers=i)$withinss)
 
@@ -134,7 +134,7 @@ kMeans_Elbow <- function(
   plot_data <- data.frame(wss) %>%
     rownames_to_column("k")
 
-  plot_data$k <- as.numeric(plot_data$k)
+  plot_data$k <- as.numeric(x = plot_data$k)
 
   # Plot data
   plot <- ggplot(data = plot_data, mapping = aes(y = wss, x = .data[["k"]])) +

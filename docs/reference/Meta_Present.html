@@ -18,7 +18,7 @@ Return warning messages for meta data columns not found."><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@ Return warning messages for meta data columns not found.</p>
 <span>  <span class="va">meta_col_names</span>,</span>
 <span>  print_msg <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  omit_warn <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  abort <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  return_none <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -139,8 +139,9 @@ Return warning messages for meta data columns not found.</p>
 <dd><p>logical. Whether to print message about features that are not found in current object. Default is TRUE.</p></dd>
 
 
-<dt>abort</dt>
-<dd><p>logical. Whether or not to stop function and print stop message if no input <code>meta_col_names</code> are found.  Default is TRUE.</p></dd>
+<dt>return_none</dt>
+<dd><p>logical. Whether list of found vs. bad features should still be returned if no
+<code>meta_col_names</code> are found.  Default is FALSE.</p></dd>
 
 </dl></div>
     <div id="value">

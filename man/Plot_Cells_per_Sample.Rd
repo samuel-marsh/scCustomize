@@ -9,6 +9,7 @@ Plot_Cells_per_Sample(
   sample_col = "orig.ident",
   group_by = NULL,
   colors_use = NULL,
+  dot_size = 1,
   plot_title = "Cells/Nuclei per Sample",
   y_axis_label = "Number of Cells",
   x_axis_label = NULL,
@@ -25,6 +26,8 @@ Plot_Cells_per_Sample(
 \item{group_by}{Column in meta.data slot to group results by (i.e. "Treatment").}
 
 \item{colors_use}{List of colors or color palette to use.}
+
+\item{dot_size}{size of the dots plotted if \code{group_by} is not NULL.  Default is 1.}
 
 \item{plot_title}{Plot title.}
 

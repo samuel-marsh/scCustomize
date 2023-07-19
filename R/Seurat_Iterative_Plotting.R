@@ -103,6 +103,7 @@ Iterate_PC_Loading_Plots <- function(
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
 #' @param color color scheme to use.
+#' @param legend logical, whether or not to include plot legend, default is TRUE.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (default is object default).
 #' @param dims Dimensions to plot.
@@ -139,6 +140,7 @@ Iterate_DimPlot_bySample <- function(
   single_pdf = FALSE,
   dpi = 600,
   color = "black",
+  legend = TRUE,
   reduction = NULL,
   dims = c(1, 2),
   pt.size = NULL,
@@ -195,20 +197,29 @@ Iterate_DimPlot_bySample <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract orig.ident
-  column_list <- as.character(unique(seurat_object@meta.data$orig.ident))
+  column_list <- as.character(x = unique(x = seurat_object@meta.data$orig.ident))
 
   # Create list of cells per sample
   cells_per_sample <- lapply(column_list, function(sample) {
-    row.names(seurat_object@meta.data)[which(seurat_object@meta.data$orig.ident == sample)]
+    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data$orig.ident == sample)]
   })
 
   # Single PDF option
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(cells_per_sample,function(cells) {DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
-        xlim(x_axis) +
-        ylim(y_axis)})
+    all_plots <- pblapply(cells_per_sample,function(cells) {
+      if (legend) {
+        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          xlim(x_axis) +
+          ylim(y_axis)
+      } else {
+        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          xlim(x_axis) +
+          ylim(y_axis) +
+          NoLegend()
+      }
+      })
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
@@ -225,9 +236,16 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
-          xlim(x_axis) +
-          ylim(y_axis)
+        if (legend) {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis)
+        } else {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis) +
+            NoLegend()
+        }
         suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
         }
@@ -238,9 +256,16 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
-          xlim(x_axis) +
-          ylim(y_axis)
+        if (legend) {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis)
+        } else {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+            xlim(x_axis) +
+            ylim(y_axis) +
+            NoLegend()
+        }
         suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
         }
@@ -275,7 +300,7 @@ Iterate_DimPlot_bySample <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
-#' @importFrom pbapply pbmapply pboptions
+#' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
@@ -294,18 +319,18 @@ Iterate_DimPlot_bySample <- function(
 #'
 
 Iterate_Cluster_Highlight_Plot <- function(
-  seurat_object,
-  highlight_color = "navy",
-  background_color = "lightgray",
-  pt.size = NULL,
-  reduction = NULL,
-  file_path = NULL,
-  file_name = NULL,
-  file_type = NULL,
-  single_pdf = FALSE,
-  dpi = 600,
-  raster = NULL,
-  ...
+    seurat_object,
+    highlight_color = "dodgerblue",
+    background_color = "lightgray",
+    pt.size = NULL,
+    reduction = NULL,
+    file_path = NULL,
+    file_name = NULL,
+    file_type = NULL,
+    single_pdf = FALSE,
+    dpi = 600,
+    raster = NULL,
+    ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -343,6 +368,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                           "*" = "Must specify output file type format from the following:",
                           "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
+
   if (!file_type %in% file_type_options) {
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
@@ -376,19 +402,16 @@ Iterate_Cluster_Highlight_Plot <- function(
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pbmapply(function(x, arg1) {
-      cells_to_highlight <- CellsByIdentities(seurat_object, idents = x)
-      suppressMessages(DimPlot(object = seurat_object,
-              cells.highlight = cells_to_highlight,
-              cols.highlight = arg1,
-              cols = background_color,
-              sizes.highlight = pt.size,
-              pt.size = pt.size,
-              order = TRUE,
-              reduction = reduction,
-              raster = raster,
-              ...))
-    }, list_idents, highlight_color, SIMPLIFY = FALSE)
+    all_plots <- pblapply(1:num_idents, function(x) {
+      suppressMessages(Cluster_Highlight_Plot(seurat_object = seurat_object,
+                                              cluster_name = list_idents[x],
+                                              highlight_color = highlight_color[x],
+                                              background_color = background_color,
+                                              pt.size = pt.size,
+                                              reduction = reduction,
+                                              raster = raster,
+                                              ...))
+    })
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
@@ -404,18 +427,15 @@ Iterate_Cluster_Highlight_Plot <- function(
     if (str_detect(file_type, ".pdf") == FALSE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
-      cells_to_highlight <- CellsByIdentities(seurat_object)
-      for (i in 1:length(cells_to_highlight)) {
-        suppressMessages(DimPlot(object = seurat_object,
-                cells.highlight = cells_to_highlight[[i]],
-                cols.highlight = highlight_color[i],
-                cols = background_color,
-                sizes.highlight = pt.size,
-                pt.size = pt.size,
-                order = TRUE,
-                reduction = reduction,
-                raster = raster,
-                ...))
+      for (i in 1:num_idents) {
+        suppressMessages(Cluster_Highlight_Plot(seurat_object = seurat_object,
+                                                cluster_name = list_idents[i],
+                                                highlight_color = highlight_color[i],
+                                                background_color = background_color,
+                                                pt.size = pt.size,
+                                                reduction = reduction,
+                                                raster = raster,
+                                                ...))
         suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -425,18 +445,15 @@ Iterate_Cluster_Highlight_Plot <- function(
     if (str_detect(file_type, ".pdf") == TRUE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
-      cells_to_highlight <- CellsByIdentities(seurat_object)
-      for (i in 1:length(cells_to_highlight)) {
-        suppressMessages(DimPlot(object = seurat_object,
-                cells.highlight = cells_to_highlight[[i]],
-                cols.highlight = highlight_color[i],
-                cols = background_color,
-                sizes.highlight = pt.size,
-                pt.size = pt.size,
-                order = TRUE,
-                reduction = reduction,
-                raster = raster,
-                ...))
+      for (i in 1:num_idents) {
+        suppressMessages(Cluster_Highlight_Plot(seurat_object = seurat_object,
+                                                cluster_name = list_idents[i],
+                                                highlight_color = highlight_color[i],
+                                                background_color = background_color,
+                                                pt.size = pt.size,
+                                                reduction = reduction,
+                                                raster = raster,
+                                                ...))
         suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -459,6 +476,9 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' all clusters/plots or a vector of colors equal to the number of clusters to use (in order) for the clusters/plots.
 #' @param background_color non-highlighted cell colors.
 #' @param pt.size point size for both highlighted cluster and background.
+#' @param no_legend logical, whether or not to remove plot legend and move to plot title.  Default is FALSE.
+#' @param title_prefix Value that should be used for plot title prefix if `no_legend = TRUE`.
+#' If NULL the value of `meta_data_column` will be used.  Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
@@ -475,7 +495,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom forcats fct_relevel
-#' @importFrom pbapply pbmapply pboptions
+#' @importFrom pbapply pblapply pboptions
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
@@ -501,6 +521,8 @@ Iterate_Meta_Highlight_Plot <- function(
   highlight_color = "navy",
   background_color = "lightgray",
   pt.size = NULL,
+  no_legend = FALSE,
+  title_prefix = NULL,
   reduction = NULL,
   file_path = NULL,
   file_name = NULL,
@@ -530,7 +552,7 @@ Iterate_Meta_Highlight_Plot <- function(
   }
 
   # Change active ident for plotting
-  Idents(seurat_object) <- meta_data_column
+  Idents(object = seurat_object) <- meta_data_column
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
@@ -577,7 +599,7 @@ Iterate_Meta_Highlight_Plot <- function(
 
   # Relevel idents for plotting to sorted order
   if (single_pdf && is.null(x = new_meta_order) && meta_data_sort) {
-    Idents(seurat_object) <- fct_relevel(Idents(seurat_object), sort)
+    Idents(object = seurat_object) <- fct_relevel(Idents(object = seurat_object), sort)
   }
 
   # Relevel idents to custom order
@@ -585,7 +607,7 @@ Iterate_Meta_Highlight_Plot <- function(
     if (length(x = new_meta_order) != length(x = levels(x = seurat_object@active.ident))) {
       cli_abort(message = c("The length of 'new_meta_order' ({.field {length(x = new_meta_order)}}) does not equal the number of levels in {.code meta_data_column}: {.val {meta_data_column}} ({.field {length(x = levels(x = seurat_object@active.ident))}})"))
     }
-    Idents(seurat_object) <- factor(Idents(seurat_object), levels = new_meta_order)
+    Idents(object = seurat_object) <- factor(Idents(object = seurat_object), levels = new_meta_order)
   }
 
   # Get number of clusters/identities
@@ -606,24 +628,56 @@ Iterate_Meta_Highlight_Plot <- function(
       highlight_color <- highlight_color
     }
   }
+  # Create plot titles if needed.
+  if (!is.null(x = title_prefix) && !no_legend) {
+    cli_warn(message = "{.code title_prefix} was omitted as {.code no_legend = FALSE}.")
+  }
+
+  if (is.null(x = title_prefix) && no_legend) {
+    plot_title <- lapply(1:num_idents, function(z) {
+      paste0(meta_data_column, ": ", list_idents[z])
+    })
+  } else {
+    plot_title <- lapply(1:num_idents, function(z) {
+      paste0(title_prefix, ": ", list_idents[z])
+    })
+  }
+
+  if (!is.null(x = title_prefix) && length(x = title_prefix) != 1 && no_legend) {
+    cli_abort(message = "{.field `title_prefix`} must be vector of length 1.")
+  }
 
   # Single PDF option
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pbmapply(function(x, arg1) {
-      cells_to_highlight <- CellsByIdentities(seurat_object, idents = x)
-      suppressMessages(DimPlot(object = seurat_object,
-                               cells.highlight = cells_to_highlight,
-                               cols.highlight = arg1,
-                               cols = background_color,
-                               sizes.highlight = pt.size,
-                               pt.size = pt.size,
-                               order = TRUE,
-                               reduction = reduction,
-                               raster = raster,
-                               ...))
-    }, list_idents, highlight_color, SIMPLIFY = FALSE)
+    all_plots <- pblapply(1:num_idents, function(x) {
+      if (no_legend) {
+        suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                             meta_data_column = meta_data_column,
+                                             meta_data_highlight = list_idents[x],
+                                             highlight_color = highlight_color[x],
+                                             background_color = background_color,
+                                             pt.size = pt.size,
+                                             reduction = reduction,
+                                             raster = raster,
+                                             ...) +
+                           NoLegend() +
+                           ggtitle(plot_title[x]) +
+                           CenterTitle())
+      } else {
+        suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                             meta_data_column = meta_data_column,
+                                             meta_data_highlight = list_idents[x],
+                                             highlight_color = highlight_color[x],
+                                             background_color = background_color,
+                                             pt.size = pt.size,
+                                             reduction = reduction,
+                                             raster = raster,
+                                             ...))
+      }
+
+    })
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
@@ -639,18 +693,32 @@ Iterate_Meta_Highlight_Plot <- function(
     if (str_detect(file_type, ".pdf") == FALSE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
-      cells_to_highlight <- CellsByIdentities(seurat_object)
-      for (i in 1:length(cells_to_highlight)) {
-        suppressMessages(DimPlot(object = seurat_object,
-                                 cells.highlight = cells_to_highlight[[i]],
-                                 cols.highlight = highlight_color[i],
-                                 cols = background_color,
-                                 sizes.highlight = pt.size,
-                                 pt.size = pt.size,
-                                 order = TRUE,
-                                 reduction = reduction,
-                                 raster = raster,
-                                 ...))
+      for (i in 1:num_idents) {
+        if (no_legend) {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...) +
+                             NoLegend() +
+                             ggtitle(plot_title[i]) +
+                             CenterTitle())
+        } else {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...))
+        }
+
         suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -660,18 +728,32 @@ Iterate_Meta_Highlight_Plot <- function(
     if (str_detect(file_type, ".pdf") == TRUE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
-      cells_to_highlight <- CellsByIdentities(seurat_object)
-      for (i in 1:length(cells_to_highlight)) {
-        suppressMessages(DimPlot(object = seurat_object,
-                                 cells.highlight = cells_to_highlight[[i]],
-                                 cols.highlight = highlight_color[i],
-                                 cols = background_color,
-                                 sizes.highlight = pt.size,
-                                 pt.size = pt.size,
-                                 order = TRUE,
-                                 reduction = reduction,
-                                 raster = raster,
-                                 ...))
+      for (i in 1:num_idents) {
+        if (no_legend) {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...) +
+                             NoLegend() +
+                             ggtitle(plot_title[i]) +
+                             CenterTitle())
+        } else {
+          suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
+                                               meta_data_column = meta_data_column,
+                                               meta_data_highlight = list_idents[i],
+                                               highlight_color = highlight_color[i],
+                                               background_color = background_color,
+                                               pt.size = pt.size,
+                                               reduction = reduction,
+                                               raster = raster,
+                                               ...))
+        }
+
         suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
       }

@@ -12,6 +12,7 @@ Iterate_DimPlot_bySample(
   single_pdf = FALSE,
   dpi = 600,
   color = "black",
+  legend = TRUE,
   reduction = NULL,
   dims = c(1, 2),
   pt.size = NULL,
@@ -32,6 +33,8 @@ Iterate_DimPlot_bySample(
 \item{dpi}{dpi for image saving.}
 
 \item{color}{color scheme to use.}
+
+\item{legend}{logical, whether or not to include plot legend, default is TRUE.}
 
 \item{reduction}{Dimensionality Reduction to use (default is object default).}
 

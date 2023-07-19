@@ -6,7 +6,7 @@
 \usage{
 Iterate_Cluster_Highlight_Plot(
   seurat_object,
-  highlight_color = "navy",
+  highlight_color = "dodgerblue",
   background_color = "lightgray",
   pt.size = NULL,
   reduction = NULL,

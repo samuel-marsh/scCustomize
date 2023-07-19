@@ -13,6 +13,8 @@
 #' "inferno", "plasma").  Default is "magma".
 #' @param custom_palette non-default color palette to be used in place of default viridis options.
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
@@ -43,6 +45,7 @@ Plot_Density_Custom <- function(
   viridis_palette = "magma",
   custom_palette = NULL,
   pt.size = 1,
+  aspect_ratio = NULL,
   reduction = NULL,
   combine = TRUE,
   ...
@@ -85,7 +88,24 @@ Plot_Density_Custom <- function(
 
   if (!is.null(x = custom_palette)) {
     suppressMessages(plot_list <- plot_list & scale_color_gradientn(colors = custom_palette))
+
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      plot_list <- plot_list & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(plot_list)
+  }
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot_list <- plot_list & theme(aspect.ratio = aspect_ratio)
   }
 
   return(plot_list)
@@ -102,6 +122,8 @@ Plot_Density_Custom <- function(
 #' "inferno", "plasma").  Default is "magma".
 #' @param custom_palette non-default color palette to be used in place of default viridis options.
 #' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
@@ -129,6 +151,7 @@ Plot_Density_Joint_Only <- function(
   viridis_palette = "magma",
   custom_palette = NULL,
   pt.size = 1,
+  aspect_ratio = NULL,
   reduction = NULL,
   ...
 ) {
@@ -180,7 +203,24 @@ Plot_Density_Joint_Only <- function(
 
   if (!is.null(x = custom_palette)) {
     suppressMessages(plot <- plot + scale_color_gradientn(colors = custom_palette))
+
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      plot <- plot & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(plot)
+  }
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot <- plot & theme(aspect.ratio = aspect_ratio)
   }
 
   return(plot)

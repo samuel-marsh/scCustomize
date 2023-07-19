@@ -18,6 +18,8 @@
 #' @param shuffle_seed Sets the seed if randomly shuffling the order of points.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
 #' technique and therefore needs to be set manually.  Default is "UMAP".
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
@@ -61,6 +63,7 @@ DimPlot_LIGER <- function(
   shuffle = TRUE,
   shuffle_seed = 1,
   reduction_label = "UMAP",
+  aspect_ratio = NULL,
   label = TRUE,
   label_size = NA,
   label_repel = FALSE,
@@ -170,6 +173,15 @@ DimPlot_LIGER <- function(
                              shuffle_seed = shuffle_seed)
 
     p3 <- wrap_plots(p1 + p2)
+
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      p3 <- p3 & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(p3)
   }
 
@@ -192,6 +204,14 @@ DimPlot_LIGER <- function(
                                 label_color = label_color,
                                 label = label,
                                 color_seed = color_seed)
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      p1 <- p1 & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(p1)
   }
 
@@ -210,6 +230,14 @@ DimPlot_LIGER <- function(
                              split_by = split_by,
                              shuffle_seed = shuffle_seed,
                              color_seed = color_seed)
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      p2 <- p2 & theme(aspect.ratio = aspect_ratio)
+    }
+
     return(p2)
   }
 }
@@ -330,7 +358,7 @@ plotFactors_scCustom <- function(
                             "i" = "The number of datasets provided to {.code reorder_datasets} ({.field {length(x = reorder_datasets)}}) does not match number of datasets in LIGER object ({.field {length(x = levels(x = levels(liger_object@cell.data$dataset)))}}).")
       )
     } else {
-      if (!all(levels(liger_object@cell.data$dataset) %in% reorder_datasets)) {
+      if (!all(levels(x = liger_object@cell.data$dataset) %in% reorder_datasets)) {
         cli_abort(message = c("Error reordering datasets (name mismatch).",
                               "*" = "Dataset names provided to {.code reorder_datasets} do not match names of datasets in LIGER object.",
                               "i" = "Please check spelling.")
@@ -379,16 +407,16 @@ plotFactors_scCustom <- function(
 
   # Get Data and Plot Factors
   cli_inform(message = "{.field Generating plots}")
-  k <- ncol(liger_object@H.norm)
+  k <- ncol(x = liger_object@H.norm)
   pb <- txtProgressBar(min = 0, max = k, style = 3)
-  W <- t(liger_object@W)
-  rownames(W) <- colnames(liger_object@scale.data[[1]])
+  W <- t(x = liger_object@W)
+  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
   Hs_norm <- liger_object@H.norm
   H_raw = do.call(rbind, liger_object@H)
   plot_list = list()
   tsne_list = list()
   for (i in 1:k) {
-    top_genes.W <- rownames(W)[order(W[, i], decreasing = T)[1:num_genes]]
+    top_genes.W <- rownames(x = W)[order(W[, i], decreasing = T)[1:num_genes]]
     top_genes.W.string <- paste0(top_genes.W, collapse = ", ")
     factor_textstring <- paste0("Factor", i)
     plot_title1 <- paste(factor_textstring, "\n", top_genes.W.string, "\n")
@@ -461,7 +489,7 @@ plotFactors_scCustom <- function(
     if (plot_dimreduc) {
       tsne_df <- data.frame(Hs_norm[, i], liger_object@tsne.coords)
       factorlab <- paste0("Factor", i)
-      colnames(tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
+      colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
 
       if (order) {
         tsne_df <- tsne_df[order(tsne_df[,1], decreasing = FALSE),]

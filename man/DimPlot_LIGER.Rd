@@ -14,6 +14,7 @@ DimPlot_LIGER(
   shuffle = TRUE,
   shuffle_seed = 1,
   reduction_label = "UMAP",
+  aspect_ratio = NULL,
   label = TRUE,
   label_size = NA,
   label_repel = FALSE,
@@ -52,6 +53,9 @@ if points of interest are being buried. (Default is TRUE).}
 
 \item{reduction_label}{What to label the x and y axes of resulting plots.  LIGER does not store name of
 technique and therefore needs to be set manually.  Default is "UMAP".}
+
+\item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+Default is NULL.}
 
 \item{label}{logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.}
 

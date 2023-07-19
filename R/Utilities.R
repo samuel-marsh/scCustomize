@@ -59,7 +59,7 @@ Gene_Present <- function(
     possible_features <- rownames(x = GetAssayData(object = data, assay = assay))
   } else if ((class(x = data)[[1]] == "liger")) {
     # get complete gene list
-    length_liger <- length(data@raw.data)
+    length_liger <- length(x = data@raw.data)
 
     list_genes <- lapply(1:length_liger, function(x){
       rownames(x = data@raw.data[[x]])
@@ -216,7 +216,8 @@ Case_Check <- function(
 #' @param meta_col_names vector of column names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object. Default is TRUE.
-#' @param abort logical. Whether or not to stop function and print stop message if no input `meta_col_names` are found.  Default is TRUE.
+#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
+#' `meta_col_names` are found.  Default is FALSE.
 #'
 #' @return vector of meta data columns that are present
 #'
@@ -237,7 +238,7 @@ Meta_Present <- function(
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
-  abort = TRUE
+  return_none = FALSE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -250,7 +251,7 @@ Meta_Present <- function(
     bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
     found_meta <- meta_col_names[meta_col_names %in% possible_features]
 
-    if (abort) {
+    if (!return_none) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
                               "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
@@ -319,7 +320,7 @@ Meta_Numeric <- function(
     is.numeric(x = data[[x]])
   }))
 
-  colnames(all_numeric) <- "Is_Numeric"
+  colnames(x = all_numeric) <- "Is_Numeric"
 
   # Pull results into vectors
   invalid_variables <- all_numeric %>%
@@ -340,6 +341,109 @@ Meta_Numeric <- function(
 
   # Return valid column names
   return(valid_variables)
+}
+
+
+#' Check if reduction loadings are present
+#'
+#' Check if reduction loadings are present in object and return vector of found loading names.  Return
+#' warning messages for genes not found.
+#'
+#' @param seurat_object object name.
+#' @param reduction_names vector of genes to check.
+#' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
+#' @param omit_warn logical. Whether to print message about features that are not found in current object.
+#'  Default is TRUE.
+#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
+#' features are found.  Default is FALSE.
+#'
+#' @importFrom purrr reduce
+#' @importFrom stringr str_to_upper str_to_sentence
+#'
+#' @return A list of length 3 containing 1) found features, 2) not found features.
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' reductions <- Reduction_Loading_Present(seurat_object = obj_name, reduction_name = "PC_1")
+#' found_features <- features[[1]]
+#' }
+#'
+
+Reduction_Loading_Present <- function(
+    seurat_object,
+    reduction_names,
+    print_msg = TRUE,
+    omit_warn = TRUE,
+    return_none = FALSE
+) {
+  # If no reductions are present
+  if (length(x = seurat_object@reductions) == 0) {
+    if (return_none) {
+      # Combine into list and return
+      feature_list <- list(
+        found_features = NULL,
+        bad_features = NULL
+      )
+      return(feature_list)
+    } else {
+      cli_abort(message ="No requested features found.")
+    }
+  }
+
+  # Get all reduction names
+  possible_reduction_names <- unlist(x = lapply(1:length(seurat_object@reductions), function(z) {
+    names <- names(x = seurat_object@reductions[[z]])
+  })
+  )
+
+  # If any features not found
+  if (any(!reduction_names %in% possible_reduction_names)) {
+    bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
+    found_features <- reduction_names[reduction_names %in% possible_reduction_names]
+    if (length(x = found_features) == 0) {
+      if (return_none) {
+        # Combine into list and return
+        feature_list <- list(
+          found_features = NULL,
+          bad_features = bad_features
+        )
+        return(feature_list)
+      } else {
+        cli_abort(message ="No requested features found.")
+      }
+    }
+
+    # Return message of features not found
+    if (length(x = bad_features) > 0 && omit_warn) {
+      cli_warn(message = c("The following features were omitted as they were not found:",
+                           "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
+      )
+    }
+
+    # Combine into list and return
+    feature_list <- list(
+      found_features = found_features,
+      bad_features = bad_features
+    )
+    return(feature_list)
+  }
+
+  # Print all found message if TRUE
+  if (print_msg) {
+    cli_inform(message = "All features present.")
+  }
+
+  # Return full input gene list.
+  # Combine into list and return
+  feature_list <- list(
+    found_features = reduction_names,
+    bad_features = NULL
+  )
+  return(feature_list)
 }
 
 
@@ -425,6 +529,7 @@ Fetch_Meta.liger <- function(
 #' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (License: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
+#' @import cli
 #' @import Matrix
 #' @importFrom dplyr intersect
 #' @importFrom magrittr "%>%"
@@ -470,14 +575,14 @@ Merge_Sparse_Data_All <- function(
   if (!is.null(x = add_cell_ids)) {
     # check barcodes will be unique after adding prefixes/suffixes
     all_names <- lapply(1:length(x = matrix_list), function(i){
-      cell_names <- colnames(matrix_list[[i]])
+      cell_names <- colnames(x = matrix_list[[i]])
     })
 
     new_names <- lapply(X = 1:length(x = matrix_list), function(x){
-      colnames(matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
+      colnames(x = matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
     })
 
-    are_duplicates <- unlist(new_names) %>%
+    are_duplicates <- unlist(x = new_names) %>%
       duplicated() %>%
       any()
 
@@ -491,11 +596,11 @@ Merge_Sparse_Data_All <- function(
   # Use summary to convert the sparse matrices into three-column indexes where i are the
   # row numbers, j are the column numbers, and x are the nonzero entries
   col_offset <- 0
-  allGenes <- unique(unlist(lapply(matrix_list, rownames)))
+  allGenes <- unique(x = unlist(x = lapply(matrix_list, rownames)))
   allCells <- c()
   cli_inform(message = "{.field Preparing & merging matrices.}")
   pb <- txtProgressBar(min = 0, max = length(x = matrix_list), style = 3, file = stderr())
-  for (i in 1:length(matrix_list)) {
+  for (i in 1:length(x = matrix_list)) {
     curr <- matrix_list[[i]]
     curr_s <- summary(curr)
 
@@ -511,13 +616,13 @@ Merge_Sparse_Data_All <- function(
         cellnames <- paste0(colnames(curr), cell_id_delimiter, add_cell_ids [i])
       }
     } else {
-      cellnames <- colnames(curr)
+      cellnames <- colnames(x = curr)
     }
     allCells <- c(allCells, cellnames)
 
     # Next, change the row (gene) indexes so that they index on the union of the gene sets,
     # so that proper merging can occur.
-    idx <- match(rownames(curr), allGenes)
+    idx <- match(x = rownames(x = curr), allGenes)
     newgenescurr <- idx[curr_s[, 1]]
     curr_s[, 1] <- newgenescurr
 
@@ -546,6 +651,105 @@ Merge_Sparse_Data_All <- function(
     )
   )
   return(M)
+}
+
+
+#' Extract multi-modal data into list by modality
+#'
+#' Reorganize multi-modal data after import with `Read10X()` or scCustomize read functions.
+#' Organizes sub-lists by data modality instead of by sample.
+#'
+#' @param matrix_list list of matrices to split by modality
+#'
+#' @return list of lists, with one sublist per data modality.  Sub-list contain 1 matrix entry per sample
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' multi_mat <- Read10X(...)
+#' new_multi_mat <- Extract_Modality(matrix_list = multi_mat)
+#' }
+#'
+
+Extract_Modality <- function(
+    matrix_list
+) {
+  modality_names <- names(x = matrix_list[[1]])
+
+  unlist_mat <- unlist(x = matrix_list)
+
+  index_list <- lapply(1:length(x = modality_names), function(x) {
+    modality_index <- grep(x = names(x = unlist_mat), pattern = modality_names[x])
+  })
+
+  split_list <- lapply(1:length(x = modality_names), function(i) {
+    modality_list <- unlist_mat[index_list[[i]]]
+    sample_name <- gsub(pattern = paste0("_.", modality_names[i]), x = names(x = modality_list), replacement = "")
+    names(x = modality_list) <- sample_name
+    return(modality_list)
+  })
+
+  names(split_list) <- modality_names
+  return(split_list)
+}
+
+
+#' Merge a list of Sparse Matrices contain multi-modal data.
+#'
+#' Enables easy merge of a list of sparse matrices for multi-modal data.
+#'
+#' @param matrix_list list of matrices to merge.
+#' @param add_cell_ids a vector of sample ids to add as prefix to cell barcode during merge.
+#' @param prefix logical.  Whether `add_cell_ids` should be added as prefix to current cell barcodes/names
+#' or as suffix to current cell barcodes/names.  Default is TRUE, add as prefix.
+#' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
+#'
+#' @import cli
+#'
+#' @return A list containing one sparse matrix for each modality
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' data_list <- Read10X_GEO(...)
+#' merged_list <- Merge_Sparse_Multimodal_All(matrix_list = data_list, add_cell_ids = names(data_list),
+#' prefix = TRUE, cell_id_delimiter = "_")
+#' }
+#'
+
+Merge_Sparse_Multimodal_All <- function(
+    matrix_list,
+    add_cell_ids = NULL,
+    prefix = TRUE,
+    cell_id_delimiter = "_"
+) {
+  # Check matrix_list is list of lists
+  if (!inherits(x = matrix_list[[1]], what = "list")) {
+    cli_abort(message = "{.code matrix_list} is not multimodal, please use {.field Merge_Sparse_Data_All}.")
+  }
+
+  # Extract matrices
+  mat_list <- Extract_Modality(matrix_list = matrix_list)
+
+  # Merge and return
+  modality_names <- names(x = mat_list)
+
+  merged_list <- lapply(1:length(x = modality_names), function(x) {
+    cli_inform(message = "Merging {.val {modality_names[x]}} matrices.")
+    merged <- Merge_Sparse_Data_All(matrix_list = mat_list[[x]], add_cell_ids = add_cell_ids, prefix = prefix, cell_id_delimiter = cell_id_delimiter)
+  })
+
+  names(x = merged_list) <- modality_names
+
+  return(merged_list)
 }
 
 
@@ -663,8 +867,32 @@ Merge_Seurat_List <- function(
     }
   }
 
+  # Check all barcodes are unique to begin with
+  duplicated_barcodes <- list_seurat %>%
+    lapply(colnames) %>%
+    unlist() %>%
+    duplicated() %>%
+    any()
+
+  if (duplicated_barcodes && is.null(x = add.cell.ids)) {
+    cli_abort(message = c("There are overlapping cell barcodes present in the input objects",
+                          "i" = "Please rename cells or provide prefixes to {.code add.cell.ids} parameter to make unique.")
+    )
+  }
+
+  # Check right number of suffix/prefix ids are provided
+  if (!is.null(x = add.cell.ids) && length(x = add.cell.ids) != length(x = list_seurat)) {
+    cli_abort(message = "The number of prefixes in {.code add.cell.ids} must be equal to the number of objects supplied to {.code list_seurat}.")
+  }
+
+  # Rename cells if provided
+  list_seurat <- lapply(1:length(list_seurat), function(x) {
+    list_seurat[[x]] <- RenameCells(object = list_seurat[[x]], add.cell.id = add.cell.ids[x])
+  })
+
+  # Merge objects
   merged_object <- reduce(list_seurat, function(x, y) {
-    merge(x = x, y = y, add.cell.ids = add.cell.ids, merge.data = merge.data, project = project)
+    merge(x = x, y = y, merge.data = merge.data, project = project)
   })
 }
 
@@ -756,7 +984,7 @@ Replace_Suffix <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
 
   } else {
@@ -834,7 +1062,7 @@ Change_Delim_Suffix <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
   } else {
     # for data.frames and individual matrices
@@ -912,7 +1140,7 @@ Change_Delim_Prefix <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
   } else {
     # for data.frames and individual matrices
@@ -988,7 +1216,7 @@ Change_Delim_All <- function(
       return(data_single)
     })
     # Add names back to output
-    names(data_mod) <- names(data)
+    names(x = data_mod) <- names(x = data)
     return(data_mod)
   } else {
     # for data.frames and individual matrices
@@ -1360,7 +1588,7 @@ Pull_Cluster_Annotation <- function(
   }
 
   # Create list elements per cluster
-  cell_type_list <- unique(annotation_table[[cell_type_col]])
+  cell_type_list <- unique(x = annotation_table[[cell_type_col]])
   cluster_annotation_list <- lapply(c(1:length(cell_type_list)), function(x){
     cluster <- annotation_table %>%
       filter(.data[[cell_type_col]] == cell_type_list[x]) %>%
@@ -1376,8 +1604,8 @@ Pull_Cluster_Annotation <- function(
   new_cluster_ids_list <- list(new_cluster_ids)
   secondary_ids_list <- list(secondary_ids)
   # Name the new cluster ids list
-  names(new_cluster_ids_list) <- "new_cluster_idents"
-  names(secondary_ids_list) <- colnames(annotation_table)[[3]]
+  names(x = new_cluster_ids_list) <- "new_cluster_idents"
+  names(x = secondary_ids_list) <- colnames(annotation_table)[[3]]
 
   # Combine and return both lists as single list
   final_cluster_annotation_list <- c(cluster_annotation_list, new_cluster_ids_list, secondary_ids_list)
@@ -1429,7 +1657,7 @@ Rename_Clusters <- function(
 
   # Name the new idents vector
   if (is.null(x = names(x = new_idents))) {
-    names(new_idents) <- levels(seurat_object)
+    names(x = new_idents) <- levels(x = seurat_object)
   }
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
@@ -1440,7 +1668,7 @@ Rename_Clusters <- function(
 
   # Rename meta column for old ident information if desired
   if (!is.null(x = meta_col_name)) {
-    seurat_object[[meta_col_name]] <- Idents(seurat_object)
+    seurat_object[[meta_col_name]] <- Idents(object = seurat_object)
   }
 
   # Add new idents & return object
@@ -1518,7 +1746,7 @@ Setup_scRNAseq_Project <- function(
   # Check for directories and create new ones
   lapply(output_dirs, function(dir_path){
     if (!dir.exists(dir_path)){
-      dir.create(dir_path)
+      dir.create(path = dir_path)
     } else {
       cli_warn(message = "The directory {.val {dir_path}} aleady exists.  No new directory created.")
     }

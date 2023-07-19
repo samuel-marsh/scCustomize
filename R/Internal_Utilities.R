@@ -225,8 +225,8 @@ glue_collapse_scCustom <- function(
 
 #' Perform Feature and Meta Checks before plotting
 #'
-#' Wraps the `Gene_Present`, `Meta_Present`, and `Case_Check` into single function to perform feature
-#' checks before plotting.
+#' Wraps the `Gene_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
+#' single function to perform feature checks before plotting.
 #'
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
@@ -245,11 +245,13 @@ Feature_PreCheck <- function(
   # Check features and meta to determine which features present
   features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
 
-  meta_list <- Meta_Present(seurat_object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, abort = FALSE)
+  meta_list <- Meta_Present(seurat_object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
-  all_not_found_features <- meta_list[[2]]
+  reduction_list <- Reduction_Loading_Present(seurat_object = object, reduction_names = meta_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
-  all_found_features <- c(features_list[[1]], meta_list[[1]])
+  all_not_found_features <- reduction_list[[2]]
+
+  all_found_features <- c(features_list[[1]], meta_list[[1]], reduction_list[[1]])
 
   # Stop if no features found
   if (length(x = all_found_features) < 1) {

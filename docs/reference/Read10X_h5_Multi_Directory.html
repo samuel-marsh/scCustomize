@@ -19,7 +19,7 @@ custom directory structure."><!-- mathjax --><script src="https://cdnjs.cloudfla
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -118,8 +118,9 @@ custom directory structure.</p>
 <span>  <span class="va">base_path</span>,</span>
 <span>  secondary_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  default_10X_path <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cellranger_multi <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  h5_filename <span class="op">=</span> <span class="st">"filtered_feature_bc_matrix.h5"</span>,</span>
-<span>  cell_bender <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cell_bender <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  sample_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  replace_suffix <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -146,6 +147,10 @@ custom directory structure.</p>
 directory structure.</p></dd>
 
 
+<dt>cellranger_multi</dt>
+<dd><p>logical, whether samples were processed with Cell Ranger <code>multi</code>, default is FALSE.</p></dd>
+
+
 <dt>h5_filename</dt>
 <dd><p>name of h5 file (including .h5 suffix).  If all h5 files have same name (i.e. Cell Ranger output)
 then use full file name.  By default function uses Cell Ranger name: "filtered_feature_bc_matrix.h5".
@@ -154,7 +159,8 @@ name (e.g., "_filtered_out.h5").</p></dd>
 
 
 <dt>cell_bender</dt>
-<dd><p>logical (default FALSE).  Is the h5 file from cell bender output, needed to set correct file names.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> CellBender read functions are now independent family of functions.
+See <code>Read_CellBender_*</code> functions.</p></dd>
 
 
 <dt>sample_list</dt>
