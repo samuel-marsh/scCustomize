@@ -1,7 +1,7 @@
 ## Minor Version Update 
-This is a minor update from v1.1.1 to v1.1.2. In this version I have:  
+This is a hotfix minor update from v1.1.2 to v1.1.3. In this version I have:  
 
-- Combination of bug fixes, new features, code styling (see News.md).  
+- Fixed parameter documentation in function help/manual that slipped through release (see News.md). Parameter input changed substantially in v1.1.2 and therefore accurate documentation is required with hotfix instead of waiting until next release.  
 
 
 ## R CMD check results
