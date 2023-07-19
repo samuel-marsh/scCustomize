@@ -1,3 +1,17 @@
+# scCustomize 1.1.3 (2023-07-19)  
+## Added  
+- None.   
+  
+  
+## Changed  
+- None.   
+   
+
+## Fixes  
+- Fixed manual entry for `Merge_Seurat_List`. 
+   
+
+
 # scCustomize 1.1.2 (2023-07-18)  
 ## Added  
 - Added `aspect_ratio` parameter to all dimensionality reduction plots to control axes ratio of output plot.  
