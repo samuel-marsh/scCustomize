@@ -14,8 +14,8 @@ Merge_Seurat_List(
 \arguments{
 \item{list_seurat}{list composed of multiple Seurat Objects.}
 
-\item{add.cell.ids}{A character vector of length(x = c(x, y)). Appends the corresponding values
-to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.}
+\item{add.cell.ids}{A character vector of equal length to the number of objects in \code{list_seurat}.
+Appends the corresponding values to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.}
 
 \item{merge.data}{Merge the data slots instead of just merging the counts (which requires renormalization).
 This is recommended if the same normalization approach was applied to all objects.
