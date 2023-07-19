@@ -622,8 +622,8 @@ CheckMatrix_scCustom <- function(
 #' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
 #'
 #' @param list_seurat list composed of multiple Seurat Objects.
-#' @param add.cell.ids A character vector of length(x = c(x, y)). Appends the corresponding values
-#' to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
+#' @param add.cell.ids A character vector of equal length to the number of objects in `list_seurat`.
+#' Appends the corresponding values to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
 #' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
 #' This is recommended if the same normalization approach was applied to all objects.
 #' See \code{\link[SeuratObject]{merge}}.
