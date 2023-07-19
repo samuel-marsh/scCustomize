@@ -886,7 +886,7 @@ Merge_Seurat_List <- function(
   }
 
   # Rename cells if provided
-  list_seurat <- lapply(1:length(list_seurat), function(x) {
+  list_seurat <- lapply(1:length(x = list_seurat), function(x) {
     list_seurat[[x]] <- RenameCells(object = list_seurat[[x]], add.cell.id = add.cell.ids[x])
   })
 
