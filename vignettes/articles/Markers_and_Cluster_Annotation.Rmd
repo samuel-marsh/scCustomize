@@ -186,10 +186,10 @@ The advantage of exporting a named vector from `Extract_Top_Markers` is that `It
 Iterate_FeaturePlot_scCustom(seurat_object = pbmc, gene_list = top_5_presto, single_pdf = T)
 ```
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Example plot showing the gene name and additional name of the plot.*", fig.show='hold', out.width="49%"}
-knitr::include_graphics("../../docs/reference/figures/assets/Iterate_named_plots.png")
-```
-
+<center>
+<img src="../reference/figures/assets/Iterate_named_plots.png">
+*Example plot showing the gene name and additional name of the plot.*
+<center>
 
 ## Create simple annotation files
 Now for a simple helper we can use `Create_Cluster_Annotation_File` to create simple csv file to use for annotation.
@@ -222,9 +222,11 @@ The result of `Pull_Cluster_Annotation` is a list that contains:
 * One entry for each unique cell type.  The entry is named for the cell type and is a vector of the numbered clustered that correspond to that cell type.
 * One entry called "new_cluster_idents" containing a vector of idents in order that can be used for renaming clusters either using `Rename_Clusters` function (see below) or manually.
 * One entry containing vector of cell sub-types (if present).
-```{r echo=FALSE, fig.align='center', fig.cap="*Example output of `Pull_Cluster_Annotation*", fig.show='hold'}
-knitr::include_graphics("../../docs/reference/figures/assets/annotation_info.png")
-```
+
+<center>
+<img src="../reference/figures/assets/annotation_info.png">
+*Example output of `Pull_Cluster_Annotation*
+<center>
 
 ## Renaming Clusters
 Finally can use `Rename_Clusters` to easily rename and set active.ident in Seurat Object.  This is simple wrapper around Seurat commands but adds additional checks/warnings and is simple one-liner.

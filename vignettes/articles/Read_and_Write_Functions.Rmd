@@ -87,14 +87,12 @@ GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
 * Several other parameters from `Seurat::Read10X()`.  See `?Read10X_GEO` for more details.
 
 #### `Read10X_GEO` Import Format
-`Read10X_GEO` will return list of matrices (single modality data) or list of list of matrices (multi-modal data).
+`Read10X_GEO` will return list of matrices (single modality data) or list of list of matrices (multi-modal data).  
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../../docs/reference/figures/assets/"}
-knitr::include_graphics(c("../../docs/reference/figures/assets/Read10X_GEO.png","../../docs/reference/figures/assets/multimodal.png")) 
-```
-<img src="../reference/figures/assets/Read10X_GEO.png", width=49%>
-
-<img src="../reference/figures/assets/multimodal.png", width=49%>
+<center>
+<img src="../reference/figures/assets/Read10X_GEO.png" width=49%> <img src="../reference/figures/assets/multimodal.png" width=49%>
+*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*
+<center>
 
 ### Import 10X Genomics H5 Formatted Files single directory with file prefixes  
 There is equivalent function for reading in 10X H5 formatted files `Read10X_h5_GEO`.  
@@ -137,9 +135,10 @@ GEO_Single <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/GSE121654_
 
 ```
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs with default naming based on file name or providing `sample_names` parameter.*", fig.show='hold', out.width="49%"}
-knitr::include_graphics(c("../../docs/reference/figures/assets/delim_default.png","../../docs/reference/figures/assets/renamed.png")) 
-```
+<center>
+<img src="../reference/figures/assets/delim_default.png" width=49%> <img src="../reference/figures/assets/renamed.png" width=49%>
+*Example outputs with default naming based on file name or providing `sample_names` parameter.*
+<center>
 
 
 #### `Read_GEO_Delim` additional parameters
@@ -224,9 +223,10 @@ GEO_Single <- list(mat1, mat2, mat3)
 GEO_Merged <- Merge_Sparse_Data_All(matrix_list = GEO_Single)
 ```
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*", fig.show='hold', out.width="98%"}
-knitr::include_graphics(c("../../docs/reference/figures/assets/geo_merged.png")) 
-```
+<center>
+<img src="../reference/figures/assets/geo_merged.png" width=98%>
+*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*
+<center>
 
 ### Multimodal Data  
 If you have multimodal data (each entry in list contains sub-list with matrices) then you can use `Merge_Sparse_Multimodal_All()`.  This function will return a list with each entry representing a merged matrix for single modality.  

@@ -229,16 +229,12 @@ If different names are desired they can be supplied to
 </h5>
 <p><code>Read10X_GEO</code> will return list of matrices (single
 modality data) or list of list of matrices (multi-modal data).</p>
-<div class="figure" style="text-align: center">
-<img src="../../docs/reference/figures/assets/Read10X_GEO.png" alt="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*" width="49%"><img src="../../docs/reference/figures/assets/multimodal.png" alt="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*" width="49%"><p class="caption">
-<em>Example outputs for GEX only (list of matrices) or multimodal (list
+<center>
+<img src="../reference/figures/assets/Read10X_GEO.png" width="49%"><img src="../reference/figures/assets/multimodal.png" width="49%"><em>Example outputs for GEX only (list of matrices) or multimodal (list
 of list of matrices) 10X-Style files downloaded from NCBI GEO</em>
-</p>
-</div>
-<p>&lt;img src=“../reference/figures/assets/Read10X_GEO.png”,
-width=49%&gt;</p>
-<p>&lt;img src=“../reference/figures/assets/multimodal.png”,
-width=49%&gt;</p>
+<center>
+</center>
+</center>
 </div>
 </div>
 <div class="section level4">
@@ -287,12 +283,10 @@ objects to sparse matrices to save memory</p>
 <span><span class="co"># Read in and use new sample names to name the list</span></span>
 <span><span class="va">GEO_Single</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read_GEO_Delim.html">Read_GEO_Delim</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/GSE121654_RAW_Hammond/GSE121654_RAW_Hammond/"</span>, file_suffix <span class="op">=</span> <span class="st">".dge.txt.gz"</span>,</span>
 <span>    sample_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample01"</span>, <span class="st">"sample02"</span>, <span class="st">"sample03"</span>, <span class="st">"sample04"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="figure" style="text-align: center">
-<img src="../../docs/reference/figures/assets/delim_default.png" alt="*Example outputs with default naming based on file name or providing `sample_names` parameter.*" width="49%"><img src="../../docs/reference/figures/assets/renamed.png" alt="*Example outputs with default naming based on file name or providing `sample_names` parameter.*" width="49%"><p class="caption">
-<em>Example outputs with default naming based on file name or providing
+<center>
+<img src="../reference/figures/assets/delim_default.png" width="49%"><img src="../reference/figures/assets/renamed.png" width="49%"><em>Example outputs with default naming based on file name or providing
 <code>sample_names</code> parameter.</em>
-</p>
-</div>
+<center>
 <div class="section level5">
 <h5 id="read_geo_delim-additional-parameters">
 <code>Read_GEO_Delim</code> additional parameters<a class="anchor" aria-label="anchor" href="#read_geo_delim-additional-parameters"></a>
@@ -300,6 +294,8 @@ objects to sparse matrices to save memory</p>
 <p>See <a href="https://samuel-marsh.github.io/scCustomize/reference/Read_GEO_Delim.html">manual
 entry</a> for more info.</p>
 </div>
+</center>
+</center>
 </div>
 </div>
 <div class="section level3">
@@ -426,6 +422,12 @@ Seurat object.</p>
 through scCustomize.</em>
 </p>
 </div>
+<center>
+<img src="../reference/figures/assets/geo_merged.png" width="98%"><em>Progress bar outputs in <code>Merge_Sparse_Data_All</code> function
+through scCustomize.</em>
+<center>
+</center>
+</center>
 </div>
 <div class="section level4">
 <h4 id="multimodal-data">Multimodal Data<a class="anchor" aria-label="anchor" href="#multimodal-data"></a>
