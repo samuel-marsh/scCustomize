@@ -187,7 +187,7 @@ Iterate_FeaturePlot_scCustom(seurat_object = pbmc, gene_list = top_5_presto, sin
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example plot showing the gene name and additional name of the plot.*", fig.show='hold', out.width="49%"}
-knitr::include_graphics("../docs/reference/figures/assets/Iterate_named_plots.png")
+knitr::include_graphics("../../docs/reference/figures/assets/Iterate_named_plots.png")
 ```
 
 

@@ -89,7 +89,7 @@ GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
 #### `Read10X_GEO` Import Format
 `Read10X_GEO` will return list of matrices (single modality data) or list of list of matrices (multi-modal data).
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../../docs/reference/figures/assets/"}
+```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../docs/reference/figures/assets/"}
 knitr::include_graphics(c("../docs/reference/figures/assets/Read10X_GEO.png","../docs/reference/figures/assets/multimodal.png")) 
 ```
 
