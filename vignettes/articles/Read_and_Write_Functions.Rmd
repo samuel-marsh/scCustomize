@@ -89,8 +89,8 @@ GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
 #### `Read10X_GEO` Import Format
 `Read10X_GEO` will return list of matrices (single modality data) or list of list of matrices (multi-modal data).
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../docs/reference/figures/assets/"}
-knitr::include_graphics(c("../docs/reference/figures/assets/Read10X_GEO.png","../docs/reference/figures/assets/multimodal.png")) 
+```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../../docs/reference/figures/assets/"}
+knitr::include_graphics(c("../../docs/reference/figures/assets/Read10X_GEO.png","../../docs/reference/figures/assets/multimodal.png")) 
 ```
 
 
@@ -136,7 +136,7 @@ GEO_Single <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/GSE121654_
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs with default naming based on file name or providing `sample_names` parameter.*", fig.show='hold', out.width="49%"}
-knitr::include_graphics(c("../docs/reference/figures/assets/delim_default.png","../docs/reference/figures/assets/renamed.png")) 
+knitr::include_graphics(c("../../docs/reference/figures/assets/delim_default.png","../../docs/reference/figures/assets/renamed.png")) 
 ```
 
 
@@ -223,7 +223,7 @@ GEO_Merged <- Merge_Sparse_Data_All(matrix_list = GEO_Single)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.cap="*Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*", fig.show='hold', out.width="98%"}
-knitr::include_graphics(c("../docs/reference/figures/assets/geo_merged.png")) 
+knitr::include_graphics(c("../../docs/reference/figures/assets/geo_merged.png")) 
 ```
 
 ### Multimodal Data  
