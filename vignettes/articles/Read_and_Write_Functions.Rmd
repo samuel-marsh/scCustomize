@@ -92,7 +92,7 @@ GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
 <center>
 <img src="../reference/figures/assets/Read10X_GEO.png" width=49%> <img src="../reference/figures/assets/multimodal.png" width=49%>
 *Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*
-<center>
+</center>
 
 ### Import 10X Genomics H5 Formatted Files single directory with file prefixes  
 There is equivalent function for reading in 10X H5 formatted files `Read10X_h5_GEO`.  
@@ -138,7 +138,7 @@ GEO_Single <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/GSE121654_
 <center>
 <img src="../reference/figures/assets/delim_default.png" width=49%> <img src="../reference/figures/assets/renamed.png" width=49%>
 *Example outputs with default naming based on file name or providing `sample_names` parameter.*
-<center>
+</center>
 
 
 #### `Read_GEO_Delim` additional parameters
@@ -226,7 +226,7 @@ GEO_Merged <- Merge_Sparse_Data_All(matrix_list = GEO_Single)
 <center>
 <img src="../reference/figures/assets/geo_merged.png" width=98%>
 *Progress bar outputs in `Merge_Sparse_Data_All` function through scCustomize.*
-<center>
+</center>
 
 ### Multimodal Data  
 If you have multimodal data (each entry in list contains sub-list with matrices) then you can use `Merge_Sparse_Multimodal_All()`.  This function will return a list with each entry representing a merged matrix for single modality.  

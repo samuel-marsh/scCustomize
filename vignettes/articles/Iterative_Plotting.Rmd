@@ -77,7 +77,7 @@ Iterate_FeaturePlot_scCustom(seurat_object = pbmc, gene_list = top_5_presto, sin
 <center>
 <img src="../reference/figures/assets/Iterate_named_plots.png" width=49%>
 *Example plot showing the gene name and additional name of the plot.*
-<center>
+</center>
   
 ## Optional Parameters  
 Remaining parameters for each function are similar or identical to their non-iterative counterparts.
