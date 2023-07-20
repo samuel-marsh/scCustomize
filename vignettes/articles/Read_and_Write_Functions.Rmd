@@ -92,7 +92,9 @@ GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
 ```{r echo=FALSE, fig.align='center', fig.cap="*Example outputs for GEX only (list of matrices) or multimodal (list of list of matrices) 10X-Style files downloaded from NCBI GEO*", fig.show='hold', out.width="49%", fig.path="../../docs/reference/figures/assets/"}
 knitr::include_graphics(c("../../docs/reference/figures/assets/Read10X_GEO.png","../../docs/reference/figures/assets/multimodal.png")) 
 ```
+<img src="https://github.com/samuel-marsh/scCustomize/blob/master/docs/reference/figures/assets/Read10X_GEO.png">
 
+<img src="https://github.com/samuel-marsh/scCustomize/blob/master/docs/reference/figures/assets/multimodal.png">
 
 ### Import 10X Genomics H5 Formatted Files single directory with file prefixes  
 There is equivalent function for reading in 10X H5 formatted files `Read10X_h5_GEO`.  
