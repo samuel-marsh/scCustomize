@@ -1,14 +1,14 @@
 # scCustomize 1.X.X (2023-XX-XX)  
 ## Added  
-- None.   
+- Added support for metrics produced by Cell Ranger multi pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
   
   
 ## Changed  
-- None.   
+- Internal rewrite of `Read10X_Metrics` to use new internal helper functions.
    
 
 ## Fixes  
-- None.  
+- Fixed issue in `Read10X_Metrics` that caused errors when reading files on windows operating system ([#115](https://github.com/samuel-marsh/scCustomize/issues/115)).  
 
 
 # scCustomize 1.1.3 (2023-07-19)  
