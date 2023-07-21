@@ -527,7 +527,7 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 #' @import cli
 #' @import pbapply
-#' @importFrom dplyr bind_rows set_diff
+#' @importFrom dplyr bind_rows setdiff
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @keywords internal
@@ -607,7 +607,7 @@ Metrics_Count_GEX <- function(
 #'
 #' @import cli
 #' @import pbapply
-#' @importFrom dplyr all_of bind_rows filter rename select set_diff
+#' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
@@ -727,7 +727,7 @@ Metrics_Multi_GEX <- function(
 #'
 #' @import cli
 #' @import pbapply
-#' @importFrom dplyr all_of bind_rows filter select set_diff
+#' @importFrom dplyr all_of bind_rows filter select setdiff
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
