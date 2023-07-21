@@ -1159,7 +1159,7 @@ Read_CellBender_h5_Mat <- function(
 
   # Check feature_slot_name is correct
   if (!length(x = grep(pattern = feature_slot_name, x = h5_dataset_list, value = TRUE)) > 0) {
-    cli::cli_abort(message = c("{.code feature_slot_name}: {.val {feature_slot_name}} not found in H5 file.",
+    cli_abort(message = c("{.code feature_slot_name}: {.val {feature_slot_name}} not found in H5 file.",
                                "i" = "Check contents of H5 file {.code rhdf5::h5ls('{file_name}')} to confirm correct {.code feature_slot_name}."))
   }
 
@@ -1186,7 +1186,7 @@ Read_CellBender_h5_Mat <- function(
   group_names <- names(x = infile)
 
   if (!is.null(x = h5_group_name) && !h5_group_name %in% group_names) {
-    cli::cli_abort(message = c("{.code h5_group_name} {.val {h5_group_name}} not found.",
+    cli_abort(message = c("{.code h5_group_name} {.val {h5_group_name}} not found.",
                                "i" = "Check H5 file group names {.code rhdf5::h5ls('{file_name}')}."))
   }
 
@@ -1209,7 +1209,7 @@ Read_CellBender_h5_Mat <- function(
     } else {
       # check subgroups
       if (is.null(x = h5_group_name)) {
-        cli::cli_abort(message = c("H5 file contains multiple sub-groups.",
+        cli_abort(message = c("H5 file contains multiple sub-groups.",
                                    "i" = "Please provide {.code h5_group_name} specifying which subgroup contains count data."))
       } else {
         counts <- infile[[paste0(h5_group_name, '/data')]]
@@ -1549,6 +1549,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @param secondary_path path from the parent directory to count "outs/" folder which contains the
 #' "metrics_summary.csv" file.
 #' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param cellranger_multi logical, whether or not metrics come from Cell Ranger `count` or from Cell Ranger `multi`.  Default is FALSE.
 #' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
 #' in all samples in parent directory.
 #' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
@@ -1575,6 +1576,7 @@ Read_Metrics_10X <- function(
   base_path,
   secondary_path = NULL,
   default_10X = TRUE,
+  cellranger_multi = FALSE,
   lib_list = NULL,
   lib_names = NULL
 ) {
@@ -1592,7 +1594,11 @@ Read_Metrics_10X <- function(
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
   if (default_10X) {
-    secondary_path <- "outs/"
+    if (cellranger_multi) {
+      secondary_path <- "outs/per_sample_outs/"
+    } else {
+      secondary_path <- "outs/"
+    }
   }
   if (is.null(x = secondary_path)) {
     secondary_path <- ""
@@ -1605,35 +1611,36 @@ Read_Metrics_10X <- function(
     }
   }
 
-  # Read in raw data
-  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+  if (cellranger_multi) {
     if (is.null(x = secondary_path)) {
-      file_path <- file.path(base_path, lib_list[x])
+      s1_file_path <- file.path(base_path, lib_list[1])
     } else {
-      file_path <- file.path(base_path, lib_list[x], secondary_path)
+      s1_file_path <- file.path(base_path, lib_list[1], secondary_path, lib_list[1])
     }
 
-    raw_data <- read.csv(file = paste0(file_path, "metrics_summary.csv"), stringsAsFactors = F)
-    # Change format of numeric columns to due commas in data csv output.
-    column_numbers <- grep(pattern = ",", x = raw_data[1, ])
-    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
-    return(raw_data)
-  })
+    modalities <- read.csv(file = file.path(s1_file_path, "metrics_summary.csv"), stringsAsFactors = F)$Library.Type %>%
+      unique()
 
-  # Name the list items
-  if (is.null(x = lib_names)) {
-    names(raw_data_list) <- lib_list
+    if ("Gene Expression" %in% modalities) {
+      multi_gex_metrics <- Metrics_Multi_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
+
+    if ("VDJ T" %in% modalities) {
+      multi_vdjt_metrics <- Metrics_Multi_VDJT(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
+
+    # Return data
+    data_list <- list(
+      multi_gex_metrics = multi_gex_metrics,
+      multi_vdjt_metrics = multi_vdjt_metrics
+    )
+
+    return(data_list)
   } else {
-    names(raw_data_list) <- lib_names
+    count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+
+    return(count_gex_metrics)
   }
-
-  # Combine the list and add sample_id column
-  full_data <- bind_rows(raw_data_list, .id = "sample_id")
-
-  # Change column nams to use "_" separator instead of "." for readability
-  colnames(full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
-
-  return(full_data)
 }
 
 
