@@ -1,3 +1,16 @@
+# scCustomize 1.X.X (2023-XX-XX)  
+## Added  
+- None.   
+  
+  
+## Changed  
+- None.   
+   
+
+## Fixes  
+- None.  
+
+
 # scCustomize 1.1.3 (2023-07-19)  
 ## Added  
 - None.   
