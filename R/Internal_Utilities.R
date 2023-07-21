@@ -508,3 +508,306 @@ Retrieve_Ensembl_Ribo <- function(
 
   return(ribo_ensembl)
 }
+
+
+#' Read Gene Expression Statistics from 10X Cell Ranger Count
+#'
+#' Get data.frame with all metrics from the Cell Ranger `count` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample metrics produced by Cell Ranger `count` pipeline.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr bind_rows set_diff
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' count_metrics <- Metrics_Count_GEX(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Count_GEX <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+){
+  cli_inform(message = "Reading {.field Gene Expression} Metrics")
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path)
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+    # Change format of numeric columns to due commas in data csv output.
+    column_numbers <- grep(pattern = ",", x = raw_data[1, ])
+    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data[1, ])
+    all_columns <- 1:ncol(x = raw_data)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data[,c(column_numbers_numeric)] <- lapply(raw_data[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+
+}
+
+
+#' Read Gene Expression Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all gene expression metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample gene expression metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter rename select set_diff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' count_multi_metrics <- Metrics_Multi_GEX(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_GEX <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+){
+  cli_inform(message = "Reading {.field Gene Expression} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+
+    # Change format to column based and select relevant metrics
+    GEX_metrics <- raw_data %>%
+      filter(Grouped.By == "Physical library ID" & Library.Type == "Gene Expression") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    GEX_metrics2 <- raw_data %>%
+      filter(Metric.Name %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_gex <- cbind(GEX_metrics, GEX_metrics2)
+
+    # Change format of numeric columns to due commas in data csv output.
+    column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
+    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+    # Rename multi columns to match names from count
+    names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                          Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                          Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                          Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                          Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                          Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                          Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                          Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                          Estimated.Number.of.Cells = "Estimated.number.of.cells",
+                          Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                          Median.Genes.per.Cell = "Median.genes.per.cell",
+                          Number.of.Reads = "Number.of.reads",
+                          Valid.Barcodes = "Valid.barcodes",
+                          Sequencing.Saturation = "Sequencing.saturation",
+                          Total.Genes.Detected = "Total.genes.detected",
+                          Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+
+    raw_data_gex <- raw_data_gex %>%
+      rename(all_of(names_to_replace))
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_gex[1, ])
+    all_columns <- 1:ncol(x = raw_data_gex)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_gex)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
+
+#' Read VDJ T Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all VDJ T metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample VDJ T metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter select set_diff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' vdj_multi_metrics <- Metrics_Multi_VDJT(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_VDJT <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+){
+  cli_inform(message = "Reading {.field VDJ T} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+
+    VDJ_T_Metrics <- raw_data %>%
+      filter(Grouped.By == "Physical library ID" & Library.Type == "VDJ T") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    VDJ_T_Metrics2 <- raw_data %>%
+      filter(Metric.Name %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
+    raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
+    all_columns <- 1:ncol(raw_data_vdjt)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_vdjt[,c(column_numbers_numeric)] <- lapply(raw_data_vdjt[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_vdjt)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # test_return <- lapply(1:length(test_return), function(i) {
+  #   test_return[[i]]$Estimated.number.of.cells <- as.numeric(test_return[[i]]$Estimated.number.of.cells)
+  # })
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
