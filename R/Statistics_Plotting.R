@@ -769,7 +769,7 @@ CellBender_Diff_Plot <- function(
   feature_diff_df_filtered <- feature_diff_df %>%
     drop_na(.data[["Raw_Counts"]], .data[["CellBender_Counts"]])
 
-  diff_features <- symdiff(x = rownames(feature_diff_df), y = rownames(feature_diff_df_filtered))
+  diff_features <- symdiff(x = rownames(x = feature_diff_df), y = rownames(x = feature_diff_df_filtered))
 
   if (length(x = diff_features > 0)) {
     cli_warn(message = c("The following features are not present in both assays and were omitted:",

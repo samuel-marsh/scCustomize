@@ -579,7 +579,7 @@ Merge_Sparse_Data_All <- function(
     })
 
     new_names <- lapply(X = 1:length(x = matrix_list), function(x){
-      colnames(x = matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
+      colnames(x = matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(x = matrix_list[[x]]))
     })
 
     are_duplicates <- unlist(x = new_names) %>%
@@ -611,9 +611,9 @@ Merge_Sparse_Data_All <- function(
     # Update full cell names
     if (!is.null(x = add_cell_ids)) {
       if (prefix) {
-        cellnames <- paste0(add_cell_ids [i], cell_id_delimiter, colnames(curr))
+        cellnames <- paste0(add_cell_ids [i], cell_id_delimiter, colnames(x = curr))
       } else {
-        cellnames <- paste0(colnames(curr), cell_id_delimiter, add_cell_ids [i])
+        cellnames <- paste0(colnames(x = curr), cell_id_delimiter, add_cell_ids [i])
       }
     } else {
       cellnames <- colnames(x = curr)
@@ -694,7 +694,7 @@ Extract_Modality <- function(
     return(modality_list)
   })
 
-  names(split_list) <- modality_names
+  names(x = split_list) <- modality_names
   return(split_list)
 }
 
@@ -1410,7 +1410,7 @@ Extract_Top_Markers <- function(
     if (make_unique) {
       cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
-    names(gene_list) <- filtered_markers[[group_by]]
+    names(x = gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
   }
 
@@ -1594,7 +1594,7 @@ Pull_Cluster_Annotation <- function(
       filter(.data[[cell_type_col]] == cell_type_list[x]) %>%
       pull(cluster_name_col)
   })
-  names(cluster_annotation_list) <- cell_type_list
+  names(x = cluster_annotation_list) <- cell_type_list
 
   # Create list elements for renaming idents
   new_cluster_ids <- annotation_table %>%
@@ -1605,7 +1605,7 @@ Pull_Cluster_Annotation <- function(
   secondary_ids_list <- list(secondary_ids)
   # Name the new cluster ids list
   names(x = new_cluster_ids_list) <- "new_cluster_idents"
-  names(x = secondary_ids_list) <- colnames(annotation_table)[[3]]
+  names(x = secondary_ids_list) <- colnames(x = annotation_table)[[3]]
 
   # Combine and return both lists as single list
   final_cluster_annotation_list <- c(cluster_annotation_list, new_cluster_ids_list, secondary_ids_list)

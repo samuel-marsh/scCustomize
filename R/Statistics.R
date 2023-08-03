@@ -68,7 +68,7 @@ Cluster_Stats_All_Samples <- function(
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
     pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
     column_to_rownames("cluster")
-  colnames(percent_per_cluster_2) <- paste(colnames(percent_per_cluster_2), "%", sep = "_")
+  colnames(x = percent_per_cluster_2) <- paste(colnames(x = percent_per_cluster_2), "%", sep = "_")
 
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
     rownames_to_column(var = "Cluster")

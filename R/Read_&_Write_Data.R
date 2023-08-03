@@ -69,8 +69,8 @@ Create_10X_H5 <- function(
                         fileext=".h5")
   DropletUtils::write10xCounts(path = temp_file,
                  x = count_matrix,
-                 barcodes = colnames(count_matrix),
-                 gene.symbol = rownames(count_matrix),
+                 barcodes = colnames(x = count_matrix),
+                 gene.symbol = rownames(x = count_matrix),
                  gene.type = "Gene Expression",
                  type = "HDF5",
                  version = "3")
@@ -458,14 +458,14 @@ Read10X_GEO <- function(
 
   # Name the list
   if (!is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   } else {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   }
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -572,14 +572,14 @@ Read10X_h5_GEO <- function(
 
   # Name the matrices
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -712,13 +712,13 @@ Read10X_Multi_Directory <- function(
   }
   # Name the list items
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
   return(raw_data_list)
@@ -877,9 +877,9 @@ Read10X_h5_Multi_Directory <- function(
   }
   # Name the list items
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Replace Suffixes
@@ -888,7 +888,7 @@ Read10X_h5_Multi_Directory <- function(
       cli_abort(message = "No values provided to {.code new_suffix_list} but {.code replace_suffix = TRUE}.")
     }
 
-    current_suffix_list <- sapply(1:length(raw_data_list), function(x) {
+    current_suffix_list <- sapply(1:length(x = raw_data_list), function(x) {
       unique(str_extract(string = colnames(x = raw_data_list[[x]]), pattern = "-.$"))
     })
 
@@ -902,7 +902,7 @@ Read10X_h5_Multi_Directory <- function(
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
   return(raw_data_list)
@@ -1034,12 +1034,12 @@ Read_GEO_Delim <- function(
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
       if (move_genes_rownames) {
-        first_col_name <- colnames(data[1])
+        first_col_name <- colnames(x = data[1])
         data <- data %>%
           column_to_rownames(first_col_name)
       }
       if (barcode_suffix_period) {
-        colnames(data) <- gsub("\\.", "-", colnames(data))
+        colnames(x = data) <- gsub("\\.", "-", colnames(x = data))
       }
       data_sparse <- as(data, "Matrix")
       return(data_sparse)
@@ -1049,7 +1049,7 @@ Read_GEO_Delim <- function(
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
       if (move_genes_rownames) {
-        first_col_name <- colnames(data[1])
+        first_col_name <- colnames(x = data[1])
         data <- data %>%
           column_to_rownames(first_col_name)
       }
@@ -1060,7 +1060,7 @@ Read_GEO_Delim <- function(
                               "i" = "Please check original file and/or that parameter {.code move_genes_rownames} is set appropriately."))
       }
       if (barcode_suffix_period) {
-        colnames(data) <- gsub("\\.", "-", colnames(data))
+        colnames(x = data) <- gsub("\\.", "-", colnames(x = data))
       }
       data_sparse <- as(data, "Matrix")
       return(data_sparse)
@@ -1068,7 +1068,7 @@ Read_GEO_Delim <- function(
   }
 
   # Name the items in list
-  names(raw_data_list) <- sample_names
+  names(x = raw_data_list) <- sample_names
 
   # Check matrices
   for (i in 1:length(x = raw_data_list)) {
@@ -1077,7 +1077,7 @@ Read_GEO_Delim <- function(
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -1376,9 +1376,9 @@ Read_CellBender_h5_Multi_Directory <- function(
   }
   # Name the list items
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Replace Suffixes
@@ -1401,7 +1401,7 @@ Read_CellBender_h5_Multi_Directory <- function(
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
   return(raw_data_list)
@@ -1520,14 +1520,14 @@ Read_CellBender_h5_Multi_File <- function(
 
   # Name the matrices
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 

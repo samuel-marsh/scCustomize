@@ -61,7 +61,7 @@ Iterate_PC_Loading_Plots <- function(
   }
 
   # Check pca present
-  reduc_present <- names(seurat_object@reductions)
+  reduc_present <- names(x = seurat_object@reductions)
   if (!"pca" %in% reduc_present) {
     cli_abort(message = "Cannot find reduction 'pca' in this Seurat Object.")
   }
@@ -898,9 +898,9 @@ Iterate_FeaturePlot_scCustom <- function(
   gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
-    names(gene_list) <- names_vec_mod
+    names(x = gene_list) <- names_vec_mod
   }
 
   # Return plots instead of saving them
@@ -1295,9 +1295,9 @@ Iterate_Plot_Density_Custom <- function(
   }
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
-    names(gene_list) <- names_vec_mod
+    names(x = gene_list) <- names_vec_mod
   }
 
   # Single PDF option
@@ -1498,7 +1498,7 @@ Iterate_Plot_Density_Joint <- function(
   })
 
   if (!is.null(x = names(x = gene_list))) {
-    names(checked_gene_list) <- names(x = gene_list)
+    names(x = checked_gene_list) <- names(x = gene_list)
   }
 
   # remove any empty entries in list
@@ -1520,9 +1520,9 @@ Iterate_Plot_Density_Joint <- function(
   }
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
-    names(gene_list) <- names_vec_mod
+    names(x = gene_list) <- names_vec_mod
   }
 
   # Single PDF option

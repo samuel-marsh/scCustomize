@@ -431,7 +431,7 @@ Generate_Plotting_df_LIGER <- function(object,
   if (reorder.idents == TRUE){
     tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
   }
-  c_names <- names(object@clusters)
+  c_names <- names(x = object@clusters)
   if (is.null(x = clusters)) {
     # if clusters have not been set yet
     if (length(x = object@clusters) == 0) {
@@ -1014,7 +1014,7 @@ Variable_Features_ALL_LIGER <- function(
 
 Liger_to_Seurat <- function(
   liger_object,
-  nms = names(liger_object@H),
+  nms = names(x = liger_object@H),
   renormalize = TRUE,
   use.liger.genes = TRUE,
   by.dataset = FALSE,
@@ -1092,7 +1092,7 @@ Liger_to_Seurat <- function(
   if (by.dataset) {
     ident.use <- as.character(x = unlist(x = lapply(1:length(liger_object@raw.data), function(i) {
       dataset.name <- names(x = liger_object@raw.data)[i]
-      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
+      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(x = liger_object@raw.data[[i]])]))
     })))
   } else {
     if (maj_version < 3) {

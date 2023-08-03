@@ -673,7 +673,7 @@ QC_Plot_UMIvsGene <- function(
     rownames_to_column("barcodes")
   # Check valid meta variable
   if (!is.null(x = meta_gradient_name)) {
-    meta_names <- colnames(featurescatter_data)
+    meta_names <- colnames(x = featurescatter_data)
     if (meta_gradient_name %in% meta_names == FALSE) {
       cli_abort(message = "The meta data variable {.val {meta_gradient_name}} could not be found in object@metadata.")
     }
