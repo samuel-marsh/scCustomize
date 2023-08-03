@@ -132,13 +132,13 @@ Create_CellBender_Merged_Seurat <- function(
   cell_names_seurat <- colnames(x = cell_bender_seurat)
   gene_names_seurat <- rownames(x = cell_bender_seurat)
 
-  # Filter raw counts by created Seurat parameters
-  cli_inform(message = "{.field Filtering raw counts matrix to match Seurat Object.}")
-  raw_counts_matrix <- raw_counts_matrix[gene_names_seurat, cell_names_seurat]
-
   # Create raw counts assay object
   cli_inform(message = "{.field Creating raw counts Seurat Assay Object.}")
   counts <- CreateAssayObject(counts = raw_counts_matrix, min.cells = 0, min.features = 0)
+
+  # Filter raw counts by created Seurat parameters
+  cli_inform(message = "{.field Filtering raw counts Assay Object to match Seurat Object.}")
+  counts <- subset(x = counts, cells = Cells(x = cell_bender_seurat), features = rownames(x = cell_bender_seurat))
 
   # Add counts assay to Seurat Object
   cli_inform(message = "{.field Adding assay to Seurat Object.}")
