@@ -118,7 +118,7 @@ Create_CellBender_Merged_Seurat <- function(
   ...
 ) {
   # Filter Cell Bender matrix for Cell Ranger cells
-  cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(raw_cell_bender_matrix))
+  cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(x = raw_cell_bender_matrix))
 
   cli_inform(message = "{.field Filtering Cell Bender matrix for cells present in raw counts matrix.}")
 
