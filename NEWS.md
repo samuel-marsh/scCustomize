@@ -10,6 +10,7 @@
 ## Fixes  
 - Fixed issue in `Read10X_Metrics` that caused errors when reading files on windows operating system ([#115](https://github.com/samuel-marsh/scCustomize/issues/115)).  
 - Fixed issue in `Create_CellBender_Merged_Seurat` when feature names are changed (underscore to dash) during object creation ([#118](https://github.com/samuel-marsh/scCustomize/issues/118)).  
+- Fixed error in `Read10X_h5_Mutli_Directory` when reading Cell Ranger `multi` directories.  
 
 
 # scCustomize 1.1.3 (2023-07-19)  
