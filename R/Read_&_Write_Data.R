@@ -863,12 +863,8 @@ Read10X_h5_Multi_Directory <- function(
     })
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
-      if (is.null(x = secondary_path)) {
-        if (cellranger_multi) {
-          file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
-        } else {
-          file_path <- file.path(base_path, sample_list[x], h5_filename)
-        }
+      if (cellranger_multi) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
       } else {
         file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
       }
