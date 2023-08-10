@@ -6,7 +6,7 @@
 \usage{
 Liger_to_Seurat(
   liger_object,
-  nms = names(liger_object@H),
+  nms = names(x = liger_object@H),
   renormalize = TRUE,
   use.liger.genes = TRUE,
   by.dataset = FALSE,
