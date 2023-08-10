@@ -1984,7 +1984,6 @@ Barcode_Plot <- function(
 #'
 #' @import cli
 #' @import ggplot2
-#' @importFrom DropletUtils barcodeRanks
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -2055,7 +2054,7 @@ Iterate_Barcode_Rank_Plot <- function(
   cli_inform(message = "{.field Calculating Barcode Rank Statistics}")
   pboptions(char = "=")
   barcode_ranks_list <- pblapply(1:length(x = all_mat), function(x) {
-    br_file <- barcodeRanks(m = all_mat[[x]])
+    br_file <- DropletUtils::barcodeRanks(m = all_mat[[x]])
   })
 
   sample_names <- names(x = all_mat)
