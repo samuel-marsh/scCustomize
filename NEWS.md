@@ -1,7 +1,8 @@
 # scCustomize 1.X.X (2023-XX-XX)  
 ## Added  
 - Added support for metrics produced by Cell Ranger multi pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
-- Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.    
+- Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.  
+- Added two new sequencing QC functions to create and iterate barcode rank plots: `Barcode_Plot` and `Iterate_Barcode_Rank_Plot`.  
   
 ## Changed  
 - Internal rewrite of `Read10X_Metrics` to use new internal helper functions.
