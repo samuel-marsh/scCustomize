@@ -2068,7 +2068,7 @@ Iterate_Barcode_Rank_Plot <- function(
   cli_inform(message = "{.field Generating plots}")
   pboptions(char = "=")
   all_plots <- pblapply(1:num_samples, function(j) {
-    Barcode_Plot(br.out = barcode_ranks_list[[j]], pt.size = pt.size, plot_title = sample_names[j], raster_dpi = raster_dpi)
+    Barcode_Plot(br_out = barcode_ranks_list[[j]], pt.size = pt.size, plot_title = sample_names[j], raster_dpi = raster_dpi)
   })
   cli_inform(message = "{.field Saving plots to file}")
   # Save plots
