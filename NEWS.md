@@ -3,6 +3,8 @@
 - Added support for metrics produced by Cell Ranger multi pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
 - Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.  
 - Added two new sequencing QC functions to create and iterate barcode rank plots: `Barcode_Plot` and `Iterate_Barcode_Rank_Plot`.  
+- Added `ident_legend` parameter to `QC_Plot_UMIvsGene` to control show/hide of the identity legend ([#121](https://github.com/samuel-marsh/scCustomize/issues/121)).  
+
   
 ## Changed  
 - Internal rewrite of `Read10X_Metrics` to use new internal helper functions.
