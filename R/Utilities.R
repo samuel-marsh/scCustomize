@@ -390,7 +390,7 @@ Reduction_Loading_Present <- function(
       )
       return(feature_list)
     } else {
-      cli_abort(message ="No requested features found.")
+      cli_abort(message ="No reductions present in object.")
     }
   }
 
