@@ -695,6 +695,11 @@ VlnPlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by)
+  }
+
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
@@ -816,6 +821,11 @@ Stacked_VlnPlot <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by)
+  }
 
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
@@ -951,6 +961,11 @@ DotPlot_scCustom <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by)
+  }
 
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
