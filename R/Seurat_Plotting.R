@@ -1983,6 +1983,11 @@ DimPlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by)
+  }
+
   # Add one time split_seurat warning
   if (!is.null(x = split.by) && !split_seurat && getOption(x = 'scCustomize_warn_DimPlot_split_type', default = TRUE)) {
     cli_inform(c("",
