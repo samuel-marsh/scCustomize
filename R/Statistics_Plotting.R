@@ -818,11 +818,21 @@ CellBender_Diff_Plot <- function(
   # Label points
   if (label) {
     if (is.null(x = custom_labels)) {
+      # Subset the labels based on min count threshold
       labels_use <- feature_diff_df_filtered %>%
         filter(.data[["Raw_Counts"]] >= min_count_label) %>%
         rownames()
 
-      plot <- LabelPoints(plot = plot, points = labels_use[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+      # Return message of features not found
+      if (length(x = labels_use) == 0) {
+        cli_warn(message = c("No features met the labeling criteria.",
+                             "i" = "Try adjusting {.field min_count_label} and/or {.field pct_diff_threshold}.")
+        )
+
+        plot <- plot
+      } else {
+        plot <- LabelPoints(plot = plot, points = labels_use[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+      }
     } else {
       # check for features
       features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
