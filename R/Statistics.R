@@ -288,6 +288,8 @@ Median_Stats <- function(
 #' @param seurat_object Seurat object name.
 #' @param raw_assay Name of the assay containing the raw count data.
 #' @param cell_bender_assay Name of the assay containing the CellBender count data.
+#' @param raw_mat Name of raw count matrix in environment if not using Seurat object.
+#' @param cell_bender_mat Name of CellBender count matrix in environment if not using Seurat object.
 #'
 #' @return A data.frame containing summed raw counts, CellBender counts, count difference, and
 #' percent difference in counts.
