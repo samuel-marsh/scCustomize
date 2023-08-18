@@ -699,6 +699,8 @@ Plot_Cells_per_Sample <- function(
 #' @param label logical, whether or not to label the features that have largest percent difference
 #' between raw and CellBender counts (Default is TRUE).
 #' @param num_labels Number of features to label if `label = TRUE`, (default is 20).
+#' @param min_count_label Minimum number of raw counts per feature necessary to be included in
+#' plot labels (default is 1)
 #' @param repel logical, whether to use geom_text_repel to create a nicely-repelled labels; this is
 #' slow when a lot of points are being plotted. If using repel, set xnudge and ynudge to 0, (Default is TRUE).
 #' @param custom_labels A custom set of features to label instead of the features most different between
