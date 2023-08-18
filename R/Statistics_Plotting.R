@@ -749,6 +749,7 @@ CellBender_Diff_Plot <- function(
   num_features = NULL,
   label = TRUE,
   num_labels = 20,
+  min_count_label = 1,
   repel = TRUE,
   custom_labels = NULL,
   plot_line = TRUE,
@@ -815,7 +816,11 @@ CellBender_Diff_Plot <- function(
   # Label points
   if (label) {
     if (is.null(x = custom_labels)) {
-      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df_filtered)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+      labels_use <- feature_diff_df_filtered %>%
+        filter(.data[["Raw_Counts"]] >= min_count_label) %>%
+        rownames()
+
+      plot <- LabelPoints(plot = plot, points = labels_use, repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
     } else {
       # check for features
       features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
