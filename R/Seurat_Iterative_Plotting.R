@@ -98,6 +98,7 @@ Iterate_PC_Loading_Plots <- function(
 #' Iterate DimPlot by orig.ident column from Seurat object metadata
 #'
 #' @param seurat_object Seurat object name.
+#' @param sample_column name of meta.data column containing sample names/ids (default is "orig.ident").
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
@@ -134,6 +135,7 @@ Iterate_PC_Loading_Plots <- function(
 
 Iterate_DimPlot_bySample <- function(
   seurat_object,
+  sample_column = "orig.ident",
   file_path = NULL,
   file_name = NULL,
   file_type = NULL,
@@ -148,6 +150,18 @@ Iterate_DimPlot_bySample <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Check meta.data column if not orig.ident
+  if (sample_column != "orig.ident") {
+    # Check meta data
+    sample_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
+
+    # stop if none found
+    if (length(x = sample_column) == 0) {
+      cli_abort(message = c("No meta.data column found.",
+                            "i" = "Column {.field {sample_column}} was not found in the meta.data slot."))
+    }
+  }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
@@ -197,7 +211,7 @@ Iterate_DimPlot_bySample <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract orig.ident
-  column_list <- as.character(x = unique(x = seurat_object@meta.data$orig.ident))
+  column_list <- as.character(x = unique(x = seurat_object@meta.data[[sample_column]]))
 
   # Create list of cells per sample
   cells_per_sample <- lapply(column_list, function(sample) {
@@ -210,11 +224,11 @@ Iterate_DimPlot_bySample <- function(
     pboptions(char = "=")
     all_plots <- pblapply(cells_per_sample,function(cells) {
       if (legend) {
-        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
           xlim(x_axis) +
           ylim(y_axis)
       } else {
-        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
           xlim(x_axis) +
           ylim(y_axis) +
           NoLegend()
@@ -237,11 +251,11 @@ Iterate_DimPlot_bySample <- function(
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         if (legend) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis)
         } else {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
             NoLegend()
@@ -257,11 +271,11 @@ Iterate_DimPlot_bySample <- function(
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         if (legend) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis)
         } else {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
             NoLegend()
