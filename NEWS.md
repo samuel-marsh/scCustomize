@@ -6,6 +6,7 @@
 - Added `ident_legend` parameter to `QC_Plot_UMIvsGene` to control show/hide of the identity legend ([#121](https://github.com/samuel-marsh/scCustomize/issues/121)).  
 - Added support for sparse matrix input in `CellBender_Feature_Diff`.  
 - Added `min_count_label` in `CellBender_Diff_Plot` to better control feature labeling.  
+- Allow specification of meta data column containing sample names/IDs in `Iterate_DimPlot_bySample` using new `sample_column` parameter.  
 
   
 ## Changed  
