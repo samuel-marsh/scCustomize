@@ -6,6 +6,7 @@
 \usage{
 Iterate_DimPlot_bySample(
   seurat_object,
+  sample_column = "orig.ident",
   file_path = NULL,
   file_name = NULL,
   file_type = NULL,
@@ -21,6 +22,8 @@ Iterate_DimPlot_bySample(
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
+
+\item{sample_column}{name of meta.data column containing sample names/ids (default is "orig.ident").}
 
 \item{file_path}{directory file path and/or file name prefix.  Defaults to current wd.}
 
