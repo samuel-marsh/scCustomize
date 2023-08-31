@@ -8,7 +8,8 @@ Barcode_Plot(
   br_out,
   pt.size = 6,
   plot_title = "Barcode Ranks",
-  raster_dpi = c(1024, 1024)
+  raster_dpi = c(1024, 1024),
+  plateau = NULL
 )
 }
 \arguments{
@@ -20,6 +21,9 @@ Barcode_Plot(
 
 \item{raster_dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(1024, 1024).}
+
+\item{plateau}{numerical value at which to add vertical line designating estimated
+empty droplet plateau (default is NULL).}
 }
 \value{
 A ggplot object

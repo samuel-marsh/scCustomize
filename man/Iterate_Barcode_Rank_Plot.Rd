@@ -15,6 +15,7 @@ Iterate_Barcode_Rank_Plot(
   file_name = NULL,
   pt.size = 6,
   raster_dpi = c(1024, 1024),
+  plateau,
   ...
 )
 }
@@ -43,6 +44,9 @@ to Cell Ranger \code{count} (default is FALSE).  Only valid if \code{multi_direc
 
 \item{raster_dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(1024, 1024).}
+
+\item{plateau}{numerical values at which to add vertical line designating estimated
+empty droplet plateau (default is NULL).  Must be vector equal in length to number of samples.}
 
 \item{...}{Additional parameters passed to \code{Read10X_h5_Multi_Directory} or \code{Read10X_h5_GEO}.}
 }
