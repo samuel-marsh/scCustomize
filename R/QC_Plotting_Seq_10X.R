@@ -1991,6 +1991,8 @@ Barcode_Plot <- function(
 #' @param pt.size point size for plotting, default is 6.
 #' @param raster_dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(1024, 1024).
+#' @param plateau numerical values at which to add vertical line designating estimated
+#' empty droplet plateau (default is NULL).  Must be vector equal in length to number of samples.
 #' @param ... Additional parameters passed to `Read10X_h5_Multi_Directory` or `Read10X_h5_GEO`.
 #'
 #' @return pdf document
@@ -2023,6 +2025,7 @@ Iterate_Barcode_Rank_Plot <- function(
     file_name = NULL,
     pt.size = 6,
     raster_dpi = c(1024, 1024),
+    plateau,
     ...
 ) {
   DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
@@ -2077,11 +2080,15 @@ Iterate_Barcode_Rank_Plot <- function(
 
   num_samples <- length(x = barcode_ranks_list)
 
+  if (!is.null(x = plateau) && length(x = plateau) != num_samples) {
+    cli_abort(message = "The number of values for plateau ({.field {length(x = plateau)}}) must be equal to the number of samples ({.field {length(x = num_samples)}}).")
+  }
+
   # Single PDF option
   cli_inform(message = "{.field Generating plots}")
   pboptions(char = "=")
   all_plots <- pblapply(1:num_samples, function(j) {
-    Barcode_Plot(br_out = barcode_ranks_list[[j]], pt.size = pt.size, plot_title = sample_names[j], raster_dpi = raster_dpi)
+    Barcode_Plot(br_out = barcode_ranks_list[[j]], pt.size = pt.size, plot_title = sample_names[j], raster_dpi = raster_dpi, plateau = plateau[j])
   })
   cli_inform(message = "{.field Saving plots to file}")
   # Save plots
