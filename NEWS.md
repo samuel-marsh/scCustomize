@@ -18,6 +18,7 @@
 - Fixed issue in `Create_CellBender_Merged_Seurat` when feature names are changed (underscore to dash) during object creation ([#118](https://github.com/samuel-marsh/scCustomize/issues/118)).  
 - Fixed error in `Read10X_h5_Mutli_Directory` when reading Cell Ranger `multi` directories.  
 - Added new checks to `VlnPlot_scCustom`, `DimPlot_scCustom`, and `DotPlot_scCustom` to avoid otherwise ambiguous error messages ([#120](https://github.com/samuel-marsh/scCustomize/issues/120)).  
+- Fixed internal check message accidentally user facing in `VlnPlot_scCustom` ([#122](https://github.com/samuel-marsh/scCustomize/issues/122)).  
 
 
 # scCustomize 1.1.3 (2023-07-19)  
