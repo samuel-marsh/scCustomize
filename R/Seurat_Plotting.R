@@ -697,7 +697,7 @@ VlnPlot_scCustom <- function(
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by)
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
