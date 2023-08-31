@@ -1903,6 +1903,8 @@ Seq_QC_Plot_Alignment_Combined <- function(
 #' @param plot_title Title for plot, default is "Barcode Ranks".
 #' @param raster_dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(1024, 1024).
+#' @param plateau numerical value at which to add vertical line designating estimated
+#' empty droplet plateau (default is NULL).
 #'
 #' @return A ggplot object
 #'
@@ -1929,7 +1931,8 @@ Barcode_Plot <- function(
     br_out,
     pt.size = 6,
     plot_title = "Barcode Ranks",
-    raster_dpi = c(1024, 1024)
+    raster_dpi = c(1024, 1024),
+    plateau = NULL
 ) {
   # Check br_out is correct
   if (!inherits(x = br_out, what = "DFrame")) {
@@ -1942,7 +1945,7 @@ Barcode_Plot <- function(
                           "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}} and no errors occured when running code."))
   }
 
-  ggplot(data = data.frame(br_out@listData), aes(x = rank, y = total)) +
+  plot <- ggplot(data = data.frame(br_out@listData), aes(x = rank, y = total)) +
     geom_scattermore(pointsize = pt.size, pixels = raster_dpi) +
     scale_y_log10() +
     scale_x_log10() +
@@ -1956,6 +1959,16 @@ Barcode_Plot <- function(
     xlab("Barcode Rank") +
     ggtitle(plot_title) +
     theme(plot.title = element_text(hjust = 0.5))
+
+  # Add plateau if specified
+  if (!is.null(x = plateau)) {
+    plot <- plot +
+      geom_vline(xintercept = plateau, linetype = "dashed", color = "dodgerblue") +
+      annotate("text", x = plateau, y = max(br_out$total), label = paste0("Plateau (", plateau, ")"), vjust = -0.5, hjust = -0.05)
+  }
+
+  # return plot
+  return(plot)
 }
 
 
