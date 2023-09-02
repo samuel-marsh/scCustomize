@@ -21,6 +21,7 @@
 - Fixed error in `Read10X_h5_Mutli_Directory` when reading Cell Ranger `multi` directories.  
 - Added new checks to `VlnPlot_scCustom`, `DimPlot_scCustom`, and `DotPlot_scCustom` to avoid otherwise ambiguous error messages ([#120](https://github.com/samuel-marsh/scCustomize/issues/120)).  
 - Fixed internal check message accidentally user facing in `VlnPlot_scCustom` ([#122](https://github.com/samuel-marsh/scCustomize/issues/122)).  
+- Fixed cli warning in `Cell_Highlight_Plot` that could cause function to error without proper error message.  
 
 
 # scCustomize 1.1.3 (2023-07-19)  
