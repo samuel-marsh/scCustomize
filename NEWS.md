@@ -12,6 +12,7 @@
 ## Changed  
 - Internal rewrite of `Read10X_Metrics` to use new internal helper functions.  
 - Updated `Iterate_FeaturePlot_scCustom` to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
+- Changed `Liger_to_Seurat` to transfer the liger_object@H slot in addition to H.norm slot already moved.  
    
 
 ## Fixes  
