@@ -1824,7 +1824,7 @@ Cell_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   if (!inherits(x = cells_highlight, what = "list")) {
-    cli_abort(message = ".{code cells_highlight} must be of class: {.val list()}.")
+    cli_abort(message = "{.code cells_highlight} must be of class: {.val list()}.")
   }
 
   if (is.null(x = names(x = cells_highlight))) {
