@@ -831,7 +831,8 @@ Iterate_Meta_Highlight_Plot <- function(
 
 Iterate_FeaturePlot_scCustom <- function(
   seurat_object,
-  gene_list,
+  features,
+  gene_list = deprecated(),
   colors_use = viridis_plasma_dark_high,
   na_color = "lightgray",
   na_cutoff = 0.000000001,
@@ -928,7 +929,7 @@ Iterate_FeaturePlot_scCustom <- function(
     all_found_features <- features
   }
 
-  if (any(features) %in% colnames(seurat_object@meta.data) && any(features) %in% rownames(seurat_object)) {
+  if (any(features %in% colnames(seurat_object@meta.data)) && any(features %in% rownames(seurat_object))) {
     cli_warn(message = c("Some of the {.code features} provided are from both assay features and meta.data",
                          "*" = "This could cause problems in plot output due to differences in {.field na_cutoff} parameter.",
                          "i" = "Suggest splitting {.code features} and running {.field Iterate_FeaturePlot_scCustom} once for each feature list."))
