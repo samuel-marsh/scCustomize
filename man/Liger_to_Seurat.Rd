@@ -6,12 +6,12 @@
 \usage{
 Liger_to_Seurat(
   liger_object,
-  nms = names(x = liger_object@H),
+  nms = names(liger_object@H),
   renormalize = TRUE,
   use.liger.genes = TRUE,
   by.dataset = FALSE,
   keep_meta = TRUE,
-  reduction_label = NULL,
+  reduction_label = "UMAP",
   seurat_assay = "RNA"
 )
 }

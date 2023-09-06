@@ -6,7 +6,8 @@
 \usage{
 Iterate_FeaturePlot_scCustom(
   seurat_object,
-  gene_list,
+  features,
+  gene_list = deprecated(),
   colors_use = viridis_plasma_dark_high,
   na_color = "lightgray",
   na_cutoff = 1e-09,
@@ -29,7 +30,10 @@ Iterate_FeaturePlot_scCustom(
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{gene_list}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{features}}
+\item{features}{vector of features to plot.  If a named vector is provided then the names for each gene
+will be incorporated into plot title if \code{single_pdf = TRUE} or into file name if \code{FALSE}.}
+
+\item{gene_list}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{features}.}
 
 \item{colors_use}{color scheme to use.}
 
@@ -67,9 +71,6 @@ value between 0-1.}
 value between 0-1.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.}
-
-\item{features}{vector of features to plot.  If a named vector is provided then the names for each gene
-will be incorporated into plot title if \code{single_pdf = TRUE} or into file name if \code{FALSE}.}
 }
 \value{
 Saved plots
