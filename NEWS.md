@@ -10,8 +10,9 @@
 
   
 ## Changed  
+- **SOFT DEPRECATION** The parameter `gene_list` in `Iterate_FeaturePlot_scCustom` and `Iterate_VlnPlot_scCustom` has been soft-deprecated and replaced by `features` parameter.  Specifying `gene_list` will display deprecation warning but continue to function until next major update.  
+- The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
 - Internal rewrite of `Read10X_Metrics` to use new internal helper functions.  
-- Updated `Iterate_FeaturePlot_scCustom` to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
 - Changed `Liger_to_Seurat` to transfer the liger_object@H slot in addition to H.norm slot already moved.  
    
 
