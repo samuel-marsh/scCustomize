@@ -784,7 +784,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param seurat_object Seurat object name.
 #' @param features vector of features to plot.  If a named vector is provided then the names for each gene
 #'  will be incorporated into plot title if `single_pdf = TRUE` or into file name if `FALSE`.
-#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`
+#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`.
 #' @param colors_use color scheme to use.
 #' @param na_color color for non-expressed cells.
 #' @param na_cutoff Value to use as minimum expression cutoff.  To set no cutoff set to `NA`.
@@ -1029,7 +1029,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #' Create and Save plots for Gene list with Single Command
 #'
 #' @param seurat_object Seurat object name.
-#' @param gene_list list of genes to plot.
+#' @param features vector of features to plot.
+#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`.
 #' @param colors_use color palette to use for plotting.  By default if number of levels plotted is less than
 #' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from `DiscretePalette_scCustomize`.
@@ -1073,7 +1074,8 @@ Iterate_FeaturePlot_scCustom <- function(
 
 Iterate_VlnPlot_scCustom <- function(
   seurat_object,
-  gene_list,
+  features,
+  gene_list = deprecated(),
   colors_use = NULL,
   pt.size = NULL,
   group.by = NULL,
@@ -1088,6 +1090,18 @@ Iterate_VlnPlot_scCustom <- function(
   color_seed = 123,
   ...
 ) {
+  # Deprecation warning
+  if (lifecycle::is_present(gene_list)) {
+    lifecycle::deprecate_warn(when = "1.2.0",
+                              what = "Iterate_VlnPlot_scCustom(gene_list)",
+                              with = "Iterate_VlnPlot_scCustom(features)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    features <- gene_list
+  }
+
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -1131,8 +1145,15 @@ Iterate_VlnPlot_scCustom <- function(
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
-  # Check whether features are present in object
-  gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
+  # Check whether features are present in object (dependent on whether vector is named)
+  if (is.null(x = names(x = features))) {
+    all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
+  } else {
+    all_found_features <- features
+  }
+
+  # # Check whether features are present in object
+  # gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
 
   # Set default color palette based on number of levels being plotted
   if (is.null(x = group.by)) {
@@ -1169,7 +1190,7 @@ Iterate_VlnPlot_scCustom <- function(
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(gene_list,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
+    all_plots <- pblapply(all_found_features,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
@@ -1183,20 +1204,20 @@ Iterate_VlnPlot_scCustom <- function(
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
-      pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
-      for (i in 1:length(gene_list)) {
-        VlnPlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, gene_list[i], file_name, file_type, sep=""), dpi = dpi))
+      pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
+      for (i in 1:length(x = all_found_features)) {
+        VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
-      pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
-      for (i in 1:length(gene_list)) {
-        VlnPlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, gene_list[i], file_name, file_type, sep=""), useDingbats = FALSE))
+      pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
+      for (i in 1:length(x = all_found_features)) {
+        VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
