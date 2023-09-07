@@ -539,7 +539,12 @@ Read10X_h5_GEO <- function(
   }
 
   file.list <- list.files(path = data_dir, pattern = ".h5", full.names = FALSE)
-  # Remove "barcodes.tsv.gz" file suffix
+
+  # Remove file suffix if provided
+  if (!is.null(x = shared_suffix)) {
+    shared_suffix <- gsub(pattern = ".h5", replacement = "", x = shared_suffix)
+  }
+
   if (is.null(x = sample_list)) {
     if (is.null(x = shared_suffix)) {
       sample_list <- gsub(pattern = ".h5", x = file.list, replacement = "")
