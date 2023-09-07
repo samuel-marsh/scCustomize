@@ -61,7 +61,7 @@ Iterate_PC_Loading_Plots <- function(
   }
 
   # Check pca present
-  reduc_present <- names(seurat_object@reductions)
+  reduc_present <- names(x = seurat_object@reductions)
   if (!"pca" %in% reduc_present) {
     cli_abort(message = "Cannot find reduction 'pca' in this Seurat Object.")
   }
@@ -98,6 +98,7 @@ Iterate_PC_Loading_Plots <- function(
 #' Iterate DimPlot by orig.ident column from Seurat object metadata
 #'
 #' @param seurat_object Seurat object name.
+#' @param sample_column name of meta.data column containing sample names/ids (default is "orig.ident").
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
@@ -134,6 +135,7 @@ Iterate_PC_Loading_Plots <- function(
 
 Iterate_DimPlot_bySample <- function(
   seurat_object,
+  sample_column = "orig.ident",
   file_path = NULL,
   file_name = NULL,
   file_type = NULL,
@@ -148,6 +150,18 @@ Iterate_DimPlot_bySample <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Check meta.data column if not orig.ident
+  if (sample_column != "orig.ident") {
+    # Check meta data
+    sample_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
+
+    # stop if none found
+    if (length(x = sample_column) == 0) {
+      cli_abort(message = c("No meta.data column found.",
+                            "i" = "Column {.field {sample_column}} was not found in the meta.data slot."))
+    }
+  }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
@@ -197,7 +211,7 @@ Iterate_DimPlot_bySample <- function(
               max(reduc_coordinates[, 2]))
 
   # Extract orig.ident
-  column_list <- as.character(x = unique(x = seurat_object@meta.data$orig.ident))
+  column_list <- as.character(x = unique(x = seurat_object@meta.data[[sample_column]]))
 
   # Create list of cells per sample
   cells_per_sample <- lapply(column_list, function(sample) {
@@ -210,11 +224,11 @@ Iterate_DimPlot_bySample <- function(
     pboptions(char = "=")
     all_plots <- pblapply(cells_per_sample,function(cells) {
       if (legend) {
-        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
           xlim(x_axis) +
           ylim(y_axis)
       } else {
-        DimPlot(object = seurat_object, cells = cells, group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
           xlim(x_axis) +
           ylim(y_axis) +
           NoLegend()
@@ -237,11 +251,11 @@ Iterate_DimPlot_bySample <- function(
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         if (legend) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis)
         } else {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
             NoLegend()
@@ -257,11 +271,11 @@ Iterate_DimPlot_bySample <- function(
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         if (legend) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis)
         } else {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = "orig.ident", cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
             NoLegend()
@@ -768,8 +782,9 @@ Iterate_Meta_Highlight_Plot <- function(
 #' Create and Save plots for Gene list with Single Command
 #'
 #' @param seurat_object Seurat object name.
-#' @param gene_list vector of genes to plot.  If a named vector is provided then the names for each gene
+#' @param features vector of features to plot.  If a named vector is provided then the names for each gene
 #'  will be incorporated into plot title if `single_pdf = TRUE` or into file name if `FALSE`.
+#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`.
 #' @param colors_use color scheme to use.
 #' @param na_color color for non-expressed cells.
 #' @param na_cutoff Value to use as minimum expression cutoff.  To set no cutoff set to `NA`.
@@ -816,7 +831,8 @@ Iterate_Meta_Highlight_Plot <- function(
 
 Iterate_FeaturePlot_scCustom <- function(
   seurat_object,
-  gene_list,
+  features,
+  gene_list = deprecated(),
   colors_use = viridis_plasma_dark_high,
   na_color = "lightgray",
   na_cutoff = 0.000000001,
@@ -835,6 +851,18 @@ Iterate_FeaturePlot_scCustom <- function(
   alpha_na_exp = NULL,
   ...
 ) {
+  # Deprecation warning
+  if (lifecycle::is_present(gene_list)) {
+    lifecycle::deprecate_warn(when = "1.2.0",
+                              what = "Iterate_FeaturePlot_scCustom(gene_list)",
+                              with = "Iterate_FeaturePlot_scCustom(features)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    features <- gene_list
+  }
+
+
   # temp turn off message call from FeaturePlot_scCustomize
   op <- options(scCustomize_warn_na_cutoff = FALSE)
   on.exit(options(op))
@@ -894,20 +922,32 @@ Iterate_FeaturePlot_scCustom <- function(
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
-  # Check whether features are present in object
-  gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
+  # Check whether features are present in object (dependent on whether vector is named)
+  if (is.null(x = names(x = features))) {
+    all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
+  } else {
+    all_found_features <- features
+  }
+
+  if (any(features %in% colnames(seurat_object@meta.data)) && any(features %in% rownames(seurat_object))) {
+    cli_warn(message = c("Some of the {.code features} provided are from both assay features and meta.data",
+                         "*" = "This could cause problems in plot output due to differences in {.field na_cutoff} parameter.",
+                         "i" = "Suggest splitting {.code features} and running {.field Iterate_FeaturePlot_scCustom} once for each feature list."))
+  }
+
+  # gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(gene_list)) && !single_pdf) {
-    names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
-    names(gene_list) <- names_vec_mod
+  if (!is.null(x = names(x = all_found_features)) && !single_pdf) {
+    names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = all_found_features))
+    names(x = all_found_features) <- names_vec_mod
   }
 
   # Return plots instead of saving them
   if (return_plots) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)})
+    all_plots <- pblapply(all_found_features,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)})
     return(all_plots)
   }
 
@@ -915,14 +955,14 @@ Iterate_FeaturePlot_scCustom <- function(
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(gene_list,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
+    all_plots <- pblapply(all_found_features,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
     cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
-    if (!is.null(x = names(x = gene_list)) && is.null(x = split.by)) {
+    if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
       pdf(paste(file_path, file_name, file_type, sep=""))
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
-        print(all_plots[[i]] + ggtitle((paste0(gene_list[i], "_", names(x = gene_list)[i]))))
+        print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -942,13 +982,13 @@ Iterate_FeaturePlot_scCustom <- function(
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
-      pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
-      for (i in 1:length(gene_list)) {
-        FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
-        if (!is.null(x = names(x = gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+      pb <- txtProgressBar(min = 0, max = length(all_found_features), style = 3, file = stderr())
+      for (i in 1:length(all_found_features)) {
+        FeaturePlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
+        if (!is.null(x = names(x = all_found_features))) {
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), dpi = dpi))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), dpi = dpi))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -956,13 +996,13 @@ Iterate_FeaturePlot_scCustom <- function(
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
-      pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
-      for (i in 1:length(gene_list)) {
-        FeaturePlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
-        if (!is.null(x = names(x = gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+      pb <- txtProgressBar(min = 0, max = length(all_found_features), style = 3, file = stderr())
+      for (i in 1:length(all_found_features)) {
+        FeaturePlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
+        if (!is.null(x = names(x = all_found_features))) {
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -989,7 +1029,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #' Create and Save plots for Gene list with Single Command
 #'
 #' @param seurat_object Seurat object name.
-#' @param gene_list list of genes to plot.
+#' @param features vector of features to plot.
+#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`.
 #' @param colors_use color palette to use for plotting.  By default if number of levels plotted is less than
 #' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from `DiscretePalette_scCustomize`.
@@ -1033,7 +1074,8 @@ Iterate_FeaturePlot_scCustom <- function(
 
 Iterate_VlnPlot_scCustom <- function(
   seurat_object,
-  gene_list,
+  features,
+  gene_list = deprecated(),
   colors_use = NULL,
   pt.size = NULL,
   group.by = NULL,
@@ -1048,6 +1090,18 @@ Iterate_VlnPlot_scCustom <- function(
   color_seed = 123,
   ...
 ) {
+  # Deprecation warning
+  if (lifecycle::is_present(gene_list)) {
+    lifecycle::deprecate_warn(when = "1.2.0",
+                              what = "Iterate_VlnPlot_scCustom(gene_list)",
+                              with = "Iterate_VlnPlot_scCustom(features)",
+                              details = c("v" = "The parameter will remain functional until next major update.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    features <- gene_list
+  }
+
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -1091,8 +1145,15 @@ Iterate_VlnPlot_scCustom <- function(
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
-  # Check whether features are present in object
-  gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
+  # Check whether features are present in object (dependent on whether vector is named)
+  if (is.null(x = names(x = features))) {
+    all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
+  } else {
+    all_found_features <- features
+  }
+
+  # # Check whether features are present in object
+  # gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
 
   # Set default color palette based on number of levels being plotted
   if (is.null(x = group.by)) {
@@ -1129,7 +1190,7 @@ Iterate_VlnPlot_scCustom <- function(
   if (single_pdf == TRUE) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(gene_list,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
+    all_plots <- pblapply(all_found_features,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, file_type, sep=""))
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
@@ -1143,20 +1204,20 @@ Iterate_VlnPlot_scCustom <- function(
   else {
     if (str_detect(file_type, ".pdf") == FALSE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
-      pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
-      for (i in 1:length(gene_list)) {
-        VlnPlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, gene_list[i], file_name, file_type, sep=""), dpi = dpi))
+      pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
+      for (i in 1:length(x = all_found_features)) {
+        VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
     }
     if (str_detect(file_type, ".pdf") == TRUE) {
       cli_inform(message = "{.field Generating plots and saving plots to file}")
-      pb <- txtProgressBar(min = 0, max = length(gene_list), style = 3, file = stderr())
-      for (i in 1:length(gene_list)) {
-        VlnPlot_scCustom(seurat_object = seurat_object, features = gene_list[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, gene_list[i], file_name, file_type, sep=""), useDingbats = FALSE))
+      pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
+      for (i in 1:length(x = all_found_features)) {
+        VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1295,9 +1356,9 @@ Iterate_Plot_Density_Custom <- function(
   }
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
-    names(gene_list) <- names_vec_mod
+    names(x = gene_list) <- names_vec_mod
   }
 
   # Single PDF option
@@ -1498,7 +1559,7 @@ Iterate_Plot_Density_Joint <- function(
   })
 
   if (!is.null(x = names(x = gene_list))) {
-    names(checked_gene_list) <- names(x = gene_list)
+    names(x = checked_gene_list) <- names(x = gene_list)
   }
 
   # remove any empty entries in list
@@ -1520,9 +1581,9 @@ Iterate_Plot_Density_Joint <- function(
   }
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
-    names(gene_list) <- names_vec_mod
+    names(x = gene_list) <- names_vec_mod
   }
 
   # Single PDF option

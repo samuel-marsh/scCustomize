@@ -68,7 +68,7 @@ Cluster_Stats_All_Samples <- function(
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
     pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
     column_to_rownames("cluster")
-  colnames(percent_per_cluster_2) <- paste(colnames(percent_per_cluster_2), "%", sep = "_")
+  colnames(x = percent_per_cluster_2) <- paste(colnames(x = percent_per_cluster_2), "%", sep = "_")
 
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
     rownames_to_column(var = "Cluster")
@@ -288,6 +288,8 @@ Median_Stats <- function(
 #' @param seurat_object Seurat object name.
 #' @param raw_assay Name of the assay containing the raw count data.
 #' @param cell_bender_assay Name of the assay containing the CellBender count data.
+#' @param raw_mat Name of raw count matrix in environment if not using Seurat object.
+#' @param cell_bender_mat Name of CellBender count matrix in environment if not using Seurat object.
 #'
 #' @return A data.frame containing summed raw counts, CellBender counts, count difference, and
 #' percent difference in counts.
@@ -311,56 +313,102 @@ Median_Stats <- function(
 #'
 
 CellBender_Feature_Diff <- function(
-  seurat_object,
-  raw_assay,
-  cell_bender_assay
+  seurat_object = NULL,
+  raw_assay = NULL,
+  cell_bender_assay = NULL,
+  raw_mat = NULL,
+  cell_bender_mat = NULL
 ) {
-  # Is Seurat
-  Is_Seurat(seurat_object = seurat_object)
+  if (!is.null(x = seurat_object)) {
+    # Is Seurat
+    Is_Seurat(seurat_object = seurat_object)
 
-  # Check assays present
-  assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay, cell_bender_assay), print_msg = FALSE, omit_warn = TRUE)[[2]]
+    # Check assays present
+    assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(raw_assay, cell_bender_assay), print_msg = FALSE, omit_warn = TRUE)[[2]]
 
-  if (!is.null(x = assays_not_found)) {
-    stop_quietly()
+    if (!is.null(x = assays_not_found)) {
+      stop_quietly()
+    }
+
+    # Pull raw counts
+    raw_counts <- pluck(seurat_object, "assays", raw_assay, "counts") %>%
+      rowSums() %>%
+      data.frame() %>%
+      rownames_to_column("Feature_Names")
+
+    colnames(x = raw_counts)[2] <- "Raw_Counts"
+
+    # Pull Cell Bender Counts
+    cb_counts <- pluck(seurat_object, "assays", cell_bender_assay, "counts") %>%
+      rowSums() %>%
+      data.frame() %>%
+      rownames_to_column("Feature_Names")
+
+    colnames(x = cb_counts)[2] <- "CellBender_Counts"
+
+    # Check features identical
+    diff_features <- symdiff(x = raw_counts$Feature_Names, y = cb_counts$Feature_Names)
+
+    if (length(x = diff_features > 0)) {
+      cli_warn(message = c("The following features are not present in both assays:",
+                           "*" = "{.field {diff_features}}",
+                           "i" = "Check matrices used to create object.")
+      )
+    }
+
+    # merge
+    merged_counts <- suppressMessages(left_join(x = raw_counts, y = cb_counts))
+
+    # Add diff and % diff
+    merged_counts <- merged_counts %>%
+      mutate(Count_Diff = .data[["Raw_Counts"]] - .data[["CellBender_Counts"]],
+             Pct_Diff = 100 - ((.data[["CellBender_Counts"]] / .data[["Raw_Counts"]]) * 100)) %>%
+      arrange(desc(.data[["Pct_Diff"]])) %>%
+      column_to_rownames("Feature_Names")
+
+    # return data
+    return(merged_counts)
   }
 
-  # Pull raw counts
-  raw_counts <- pluck(seurat_object, "assays", raw_assay, "counts") %>%
-    rowSums() %>%
-    data.frame() %>%
-    rownames_to_column("Feature_Names")
+  # Matrix Version (Need to update warnings and checks here)
+  if (!is.null(x = raw_mat) && !is.null(x = cell_bender_mat)) {
+    # Pull raw counts
+    raw_counts <- raw_mat %>%
+      rowSums() %>%
+      data.frame() %>%
+      rownames_to_column("Feature_Names")
 
-  colnames(x = raw_counts)[2] <- "Raw_Counts"
+    colnames(x = raw_counts)[2] <- "Raw_Counts"
 
-  # Pull Cell Bender Counts
-  cb_counts <- pluck(seurat_object, "assays", cell_bender_assay, "counts") %>%
-    rowSums() %>%
-    data.frame() %>%
-    rownames_to_column("Feature_Names")
+    # Pull Cell Bender Counts
+    cb_counts <- cell_bender_mat %>%
+      rowSums() %>%
+      data.frame() %>%
+      rownames_to_column("Feature_Names")
 
-  colnames(x = cb_counts)[2] <- "CellBender_Counts"
+    colnames(x = cb_counts)[2] <- "CellBender_Counts"
 
-  # Check features identical
-  diff_features <- symdiff(x = raw_counts$Feature_Names, y = cb_counts$Feature_Names)
+    # Check features identical
+    diff_features <- symdiff(x = raw_counts$Feature_Names, y = cb_counts$Feature_Names)
 
-  if (length(x = diff_features > 0)) {
-    cli_warn(message = c("The following features are not present in both assays:",
-                         "*" = "{.field {diff_features}}",
-                         "i" = "Check matrices used to create object.")
-             )
+    if (length(x = diff_features > 0)) {
+      cli_warn(message = c("The following features are not present in both assays:",
+                           "*" = "{.field {diff_features}}",
+                           "i" = "Check matrices used to create object.")
+      )
+    }
+
+    # merge
+    merged_counts <- suppressMessages(left_join(x = raw_counts, y = cb_counts))
+
+    # Add diff and % diff
+    merged_counts <- merged_counts %>%
+      mutate(Count_Diff = .data[["Raw_Counts"]] - .data[["CellBender_Counts"]],
+             Pct_Diff = 100 - ((.data[["CellBender_Counts"]] / .data[["Raw_Counts"]]) * 100)) %>%
+      arrange(desc(.data[["Pct_Diff"]])) %>%
+      column_to_rownames("Feature_Names")
+
+    # return data
+    return(merged_counts)
   }
-
-  # merge
-  merged_counts <- suppressMessages(left_join(x = raw_counts, y = cb_counts))
-
-  # Add diff and % diff
-  merged_counts <- merged_counts %>%
-    mutate(Count_Diff = .data[["Raw_Counts"]] - .data[["CellBender_Counts"]],
-           Pct_Diff = 100 - ((.data[["CellBender_Counts"]] / .data[["Raw_Counts"]]) * 100)) %>%
-    arrange(desc(.data[["Pct_Diff"]])) %>%
-    column_to_rownames("Feature_Names")
-
-  # return data
-  return(merged_counts)
 }

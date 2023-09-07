@@ -1,14 +1,29 @@
 # scCustomize 1.X.X (2023-XX-XX)  
 ## Added  
 - Added support for metrics produced by Cell Ranger multi pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
-  
+- Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.  
+- Added two new sequencing QC functions to create and iterate barcode rank plots: `Barcode_Plot` and `Iterate_Barcode_Rank_Plot`.  
+- Added `ident_legend` parameter to `QC_Plot_UMIvsGene` to control show/hide of the identity legend ([#121](https://github.com/samuel-marsh/scCustomize/issues/121)).  
+- Added support for sparse matrix input in `CellBender_Feature_Diff`.  
+- Added `min_count_label` in `CellBender_Diff_Plot` to better control feature labeling.  
+- Allow specification of meta data column containing sample names/IDs in `Iterate_DimPlot_bySample` using new `sample_column` parameter.  
+
   
 ## Changed  
-- Internal rewrite of `Read10X_Metrics` to use new internal helper functions.
+- **SOFT DEPRECATION** The parameter `gene_list` in `Iterate_FeaturePlot_scCustom` and `Iterate_VlnPlot_scCustom` has been soft-deprecated and replaced by `features` parameter.  Specifying `gene_list` will display deprecation warning but continue to function until next major update.  
+- The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
+- Internal rewrite of `Read10X_Metrics` to use new internal helper functions.  
+- Changed `Liger_to_Seurat` to transfer the liger_object@H slot in addition to H.norm slot already moved.  
    
 
 ## Fixes  
 - Fixed issue in `Read10X_Metrics` that caused errors when reading files on windows operating system ([#115](https://github.com/samuel-marsh/scCustomize/issues/115)).  
+- Fixed issue in `Create_CellBender_Merged_Seurat` when feature names are changed (underscore to dash) during object creation ([#118](https://github.com/samuel-marsh/scCustomize/issues/118)).  
+- Fixed error in `Read10X_h5_Mutli_Directory` when reading Cell Ranger `multi` directories.  
+- Added new checks to `VlnPlot_scCustom`, `DimPlot_scCustom`, and `DotPlot_scCustom` to avoid otherwise ambiguous error messages ([#120](https://github.com/samuel-marsh/scCustomize/issues/120)).  
+- Fixed internal check message accidentally user facing in `VlnPlot_scCustom` ([#122](https://github.com/samuel-marsh/scCustomize/issues/122)).  
+- Fixed cli warning in `Cell_Highlight_Plot` that could cause function to error without proper error message.  
+- Fixed handling of file names in `Read_*` functions to avoid unesscesary errors.  
 
 
 # scCustomize 1.1.3 (2023-07-19)  

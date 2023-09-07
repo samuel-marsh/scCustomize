@@ -4,7 +4,13 @@
 \alias{CellBender_Feature_Diff}
 \title{CellBender Feature Differences}
 \usage{
-CellBender_Feature_Diff(seurat_object, raw_assay, cell_bender_assay)
+CellBender_Feature_Diff(
+  seurat_object = NULL,
+  raw_assay = NULL,
+  cell_bender_assay = NULL,
+  raw_mat = NULL,
+  cell_bender_mat = NULL
+)
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
@@ -12,6 +18,10 @@ CellBender_Feature_Diff(seurat_object, raw_assay, cell_bender_assay)
 \item{raw_assay}{Name of the assay containing the raw count data.}
 
 \item{cell_bender_assay}{Name of the assay containing the CellBender count data.}
+
+\item{raw_mat}{Name of raw count matrix in environment if not using Seurat object.}
+
+\item{cell_bender_mat}{Name of CellBender count matrix in environment if not using Seurat object.}
 }
 \value{
 A data.frame containing summed raw counts, CellBender counts, count difference, and

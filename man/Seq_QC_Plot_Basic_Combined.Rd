@@ -8,6 +8,7 @@ Seq_QC_Plot_Basic_Combined(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   patchwork_title = "Sequencing QC Plots: Basic Cell Metrics",
   significance = FALSE,
@@ -21,6 +22,8 @@ Seq_QC_Plot_Basic_Combined(
 
 \item{colors_use}{colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 less than 8 groups and \code{DiscretePalette_scCustomize(palette = "polychrome")} if more than 8.}
+
+\item{dot_size}{size of the dots plotted if \code{plot_by} is not \code{sample_id}  Default is 1.}
 
 \item{x_lab_rotate}{logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.}
 

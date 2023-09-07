@@ -641,9 +641,9 @@ Extract_Sample_Meta <- function(
 
   # Generate nCount and nFeature variable vectors for exclusion
   if (is.null(x = variables_exclude)) {
-    nFeature_cols <- grep(x = colnames(object@meta.data), pattern = "^nFeature", value = TRUE)
+    nFeature_cols <- grep(x = colnames(x = object@meta.data), pattern = "^nFeature", value = TRUE)
 
-    nCount_cols <- grep(x = colnames(object@meta.data), pattern = "^nCount", value = TRUE)
+    nCount_cols <- grep(x = colnames(x = object@meta.data), pattern = "^nCount", value = TRUE)
 
     combined_exclude <- c(nFeature_cols, nCount_cols, "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
 

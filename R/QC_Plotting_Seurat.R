@@ -575,6 +575,8 @@ QC_Plots_Combined_Vln <- function(
 #' @param cells Cells to include on the scatter plot (default is all cells).
 #' @param combination logical (default FALSE).  Whether or not to return a plot layout with both the
 #' plot colored by identity and the meta data gradient plot.
+#' @param ident_legend logical, whether to plot the legend containing identities (left plot) when
+#' `combination = TRUE`.  Default is TRUE.
 #' @param pt.size Passes size of points to both \code{\link[Seurat]{FeatureScatter}} and `geom_point`.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
 #' Default is `@active.ident`.
@@ -624,6 +626,7 @@ QC_Plot_UMIvsGene <- function(
   meta_gradient_low_cutoff = NULL,
   cells = NULL,
   combination = FALSE,
+  ident_legend = TRUE,
   pt.size = 1,
   group.by = NULL,
   raster = NULL,
@@ -668,12 +671,17 @@ QC_Plot_UMIvsGene <- function(
     }
   }
 
+  if (!ident_legend && !combination) {
+    cli_warn(message = "{.code ident_legend} parameter ignored as {.code combination = FALSE}")
+  }
+
+
   # Pull meta data
   featurescatter_data <- Fetch_Meta(object = seurat_object) %>%
     rownames_to_column("barcodes")
   # Check valid meta variable
   if (!is.null(x = meta_gradient_name)) {
-    meta_names <- colnames(featurescatter_data)
+    meta_names <- colnames(x = featurescatter_data)
     if (meta_gradient_name %in% meta_names == FALSE) {
       cli_abort(message = "The meta data variable {.val {meta_gradient_name}} could not be found in object@metadata.")
     }
@@ -762,6 +770,10 @@ QC_Plot_UMIvsGene <- function(
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
       xlab(x_axis_label) +
       ylab(y_axis_label) + ggtitle("")
+
+    if (!ident_legend) {
+      p1 <- p1 + NoLegend()
+    }
 
     # Plot with meta gradient
     if (raster) {

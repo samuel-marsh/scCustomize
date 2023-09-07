@@ -431,7 +431,7 @@ Generate_Plotting_df_LIGER <- function(object,
   if (reorder.idents == TRUE){
     tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
   }
-  c_names <- names(object@clusters)
+  c_names <- names(x = object@clusters)
   if (is.null(x = clusters)) {
     # if clusters have not been set yet
     if (length(x = object@clusters) == 0) {
@@ -1013,14 +1013,14 @@ Variable_Features_ALL_LIGER <- function(
 #' }
 
 Liger_to_Seurat <- function(
-  liger_object,
-  nms = names(liger_object@H),
-  renormalize = TRUE,
-  use.liger.genes = TRUE,
-  by.dataset = FALSE,
-  keep_meta = TRUE,
-  reduction_label = NULL,
-  seurat_assay = "RNA"
+    liger_object,
+    nms = names(liger_object@H),
+    renormalize = TRUE,
+    use.liger.genes = TRUE,
+    by.dataset = FALSE,
+    keep_meta = TRUE,
+    reduction_label = "UMAP",
+    seurat_assay = "RNA"
 ) {
   if (is.null(x = reduction_label)) {
     cli_abort(message = c("{.code reduction_label} parameter was not set.",
@@ -1061,16 +1061,23 @@ Liger_to_Seurat <- function(
       var.genes <- gsub("_", replacement = "-", var.genes)
     }
     inmf.loadings <- t(x = liger_object@W)
+    rinmf.loadings <- t(x = liger_object@W)
+
     inmf.embeddings <- liger_object@H.norm
+    rinmf.embeddings <- do.call(what = 'rbind', args = liger_object@H)
+
     ncol_Hnorm <- ncol(x = liger_object@H.norm)
     colnames(x = inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
+    colnames(x = rinmf.embeddings) <- paste0("rawiNMF_", 1:ncol_Hnorm)
 
     tsne.embeddings <- liger_object@tsne.coords
     colnames(x = tsne.embeddings) <- paste0(key_name, 1:2)
     rownames(x = inmf.loadings) <- var.genes
     rownames(x = inmf.embeddings) <-
+      rownames(x = rinmf.embeddings) <-
       rownames(x = tsne.embeddings) <-
       rownames(x = scale.data)
+
     inmf.obj <- CreateDimReducObject(
       embeddings = inmf.embeddings,
       loadings = inmf.loadings,
@@ -1078,6 +1085,15 @@ Liger_to_Seurat <- function(
       global = TRUE,
       assay = seurat_assay
     )
+
+    rinmf.obj <- CreateDimReducObject(
+      embeddings = rinmf.embeddings,
+      loadings = rinmf.loadings,
+      key = "rawiNMF_",
+      global = TRUE,
+      assay = seurat_assay
+    )
+
     tsne.obj <- CreateDimReducObject(
       embeddings = tsne.embeddings,
       key = key_name,
@@ -1092,7 +1108,7 @@ Liger_to_Seurat <- function(
   if (by.dataset) {
     ident.use <- as.character(x = unlist(x = lapply(1:length(liger_object@raw.data), function(i) {
       dataset.name <- names(x = liger_object@raw.data)[i]
-      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
+      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(x = liger_object@raw.data[[i]])]))
     })))
   } else {
     if (maj_version < 3) {
@@ -1108,7 +1124,8 @@ Liger_to_Seurat <- function(
     }
     new.seurat@scale.data <- t(scale.data)
     new.seurat@dr[[reduction_label]] <- tsne.obj
-    new.seurat@dr$inmf <- inmf.obj
+    new.seurat@dr$iNMF <- inmf.obj
+    new.seurat@dr$iNMF <- rinmf.obj
     new.seurat <- SetIdent(new.seurat, ident.use = ident.use)
 
   } else {
@@ -1117,7 +1134,8 @@ Liger_to_Seurat <- function(
     }
     SetAssayData(new.seurat, slot = "scale.data",  t(scale.data), assay = "RNA")
     new.seurat[[reduction_label]] <- tsne.obj
-    new.seurat[['inmf']] <- inmf.obj
+    new.seurat[['iNMF']] <- inmf.obj
+    new.seurat[['rawiNMF']] <- rinmf.obj
     Idents(object = new.seurat) <- ident.use
   }
   if (keep_meta){
@@ -1141,4 +1159,3 @@ Liger_to_Seurat <- function(
 
   return(new.seurat)
 }
-

@@ -10,6 +10,7 @@ CellBender_Diff_Plot(
   num_features = NULL,
   label = TRUE,
   num_labels = 20,
+  min_count_label = 1,
   repel = TRUE,
   custom_labels = NULL,
   plot_line = TRUE,
@@ -40,6 +41,9 @@ plot with specified number of features.  Default is NULL.}
 between raw and CellBender counts (Default is TRUE).}
 
 \item{num_labels}{Number of features to label if \code{label = TRUE}, (default is 20).}
+
+\item{min_count_label}{Minimum number of raw counts per feature necessary to be included in
+plot labels (default is 1)}
 
 \item{repel}{logical, whether to use geom_text_repel to create a nicely-repelled labels; this is
 slow when a lot of points are being plotted. If using repel, set xnudge and ynudge to 0, (Default is TRUE).}

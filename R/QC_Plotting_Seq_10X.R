@@ -11,6 +11,7 @@
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #'  less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -38,6 +39,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -91,7 +93,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Mean_Reads_per_Cell"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       theme(legend.position = "none",
             axis.text.x = element_text(angle = 45, hjust = 1,size = 12),
             axis.text.y = element_text(size = 12),
@@ -145,6 +147,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #'  less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -172,6 +175,7 @@ Seq_QC_Plot_Number_Cells <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -225,7 +229,7 @@ Seq_QC_Plot_Number_Cells <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Estimated_Number_of_Cells"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       theme(legend.position = "none",
             axis.text.x = element_text(angle = 45, hjust = 1,size = 12),
             axis.text.y = element_text(size = 12),
@@ -279,6 +283,7 @@ Seq_QC_Plot_Number_Cells <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -306,6 +311,7 @@ Seq_QC_Plot_Genes <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -354,7 +360,7 @@ Seq_QC_Plot_Genes <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Median_Genes_per_Cell"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Median Genes per Cell") +
       ylab('Median Genes') +
@@ -403,6 +409,7 @@ Seq_QC_Plot_Genes <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -430,6 +437,7 @@ Seq_QC_Plot_UMIs <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -478,7 +486,7 @@ Seq_QC_Plot_UMIs <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Median_UMI_Counts_per_Cell"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Median UMIs per Cell") +
       ylab('Median UMIs') +
@@ -527,6 +535,7 @@ Seq_QC_Plot_UMIs <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -554,6 +563,7 @@ Seq_QC_Plot_Total_Genes <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -602,7 +612,7 @@ Seq_QC_Plot_Total_Genes <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Total_Genes_Detected"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Total Genes Detected per Sample") +
       ylab('Total Genes') +
@@ -651,6 +661,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -679,6 +690,7 @@ Seq_QC_Plot_Saturation <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -732,7 +744,7 @@ Seq_QC_Plot_Saturation <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Sequencing_Saturation"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Sequencing Saturation") +
       ylab('Sequencing Saturation Percent') +
@@ -782,6 +794,7 @@ Seq_QC_Plot_Saturation <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -810,6 +823,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -863,7 +877,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Fraction_Reads_in_Cells"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Fraction of Reads in Cells per Sample") +
       ylab('Fraction of Reads in Cells') +
@@ -913,6 +927,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -941,6 +956,7 @@ Seq_QC_Plot_Transcriptome <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -994,7 +1010,7 @@ Seq_QC_Plot_Transcriptome <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Transcriptome"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Transcriptome") +
       ylab('Percent of Reads') +
@@ -1043,6 +1059,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1071,6 +1088,7 @@ Seq_QC_Plot_Genome <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -1124,7 +1142,7 @@ Seq_QC_Plot_Genome <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Genome"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Genome") +
       ylab('Percent of Reads') +
@@ -1173,6 +1191,7 @@ Seq_QC_Plot_Genome <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1201,6 +1220,7 @@ Seq_QC_Plot_Intergenic <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -1254,7 +1274,7 @@ Seq_QC_Plot_Intergenic <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Intergenic_Regions"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Intergenic Regions") +
       ylab('Percent of Reads') +
@@ -1303,6 +1323,7 @@ Seq_QC_Plot_Intergenic <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1331,6 +1352,7 @@ Seq_QC_Plot_Intronic <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -1384,7 +1406,7 @@ Seq_QC_Plot_Intronic <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Intronic_Regions"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Intronic Regions") +
       ylab('Percent of Reads') +
@@ -1433,6 +1455,7 @@ Seq_QC_Plot_Intronic <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1461,6 +1484,7 @@ Seq_QC_Plot_Exonic <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -1514,7 +1538,7 @@ Seq_QC_Plot_Exonic <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Exonic_Regions"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Exonic Regions") +
       ylab('Percent of Reads') +
@@ -1563,6 +1587,7 @@ Seq_QC_Plot_Exonic <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1591,6 +1616,7 @@ Seq_QC_Plot_Antisense <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
@@ -1644,7 +1670,7 @@ Seq_QC_Plot_Antisense <- function(
   } else {
     plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Antisense_to_Gene"]], fill = .data[[plot_by]])) +
       geom_boxplot(fill = "white") +
-      geom_dotplot(binaxis ='y', stackdir = 'center') +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Antisense to Gene") +
       ylab('Percent of Reads') +
@@ -1693,6 +1719,7 @@ Seq_QC_Plot_Antisense <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param patchwork_title Title to use for the patchworked plot output.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
@@ -1720,6 +1747,7 @@ Seq_QC_Plot_Basic_Combined <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   patchwork_title = "Sequencing QC Plots: Basic Cell Metrics",
   significance = FALSE,
@@ -1733,36 +1761,36 @@ Seq_QC_Plot_Basic_Combined <- function(
   }
 
   # Create Plots & modify for plotting together
-  p1 <- Seq_QC_Plot_Number_Cells(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p1 <- Seq_QC_Plot_Number_Cells(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p1 <- p1 +
     labs(title = str_wrap(p1$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p2 <- Seq_QC_Plot_Reads_per_Cell(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p2 <- Seq_QC_Plot_Reads_per_Cell(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p2 <- p2 + labs(title = str_wrap(p2$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p3 <- Seq_QC_Plot_Genes(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p3 <- Seq_QC_Plot_Genes(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p3 <- p3 + labs(title = str_wrap(p3$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p4 <- Seq_QC_Plot_UMIs(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p4 <- Seq_QC_Plot_UMIs(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p4 <- p4 + labs(title = str_wrap(p4$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p5 <- Seq_QC_Plot_Total_Genes(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p5 <- Seq_QC_Plot_Total_Genes(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p5 <- p5 + labs(title = str_wrap(p5$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p6 <- Seq_QC_Plot_Saturation(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p6 <- Seq_QC_Plot_Saturation(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p6 <- p6 + labs(title = str_wrap(p6$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p7 <- Seq_QC_Plot_Reads_in_Cells(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p7 <- Seq_QC_Plot_Reads_in_Cells(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p7 <- p7 + labs(title = str_wrap(p7$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p8 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p8 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p8 <- p8 + labs(title = str_wrap(p8$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
@@ -1784,6 +1812,7 @@ Seq_QC_Plot_Basic_Combined <- function(
 #' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
+#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param patchwork_title Title to use for the patchworked plot output.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
@@ -1811,6 +1840,7 @@ Seq_QC_Plot_Alignment_Combined <- function(
   metrics_dataframe,
   plot_by = "sample_id",
   colors_use = NULL,
+  dot_size = 1,
   x_lab_rotate = FALSE,
   patchwork_title = "Sequencing QC Plots: Read Alignment Metrics",
   significance = FALSE,
@@ -1824,28 +1854,28 @@ Seq_QC_Plot_Alignment_Combined <- function(
   }
 
   # Create Plots & modify for plotting together
-  p1 <- Seq_QC_Plot_Genome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p1 <- Seq_QC_Plot_Genome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size, ...)
   p1 <- p1 +
     labs(title = str_wrap(p1$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p2 <- Seq_QC_Plot_Intergenic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p2 <- Seq_QC_Plot_Intergenic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p2 <- p2 + labs(title = str_wrap(p2$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p3 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p3 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p3 <- p3 + labs(title = str_wrap(p3$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p4 <- Seq_QC_Plot_Exonic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p4 <- Seq_QC_Plot_Exonic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p4 <- p4 + labs(title = str_wrap(p4$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p5 <- Seq_QC_Plot_Intronic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p5 <- Seq_QC_Plot_Intronic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p5 <- p5 + labs(title = str_wrap(p5$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p6 <- Seq_QC_Plot_Antisense(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, ...)
+  p6 <- Seq_QC_Plot_Antisense(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p6 <- p6 + labs(title = str_wrap(p6$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
@@ -1856,4 +1886,218 @@ Seq_QC_Plot_Alignment_Combined <- function(
 
   # Print plots
   suppressMessages(print(plot))
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### Barcode Rank QC ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Create Barcode Rank Plot
+#'
+#' Plot UMI vs. Barcode Rank with inflection and knee.  Requires input from DropletUtils package.
+#'
+#' @param br_out DFrame output from \code{\link[DropletUtils]{barcodeRanks}}.
+#' @param pt.size point size for plotting, default is 6.
+#' @param plot_title Title for plot, default is "Barcode Ranks".
+#' @param raster_dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(1024, 1024).
+#' @param plateau numerical value at which to add vertical line designating estimated
+#' empty droplet plateau (default is NULL).
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom scattermore geom_scattermore
+#' @importFrom cowplot theme_cowplot
+#'
+#' @export
+#'
+#' @concept seq_qc_plotting_basic
+#'
+#' @examples
+#' \dontrun{
+#' mat <- Read10X_h5(filename = "raw_feature_bc_matrix.h5")
+#'
+#' br_results <- DropletUtils::barcodeRanks(mat)
+#'
+#' Barcode_Plot(br_out = br_results)
+#' }
+#'
+
+Barcode_Plot <- function(
+    br_out,
+    pt.size = 6,
+    plot_title = "Barcode Ranks",
+    raster_dpi = c(1024, 1024),
+    plateau = NULL
+) {
+  # Check br_out is correct
+  if (!inherits(x = br_out, what = "DFrame")) {
+    cli_abort(message = c("{.code br_out} must be object of class {.field DFrame}.",
+                          "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}}."))
+  }
+
+  if (!c("knee", "inflection") %in% names(x = br_out@metadata) && !c("rank", "total", "fitted") %in% names(x = br_out@listData)) {
+    cli_abort(message = c("{.code br_out} appears to be missing necessarily information.",
+                          "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}} and no errors occured when running code."))
+  }
+
+  plot <- ggplot(data = data.frame(br_out@listData), aes(x = rank, y = total)) +
+    geom_scattermore(pointsize = pt.size, pixels = raster_dpi) +
+    scale_y_log10() +
+    scale_x_log10() +
+    theme_cowplot() +
+    geom_line(mapping = aes(x = rank, y = fitted, color = "red"), show.legend = FALSE) +
+    geom_hline(yintercept = br_out@metadata$knee, linetype = "dashed", color = "dodgerblue") +
+    geom_hline(yintercept = br_out@metadata$inflection, linetype = "dashed", color = "forestgreen") +
+    annotate("text", x = 1, y = br_out@metadata$knee, label = paste0("Knee (", br_out@metadata$knee, ")"), vjust = -0.5, hjust = 0) +
+    annotate("text", x = 1, y = br_out@metadata$inflection, label = paste0("Inflection (", br_out@metadata$inflection, ")"), vjust = -0.5, hjust = 0) +
+    ylab("UMIs") +
+    xlab("Barcode Rank") +
+    ggtitle(plot_title) +
+    theme(plot.title = element_text(hjust = 0.5))
+
+  # Add plateau if specified
+  if (!is.null(x = plateau)) {
+    plot <- plot +
+      geom_vline(xintercept = plateau, linetype = "dashed", color = "dodgerblue") +
+      annotate("text", x = plateau, y = max(br_out$total), label = paste0("Plateau (", plateau, ")"), vjust = -0.5, hjust = -0.05)
+  }
+
+  # return plot
+  return(plot)
+}
+
+
+#' Iterative Barcode Rank Plots
+#'
+#' Read data, calculate `DropletUtils::barcodeRanks`, create barcode rank plots, and outout single PDF output.
+#'
+#' @param dir_path_h5 path to parent directory (if `multi_directory = TRUE`) or directory containing
+#' all h5 files (if `multi_directory = FALSE`).
+#' @param multi_directory logical, whether or not all h5 files are in their own subdirectories or in a
+#' single directory (default is TRUE; each in own subdirectory (e.g. output from Cell Ranger)).
+#' @param h5_filename Either the file name of h5 file (if `multi_directory = TRUE`) or the shared
+#' suffix (if `multi_directory = FALSE`)
+#' @param cellranger_multi logical, whether the outputs to be read are from Cell Ranger `multi` as opposed
+#' to Cell Ranger `count` (default is FALSE).  Only valid if `multi_directory = FALSE`.
+#' @param parallel logical, should files be read in parallel (default is FALSE).
+#' @param num_cores Number of cores to use in parallel if `parallel = TRUE`.
+#' @param file_path file path to use for saving PDF output.
+#' @param file_name Name of PDF output file.
+#' @param pt.size point size for plotting, default is 6.
+#' @param raster_dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(1024, 1024).
+#' @param plateau numerical values at which to add vertical line designating estimated
+#' empty droplet plateau (default is NULL).  Must be vector equal in length to number of samples.
+#' @param ... Additional parameters passed to `Read10X_h5_Multi_Directory` or `Read10X_h5_GEO`.
+#'
+#' @return pdf document
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom grDevices dev.off pdf
+#' @importFrom pbapply pblapply pboptions
+#' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @export
+#'
+#' @concept seq_qc_plotting_basic
+#'
+#' @examples
+#' \dontrun{
+#' Iterate_Barcode_Rank_Plot(dir_path_h5 = "H5_PATH/", multi_directory = TRUE, h5_filename = "raw_feature_bc_matrix",
+#' parallel = TRUE, num_cores = 12, file_path = "OUTPUT_PATH", file_name = "Barcode_Rank_Plots")
+#' }
+#'
+
+Iterate_Barcode_Rank_Plot <- function(
+    dir_path_h5,
+    multi_directory = TRUE,
+    h5_filename = "raw_feature_bc_matrix.h5",
+    cellranger_multi = FALSE,
+    parallel = FALSE,
+    num_cores = NULL,
+    file_path = NULL,
+    file_name = NULL,
+    pt.size = 6,
+    raster_dpi = c(1024, 1024),
+    plateau,
+    ...
+) {
+  DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
+  if (!DropletUtils_check[1]) {
+    cli_abort(message = c(
+      "Please install the {.val DropletUtils} package to use {.code Create_10X_H5}",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}DropletUtils{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+  if (!is.null(x = file_path) && file_path == "") {
+    file_path <- NULL
+  }
+
+  # Check file path is valid
+  if (!is.null(x = file_path)) {
+    if (!dir.exists(paths = file_path)) {
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
+    }
+  }
+
+  # Check if file name provided
+  if (is.null(x = file_name)) {
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
+  }
+
+  # Set file type for single pdf option
+  file_type <- ".pdf"
+
+  # Read in data
+  if (multi_directory) {
+    all_mat <- Read10X_h5_Multi_Directory(base_path = dir_path_h5, h5_filename = h5_filename, parallel = parallel, num_cores = num_cores, ...)
+  } else {
+    all_mat <- Read10X_h5_GEO(data_dir = dir_path_h5, parallel = parallel, num_cores = num_cores, shared_suffix = h5_filename, ...)
+  }
+
+  cli_inform(message = "{.field Calculating Barcode Rank Statistics}")
+  pboptions(char = "=")
+  barcode_ranks_list <- pblapply(1:length(x = all_mat), function(x) {
+    br_file <- DropletUtils::barcodeRanks(m = all_mat[[x]])
+  })
+
+  sample_names <- names(x = all_mat)
+
+  rm(all_mat)
+  gc()
+
+  num_samples <- length(x = barcode_ranks_list)
+
+  if (!is.null(x = plateau) && length(x = plateau) != num_samples) {
+    cli_abort(message = "The number of values for plateau ({.field {length(x = plateau)}}) must be equal to the number of samples ({.field {length(x = num_samples)}}).")
+  }
+
+  # Single PDF option
+  cli_inform(message = "{.field Generating plots}")
+  pboptions(char = "=")
+  all_plots <- pblapply(1:num_samples, function(j) {
+    Barcode_Plot(br_out = barcode_ranks_list[[j]], pt.size = pt.size, plot_title = sample_names[j], raster_dpi = raster_dpi, plateau = plateau[j])
+  })
+  cli_inform(message = "{.field Saving plots to file}")
+  # Save plots
+  pdf(paste(file_path, file_name, file_type, sep=""))
+  pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+  for (i in 1:length(all_plots)) {
+    print(all_plots[[i]])
+    setTxtProgressBar(pb = pb, value = i)
+  }
+  close(con = pb)
+  dev.off()
 }

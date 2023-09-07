@@ -695,6 +695,11 @@ VlnPlot_scCustom <- function(
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  }
+
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
@@ -816,6 +821,11 @@ Stacked_VlnPlot <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  }
 
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
@@ -951,6 +961,11 @@ DotPlot_scCustom <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  }
 
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
@@ -1571,7 +1586,7 @@ Cluster_Highlight_Plot <- function(
           ...)
 
   # Edit plot legend
-  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
   # Aspect ratio changes
   if (!is.null(x = aspect_ratio)) {
@@ -1729,7 +1744,7 @@ Meta_Highlight_Plot <- function(
           ...)
 
   # Update legend and return plot
-  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
   # Aspect ratio changes
   if (!is.null(x = aspect_ratio)) {
@@ -1809,7 +1824,7 @@ Cell_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   if (!inherits(x = cells_highlight, what = "list")) {
-    cli_abort(message = ".{code cells_highlight} must be of class: {.val list()}.")
+    cli_abort(message = "{.code cells_highlight} must be of class: {.val list()}.")
   }
 
   if (is.null(x = names(x = cells_highlight))) {
@@ -1873,7 +1888,7 @@ Cell_Highlight_Plot <- function(
                            ...)
 
   # Edit plot legend
-  plot <- suppressMessages(plot & scale_color_manual(breaks = names(cells_highlight), values = c(highlight_color, background_color), na.value = background_color))
+  plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
   # Aspect ratio changes
   if (!is.null(x = aspect_ratio)) {
@@ -1981,6 +1996,11 @@ DimPlot_scCustom <- function(
 
   if (!is.null(x = split.by)) {
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Add check for group.by before getting to colors
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Add one time split_seurat warning
