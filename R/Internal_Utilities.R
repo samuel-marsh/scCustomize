@@ -166,7 +166,7 @@ Assay_Present <- function(
 #' Checks Seurat object to verify whether it is composed of "Assay" or "Assay5" slots.
 #'
 #' @param seurat_object Seurat object name.
-#' @param assay name of assay to check
+#' @param assay name of assay to check, default is NULL.
 #'
 #' @return TRUE if seurat_object contains "Assay5" class.
 #'
@@ -175,8 +175,10 @@ Assay_Present <- function(
 
 Assay5_Check <- function(
     seurat_object,
-    assay = "RNA"
+    assay = NULL
 ){
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
   if (inherits(x = seurat_object@assays[[assay]], what = "Assay")) {
     return(FALSE)
   }
