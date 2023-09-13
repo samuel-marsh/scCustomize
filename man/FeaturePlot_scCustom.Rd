@@ -19,7 +19,8 @@ FeaturePlot_scCustom(
   split_collect = NULL,
   aspect_ratio = NULL,
   num_columns = NULL,
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
   label = FALSE,
@@ -63,7 +64,9 @@ Default is NULL.}
 
 \item{num_columns}{Number of columns in plot layout.}
 
-\item{slot}{Which slot to pull expression data from?  Default is "data".}
+\item{slot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{layer}}
+
+\item{layer}{Which layer to pull expression data from?  Default is "data".}
 
 \item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
 value between 0-1.}
