@@ -298,7 +298,6 @@ Median_Stats <- function(
 #' @importFrom dplyr arrange desc left_join mutate
 #' @importFrom magrittr "%>%"
 #' @importFrom Matrix rowSums
-#' @importFrom purrr pluck
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @export
@@ -330,8 +329,26 @@ CellBender_Feature_Diff <- function(
       stop_quietly()
     }
 
+    # Check layers and join if split
+    raw_layers_present <- Layers(object = seurat_object, assay = raw_assay, search = 'counts')
+
+    if (length(x = raw_layers_present) > 1) {
+      cli_inform(message = c("Multiple raw count layers present in {.field {raw_assay}} assay.",
+                             "i" = "Plot will join layers."))
+      seurat_object <- JoinLayers(object = seurat_object, assay = raw_assay)
+    }
+
+    # Check layers and join if split
+    cb_layers_present <- Layers(object = seurat_object, assay = cell_bender_assay, search = 'counts')
+
+    if (length(x = cb_layers_present) > 1) {
+      cli_inform(message = c("Multiple raw count layers present in {.field {raw_assay}} assay.",
+                             "i" = "Plot will join layers."))
+      seurat_object <- JoinLayers(object = seurat_object, assay = cell_bender_assay)
+    }
+
     # Pull raw counts
-    raw_counts <- pluck(seurat_object, "assays", raw_assay, "counts") %>%
+    raw_counts <- LayerData(object = seurat_object, assay = raw_assay, layer = "counts") %>%
       rowSums() %>%
       data.frame() %>%
       rownames_to_column("Feature_Names")
@@ -339,7 +356,7 @@ CellBender_Feature_Diff <- function(
     colnames(x = raw_counts)[2] <- "Raw_Counts"
 
     # Pull Cell Bender Counts
-    cb_counts <- pluck(seurat_object, "assays", cell_bender_assay, "counts") %>%
+    cb_counts <- LayerData(object = seurat_object, assay = cell_bender_assay, layer = "counts") %>%
       rowSums() %>%
       data.frame() %>%
       rownames_to_column("Feature_Names")
