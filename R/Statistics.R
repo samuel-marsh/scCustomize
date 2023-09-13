@@ -91,7 +91,8 @@ Cluster_Stats_All_Samples <- function(
 #' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
 #' across the entire object as opposed to by cluster or by `group_by` variable.
 #' @param assay Assay to pull feature data from.  Default is active assay.
-#' @param slot Slot to pull feature data for.  Default is "data".
+#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
+#' @param layer Which layer to pull expression data from?  Default is "data".
 #'
 #' @return A data.frame
 #'
@@ -118,11 +119,23 @@ Percent_Expressing <- function(
   group_by = NULL,
   split_by = NULL,
   entire_object = FALSE,
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   assay = NULL
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Check is slot is supplied
+  if (lifecycle::is_present(slot)) {
+    lifecycle::deprecate_warn(when = "2.0.0",
+                              what = "slot",
+                              with = "layer",
+                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    layer <- slot
+  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -148,7 +161,7 @@ Percent_Expressing <- function(
 
   # Pull Expression Info
   cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = NULL))
-  expression_info <- FetchData(object = seurat_object, vars = features_list, cells = cells, slot = slot)
+  expression_info <- FetchData(object = seurat_object, vars = features_list, cells = cells, layer = layer)
 
   # Add grouping variable
   if (entire_object) {

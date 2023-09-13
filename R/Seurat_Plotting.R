@@ -27,7 +27,8 @@
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param num_columns Number of columns in plot layout.
-#' @param slot Which slot to pull expression data from?  Default is "data".
+#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
+#' @param layer Which layer to pull expression data from?  Default is "data".
 #' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
 #' value between 0-1.
 #' @param alpha_na_exp new alpha level to apply to non-expressing cell color palette (`na_color`).  Must be
@@ -75,7 +76,8 @@ FeaturePlot_scCustom <- function(
   split_collect = NULL,
   aspect_ratio = NULL,
   num_columns = NULL,
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
   label = FALSE,
@@ -85,6 +87,17 @@ FeaturePlot_scCustom <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Check is slot is supplied
+  if (lifecycle::is_present(slot)) {
+    lifecycle::deprecate_warn(when = "1.1.0",
+                              what = "slot",
+                              with = "layer",
+                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    layer <- slot
+  }
 
   # Check meta
   if (!is.null(x = split.by)) {
@@ -205,7 +218,7 @@ FeaturePlot_scCustom <- function(
     feature_data <- FetchData(
       object = seurat_object,
       vars = all_found_features,
-      slot = slot)
+      layer = layer)
     # Pull min and max values
     max_exp_value <- max(feature_data)
     min_exp_value <- min(feature_data)
@@ -235,7 +248,7 @@ FeaturePlot_scCustom <- function(
       feature_data <- FetchData(
         object = seurat_object,
         vars = all_found_features[i],
-        slot = slot)
+        layer = layer)
       # Pull min and max values
       max_exp_value <- max(feature_data)
       min_exp_value <- min(feature_data)
@@ -312,7 +325,8 @@ FeaturePlot_scCustom <- function(
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
-#' @param slot Which slot to pull expression data from?  Default is "data".
+#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
+#' @param layer Which layer to pull expression data from?  Default is "data".
 #' @param num_columns Number of columns in plot layout.  If number of features > 1 then `num_columns`
 #' dictates the number of columns in overall layout (`num_columns = 1` means stacked layout & `num_columns = 2`
 #' means adjacent layout).
@@ -354,12 +368,27 @@ FeaturePlot_DualAssay <- function(
   na_cutoff = 0.000000001,
   raster = NULL,
   raster.dpi = c(512, 512),
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   num_columns = NULL,
   alpha_exp = NULL,
   alpha_na_exp = NULL,
   ...
 ) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check is slot is supplied
+  if (lifecycle::is_present(slot)) {
+    lifecycle::deprecate_warn(when = "1.1.0",
+                              what = "slot",
+                              with = "layer",
+                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+    layer <- slot
+  }
+
   # Check assays present
   assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(assay1, assay2), print_msg = FALSE, omit_warn = TRUE)[[2]]
 
@@ -400,12 +429,12 @@ FeaturePlot_DualAssay <- function(
   # Change assay and plot raw
   DefaultAssay(object = seurat_object) <- assay1
 
-  plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
+  plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
 
   # Change to cell bender and plot
   DefaultAssay(object = seurat_object) <- assay2
 
-  plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = slot, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, slot = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
 
   # Assemble plots & return plots
   plots <- wrap_plots(plot_raw, plot_cell_bender, ncol = num_columns)
