@@ -56,7 +56,7 @@ Gene_Present <- function(
     # set assay (if null set to active assay)
     assay <- seurat_assay %||% DefaultAssay(object = data)
 
-    possible_features <- rownames(x = GetAssayData(object = data, assay = assay))
+    possible_features <- rownames(x = LayerData(object = data, assay = assay))
   } else if ((class(x = data)[[1]] == "liger")) {
     # get complete gene list
     length_liger <- length(x = data@raw.data)
@@ -182,7 +182,7 @@ Case_Check <- function(
   return_features = TRUE
 ) {
   # get all features
-  possible_features <- rownames(x = GetAssayData(object = seurat_object))
+  possible_features <- rownames(x = LayerData(object = seurat_object))
 
   upper_bad_features <- str_to_upper(string = gene_list)
   upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
