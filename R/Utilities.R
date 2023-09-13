@@ -395,7 +395,7 @@ Reduction_Loading_Present <- function(
   }
 
   # Get all reduction names
-  possible_reduction_names <- unlist(x = lapply(1:length(seurat_object@reductions), function(z) {
+  possible_reduction_names <- unlist(x = lapply(1:length(x = seurat_object@reductions), function(z) {
     names <- names(x = seurat_object@reductions[[z]])
   })
   )
@@ -961,7 +961,7 @@ Replace_Suffix <- function(
     }
 
     # Is current suffix found in all cell names
-    check_suffixes <- sapply(1:length(data), FUN = function(j){
+    check_suffixes <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_suffix_regexp[[j]], x = current_cell_names[[j]]))
     })
 
@@ -1040,7 +1040,7 @@ Change_Delim_Suffix <- function(
     })
 
     # Is current suffix delim found in all cell names
-    check_suffix_delim <- sapply(1:length(data), FUN = function(j){
+    check_suffix_delim <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_delim, x = current_cell_names[[j]], fixed = TRUE))
     })
 
@@ -1118,7 +1118,7 @@ Change_Delim_Prefix <- function(
     })
 
     # Is current prefix delim found in all cell names
-    check_prefix_delim <- sapply(1:length(data), FUN = function(j){
+    check_prefix_delim <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_delim, x = current_cell_names[[j]], fixed = TRUE))
     })
 
@@ -1194,7 +1194,7 @@ Change_Delim_All <- function(
     })
 
     # Is current prefix delim found in all cell names
-    check_prefix_delim <- sapply(1:length(data), FUN = function(j){
+    check_prefix_delim <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_delim, x = current_cell_names[[j]], fixed = TRUE))
     })
 
@@ -1589,7 +1589,7 @@ Pull_Cluster_Annotation <- function(
 
   # Create list elements per cluster
   cell_type_list <- unique(x = annotation_table[[cell_type_col]])
-  cluster_annotation_list <- lapply(c(1:length(cell_type_list)), function(x){
+  cluster_annotation_list <- lapply(c(1:length(x = cell_type_list)), function(x){
     cluster <- annotation_table %>%
       filter(.data[[cell_type_col]] == cell_type_list[x]) %>%
       pull(cluster_name_col)
@@ -1651,7 +1651,7 @@ Rename_Clusters <- function(
   # Check equivalent lengths
   if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
     cli_abort(message = c("Length of {.code new_idents} must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(levels(x = seurat_object))}}.")
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(x = levels(x = seurat_object))}}.")
     )
   }
 
@@ -1662,7 +1662,7 @@ Rename_Clusters <- function(
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
     cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}}.")
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(x = levels(x = seurat_object))}}.")
     )
   }
 
