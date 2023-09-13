@@ -90,7 +90,7 @@ FeaturePlot_scCustom <- function(
 
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "1.1.0",
+    lifecycle::deprecate_warn(when = "2.0.0",
                               what = "slot",
                               with = "layer",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
@@ -380,7 +380,7 @@ FeaturePlot_DualAssay <- function(
 
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "1.1.0",
+    lifecycle::deprecate_warn(when = "2.0.0",
                               what = "slot",
                               with = "layer",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
@@ -1167,21 +1167,17 @@ Clustered_DotPlot <- function(
   }
 
   if (lifecycle::is_present(row_km_repeats)) {
-    lifecycle::deprecate_warn(when = "1.1.0",
+    lifecycle::deprecate_stop(when = "2.0.0",
                               what = "Clustered_DotPlot(row_km_repeats)",
-                              with = "Clustered_DotPlot(feature_km_repeats)",
-                              details = c("v" = "The parameter will remain functional until next major update.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
+                              with = "Clustered_DotPlot(feature_km_repeats)"
     )
     feature_km_repeats <- row_km_repeats
   }
 
   if (lifecycle::is_present(column_km_repeats)) {
-    lifecycle::deprecate_warn(when = "1.1.0",
+    lifecycle::deprecate_stop(when = "2.0.0",
                               what = "Clustered_DotPlot(column_km_repeats)",
-                              with = "Clustered_DotPlot(ident_km_repeats)",
-                              details = c("v" = "The parameter will remain functional until next major update.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
+                              with = "Clustered_DotPlot(ident_km_repeats)"
     )
     ident_km_repeats <- column_km_repeats
   }
