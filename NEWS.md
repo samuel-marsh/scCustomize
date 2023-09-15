@@ -25,6 +25,8 @@
 - Fixed internal check message accidentally user facing in `VlnPlot_scCustom` ([#122](https://github.com/samuel-marsh/scCustomize/issues/122)).  
 - Fixed cli warning in `Cell_Highlight_Plot` that could cause function to error without proper error message.  
 - Fixed handling of file names in `Read_*` functions to avoid unnecessary errors.  
+- Replace superseded dplyr syntax/functionality `drop_na(.data[[var]]`, with current dplyr syntax.  
+
 
 
 # scCustomize 1.1.3 (2023-07-19)  
