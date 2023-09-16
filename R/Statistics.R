@@ -293,6 +293,95 @@ Median_Stats <- function(
 }
 
 
+#' Median Absolute Deviation Statistics
+#'
+#' Get quick values for X x median absolute deviation for Genes, UMIs, %mito per cell grouped by meta.data variable.
+#'
+#' @param seurat_object Seurat object name.
+#' @param group_by_var Column in meta.data slot to group results by (default = "orig.ident").
+#' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
+#' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
+#' in addition to variables supplied to `mad_var`.
+#' @param mad_var Column(s) in `@meta.data` to calculate medians for in addition to defaults.
+#' Must be of `class()` integer or numeric.
+#'
+#' @return A data.frame.
+#'
+#' @importFrom dplyr group_by select summarise any_of across all_of
+#' @importFrom magrittr "%>%"
+#' @importFrom stats mad
+#'
+#' @export
+#'
+#' @concept stats
+#'
+#' @examples
+#' \dontrun{
+#' mad_stats <- MAD_Stats(seurat_object = obj, group_by_var = "orig.ident")
+#' }
+#'
+
+MAD_Stats <- function(
+    seurat_object,
+    group_by_var = "orig.ident",
+    default_var = TRUE,
+    mad_var = NULL,
+    mad_num = 2
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  if (default_var) {
+    default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
+  } else {
+    default_var <- NULL
+  }
+
+  # Check group variable present
+  group_by_var <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+
+  # Check stats variables present
+  all_variables <- c(default_var, mad_var)
+
+  all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
+
+  # Filter meta data for columns of interest
+  meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
+    select(any_of(all_variables))
+
+  all_variables <- Meta_Numeric(data = meta_numeric_check)
+
+  # Create column names for final data frame from valid columns
+  all_variable_col_names <- c(group_by_var, paste0("MAD x ", mad_num, " ", all_variables))
+
+  # Calculate medians for each group_by
+  meta_data <- Fetch_Meta(object = seurat_object)
+
+  mad_by_group <- meta_data %>%
+    group_by(.data[[group_by_var]]) %>%
+    summarise(across(all_of(all_variables), mad))
+
+  # Calculate overall medians
+  mad_overall <- meta_data %>%
+    summarise(across(all_of(all_variables), mad))
+
+  # Create data.frame with group_by_var as column name
+  meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
+  colnames(x = meta_col_name_df) <- group_by_var
+  # Merge with overall median data.frame
+  mad_overall <- cbind(meta_col_name_df, mad_overall)
+
+  # Merge by group_by_var and overall median data.frames
+  mad_all <- rbind(mad_by_group, mad_overall)
+
+  # Rename columns and return data.frame
+  colnames(x = mad_all) <- all_variable_col_names
+
+  # return data.frame
+  return(mad_all)
+}
+
+
 #' CellBender Feature Differences
 #'
 #' Get quick values for raw counts, CellBender counts, count differences, and percent count differences
