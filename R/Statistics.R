@@ -221,7 +221,7 @@ Percent_Expressing <- function(
 #'
 #' @return A data.frame.
 #'
-#' @importFrom dplyr group_by select summarise any_of across
+#' @importFrom dplyr group_by select summarise any_of across all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom stats median
 #'
@@ -272,11 +272,11 @@ Median_Stats <- function(
 
   median_by_group <- meta_data %>%
     group_by(.data[[group_by_var]]) %>%
-    summarise(across(all_variables, median))
+    summarise(across(all_of(all_variables), median))
 
   # Calculate overall medians
   median_overall <- meta_data %>%
-    summarise(across(all_variables, median))
+    summarise(across(all_of(all_variables), median))
 
   # Create data.frame with group_by_var as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
