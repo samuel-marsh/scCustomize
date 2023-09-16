@@ -13,7 +13,7 @@ Authors@R: c(
 URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize/, https://doi.org/10.5281/zenodo.5706431
 BugReports: https://github.com/samuel-marsh/scCustomize/issues
 Depends: R (>= 4.0.0),
-         Seurat (>= 4.9.9.9058)
+         Seurat (>= 4.3.0.1)
 Imports: 
     circlize,
     cli (>= 3.2.0),
