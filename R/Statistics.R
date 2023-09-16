@@ -214,7 +214,8 @@ Percent_Expressing <- function(
 #' @param seurat_object Seurat object name.
 #' @param group_by_var Column in meta.data slot to group results by (default = "orig.ident").
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
-#' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo" in addition to variables supplied to `median_var`.
+#' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
+#' in addition to variables supplied to `median_var`.
 #' @param median_var Column(s) in `@meta.data` to calculate medians for in addition to defaults.
 #' Must be of `class()` integer or numeric.
 #'
@@ -244,7 +245,7 @@ Median_Stats <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   if (default_var) {
-    default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo")
+    default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
   } else {
     default_var <- NULL
   }
