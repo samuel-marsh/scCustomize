@@ -866,7 +866,7 @@ Stacked_VlnPlot <- function(
   }
 
   # Set rasterization
-  num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
+  num_cells <- length(x = Cells(x = seurat_object))
 
   if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
