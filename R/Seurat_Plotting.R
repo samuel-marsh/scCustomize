@@ -736,7 +736,8 @@ VlnPlot_scCustom <- function(
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Add raster check for scCustomize
-  num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
+  # num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
+  num_cells <- length(x = Cells(object = seurat_object))
 
   if (is.null(x = raster)) {
     if (pt.size == 0) {
