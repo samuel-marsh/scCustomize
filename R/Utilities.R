@@ -182,7 +182,7 @@ Case_Check <- function(
   return_features = TRUE
 ) {
   # get all features
-  possible_features <- Features(x = data, assay = seurat_assay)
+  possible_features <- Features(x = seurat_object, assay = seurat_assay)
 
   upper_bad_features <- str_to_upper(string = gene_list)
   upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
