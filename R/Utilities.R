@@ -56,7 +56,7 @@ Gene_Present <- function(
     # set assay (if null set to active assay)
     assay <- seurat_assay %||% DefaultAssay(object = data)
 
-    possible_features <- rownames(x = LayerData(object = data, assay = assay))
+    possible_features <- Features(x = seurat_object, assay = seurat_assay)
   } else if ((class(x = data)[[1]] == "liger")) {
     # get complete gene list
     length_liger <- length(x = data@raw.data)
