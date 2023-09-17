@@ -27,6 +27,7 @@
 - Fixed cli warning in `Cell_Highlight_Plot` that could cause function to error without proper error message.  
 - Fixed handling of file names in `Read_*` functions to avoid unnecessary errors.  
 - Replace superseded dplyr syntax/functionality `drop_na(.data[[var]]`, with current dplyr syntax.  
+- Internal code fixes to accelerate plotting functions.  
 
 
 
