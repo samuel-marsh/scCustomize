@@ -881,10 +881,14 @@ Stacked_VlnPlot <- function(
   }
 
   # Set default color palette based on number of levels being plotted
-  if (is.null(x = group.by)) {
-    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  if (is.null(x = split.by)) {
+    if (is.null(x = group.by)) {
+      group_by_length <- length(x = unique(x = seurat_object@active.ident))
+    } else {
+      group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    }
   } else {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
   }
 
   # Check colors use vs. ggplot2 color scale
