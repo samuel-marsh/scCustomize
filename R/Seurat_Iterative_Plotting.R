@@ -202,7 +202,7 @@ Iterate_DimPlot_bySample <- function(
 
   # Extract reduction coordinates
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
-  cells <- colnames(x = seurat_object)
+  cells <- Cells(x = seurat_object)
   reduc_coordinates <- Embeddings(object = seurat_object[[reduction]])[cells, dims]
   reduc_coordinates <- as.data.frame(x = reduc_coordinates)
   x_axis <- c(min(reduc_coordinates[, 1]),
@@ -391,7 +391,7 @@ Iterate_Cluster_Highlight_Plot <- function(
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Get number of clusters/identities
   list_idents <- levels(x = seurat_object@active.ident)
@@ -609,7 +609,7 @@ Iterate_Meta_Highlight_Plot <- function(
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Relevel idents for plotting to sorted order
   if (single_pdf && is.null(x = new_meta_order) && meta_data_sort) {
@@ -871,7 +871,7 @@ Iterate_FeaturePlot_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Return plot check
   if (return_plots) {
