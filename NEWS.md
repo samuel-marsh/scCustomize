@@ -16,6 +16,7 @@
 - The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
 - Internal rewrite of `Read10X_Metrics` to use new internal helper functions.  
 - Changed `Liger_to_Seurat` to transfer the liger_object@H slot in addition to H.norm slot already moved.  
+- Replaced `length(x = colnames(x = obj)` with `length(x = Cells(x = obj)` for accurate plotting based on V5 object structure.  
    
 
 ## Fixes  
