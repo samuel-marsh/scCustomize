@@ -641,9 +641,9 @@ QC_Plot_UMIvsGene <- function(
 
   # Default raster check
   if (combination) {
-    raster <- raster %||% (length(x = colnames(x = seurat_object)) > 1e5)
+    raster <- raster %||% (length(x = Cells(x = seurat_object)) > 1e5)
   } else {
-    raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+    raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
   }
 
   # select color palette if not specified
