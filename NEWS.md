@@ -28,6 +28,7 @@
 - Fixed handling of file names in `Read_*` functions to avoid unnecessary errors.  
 - Replace superseded dplyr syntax/functionality `drop_na(.data[[var]]`, with current dplyr syntax.  
 - Internal code fixes to accelerate plotting functions.  
+- Fixed default plot colors in `VlnPlot`-based plots when `split.by` is not NULL.  
 
 
 
