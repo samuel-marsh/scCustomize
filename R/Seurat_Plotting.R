@@ -161,7 +161,7 @@ FeaturePlot_scCustom <- function(
   }
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Set uniform poist size is pt.size = NULL (based on plot with most cells)
   if (is.null(x = pt.size)) {
@@ -581,7 +581,7 @@ Split_FeatureScatter <- function(
     row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[, split.by] == x)]})
 
   # raster check
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Set uniform point size is pt.size = NULL (based on plot with most cells)
   if (is.null(x = pt.size)) {
@@ -1570,7 +1570,7 @@ Cluster_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Perform Idents check and report errors when when length(cluster_name) > 1
   if (length(x = cluster_name) > 1) {
@@ -1738,7 +1738,7 @@ Meta_Highlight_Plot <- function(
   }
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Change default ident and pull cells to highlight in plot
   Idents(object = seurat_object) <- good_meta_data_column
@@ -1875,7 +1875,7 @@ Cell_Highlight_Plot <- function(
   }
 
   # Check all cells are present in object
-  if (!all(unlist(x = cells_highlight) %in% colnames(x = seurat_object))) {
+  if (!all(unlist(x = cells_highlight) %in% Cells(x = seurat_object))) {
     cli_abort(message = c("Some of cells in {.code cells_highlight} are not present in object.",
                           "i" = "Ensure all cells are present in object before plotting."
                           )
@@ -1883,7 +1883,7 @@ Cell_Highlight_Plot <- function(
   }
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # set point size
   if (is.null(x = pt.size)) {
@@ -2050,7 +2050,7 @@ DimPlot_scCustom <- function(
   }
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   label <- label %||% (is.null(x = group.by))
 
@@ -2210,7 +2210,7 @@ DimPlot_scCustom <- function(
       }
       # Extract reduction coordinates
       reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
-      all_cells <- colnames(x = seurat_object)
+      all_cells <- Cells(x = seurat_object)
       reduc_coordinates <- Embeddings(object = seurat_object[[reduction]])[all_cells, dims]
       reduc_coordinates <- as.data.frame(x = reduc_coordinates)
       x_axis <- c(min(reduc_coordinates[, 1]),
@@ -2341,11 +2341,11 @@ DimPlot_All_Samples <- function(
   }
 
   # Add raster check for scCustomize
-  raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Extract reduction coordinates
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
-  all_cells <- colnames(x = seurat_object)
+  all_cells <- Cells(x = seurat_object)
   reduc_coordinates <- Embeddings(object = seurat_object[[reduction]])[all_cells, dims]
   reduc_coordinates <- as.data.frame(x = reduc_coordinates)
   x_axis <- c(min(reduc_coordinates[, 1]),
