@@ -2025,7 +2025,7 @@ Iterate_Barcode_Rank_Plot <- function(
     file_name = NULL,
     pt.size = 6,
     raster_dpi = c(1024, 1024),
-    plateau,
+    plateau = NULL,
     ...
 ) {
   DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
@@ -2081,7 +2081,7 @@ Iterate_Barcode_Rank_Plot <- function(
   num_samples <- length(x = barcode_ranks_list)
 
   if (!is.null(x = plateau) && length(x = plateau) != num_samples) {
-    cli_abort(message = "The number of values for plateau ({.field {length(x = plateau)}}) must be equal to the number of samples ({.field {length(x = num_samples)}}).")
+    cli_abort(message = "The number of values for plateau ({.field {length(x = plateau)}}) must be equal to the number of samples ({.field {num_samples}}).")
   }
 
   # Single PDF option
