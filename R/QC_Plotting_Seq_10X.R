@@ -1940,7 +1940,7 @@ Barcode_Plot <- function(
                           "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}}."))
   }
 
-  if (!c("knee", "inflection") %in% names(x = br_out@metadata) && !c("rank", "total", "fitted") %in% names(x = br_out@listData)) {
+  if (!all(c("knee", "inflection") %in% names(x = br_out@metadata)) && !all(c("rank", "total", "fitted") %in% names(x = br_out@listData))) {
     cli_abort(message = c("{.code br_out} appears to be missing necessarily information.",
                           "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}} and no errors occured when running code."))
   }
