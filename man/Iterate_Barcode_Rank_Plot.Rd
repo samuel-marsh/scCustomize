@@ -15,7 +15,7 @@ Iterate_Barcode_Rank_Plot(
   file_name = NULL,
   pt.size = 6,
   raster_dpi = c(1024, 1024),
-  plateau,
+  plateau = NULL,
   ...
 )
 }
