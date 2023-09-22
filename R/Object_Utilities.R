@@ -295,6 +295,109 @@ Add_Cell_Complexity_Seurat <- function(
 }
 
 
+#' Add Percent of High Abundance Genes
+#'
+#' Add the percentage of counts occupied by the top XX most highly expressed genes in each cell.
+#'
+#' @param seurat_object object name.
+#' @param num_top_genes An integer vector specifying the size(s) of the top set of high-abundance genes.
+#' Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.
+#' @param meta_col_name name to use for new meta data column.  Default is "percent_topXX", where XX is
+#' equal to the value provided to `num_top_genes`.
+#' @param assay assay to use in calculation.  Default is "RNA".  *Note* This should only be changed if
+#' storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#'
+#' @import cli
+#' @importFrom dplyr select all_of
+#' @importFrom magrittr "%>%"
+#'
+#' @return A Seurat Object
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#'
+#' @references This function uses scuttle package (license: GPL-3) to calculate the percent of expression
+#' coming from top XX genes in each cell.  Parameter description for `num_top_genes` also from scuttle.
+#' If using this function in analysis, in addition to citing scCustomize, please cite scuttle:
+#' McCarthy DJ, Campbell KR, Lun ATL, Willis QF (2017). “Scater: pre-processing, quality control,
+#' normalisation and visualisation of single-cell RNA-seq data in R.” Bioinformatics, 33, 1179-1186.
+#' \url{doi:10.1093/bioinformatics/btw777}.
+#' @seealso \url{https://bioconductor.org/packages/release/bioc/html/scuttle.html}
+#'
+#' @examples
+#' library(Seurat)
+#' pbmc_small <- Add_Top_Gene_Pct_Seurat(seurat_object = pbmc_small, num_top_genes = 50)
+#'
+
+Add_Top_Gene_Pct_Seurat <- function(
+    seurat_object,
+    num_top_genes = 50,
+    meta_col_name = NULL,
+    assay = "RNA",
+    overwrite = FALSE
+){
+  # Check for scuttle first
+  scuttle_check <- PackageCheck("scuttle", error = FALSE)
+  if (!scuttle_check[1]) {
+    cli_abort(message = c(
+      "Please install the {.val scuttle} package to calculate/add top {num_top_genes} genes percentage.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}scuttle{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Add assay warning message
+  if (assay != "RNA") {
+    cli_warn(message = "Assay is set to value other than 'RNA'. This should only be done in rare instances.  See documentation for more info ({.code ?Add_Top_Gene_Pct_Seurat}).",
+             .frequency = "once",
+             .frequency_id = "assay_warn")
+  }
+
+  # Set colnames
+  scuttle_colname <- paste0("percent.top_", num_top_genes)
+  if (is.null(x = meta_col_name)) {
+    meta_col_name <- paste0("percent_top", num_top_genes)
+  }
+
+  # Check columns for overwrite
+  if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
+    if (!overwrite) {
+      cli_abort(message = c("Column {.val {meta_col_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
+      )
+    }
+    cli_inform(message = c("Column {.val {meta_col_name}} already present in meta.data slot",
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE}.")
+    )
+  }
+
+  # Extract matrix
+  count_mat <- LayerData(object = seurat_object, assay = assay)
+
+  # calculate
+  res <- as.data.frame(scuttle::perCellQCMetrics(x = count_mat, percent.top = num_top_genes))
+
+  # select percent column
+  res <- res %>%
+    select(all_of(scuttle_colname))
+
+  # Add to object and return
+  seurat_object <- AddMetaData(object = seurat_object, metadata = res, col.name = meta_col_name)
+
+  return(seurat_object)
+}
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
