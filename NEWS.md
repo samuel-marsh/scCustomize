@@ -31,6 +31,7 @@
 - Replace superseded dplyr syntax/functionality `drop_na(.data[[var]]`, with current dplyr syntax.  
 - Internal code fixes to accelerate plotting functions.  
 - Fixed default plot colors in `VlnPlot`-based plots when `split.by` is not NULL.  
+- Fixed error when trying to plot more than two variables with `group.by` when using `DimPlot_scCustom` ([#128](https://github.com/samuel-marsh/scCustomize/issues/128)).  
 
 
 
