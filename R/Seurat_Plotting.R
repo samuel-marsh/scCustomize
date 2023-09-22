@@ -2034,8 +2034,12 @@ DimPlot_scCustom <- function(
   }
 
   # Add check for group.by before getting to colors
-  if (!is.null(x = group.by) && group.by != "ident") {
+  if (length(x = group.by) > 1) {
     Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  } else {
+    if (!is.null(x = group.by) && group.by != "ident") {
+      Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    }
   }
 
   # Add one time split_seurat warning
@@ -2065,10 +2069,17 @@ DimPlot_scCustom <- function(
   }
 
   # Set default color palette based on number of levels being plotted
-  if (is.null(x = group.by)) {
-    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  if (length(x = group.by) > 1) {
+    all_length <- lapply(group.by, function(x) {
+      num_var <- length(x = unique(x = seurat_object@meta.data[[x]]))
+    })
+    group_by_length <- max(unlist(x = all_length))
   } else {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    if (is.null(x = group.by)) {
+      group_by_length <- length(x = unique(x = seurat_object@active.ident))
+    } else {
+      group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    }
   }
 
   # Check colors use vs. ggplot2 color scale
