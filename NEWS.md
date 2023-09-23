@@ -1,4 +1,4 @@
-# scCustomize 1.X.X (2023-XX-XX)  
+# scCustomize 2.0.0 (2023-XX-XX)  
 ## Added  
 - Added support for metrics produced by Cell Ranger multi pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
 - Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.  
@@ -9,6 +9,7 @@
 - Allow specification of meta data column containing sample names/IDs in `Iterate_DimPlot_bySample` using new `sample_column` parameter.  
 - Added new function `MAD_Stats` to calculate to the median absolute deviation of meta.data columns by grouping variable and across entire object.  
 - Added new function `Add_Top_Gene_Pct_Seurat` to add another QC measure of cell complexity to object meta.data.  Returns percentage of counts occupied by top XX genes in each cell.  
+- Added ability to provide set of custom features to `VariableFeaturePlot_scCustom` using `custom_features` parameter.  
 
   
 ## Changed  
