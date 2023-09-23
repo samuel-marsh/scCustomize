@@ -215,7 +215,7 @@ Iterate_DimPlot_bySample <- function(
 
   # Create list of cells per sample
   cells_per_sample <- lapply(column_list, function(sample) {
-    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data$orig.ident == sample)]
+    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[[sample_column]] == sample)]
   })
 
   # Single PDF option
