@@ -2432,6 +2432,8 @@ DimPlot_All_Samples <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param num_features Number of top variable features to highlight by color/label.
+#' @param custom_features A vector of custom feature names to label on plot instead of labeling top
+#' variable genes.
 #' @param label logical. Whether to label the top features.  Default is TRUE.
 #' @param pt.size Adjust point size for plotting.
 #' @param colors_use colors to use for plotting.  Default is "black" and "red".
@@ -2460,6 +2462,7 @@ DimPlot_All_Samples <- function(
 VariableFeaturePlot_scCustom <- function(
   seurat_object,
   num_features = 10,
+  custom_features = NULL,
   label = TRUE,
   pt.size = 1,
   colors_use = c("black", "red"),
@@ -2475,6 +2478,12 @@ VariableFeaturePlot_scCustom <- function(
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
+  if (isTRUE(x = Assay5_Check(seurat_object = seurat_object, assay = assay))) {
+    cli_inform(message = c("!" = "Currently labeling top variable genes from Assay5 object will not correctly label top variable features due to changes in Seurat5.",
+                                "i" = "This feature will be updated when more information comes from Seurat Dev team.",
+                                "i" = "For now the top variable features can be manually extracted and provided to {.code custom_features} parameter."))
+  }
+
   # Extract num of desired features
   top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, selection.method = selection.method), num_features)
 
@@ -2482,8 +2491,17 @@ VariableFeaturePlot_scCustom <- function(
   plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, selection.method = selection.method, cols = colors_use, ...)
 
   # Label points
+  if (isFALSE(x = label) && !is.null(x = custom_features)) {
+    cli_warn(message = "The provided values provided to {.field custom_features} were not labeled as {.code label = FALSE} was also set.")
+  }
+
   if (label) {
-    plot <- LabelPoints(plot = plot, points = top_features, repel = repel)
+    if (is.null(x = custom_features)) {
+      plot <- LabelPoints(plot = plot, points = top_features, repel = repel)
+    }
+    # check all custom features are present
+    all_found_features <- Feature_PreCheck(object = seurat_object, features = custom_features)
+    plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel)
   }
 
   # return log10 y axis
