@@ -398,6 +398,100 @@ Add_Top_Gene_Pct_Seurat <- function(
 }
 
 
+#' Add Multiple Cell Quality Control Values with Single Function
+#'
+#' Add Mito/Ribo %, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single function call
+#'
+#' @param seurat_object object name.
+#' @param add_mito_ribo logical, whether to add mito/ribo percentages to object (Default is TRUE).
+#' @param add_complexity logical, whether to add Cell Complexity to object (Default is TRUE).
+#' @param add_top_pct logical, whether to add Top Gene Percentages to object (Default is TRUE).
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' generate mito_pattern and ribo_pattern values.
+#' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
+#' Default is "percent_mito".
+#' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
+#' Default is "percent_ribo".
+#' @param mito_ribo_name name to use for the new meta.data column containing percent
+#' mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".
+#' @param complexity_name name to use for new meta data column for `Add_Cell_Complexity_Seurat`.
+#' Default is "log10GenesPerUMI".
+#' @param top_pct_name name to use for new meta data column for `Add_Top_Gene_Pct_Seurat`.
+#' Default is "percent_topXX", where XX is equal to the value provided to `num_top_genes`.
+#' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
+#' species is mouse or human; marmoset features list saved separately).
+#' @param ribo_pattern A regex pattern to match features against for ribosomal genes
+#' (will set automatically if species is mouse, human, or marmoset).
+#' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
+#' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
+#' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param num_top_genes An integer vector specifying the size(s) of the top set of high-abundance genes.
+#' Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.
+#' @param assay assay to use in calculation.  Default is "RNA".  *Note* This should only be changed if
+#' storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#'
+#' @import cli
+#'
+#' @return A Seurat Object
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' library(Seurat)
+#' pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
+#'
+
+Add_Cell_QC_Metrics <- function(
+    seurat_object,
+    add_mito_ribo = TRUE,
+    add_complexity = TRUE,
+    add_top_pct = TRUE,
+    species,
+    mito_name = "percent_mito",
+    ribo_name = "percent_ribo",
+    mito_ribo_name = "percent_mito_ribo",
+    complexity_name = "log10GenesPerUMI",
+    top_pct_name = "percent_top50",
+    mito_pattern = NULL,
+    ribo_pattern = NULL,
+    mito_features = NULL,
+    ribo_features = NULL,
+    ensembl_ids = FALSE,
+    num_top_genes = 50,
+    assay = NULL,
+    overwrite = FALSE
+) {
+  # Add mito/ribo
+  if (isTRUE(x = add_mito_ribo)) {
+    cli_inform(message = "Adding {.field Mito/Ribo %} to meta.data.")
+    seurat_object <- Add_Mito_Ribo_Seurat(seurat_object = seurat_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
+  }
+
+  # Add complexity
+  if (isTRUE(x = add_complexity)) {
+    cli_inform(message = "Adding {.field Cell Complexity #1 (log10GenesPerUMI)} to meta.data.")
+    seurat_object <- Add_Cell_Complexity_Seurat(seurat_object = seurat_object, meta_col_name = complexity_name, assay = assay, overwrite = overwrite)
+  }
+
+  # Add top gene expression percent
+  if (isTRUE(x = add_top_pct)) {
+    cli_inform(message = "Adding {.field Cell Complexity #1 (Top {num_top_genes} Percent)} to meta.data.")
+    seurat_object <- Add_Top_Gene_Pct_Seurat(seurat_object = seurat_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
+  }
+
+  # return object
+  return(seurat_object)
+}
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
