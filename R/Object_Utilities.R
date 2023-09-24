@@ -14,9 +14,9 @@
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
-#' Default is "percent_mito".
+#' Default is "percent_ribo".
 #' @param mito_ribo_name name to use for the new meta.data column containing percent
-#' mitochondrial+ribosomal counts.  Default is "percent_mito".
+#' mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
