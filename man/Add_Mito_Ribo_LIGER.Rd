@@ -30,10 +30,10 @@ generate mito_pattern and ribo_pattern values.}
 Default is "percent_mito".}
 
 \item{ribo_name}{name to use for the new meta.data column containing percent ribosomal counts.
-Default is "percent_mito".}
+Default is "percent_ribo".}
 
 \item{mito_ribo_name}{name to use for the new meta.data column containing percent mitochondrial+ribosomal
-counts.  Default is "percent_mito".}
+counts.  Default is "percent_mito_ribo".}
 
 \item{mito_pattern}{A regex pattern to match features against for mitochondrial genes (will set automatically
 if species is mouse or human; marmoset features list saved separately).}
