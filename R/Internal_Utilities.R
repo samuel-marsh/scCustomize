@@ -306,6 +306,218 @@ Feature_PreCheck <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### QC HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Ensembl Mito IDs
+#'
+#' Retrieves Ensembl IDs for mitochondrial genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Mito <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% marmoset_options) {
+    cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
+  }
+
+  if (species %in% mouse_options) {
+    mito_ensembl <- ensembl_mito_id$Mus_musculus_mito_ensembl
+  }
+  if (species %in% human_options) {
+    mito_ensembl <- ensembl_mito_id$Homo_sapiens_mito_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    mito_ensembl <- ensembl_mito_id$Danio_rerio_mito_ensembl
+  }
+  if (species %in% rat_options) {
+    mito_ensembl <- ensembl_mito_id$Rattus_norvegicus_mito_ensembl
+  }
+  if (species %in% drosophila_options) {
+    mito_ensembl <- ensembl_mito_id$Drosophila_melanogaster_mito_ensembl
+  }
+  if (species %in% macaque_options) {
+    mito_ensembl <- ensembl_mito_id$Macaca_mulatta_mito_ensembl
+  }
+
+  return(mito_ensembl)
+}
+
+
+#' Ensembl Ribo IDs
+#'
+#' Retrieves Ensembl IDs for ribsomal genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Ribo <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% mouse_options) {
+    ribo_ensembl <- ensembl_ribo_id$Mus_musculus_ribo_ensembl
+  }
+  if (species %in% human_options) {
+    ribo_ensembl <- ensembl_ribo_id$Homo_sapiens_ribo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    ribo_ensembl <- ensembl_ribo_id$Callithrix_jacchus_ribo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    ribo_ensembl <- ensembl_ribo_id$Danio_rerio_ribo_ensembl
+  }
+  if (species %in% rat_options) {
+    ribo_ensembl <- ensembl_ribo_id$Rattus_norvegicus_ribo_ensembl
+  }
+  if (species %in% drosophila_options) {
+    ribo_ensembl <- ensembl_ribo_id$Drosophila_melanogaster_ribo_ensembl
+  }
+  if (species %in% macaque_options) {
+    ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
+  }
+
+  return(ribo_ensembl)
+}
+
+
+#' MSigDB Gene Lists
+#'
+#' Retrieves species specifc gene lists for MSigDB QC Hallmark lists.
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 3 sets of gene_symbols
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_MSigDB_Lists <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% marmoset_options) {
+    cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
+  }
+
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
+  if (species %in% zebrafish_options) {
+    prefix <- "Dario_rerio_"
+  }
+  if (species %in% rat_options) {
+    prefix <- "Rattus_norvegicus_"
+  }
+  if (species %in% drosophila_options) {
+    prefix <- "Drosophila_melanogaster_"
+  }
+  if (species %in% macaque_options) {
+    prefix <- "Macaca_mulatta_"
+  }
+
+  # set list names
+  oxphos <- paste0(prefix, "msigdb_oxphos")
+  apop <- paste0(prefix, "msigdb_apop")
+  dna_repair <- paste0(prefix, "msigdb_dna_repair")
+
+  # pull lists
+  qc_gene_list <- list(
+    oxphos <- msigdb_qc_gene_list[[oxphos]],
+    apop <- msigdb_qc_gene_list[[apop]],
+    dna_repair <- msigdb_qc_gene_list[[dna_repair]]
+  )
+
+  return(qc_gene_list)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### GENERAL HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -405,135 +617,6 @@ symdiff <- function(
   y
 ) {
   setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
-}
-
-
-#' Ensembl Mito IDs
-#'
-#' Retrieves Ensembl IDs for mitochondrial genes
-#'
-#' @param species species to retrieve IDs.
-#'
-#' @return vector of Ensembl Gene IDs
-#'
-#' @import cli
-#'
-#' @keywords internal
-#'
-#' @noRd
-#'
-
-Retrieve_Ensembl_Mito <- function(
-  species
-) {
-  # Accepted species names
-  accepted_names <- data.frame(
-    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
-  )
-
-  # Species Spelling Options
-  mouse_options <- accepted_names$Mouse_Options
-  human_options <- accepted_names$Human_Options
-  marmoset_options <- accepted_names$Marmoset_Options
-  zebrafish_options <- accepted_names$Zebrafish_Options
-  rat_options <- accepted_names$Rat_Options
-  drosophila_options <- accepted_names$Drosophila_Options
-  macaque_options <- accepted_names$Macaque_Options
-
-  if (species %in% marmoset_options) {
-    cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
-  }
-
-  if (species %in% mouse_options) {
-    mito_ensembl <- ensembl_mito_id$Mus_musculus_mito_ensembl
-  }
-  if (species %in% human_options) {
-    mito_ensembl <- ensembl_mito_id$Homo_sapiens_mito_ensembl
-  }
-  if (species %in% zebrafish_options) {
-    mito_ensembl <- ensembl_mito_id$Danio_rerio_mito_ensembl
-  }
-  if (species %in% rat_options) {
-    mito_ensembl <- ensembl_mito_id$Rattus_norvegicus_mito_ensembl
-  }
-  if (species %in% drosophila_options) {
-    mito_ensembl <- ensembl_mito_id$Drosophila_melanogaster_mito_ensembl
-  }
-  if (species %in% macaque_options) {
-    mito_ensembl <- ensembl_mito_id$Macaca_mulatta_mito_ensembl
-  }
-
-  return(mito_ensembl)
-}
-
-
-#' Ensembl Ribo IDs
-#'
-#' Retrieves Ensembl IDs for ribsomal genes
-#'
-#' @param species species to retrieve IDs.
-#'
-#' @return vector of Ensembl Gene IDs
-#'
-#' @import cli
-#'
-#' @keywords internal
-#'
-#' @noRd
-#'
-
-Retrieve_Ensembl_Ribo <- function(
-  species
-) {
-  # Accepted species names
-  accepted_names <- data.frame(
-    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
-  )
-
-  # Species Spelling Options
-  mouse_options <- accepted_names$Mouse_Options
-  human_options <- accepted_names$Human_Options
-  marmoset_options <- accepted_names$Marmoset_Options
-  zebrafish_options <- accepted_names$Zebrafish_Options
-  rat_options <- accepted_names$Rat_Options
-  drosophila_options <- accepted_names$Drosophila_Options
-  macaque_options <- accepted_names$Macaque_Options
-
-  if (species %in% mouse_options) {
-    ribo_ensembl <- ensembl_ribo_id$Mus_musculus_ribo_ensembl
-  }
-  if (species %in% human_options) {
-    ribo_ensembl <- ensembl_ribo_id$Homo_sapiens_ribo_ensembl
-  }
-  if (species %in% zebrafish_options) {
-    ribo_ensembl <- ensembl_ribo_id$Callithrix_jacchus_ribo_ensembl
-  }
-  if (species %in% zebrafish_options) {
-    ribo_ensembl <- ensembl_ribo_id$Danio_rerio_ribo_ensembl
-  }
-  if (species %in% rat_options) {
-    ribo_ensembl <- ensembl_ribo_id$Rattus_norvegicus_ribo_ensembl
-  }
-  if (species %in% drosophila_options) {
-    ribo_ensembl <- ensembl_ribo_id$Drosophila_melanogaster_ribo_ensembl
-  }
-  if (species %in% macaque_options) {
-    ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
-  }
-
-  return(ribo_ensembl)
 }
 
 
