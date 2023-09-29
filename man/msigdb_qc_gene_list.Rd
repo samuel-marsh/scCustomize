@@ -29,7 +29,7 @@ A list of 18 vectors
 }
 }
 \source{
-MSigDB gene sets via msigdbr package  \url{https://cran.r-project.org/package=msigdbr}
+MSigDB gene sets via msigdbr package \url{https://cran.r-project.org/package=msigdbr}
 }
 \usage{
 msigdb_qc_gene_list
