@@ -257,6 +257,7 @@ glue_collapse_scCustom <- function(
 #'
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
+#' @param assay Assay to use (default is the current object default assay).
 #'
 #' @return vector of features and/or meta data that were found in object.
 #'
@@ -267,10 +268,14 @@ glue_collapse_scCustom <- function(
 
 Feature_PreCheck <- function(
     object,
-    features
+    features,
+    assay = NULL
 ) {
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = object)
+
   # Check features and meta to determine which features present
-  features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+  features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
 
   meta_list <- Meta_Present(seurat_object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
@@ -441,7 +446,8 @@ Retrieve_Ensembl_Ribo <- function(
 
 #' MSigDB Gene Lists
 #'
-#' Retrieves species specifc gene lists for MSigDB QC Hallmark lists.
+#' Retrieves species specifc gene lists for MSigDB QC Hallmark lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
 #'
 #' @param species species to retrieve IDs.
 #'
@@ -454,67 +460,166 @@ Retrieve_Ensembl_Ribo <- function(
 #' @noRd
 #'
 
-Retrieve_MSigDB_Lists <- function(
-    species
-) {
-  # Accepted species names
-  accepted_names <- data.frame(
-    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
-  )
+ Retrieve_MSigDB_Lists <- function(
+     species
+ ) {
+   # Accepted species names
+   accepted_names <- data.frame(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
 
-  # Species Spelling Options
-  mouse_options <- accepted_names$Mouse_Options
-  human_options <- accepted_names$Human_Options
-  marmoset_options <- accepted_names$Marmoset_Options
-  zebrafish_options <- accepted_names$Zebrafish_Options
-  rat_options <- accepted_names$Rat_Options
-  drosophila_options <- accepted_names$Drosophila_Options
-  macaque_options <- accepted_names$Macaque_Options
+   # Species Spelling Options
+   mouse_options <- accepted_names$Mouse_Options
+   human_options <- accepted_names$Human_Options
+   marmoset_options <- accepted_names$Marmoset_Options
+   zebrafish_options <- accepted_names$Zebrafish_Options
+   rat_options <- accepted_names$Rat_Options
+   drosophila_options <- accepted_names$Drosophila_Options
+   macaque_options <- accepted_names$Macaque_Options
 
-  if (species %in% marmoset_options) {
-    cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
-  }
+   if (species %in% marmoset_options) {
+     cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
+   }
 
-  # set prefix
-  if (species %in% mouse_options) {
-    prefix <- "Mus_musculus_"
-  }
-  if (species %in% human_options) {
-    prefix <- "Homo_sapiens_"
-  }
-  if (species %in% zebrafish_options) {
-    prefix <- "Dario_rerio_"
-  }
-  if (species %in% rat_options) {
-    prefix <- "Rattus_norvegicus_"
-  }
-  if (species %in% drosophila_options) {
-    prefix <- "Drosophila_melanogaster_"
-  }
-  if (species %in% macaque_options) {
-    prefix <- "Macaca_mulatta_"
-  }
+   # set prefix
+   if (species %in% mouse_options) {
+     prefix <- "Mus_musculus_"
+   }
+   if (species %in% human_options) {
+     prefix <- "Homo_sapiens_"
+   }
+   if (species %in% zebrafish_options) {
+     prefix <- "Dario_rerio_"
+   }
+   if (species %in% rat_options) {
+     prefix <- "Rattus_norvegicus_"
+   }
+   if (species %in% drosophila_options) {
+     prefix <- "Drosophila_melanogaster_"
+   }
+   if (species %in% macaque_options) {
+     prefix <- "Macaca_mulatta_"
+   }
 
-  # set list names
-  oxphos <- paste0(prefix, "msigdb_oxphos")
-  apop <- paste0(prefix, "msigdb_apop")
-  dna_repair <- paste0(prefix, "msigdb_dna_repair")
+   # set list names
+   oxphos <- paste0(prefix, "msigdb_oxphos")
+   apop <- paste0(prefix, "msigdb_apop")
+   dna_repair <- paste0(prefix, "msigdb_dna_repair")
 
-  # pull lists
-  qc_gene_list <- list(
-    oxphos <- msigdb_qc_gene_list[[oxphos]],
-    apop <- msigdb_qc_gene_list[[apop]],
-    dna_repair <- msigdb_qc_gene_list[[dna_repair]]
-  )
+   # pull lists
+   qc_gene_list <- list(
+     oxphos <- msigdb_qc_gene_list[[oxphos]],
+     apop <- msigdb_qc_gene_list[[apop]],
+     dna_repair <- msigdb_qc_gene_list[[dna_repair]]
+   )
 
-  return(qc_gene_list)
-}
+   return(qc_gene_list)
+ }
+
+
+ #' Add MSigDB Gene Lists Percentages
+ #'
+ #' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+ #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+ #'
+ #' @param seurat_object object name.
+ #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+ #' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
+ #' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
+ #' phosphorylation counts. Default is "percent_oxphos".
+ #' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
+ #' Default is "percent_apop".
+ #' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
+ #' Default is "percent_oxphos".
+ #' @param assay Assay to use (default is the current object default assay).
+ #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+ #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
+ #' `mito_ribo_name` is present in meta.data slot.
+ #'
+ #' @return list of 3 sets of gene_symbols
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+
+ Add_MSigDB_Seurat <- function(
+     seurat_object,
+     species,
+     oxphos_name = "percent_oxphos",
+     apop_name = "percent_apop",
+     dna_repair_name = "percent_dna_repair",
+     assay = NULL,
+     overwrite = FALSE
+ ) {
+   # Accepted species names
+   accepted_names <- list(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   if (!species %in% unlist(x = accepted_names)) {
+     cli::cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+   }
+
+   # Check Seurat
+   Is_Seurat(seurat_object = seurat_object)
+
+   # Check name collision
+   if (any(duplicated(x = c(oxphos_name, apop_name, dna_repair_name)))) {
+     cli_abort(message = "One or more of values provided to {.code oxphos_name}, {.code apop_name}, {.code dna_repair_name} are identical.")
+   }
+
+   # Overwrite check
+   if (oxphos_name %in% colnames(x = seurat_object@meta.data) || apop_name %in% colnames(x = seurat_object@meta.data) || dna_repair_name %in% colnames(x = seurat_object@meta.data)) {
+     if (!overwrite) {
+       cli_abort(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
+                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code oxphos_name}, {.code apop_name}, and/or {.code dna_repair_name}*")
+       )
+     }
+     cli_inform(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
+                            "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
+     )
+   }
+
+   # Set default assay
+   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+   # Retrieve gene lists
+   msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
+
+   oxphos_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["oxphos"]])
+   apop_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["apop"]])
+   dna_repair_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["dna_repair"]])
+
+   # Add mito and ribo columns
+   if (length(x = oxphos_found) > 0) {
+     seurat_object[[oxphos_name]] <- PercentageFeatureSet(object = seurat_object, features = oxphos_found, assay = assay)
+   }
+   if (length(x = apop_found) > 0) {
+     seurat_object[[apop_name]] <- PercentageFeatureSet(object = seurat_object, features = apop_found, assay = assay)
+   }
+   if (length(x = dna_repair_found) > 0) {
+     seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
+   }
+
+   # return final object
+   return(seurat_object)
+ }
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
