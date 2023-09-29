@@ -9,12 +9,18 @@ Add_Cell_QC_Metrics(
   add_mito_ribo = TRUE,
   add_complexity = TRUE,
   add_top_pct = TRUE,
+  add_MSigDB = TRUE,
+  add_IEG = TRUE,
   species,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
   mito_ribo_name = "percent_mito_ribo",
   complexity_name = "log10GenesPerUMI",
   top_pct_name = "percent_top50",
+  oxphos_name = "percent_oxphos",
+  apop_name = "percent_apop",
+  dna_repair_name = "percent_dna_repair",
+  ieg_name = "percent_ieg",
   mito_pattern = NULL,
   ribo_pattern = NULL,
   mito_features = NULL,
@@ -28,11 +34,18 @@ Add_Cell_QC_Metrics(
 \arguments{
 \item{seurat_object}{object name.}
 
-\item{add_mito_ribo}{logical, whether to add mito/ribo percentages to object (Default is TRUE).}
+\item{add_mito_ribo}{logical, whether to add percentage of counts belonging to mitochondrial/ribosomal
+genes to object (Default is TRUE).}
 
 \item{add_complexity}{logical, whether to add Cell Complexity to object (Default is TRUE).}
 
 \item{add_top_pct}{logical, whether to add Top Gene Percentages to object (Default is TRUE).}
+
+\item{add_MSigDB}{logical, whether to add percentages of counts belonging to genes from of mSigDB hallmark
+gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
+object (Default is TRUE).}
+
+\item{add_IEG}{logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).}
 
 \item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
@@ -52,6 +65,17 @@ Default is "log10GenesPerUMI".}
 
 \item{top_pct_name}{name to use for new meta data column for \code{Add_Top_Gene_Pct_Seurat}.
 Default is "percent_topXX", where XX is equal to the value provided to \code{num_top_genes}.}
+
+\item{oxphos_name}{name to use for new meta data column for percentage of MSigDB oxidative phosphorylation
+counts.  Default is "percent_oxphos".}
+
+\item{apop_name}{name to use for new meta data column for percentage of MSigDB apoptosis counts.
+Default is "percent_apop".}
+
+\item{dna_repair_name}{name to use for new meta data column for percentage of MSigDB DNA repair
+counts.  Default is "percent_dna_repair"..}
+
+\item{ieg_name}{name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".}
 
 \item{mito_pattern}{A regex pattern to match features against for mitochondrial genes (will set automatically if
 species is mouse or human; marmoset features list saved separately).}
