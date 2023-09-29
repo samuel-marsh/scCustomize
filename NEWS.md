@@ -10,7 +10,8 @@
 - Added new function `MAD_Stats` to calculate to the median absolute deviation of meta.data columns by grouping variable and across entire object.  
 - Added new function `Add_Top_Gene_Pct_Seurat` to add another QC measure of cell complexity to object meta.data.  Returns percentage of counts occupied by top XX genes in each cell.  
 - Added ability to provide set of custom features to `VariableFeaturePlot_scCustom` using `custom_features` parameter.  
-- Added new overall cell QC metric function `Add_Cell_QC_Metrics` to simplify adding cell QC metrics.  Single function call to add Mito/Ribo%, Cell Complexity, and Top Gene Percent.  
+- Added new overall cell QC metric function `Add_Cell_QC_Metrics` to simplify adding cell QC metrics.  Single function call to add Mito/Ribo Percentages, Cell Complexity, Top Gene Percentages, MSigDB Percentages, and IEG Percentages.  
+- Added 2 new gene lists to package data for use in `Add_Cell_QC_Metrics` function: "msigdb_qc_gene_list""
 
   
 ## Changed  
