@@ -35,3 +35,37 @@
 #' @concept data
 #'
 "ensembl_ribo_id"
+
+
+#' QC Gene Lists
+#'
+#' A list gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
+#' "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @format A list of 18 vectors
+#' \describe{
+#'   \item{Homo_sapiens_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for human}
+#'   \item{Homo_sapiens_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for human}
+#'   \item{Homo_sapiens_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for human}
+#'   \item{Mus_musculus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for mouse}
+#'   \item{Mus_musculus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for mouse}
+#'   \item{Mus_musculus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for mouse}
+#'   \item{Rattus_norvegicus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for rat}
+#'   \item{Rattus_norvegicus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for rat}
+#'   \item{Rattus_norvegicus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for rat}
+#'   \item{Drosophila_melanogaster_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for fly}
+#'   \item{Drosophila_melanogaster_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for fly}
+#'   \item{Drosophila_melanogaster_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for fly}
+#'   \item{Dario_rerio_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for zebrafish}
+#'   \item{Dario_rerio_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for zebrafish}
+#'   \item{Dario_rerio_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for zebrafish}
+#'   \item{Macaca_mulatta_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for macaque}
+#'   \item{Macaca_mulatta_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for macaque}
+#'   \item{Macaca_mulatta_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for macaque}
+#'
+#' }
+#' @concept data
+#'
+#' @source MSigDB gene sets via msigdbr package  \url{https://cran.r-project.org/package=msigdbr}
+#'
+"msigdb_qc_gene_list"
