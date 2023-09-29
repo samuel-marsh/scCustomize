@@ -1210,7 +1210,7 @@ Clustered_DotPlot <- function(
   }
 
   # Check features and meta to determine which features present
-  all_found_features <- Feature_PreCheck(object = seurat_object, features = features_unique)
+  all_found_features <- Feature_PreCheck(object = seurat_object, features = features_unique, assay = assay)
 
   # Check exp min/max set correctly
   if (!exp_color_min < exp_color_max) {
