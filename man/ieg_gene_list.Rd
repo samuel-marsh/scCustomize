@@ -13,7 +13,9 @@ A list of seven vectors
 }
 }
 \source{
-SI Table 4 from \url{https://doi.org/10.1016/j.neuron.2017.09.026}.
+Mouse gene list is from: SI Table 4 from \url{https://doi.org/10.1016/j.neuron.2017.09.026}.  Human
+gene list was compiled by first creating homologous gene list using bioaRt and then adding some manually curated
+homologs according to HGNC.
 }
 \usage{
 ieg_gene_list
