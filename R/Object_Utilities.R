@@ -403,9 +403,14 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' Add Mito/Ribo %, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single function call
 #'
 #' @param seurat_object object name.
-#' @param add_mito_ribo logical, whether to add mito/ribo percentages to object (Default is TRUE).
+#' @param add_mito_ribo logical, whether to add percentage of counts belonging to mitochondrial/ribosomal
+#' genes to object (Default is TRUE).
 #' @param add_complexity logical, whether to add Cell Complexity to object (Default is TRUE).
 #' @param add_top_pct logical, whether to add Top Gene Percentages to object (Default is TRUE).
+#' @param add_MSigDB logical, whether to add percentages of counts belonging to genes from of mSigDB hallmark
+#' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
+#' object (Default is TRUE).
+#' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
@@ -419,6 +424,13 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' Default is "log10GenesPerUMI".
 #' @param top_pct_name name to use for new meta data column for `Add_Top_Gene_Pct_Seurat`.
 #' Default is "percent_topXX", where XX is equal to the value provided to `num_top_genes`.
+#' @param oxphos_name name to use for new meta data column for percentage of MSigDB oxidative phosphorylation
+#' counts.  Default is "percent_oxphos".
+#' @param apop_name name to use for new meta data column for percentage of MSigDB apoptosis counts.
+#' Default is "percent_apop".
+#' @param dna_repair_name name to use for new meta data column for percentage of MSigDB DNA repair
+#' counts.  Default is "percent_dna_repair"..
+#' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
@@ -454,12 +466,18 @@ Add_Cell_QC_Metrics <- function(
     add_mito_ribo = TRUE,
     add_complexity = TRUE,
     add_top_pct = TRUE,
+    add_MSigDB = TRUE,
+    add_IEG = TRUE,
     species,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
     mito_ribo_name = "percent_mito_ribo",
     complexity_name = "log10GenesPerUMI",
     top_pct_name = "percent_top50",
+    oxphos_name = "percent_oxphos",
+    apop_name = "percent_apop",
+    dna_repair_name = "percent_dna_repair",
+    ieg_name = "percent_ieg",
     mito_pattern = NULL,
     ribo_pattern = NULL,
     mito_features = NULL,
@@ -469,9 +487,29 @@ Add_Cell_QC_Metrics <- function(
     assay = NULL,
     overwrite = FALSE
 ) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
   # Add mito/ribo
   if (isTRUE(x = add_mito_ribo)) {
-    cli_inform(message = "Adding {.field Mito/Ribo %} to meta.data.")
+    cli_inform(message = "Adding {.field Mito/Ribo Percentages} to meta.data.")
     seurat_object <- Add_Mito_Ribo_Seurat(seurat_object = seurat_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
   }
 
@@ -483,8 +521,30 @@ Add_Cell_QC_Metrics <- function(
 
   # Add top gene expression percent
   if (isTRUE(x = add_top_pct)) {
-    cli_inform(message = "Adding {.field Cell Complexity #1 (Top {num_top_genes} Percent)} to meta.data.")
+    cli_inform(message = "Adding {.field Cell Complexity #2 (Top {num_top_genes} Percentages)} to meta.data.")
     seurat_object <- Add_Top_Gene_Pct_Seurat(seurat_object = seurat_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
+  }
+
+  # Add MSigDB
+  if (isTRUE(x = add_MSigDB)) {
+    if (species %in% marmoset_options) {
+      cli_warn(message = c("{.val Marmoset} is not currently a part of MSigDB gene list database.",
+                           "i" = "No columns will be added to object meta.data"))
+    } else {
+      cli_inform(message = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages.} to meta.data.")
+      seurat_object <- Add_MSigDB_Seurat(seurat_object = seurat_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite)
+    }
+  }
+
+  # Add IEG
+  if (isTRUE(x = add_IEG)) {
+    if (species %in% c(marmoset_options, rat_options, zebrafish_options, macaque_options, drosophila_options)) {
+      cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, and Drosophila} are not currently supported.",
+                           "i" = "No column will be added to object meta.data"))
+    } else {
+      cli_inform(message = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages.} to meta.data.")
+      seurat_object <- Add_IEG_Seurat(seurat_object = seurat_object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
+    }
   }
 
   # return object
