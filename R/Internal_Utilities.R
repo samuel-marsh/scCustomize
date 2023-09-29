@@ -604,7 +604,7 @@ Retrieve_Ensembl_Ribo <- function(
  #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
  #' `mito_ribo_name` is present in meta.data slot.
  #'
- #' @return list of 3 sets of gene_symbols
+ #' @return Seurat object
  #'
  #' @import cli
  #'
@@ -635,7 +635,7 @@ Retrieve_Ensembl_Ribo <- function(
    )
 
    if (!species %in% unlist(x = accepted_names)) {
-     cli::cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
    }
 
    # Check Seurat
@@ -677,6 +677,83 @@ Retrieve_Ensembl_Ribo <- function(
    }
    if (length(x = dna_repair_found) > 0) {
      seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
+   }
+
+   # return final object
+   return(seurat_object)
+ }
+
+
+
+ #' Add IEG Gene List Percentages
+ #'
+ #' Adds percentage of counts from IEG genes from mouse and human.
+ #'
+ #' @param seurat_object object name.
+ #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+ #' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+ #' @param assay Assay to use (default is the current object default assay).
+ #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+ #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
+ #'
+ #' @return Seurat object
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+
+ Add_IEG_Seurat <- function(
+    seurat_object,
+    species,
+    ieg_name = "percent_ieg",
+    assay = NULL,
+    overwrite = FALSE
+ ) {
+   # Accepted species names
+   accepted_names <- list(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   if (!species %in% unlist(x = accepted_names)) {
+     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+   }
+
+   # Check Seurat
+   Is_Seurat(seurat_object = seurat_object)
+
+   # Overwrite check
+   if (ieg_name %in% colnames(x = seurat_object@meta.data)) {
+     if (!overwrite) {
+       cli_abort(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
+                             "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_name}*")
+       )
+     }
+     cli_inform(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
+                            "i" = "Overwriting those column as .code {overwrite = TRUE.}")
+     )
+   }
+
+   # Set default assay
+   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+   # Retrieve gene lists
+   ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+
+   ieg_found <- Feature_PreCheck(object = seurat_object, features = ieg_gene_list[["ieg"]])
+
+   # Add mito and ribo columns
+   if (length(x = ieg_found) > 0) {
+     seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
    }
 
    # return final object
