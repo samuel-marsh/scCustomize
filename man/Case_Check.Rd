@@ -9,7 +9,8 @@ Case_Check(
   seurat_object,
   gene_list,
   case_check_msg = TRUE,
-  return_features = TRUE
+  return_features = TRUE,
+  assay = NULL
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ Case_Check(
 found in addition to inclusion in returned list.  Default is TRUE.}
 
 \item{return_features}{logical. Whether to return vector of alternate case features.  Default is TRUE.}
+
+\item{assay}{Name of assay to pull feature names from. If NULL will use the result of \code{DefaultAssay(seurat_object)}.}
 }
 \value{
 If features found returns vector of found alternate case features and prints message depending on
