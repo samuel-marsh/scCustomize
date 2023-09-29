@@ -446,7 +446,7 @@ Retrieve_Ensembl_Ribo <- function(
 
 #' Retrieve MSigDB Gene Lists
 #'
-#' Retrieves species specifc gene lists for MSigDB QC Hallmark lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' Retrieves species specific gene lists for MSigDB QC Hallmark lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
 #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
 #'
 #' @param species species to retrieve IDs.
@@ -517,6 +517,68 @@ Retrieve_Ensembl_Ribo <- function(
      oxphos <- msigdb_qc_gene_list[[oxphos]],
      apop <- msigdb_qc_gene_list[[apop]],
      dna_repair <- msigdb_qc_gene_list[[dna_repair]]
+   )
+
+   return(qc_gene_list)
+ }
+
+
+ #' Retrieve IEG Gene Lists
+ #'
+ #' Retrieves species specific IEG gene lists
+ #'
+ #' @param species species to retrieve IDs.
+ #'
+ #' @return list of 2 sets of gene_symbols
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+ Retrieve_IEG_Lists <- function(
+    species
+ ) {
+   # Accepted species names
+   accepted_names <- data.frame(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   # Species Spelling Options
+   mouse_options <- accepted_names$Mouse_Options
+   human_options <- accepted_names$Human_Options
+   marmoset_options <- accepted_names$Marmoset_Options
+   zebrafish_options <- accepted_names$Zebrafish_Options
+   rat_options <- accepted_names$Rat_Options
+   drosophila_options <- accepted_names$Drosophila_Options
+   macaque_options <- accepted_names$Macaque_Options
+
+   if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options)) {
+     cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
+   }
+
+   # set prefix
+   if (species %in% mouse_options) {
+     prefix <- "Mus_musculus_"
+   }
+   if (species %in% human_options) {
+     prefix <- "Homo_sapiens_"
+   }
+
+   # set list names
+   ieg <- paste0(prefix, "ieg")
+
+   # pull lists
+   qc_gene_list <- list(
+     ieg <- ieg_gene_list[[ieg]]
    )
 
    return(qc_gene_list)
