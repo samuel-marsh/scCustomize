@@ -444,7 +444,7 @@ Retrieve_Ensembl_Ribo <- function(
 }
 
 
-#' MSigDB Gene Lists
+#' Retrieve MSigDB Gene Lists
 #'
 #' Retrieves species specifc gene lists for MSigDB QC Hallmark lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
 #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
