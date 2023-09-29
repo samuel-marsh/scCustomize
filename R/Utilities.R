@@ -162,6 +162,7 @@ Gene_Present <- function(
 #' @param case_check_msg logical. Whether to print message to console if alternate case features are
 #' found in addition to inclusion in returned list.  Default is TRUE.
 #' @param return_features logical. Whether to return vector of alternate case features.  Default is TRUE.
+#' @param assay Name of assay to pull feature names from. If NULL will use the result of `DefaultAssay(seurat_object)`.
 #'
 #' @return If features found returns vector of found alternate case features and prints message depending on
 #' parameters specified.
@@ -179,10 +180,14 @@ Case_Check <- function(
   seurat_object,
   gene_list,
   case_check_msg = TRUE,
-  return_features = TRUE
+  return_features = TRUE,
+  assay = NULL
 ) {
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = object)
+
   # get all features
-  possible_features <- Features(x = seurat_object)
+  possible_features <- Features(x = seurat_object, assay = assay)
 
   upper_bad_features <- str_to_upper(string = gene_list)
   upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
