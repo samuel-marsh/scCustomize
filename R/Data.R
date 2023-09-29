@@ -66,6 +66,23 @@
 #' }
 #' @concept data
 #'
-#' @source MSigDB gene sets via msigdbr package  \url{https://cran.r-project.org/package=msigdbr}
+#' @source MSigDB gene sets via msigdbr package \url{https://cran.r-project.org/package=msigdbr}
 #'
 "msigdb_qc_gene_list"
+
+
+#' Immediate Early Gene (IEG) gene lists
+#'
+#' A list of gene symbols for immediate early genes
+#'
+#' @format A list of seven vectors
+#' \describe{
+#'   \item{Mus_musculus_IEGs}{Gene symbols for IEGs from source publication (see below)}
+#'   \item{Homo_sapiens_ribo_ensembl}{Human gene symbols for homologous genes from mouse gene list}
+#'
+#' }
+#' @concept data
+#'
+#' @source SI Table 4 from \url{https://doi.org/10.1016/j.neuron.2017.09.026}.
+#'
+"ieg_gene_list"
