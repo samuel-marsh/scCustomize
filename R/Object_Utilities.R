@@ -492,6 +492,8 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
 #' object (Default is TRUE).
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
+#' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
@@ -539,7 +541,7 @@ Add_Top_Gene_Pct_Seurat <- function(
 #'
 #' @examples
 #' library(Seurat)
-#' pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
+#' pbmc_small <- Add_Cell_QC_Metrics(seurat_object = pbmc_small, species = "Human")
 #'
 
 Add_Cell_QC_Metrics <- function(
@@ -549,6 +551,7 @@ Add_Cell_QC_Metrics <- function(
     add_top_pct = TRUE,
     add_MSigDB = TRUE,
     add_IEG = TRUE,
+    add_cell_cycle = TRUE,
     species,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
@@ -627,6 +630,39 @@ Add_Cell_QC_Metrics <- function(
       seurat_object <- Add_IEG_Seurat(seurat_object = seurat_object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
     }
   }
+
+  if (isTRUE(x = add_cell_cycle)) {
+    if (!species %in% human_options) {
+      cli_abort(message = c("Cell Cycle Scoring is only supported for human in this function.",
+                            "i" = "To add score for other species supply cell cycle gene list of `CellCycleScoring` function."
+                ))
+    } else {
+      if (length(grep(x = Layers(seurat_object), pattern = "data", value = T)) == 0) {
+        cli_inform(message = c("Layer with normalized data not present.",
+                               "i" = "Normalizing Data."))
+        seurat_object <- NormalizeData(object = seurat_object)
+      }
+
+      # Overwrite check
+      if ("S.Score" %in% colnames(x = seurat_object@meta.data) || "G2M.Score" %in% colnames(x = seurat_object@meta.data) || "Phase" %in% colnames(x = seurat_object@meta.data)) {
+        if (!overwrite) {
+          cli_abort(message = c("Columns with {.val S.Score}, {.val G2M.Score} and/or {.val Phase} already present in meta.data slot.",
+                                "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE}*")
+          )
+        }
+        cli_inform(message = c("Columns with {.val S.Score}, {.val G2M.Score} and/or {.val Phase} already present in meta.data slot.",
+                               "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
+        )
+      }
+
+      # Add Cell Cycle Scoring
+      cli_inform(message = "Adding {.field Cell Cycle Scoring to meta.data.} to meta.data.")
+      seurat_object <- CellCycleScoring(object = seurat_object, s.features = cc.genes.updated.2019$s.genes, g2m.features = cc.genes.updated.2019$g2m.genes)
+    }
+  }
+
+
+
 
   # return object
   return(seurat_object)
