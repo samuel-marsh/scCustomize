@@ -23,6 +23,7 @@
 - Changed `Liger_to_Seurat` to transfer the liger_object@H slot in addition to H.norm slot already moved.  
 - Replaced `length(x = colnames(x = obj)` with `length(x = Cells(x = obj)` for accurate plotting based on V5 object structure.  
 - `Gene_Present` now accepts `assay` parameter.  
+- Internal reorganization of some functions within `R/` for better organization.  
    
 
 ## Fixes  
