@@ -1,4 +1,85 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### GENERAL OBJECT UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Merge a list of Seurat Objects
+#'
+#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
+#'
+#' @param list_seurat list composed of multiple Seurat Objects.
+#' @param add.cell.ids A character vector of equal length to the number of objects in `list_seurat`.
+#' Appends the corresponding values to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
+#' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
+#' This is recommended if the same normalization approach was applied to all objects.
+#' See \code{\link[SeuratObject]{merge}}.
+#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
+#'
+#' @import cli
+#' @importFrom purrr reduce
+#'
+#' @return A Seurat Object
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' object_list <- list(obj1, obj2, obj3, ...)
+#' merged_object <- Merge_Seurat_List(list_seurat = object_list)
+#' }
+#'
+
+Merge_Seurat_List <- function(
+    list_seurat,
+    add.cell.ids = NULL,
+    merge.data = TRUE,
+    project = "SeuratProject"
+) {
+  # Check list_seurat is list
+  if (!inherits(x = list_seurat, what = "list")) {
+    cli_abort(message = "{.code list_seurat} must be environmental variable of class {.val list}")
+  }
+
+  # Check list_seurat is only composed of Seurat objects
+  for (i in 1:length(x = list_seurat)) {
+    if (!inherits(x = list_seurat[[i]], what = "Seurat")) {
+      cli_abort("One or more of entries in {.code list_seurat} are not objects of class {.val Seurat}")
+    }
+  }
+
+  # Check all barcodes are unique to begin with
+  duplicated_barcodes <- list_seurat %>%
+    lapply(colnames) %>%
+    unlist() %>%
+    duplicated() %>%
+    any()
+
+  if (duplicated_barcodes && is.null(x = add.cell.ids)) {
+    cli_abort(message = c("There are overlapping cell barcodes present in the input objects",
+                          "i" = "Please rename cells or provide prefixes to {.code add.cell.ids} parameter to make unique.")
+    )
+  }
+
+  # Check right number of suffix/prefix ids are provided
+  if (!is.null(x = add.cell.ids) && length(x = add.cell.ids) != length(x = list_seurat)) {
+    cli_abort(message = "The number of prefixes in {.code add.cell.ids} must be equal to the number of objects supplied to {.code list_seurat}.")
+  }
+
+  # Rename cells if provided
+  list_seurat <- lapply(1:length(x = list_seurat), function(x) {
+    list_seurat[[x]] <- RenameCells(object = list_seurat[[x]], add.cell.id = add.cell.ids[x])
+  })
+
+  # Merge objects
+  merged_object <- reduce(list_seurat, function(x, y) {
+    merge(x = x, y = y, merge.data = merge.data, project = project)
+  })
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### QC UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
