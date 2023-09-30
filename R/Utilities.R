@@ -184,7 +184,7 @@ Case_Check <- function(
   assay = NULL
 ) {
   # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # get all features
   possible_features <- Features(x = seurat_object, assay = assay)
