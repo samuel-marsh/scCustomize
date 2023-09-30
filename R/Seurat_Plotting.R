@@ -1002,7 +1002,7 @@ DotPlot_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Add check for group.by before getting to colors
-  if (!is.null(x = group.by) && group.by != "ident") {
+  if (!is.null(x = group.by) || group.by != "ident") {
     Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
