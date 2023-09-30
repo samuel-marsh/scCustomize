@@ -7,6 +7,7 @@
 DotPlot_scCustom(
   seurat_object,
   features,
+  group.by = NULL,
   colors_use = viridis_plasma_dark_high,
   remove_axis_titles = TRUE,
   x_lab_rotate = FALSE,
@@ -20,6 +21,9 @@ DotPlot_scCustom(
 \item{seurat_object}{Seurat object name.}
 
 \item{features}{Features to plot.}
+
+\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.}
 
 \item{colors_use}{specify color palette to used.  Default is viridis_plasma_dark_high.}
 
