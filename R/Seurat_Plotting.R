@@ -962,6 +962,8 @@ Stacked_VlnPlot <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' default is the current active.ident of the object.
 #' @param colors_use specify color palette to used.  Default is viridis_plasma_dark_high.
 #' @param remove_axis_titles logical. Whether to remove the x and y axis titles.  Default = TRUE.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE).
@@ -990,6 +992,7 @@ Stacked_VlnPlot <- function(
 DotPlot_scCustom <- function(
   seurat_object,
   features,
+  group.by = NULL,
   colors_use = viridis_plasma_dark_high,
   remove_axis_titles = TRUE,
   x_lab_rotate = FALSE,
@@ -1002,7 +1005,7 @@ DotPlot_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Add check for group.by before getting to colors
-  if (!is.null(x = group.by) || group.by != "ident") {
+  if (!is.null(x = group.by) && group.by != "ident") {
     Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
