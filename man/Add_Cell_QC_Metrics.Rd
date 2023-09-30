@@ -11,6 +11,7 @@ Add_Cell_QC_Metrics(
   add_top_pct = TRUE,
   add_MSigDB = TRUE,
   add_IEG = TRUE,
+  add_cell_cycle = TRUE,
   species,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
@@ -46,6 +47,9 @@ gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HAL
 object (Default is TRUE).}
 
 \item{add_IEG}{logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).}
+
+\item{add_cell_cycle}{logical, whether to addcell cycle scores and phase based on
+\code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
 
 \item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
@@ -109,7 +113,7 @@ Add Mito/Ribo \%, Cell Complexity (log10GenesPerUMI), Top Gene Percent with sing
 }
 \examples{
 library(Seurat)
-pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
+pbmc_small <- Add_Cell_QC_Metrics(seurat_object = pbmc_small, species = "Human")
 
 }
 \concept{object_util}
