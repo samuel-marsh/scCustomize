@@ -39,7 +39,7 @@
 - Fixed default plot colors in `VlnPlot`-based plots when `split.by` is not NULL.  
 - Fixed error when trying to plot more than two variables with `group.by` when using `DimPlot_scCustom` ([#128](https://github.com/samuel-marsh/scCustomize/issues/128)).  
 - Fixed errors in parameter description for `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` which incorrectly stated the names of new meta.data/cell.data columns to be added.  
-- Fixed bug in `DotPLot_scCustom` that prevented it from working unless `group.by` parameter was explicitly added.  
+- Fixed bug in `DotPlot_scCustom` that prevented it from working unless `group.by` parameter was explicitly added.  
 - Fixed bug in `Case_Check` caused by typo.  
 
 
