@@ -42,6 +42,7 @@
 - Fixed errors in parameter description for `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` which incorrectly stated the names of new meta.data/cell.data columns to be added.  
 - Fixed bug in `DotPlot_scCustom` that prevented it from working unless `group.by` parameter was explicitly added.  
 - Fixed bug in `Case_Check` caused by typo.  
+- Fixed color warning messages in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` that were too verbose.  
 
 
 
