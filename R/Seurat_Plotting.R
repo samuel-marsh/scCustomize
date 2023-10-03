@@ -531,7 +531,7 @@ Split_FeatureScatter <- function(
   }
 
   # Set columna and row lengths
-  split.by_length <- length(unique(seurat_object@meta.data[[split.by]]))
+  split.by_length <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
 
    if (is.null(x = num_columns)) {
     num_columns <- split.by_length
