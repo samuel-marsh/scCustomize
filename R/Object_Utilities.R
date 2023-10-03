@@ -661,9 +661,6 @@ Add_Cell_QC_Metrics <- function(
     }
   }
 
-
-
-
   # return object
   return(seurat_object)
 }
