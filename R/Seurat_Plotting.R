@@ -128,7 +128,7 @@ FeaturePlot_scCustom <- function(
   }
 
   if (!is.null(x = split.by)) {
-    split.by_length <- length(unique(seurat_object@meta.data[[split.by]]))
+    split.by_length <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
 
     if (!is.null(x = num_columns) && label_feature_yaxis) {
 
@@ -911,12 +911,12 @@ Stacked_VlnPlot <- function(
   # Add back x-axis title to bottom plot. patchwork is going to support this?
   # Add ability to rotate the X axis labels to the function call
   if (isTRUE(x = x_lab_rotate) || x_lab_rotate == 45) {
-    plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
+    plot_list[[length(x = plot_list)]] <- plot_list[[length(x = plot_list)]] +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1), axis.ticks.x = element_line())
   }
 
   if (x_lab_rotate == 90) {
-    plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
+    plot_list[[length(x = plot_list)]] <- plot_list[[length(x = plot_list)]] +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), axis.ticks.x = element_line())
   }
 
@@ -924,7 +924,7 @@ Stacked_VlnPlot <- function(
     cli_abort(message = "{.code x_lab_rotate} must be either a logical or a numeric value of 45 or 90.")
   }
 
-  plot_list[[length(plot_list)]] <- plot_list[[length(plot_list)]] +
+  plot_list[[length(x = plot_list)]] <- plot_list[[length(x = plot_list)]] +
     theme(axis.text.x = element_text(), axis.ticks.x = element_line())
 
   # change the y-axis tick to only max value
@@ -1592,7 +1592,7 @@ Cluster_Highlight_Plot <- function(
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_to_highlight)), raster = raster)
+    pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_to_highlight)), raster = raster)
   }
 
   # Set colors
@@ -1750,7 +1750,7 @@ Meta_Highlight_Plot <- function(
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- AutoPointSize_scCustom(data = sum(lengths(cells_to_highlight)), raster = raster)
+    pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_to_highlight)), raster = raster)
   }
 
   # Set colors
