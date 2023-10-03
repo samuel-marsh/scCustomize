@@ -1758,7 +1758,7 @@ Meta_Highlight_Plot <- function(
   if (length(x = highlight_color) == 1 && length(x = found_meta_highlight) > 1) {
     highlight_color <- rep(x = highlight_color, length(x = found_meta_highlight))
     cli_inform(message = c("NOTE: Only one color provided to but {length(x = found_meta_highlight) `meta_data_highlight` variables were provided.}",
-                           "i" = "Using the same color ({highlight_color}) for all variables"))
+                           "i" = "Using the same color ({highlight_color[1]}) for all variables"))
   }
 
   # If NULL set using scCustomize_Palette
