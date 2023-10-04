@@ -40,7 +40,7 @@ Imports:
     purrr,
     rlang (>= 1.0.1),
     scales,
-    scattermore (>= 0.7), 
+    scattermore (>= 1.2), 
     SeuratObject (>= 4.1.2),
     stats,
     stringi,
