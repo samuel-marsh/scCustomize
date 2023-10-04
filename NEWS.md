@@ -25,6 +25,7 @@
 - `Gene_Present` now accepts `assay` parameter.  
 - Internal reorganization of some functions within `R/` for better organization.  
 - Updated default scCustomize color palettes.  Now if number of colors is greater than 2 but less than 8 the default palette will be `ColorBlind_Pal` (previously it was "polychrome").  Polychrome remains the default when number of colors is between 9-36.  
+- Minimum version of scattermore package updated to v1.2.  
    
 
 ## Fixes  
