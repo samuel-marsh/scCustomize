@@ -17,6 +17,7 @@
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -53,6 +54,7 @@ QC_Plots_Genes <- function(
   high_cutoff = NULL,
   pt.size = NULL,
   plot_median = FALSE,
+  plot_boxplot = FALSE,
   median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
@@ -68,7 +70,7 @@ QC_Plots_Genes <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -109,6 +111,7 @@ QC_Plots_Genes <- function(
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -146,6 +149,7 @@ QC_Plots_UMIs <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -160,7 +164,7 @@ QC_Plots_UMIs <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -203,6 +207,7 @@ QC_Plots_UMIs <- function(
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -241,6 +246,7 @@ QC_Plots_Mito <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -255,7 +261,7 @@ QC_Plots_Mito <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -297,6 +303,7 @@ QC_Plots_Mito <- function(
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -337,6 +344,7 @@ QC_Plots_Feature <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -354,7 +362,7 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -396,6 +404,7 @@ QC_Plots_Feature <- function(
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -434,6 +443,7 @@ QC_Plots_Complexity <- function(
   high_cutoff = NULL,
   pt.size = NULL,
   plot_median = FALSE,
+  plot_boxplot = FALSE,
   median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
@@ -443,7 +453,7 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
-  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
   return(plot)
 }
@@ -464,6 +474,7 @@ QC_Plots_Complexity <- function(
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -502,6 +513,7 @@ QC_Plots_Combined_Vln <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -534,11 +546,11 @@ QC_Plots_Combined_Vln <- function(
   }
 
   # Create Individual Plots
-  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
-  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
-  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
   # wrap plots
   plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
