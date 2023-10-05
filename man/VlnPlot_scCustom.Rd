@@ -11,6 +11,9 @@ VlnPlot_scCustom(
   pt.size = NULL,
   group.by = NULL,
   split.by = NULL,
+  plot_median = FALSE,
+  plot_boxplot = FALSE,
+  median_size = 15,
   idents = NULL,
   num_columns = NULL,
   raster = NULL,
@@ -35,6 +38,12 @@ both from \code{DiscretePalette_scCustomize}.}
 default is the current active.ident of the object.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
+
+\item{plot_median}{logical, whether to plot median for each ident on the plot (Default is FALSE).}
+
+\item{plot_boxplot}{logical, whether to plot boxplot inside of violin (Default is FALSE).}
+
+\item{median_size}{Shape size for the median is plotted.}
 
 \item{idents}{Which classes to include in the plot (default is all).}
 
