@@ -2032,6 +2032,11 @@ DimPlot_scCustom <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Change label if label.box
+  if (isTRUE(x = label.box)) {
+    label <- TRUE
+  }
+
   if (!is.null(x = split.by)) {
     split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
