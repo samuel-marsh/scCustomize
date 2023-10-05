@@ -13,7 +13,7 @@
 - Added new overall cell QC metric function `Add_Cell_QC_Metrics` to simplify adding cell QC metrics.  Single function call to add Mito/Ribo Percentages, Cell Complexity, Top Gene Percentages, MSigDB Percentages, IEG Percentages, and/or Cell Cycle Scoring (human only).  
 - Added 2 new gene lists to package data for use in `Add_Cell_QC_Metrics` function: "msigdb_qc_gene_list" and "ieg_gene_list".
 - Added several internal functions to support new MsigDB and IEG capabilities of `Add_Cell_QC_Metrics`.  
-- Added new parameters `plot_median` and `plot_boxplot` to `VlnPlot_scCustom` for added visualization.  
+- Added new parameters `plot_median` and `plot_boxplot` to `VlnPlot_scCustom` (and `VlnPlot_scCustom`-based plots; e.g., `QC_Plot_*` family) for added visualization.  
 
   
 ## Changed  
