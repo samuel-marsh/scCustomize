@@ -671,6 +671,9 @@ Split_FeatureScatter <- function(
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
+#' @param median_size Shape size for the median is plotted.
 #' @param idents Which classes to include in the plot (default is all).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
@@ -708,6 +711,9 @@ VlnPlot_scCustom <- function(
   pt.size = NULL,
   group.by = NULL,
   split.by = NULL,
+  plot_median = FALSE,
+  plot_boxplot = FALSE,
+  median_size = 15,
   idents = NULL,
   num_columns = NULL,
   raster = NULL,
@@ -733,7 +739,20 @@ VlnPlot_scCustom <- function(
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # set size if NULL
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+  if (isTRUE(x = plot_boxplot)) {
+    if (!is.null(x = pt.size)) {
+      cli::cli_warn(message = c("Provided value for {.code pt.size} ({.field {pt.size}}) will be ignored.",
+                                "When setting {.field plot_boxplot = TRUE}, {.code pt.size} is automatically set to 0."))
+    }
+    pt.size <- 0
+  } else {
+    pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+  }
+
+  # check median vs boxplot
+  if (isTRUE(x = plot_median) && isTRUE(x = plot_boxplot)) {
+    cli_abort(message = "{.code plot_median} and {.code plot_boxplot} cannot both be set {.field TRUE}")
+  }
 
   # Add raster check for scCustomize
   # num_cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = idents))
@@ -778,6 +797,22 @@ VlnPlot_scCustom <- function(
 
   # Plot
   plot <- VlnPlot(object = seurat_object, features = all_found_features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster, add.noise = add.noise, ...)
+
+  # Add add median plot
+  if (isTRUE(x = plot_median) && is.null(x = split.by)) {
+    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
+  }
+
+  if (isTRUE(x = plot_median) && !is.null(x = split.by)) {
+    cli_abort(message = "Cannot add median ({.field plot_median = TRUE}) when {.code split.by} is not NULL.")
+  }
+
+  if (isTRUE(x = plot_boxplot) && is.null(x = split.by)) {
+    plot <- plot + geom_boxplot(fill='#A4A4A4', color="black", width = 0.1)
+  }
+  if (isTRUE(x = plot_boxplot) && !is.null(x = split.by)) {
+    cli_abort(message = "Cannot add median ({.field plot_boxplot = TRUE}) when {.code split.by} is not NULL.")
+  }
 
   return(plot)
 }
