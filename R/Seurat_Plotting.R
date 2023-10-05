@@ -2033,7 +2033,7 @@ DimPlot_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Change label if label.box
-  if (isTRUE(x = label.box)) {
+  if (isTRUE(x = label.box) && is.null(x = label)) {
     label <- TRUE
   }
 
