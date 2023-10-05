@@ -14,6 +14,7 @@ QC_Plots_Combined_Vln(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -43,6 +44,8 @@ default is the current active.ident of the object.}
 \item{plot_median}{logical, whether to plot median for each ident on the plot (Default is FALSE).}
 
 \item{median_size}{Shape size for the median is plotted.}
+
+\item{plot_boxplot}{logical, whether to plot boxplot inside of violin (Default is FALSE).}
 
 \item{colors_use}{vector of colors to use for plot.}
 
