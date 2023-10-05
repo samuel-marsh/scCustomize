@@ -87,11 +87,6 @@ QC_Plots_Genes <- function(
     plot <- plot + scale_y_log10()
   }
 
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
-  }
-
   return(plot)
 }
 
@@ -179,11 +174,6 @@ QC_Plots_UMIs <- function(
   # return log10 y axis
   if (y_axis_log) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -276,11 +266,6 @@ QC_Plots_Mito <- function(
   # return log10 y axis
   if (y_axis_log) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -377,11 +362,6 @@ QC_Plots_Feature <- function(
   # return log10 y axis
   if (y_axis_log) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
