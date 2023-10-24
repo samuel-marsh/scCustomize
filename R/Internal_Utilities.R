@@ -761,6 +761,125 @@ Retrieve_Ensembl_Ribo <- function(
  }
 
 
+ #' Return default QC features
+ #'
+ #' Returns default QC features full names when provided with shortcut name.
+ #'
+ #' @param seurat_object object name.
+ #' @param features vector of features to check against defaults.
+ #' @param print_defaults return the potential accepted default values.
+ #'
+ #' @return list of found and not found features
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+ Return_QC_Defaults <- function(
+    seurat_object,
+    features,
+    print_defaults = FALSE
+ ) {
+   # default values
+   feature_defaults <- list(
+     feature = c("features", "Features", "genes", "Genes"),
+     UMIs = c("counts", "Counts", "umis", "umi", "UMI", "UMIs", "UMIS"),
+     mito = c("mito", "Mito"),
+     ribo = c("ribo", "Ribo"),
+     mito_ribo = c("mito_ribo", "Mito_Ribo"),
+     complexity = c("complexity", "Complexity"),
+     top_pct = c("top_pct", "Top_Pct"),
+     IEG = c("ieg", "IEG"),
+     OXPHOS = c("oxphos", "OXPHOS"),
+     APOP = c("apop", "Apop"),
+     DNA_Repair = c("dna_repair", "DNA_Repair")
+   )
+
+   # if print is TRUE
+   if (isTRUE(x = print_defaults)) {
+     cli_inform(message = c("Accepted default values are:",
+                            "{.field {glue_collapse_scCustom(input_string = unlist(feature_defaults), and = TRUE)}}"))
+     scCustomize:::stop_quietly()
+   }
+
+   # Assign values
+   if (any(features %in% feature_defaults[[1]])) {
+     default1 <- "nFeature_RNA"
+   } else {
+     default1 <- NULL
+   }
+   if (any(features %in% feature_defaults[[2]])) {
+     default2 <- "nCount_RNA"
+   } else {
+     default2 <- NULL
+   }
+   if (any(features %in% feature_defaults[[3]])) {
+     default3 <- "percent_mito"
+   } else {
+     default3 <- NULL
+   }
+   if (any(features %in% feature_defaults[[4]])) {
+     default4 <- "percent_ribo"
+   } else {
+     default4 <- NULL
+   }
+   if (any(features %in% feature_defaults[[5]])) {
+     default5 <- "percent_mito_ribo"
+   } else {
+     default5 <- NULL
+   }
+   if (any(features %in% feature_defaults[[6]])) {
+     default6 <- "log10GenesPerUMI"
+   } else {
+     default6 <- NULL
+   }
+   if (any(features %in% feature_defaults[[7]])) {
+     default7 <- grep(pattern = "percent_top", x = colnames(x = seurat_object@meta.data), value = TRUE)
+   } else {
+     default7 <- NULL
+   }
+   if (any(features %in% feature_defaults[[8]])) {
+     default8 <- "percent_ieg"
+   } else {
+     default8 <- NULL
+   }
+   if (any(features %in% feature_defaults[[9]])) {
+     default9 <- "percent_oxphos"
+   } else {
+     default9 <- NULL
+   }
+   if (any(features %in% feature_defaults[[10]])) {
+     default10 <- "percent_apop"
+   } else {
+     default10 <- NULL
+   }
+   if (any(features %in% feature_defaults[[11]])) {
+     default11 <- "percent_dna_repair"
+   } else {
+     default11 <- NULL
+   }
+
+   # All found defaults
+   all_found_defaults <- c(default1, default2, default3, default4, default5, default6, default7, default8, default9, default10, default11)
+
+   # get not found features
+   not_found_defaults <- features[!features %in% unlist(feature_defaults)]
+
+   # create return list
+   feat_list <- list(
+     found_defaults = all_found_defaults,
+     not_found_defaults = not_found_defaults
+   )
+
+   # return feature list
+   return(feat_list)
+ }
+
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### GENERAL HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
