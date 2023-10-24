@@ -540,6 +540,106 @@ QC_Plots_Combined_Vln <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### OBJECT QC HISTOGRAM ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' QC Plots Genes, UMIs, & % Mito
+#'
+#' Custom VlnPlot for initial QC checks including lines for thresholding
+#'
+#' @param seurat_object Seurat object name.
+#' @param features Feature from meta.data, assay features, or feature name shortcut to plot.
+#' @param low_cutoff Plot line a potential low threshold for filtering.
+#' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param bins number of bins to plot default is 250.
+#' @param colors_use color to fill histogram bars, default is "dodgerblue".
+#' @param num_columns Number of columns in plot layout.
+#' @param plot_title optional, vector to use for plot title.  Default is the name of the
+#' variable being plotted.
+#' @param assay assay to pull features from, default is active assay.
+#' @param print_defaults return list of accepted default shortcuts to provide to `features` instead
+#' of full name.
+#'
+#' @return A patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom cowplot theme_cowplot
+#' @importFrom patchwork wrap_plots
+#'
+#' @export
+#'
+#' @concept object_qc_plotting
+#'
+#' @examples
+#' \dontrun{
+#' QC_Histogram(seurat_object = object, features = "nFeature_RNA")
+#' }
+#'
+
+QC_Histogram <- function(
+    seurat_object,
+    features,
+    low_cutoff = NULL,
+    high_cutoff = NULL,
+    bins = 250,
+    colors_use = "dodgerblue",
+    num_columns = NULL,
+    plot_title = NULL,
+    assay = NULL,
+    print_defaults = FALSE
+){
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # default features
+  found_defaults <- Return_QC_Defaults(seurat_object = seurat_object, features = features, print_defaults = print_defaults)
+
+  # set assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Check against object
+  found_features <- Gene_Present(data = seurat_object, gene_list = found_defaults[[2]], omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
+
+  found_meta <- Meta_Present(seurat_object = seurat_object, meta_col_names = found_features[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+
+  # Combine lists
+  all_not_found_features <- found_meta[[2]]
+
+  all_found_features <- c(found_defaults[[1]], found_features[[1]], found_meta[[1]])
+
+  # Warn not found
+  if (length(x = all_not_found_features > 0)) {
+    cli_warn(message = c("The following features were omitted as they not found in default values or in Seurat object:",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}"))
+  }
+
+  # Check and set titles
+  if (is.null(x = plot_title)) {
+    plot_titles <- all_found_features
+  }
+
+  if (!is.null(x = plot_title) && length(x = plot_title) != features) {
+    cli_abort(message = "The number of {.code plot_title} (.field {length(x = plot_title)}}) does not equal number of features ({.field {length(x = all_found_features)}})")
+  }
+
+  plot_list <- lapply(1:length(x = all_found_features), function(x) {
+    plot <- ggplot(data = seurat_object@meta.data, aes(x = .data[[all_found_features[x]]])) +
+      geom_histogram(color = "black", fill = colors_use, bins = bins) +
+      theme_cowplot() +
+      geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+      ggtitle(plot_titles[x])
+  })
+
+  # wrap and return plots
+  plots <- wrap_plots(plot_list, ncol = num_columns)
+
+  return(plots)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### OBJECT QC SCATTER ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

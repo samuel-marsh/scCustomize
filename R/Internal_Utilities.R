@@ -802,7 +802,7 @@ Retrieve_Ensembl_Ribo <- function(
    if (isTRUE(x = print_defaults)) {
      cli_inform(message = c("Accepted default values are:",
                             "{.field {glue_collapse_scCustom(input_string = unlist(feature_defaults), and = TRUE)}}"))
-     scCustomize:::stop_quietly()
+     stop_quietly()
    }
 
    # Assign values
