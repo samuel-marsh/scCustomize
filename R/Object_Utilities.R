@@ -557,7 +557,7 @@ Add_Cell_QC_Metrics <- function(
     ribo_name = "percent_ribo",
     mito_ribo_name = "percent_mito_ribo",
     complexity_name = "log10GenesPerUMI",
-    top_pct_name = "percent_top50",
+    top_pct_name = NULL,
     oxphos_name = "percent_oxphos",
     apop_name = "percent_apop",
     dna_repair_name = "percent_dna_repair",
