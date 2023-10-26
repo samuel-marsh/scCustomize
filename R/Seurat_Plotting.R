@@ -2578,3 +2578,187 @@ VariableFeaturePlot_scCustom <- function(
   return(plot)
 }
 
+
+#' Modified version of FeatureScatter
+#'
+#' Create customized FeatureScatter plots with scCustomize defaults.
+#'
+#' @param seurat_object Seurat object name.
+#' @param feature1 First feature to plot.
+#' @param feature2 Second feature to plot.
+#' @param colors_use color for the points on plot.
+#' @param pt.size Adjust point size for plotting.
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
+#' Default is active ident.
+#' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
+#' individual plots in layout.  Default is FALSE.
+#' @param shuffle logical, whether to randomly shuffle the order of points. This can be useful for crowded plots if points of interest are being buried. Default is TRUE.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
+#' @param title_size size for plot title labels. Does NOT apply if `split_seurat = TRUE`.
+#' @param plot.cor Display correlation in plot subtitle (or title if `split_seurat = TRUE`).
+#' @param num_columns number of columns in final layout plot.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{FeatureScatter}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat FeatureScatter
+#'
+#' @export
+#'
+#' @concept seurat_plotting
+#'
+#' @examples
+#' \donttest{
+#' library(Seurat)
+#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
+#'
+#' FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
+#' split.by = "sample_id")
+#'}
+#'
+
+FeatureScatter_scCustom <- function(
+    seurat_object,
+    feature1 = NULL,
+    feature2 = NULL,
+    colors_use = NULL,
+    pt.size = NULL,
+    group.by = NULL,
+    split.by = NULL,
+    split_seurat = FALSE,
+    shuffle = TRUE,
+    aspect_ratio = NULL,
+    title_size = 15,
+    plot.cor = TRUE,
+    num_columns = NULL,
+    raster = NULL,
+    raster.dpi = c(512, 512),
+    ggplot_default_colors = FALSE,
+    color_seed = 123,
+    ...
+) {
+  lifecycle::deprecate_stop(when = "2.1.0",
+                            what = "FeatureScatter_scCustom()",
+                            with = "FeatureScatter_scCustom_TESTING()",
+                            details = c("i" = "The functionality is now contained within `FeatureScatter_scCustom`")
+  )
+
+
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Add check for group.by before getting to colors
+  if (length(x = group.by) > 1) {
+    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  } else {
+    if (!is.null(x = group.by) && group.by != "ident") {
+      Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    }
+  }
+
+  # Add one time split_seurat warning
+  if (!is.null(x = split.by) && !split_seurat && getOption(x = 'scCustomize_warn_FeatureScatter_split_type', default = TRUE)) {
+    cli_inform(c("",
+                 "NOTE: {.field FeatureScatter_scCustom} returns split plots as layout of all plots each",
+                 "with their own axes as opposed to Seurat which returns with shared x or y axis.",
+                 "To return to Seurat behvaior set {.code split_seurat = TRUE}.",
+                 "",
+                 "-----This message will be shown once per session.-----"))
+    options(scCustomize_warn_FeatureScatter_split_type = FALSE)
+  }
+
+  # Add raster check for scCustomize
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
+  # Set default color palette based on number of levels being plotted
+  if (length(x = group.by) > 1) {
+    all_length <- lapply(group.by, function(x) {
+      num_var <- length(x = unique(x = seurat_object@meta.data[[x]]))
+    })
+    group_by_length <- max(unlist(x = all_length))
+  } else {
+    if (is.null(x = group.by)) {
+      group_by_length <- length(x = unique(x = seurat_object@active.ident))
+    } else {
+      group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    }
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # Set uniform point size is pt.size = NULL (based on plot with most cells)
+  if (is.null(x = pt.size) && !is.null(split.by)) {
+    # cells per meta data
+    cells_by_split <- data.frame(table(seurat_object@meta.data[, split.by]))
+    # Identity with greatest number of cells
+    max_cells <- max(cells_by_split$Freq)
+    # modified version of the autopointsize function from Seurat
+    pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+  }
+
+  # set size otherwise
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+
+  # Plot
+  if (is.null(x = split.by)) {
+    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+
+    # Change title
+    plot <- plot +
+      theme(plot.title = element_text(hjust = 0.5, size = title_size), legend.position = "right") +
+      ggtitle(paste0(feature1, " vs. ", feature2), subtitle = paste0("Correlation: ", plot$labels$title))
+
+
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      plot <- plot & theme(aspect.ratio = aspect_ratio)
+    }
+
+    # return plot
+    return(plot)
+  } else {
+    # Plot with Seurat splitting
+    if (isTRUE(x = split_seurat)) {
+      plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plot <- plot & theme(aspect.ratio = aspect_ratio)
+      }
+
+      # return plot
+      return(plot)
+    } else {
+      plot <- scCustomze_Split_FeatureScatter(seurat_object = seurat_object, feature1 = feature1, feature2 = feature2, split.by = split.by, group.by = group.by, colors_use = colors_use, pt.size = pt.size, aspect_ratio = aspect_ratio, title_size = title_size, num_columns = num_columns, raster = raster, raster.dpi = raster.dpi, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+
+      return(plot)
+    }
+  }
+}
