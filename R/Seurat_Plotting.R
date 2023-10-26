@@ -490,7 +490,8 @@ FeaturePlot_DualAssay <- function(
 #'
 #' @concept seurat_plotting
 #'
-#' @description `r lifecycle::badge("deprecated")`
+#' @description
+#' `r lifecycle::badge("deprecated")`
 #'
 #' @examples
 #' library(Seurat)
