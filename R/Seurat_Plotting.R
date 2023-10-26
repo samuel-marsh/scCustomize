@@ -738,6 +738,12 @@ VlnPlot_scCustom <- function(
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
+  # Check boxplot vs median
+  if (isTRUE(x = plot_median) && isTRUE(x = plot_boxplot)) {
+    cli_abort(message = c("Incompatible settings.",
+                          "{.code plot_median} and {.code plot_boxplot} cannot both be set to TRUE."))
+  }
+
   # set size if NULL
   if (isTRUE(x = plot_boxplot)) {
     if (!is.null(x = pt.size)) {
