@@ -47,6 +47,7 @@
 - Fixed bug in `DotPlot_scCustom` that prevented it from working unless `group.by` parameter was explicitly added.  
 - Fixed bug in `Case_Check` caused by typo.  
 - Fixed color warning messages in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` that were too verbose.  
+- Fixed bug in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` which caused error when supplying custom list of features for non-default organism ([#133](https://github.com/samuel-marsh/scCustomize/issues/133)).  
 
 
 
