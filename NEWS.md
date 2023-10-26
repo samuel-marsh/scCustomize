@@ -15,10 +15,12 @@
 - Added several internal functions to support new MsigDB and IEG capabilities of `Add_Cell_QC_Metrics`.  
 - Added new parameters `plot_median` and `plot_boxplot` to `VlnPlot_scCustom` (and `VlnPlot_scCustom`-based plots; e.g., `QC_Plot_*` family) for added visualization.  
 - Added `QC_Histogram` to plot QC features (or any feature) using simple histogram.  
+- Added `FeatureScatter_scCustom` function to customize Seurat's `FeatureScatter` plots.  
 
   
 ## Changed  
 - Large scale under the hood adjustments to ensure compatibility with Seurat V5 object structure (ONGOING).  
+- **HARD DEPRECATION** `Split_FeatureScatter` function has been completely deprecated and it's functionality has been moved to new `FeatureScatter_scCustom`.  
 - **SOFT DEPRECATION** The parameter `gene_list` in `Iterate_FeaturePlot_scCustom` and `Iterate_VlnPlot_scCustom` has been soft-deprecated and replaced by `features` parameter.  Specifying `gene_list` will display deprecation warning but continue to function until next major update.  
 - The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
 - Internal rewrite of `Read10X_Metrics` to use new internal helper functions.  
