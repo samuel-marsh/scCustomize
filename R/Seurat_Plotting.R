@@ -453,7 +453,6 @@ FeaturePlot_DualAssay <- function(
 
 #' Split FeatureScatter
 #'
-#' #' @description
 #' `r lifecycle::badge("deprecated")`
 #' Create FeatureScatter using split.by
 #'
