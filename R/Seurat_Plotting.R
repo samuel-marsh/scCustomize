@@ -453,6 +453,8 @@ FeaturePlot_DualAssay <- function(
 
 #' Split FeatureScatter
 #'
+#' #' @description
+#' `r lifecycle::badge("deprecated")`
 #' Create FeatureScatter using split.by
 #'
 #' @param seurat_object Seurat object name.
@@ -489,9 +491,6 @@ FeaturePlot_DualAssay <- function(
 #' @export
 #'
 #' @concept seurat_plotting
-#'
-#' @description
-#' `r lifecycle::badge("deprecated")`
 #'
 #' @examples
 #' library(Seurat)
