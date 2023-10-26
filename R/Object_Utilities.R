@@ -245,7 +245,7 @@ Add_Mito_Ribo_Seurat <- function(
   }
 
   # Check that values are provided for mito and ribo
-  if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_pattern)) {
+  if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_features)) {
     cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
                           "i" = "Please provide a default species name or pattern/features."))
   }
