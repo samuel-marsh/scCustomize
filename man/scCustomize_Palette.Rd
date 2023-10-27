@@ -4,7 +4,11 @@
 \alias{scCustomize_Palette}
 \title{Color Palette Selection for scCustomize}
 \usage{
-scCustomize_Palette(num_groups, ggplot_default_colors, color_seed = 123)
+scCustomize_Palette(
+  num_groups,
+  ggplot_default_colors = FALSE,
+  color_seed = 123
+)
 }
 \arguments{
 \item{num_groups}{number of groups to be plotted. If \code{ggplot_default_colors = FALSE} then by default:
