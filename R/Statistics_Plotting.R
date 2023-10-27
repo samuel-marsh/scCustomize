@@ -119,7 +119,7 @@ Plot_Median_Genes <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -257,7 +257,7 @@ Plot_Median_UMIs <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -396,7 +396,7 @@ Plot_Median_Mito <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -550,7 +550,7 @@ Plot_Median_Other <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -670,7 +670,7 @@ Plot_Cells_per_Sample <- function(
     xlab("")
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -816,7 +816,7 @@ CellBender_Diff_Plot <- function(
     }
 
   # Label points
-  if (label) {
+  if (isTRUE(x = label)) {
     if (is.null(x = custom_labels)) {
       # Subset the labels based on min count threshold
       labels_use <- feature_diff_df_filtered %>%
@@ -862,7 +862,7 @@ CellBender_Diff_Plot <- function(
     }
   }
 
-  if (plot_line) {
+  if (isTRUE(x = plot_line)) {
     plot <- plot + geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red")
   }
 

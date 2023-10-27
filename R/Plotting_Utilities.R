@@ -322,7 +322,7 @@ scCustomze_Split_FeatureScatter <- function(
             legend.position = "right") +
       xlim(min_feature1, max_feature1) +
       ylim(min_feature2, max_feature2)
-    if (plot_cor) {
+    if (isTRUE(x = plot_cor)) {
       plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[j]))
     } else {
       plot + ggtitle(paste(meta_sample_list[[j]]))
@@ -429,7 +429,7 @@ Test_Integer <- function(
   x
   ) {
   test <- all.equal(x, as.integer(x), check.attributes = FALSE)
-  if (test == TRUE) {
+  if (isTRUE(x = test)) {
     return(TRUE)
   } else {
       return(FALSE)

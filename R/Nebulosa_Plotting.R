@@ -53,7 +53,7 @@ Plot_Density_Custom <- function(
 ) {
   # Check Nebulosa installed
   Nebulosa_check <- is_installed(pkg = "Nebulosa")
-  if (!Nebulosa_check[1]) {
+  if (isFALSE(x = Nebulosa_check)) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Plot_Density_Custom}",
       "i" = "This can be accomplished with the following commands: ",
@@ -159,7 +159,7 @@ Plot_Density_Joint_Only <- function(
 ) {
   # Check Nebulosa installed
   Nebulosa_check <- is_installed(pkg = "Nebulosa")
-  if (!Nebulosa_check[1]) {
+  if (isFALSE(x = Nebulosa_check)) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Plot_Density_Joint_Only}",
       "i" = "This can be accomplished with the following commands: ",

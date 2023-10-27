@@ -56,7 +56,7 @@ Merge_Seurat_List <- function(
     duplicated() %>%
     any()
 
-  if (duplicated_barcodes && is.null(x = add.cell.ids)) {
+  if (isTRUE(x = duplicated_barcodes) && is.null(x = add.cell.ids)) {
     cli_abort(message = c("There are overlapping cell barcodes present in the input objects",
                           "i" = "Please rename cells or provide prefixes to {.code add.cell.ids} parameter to make unique.")
     )
@@ -160,7 +160,7 @@ Add_Mito_Ribo_Seurat <- function(
   )
 
   # Return list of accepted default species name options
-  if (list_species_names) {
+  if (isTRUE(x = list_species_names)) {
     return(accepted_names)
     stop_quietly()
   }
@@ -175,7 +175,7 @@ Add_Mito_Ribo_Seurat <- function(
 
   # Overwrite check
   if (mito_name %in% colnames(x = seurat_object@meta.data) || ribo_name %in% colnames(x = seurat_object@meta.data) || mito_ribo_name %in% colnames(x = seurat_object@meta.data)) {
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in meta.data slot.",
                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}*")
       )
@@ -205,7 +205,7 @@ Add_Mito_Ribo_Seurat <- function(
   macaque_options <- accepted_names$Macaque_Options
 
   # Check ensembl vs patterns
-  if (ensembl_ids && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
+  if (isTRUE(x = ensembl_ids) && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
     cli_warn(message = c("When using a default species and setting {.code ensembl_ids = TRUE} provided patterns or features are ignored.",
                          "*" = "Supplied {.code mito_pattern}, {.code ribo_pattern}, {.code mito_features}, {.code ribo_features} will be disregarded.")
     )
@@ -251,7 +251,7 @@ Add_Mito_Ribo_Seurat <- function(
   }
 
   # Retrieve ensembl ids if TRUE
-  if (ensembl_ids) {
+  if (isTRUE(x = ensembl_ids)) {
     mito_features <- Retrieve_Ensembl_Mito(species = species)
     ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
@@ -354,7 +354,7 @@ Add_Cell_Complexity_Seurat <- function(
 
   # Check columns for overwrite
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in meta.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
       )
@@ -393,6 +393,7 @@ Add_Cell_Complexity_Seurat <- function(
 #' @import cli
 #' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang is_installed
 #'
 #' @return A Seurat Object
 #'
@@ -422,8 +423,8 @@ Add_Top_Gene_Pct_Seurat <- function(
     overwrite = FALSE
 ){
   # Check for scuttle first
-  scuttle_check <- PackageCheck("scuttle", error = FALSE)
-  if (!scuttle_check[1]) {
+  scuttle_check <- is_installed(pkg = "scuttle")
+  if (isFALSE(x = scuttle_check)) {
     cli_abort(message = c(
       "Please install the {.val scuttle} package to calculate/add top {num_top_genes} genes percentage.",
       "i" = "This can be accomplished with the following commands: ",
@@ -452,7 +453,7 @@ Add_Top_Gene_Pct_Seurat <- function(
 
   # Check columns for overwrite
   if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in meta.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
       )
@@ -779,7 +780,7 @@ Meta_Remove_Seurat <- function(
   meta_data_filtered <- meta_data %>%
     select(-all_of(x = existing_names))
 
-  if (barcodes_to_rownames) {
+  if (isTRUE(x = barcodes_to_rownames)) {
     # Check barcodes colname exists
     if (!barcodes_colname %in% colnames(x = meta_data)) {
       cli_abort(message = "{.code barcodes_colname}: {.val {barcodes_colname}} was not present in the column names of meta_data data.frame provided.")
@@ -910,7 +911,7 @@ Add_Sample_Meta <- function(
     rownames_to_column("barcodes")
 
   # remove
-  if (overwrite) {
+  if (isTRUE(x = overwrite)) {
     meta_seurat <- meta_seurat %>%
       select(-all_of(x = dup_columns))
   } else {
@@ -921,7 +922,7 @@ Add_Sample_Meta <- function(
   meta_merged <- left_join(x = meta_seurat, y = meta_data, by = setNames(join_by_meta, join_by_seurat))
 
   # Remove existing Seurat meta
-  if (length(x = dup_columns) > 0 && overwrite) {
+  if (length(x = dup_columns) > 0 && isTRUE(x = overwrite)) {
     meta_merged <- meta_merged %>%
       column_to_rownames("barcodes")
   } else {
@@ -1074,7 +1075,7 @@ Extract_Sample_Meta <- function(
   rownames(x = sample_meta_df) <- NULL
 
   # Filter data.frame
-  if (include_all) {
+  if (isTRUE(x = include_all)) {
     sample_meta_df_filtered <- sample_meta_df
   } else {
     if (length(x = include_meta_list[[1]]) > 0) {
@@ -1145,7 +1146,7 @@ Store_Misc_Info_Seurat <- function(
   # Check if name already present
   misc_present <- names(x = seurat_object@misc)
   if (data_name %in% misc_present) {
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Item(s) named: {.val {data_name}} already present in @misc slot.",
                             "i" = "*To run function and overwrite items set parameter {.code overwrite = TRUE} or change {.code data_name}*")
       )
@@ -1164,7 +1165,7 @@ Store_Misc_Info_Seurat <- function(
 
   # Check class of data
   if (inherits(x = data_to_store, what = "list")) {
-    if (list_as_list) {
+    if (isTRUE(x = list_as_list)) {
       # Check length of name
       if (length(x = data_name) != 1) {
         cli_abort(message = "When storing as list the length {.code data_name} must be {.field 1 (one)}.")
