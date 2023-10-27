@@ -45,7 +45,9 @@ While the majority of scCustomize's current functionality is with Seurat Objects
 For this tutorial, I will be utilizing microglia data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) which I have converted to LIGER object.
 ```{r init}
 # Load Packages
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(Seurat)
 library(rliger)

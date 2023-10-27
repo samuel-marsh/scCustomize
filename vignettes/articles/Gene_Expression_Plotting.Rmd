@@ -47,7 +47,9 @@ Even simple things like adding the same two ggplot2 themeing options to every pl
 For this tutorial, I will be utilizing microglia data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) the mouse microglia (Figure 1) referred to as `marsh_mouse_micro` and the human post-mortem snRNA-seq (Figure 3) referred to as `marsh_human_pm` in addition to the pbmc3k dataset from SeuratData package.
 
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(viridis)
 library(Seurat)

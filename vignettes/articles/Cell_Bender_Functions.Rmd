@@ -45,7 +45,9 @@ CellBender is software for elimination of technical artifacts in scRNA-seq/snRNA
 Following completion of CellBender scCustomize contains a couple of functions that may be helpful when creating and visualizing data in Seurat.
 
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(viridis)
 library(Seurat)

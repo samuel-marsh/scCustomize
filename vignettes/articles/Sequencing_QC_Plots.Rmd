@@ -45,7 +45,9 @@ In addition to other QC metrics previously discussed it can also be helpful to p
 For this tutorial, I will be utilizing de-identified example data from my own experience but I will walk through process for using your own data.
 
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(Seurat)
 library(scCustomize)
 library(qs)
@@ -149,7 +151,7 @@ Seq_QC_Plot_Alignment_Combined(metrics_dataframe = metrics_final, plot_by = "Ful
 ```
 
 ### Basic Statistics
-All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means`.  
+All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means()`.  
 ***NOTE: See function help pages and ggpubr for more info to make sure the right test is being used for your data.***
 ```{r, fig.height=9, fig.width=13}
 Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch", significance = T)

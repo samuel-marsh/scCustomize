@@ -45,7 +45,9 @@ One of the first steps in all scRNA-seq analyses is performing a number of QC ch
 
 For this tutorial, I will be utilizing HCA bone marrow cell data from the SeuratData package.
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(Seurat)
 library(scCustomize)
