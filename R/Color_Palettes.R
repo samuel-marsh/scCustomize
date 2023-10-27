@@ -467,7 +467,7 @@ DiscretePalette_scCustomize <- function(
                           "i" = "Please adjust {.code num_colors} to be less than or equal to {.field {length(x = palette_out)}} or select a different {.code palette}.")
     )
   }
-  if (shuffle_pal) {
+  if (isTRUE(x = shuffle_pal)) {
     set.seed(seed = seed)
     palette_out <- sample(x = palette_out[1:num_colors])
   } else {
