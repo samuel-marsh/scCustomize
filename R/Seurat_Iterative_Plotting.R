@@ -87,7 +87,7 @@ Iterate_PC_Loading_Plots <- function(
   }
   close(con = pb)
   dev.off()
-  if (return_plots) {
+  if (isTRUE(x = return_plots)) {
     return(all_plots)
   }
 }
@@ -181,10 +181,10 @@ Iterate_DimPlot_bySample <- function(
   }
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -219,11 +219,11 @@ Iterate_DimPlot_bySample <- function(
   })
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(cells_per_sample,function(cells) {
-      if (legend) {
+      if (isTRUE(x = legend)) {
         DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
           xlim(x_axis) +
           ylim(y_axis)
@@ -250,7 +250,7 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        if (legend) {
+        if (isTRUE(x = legend)) {
           DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis)
@@ -270,7 +270,7 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        if (legend) {
+        if (isTRUE(x = legend)) {
           DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
             xlim(x_axis) +
             ylim(y_axis)
@@ -367,10 +367,10 @@ Iterate_Cluster_Highlight_Plot <- function(
   }
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -413,7 +413,7 @@ Iterate_Cluster_Highlight_Plot <- function(
   }
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(1:num_idents, function(x) {
@@ -586,10 +586,10 @@ Iterate_Meta_Highlight_Plot <- function(
   }
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -612,12 +612,12 @@ Iterate_Meta_Highlight_Plot <- function(
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Relevel idents for plotting to sorted order
-  if (single_pdf && is.null(x = new_meta_order) && meta_data_sort) {
+  if (isTRUE(x = single_pdf) && is.null(x = new_meta_order) && meta_data_sort) {
     Idents(object = seurat_object) <- fct_relevel(Idents(object = seurat_object), sort)
   }
 
   # Relevel idents to custom order
-  if (single_pdf && !is.null(x = new_meta_order)) {
+  if (isTRUE(x = single_pdf) && !is.null(x = new_meta_order)) {
     if (length(x = new_meta_order) != length(x = levels(x = seurat_object@active.ident))) {
       cli_abort(message = c("The length of 'new_meta_order' ({.field {length(x = new_meta_order)}}) does not equal the number of levels in {.code meta_data_column}: {.val {meta_data_column}} ({.field {length(x = levels(x = seurat_object@active.ident))}})"))
     }
@@ -643,11 +643,11 @@ Iterate_Meta_Highlight_Plot <- function(
     }
   }
   # Create plot titles if needed.
-  if (!is.null(x = title_prefix) && !no_legend) {
+  if (!is.null(x = title_prefix) && isFALSE(x = no_legend)) {
     cli_warn(message = "{.code title_prefix} was omitted as {.code no_legend = FALSE}.")
   }
 
-  if (is.null(x = title_prefix) && no_legend) {
+  if (is.null(x = title_prefix) && isTRUE(x = no_legend)) {
     plot_title <- lapply(1:num_idents, function(z) {
       paste0(meta_data_column, ": ", list_idents[z])
     })
@@ -657,16 +657,16 @@ Iterate_Meta_Highlight_Plot <- function(
     })
   }
 
-  if (!is.null(x = title_prefix) && length(x = title_prefix) != 1 && no_legend) {
+  if (!is.null(x = title_prefix) && length(x = title_prefix) != 1 && isTRUE(x = no_legend)) {
     cli_abort(message = "{.field `title_prefix`} must be vector of length 1.")
   }
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(1:num_idents, function(x) {
-      if (no_legend) {
+      if (isTRUE(x = no_legend)) {
         suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
                                              meta_data_column = meta_data_column,
                                              meta_data_highlight = list_idents[x],
@@ -708,7 +708,7 @@ Iterate_Meta_Highlight_Plot <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       for (i in 1:num_idents) {
-        if (no_legend) {
+        if (isTRUE(x = no_legend)) {
           suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
                                                meta_data_column = meta_data_column,
                                                meta_data_highlight = list_idents[i],
@@ -743,7 +743,7 @@ Iterate_Meta_Highlight_Plot <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = num_idents, style = 3, file = stderr())
       for (i in 1:num_idents) {
-        if (no_legend) {
+        if (isTRUE(x = no_legend)) {
           suppressMessages(Meta_Highlight_Plot(seurat_object = seurat_object,
                                                meta_data_column = meta_data_column,
                                                meta_data_highlight = list_idents[i],
@@ -874,8 +874,8 @@ Iterate_FeaturePlot_scCustom <- function(
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
   # Return plot check
-  if (return_plots) {
-    if (!is.null(x = file_type) | !is.null(x = file_path) | !is.null(x = file_name) | single_pdf) {
+  if (isTRUE(x = return_plots)) {
+    if (!is.null(x = file_type) | !is.null(x = file_path) | !is.null(x = file_name) | isTRUE(x = single_pdf)) {
       cli_abort(message = c("Cannot return plots to list and save plots to file with single function call.",
                             "i" = "If {.field saving plots} please set {.code return_plots = FALSE}.",
                             "i" = "If {.field returning plots} please leave {.code file_type}, {.code file_path}, {.code file_name} and {.code single_pdf} at their default settings."))
@@ -888,14 +888,14 @@ Iterate_FeaturePlot_scCustom <- function(
   }
 
   # Check file path is valid
-  if (!is.null(x = file_path) && !return_plots) {
+  if (!is.null(x = file_path) && isFALSE(x = return_plots)) {
     if (!dir.exists(paths = file_path)) {
       cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
     }
   }
 
   # Check if file name provided
-  if (is.null(x = file_name) && !return_plots) {
+  if (is.null(x = file_name) && isFALSE(return_plots)) {
     cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
   }
 
@@ -903,10 +903,10 @@ Iterate_FeaturePlot_scCustom <- function(
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -938,13 +938,13 @@ Iterate_FeaturePlot_scCustom <- function(
   # gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(x = all_found_features)) && !single_pdf) {
+  if (!is.null(x = names(x = all_found_features)) && isFALSE(x = single_pdf)) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = all_found_features))
     names(x = all_found_features) <- names_vec_mod
   }
 
   # Return plots instead of saving them
-  if (return_plots) {
+  if (isTRUE(x = return_plots)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(all_found_features,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)})
@@ -952,7 +952,7 @@ Iterate_FeaturePlot_scCustom <- function(
   }
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(all_found_features,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
@@ -1011,7 +1011,7 @@ Iterate_FeaturePlot_scCustom <- function(
   }
 
   # One warning rastering
-  if (!raster && single_pdf && getOption(x = 'scCustomize_warn_raster_iterative', default = TRUE)) {
+  if (isFALSE(x = raster) && isTRUE(x = single_pdf) && getOption(x = 'scCustomize_warn_raster_iterative', default = TRUE)) {
     cli_inform(message = c("",
                            "NOTE: {.code single_pdf = TRUE} and {.code raster = FALSE},",
                            "Saving large numbers of plots in vector form can result in very large file sizes.",
@@ -1126,10 +1126,10 @@ Iterate_VlnPlot_scCustom <- function(
   }
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -1163,7 +1163,7 @@ Iterate_VlnPlot_scCustom <- function(
   }
 
   # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use) && ggplot_default_colors) {
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
     cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
   if (is.null(x = colors_use)) {
@@ -1174,7 +1174,7 @@ Iterate_VlnPlot_scCustom <- function(
   }
 
   # Add one time raster warning
-  if (single_pdf && pt.size != 0 && !raster && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {
+  if (isTRUE(x = single_pdf) && pt.size != 0 && isFALSE(raster) && getOption(x = 'scCustomize_warn_vln_raster_iterative', default = TRUE)) {
     cli_inform(message = c("",
                            "NOTE: {.code single_pdf = TRUE} and {.code pt.size} > 0 and {.code raster = FALSE},",
                            "so all points are plotted.",
@@ -1187,7 +1187,7 @@ Iterate_VlnPlot_scCustom <- function(
   }
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(all_found_features,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
@@ -1286,7 +1286,7 @@ Iterate_Plot_Density_Custom <- function(
 ) {
   # Check Nebulosa installed
   Nebulosa_check <- is_installed(pkg = "Nebulosa")
-  if (!Nebulosa_check[1]) {
+  if (isFALSE(x = Nebulosa_check)) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Iterate_Plot_Density_Custom}",
       "i" = "This can be accomplished with the following commands: ",
@@ -1328,10 +1328,10 @@ Iterate_Plot_Density_Custom <- function(
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -1357,13 +1357,13 @@ Iterate_Plot_Density_Custom <- function(
   }
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && isFALSE(x = single_pdf)) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
     names(x = gene_list) <- names_vec_mod
   }
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(gene_list,function(gene) {
@@ -1487,7 +1487,7 @@ Iterate_Plot_Density_Joint <- function(
 ) {
   # Check Nebulosa installed
   Nebulosa_check <- is_installed("Nebulosa")
-  if (!Nebulosa_check[1]) {
+  if (isFALSE(Nebulosa_check)) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Iterate_Plot_Density_Joint}",
       "i" = "This can be accomplished with the following commands: ",
@@ -1536,10 +1536,10 @@ Iterate_Plot_Density_Joint <- function(
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Set file type for single pdf option
-  if (single_pdf && is.null(x = file_type)) {
+  if (isTRUE(x = single_pdf) && is.null(x = file_type)) {
     file_type <- ".pdf"
   }
-  if (single_pdf && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
+  if (isTRUE(x = single_pdf) && !is.null(x = file_type) && str_detect(file_type, ".pdf") == FALSE) {
     cli_inform(message = "WARNING: non-PDF {.code file_type} specified but {.code single_pdf = TRUE} selected.  Changing file_type to {.val .pdf} for output.")
     file_type <- ".pdf"
   }
@@ -1583,13 +1583,13 @@ Iterate_Plot_Density_Joint <- function(
   }
 
   # Modify Cluster Labels names if needed for saving plots
-  if (!is.null(x = names(x = gene_list)) && !single_pdf) {
+  if (!is.null(x = names(x = gene_list)) && isFALSE(x = single_pdf)) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = gene_list))
     names(x = gene_list) <- names_vec_mod
   }
 
   # Single PDF option
-  if (single_pdf == TRUE) {
+  if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(1:length(final_gene_list),function(i) {

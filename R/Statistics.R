@@ -164,7 +164,7 @@ Percent_Expressing <- function(
   expression_info <- FetchData(object = seurat_object, vars = features_list, cells = cells, layer = layer)
 
   # Add grouping variable
-  if (entire_object) {
+  if (isTRUE(x = entire_object)) {
     expression_info$id <- "All_Cells"
   } else {
     expression_info$id <- if (is.null(x = group_by)) {
@@ -244,7 +244,7 @@ Median_Stats <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  if (default_var) {
+  if (isTRUE(x = default_var)) {
     default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
   } else {
     default_var <- NULL
@@ -332,7 +332,7 @@ MAD_Stats <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  if (default_var) {
+  if (isTRUE(x = default_var)) {
     default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
   } else {
     default_var <- NULL
