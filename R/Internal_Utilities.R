@@ -132,7 +132,7 @@ Assay_Present <- function(
     }
 
     # Return message of assays not found
-    if (length(x = bad_assays) > 0 && omit_warn) {
+    if (length(x = bad_assays) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following assays were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_assays, and = TRUE)}}.")
       )
@@ -147,7 +147,7 @@ Assay_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All assays present.")
   }
 
@@ -236,7 +236,7 @@ glue_collapse_scCustom <- function(
   input_length <- length(x = input_string)
 
   # set last seperator
-  if (and) {
+  if (isTRUE(x = and)) {
     last_sep <- " and "
   } else {
     last_sep <- " or "
@@ -648,7 +648,7 @@ Retrieve_Ensembl_Ribo <- function(
 
    # Overwrite check
    if (oxphos_name %in% colnames(x = seurat_object@meta.data) || apop_name %in% colnames(x = seurat_object@meta.data) || dna_repair_name %in% colnames(x = seurat_object@meta.data)) {
-     if (!overwrite) {
+     if (isFALSE(x = overwrite)) {
        cli_abort(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
                              "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code oxphos_name}, {.code apop_name}, and/or {.code dna_repair_name}*")
        )
@@ -733,7 +733,7 @@ Retrieve_Ensembl_Ribo <- function(
 
    # Overwrite check
    if (ieg_name %in% colnames(x = seurat_object@meta.data)) {
-     if (!overwrite) {
+     if (isFALSE(x = overwrite)) {
        cli_abort(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
                              "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_name}*")
        )
