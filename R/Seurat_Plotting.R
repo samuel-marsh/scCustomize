@@ -114,7 +114,7 @@ FeaturePlot_scCustom <- function(
   }
 
   if (!is.null(x = split_collect)) {
-    if (length(x = features) > 1 && split_collect) {
+    if (length(x = features) > 1 && isTRUE(x = split_collect)) {
       cli_abort(message = "{.code split_collect} cannot be set to {.field TRUE} if the number of features is greater than 1.")
     }
   }
@@ -123,14 +123,14 @@ FeaturePlot_scCustom <- function(
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Get length of meta data feature
-  if (is.null(x = split.by) && label_feature_yaxis) {
+  if (is.null(x = split.by) && isTRUE(x = label_feature_yaxis)) {
     cli_abort(message = "Setting {.code label_feature_yaxis = TRUE} is only supported when also setting {.code split.by}.")
   }
 
   if (!is.null(x = split.by)) {
     split.by_length <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
 
-    if (!is.null(x = num_columns) && label_feature_yaxis) {
+    if (!is.null(x = num_columns) && isTRUE(x = label_feature_yaxis)) {
 
       cli_warn(message = c("Setting number of columns is not permitted if {.code label_feature_yaxis = TRUE}",
                            "i" = "Number of columns be automatically set to number of levels in `split.by` ({.field {split.by_length}}).")
@@ -198,12 +198,12 @@ FeaturePlot_scCustom <- function(
   }
 
   # plot no split & combined
-  if (is.null(x = split.by) && combine) {
+  if (is.null(x = split.by) && isTRUE(x = combine)) {
     plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
   }
 
   # plot no split & combined
-  if (is.null(x = split.by) && !combine) {
+  if (is.null(x = split.by) && isFALSE(x = combine)) {
     plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
 
     plot <- lapply(1:length(x = plot_list), function(i) {
@@ -225,12 +225,12 @@ FeaturePlot_scCustom <- function(
 
     plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
-    if (label_feature_yaxis) {
+    if (isTRUE(x = label_feature_yaxis)) {
       plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
       plot <- plot & theme(legend.title=element_blank())
       plot <- suppressMessages(plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features))) + No_Right()
     } else {
-      if (split_collect) {
+      if (isTRUE(x = split_collect)) {
         if (hasArg("keep.scale")) {
           cli_abort(message = "The parameter {.code keep.scale} cannot be set different from default if {.code split_collect - TRUE}.")
         }
@@ -255,7 +255,7 @@ FeaturePlot_scCustom <- function(
 
       single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
 
-      if (label_feature_yaxis) {
+      if (isTRUE(x = label_feature_yaxis)) {
         single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
         single_plot <- single_plot & theme(legend.title=element_blank())
         single_plot <- suppressMessages(single_plot + scale_y_continuous(sec.axis = dup_axis(name = all_found_features[i]))) + No_Right()
@@ -646,7 +646,7 @@ Split_FeatureScatter <- function(
             legend.position = "right") +
       xlim(min_feature1, max_feature1) +
       ylim(min_feature2, max_feature2)
-    if (plot_cor) {
+    if (isTRUE(x = plot_cor)) {
       plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[j]))
     } else {
       plot + ggtitle(paste(meta_sample_list[[j]]))
@@ -807,7 +807,7 @@ VlnPlot_scCustom <- function(
 
 
   # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use) && ggplot_default_colors) {
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
     cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
 
@@ -948,7 +948,7 @@ Stacked_VlnPlot <- function(
   }
 
   # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use) && ggplot_default_colors) {
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
     cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
   if (is.null(x = colors_use)) {
@@ -1073,21 +1073,21 @@ DotPlot_scCustom <- function(
                              scale_color_gradientn(colors = colors_use)
   )
   # Modify plot
-  if (remove_axis_titles) {
+  if (isTRUE(x = remove_axis_titles)) {
     plot <- plot +
       theme(axis.title.x = element_blank(),
             axis.title.y = element_blank()
       )
   }
 
-  if (flip_axes) {
+  if (isTRUE(x = flip_axes)) {
     plot <- plot & coord_flip()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   }
-  if (y_lab_rotate) {
+  if (isTRUE(x = y_lab_rotate)) {
     plot <- plot +
       theme(axis.text.y = element_text(angle = 45, hjust = 1))
   }
@@ -1224,7 +1224,7 @@ Clustered_DotPlot <- function(
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
-  if (!ComplexHeatmap_check[1]) {
+  if (isFALSE(x = ComplexHeatmap_check)) {
     cli_abort(message = c(
       "Please install the {.val ComplexHeatmap} package to use {.code Clustered_DotPlot}",
       "i" = "This can be accomplished with the following commands: ",
@@ -1330,7 +1330,7 @@ Clustered_DotPlot <- function(
     as.matrix()
 
   # print quantiles
-  if (print_exp_quantiles) {
+  if (isTRUE(x = print_exp_quantiles)) {
     cli_inform(message = "Quantiles of gene expression data are:")
     print(quantile(exp_mat, c(0.1, 0.5, 0.9, 0.99)))
   }
@@ -1346,7 +1346,7 @@ Clustered_DotPlot <- function(
   }
 
   # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use_idents) && ggplot_default_colors) {
+  if (!is.null(x = colors_use_idents) && isTRUE(x = ggplot_default_colors)) {
     cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
   if (is.null(x = colors_use_idents)) {
@@ -1370,7 +1370,7 @@ Clustered_DotPlot <- function(
   identity_colors_list <- list(Identity = identity_colors)
 
   # Create identity annotation
-  if (flip) {
+  if (isTRUE(x = flip)) {
     column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
                                                col =  identity_colors_list,
                                                na_col = "grey",
@@ -1398,7 +1398,7 @@ Clustered_DotPlot <- function(
   col_fun = colorRamp2(c(exp_color_min, exp_color_middle, exp_color_max), colors_use_exp[c(1,palette_middle, palette_length)])
 
   # Calculate and plot Elbow
-  if (plot_km_elbow) {
+  if (isTRUE(x = plot_km_elbow)) {
     # if elbow_kmax not NULL check it is usable
     if (!is.null(x = elbow_kmax) && elbow_kmax > (nrow(x = exp_mat) - 1)) {
       elbow_kmax <- nrow(x = exp_mat) - 1
@@ -1421,8 +1421,8 @@ Clustered_DotPlot <- function(
   }
 
   # prep heatmap
-  if (flip) {
-    if (raster) {
+  if (isTRUE(x = flip)) {
+    if (isTRUE(x = raster)) {
       layer_fun_flip = function(i, j, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
                   gp = gpar(col = NA, fill = NA))
@@ -1438,7 +1438,7 @@ Clustered_DotPlot <- function(
       }
     }
   } else {
-    if (raster) {
+    if (isTRUE(x = raster)) {
       layer_fun = function(j, i, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
                   gp = gpar(col = NA, fill = NA))
@@ -1484,8 +1484,8 @@ Clustered_DotPlot <- function(
 
   # Create Plot
   set.seed(seed = seed)
-  if (raster) {
-    if (flip) {
+  if (isTRUE(x = raster)) {
+    if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
@@ -1521,7 +1521,7 @@ Clustered_DotPlot <- function(
                                                   cluster_columns = cluster_ident)
     }
   } else {
-    if (flip) {
+    if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
                                                   col=col_fun,
@@ -1559,7 +1559,7 @@ Clustered_DotPlot <- function(
   }
 
   # Add pt.size legend & return plots
-  if (plot_km_elbow) {
+  if (isTRUE(x = plot_km_elbow)) {
     return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list)))
   }
   return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
@@ -1951,7 +1951,7 @@ Cell_Highlight_Plot <- function(
 
   # Check right number of colors provided
   # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = highlight_color) && ggplot_default_colors) {
+  if (!is.null(x = highlight_color) && isTRUE(x = ggplot_default_colors)) {
     cli_abort(message = "Cannot provide both {.code highlight_color} and specify {.code ggplot_default_colors = TRUE}.")
   }
 
@@ -2107,7 +2107,7 @@ DimPlot_scCustom <- function(
   }
 
   # Add one time split_seurat warning
-  if (!is.null(x = split.by) && !split_seurat && getOption(x = 'scCustomize_warn_DimPlot_split_type', default = TRUE)) {
+  if (!is.null(x = split.by) && isFALSE(x = split_seurat) && getOption(x = 'scCustomize_warn_DimPlot_split_type', default = TRUE)) {
     cli_inform(c("",
                  "NOTE: {.field DimPlot_scCustom} returns split plots as layout of all plots each",
                  "with their own axes as opposed to Seurat which returns with shared x or y axis.",
@@ -2127,10 +2127,10 @@ DimPlot_scCustom <- function(
     split_seurat <- TRUE
   }
 
-  # figure_plot check
-  if (figure_plot && !split_seurat) {
-    cli_abort(message = "{.code figure_plot} can only be TRUE if {.code split_seurat = FALSE}.")
-  }
+  # # figure_plot check
+  # if (isTRUE(x = figure_plot) && isTRUE(x = split_seurat)) {
+  #   cli_abort(message = "{.code figure_plot} can only be TRUE if {.code split_seurat = FALSE}.")
+  # }
 
   # Set default color palette based on number of levels being plotted
   if (length(x = group.by) > 1) {
@@ -2147,7 +2147,7 @@ DimPlot_scCustom <- function(
   }
 
   # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use) && ggplot_default_colors) {
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
     cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
   }
 
@@ -2172,7 +2172,7 @@ DimPlot_scCustom <- function(
   # Plot
   if (is.null(x = split.by)) {
     plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
-    if (figure_plot) {
+    if (isTRUE(x = figure_plot)) {
 
       # pull axis labels
       x_lab_reduc <- plot$labels$x
@@ -2224,10 +2224,10 @@ DimPlot_scCustom <- function(
     }
 
   } else {
-    if (split_seurat) {
+    if (isTRUE(x = split_seurat)) {
       # Plot Seurat Splitting
       plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
-      if (figure_plot) {
+      if (isTRUE(x = figure_plot)) {
 
         # pull axis labels
         x_lab_reduc <- plot$labels$x
@@ -2559,7 +2559,7 @@ VariableFeaturePlot_scCustom <- function(
     cli_warn(message = "The provided values provided to {.field custom_features} were not labeled as {.code label = FALSE} was also set.")
   }
 
-  if (label) {
+  if (isTRUE(x = label)) {
     if (is.null(x = custom_features)) {
       plot <- LabelPoints(plot = plot, points = top_features, repel = repel)
     }
@@ -2569,7 +2569,7 @@ VariableFeaturePlot_scCustom <- function(
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
     return(plot)
   }
@@ -2675,7 +2675,7 @@ FeatureScatter_scCustom <- function(
   }
 
   # Add one time split_seurat warning
-  if (!is.null(x = split.by) && !split_seurat && getOption(x = 'scCustomize_warn_FeatureScatter_split_type', default = TRUE)) {
+  if (!is.null(x = split.by) && isFALSE(x = split_seurat) && getOption(x = 'scCustomize_warn_FeatureScatter_split_type', default = TRUE)) {
     cli_inform(c("",
                  "NOTE: {.field FeatureScatter_scCustom} returns split plots as layout of all plots each",
                  "with their own axes as opposed to Seurat which returns with shared x or y axis.",

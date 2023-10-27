@@ -81,7 +81,7 @@ Gene_Present <- function(
     bad_features <- gene_list[!gene_list %in% possible_features]
     found_features <- gene_list[gene_list %in% possible_features]
     if (length(x = found_features) == 0) {
-      if (return_none) {
+      if (isTRUE(x = return_none)) {
         # Combine into list and return
         feature_list <- list(
           found_features = NULL,
@@ -95,14 +95,14 @@ Gene_Present <- function(
     }
 
     # Return message of features not found
-    if (length(x = bad_features) > 0 && omit_warn) {
+    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following features were omitted as they were not found:",
                             "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
     }
 
     # Check if features found if case is changed.
-    if (case_check) {
+    if (isTRUE(x = case_check)) {
       upper_bad_features <- str_to_upper(string = bad_features)
       upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
 
@@ -114,7 +114,7 @@ Gene_Present <- function(
 
       # Additional messages if found.
       if (length(x = wrong_case_found_features) > 0) {
-        if (case_check_msg) {
+        if (isTRUE(x = case_check_msg)) {
           cli_warn(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
                                 "i" = "Please check intended case of features provided.")
           )
@@ -138,7 +138,7 @@ Gene_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All features present.")
   }
 
@@ -200,12 +200,12 @@ Case_Check <- function(
 
   # Additional messages if found.
   if (length(x = wrong_case_found_features) > 0) {
-    if (case_check_msg) {
+    if (isTRUE(x = case_check_msg)) {
       cli_inform(message = c("{col_cyan('*NOTE*')}: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
                              "i" = "Please check intended case of features provided.")
       )
     }
-    if (return_features) {
+    if (isTRUE(x = return_features)) {
       return(wrong_case_found_features)
     }
   }
@@ -256,7 +256,7 @@ Meta_Present <- function(
     bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
     found_meta <- meta_col_names[meta_col_names %in% possible_features]
 
-    if (!return_none) {
+    if (isFALSE(return_none)) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
                               "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
@@ -265,7 +265,7 @@ Meta_Present <- function(
     }
 
     # Return message of features not found
-    if (length(x = bad_meta) > 0 && omit_warn) {
+    if (length(x = bad_meta) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following @meta.data columns were omitted as they were not found:",
                             "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
       )
@@ -281,7 +281,7 @@ Meta_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All @meta.data columns present.")
   }
 
@@ -387,7 +387,7 @@ Reduction_Loading_Present <- function(
 ) {
   # If no reductions are present
   if (length(x = seurat_object@reductions) == 0) {
-    if (return_none) {
+    if (isTRUE(x = return_none)) {
       # Combine into list and return
       feature_list <- list(
         found_features = NULL,
@@ -410,7 +410,7 @@ Reduction_Loading_Present <- function(
     bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
     found_features <- reduction_names[reduction_names %in% possible_reduction_names]
     if (length(x = found_features) == 0) {
-      if (return_none) {
+      if (isTRUE(x = return_none)) {
         # Combine into list and return
         feature_list <- list(
           found_features = NULL,
@@ -423,7 +423,7 @@ Reduction_Loading_Present <- function(
     }
 
     # Return message of features not found
-    if (length(x = bad_features) > 0 && omit_warn) {
+    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following features were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
@@ -438,7 +438,7 @@ Reduction_Loading_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All features present.")
   }
 
@@ -566,7 +566,7 @@ Merge_Sparse_Data_All <- function(
     duplicated() %>%
     any()
 
-  if (duplicated_barcodes && is.null(x = add_cell_ids)) {
+  if (isTRUE(x = duplicated_barcodes) && is.null(x = add_cell_ids)) {
     cli_abort(message = c("There are overlapping cell barcodes present in the input matrices.",
                           "i" = "Please provide prefixes/suffixes to {.code add_cell_ids} parameter to make unique.")
     )
@@ -591,7 +591,7 @@ Merge_Sparse_Data_All <- function(
       duplicated() %>%
       any()
 
-    if (are_duplicates) {
+    if (isTRUE(x = are_duplicates)) {
       cli_abort(message = c("Supplied {.code add_cell_ids} will result in overlapping barcodes names if provided cell prefixes/suffixes are not unique.",
                             "i" = "Please change and re-run.")
       )
@@ -615,7 +615,7 @@ Merge_Sparse_Data_All <- function(
 
     # Update full cell names
     if (!is.null(x = add_cell_ids)) {
-      if (prefix) {
+      if (isTRUE(x = prefix)) {
         cellnames <- paste0(add_cell_ids [i], cell_id_delimiter, colnames(x = curr))
       } else {
         cellnames <- paste0(colnames(x = curr), cell_id_delimiter, add_cell_ids [i])
@@ -1207,7 +1207,7 @@ Add_Pct_Diff <- function(
   # Check if percent difference exists already
   if ("pct_diff" %in% colnames(marker_dataframe)) {
     df_name <- deparse(expr = substitute(expr = marker_dataframe))
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",
                             "i" = "To overwrite previous results set `overwrite = TRUE`.")
       )
@@ -1288,7 +1288,7 @@ Extract_Top_Markers <- function(
   }
 
   # Check gene column is present
-  if (!gene_column %in% colnames(x = marker_dataframe) && !gene_rownames_to_column) {
+  if (!gene_column %in% colnames(x = marker_dataframe) && isFALSE(x = gene_rownames_to_column)) {
     cli_abort(message = c("{.code gene_column}: '{gene_column}' not found in column names of {.code marker_dataframe}.",
                           "i" = "Set {.code gene_rownames_to_column} to move genes from rownames to column.")
     )
@@ -1309,13 +1309,13 @@ Extract_Top_Markers <- function(
       column_to_rownames("rownames")
   }
 
-  if (gene_rownames_to_column) {
+  if (isTRUE(x = gene_rownames_to_column)) {
     filtered_markers <- filtered_markers %>%
       rownames_to_column(gene_column)
   }
 
   # return data.frame
-  if (data_frame) {
+  if (isTRUE(x = data_frame)) {
     return(filtered_markers)
   }
 
@@ -1324,14 +1324,14 @@ Extract_Top_Markers <- function(
 
   # should gene list be named
   # check naming
-  if (named_vector && is.null(x = group_by)) {
+  if (isTRUE(x = named_vector) && is.null(x = group_by)) {
     cli_warn(message = c("Cannot return named vector if {.code group_by} is NULL.",
                          "i" = "Returning unnamed vector.")
     )
   }
 
-  if (named_vector && !is.null(x = group_by)) {
-    if (make_unique) {
+  if (isTRUE(x = named_vector) && !is.null(x = group_by)) {
+    if (isTRUE(x = make_unique)) {
       cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
     names(x = gene_list) <- filtered_markers[[group_by]]
@@ -1339,7 +1339,7 @@ Extract_Top_Markers <- function(
   }
 
   # make unique
-  if (make_unique) {
+  if (isTRUE(x = make_unique)) {
     gene_list <- unique(x = gene_list)
   }
 
