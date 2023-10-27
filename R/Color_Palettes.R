@@ -504,7 +504,7 @@ DiscretePalette_scCustomize <- function(
 
 scCustomize_Palette <- function(
   num_groups,
-  ggplot_default_colors,
+  ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
   # Set color palette depending on group length
