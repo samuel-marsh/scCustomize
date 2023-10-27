@@ -78,12 +78,12 @@ QC_Plots_Genes <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
   }
 
@@ -167,12 +167,12 @@ QC_Plots_UMIs <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
   }
 
@@ -259,12 +259,12 @@ QC_Plots_Mito <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
   }
 
@@ -355,12 +355,12 @@ QC_Plots_Feature <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
   }
 
@@ -732,7 +732,7 @@ QC_Plot_UMIvsGene <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Default raster check
-  if (combination) {
+  if (isTRUE(x = combination)) {
     raster <- raster %||% (length(x = Cells(x = seurat_object)) > 1e5)
   } else {
     raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
@@ -745,7 +745,7 @@ QC_Plot_UMIvsGene <- function(
     group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use <- Hue_Pal(group_by_length)
     } else {
       if (group_by_length <= 2) {
@@ -763,7 +763,7 @@ QC_Plot_UMIvsGene <- function(
     }
   }
 
-  if (!ident_legend && !combination) {
+  if (isFALSE(x = ident_legend) && isFALSE(x = combination)) {
     cli_warn(message = "{.code ident_legend} parameter ignored as {.code combination = FALSE}")
   }
 
@@ -818,8 +818,8 @@ QC_Plot_UMIvsGene <- function(
   plot_cor_filtered <- round(x = cor(x = featurescatter_data_sort_filter[, "nCount_RNA"], y = featurescatter_data_sort_filter[, "nFeature_RNA"]), digits = 2)
 
   # Plot with meta gradient
-  if (!is.null(x = meta_gradient_name) && combination == FALSE) {
-    if (raster) {
+  if (!is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
+    if (isTRUE(x = raster)) {
       p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
@@ -845,7 +845,7 @@ QC_Plot_UMIvsGene <- function(
     return(p1)
   }
   # Plot by identity
-  if (is.null(x = meta_gradient_name) && combination == FALSE) {
+  if (is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
     p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
@@ -855,7 +855,7 @@ QC_Plot_UMIvsGene <- function(
     return(p1)
   }
 
-  if (combination) {
+  if (isTRUE(x = combination)) {
     # Plot by identity
     p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
@@ -863,12 +863,12 @@ QC_Plot_UMIvsGene <- function(
       xlab(x_axis_label) +
       ylab(y_axis_label) + ggtitle("")
 
-    if (!ident_legend) {
+    if (isFALSE(x = ident_legend)) {
       p1 <- p1 + NoLegend()
     }
 
     # Plot with meta gradient
-    if (raster) {
+    if (isTRUE(x = raster)) {
       p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
@@ -973,7 +973,7 @@ QC_Plot_GenevsFeature <- function(
     group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use <- Hue_Pal(group_by_length)
     } else {
       if (group_by_length <= 2) {
@@ -1076,7 +1076,7 @@ QC_Plot_UMIvsFeature <- function(
     group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use <- Hue_Pal(group_by_length)
     } else {
       if (group_by_length <= 2) {

@@ -106,13 +106,13 @@ Seq_QC_Plot_Reads_per_Cell <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -242,13 +242,13 @@ Seq_QC_Plot_Number_Cells <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -368,13 +368,13 @@ Seq_QC_Plot_Genes <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -494,13 +494,13 @@ Seq_QC_Plot_UMIs <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -620,13 +620,13 @@ Seq_QC_Plot_Total_Genes <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -753,13 +753,13 @@ Seq_QC_Plot_Saturation <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -886,13 +886,13 @@ Seq_QC_Plot_Reads_in_Cells <- function(
       theme_ggprism_mod()
   }
 
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1018,13 +1018,13 @@ Seq_QC_Plot_Transcriptome <- function(
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1150,13 +1150,13 @@ Seq_QC_Plot_Genome <- function(
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1282,13 +1282,13 @@ Seq_QC_Plot_Intergenic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1414,13 +1414,13 @@ Seq_QC_Plot_Intronic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1546,13 +1546,13 @@ Seq_QC_Plot_Exonic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1678,13 +1678,13 @@ Seq_QC_Plot_Antisense <- function(
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
-  if (significance) {
+  if (isTRUE(x = significance)) {
     ggpubr_check <- is_installed(pkg = "ggpubr")
-    if (!ggpubr_check[1]) {
+    if (isFALSE(x = ggpubr_check)) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
         "i" = "This can be accomplished with the following commands: ",
@@ -1754,7 +1754,7 @@ Seq_QC_Plot_Basic_Combined <- function(
   ...
 ) {
   # Create rotated axis value
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     axis_angle <- 45
   } else {
     axis_angle <- 0
@@ -1847,7 +1847,7 @@ Seq_QC_Plot_Alignment_Combined <- function(
   ...
 ) {
   # Create rotated axis value
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     axis_angle <- 45
   } else {
     axis_angle <- 0
