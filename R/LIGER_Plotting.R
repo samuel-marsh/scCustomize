@@ -80,11 +80,11 @@ DimPlot_LIGER <- function(
   Is_LIGER(liger_object = liger_object)
 
   # Set group_by defaults
-  if (!combination && is.null(x = group_by)) {
+  if (isFALSE(x = combination) && is.null(x = group_by)) {
     group_by <- "cluster"
   }
 
-  if (combination && is.null(x = group_by)) {
+  if (isTRUE(x = combination) && is.null(x = group_by)) {
     group_by <- "dataset"
   }
 
@@ -118,7 +118,7 @@ DimPlot_LIGER <- function(
   # Add raster check for scCustomize
   raster <- raster %||% (nrow(x = liger_object@cell.data) > 2e5)
 
-  if (raster && (nrow(x = liger_object@cell.data) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
+  if (isTRUE(x = raster) && (nrow(x = liger_object@cell.data) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
     cli_inform(message = c("",
                            "Rasterizing points since number of points exceeds 200,000.",
                            "To disable this behavior set {.code raster = FALSE}",
@@ -139,7 +139,7 @@ DimPlot_LIGER <- function(
   y_axis_label <- paste0(reduction_label, "_2")
 
   # plot combination plot
-  if (combination) {
+  if (isTRUE(x = combination)) {
     p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
                                 split_by = split_by,
@@ -322,7 +322,7 @@ plotFactors_scCustom <- function(
   Is_LIGER(liger_object = liger_object)
 
   # if returning and saving
-  if (save_plots) {
+  if (isTRUE(x = save_plots)) {
 
     # Check file path is valid
     if (!is.null(x = file_path) && file_path != "") {
@@ -378,7 +378,7 @@ plotFactors_scCustom <- function(
 
   # Default Colors for Factor Plots
   if (is.null(x = colors_use_factors)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use_factors <- Hue_Pal(num_colors = num_datasets)
     } else {
       colors_use_factors <- DiscretePalette_scCustomize(num_colors = num_datasets, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
@@ -423,7 +423,7 @@ plotFactors_scCustom <- function(
     h_df = data.frame(x = 1:nrow(Hs_norm), h_norm = Hs_norm[, i],
                       h_raw = H_raw[, i], dataset = liger_object@cell.data$dataset,
                       highlight = FALSE)
-    if (raster) {
+    if (isTRUE(x = raster)) {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
         labs(x = 'Cell', y = 'Raw H Score') +
@@ -460,7 +460,7 @@ plotFactors_scCustom <- function(
 
     if (!is.null(cells.highlight)) {
       h_df[cells.highlight, 'highlight'] = TRUE
-      if (raster) {
+      if (isTRUE(x = raster)) {
         top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                                    aes(.data[["x"]], .data[["h_raw"]]),
                                                    col = "black",
@@ -486,16 +486,16 @@ plotFactors_scCustom <- function(
     plot_list[[i]] = full
 
     # plot tSNE/UMAP
-    if (plot_dimreduc) {
+    if (isTRUE(x = plot_dimreduc)) {
       tsne_df <- data.frame(Hs_norm[, i], liger_object@tsne.coords)
       factorlab <- paste0("Factor", i)
       colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
 
-      if (order) {
+      if (isTRUE(x = order)) {
         tsne_df <- tsne_df[order(tsne_df[,1], decreasing = FALSE),]
       }
 
-      if (raster) {
+      if (isTRUE(x = raster)) {
         p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
           geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
           ggtitle(label = paste('Factor', i)) +
@@ -527,12 +527,12 @@ plotFactors_scCustom <- function(
   }
 
   # save plots
-  if (save_plots) {
+  if (isTRUE(x = save_plots)) {
     cli_inform(message = "{.field Saving plots to file}")
     pdf(paste(file_path, file_name, ".pdf", sep=""))
     pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
     for (i in 1:k) {
-      if (plot_dimreduc) {
+      if (isTRUE(x = plot_dimreduc)) {
         print(plot_list[[i]])
         print(tsne_list[[i]])
         setTxtProgressBar(pb = pb, value = i)
@@ -546,7 +546,7 @@ plotFactors_scCustom <- function(
   }
 
   # return plots
-  if (return_plots) {
+  if (isTRUE(x = return_plots)) {
     return(list(factor_plots = plot_list,
                 dimreduc_plots = tsne_list))
   }
