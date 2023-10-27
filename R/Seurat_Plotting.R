@@ -2562,10 +2562,11 @@ VariableFeaturePlot_scCustom <- function(
   if (isTRUE(x = label)) {
     if (is.null(x = custom_features)) {
       plot <- LabelPoints(plot = plot, points = top_features, repel = repel)
+    } else {
+      # check all custom features are present
+      all_found_features <- Feature_PreCheck(object = seurat_object, features = custom_features)
+      plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel)
     }
-    # check all custom features are present
-    all_found_features <- Feature_PreCheck(object = seurat_object, features = custom_features)
-    plot <- LabelPoints(plot = plot, points = all_found_features, repel = repel)
   }
 
   # return log10 y axis
