@@ -31,6 +31,7 @@
 - Updated default scCustomize color palettes.  Now if number of colors is greater than 2 but less than 8 the default palette will be `ColorBlind_Pal` (previously it was "polychrome").  Polychrome remains the default when number of colors is between 9-36.  
 - Minimum version of scattermore package updated to v1.2.  
 - `DimPlot_scCustom` will now set `label = TRUE` if `label.box` is set to TRUE but `label` is not changed from default.  
+- Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependecy installs when not completely needed).  
    
 
 ## Fixes  
