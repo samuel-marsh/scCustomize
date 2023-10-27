@@ -33,6 +33,7 @@
 - Minimum version of scattermore package updated to v1.2.  
 - `DimPlot_scCustom` will now set `label = TRUE` if `label.box` is set to TRUE but `label` is not changed from default.  
 - Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependecy installs when not completely needed).  
+- Replace Seurat `PackageCheck` (now deprecated), with `rlang::is_installed()` for non-dependency checks.  
    
 
 ## Fixes  
