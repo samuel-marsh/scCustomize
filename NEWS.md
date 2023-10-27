@@ -28,7 +28,8 @@
 - Replaced `length(x = colnames(x = obj)` with `length(x = Cells(x = obj)` for accurate plotting based on V5 object structure.  
 - `Gene_Present` now accepts `assay` parameter.  
 - Internal reorganization of some functions within `R/` for better organization.  
-- Updated default scCustomize color palettes.  Now if number of colors is greater than 2 but less than 8 the default palette will be `ColorBlind_Pal` (previously it was "polychrome").  Polychrome remains the default when number of colors is between 9-36.  
+- Updated default scCustomize color palettes (`scCustomize_Palette`).  Now if number of colors is greater than 2 but less than 8 the default palette will be `ColorBlind_Pal` (previously it was "polychrome").  Polychrome remains the default when number of colors is between 9-36.  
+- Updated parameter default within `scCustomize_Palette` to `ggplot_default_colors = FALSE` to avoid uncessary error when no value supplied.  
 - Minimum version of scattermore package updated to v1.2.  
 - `DimPlot_scCustom` will now set `label = TRUE` if `label.box` is set to TRUE but `label` is not changed from default.  
 - Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependecy installs when not completely needed).  
