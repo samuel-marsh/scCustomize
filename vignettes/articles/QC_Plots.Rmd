@@ -63,6 +63,10 @@ hca_bm@meta.data$group[hca_bm@meta.data$orig.ident == "MantonBM5" | hca_bm@meta.
 
 ```
 
+```{r include=FALSE}
+hca_bm <- UpdateSeuratObject(hca_bm)
+```
+
 
 ```{r include=FALSE}
 accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
@@ -113,6 +117,27 @@ scCustomize contains easy shortcut function to add a measure of cell complexity/
 hca_bm <- Add_Cell_Complexity_Seurat(seurat_object = hca_bm)
 ```
 *NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER`) but QC plotting functions currently only support Seurat objects.*
+
+## Add All Cell QC Metrics with Single Function
+To simplify the process of adding cell QC metrics scCustomize contains a wrapper function which can be customized to add all or some of the available QC metrics.  The default parameters of the function `Add_Cell_QC_Metrics` will add:  
+
+* Mitochondrial and Ribosomal Percentages (default and custom species).
+* Cell Complexity (log10(nFeature) / log10(nCount).
+* Top XX Gene Percentage.
+* Percentage of counts for IEG (human and mouse only).
+* OXPHOS, APOP, and DNA Repair pathways (supported species only).
+* Cell Cycle Scoring (Human only).
+
+```{r eval=FALSE}
+hca_bm <- Add_Cell_QC_Metrics(seurat_object = hca_bm, species = "human")
+```
+
+### Customizing metrics  
+By changing the function parameters you can add a subset of available QC metrics.  For instance:
+```{r eval=FALSE}
+hca_bm <- Add_Cell_QC_Metrics(seurat_object = hca_bm, species = "human", add_mito_ribo = TRUE, add_complexity = FALSE, add_top_pct = TRUE, add_IEG = TRUE, add_MSigDB = FALSE, add_cell_cycle = FALSE)
+```
+
 
 
 ## Plotting QC Metrics

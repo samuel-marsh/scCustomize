@@ -60,7 +60,8 @@ meta_metrics <- qread("assets/seq_metrics_dataframe_meta.qs")
 
 
 ## Loading Data  
-Before we can plot these metrics we first need to import raw data.
+Before we can plot these metrics we first need to import raw data.  
+
 ### Accepted Data Types  
 These functions currently only work with data from 10X Genomics processed via Cell Ranger.  If there is interest in adapting to other platforms I'd be happy to entertain PRs.
 
@@ -156,3 +157,21 @@ All of the `Seq_QC_Plot_...` functions also contain parameter to calculate signi
 ```{r, fig.height=9, fig.width=13}
 Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch", significance = T)
 ```
+
+### Barcode Rank Plots
+scCustomize can also be used to create customized barcode rank plots from raw feature barcode data using outputs from DropletUtils package.  scCustomize provides the function `Iterate_Barcode_Rank_Plot` which reads data, processes using DropletUtils, and returns plots.
+
+The plots are adaptation of the plots from DropletUtils package moved to ggplot2 framework with some additional customization and the ability to return rastered plots.
+
+```{r eval=FALSE}
+Iterate_Barcode_Rank_Plot(dir_path_h5 = "assets/Barcode_Rank_Example/", plateau = 20000, file_path = "plots/", file_name = "Barcode_Rank_Plots.pdf")
+```
+
+```{r message=TRUE, include=FALSE}
+Iterate_Barcode_Rank_Plot(dir_path_h5 = "assets/Barcode_Rank_Example/", plateau = 20000, file_path = "~/Downloads/", file_name = "Barcode_Rank_Plots.pdf", )
+```
+
+<center>
+<img src="../reference/figures/assets/Barcode_Rank_Plot_Example.jpg" width=75%>
+*Example of barcode rank plot output.  (10K PBMCs from 10X Genomics Public Data).*
+</center>

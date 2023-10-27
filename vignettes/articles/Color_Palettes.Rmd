@@ -65,7 +65,7 @@ pbmc <- pbmc3k.SeuratData::pbmc3k.final
 ```{r include=FALSE}
 pbmc <- UpdateSeuratObject(pbmc)
 
-marsh_mouse_micro <- UpdateSeuratObject(object = marsh_mouse_micro)
+#marsh_mouse_micro <- UpdateSeuratObject(object = marsh_mouse_micro)
 ```
 
 ```{r include=FALSE}
@@ -101,12 +101,14 @@ To provide better visualizations using default parameters scCustomize sets a ser
 
 * If only **one identity** is being plotted will use: "dodgerblue".
 * If only *two identities* are being plotted will use: `NavyAndOrange()`
+* If between 2 and 8 identities are being plotted will use `ColorBlind_Pal`.
 * If greater than 2 identities but less than or equal to 36 will use: `DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")`
 * If greater than 36 identities will use dynamic varibow palette: `DiscretePalette_scCustomize(num_colors = *Number of identities*, palette = "varibow", shuffle_pal = TRUE)`
 
 ```{r echo=FALSE, fig.height=1,fig.width=11}
 PalettePlot(pal = "dodgerblue", label_color_num = FALSE) + ggtitle("'dodgerblue' (1 color)")
 PalettePlot(pal = NavyAndOrange(), label_color_num = FALSE) + ggtitle("NavyAndOrange() (2 colors)")
+PalettePlot(pal = ColorBlind_Pal(), label_color_num = FALSE) + ggtitle("ColorBlind_Pal() (8 colors)")
 PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome"), label_color_num = FALSE) + ggtitle("polychrome (36 colors)")
 PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 50, palette = "varibow", shuffle_pal = TRUE), label_color_num = FALSE) + ggtitle("varibow (50 color version)")
 ```
