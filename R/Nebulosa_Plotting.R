@@ -25,7 +25,8 @@
 #' @import ggplot2
 #' @import patchwork
 # #' @importFrom Nebulosa plot_density
-#' @importFrom SeuratObject DefaultDimReduc PackageCheck
+#' @importFrom rlang is_installed
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -51,7 +52,7 @@ Plot_Density_Custom <- function(
   ...
 ) {
   # Check Nebulosa installed
-  Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
+  Nebulosa_check <- is_installed(pkg = "Nebulosa")
   if (!Nebulosa_check[1]) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Plot_Density_Custom}",
@@ -132,7 +133,8 @@ Plot_Density_Custom <- function(
 #' @import cli
 #' @import ggplot2
 # #' @importFrom Nebulosa plot_density
-#' @importFrom SeuratObject DefaultDimReduc PackageCheck
+#' @importFrom rlang is_installed
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -156,7 +158,7 @@ Plot_Density_Joint_Only <- function(
   ...
 ) {
   # Check Nebulosa installed
-  Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
+  Nebulosa_check <- is_installed(pkg = "Nebulosa")
   if (!Nebulosa_check[1]) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Plot_Density_Joint_Only}",

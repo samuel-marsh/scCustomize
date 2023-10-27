@@ -215,7 +215,7 @@ NavyAndOrange <- function(
   flip_order = FALSE
 ) {
   navy_orange <- c("navy", "orange")
-  if (flip_order) {
+  if (isTRUE(x = flip_order)) {
     navy_orange <- rev(x = navy_orange)
   }
   return(navy_orange)
@@ -376,7 +376,7 @@ varibow_scCustom <- function(
 #' @import cli
 # #' @importFrom colorway varibow (now directly ported for CRAN compatibility)
 #' @importFrom paletteer paletteer_d
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #'
 #' @return A vector of colors
 #'
@@ -428,8 +428,8 @@ DiscretePalette_scCustomize <- function(
 
   # dittoseq check
   if (palette == "ditto_seq") {
-    dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
-    if (!dittoseq_check[1]) {
+    dittoseq_check <- is_installed(pkg = "dittoSeq")
+    if (isFALSE(x = dittoseq_check[1])) {
       cli_abort(message = c(
         "Please install the {.val dittoSeq} package to {.code palette = {symbol$dquote_left}ditto_seq{symbol$dquote_right}}",
         "i" = "This can be accomplished with the following commands:",
@@ -508,7 +508,7 @@ scCustomize_Palette <- function(
   color_seed = 123
 ) {
   # Set color palette depending on group length
-  if (ggplot_default_colors) {
+  if (isTRUE(x = ggplot_default_colors)) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
     if (num_groups == 1) {
@@ -589,7 +589,7 @@ PalettePlot <- function(
 
   # Plot
   # Label plot
-  if (label_color_num) {
+  if (isTRUE(x = label_color_num)) {
     palette_plot <- ggplot(palette_data) +
       geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
       geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +

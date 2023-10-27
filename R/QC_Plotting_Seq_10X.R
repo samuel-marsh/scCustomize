@@ -22,7 +22,7 @@
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -111,7 +111,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -158,7 +158,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -247,7 +247,7 @@ Seq_QC_Plot_Number_Cells <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -294,7 +294,7 @@ Seq_QC_Plot_Number_Cells <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -373,7 +373,7 @@ Seq_QC_Plot_Genes <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -420,7 +420,7 @@ Seq_QC_Plot_Genes <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -499,7 +499,7 @@ Seq_QC_Plot_UMIs <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -546,7 +546,7 @@ Seq_QC_Plot_UMIs <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -625,7 +625,7 @@ Seq_QC_Plot_Total_Genes <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -673,7 +673,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -758,7 +758,7 @@ Seq_QC_Plot_Saturation <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -806,7 +806,7 @@ Seq_QC_Plot_Saturation <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -891,7 +891,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -939,7 +939,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1023,7 +1023,7 @@ Seq_QC_Plot_Transcriptome <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -1071,7 +1071,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1155,7 +1155,7 @@ Seq_QC_Plot_Genome <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -1203,7 +1203,7 @@ Seq_QC_Plot_Genome <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1287,7 +1287,7 @@ Seq_QC_Plot_Intergenic <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -1335,7 +1335,7 @@ Seq_QC_Plot_Intergenic <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1419,7 +1419,7 @@ Seq_QC_Plot_Intronic <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -1467,7 +1467,7 @@ Seq_QC_Plot_Intronic <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1551,7 +1551,7 @@ Seq_QC_Plot_Exonic <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -1599,7 +1599,7 @@ Seq_QC_Plot_Exonic <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1683,7 +1683,7 @@ Seq_QC_Plot_Antisense <- function(
   }
 
   if (significance) {
-    ggpubr_check <- PackageCheck("ggpubr", error = FALSE)
+    ggpubr_check <- is_installed(pkg = "ggpubr")
     if (!ggpubr_check[1]) {
       cli_abort(message = c(
         "Please install the {.val ggpubr} package to calculate/plot significance values.",
@@ -1730,7 +1730,7 @@ Seq_QC_Plot_Antisense <- function(
 #'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout plot_annotation
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom stringr str_wrap
 #'
 #' @export
@@ -1823,7 +1823,7 @@ Seq_QC_Plot_Basic_Combined <- function(
 #'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout plot_annotation
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #' @importFrom stringr str_wrap
 #'
 #' @export
@@ -2028,7 +2028,7 @@ Iterate_Barcode_Rank_Plot <- function(
     plateau = NULL,
     ...
 ) {
-  DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
+  DropletUtils_check <- is_installed(pkg = "DropletUtils")
   if (!DropletUtils_check[1]) {
     cli_abort(message = c(
       "Please install the {.val DropletUtils} package to use {.code Create_10X_H5}",

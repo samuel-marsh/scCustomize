@@ -1168,8 +1168,8 @@ DotPlot_scCustom <- function(
 #' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
-#' @importFrom SeuratObject PackageCheck
 #' @importFrom stats quantile
 #' @importFrom tidyr pivot_wider
 #'
@@ -1223,7 +1223,7 @@ Clustered_DotPlot <- function(
   seed = 123
 ) {
   # Check for packages
-  ComplexHeatmap_check <- PackageCheck("ComplexHeatmap", error = FALSE)
+  ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
   if (!ComplexHeatmap_check[1]) {
     cli_abort(message = c(
       "Please install the {.val ComplexHeatmap} package to use {.code Clustered_DotPlot}",

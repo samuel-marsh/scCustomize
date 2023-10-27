@@ -15,8 +15,8 @@
 #' @import cli
 #' @importFrom Matrix readMM
 # #' @importFrom DropletUtils write10xCounts
+#' @importFrom rlang is_installed
 #' @importFrom Seurat Read10X
-#' @importFrom SeuratObject PackageCheck
 #'
 #' @return A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.
 #'
@@ -36,7 +36,7 @@ Create_10X_H5 <- function(
   save_file_path,
   save_name
 ) {
-  DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
+  DropletUtils_check <- is_installed(pkg = "DropletUtils")
   if (!DropletUtils_check[1]) {
     cli_abort(message = c(
       "Please install the {.val DropletUtils} package to use {.code Create_10X_H5}",
@@ -1111,6 +1111,7 @@ Read_GEO_Delim <- function(
 #'
 #' @import cli
 #' @import Matrix
+#' @importFrom rlang is_installed
 #'
 #' @export
 #'
@@ -1130,7 +1131,7 @@ Read_CellBender_h5_Mat <- function(
     feature_slot_name = "features"
 ) {
   # Check hdf5r installed
-  hdf5r_check <- PackageCheck("hdf5r", error = FALSE)
+  hdf5r_check <- is_installed(pkg = "hdf5r")
   if (!hdf5r_check[1]) {
     cli_abort(message = c(
       "Please install the {.val hdf5r} package to use {.code Read_CellBender_h5_Mat} and read HDF5 files.",

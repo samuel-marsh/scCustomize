@@ -1250,7 +1250,8 @@ Iterate_VlnPlot_scCustom <- function(
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
-#' @importFrom SeuratObject DefaultDimReduc PackageCheck
+#' @importFrom rlang is_installed
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -1284,7 +1285,7 @@ Iterate_Plot_Density_Custom <- function(
   ...
 ) {
   # Check Nebulosa installed
-  Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
+  Nebulosa_check <- is_installed(pkg = "Nebulosa")
   if (!Nebulosa_check[1]) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Iterate_Plot_Density_Custom}",
@@ -1450,7 +1451,8 @@ Iterate_Plot_Density_Custom <- function(
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
 #' @importFrom purrr discard keep
-#' @importFrom SeuratObject DefaultDimReduc PackageCheck
+#' @importFrom rlang is_installed
+#' @importFrom SeuratObject DefaultDimReduc
 #' @importFrom stringr str_detect
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -1484,7 +1486,7 @@ Iterate_Plot_Density_Joint <- function(
   ...
 ) {
   # Check Nebulosa installed
-  Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
+  Nebulosa_check <- is_installed("Nebulosa")
   if (!Nebulosa_check[1]) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Iterate_Plot_Density_Joint}",
