@@ -35,6 +35,7 @@
 - `DimPlot_scCustom` will now set `label = TRUE` if `label.box` is set to TRUE but `label` is not changed from default.  
 - Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependecy installs when not completely needed).  
 - Replace Seurat `PackageCheck` (now deprecated), with `rlang::is_installed()` for non-dependency checks.  
+- Update vignettes with new features and bug fixes from old code.  
    
 
 ## Fixes  
