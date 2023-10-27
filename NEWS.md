@@ -19,7 +19,8 @@
 
   
 ## Changed  
-- Large scale under the hood adjustments to ensure compatibility with Seurat V5 object structure (ONGOING).  
+- Large scale under the hood code adjustments to ensure compatibility with Seurat V5 object structure.  
+- Internal code syntax updates independent of Seurat functionality.  
 - **HARD DEPRECATION** `Split_FeatureScatter` function has been completely deprecated and it's functionality has been moved to new `FeatureScatter_scCustom`.  
 - **SOFT DEPRECATION** The parameter `gene_list` in `Iterate_FeaturePlot_scCustom` and `Iterate_VlnPlot_scCustom` has been soft-deprecated and replaced by `features` parameter.  Specifying `gene_list` will display deprecation warning but continue to function until next major update.  
 - The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
@@ -53,6 +54,7 @@
 - Fixed bug in `Case_Check` caused by typo.  
 - Fixed color warning messages in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` that were too verbose.  
 - Fixed bug in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` which caused error when supplying custom list of features for non-default organism ([#133](https://github.com/samuel-marsh/scCustomize/issues/133)).  
+- Fixed bug in `DimPlot_scCustom` preventing that errored when trying to split plot and use `figure_plot` at same time.  
 
 
 
