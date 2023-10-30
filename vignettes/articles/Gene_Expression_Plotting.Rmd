@@ -580,8 +580,9 @@ The scCustomize function `FeatureScatter_scCustom()` is a slightly modified vers
 
 ```{r, fig.height=10, fig.width=13, fig.align='center'}
 # Create Plots
-FeatureScatter_scCustom(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, group.by = "ident", num_columns = 2, pt.size = 1, shuffle =) 
+FeatureScatter_scCustom(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, group.by = "ident", num_columns = 2, pt.size = 1) 
 ```
+
 #### Split FeatureScatter Plots  
 scCustomize previously contained function `Split_FeatureScatter` as Seurat's plot lacked that functionality.  However, that is now present and `Split_FeatureScatter` has therefore been deprecated and it's functionality moved within `FeatureScatter_scCustom`.  
 
