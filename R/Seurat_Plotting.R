@@ -2652,13 +2652,6 @@ FeatureScatter_scCustom <- function(
     color_seed = 123,
     ...
 ) {
-  lifecycle::deprecate_stop(when = "2.1.0",
-                            what = "FeatureScatter_scCustom()",
-                            with = "FeatureScatter_scCustom_TESTING()",
-                            details = c("i" = "The functionality is now contained within `FeatureScatter_scCustom`")
-  )
-
-
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
