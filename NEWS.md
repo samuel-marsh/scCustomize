@@ -33,7 +33,7 @@
 - Updated parameter default within `scCustomize_Palette` to `ggplot_default_colors = FALSE` to avoid uncessary error when no value supplied.  
 - Minimum version of scattermore package updated to v1.2.  
 - `DimPlot_scCustom` will now set `label = TRUE` if `label.box` is set to TRUE but `label` is not changed from default.  
-- Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependecy installs when not completely needed).  
+- Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependency installs when not completely needed).  
 - Replace Seurat `PackageCheck` (now deprecated), with `rlang::is_installed()` for non-dependency checks.  
 - Update vignettes with new features and bug fixes from old code.  
    
