@@ -514,9 +514,9 @@ Retrieve_Ensembl_Ribo <- function(
 
    # pull lists
    qc_gene_list <- list(
-     oxphos <- msigdb_qc_gene_list[[oxphos]],
-     apop <- msigdb_qc_gene_list[[apop]],
-     dna_repair <- msigdb_qc_gene_list[[dna_repair]]
+     oxphos = msigdb_qc_gene_list[[oxphos]],
+     apop = msigdb_qc_gene_list[[apop]],
+     dna_repair = msigdb_qc_gene_list[[dna_repair]]
    )
 
    return(qc_gene_list)
