@@ -572,6 +572,9 @@ Add_Cell_QC_Metrics <- function(
     assay = NULL,
     overwrite = FALSE
 ) {
+  # Set assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
   # Accepted species names
   accepted_names <- data.frame(
     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
