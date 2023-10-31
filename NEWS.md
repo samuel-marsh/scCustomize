@@ -1,4 +1,4 @@
-# scCustomize 2.0.0 (2023-XX-XX)  
+# scCustomize 2.0.0 (2023-11-XX)  
 ## Added  
 - Added support for metrics produced by Cell Ranger multi pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
 - Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.  
