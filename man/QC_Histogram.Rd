@@ -2,13 +2,14 @@
 % Please edit documentation in R/QC_Plotting_Seurat.R
 \name{QC_Histogram}
 \alias{QC_Histogram}
-\title{QC Plots Genes, UMIs, & \% Mito}
+\title{QC Histogram Plots}
 \usage{
 QC_Histogram(
   seurat_object,
   features,
   low_cutoff = NULL,
   high_cutoff = NULL,
+  split.by = NULL,
   bins = 250,
   colors_use = "dodgerblue",
   num_columns = NULL,
@@ -25,6 +26,8 @@ QC_Histogram(
 \item{low_cutoff}{Plot line a potential low threshold for filtering.}
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
+
+\item{split.by}{Feature to split plots by (i.e. "orig.ident").}
 
 \item{bins}{number of bins to plot default is 250.}
 
@@ -44,7 +47,7 @@ of full name.}
 A patchwork object
 }
 \description{
-Custom VlnPlot for initial QC checks including lines for thresholding
+Custom histogram for initial QC checks including lines for thresholding
 }
 \examples{
 \dontrun{
