@@ -544,14 +544,15 @@ QC_Plots_Combined_Vln <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-#' QC Plots Genes, UMIs, & % Mito
+#' QC Histogram Plots
 #'
-#' Custom VlnPlot for initial QC checks including lines for thresholding
+#' Custom histogram for initial QC checks including lines for thresholding
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Feature from meta.data, assay features, or feature name shortcut to plot.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param bins number of bins to plot default is 250.
 #' @param colors_use color to fill histogram bars, default is "dodgerblue".
 #' @param num_columns Number of columns in plot layout.
@@ -566,7 +567,9 @@ QC_Plots_Combined_Vln <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
-#' @importFrom patchwork wrap_plots
+#' @import dplyr filter
+#' @importFrom magrittr "%>%"
+#' @importFrom patchwork wrap_plots plot_annotation
 #'
 #' @export
 #'
@@ -583,6 +586,7 @@ QC_Histogram <- function(
     features,
     low_cutoff = NULL,
     high_cutoff = NULL,
+    split.by = NULL,
     bins = 250,
     colors_use = "dodgerblue",
     num_columns = NULL,
@@ -598,6 +602,18 @@ QC_Histogram <- function(
 
   # set assay
   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Check split valid
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Check feature length if split.by provided
+  if (!is.null(x = split.by)) {
+    if (length(x = features) != 1) {
+      cli_abort(message = "Only 1 feature can be plotted when {.code split.by = TRUE}.")
+    }
+  }
 
   # Check against object
   found_features <- Gene_Present(data = seurat_object, gene_list = found_defaults[[2]], omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
@@ -616,7 +632,7 @@ QC_Histogram <- function(
   }
 
   # Check and set titles
-  if (is.null(x = plot_title)) {
+  if (is.null(x = plot_title) && is.null(x = split.by)) {
     plot_titles <- all_found_features
   }
 
@@ -624,20 +640,61 @@ QC_Histogram <- function(
     cli_abort(message = "The number of {.code plot_title} (.field {length(x = plot_title)}}) does not equal number of features ({.field {length(x = all_found_features)}})")
   }
 
-  plot_list <- lapply(1:length(x = all_found_features), function(x) {
-    plot <- ggplot(data = seurat_object@meta.data, aes(x = .data[[all_found_features[x]]])) +
-      geom_histogram(color = "black", fill = colors_use, bins = bins) +
-      theme_cowplot() +
-      geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
-      ggtitle(plot_titles[x])
-  })
+  # Plot
+  if (is.null(x = split.by)) {
+    plot_list <- lapply(1:length(x = all_found_features), function(x) {
+      plot <- ggplot(data = seurat_object@meta.data, aes(x = .data[[all_found_features[x]]])) +
+        geom_histogram(color = "black", fill = colors_use, bins = bins) +
+        theme_cowplot() +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+        ggtitle(plot_titles[x])
+    })
 
-  # wrap and return plots
-  plots <- wrap_plots(plot_list, ncol = num_columns)
+    # wrap and return plots
+    plots <- wrap_plots(plot_list, ncol = num_columns)
 
-  return(plots)
+    return(plots)
+
+  } else {
+    # Pull required data
+    data_to_plot <- FetchData(object = seurat_object, vars = c(all_found_features, split.by))
+
+    # Extract split.by list of values
+    if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+      meta_sample_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+    } else {
+      meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+    }
+
+    if (length(x = colors_use) != length(x = meta_sample_list)) {
+      if (length(x = colors_use == 1)) {
+        if (colors_use == "dodgerblue") {
+          colors_use <- scCustomize_Palette(num_groups = length(x = meta_sample_list))
+        }
+      } else {
+        cli_abort(message = c("The number of colors must match the number of variables in {.code split.by}.",
+                              "i" = "The length of {.code colors_use} is {.field {length(x = colors_use)}} but the number of variables in {.code spliut.by} is {.field {length(x = split.by)}}"))
+      }
+    }
+
+    # Plot
+    plot_list <- lapply(1:length(x = meta_sample_list), function(x) {
+      sub_data <- data_to_plot %>%
+        filter(.data[[split.by]] == meta_sample_list[x])
+
+      plot <- ggplot(data = sub_data, aes(x = .data[[all_found_features]])) +
+        geom_histogram(color = "black", fill = colors_use[x], bins = bins) +
+        theme_cowplot() +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+        ggtitle(meta_sample_list[x])
+    })
+
+    # wrap and return plots
+    plots <- wrap_plots(plot_list, ncol = num_columns) + plot_annotation(title = all_found_features, theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = rel(1.5))))
+
+    return(plots)
+  }
 }
-
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### OBJECT QC SCATTER ####################
