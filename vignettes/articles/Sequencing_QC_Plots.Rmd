@@ -87,6 +87,9 @@ Parent_Directory
 
 *NOTE: If the path to these files on your system is different that the default 10X path be sure to specify the `secondary_path` param and set `default_10X = FALSE` when importing data.*
 
+### Support for Cell Ranger `multi` pipeline  
+`Read_Metrics_10X` includes support for data processed using Cell Ranger `multi` pipeline by setting the parameter `cellranger_multi = TRUE`.  The function will automatically alter it's default secondary path value and will return both gene expression and TCR metrics as separate data.frames.  
+
 ### Read Data
 We can read all metrics files within a given parent directory using the `Read_Metrics_10X` function.
 ```{r eval=FALSE}

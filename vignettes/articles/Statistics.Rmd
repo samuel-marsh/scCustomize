@@ -206,6 +206,21 @@ median_stats %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
 ```
 
+### Calculate Median Absolute Deviations
+In addition to calculating the median values scCustomize includes function to calculate the median absolute deviation for each of those features with function `MAD_Stats`.  By setting the parameter `mad_num` the function will retrun the MAD*mad_num.
+
+```{r eval=FALSE}
+mad <- MAD_Stats(seurat_object = pbmc, group_by_var = "orig.ident", mad_num = 2)
+```
+
+```{r echo=FALSE}
+mad <- MAD_Stats(seurat_object = pbmc, group_by_var = "orig.ident", mad_num = 2)
+
+mad %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
 
 ## Plotting Median Data
 scCustomize also contains series of functions for plotting the results of these median calculations:

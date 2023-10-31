@@ -139,6 +139,8 @@ p4 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_featur
 wrap_plots(p1, p2, p3, p4) + plot_annotation(tag_levels = "A")
 ```
 
+#### Label custom features  
+In addition to labeling the top variable genes `VariableFeaturePlot_scCustom` also supports labeling a custom set of genes using the `custom_features` parameter.  
 
 ### Plotting PC heatmaps and loadings.
 For ease in evaluating PCA results scCustomize provides function `PC_Plotting()` which returns both PC heatmap and Feature Loading plot in single patchwork layout.
