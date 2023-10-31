@@ -574,7 +574,7 @@ Retrieve_Ensembl_Ribo <- function(
    }
 
    # set list names
-   ieg <- paste0(prefix, "ieg")
+   ieg <- paste0(prefix, "IEG")
 
    # pull lists
    qc_gene_list <- list(
