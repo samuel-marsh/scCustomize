@@ -567,7 +567,7 @@ QC_Plots_Combined_Vln <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
-#' @import dplyr filter
+#' @importFrom dplyr filter
 #' @importFrom magrittr "%>%"
 #' @importFrom patchwork wrap_plots plot_annotation
 #'
