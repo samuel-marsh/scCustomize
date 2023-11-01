@@ -382,7 +382,7 @@ Retrieve_Ensembl_Mito <- function(
 
 #' Ensembl Ribo IDs
 #'
-#' Retrieves Ensembl IDs for ribosomal genes
+#' Retrieves Ensembl IDs for ribsomal genes
 #'
 #' @param species species to retrieve IDs.
 #'
@@ -451,7 +451,7 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 #' @param species species to retrieve IDs.
 #'
-#' @return 3 sets of gene_symbols
+#' @return list of 3 sets of gene_symbols
 #'
 #' @import cli
 #'
@@ -529,7 +529,7 @@ Retrieve_Ensembl_Ribo <- function(
  #'
  #' @param species species to retrieve IDs.
  #'
- #' @return 2 sets of gene_symbols
+ #' @return list of 2 sets of gene_symbols
  #'
  #' @import cli
  #'
@@ -567,19 +567,18 @@ Retrieve_Ensembl_Ribo <- function(
 
    # set prefix
    if (species %in% mouse_options) {
-     ieg <- ieg_gene_list$Mus_musculus_IEG
+     prefix <- "Mus_musculus_"
    }
    if (species %in% human_options) {
-     ieg <- ieg_gene_list$Homo_sapiens_IEG
+     prefix <- "Homo_sapiens_"
    }
 
-   # # set list names
-   # ieg_name <- paste0(prefix, "IEG")
-   # ieg_list <- ieg_gene_list$ieg_name
+   # set list names
+   ieg <- paste0(prefix, "IEG")
 
    # pull lists
    qc_gene_list <- list(
-     ieg = ieg
+     ieg = ieg_gene_list[[ieg]]
    )
 
    return(qc_gene_list)
