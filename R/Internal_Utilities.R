@@ -1114,14 +1114,14 @@ Metrics_Multi_GEX <- function(
 
     # Change format to column based and select relevant metrics
     GEX_metrics <- raw_data %>%
-      filter(Grouped.By == "Physical library ID" & Library.Type == "Gene Expression") %>%
+      filter(.data[["Grouped.By"]] == "Physical library ID" & .data[["Library.Type"]] == "Gene Expression") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(Metric.Name %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -1233,14 +1233,14 @@ Metrics_Multi_VDJT <- function(
     raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
 
     VDJ_T_Metrics <- raw_data %>%
-      filter(Grouped.By == "Physical library ID" & Library.Type == "VDJ T") %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
       data.frame()
 
     VDJ_T_Metrics2 <- raw_data %>%
-      filter(Metric.Name %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
       ) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
@@ -1253,7 +1253,7 @@ Metrics_Multi_VDJT <- function(
     raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
-    all_columns <- 1:ncol(raw_data_vdjt)
+    all_columns <- 1:ncol(x = raw_data_vdjt)
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
