@@ -2009,8 +2009,9 @@ Barcode_Plot <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_Barcode_Rank_Plot(dir_path_h5 = "H5_PATH/", multi_directory = TRUE, h5_filename = "raw_feature_bc_matrix",
-#' parallel = TRUE, num_cores = 12, file_path = "OUTPUT_PATH", file_name = "Barcode_Rank_Plots")
+#' Iterate_Barcode_Rank_Plot(dir_path_h5 = "H5_PATH/", multi_directory = TRUE,
+#' h5_filename = "raw_feature_bc_matrix", parallel = TRUE, num_cores = 12, file_path = "OUTPUT_PATH",
+#' file_name = "Barcode_Rank_Plots")
 #' }
 #'
 
