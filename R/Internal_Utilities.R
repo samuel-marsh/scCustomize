@@ -574,11 +574,12 @@ Retrieve_Ensembl_Ribo <- function(
    }
 
    # set list names
-   ieg <- paste0(prefix, "IEG")
+   ieg_name <- paste0(prefix, "IEG")
+   ieg_list <- ieg_gene_list[[ieg_name]]
 
    # pull lists
    qc_gene_list <- list(
-     ieg = ieg_gene_list[[ieg]]
+     ieg = ieg_list
    )
 
    return(qc_gene_list)
