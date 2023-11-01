@@ -382,7 +382,7 @@ Retrieve_Ensembl_Mito <- function(
 
 #' Ensembl Ribo IDs
 #'
-#' Retrieves Ensembl IDs for ribsomal genes
+#' Retrieves Ensembl IDs for ribosomal genes
 #'
 #' @param species species to retrieve IDs.
 #'
