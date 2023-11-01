@@ -35,7 +35,7 @@ MSigDB gene sets via msigdbr package \url{https://cran.r-project.org/package=msi
 msigdb_qc_gene_list
 }
 \description{
-A list gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
+Gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
 "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
 }
 \concept{data}

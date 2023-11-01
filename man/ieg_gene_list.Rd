@@ -21,7 +21,7 @@ homologs according to HGNC.
 ieg_gene_list
 }
 \description{
-A list of gene symbols for immediate early genes
+Gene symbols for immediate early genes
 }
 \concept{data}
 \keyword{datasets}

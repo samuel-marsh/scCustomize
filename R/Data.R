@@ -39,7 +39,7 @@
 
 #' QC Gene Lists
 #'
-#' A list gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
+#' Gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
 #' "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
 #'
 #' @format A list of 18 vectors
@@ -73,7 +73,7 @@
 
 #' Immediate Early Gene (IEG) gene lists
 #'
-#' A list of gene symbols for immediate early genes
+#' Gene symbols for immediate early genes
 #'
 #' @format A list of seven vectors
 #' \describe{
