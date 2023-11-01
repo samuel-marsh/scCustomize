@@ -541,8 +541,9 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
-#' library(Seurat)
-#' pbmc_small <- Add_Cell_QC_Metrics(seurat_object = pbmc_small, species = "Human")
+#' \dontrun{
+#' obj <- Add_Cell_QC_Metrics(seurat_object = obj, species = "Human")
+#'}
 #'
 
 Add_Cell_QC_Metrics <- function(
