@@ -8,13 +8,13 @@
 A list of seven vectors
 \describe{
 \item{Mus_musculus_IEGs}{Gene symbols for IEGs from source publication (see below)}
-\item{Homo_sapiens_ribo_ensembl}{Human gene symbols for homologous genes from mouse gene list}
+\item{Homo_sapiens_IEGs}{Human gene symbols for homologous genes from mouse gene list}
 
 }
 }
 \source{
 Mouse gene list is from: SI Table 4 from \doi{doi.org/10.1016/j.neuron.2017.09.026}.  Human
-gene list was compiled by first creating homologous gene list using bioaRt and then adding some manually curated
+gene list was compiled by first creating homologous gene list using biomaRt and then adding some manually curated
 homologs according to HGNC.
 }
 \usage{
