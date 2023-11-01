@@ -23,6 +23,9 @@ in addition to variables supplied to \code{mad_var}.}
 
 \item{mad_var}{Column(s) in \verb{@meta.data} to calculate medians for in addition to defaults.
 Must be of \code{class()} integer or numeric.}
+
+\item{mad_num}{integer value to multiply the MAD in returned data.frame (default is 2).
+Often helpful when calculating a outlier range to base of of median + (X*MAD).}
 }
 \value{
 A data.frame.

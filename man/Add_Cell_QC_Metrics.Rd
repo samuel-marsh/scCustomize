@@ -112,8 +112,9 @@ A Seurat Object
 Add Mito/Ribo \%, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single function call
 }
 \examples{
-library(Seurat)
-pbmc_small <- Add_Cell_QC_Metrics(seurat_object = pbmc_small, species = "Human")
+\dontrun{
+obj <- Add_Cell_QC_Metrics(seurat_object = obj, species = "Human")
+}
 
 }
 \concept{object_util}
