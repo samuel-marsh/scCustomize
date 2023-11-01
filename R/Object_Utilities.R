@@ -533,7 +533,6 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
 #' @import cli
-#' @importFrom Seurat Layers
 #'
 #' @return A Seurat Object
 #'
