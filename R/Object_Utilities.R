@@ -662,7 +662,7 @@ Add_Cell_QC_Metrics <- function(
 
       # Add Cell Cycle Scoring
       cli_inform(message = "Adding {.field Cell Cycle Scoring to meta.data.} to meta.data.")
-      seurat_object <- CellCycleScoring(object = seurat_object, s.features = cc.genes.updated.2019$s.genes, g2m.features = cc.genes.updated.2019$g2m.genes)
+      seurat_object <- CellCycleScoring(object = seurat_object, s.features = Seurat::cc.genes.updated.2019$s.genes, g2m.features = Seurat::cc.genes.updated.2019$g2m.genes)
     }
   }
 
