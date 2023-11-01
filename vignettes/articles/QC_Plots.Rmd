@@ -185,7 +185,7 @@ scCustomize functions have the added benefit of:
 
 ```{r eval=FALSE}
 # All functions contain 
-p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500)
+p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 600, high_cutoff = 5500)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20)
 p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8)
@@ -193,7 +193,7 @@ p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8)
 
 ```{r echo=FALSE}
 # All functions contain 
-p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500, pt.size = 0.1)
+p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 600, high_cutoff = 5500, pt.size = 0.1)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20, pt.size = 0.1)
 p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8, pt.size = 0.1)
@@ -243,7 +243,7 @@ wrap_plots(p1, p2, ncol = 2)
 As a shortcut you can return single patchwork plot of the 3 main QC Plots (Genes, UMIs, %Mito) by using single function, `QC_Plots_Combined_Vln()`.
 
 ```{r, fig.height=7, fig.width=13}
-QC_Plots_Combined_Vln(seurat_object = hca_bm, feature_cutoffs = c(800, 5500), UMI_cutoffs = c(1200, 45000), mito_cutoffs = 20, pt.size = 0.1)
+QC_Plots_Combined_Vln(seurat_object = hca_bm, feature_cutoffs = c(600, 5500), UMI_cutoffs = c(1200, 45000), mito_cutoffs = 20, pt.size = 0.1)
 ```
 
 
@@ -263,14 +263,14 @@ scCustomize contains 3 functions which wrap `Seurat::FeatureScatter()` with adde
 
 ```{r eval=FALSE}
 # All functions contain 
-QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 800, high_cutoff_gene = 5500, low_cutoff_UMI = 500, high_cutoff_UMI = 50000)
-QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_feature = 20)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 600, high_cutoff_gene = 5500, low_cutoff_UMI = 500, high_cutoff_UMI = 50000)
+QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_feature = 20)
 ```
 
 ```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
 # All functions contain 
-p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 400, high_cutoff_gene = 5500, low_cutoff_UMI = 1200, high_cutoff_UMI = 45000, x_axis_label = "UMIs per Cell")
-p2 <- QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_feature = 20)
+p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 600, high_cutoff_gene = 5500, low_cutoff_UMI = 1200, high_cutoff_UMI = 45000, x_axis_label = "UMIs per Cell")
+p2 <- QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_feature = 20)
 
 wrap_plots(p1, p2, ncol = 2)
 ```
@@ -280,13 +280,13 @@ wrap_plots(p1, p2, ncol = 2)
 `QC_Plot_UMIvsGene` contains the ability to color points by continuous meta data variables.  
 This can be used to plot % of mito reads in addition to UMI vs. Gene comparisons
 ```{r eval=FALSE}
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
 ```
 
 ```{r echo=FALSE, fig.height=7, fig.width=13, fig.cap="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*", fig.align='center'}
-p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
-p2 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
+p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
+p2 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
 
 wrap_plots(p1, p2, ncol = 2)
 ```
@@ -294,7 +294,7 @@ wrap_plots(p1, p2, ncol = 2)
 ### Combination Plots
 If you are interested in viewing `QC_Plot_UMIvsGene` both by discrete grouping variable and by continuous variable without writing function twice you can use `combination = TRUE` and plot output will contain both plots.
 ```{r, fig.height=7, fig.width=13, fig.cap="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*", fig.align='center'}
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20, combination = TRUE)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20, combination = TRUE)
 ```
 
 ## Histogram-Based QC Plots  
