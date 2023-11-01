@@ -567,19 +567,19 @@ Retrieve_Ensembl_Ribo <- function(
 
    # set prefix
    if (species %in% mouse_options) {
-     prefix <- "Mus_musculus_"
+     ieg <- ieg_gene_list$Mus_musculus_IEG
    }
    if (species %in% human_options) {
-     prefix <- "Homo_sapiens_"
+     ieg <- ieg_gene_list$Homo_sapiens_IEG
    }
 
-   # set list names
-   ieg_name <- paste0(prefix, "IEG")
-   ieg_list <- ieg_gene_list$ieg_name
+   # # set list names
+   # ieg_name <- paste0(prefix, "IEG")
+   # ieg_list <- ieg_gene_list$ieg_name
 
    # pull lists
    qc_gene_list <- list(
-     ieg = ieg_list
+     ieg = ieg
    )
 
    return(qc_gene_list)
