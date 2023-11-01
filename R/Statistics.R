@@ -305,6 +305,8 @@ Median_Stats <- function(
 #' in addition to variables supplied to `mad_var`.
 #' @param mad_var Column(s) in `@meta.data` to calculate medians for in addition to defaults.
 #' Must be of `class()` integer or numeric.
+#' @param mad_num integer value to multiply the MAD in returned data.frame (default is 2).
+#' Often helpful when calculating a outlier range to base of of median + (X*MAD).
 #'
 #' @return A data.frame.
 #'
