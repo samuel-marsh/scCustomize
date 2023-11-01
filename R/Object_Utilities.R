@@ -533,6 +533,7 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
 #' @import cli
+#' @importFrom Seurat Layers
 #'
 #' @return A Seurat Object
 #'
@@ -642,7 +643,7 @@ Add_Cell_QC_Metrics <- function(
                             "i" = "To add score for other species supply cell cycle gene list of `CellCycleScoring` function."
                 ))
     } else {
-      if (length(grep(x = Layers(seurat_object), pattern = "data", value = T)) == 0) {
+      if (length(grep(x = Layers(object = seurat_object), pattern = "data", value = T)) == 0) {
         cli_inform(message = c("Layer with normalized data not present.",
                                "i" = "Normalizing Data."))
         seurat_object <- NormalizeData(object = seurat_object)
