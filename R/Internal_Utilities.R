@@ -451,7 +451,7 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 #' @param species species to retrieve IDs.
 #'
-#' @return list of 3 sets of gene_symbols
+#' @return 3 sets of gene_symbols
 #'
 #' @import cli
 #'
@@ -529,7 +529,7 @@ Retrieve_Ensembl_Ribo <- function(
  #'
  #' @param species species to retrieve IDs.
  #'
- #' @return list of 2 sets of gene_symbols
+ #' @return 2 sets of gene_symbols
  #'
  #' @import cli
  #'
