@@ -1945,12 +1945,12 @@ Barcode_Plot <- function(
                           "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}} and no errors occured when running code."))
   }
 
-  plot <- ggplot(data = data.frame(br_out@listData), aes(x = rank, y = total)) +
+  plot <- ggplot(data = data.frame(br_out@listData), aes(x = .data[["rank"]], y = .data[["total"]])) +
     geom_scattermore(pointsize = pt.size, pixels = raster_dpi) +
     scale_y_log10() +
     scale_x_log10() +
     theme_cowplot() +
-    geom_line(mapping = aes(x = rank, y = fitted, color = "red"), show.legend = FALSE) +
+    geom_line(mapping = aes(x = .data[["rank"]], y = .data[["fitted"]], color = "red"), show.legend = FALSE) +
     geom_hline(yintercept = br_out@metadata$knee, linetype = "dashed", color = "dodgerblue") +
     geom_hline(yintercept = br_out@metadata$inflection, linetype = "dashed", color = "forestgreen") +
     annotate("text", x = 1, y = br_out@metadata$knee, label = paste0("Knee (", br_out@metadata$knee, ")"), vjust = -0.5, hjust = 0) +
