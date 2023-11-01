@@ -129,8 +129,9 @@ Merge_Seurat_List <- function(
 #' @concept object_util
 #'
 #' @examples
-#' library(Seurat)
-#' pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
+#' \dontrun{
+#' obj <- Add_Mito_Ribo_Seurat(seurat_object = obj, species = "human")
+#'}
 #'
 
 Add_Mito_Ribo_Seurat <- function(
