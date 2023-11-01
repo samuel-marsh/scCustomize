@@ -77,8 +77,8 @@ Split_FeatureScatter(seurat_object = pbmc_small, feature1 = "nCount_RNA", featur
 split.by = "sample_id")
 
 # NEW Code
-FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
-split.by = "sample_id")
+FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA",
+feature2 = "nFeature_RNA", split.by = "sample_id")
 }
 
 }

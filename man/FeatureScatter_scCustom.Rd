@@ -80,8 +80,8 @@ Create customized FeatureScatter plots with scCustomize defaults.
 library(Seurat)
 pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 
-FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
-split.by = "sample_id")
+FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA",
+feature2 = "nFeature_RNA", split.by = "sample_id")
 }
 
 }
