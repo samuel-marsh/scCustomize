@@ -344,6 +344,61 @@ scCustomze_Split_FeatureScatter <- function(
 }
 
 
+#' Figure Plots
+#'
+#' Removes the axes from 2D DR plots and makes them into plot label.
+#' Used for `figure_plot` parameter in plotting functions.
+#'
+#' @param plot 2D DR plot
+#'
+#' @return A modified plot
+#'
+#' @import ggplot2
+#' @import patchwork
+#'
+#' @references parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
+#'
+#' @noRd
+#'
+
+Figure_Plot <- function(
+    plot
+){
+  # pull axis labels
+  x_lab_reduc <- plot$labels$x
+  y_lab_reduc <- plot$labels$y
+
+  plot <- plot & NoAxes()
+
+  axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
+    geom_point() +
+    xlim(c(0, 10)) + ylim(c(0, 10)) +
+    theme_classic() +
+    ylab(y_lab_reduc) + xlab(x_lab_reduc) +
+    theme(plot.background = element_rect(fill = "transparent", colour = NA),
+          panel.background = element_rect(fill = "transparent"),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks = element_blank(),
+          axis.line = element_line(
+            arrow = arrow(angle = 15, length = unit(.5, "cm"), type = "closed")
+          )
+    )
+
+  figure_layout <- c(
+    area(t = 1, l = 2, b = 11, r = 11),
+    area(t = 10, l = 1, b = 12, r = 2))
+
+  plot_figure <- plot + axis_plot +
+    plot_layout(design = figure_layout)
+
+  return(plot_figure)
+}
+
+
+
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### TEST/HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -650,3 +705,5 @@ No_Right <- function() {
   )
   return(no.right)
 }
+
+
