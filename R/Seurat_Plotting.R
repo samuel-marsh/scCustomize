@@ -308,9 +308,11 @@ FeaturePlot_scCustom <- function(
     if (length(x = all_found_features) == 1) {
       plot <- Figure_Plot(plot = plot)
     } else {
-      plot <- lapply(1:length(x = all_found_features), function(j) {
+      plot_list <- lapply(1:length(x = all_found_features), function(j) {
         fig_plot <- Figure_Plot(plot = plot[[j]])
       })
+
+      plot <- wrap_plots(plot_list, ncol = num_columns)
     }
   }
 
