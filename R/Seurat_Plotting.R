@@ -26,6 +26,8 @@
 #' Default is TRUE if one value is provided to `features` otherwise is set to FALSE.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
+#' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
+#' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param num_columns Number of columns in plot layout.
 #' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
 #' @param layer Which layer to pull expression data from?  Default is "data".
@@ -75,6 +77,7 @@ FeaturePlot_scCustom <- function(
   split.by = NULL,
   split_collect = NULL,
   aspect_ratio = NULL,
+  figure_plot = FALSE,
   num_columns = NULL,
   slot = deprecated(),
   layer = "data",
@@ -298,6 +301,11 @@ FeaturePlot_scCustom <- function(
       cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
     }
     plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
+  # Figure plot
+  if (isTRUE(x = figure_plot)) {
+    plot <- Figure_Plot(plot = plot)
   }
 
   return(plot)
@@ -1714,6 +1722,8 @@ Cluster_Highlight_Plot <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
+#' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
+#' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1753,6 +1763,7 @@ Meta_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   aspect_ratio = NULL,
+  figure_plot = FALSE,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -1856,6 +1867,11 @@ Meta_Highlight_Plot <- function(
     plot <- plot & theme(aspect.ratio = aspect_ratio)
   }
 
+  # Figure plot
+  if (isTRUE(x = figure_plot)) {
+    plot <- Figure_Plot(plot = plot)
+  }
+
   return(plot)
 }
 
@@ -1871,6 +1887,8 @@ Meta_Highlight_Plot <- function(
 #' @param pt.size point size for both highlighted cluster and background.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
+#' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
+#' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -1914,6 +1932,7 @@ Cell_Highlight_Plot <- function(
   background_color = "lightgray",
   pt.size = NULL,
   aspect_ratio = NULL,
+  figure_plot = FALSE,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -1998,6 +2017,11 @@ Cell_Highlight_Plot <- function(
       cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
     }
     plot <- plot & theme(aspect.ratio = aspect_ratio)
+  }
+
+  # Figure plot
+  if (isTRUE(x = figure_plot)) {
+    plot <- Figure_Plot(plot = plot)
   }
 
   return(plot)

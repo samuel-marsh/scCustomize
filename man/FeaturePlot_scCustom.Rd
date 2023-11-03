@@ -18,6 +18,7 @@ FeaturePlot_scCustom(
   split.by = NULL,
   split_collect = NULL,
   aspect_ratio = NULL,
+  figure_plot = FALSE,
   num_columns = NULL,
   slot = deprecated(),
   layer = "data",
@@ -61,6 +62,9 @@ Default is TRUE if one value is provided to \code{features} otherwise is set to 
 
 \item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 Default is NULL.}
+
+\item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting
+axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
 
 \item{num_columns}{Number of columns in plot layout.}
 
