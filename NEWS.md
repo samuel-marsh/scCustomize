@@ -16,6 +16,7 @@
 - Added new parameters `plot_median` and `plot_boxplot` to `VlnPlot_scCustom` (and `VlnPlot_scCustom`-based plots; e.g., `QC_Plot_*` family) for added visualization.  
 - Added `QC_Histogram` to plot QC features (or any feature) using simple histogram.  
 - Added `FeatureScatter_scCustom` function to customize Seurat's `FeatureScatter` plots.  
+- Added `figure_plot` parameter to all 2D DR (t-SNE, UMAP, etc) based plots ([#127](https://github.com/samuel-marsh/scCustomize/issues/127)).  
 
   
 ## Changed  
