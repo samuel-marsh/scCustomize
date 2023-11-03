@@ -305,7 +305,13 @@ FeaturePlot_scCustom <- function(
 
   # Figure plot
   if (isTRUE(x = figure_plot)) {
-    plot <- Figure_Plot(plot = plot)
+    if (length(x = all_found_features) == 1) {
+      plot <- Figure_Plot(plot = plot)
+    } else {
+      plot <- lapply(1:length(x = all_found_features), function(j) {
+        fig_plot <- Figure_Plot(plot = plot[[j]])
+      })
+    }
   }
 
   return(plot)
