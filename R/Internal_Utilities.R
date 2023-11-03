@@ -983,6 +983,11 @@ symdiff <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### METRICS HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Read Gene Expression Statistics from 10X Cell Ranger Count
 #'
 #' Get data.frame with all metrics from the Cell Ranger `count` analysis (present in web_summary.html)
