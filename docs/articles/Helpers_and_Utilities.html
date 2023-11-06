@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -130,7 +130,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>General Helpers &amp; Utilities</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 06,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Helpers_and_Utilities.Rmd" class="external-link"><code>vignettes/articles/Helpers_and_Utilities.Rmd</code></a></small>
       <div class="hidden name"><code>Helpers_and_Utilities.Rmd</code></div>
@@ -153,7 +154,9 @@ common tasks in scRNA-seq analysis. Let’s load packages and raw data
 object for this tutorial.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
@@ -441,8 +444,15 @@ and capabilities as <code>Add_Mito_Ribo_Seurat</code></p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="add-cell-complexitynovelty-qc-metric">Add Cell Complexity/Novelty QC Metric<a class="anchor" aria-label="anchor" href="#add-cell-complexitynovelty-qc-metric"></a>
+<h3 id="add-cell-complexitynovelty-qc-metrics">Add Cell Complexity/Novelty QC Metrics<a class="anchor" aria-label="anchor" href="#add-cell-complexitynovelty-qc-metrics"></a>
 </h3>
+<p>In addition to metrics like number of features and UMIs it can often
+be helpful to analyze the complexity of expression within a single cell.
+scCustomize provides functions to add two of these metrics to meta
+data.</p>
+<div class="section level4">
+<h4 id="cell-complexity-log10nfeature-log10ncount">Cell Complexity (log10(nFeature) / log10(nCount))<a class="anchor" aria-label="anchor" href="#cell-complexity-log10nfeature-log10ncount"></a>
+</h4>
 <p>scCustomize contains easy shortcut function to add a measure of cell
 complexity/novelty that can sometimes be useful to filter low quality
 cells. The metric is calculated by calculating the result of
@@ -452,6 +462,38 @@ log10(nFeature) / log10(nCount).</p>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Complexity_Seurat.html">Add_Cell_Complexity_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
 <p><em>NOTE: There is analogous function for LIGER objects (see:
 <code><a href="../reference/Add_Cell_Complexity_LIGER.html">Add_Cell_Complexity_LIGER()</a></code>).</em></p>
+</div>
+<div class="section level4">
+<h4 id="add-top-percent-expression-qc-metric">Add Top Percent Expression QC Metric<a class="anchor" aria-label="anchor" href="#add-top-percent-expression-qc-metric"></a>
+</h4>
+<p>Additionally, (or alternatively), scCustomize contains another metric
+of complexity which is the top percent expression. The user supplies an
+integer value for <code>num_top_genes</code> (default is 50) which
+species the number of genes and the function returns percentage of
+counts occupied by top XX genes in each cell.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Top_Gene_Pct_Seurat.html">Add_Top_Gene_Pct_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, num_top_genes <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="add-all-cell-qc-metrics-with-single-function">Add All Cell QC Metrics with Single Function<a class="anchor" aria-label="anchor" href="#add-all-cell-qc-metrics-with-single-function"></a>
+</h3>
+<p>To simplify the process of adding cell QC metrics scCustomize
+contains a wrapper function which can be customized to add all or some
+of the available QC metrics. The default parameters of the function
+<code>Add_Cell_QC_Metrics</code> will add:</p>
+<ul>
+<li>Mitochondrial and Ribosomal Percentages (default and custom
+species).</li>
+<li>Cell Complexity (log10(nFeature) / log10(nCount).</li>
+<li>Top XX Gene Percentage.</li>
+<li>Percentage of counts for IEG (human and mouse only).</li>
+<li>OXPHOS, APOP, and DNA Repair pathways (supported species only).</li>
+<li>Cell Cycle Scoring (Human only).</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="meta-data">Meta Data<a class="anchor" aria-label="anchor" href="#meta-data"></a>
@@ -463,7 +505,7 @@ both within and outside of objects.</p>
 </h4>
 <p><code><a href="../reference/Fetch_Meta.html">Fetch_Meta()</a></code> functions as simple getter function to
 obtain meta data from object and return data.frame.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">meta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Fetch_Meta.html">Fetch_Meta</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">meta_data</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
@@ -508,10 +550,10 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample5
+sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -534,7 +576,7 @@ B
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -554,7 +596,7 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample3
+sample5
 </td>
 <td style="text-align:left;">
 Batch2
@@ -577,10 +619,10 @@ pbmc3k
 CD14+ Mono
 </td>
 <td style="text-align:left;">
-sample3
+sample2
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -623,7 +665,7 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample5
+sample4
 </td>
 <td style="text-align:left;">
 Batch2
@@ -646,10 +688,10 @@ pbmc3k
 CD8 T
 </td>
 <td style="text-align:left;">
-sample6
+sample4
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -669,7 +711,7 @@ pbmc3k
 CD8 T
 </td>
 <td style="text-align:left;">
-sample5
+sample4
 </td>
 <td style="text-align:left;">
 Batch1
@@ -692,10 +734,10 @@ pbmc3k
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-sample6
+sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -715,7 +757,7 @@ pbmc3k
 FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
-sample2
+sample6
 </td>
 <td style="text-align:left;">
 Batch1
@@ -730,7 +772,7 @@ Batch1
 <p>While cell-level meta data is helpful in some situations often all
 that is required is sample-level meta data. This can easily be extracted
 and filtered using <code><a href="../reference/Extract_Sample_Meta.html">Extract_Sample_Meta()</a></code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Sample_Meta.html">Extract_Sample_Meta</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, sample_name <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -764,7 +806,7 @@ B
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -775,13 +817,13 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-FCGR3A+ Mono
+Memory CD4 T
 </td>
 <td style="text-align:left;">
 sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -792,7 +834,7 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-Memory CD4 T
+NA
 </td>
 <td style="text-align:left;">
 sample3
@@ -832,7 +874,7 @@ Memory CD4 T
 sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -843,7 +885,7 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-CD8 T
+FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
 sample6
@@ -863,7 +905,7 @@ meaningful sample-level information (e.g., nFeature_RNA). However, you
 may want to remove other columns too. This can be achieved using either
 positive or negative selection using <code>variables_include</code> or
 <code>variables_exclude</code> parameters.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Sample_Meta.html">Extract_Sample_Meta</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, sample_name <span class="op">=</span> <span class="st">"sample_id"</span>, variables_exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nFeature_RNA"</span>,</span>
 <span>    <span class="st">"nCount_RNA"</span>, <span class="st">"seurat_annotations"</span>, <span class="st">"orig.ident"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -886,7 +928,7 @@ batch
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -897,7 +939,7 @@ Batch1
 sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -930,7 +972,7 @@ Batch2
 sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -954,7 +996,7 @@ Batch1
 can be valuable to get summary information for those variables. This can
 be achieved by merging outputs with <code>Median_Stats</code>
 function.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Sample_Meta.html">Extract_Sample_Meta</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, sample_name <span class="op">=</span> <span class="st">"sample_id"</span>, variables_exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nFeature_RNA"</span>,</span>
 <span>    <span class="st">"nCount_RNA"</span>, <span class="st">"seurat_annotations"</span>, <span class="st">"orig.ident"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -987,13 +1029,13 @@ Median_nFeature_RNA
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2213.0
+2258
 </td>
 <td style="text-align:right;">
-824.0
+829.0
 </td>
 </tr>
 <tr>
@@ -1004,13 +1046,13 @@ Batch1
 sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2130.5
+2226
 </td>
 <td style="text-align:right;">
-812.0
+815.0
 </td>
 </tr>
 <tr>
@@ -1024,10 +1066,10 @@ sample3
 Batch2
 </td>
 <td style="text-align:right;">
-2222.0
+2209
 </td>
 <td style="text-align:right;">
-829.0
+810.0
 </td>
 </tr>
 <tr>
@@ -1041,10 +1083,10 @@ sample4
 Batch2
 </td>
 <td style="text-align:right;">
-2268.0
+2137
 </td>
 <td style="text-align:right;">
-824.5
+807.0
 </td>
 </tr>
 <tr>
@@ -1055,13 +1097,13 @@ Batch2
 sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2172.0
+2151
 </td>
 <td style="text-align:right;">
-800.0
+816.0
 </td>
 </tr>
 <tr>
@@ -1075,10 +1117,10 @@ sample6
 Batch1
 </td>
 <td style="text-align:right;">
-2175.0
+2192
 </td>
 <td style="text-align:right;">
-808.0
+828.5
 </td>
 </tr>
 <tr>
@@ -1092,7 +1134,7 @@ Totals (All Cells)
 NA
 </td>
 <td style="text-align:right;">
-2196.0
+2196
 </td>
 <td style="text-align:right;">
 816.0
@@ -1121,7 +1163,7 @@ environment or a path to file to read.<br>
 information in Seurat object and sample-level meta data.</li>
 </ul>
 <p>This is example command:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Sample_Meta.html">Add_Sample_Meta</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, meta_data <span class="op">=</span> <span class="va">sample_meta</span>, join_by_seurat <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
 <span>    join_by_meta <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1156,7 +1198,7 @@ case was provided.</em></li>
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Example gene list with all examples (found genes, wrong case (lower) and misspelled (CD8A</span></span>
 <span><span class="co"># forgetting to un-shift when typing 8))</span></span>
 <span><span class="va">gene_input_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14"</span>, <span class="st">"CD3E"</span>, <span class="st">"Cd4"</span>, <span class="st">"CD*A"</span><span class="op">)</span></span>
@@ -1167,7 +1209,7 @@ case was provided.</em></li>
 <pre><code><span><span class="co">## Warning: NOTE: However, the following features were found: <span style="color: #00BB00;">CD4</span></span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please check intended case of features provided.</span></span></code></pre>
 <p>Now let’s look at the output:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes_present</span></span></code></pre></div>
 <pre><code><span><span class="co">## $found_features</span></span>
 <span><span class="co">## [1] "CD14" "CD3E"</span></span>
@@ -1207,7 +1249,7 @@ offline use <code>Gene_Present</code> does not include a check for
 updated gene symbols. If you’re dataset is from human cells/donors you
 can simply supply the not found features from <code>Gene_Present</code>
 to Seurat’s <code>UpdateSymbolList</code> function.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gene_input_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD14"</span>, <span class="st">"CD3E"</span>, <span class="st">"Cd4"</span>, <span class="st">"CD*A"</span>, <span class="st">"SEPT1"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">genes_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Gene_Present.html">Gene_Present</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pbmc</span>, gene_list <span class="op">=</span> <span class="va">gene_input_list</span><span class="op">)</span></span></code></pre></div>
@@ -1215,7 +1257,7 @@ to Seurat’s <code>UpdateSymbolList</code> function.</p>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">Cd4 and CD*A</span></span></span></code></pre>
 <pre><code><span><span class="co">## Warning: NOTE: However, the following features were found: <span style="color: #00BB00;">CD4</span></span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please check intended case of features provided.</span></span></code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">check_symbols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/UpdateSymbolList.html" class="external-link">UpdateSymbolList</a></span><span class="op">(</span>symbols <span class="op">=</span> <span class="va">genes_present</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: No updated symbols found</span></span></code></pre>
 </div>
@@ -1240,7 +1282,7 @@ scCustomize’s <code>Read_</code> data functions which automatically
 return named lists of matrices and the ability to specify sample
 <code>orig.ident</code> when creating Seurat objects. See <a href="https://samuel-marsh.github.io/scCustomize/articles/Read_and_Write_Functions.html">Read
 &amp; Write Vignette</a> for more info on the data import functions.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read in data</span></span>
 <span><span class="va">GEO_10X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Read10X_GEO.html">Read10X_GEO</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="st">"assets/GSE152183_RAW_Marsh/"</span><span class="op">)</span></span>
 <span></span>
@@ -1260,7 +1302,7 @@ Objects in order to run similar pipeline on all objects in loop.</p>
 scCustomize contains simple wrapper <code>Merge_Seurat_List</code> that
 uses <code><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">purrr::reduce()</a></code> to merge all objects in list into
 single combined object</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">list_of_objects</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">obj1</span>, <span class="va">obj2</span>, <span class="va">obj2</span>, <span class="va">...</span>, <span class="va">obj10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">merged_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Seurat_List.html">Merge_Seurat_List</a></span><span class="op">(</span>list_seurat <span class="op">=</span> <span class="va">list_of_objects</span><span class="op">)</span></span>
@@ -1279,7 +1321,7 @@ any extra information desired.<br>
 scCustomize contains two functions <code>Store_Misc_Info_Seurat</code>
 and a wrapper around that function <code>Store_Palette_Seurat</code> to
 make this process easy.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data can be vectors or data.frames</span></span>
 <span><span class="va">misc_info</span> <span class="op">&lt;-</span> <span class="st">"misc_vector_dataframe_list_etc"</span></span>
 <span></span>
@@ -1291,7 +1333,7 @@ make this process easy.</p>
 <p>If you are storing a list in the <code>@misc</code> slot there is
 additional parameter that dictates whether to store the information as a
 list or whether to store each entry in the list separately.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create list</span></span>
 <span><span class="va">misc_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"misc_item1"</span>, <span class="st">"misc_item2"</span>, <span class="va">etc</span><span class="op">)</span></span>
 <span></span>
@@ -1311,7 +1353,7 @@ palettes associated with clustering or subclustering.<br>
 To make it easier to remember function call in this situation
 scCustomize contains a wrapper function
 <code>Store_Palette_Seurat</code>.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data can be vectors or data.frames</span></span>
 <span><span class="va">annotated_color_palette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"color1"</span>, <span class="st">"color2"</span>, <span class="st">"color3"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
 <span></span>
@@ -1335,7 +1377,7 @@ process:</p>
 </h4>
 <p><code>Replace_Suffix</code> can be used on single matrix/data.frame
 or list of matrices/data.frames to modify to remove suffixes</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For single object</span></span>
 <span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Replace_Suffix.html">Replace_Suffix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_suffix <span class="op">=</span> <span class="st">"-1"</span>, new_suffix <span class="op">=</span> <span class="st">"-2"</span><span class="op">)</span></span>
 <span></span>
@@ -1360,7 +1402,7 @@ or list of matrices/data.frames to modify to remove suffixes</p>
 </h4>
 <p><code>Replace_Suffix</code> can also be used to strip suffixes from
 data</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For single object</span></span>
 <span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Replace_Suffix.html">Replace_Suffix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_suffix <span class="op">=</span> <span class="st">"-1"</span>, new_suffix <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1381,7 +1423,7 @@ delimiter.</li>
 </ul>
 <p>These functions all take identical inputs and can be applied to
 either single matrix/data.frames or lists of matrices/data.frames.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Change_Delim_Prefix.html">Change_Delim_Prefix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_delim <span class="op">=</span> <span class="st">"."</span>, new_delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Change_Delim_Suffix.html">Change_Delim_Suffix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_delim <span class="op">=</span> <span class="st">"."</span>, new_delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>

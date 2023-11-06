@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -130,7 +130,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #2: QC Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 06,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/QC_Plots.Rmd" class="external-link"><code>vignettes/articles/QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>QC_Plots.Rmd</code></div>
@@ -146,7 +147,7 @@ p.caption {
 }
 </style>
 <div class="section level2">
-<h2 id="qc-plots">QC Plots<a class="anchor" aria-label="anchor" href="#qc-plots"></a>
+<h2 id="qc-metrics-plots">QC Metrics &amp; Plots<a class="anchor" aria-label="anchor" href="#qc-metrics-plots"></a>
 </h2>
 <p>One of the first steps in all scRNA-seq analyses is performing a
 number of QC checks and plots so that data can be appropriately
@@ -155,7 +156,9 @@ quickly and easily generate some of the most relevant QC plots.</p>
 <p>For this tutorial, I will be utilizing HCA bone marrow cell data from
 the SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
@@ -170,6 +173,10 @@ the SeuratData package.</p>
 <span></span>
 <span><span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM5"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span></span>
 <span>    <span class="st">"MantonBM6"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM7"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM8"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 2"</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="adding">Adding<a class="anchor" aria-label="anchor" href="#adding"></a>
+</h3>
+</div>
 <div class="section level3">
 <h3 id="add-mitochondrial-and-ribosomal-gene-percentages">Add Mitochondrial and Ribosomal Gene Percentages<a class="anchor" aria-label="anchor" href="#add-mitochondrial-and-ribosomal-gene-percentages"></a>
 </h3>
@@ -385,8 +392,15 @@ object using ensembl IDs as features names then simply add
 </div>
 </div>
 <div class="section level3">
-<h3 id="add-cell-complexitynovelty-qc-metric">Add Cell Complexity/Novelty QC Metric<a class="anchor" aria-label="anchor" href="#add-cell-complexitynovelty-qc-metric"></a>
+<h3 id="add-cell-complexitynovelty-qc-metrics">Add Cell Complexity/Novelty QC Metrics<a class="anchor" aria-label="anchor" href="#add-cell-complexitynovelty-qc-metrics"></a>
 </h3>
+<p>In addition to metrics like number of features and UMIs it can often
+be helpful to analyze the complexity of expression within a single cell.
+scCustomize provides functions to add two of these metrics to meta
+data.</p>
+<div class="section level4">
+<h4 id="cell-complexity-log10nfeature-log10ncount">Cell Complexity (log10(nFeature) / log10(nCount))<a class="anchor" aria-label="anchor" href="#cell-complexity-log10nfeature-log10ncount"></a>
+</h4>
 <p>scCustomize contains easy shortcut function to add a measure of cell
 complexity/novelty that can sometimes be useful to filter low quality
 cells. The metric is calculated by calculating the result of
@@ -397,6 +411,67 @@ log10(nFeature) / log10(nCount).</p>
 <p><em>NOTE: There is analogous function for LIGER objects (see:
 <code>Add_Cell_Complexity_LIGER</code>) but QC plotting functions
 currently only support Seurat objects.</em></p>
+</div>
+<div class="section level4">
+<h4 id="add-top-percent-expression-qc-metric">Add Top Percent Expression QC Metric<a class="anchor" aria-label="anchor" href="#add-top-percent-expression-qc-metric"></a>
+</h4>
+<p>Additionally, (or alternatively), scCustomize contains another metric
+of complexity which is the top percent expression. The user supplies an
+integer value for <code>num_top_genes</code> (default is 50) which
+species the number of genes and the function returns percentage of
+counts occupied by top XX genes in each cell.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Top_Gene_Pct_Seurat.html">Add_Top_Gene_Pct_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, num_top_genes <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="add-qc-metrics-from-pathway-gene-lists">Add QC Metrics from Pathway Gene Lists<a class="anchor" aria-label="anchor" href="#add-qc-metrics-from-pathway-gene-lists"></a>
+</h3>
+<p>In addition to those standard QC metrics it can be helpful when using
+network based QC analysis to add the percent of expression of genes
+related to common pathways. This function and the network-based analysis
+is further extension of the analysis/QC from our recent publication:
+Gazestani &amp; Kamath et al., 2023 (<a href="https://doi.org/10.1016/j.cell.2023.08.005" class="external-link"><em>Cell</em></a>).</p>
+<p>In scCustomize the percent of gene expression from the following gene
+lists can be added as part of the <code>Add_Cell_QC_Metrics</code> (see
+next section for more details):<br>
+* Immediate Early Genes (for human and mouse only)<br>
+- Can be used in part to examine potential impact of dissociation or
+post-mortem signatures (<a href="https://doi.org/10.1038/s41593-022-01022-8" class="external-link"><em>Marsh et al.,
+2022</em></a>) (gene list from <a href="https://doi.org/10.1016/j.neuron.2017.09.026" class="external-link"><em>Wu et al.,
+2017</em></a>)<br>
+* Oxidative Phosphorylation, Apoptosis, &amp; DNA Repair (all default
+species except Marmoset) - Species specific gene lists from <a href="https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H" class="external-link">MSigDB
+Hallmark Gene Sets</a></p>
+</div>
+<div class="section level3">
+<h3 id="add-all-cell-qc-metrics-with-single-function">Add All Cell QC Metrics with Single Function<a class="anchor" aria-label="anchor" href="#add-all-cell-qc-metrics-with-single-function"></a>
+</h3>
+<p>To simplify the process of adding cell QC metrics scCustomize
+contains a wrapper function which can be customized to add all or some
+of the available QC metrics. The default parameters of the function
+<code>Add_Cell_QC_Metrics</code> will add:</p>
+<ul>
+<li>Mitochondrial and Ribosomal Percentages (default and custom
+species).</li>
+<li>Cell Complexity (log10(nFeature) / log10(nCount).</li>
+<li>Top XX Gene Percentage.</li>
+<li>Percentage of counts for IEG (human and mouse only).</li>
+<li>OXPHOS, APOP, and DNA Repair pathways (supported species only).</li>
+<li>Cell Cycle Scoring (Human only).</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="customizing-metrics">Customizing metrics<a class="anchor" aria-label="anchor" href="#customizing-metrics"></a>
+</h4>
+<p>By changing the function parameters you can add a subset of available
+QC metrics. For instance:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"human"</span>, add_mito_ribo <span class="op">=</span> <span class="cn">TRUE</span>, add_complexity <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    add_top_pct <span class="op">=</span> <span class="cn">TRUE</span>, add_IEG <span class="op">=</span> <span class="cn">TRUE</span>, add_MSigDB <span class="op">=</span> <span class="cn">FALSE</span>, add_cell_cycle <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="plotting-qc-metrics">Plotting QC Metrics<a class="anchor" aria-label="anchor" href="#plotting-qc-metrics"></a>
@@ -410,11 +485,13 @@ Seurat function that is being used under the hood.</em></p>
 <h3 id="vlnplot-based-qc-plots">
 <code>VlnPlot</code>-Based QC Plots<a class="anchor" aria-label="anchor" href="#vlnplot-based-qc-plots"></a>
 </h3>
-<p>scCustomize contains 4 functions which wrap
-<code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot()</a></code>.</p>
+<p>scCustomize contains a number of shortcut/wrapper functions for QC
+plotting, which are wrappers around
+<code><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">Seurat::VlnPlot()</a></code>/<code>VlnPlot_scCustom</code>.</p>
 <ul>
 <li>
-<code><a href="../reference/QC_Plots_Genes.html">QC_Plots_Genes()</a></code> Plots genes per cell/nucleus.</li>
+<code><a href="../reference/QC_Plots_Genes.html">QC_Plots_Genes()</a></code> Plots genes/features per
+cell/nucleus.</li>
 <li>
 <code><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs()</a></code> Plots UMIs per cell/nucleus.<br>
 </li>
@@ -440,15 +517,15 @@ named feature in object@meta.data slot.</li>
 <li>Added high/low cutoff parameters to allow for easy visualization of
 potential cutoff thresholds.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># All functions contain</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_Genes.html">QC_Plots_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">800</span>, high_cutoff <span class="op">=</span> <span class="fl">5500</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_Genes.html">QC_Plots_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">600</span>, high_cutoff <span class="op">=</span> <span class="fl">5500</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span><span class="op">)</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_Mito.html">QC_Plots_Mito</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, high_cutoff <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_Complexity.html">QC_Plots_Complexity</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, high_cutoff <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-9-1.png" width="1248"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-13-1.png" width="1248"></p>
 <div class="section level4">
 <h4 id="additional-parameters">Additional parameters<a class="anchor" aria-label="anchor" href="#additional-parameters"></a>
 </h4>
@@ -471,22 +548,25 @@ scale.<br>
 </li>
 <li>
 <code>plot_median</code> &amp; <code>median_size</code>: Plot a line
-at the median of each x-axis identity.</li>
+at the median of each x-axis identity.<br>
+</li>
+<li>
+<code>plot_boxplot</code>: Plot boxplot on top of the violin.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>    y_axis_log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="QC_Plots_files/figure-html/unnamed-chunk-10-1.png" alt="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*" width="1248"><p class="caption">
+<img src="QC_Plots_files/figure-html/unnamed-chunk-14-1.png" alt="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*" width="1248"><p class="caption">
 <em>Setting <code>y_axis_log</code> can be very helpful for initial
 plots where outliers skew the visualization of the majority of the data
 without excluding data by setting y-axis limit.</em>
 </p>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>    plot_median <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -494,9 +574,22 @@ without excluding data by setting y-axis limit.</em>
 <span></span>
 <span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="QC_Plots_files/figure-html/unnamed-chunk-11-1.png" alt="*Plotting median values by setting the `plot_median = TRUE` parameter.*" width="1248"><p class="caption">
+<img src="QC_Plots_files/figure-html/unnamed-chunk-15-1.png" alt="*Plotting median values by setting the `plot_median = TRUE` parameter.*" width="1248"><p class="caption">
 <em>Plotting median values by setting the
 <code>plot_median = TRUE</code> parameter.</em>
+</p>
+</div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    plot_boxplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_UMIs.html">QC_Plots_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff <span class="op">=</span> <span class="fl">1200</span>, high_cutoff <span class="op">=</span> <span class="fl">45000</span>, pt.size <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    y_axis_log <span class="op">=</span> <span class="cn">TRUE</span>, plot_boxplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="QC_Plots_files/figure-html/unnamed-chunk-16-1.png" alt="*Plotting boxplot by setting the `plot_boxplot = TRUE` parameter.*" width="1248"><p class="caption">
+<em>Plotting boxplot by setting the <code>plot_boxplot = TRUE</code>
+parameter.</em>
 </p>
 </div>
 </div>
@@ -506,10 +599,10 @@ without excluding data by setting y-axis limit.</em>
 <p>As a shortcut you can return single patchwork plot of the 3 main QC
 Plots (Genes, UMIs, %Mito) by using single function,
 <code><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln()</a></code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, feature_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">800</span>, <span class="fl">5500</span><span class="op">)</span>, UMI_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1200</span>,</span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, feature_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">600</span>, <span class="fl">5500</span><span class="op">)</span>, UMI_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1200</span>,</span>
 <span>    <span class="fl">45000</span><span class="op">)</span>, mito_cutoffs <span class="op">=</span> <span class="fl">20</span>, pt.size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-12-1.png" width="1248"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-17-1.png" width="1248"></p>
 </div>
 </div>
 <div class="section level3">
@@ -547,13 +640,13 @@ to VlnPlot based QC Plots above)</li>
 dataset correlation when using <code>QC_Plot_UMIvsGene</code> (based on
 values provided to high and low cutoff parameters)</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># All functions contain</span></span>
-<span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">800</span>, high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, low_cutoff_UMI <span class="op">=</span> <span class="fl">500</span>,</span>
+<span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">600</span>, high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, low_cutoff_UMI <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>    high_cutoff_UMI <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/QC_Plot_GenevsFeature.html">QC_Plot_GenevsFeature</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, feature1 <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">800</span>,</span>
+<span><span class="fu"><a href="../reference/QC_Plot_GenevsFeature.html">QC_Plot_GenevsFeature</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, feature1 <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>    high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, high_cutoff_feature <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-14-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-19-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="color-data-by-continuous-meta-data-variable">Color data by continuous meta data variable<a class="anchor" aria-label="anchor" href="#color-data-by-continuous-meta-data-variable"></a>
@@ -562,13 +655,13 @@ values provided to high and low cutoff parameters)</li>
 by continuous meta data variables.<br>
 This can be used to plot % of mito reads in addition to UMI vs. Gene
 comparisons</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">800</span>,</span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>    high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, high_cutoff_UMI <span class="op">=</span> <span class="fl">45000</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">800</span>,</span>
+<span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>    high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, high_cutoff_UMI <span class="op">=</span> <span class="fl">45000</span>, meta_gradient_low_cutoff <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="QC_Plots_files/figure-html/unnamed-chunk-16-1.png" alt="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*" width="1248"><p class="caption">
+<img src="QC_Plots_files/figure-html/unnamed-chunk-21-1.png" alt="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*" width="1248"><p class="caption">
 <em><code><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene()</a></code> when using
 <code>meta_gradient_name</code> outputs plot colored by meta data
 variable (left) to view only points above potential cutoff
@@ -584,16 +677,34 @@ plotting (right).</em>
 by discrete grouping variable and by continuous variable without writing
 function twice you can use <code>combination = TRUE</code> and plot
 output will contain both plots.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">800</span>,</span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, meta_gradient_name <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>    high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, high_cutoff_UMI <span class="op">=</span> <span class="fl">45000</span>, meta_gradient_low_cutoff <span class="op">=</span> <span class="fl">20</span>, combination <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="QC_Plots_files/figure-html/unnamed-chunk-17-1.png" alt="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*" width="1248"><p class="caption">
+<img src="QC_Plots_files/figure-html/unnamed-chunk-22-1.png" alt="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*" width="1248"><p class="caption">
 <em><code><a href="../reference/QC_Plot_UMIvsGene.html">QC_Plot_UMIvsGene()</a></code> when using
 <code>combination = TRUE</code> will output both the Gene x UMI by
 active identity and with meta data gradient coloring.</em>
 </p>
 </div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="histogram-based-qc-plots">Histogram-Based QC Plots<a class="anchor" aria-label="anchor" href="#histogram-based-qc-plots"></a>
+</h3>
+<p>Finally, scCustomize contains a function to plot QC metrics as
+histogram instead of violin for visualization of the distribution of
+feature.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Histogram.html">QC_Histogram</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, features <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Histogram.html">QC_Histogram</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, features <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff <span class="op">=</span> <span class="fl">15</span>, split.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="QC_Plots_files/figure-html/unnamed-chunk-24-1.png" alt="*`QC_Histogram` also supports splitting plots by meta.data variables*" width="1248"><p class="caption">
+<em><code>QC_Histogram</code> also supports splitting plots by meta.data
+variables</em>
+</p>
 </div>
 </div>
 <div class="section level3">
@@ -608,7 +719,7 @@ basis.</p>
 <p>scCustomize contains function <code>Median_Stats</code> to quickly
 calculate the medians for basic QC stats (Genes/, UMIs/, %Mito/Cell,
 etc) and return a data.frame.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -629,6 +740,9 @@ Median_percent_ribo
 </th>
 <th style="text-align:right;">
 Median_percent_mito_ribo
+</th>
+<th style="text-align:right;">
+Median_log10GenesPerUMI
 </th>
 </tr></thead>
 <tbody>
@@ -651,6 +765,9 @@ MantonBM1
 <td style="text-align:right;">
 46.43790
 </td>
+<td style="text-align:right;">
+0.8506316
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -670,6 +787,9 @@ MantonBM2
 </td>
 <td style="text-align:right;">
 46.87269
+</td>
+<td style="text-align:right;">
+0.8505270
 </td>
 </tr>
 <tr>
@@ -691,6 +811,9 @@ MantonBM3
 <td style="text-align:right;">
 44.10722
 </td>
+<td style="text-align:right;">
+0.8483425
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -710,6 +833,9 @@ MantonBM4
 </td>
 <td style="text-align:right;">
 37.96850
+</td>
+<td style="text-align:right;">
+0.8645139
 </td>
 </tr>
 <tr>
@@ -731,6 +857,9 @@ MantonBM5
 <td style="text-align:right;">
 45.33713
 </td>
+<td style="text-align:right;">
+0.8360196
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -750,6 +879,9 @@ MantonBM6
 </td>
 <td style="text-align:right;">
 46.70119
+</td>
+<td style="text-align:right;">
+0.8522162
 </td>
 </tr>
 <tr>
@@ -771,6 +903,9 @@ MantonBM7
 <td style="text-align:right;">
 48.20765
 </td>
+<td style="text-align:right;">
+0.8477172
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -790,6 +925,9 @@ MantonBM8
 </td>
 <td style="text-align:right;">
 48.96420
+</td>
+<td style="text-align:right;">
+0.8406128
 </td>
 </tr>
 <tr>
@@ -811,13 +949,16 @@ Totals (All Cells)
 <td style="text-align:right;">
 45.40989
 </td>
+<td style="text-align:right;">
+0.8494067
+</td>
 </tr>
 </tbody>
 </table>
 <p>The <code>Median_Stats</code> function has some column names stored
 by default but will also calculate medians for additional meta.data
 columns using the optional <code>median_var</code> parameter</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"meta_data_column_name"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -844,12 +985,12 @@ meta.data slot.</em></li>
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_UMIs.html">Plot_Median_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Mito.html">Plot_Median_Mito</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, median_var <span class="op">=</span> <span class="st">"percent_ribo"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-22-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-29-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="plot-number-of-cellsnuclei-per-sample">Plot Number of Cells/Nuclei per Sample<a class="anchor" aria-label="anchor" href="#plot-number-of-cellsnuclei-per-sample"></a>
@@ -859,7 +1000,7 @@ cells or nuclei per sample.</p>
 <p>Since the HCA Bone Marrow dataset has exactly the same number of
 cells per sample we will use the microglia object from the Analysis
 Plots vignette.</p>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-24-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-31-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

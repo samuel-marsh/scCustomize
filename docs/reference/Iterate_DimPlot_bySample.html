@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -112,6 +112,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Iterate_DimPlot_bySample</span><span class="op">(</span></span>
 <span>  <span class="va">seurat_object</span>,</span>
+<span>  sample_column <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -130,6 +131,10 @@
     <h2>Arguments</h2>
     <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
+
+
+<dt>sample_column</dt>
+<dd><p>name of meta.data column containing sample names/ids (default is "orig.ident").</p></dd>
 
 
 <dt>file_path</dt>

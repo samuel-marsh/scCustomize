@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -131,7 +131,8 @@
       <h1 data-toc-skip>Marker Identification &amp; Cluster Annotation
 Helpers</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 06,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Markers_and_Cluster_Annotation.Rmd" class="external-link"><code>vignettes/articles/Markers_and_Cluster_Annotation.Rmd</code></a></small>
       <div class="hidden name"><code>Markers_and_Cluster_Annotation.Rmd</code></div>
@@ -154,7 +155,9 @@ identification of marker genes and annotation of clusters. Load packages
 &amp; Data</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
@@ -227,25 +230,25 @@ gene
 1
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.330040
+7.115580
 </td>
 <td style="text-align:right;">
-0.436
+0.016
 </td>
 <td style="text-align:right;">
-0.110
+0.000
 </td>
 <td style="text-align:right;">
-0
+0.0004033
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-CCR7
+GTSCR1
 </td>
 </tr>
 <tr>
@@ -253,25 +256,25 @@ CCR7
 2
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.101679
+5.853999
 </td>
 <td style="text-align:right;">
-0.245
+0.022
 </td>
 <td style="text-align:right;">
-0.084
+0.001
 </td>
 <td style="text-align:right;">
-0
+0.0000122
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LDLRAP1
+REG4
 </td>
 </tr>
 <tr>
@@ -279,25 +282,25 @@ LDLRAP1
 3
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.053259
+4.791871
 </td>
 <td style="text-align:right;">
-0.901
+0.034
 </td>
 <td style="text-align:right;">
-0.594
+0.003
 </td>
 <td style="text-align:right;">
-0
+0.0000001
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LDHB
+NOG
 </td>
 </tr>
 <tr>
@@ -305,25 +308,25 @@ LDHB
 4
 </td>
 <td style="text-align:right;">
-0
+8.71e-05
 </td>
 <td style="text-align:right;">
-1.052644
+4.425698
 </td>
 <td style="text-align:right;">
-0.336
+0.010
 </td>
 <td style="text-align:right;">
-0.104
+0.001
 </td>
 <td style="text-align:right;">
-0
+1.0000000
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LEF1
+ST6GALNAC1
 </td>
 </tr>
 <tr>
@@ -331,25 +334,25 @@ LEF1
 5
 </td>
 <td style="text-align:right;">
-0
+8.67e-05
 </td>
 <td style="text-align:right;">
-1.027161
+4.423395
 </td>
 <td style="text-align:right;">
-0.331
+0.010
 </td>
 <td style="text-align:right;">
-0.110
+0.001
 </td>
 <td style="text-align:right;">
-0
+1.0000000
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-PRKCQ-AS1
+AXIN2
 </td>
 </tr>
 </tbody>
@@ -410,28 +413,28 @@ pct_diff
 1
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.330040
+7.115580
 </td>
 <td style="text-align:right;">
-0.436
+0.016
 </td>
 <td style="text-align:right;">
-0.110
+0.000
 </td>
 <td style="text-align:right;">
-0
+0.0004033
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-CCR7
+GTSCR1
 </td>
 <td style="text-align:right;">
-0.326
+0.016
 </td>
 </tr>
 <tr>
@@ -439,28 +442,28 @@ CCR7
 2
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.101679
+5.853999
 </td>
 <td style="text-align:right;">
-0.245
+0.022
 </td>
 <td style="text-align:right;">
-0.084
+0.001
 </td>
 <td style="text-align:right;">
-0
+0.0000122
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LDLRAP1
+REG4
 </td>
 <td style="text-align:right;">
-0.161
+0.021
 </td>
 </tr>
 <tr>
@@ -468,28 +471,28 @@ LDLRAP1
 3
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.053259
+4.791871
 </td>
 <td style="text-align:right;">
-0.901
+0.034
 </td>
 <td style="text-align:right;">
-0.594
+0.003
 </td>
 <td style="text-align:right;">
-0
+0.0000001
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LDHB
+NOG
 </td>
 <td style="text-align:right;">
-0.307
+0.031
 </td>
 </tr>
 <tr>
@@ -497,28 +500,28 @@ LDHB
 4
 </td>
 <td style="text-align:right;">
-0
+8.71e-05
 </td>
 <td style="text-align:right;">
-1.052644
+4.425698
 </td>
 <td style="text-align:right;">
-0.336
+0.010
 </td>
 <td style="text-align:right;">
-0.104
+0.001
 </td>
 <td style="text-align:right;">
-0
+1.0000000
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LEF1
+ST6GALNAC1
 </td>
 <td style="text-align:right;">
-0.232
+0.009
 </td>
 </tr>
 <tr>
@@ -526,28 +529,28 @@ LEF1
 5
 </td>
 <td style="text-align:right;">
-0
+8.67e-05
 </td>
 <td style="text-align:right;">
-1.027161
+4.423395
 </td>
 <td style="text-align:right;">
-0.331
+0.010
 </td>
 <td style="text-align:right;">
-0.110
+0.001
 </td>
 <td style="text-align:right;">
-0
+1.0000000
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-PRKCQ-AS1
+AXIN2
 </td>
 <td style="text-align:right;">
-0.221
+0.009
 </td>
 </tr>
 </tbody>
@@ -586,10 +589,10 @@ option to return either a vector of genes or a filtered data.frame.</p>
 <span><span class="co"># with)</span></span>
 <span><span class="va">top_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">5</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">top_5</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T  Naive CD4 T Memory CD4 T </span></span>
-<span><span class="co">##       "CCR7"    "LDLRAP1"       "LDHB"       "LEF1"  "PRKCQ-AS1"        "LTB" </span></span>
-<span><span class="co">## Memory CD4 T Memory CD4 T Memory CD4 T Memory CD4 T </span></span>
-<span><span class="co">##       "AQP3"        "CD2"       "IL32"       "IL7R"</span></span></code></pre>
+<pre><code><span><span class="co">##   Naive CD4 T   Naive CD4 T   Naive CD4 T   Naive CD4 T   Naive CD4 T </span></span>
+<span><span class="co">##      "GTSCR1"        "REG4"         "NOG"  "ST6GALNAC1"       "AXIN2" </span></span>
+<span><span class="co">##  Memory CD4 T  Memory CD4 T  Memory CD4 T  Memory CD4 T  Memory CD4 T </span></span>
+<span><span class="co">##     "HSD11B1" "RP11-90D4.3"       "RFPL2"       "CCL27"       "CCR10"</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="return-data-frame-optional">Return data.frame (Optional)<a class="anchor" aria-label="anchor" href="#return-data-frame-optional"></a>
@@ -631,25 +634,25 @@ gene
 1
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.330040
+7.115580
 </td>
 <td style="text-align:right;">
-0.436
+0.016
 </td>
 <td style="text-align:right;">
-0.110
+0.000
 </td>
 <td style="text-align:right;">
-0
+0.0004033
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-CCR7
+GTSCR1
 </td>
 </tr>
 <tr>
@@ -657,25 +660,25 @@ CCR7
 2
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.101679
+5.853999
 </td>
 <td style="text-align:right;">
-0.245
+0.022
 </td>
 <td style="text-align:right;">
-0.084
+0.001
 </td>
 <td style="text-align:right;">
-0
+0.0000122
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LDLRAP1
+REG4
 </td>
 </tr>
 <tr>
@@ -683,25 +686,25 @@ LDLRAP1
 3
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.053259
+4.791871
 </td>
 <td style="text-align:right;">
-0.901
+0.034
 </td>
 <td style="text-align:right;">
-0.594
+0.003
 </td>
 <td style="text-align:right;">
-0
+0.0000001
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LDHB
+NOG
 </td>
 </tr>
 <tr>
@@ -709,25 +712,25 @@ LDHB
 4
 </td>
 <td style="text-align:right;">
-0
+8.71e-05
 </td>
 <td style="text-align:right;">
-1.052644
+4.425698
 </td>
 <td style="text-align:right;">
-0.336
+0.010
 </td>
 <td style="text-align:right;">
-0.104
+0.001
 </td>
 <td style="text-align:right;">
-0
+1.0000000
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-LEF1
+ST6GALNAC1
 </td>
 </tr>
 <tr>
@@ -735,155 +738,155 @@ LEF1
 5
 </td>
 <td style="text-align:right;">
-0
+8.67e-05
 </td>
 <td style="text-align:right;">
-1.027161
+4.423395
 </td>
 <td style="text-align:right;">
-0.331
+0.010
 </td>
 <td style="text-align:right;">
-0.110
+0.001
 </td>
 <td style="text-align:right;">
-0
+1.0000000
 </td>
 <td style="text-align:left;">
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-PRKCQ-AS1
+AXIN2
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-948
+2584
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.287053
+7.049508
 </td>
 <td style="text-align:right;">
-0.981
+0.017
 </td>
 <td style="text-align:right;">
-0.642
+0.000
 </td>
 <td style="text-align:right;">
-0
+0.0000302
 </td>
 <td style="text-align:left;">
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-LTB
+HSD11B1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-949
+2585
 </td>
 <td style="text-align:right;">
-0
+2.30e-06
 </td>
 <td style="text-align:right;">
-1.238703
+6.574363
 </td>
 <td style="text-align:right;">
-0.422
+0.010
 </td>
 <td style="text-align:right;">
-0.110
+0.000
 </td>
 <td style="text-align:right;">
-0
+0.0313519
 </td>
 <td style="text-align:left;">
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-AQP3
+RP11-90D4.3
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-950
+2586
 </td>
 <td style="text-align:right;">
-0
+3.30e-05
 </td>
 <td style="text-align:right;">
-1.234832
+5.049954
 </td>
 <td style="text-align:right;">
-0.652
+0.012
 </td>
 <td style="text-align:right;">
-0.244
+0.001
 </td>
 <td style="text-align:right;">
-0
+0.4521838
 </td>
 <td style="text-align:left;">
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-CD2
+RFPL2
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-951
+2587
 </td>
 <td style="text-align:right;">
-0
+3.78e-05
 </td>
 <td style="text-align:right;">
-1.208094
+4.002013
 </td>
 <td style="text-align:right;">
-0.948
+0.010
 </td>
 <td style="text-align:right;">
-0.464
+0.000
 </td>
 <td style="text-align:right;">
-0
+0.5180331
 </td>
 <td style="text-align:left;">
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-IL32
+CCL27
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-952
+2588
 </td>
 <td style="text-align:right;">
-0
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.175375
+3.725109
 </td>
 <td style="text-align:right;">
-0.747
+0.039
 </td>
 <td style="text-align:right;">
-0.325
+0.004
 </td>
 <td style="text-align:right;">
-0
+0.0000000
 </td>
 <td style="text-align:left;">
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-IL7R
+CCR10
 </td>
 </tr>
 </tbody>
@@ -924,7 +927,7 @@ of features to plotting function like <code><a href="https://satijalab.org/seura
 <span>    named_vector <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">top_5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+<pre><code><span><span class="co">## [1] FALSE</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Set `make_unique = TRUE`</span></span>
 <span><span class="va">top_5_unique</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">5</span>, rank_by <span class="op">=</span> <span class="st">"avg_log2FC"</span>,</span>

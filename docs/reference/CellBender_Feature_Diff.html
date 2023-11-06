@@ -18,7 +18,7 @@ per feature."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -112,7 +112,13 @@ per feature.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">CellBender_Feature_Diff</span><span class="op">(</span><span class="va">seurat_object</span>, <span class="va">raw_assay</span>, <span class="va">cell_bender_assay</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">CellBender_Feature_Diff</span><span class="op">(</span></span>
+<span>  seurat_object <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raw_assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cell_bender_assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raw_mat <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cell_bender_mat <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -127,6 +133,14 @@ per feature.</p>
 
 <dt>cell_bender_assay</dt>
 <dd><p>Name of the assay containing the CellBender count data.</p></dd>
+
+
+<dt>raw_mat</dt>
+<dd><p>Name of raw count matrix in environment if not using Seurat object.</p></dd>
+
+
+<dt>cell_bender_mat</dt>
+<dd><p>Name of CellBender count matrix in environment if not using Seurat object.</p></dd>
 
 </dl></div>
     <div id="value">

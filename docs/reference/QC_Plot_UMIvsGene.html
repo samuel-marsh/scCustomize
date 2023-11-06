@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -125,6 +125,7 @@
 <span>  meta_gradient_low_cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cells <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  combination <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ident_legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -197,6 +198,11 @@ below this value will be plotted using <code>meta_gradient_na_color</code>.</p><
 <dt>combination</dt>
 <dd><p>logical (default FALSE).  Whether or not to return a plot layout with both the
 plot colored by identity and the meta data gradient plot.</p></dd>
+
+
+<dt>ident_legend</dt>
+<dd><p>logical, whether to plot the legend containing identities (left plot) when
+<code>combination = TRUE</code>.  Default is TRUE.</p></dd>
 
 
 <dt>pt.size</dt>

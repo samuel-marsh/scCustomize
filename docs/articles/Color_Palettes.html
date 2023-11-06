@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Customized Color Palettes &amp; Themes</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 06,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Color_Palettes.Rmd" class="external-link"><code>vignettes/articles/Color_Palettes.Rmd</code></a></small>
       <div class="hidden name"><code>Color_Palettes.Rmd</code></div>
@@ -157,7 +158,9 @@ access to color palettes and themes that are frequently
 used.</strong></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
@@ -211,6 +214,8 @@ sets a series of defaults for plots with discrete palettes using
 <li>If only <em>two identities</em> are being plotted will use:
 <code><a href="../reference/NavyAndOrange.html">NavyAndOrange()</a></code>
 </li>
+<li>If between 2 and 8 identities are being plotted will use
+<code>ColorBlind_Pal</code>.</li>
 <li>If greater than 2 identities but less than or equal to 36 will use:
 <code>DiscretePalette_scCustomize(num_colors = 36, palette = "polychrome")</code>
 </li>
@@ -218,7 +223,7 @@ sets a series of defaults for plots with discrete palettes using
 <code>DiscretePalette_scCustomize(num_colors = *Number of identities*, palette = "varibow", shuffle_pal = TRUE)</code>
 </li>
 </ul>
-<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-4.png" width="1056"></p>
+<p><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-1.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-2.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-3.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-4.png" width="1056"><img src="Color_Palettes_files/figure-html/unnamed-chunk-6-5.png" width="1056"></p>
 </div>
 </div>
 <div class="section level2">

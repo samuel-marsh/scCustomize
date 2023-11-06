@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -113,6 +113,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DotPlot_scCustom</span><span class="op">(</span></span>
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">features</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,</span>
 <span>  remove_axis_titles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  x_lab_rotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -131,6 +132,11 @@
 
 <dt>features</dt>
 <dd><p>Features to plot.</p></dd>
+
+
+<dt>group.by</dt>
+<dd><p>Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+default is the current active.ident of the object.</p></dd>
 
 
 <dt>colors_use</dt>

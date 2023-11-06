@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.9.9041</span>
       </span>
     </div>
 
@@ -130,7 +130,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #3: Sequencing QC Plots/Analysis</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 06,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Sequencing_QC_Plots.Rmd" class="external-link"><code>vignettes/articles/Sequencing_QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>Sequencing_QC_Plots.Rmd</code></div>
@@ -156,18 +157,24 @@ sequencing differences as opposed to biological differences.</p>
 from my own experience but I will walk through process for using your
 own data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="loading-data">Loading Data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
 </h3>
-<p>Before we can plot these metrics we first need to import raw data.
-### Accepted Data Types<br>
-These functions currently only work with data from 10X Genomics
+<p>Before we can plot these metrics we first need to import raw
+data.</p>
+<div class="section level4">
+<h4 id="accepted-data-types">Accepted Data Types<a class="anchor" aria-label="anchor" href="#accepted-data-types"></a>
+</h4>
+<p>These functions currently only work with data from 10X Genomics
 processed via Cell Ranger. If there is interest in adapting to other
 platforms I’d be happy to entertain PRs.</p>
+</div>
 <div class="section level4">
 <h4 id="data-location">Data Location<a class="anchor" aria-label="anchor" href="#data-location"></a>
 </h4>
@@ -192,6 +199,15 @@ displayed in the html summary. See abbreviated example below.</p>
 the default 10X path be sure to specify the <code>secondary_path</code>
 param and set <code>default_10X = FALSE</code> when importing
 data.</em></p>
+</div>
+<div class="section level4">
+<h4 id="support-for-cell-ranger-multi-pipeline">Support for Cell Ranger <code>multi</code> pipeline<a class="anchor" aria-label="anchor" href="#support-for-cell-ranger-multi-pipeline"></a>
+</h4>
+<p><code>Read_Metrics_10X</code> includes support for data processed
+using Cell Ranger <code>multi</code> pipeline by setting the parameter
+<code>cellranger_multi = TRUE</code>. The function will automatically
+alter it’s default secondary path value and will return both gene
+expression and TCR metrics as separate data.frames.</p>
 </div>
 <div class="section level4">
 <h4 id="read-data">Read Data<a class="anchor" aria-label="anchor" href="#read-data"></a>
@@ -827,11 +843,29 @@ single plot.</p>
 </h4>
 <p>All of the <code>Seq_QC_Plot_...</code> functions also contain
 parameter to calculate significance between all groups using
-<code><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html" class="external-link">ggpubr::stat_compare_means</a></code>.<br><strong><em>NOTE: See function help pages and ggpubr for more info to
+<code><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html" class="external-link">ggpubr::stat_compare_means()</a></code>.<br><strong><em>NOTE: See function help pages and ggpubr for more info to
 make sure the right test is being used for your data.</em></strong></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Seq_QC_Plot_Basic_Combined.html">Seq_QC_Plot_Basic_Combined</a></span><span class="op">(</span>metrics_dataframe <span class="op">=</span> <span class="va">metrics_final</span>, plot_by <span class="op">=</span> <span class="st">"Full_Batch"</span>, significance <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Sequencing_QC_Plots_files/figure-html/unnamed-chunk-9-1.png" width="1248"></p>
+</div>
+<div class="section level4">
+<h4 id="barcode-rank-plots">Barcode Rank Plots<a class="anchor" aria-label="anchor" href="#barcode-rank-plots"></a>
+</h4>
+<p>scCustomize can also be used to create customized barcode rank plots
+from raw feature barcode data using outputs from DropletUtils package.
+scCustomize provides the function <code>Iterate_Barcode_Rank_Plot</code>
+which reads data, processes using DropletUtils, and returns plots.</p>
+<p>The plots are adaptation of the plots from DropletUtils package moved
+to ggplot2 framework with some additional customization and the ability
+to return rastered plots.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Iterate_Barcode_Rank_Plot.html">Iterate_Barcode_Rank_Plot</a></span><span class="op">(</span>dir_path_h5 <span class="op">=</span> <span class="st">"assets/Barcode_Rank_Example/"</span>, plateau <span class="op">=</span> <span class="fl">20000</span>, file_path <span class="op">=</span> <span class="st">"plots/"</span>,</span>
+<span>    file_name <span class="op">=</span> <span class="st">"Barcode_Rank_Plots.pdf"</span><span class="op">)</span></span></code></pre></div>
+<center>
+<img src="../reference/figures/assets/Barcode_Rank_Plot_Example.jpg" width="75%"><em>Example of barcode rank plot output. (10K PBMCs from 10X Genomics
+Public Data).</em>
+</center>
 </div>
 </div>
 </div>
