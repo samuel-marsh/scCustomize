@@ -16,8 +16,9 @@ Downloads](https://cranlogs.r-pkg.org/badges/scCustomize)](https://cran.r-projec
 [![issues](https://img.shields.io/github/issues/samuel-marsh/scCustomize)](https://github.com/samuel-marsh/scCustomize/issues)
 [![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.5706430-blue)](https://doi.org/10.5281/zenodo.5706430)
 
-scCustomize is a collection of functions created and/or curated to aid
-in the visualization and analysis of single-cell data using R.
+scCustomize is an R package with collection of functions created and/or
+curated to aid in the visualization and analysis of single-cell data
+using R.
 
 ## Installing scCustomize
 
