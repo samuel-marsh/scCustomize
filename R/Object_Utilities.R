@@ -395,6 +395,7 @@ Add_Cell_Complexity_Seurat <- function(
 #' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang is_installed
+#' @importFrom SeuratObject LayerData
 #'
 #' @return A Seurat Object
 #'
@@ -534,6 +535,7 @@ Add_Top_Gene_Pct_Seurat <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
 #' @import cli
+#' @importFrom SeuratObject Layers
 #'
 #' @return A Seurat Object
 #'

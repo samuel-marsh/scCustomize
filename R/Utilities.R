@@ -22,7 +22,9 @@
 #' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
 #' Defaults to  `DefaultAssay(OBJ)` if NULL.
 #'
+#' @import cli
 #' @importFrom purrr reduce
+#' @importFrom SeuratObject Features
 #' @importFrom stringr str_to_upper str_to_sentence
 #'
 #' @return A list of length 3 containing 1) found features, 2) not found features, 3) features found if
@@ -164,8 +166,13 @@ Gene_Present <- function(
 #' @param return_features logical. Whether to return vector of alternate case features.  Default is TRUE.
 #' @param assay Name of assay to pull feature names from. If NULL will use the result of `DefaultAssay(seurat_object)`.
 #'
+#' @import cli
+#' @importFrom SeuratObject Features
+#' @importFrom stringr str_to_sentence str_to_upper
+#'
 #' @return If features found returns vector of found alternate case features and prints message depending on
 #' parameters specified.
+#'
 #' @export
 #'
 #' @concept helper_util

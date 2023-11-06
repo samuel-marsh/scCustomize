@@ -403,6 +403,7 @@ MAD_Stats <- function(
 #' @importFrom dplyr arrange desc left_join mutate
 #' @importFrom magrittr "%>%"
 #' @importFrom Matrix rowSums
+#' @importFrom SeuratObject Layers JoinLayers LayerData
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @export
