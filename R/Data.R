@@ -83,7 +83,7 @@
 #' }
 #' @concept data
 #'
-#' @source Mouse gene list is from: SI Table 4 from \doi{doi.org/10.1016/j.neuron.2017.09.026}.  Human
+#' @source Mouse gene list is from: SI Table 4 from \doi{10.1016/j.neuron.2017.09.026}.  Human
 #' gene list was compiled by first creating homologous gene list using biomaRt and then adding some manually curated
 #' homologs according to HGNC.
 #'
