@@ -1562,6 +1562,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows
+#' @importFrom magrittr "%>%"
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @export
