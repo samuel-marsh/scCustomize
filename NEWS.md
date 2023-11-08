@@ -37,6 +37,7 @@
 - Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependency installs when not completely needed).  
 - Replace Seurat `PackageCheck` (now deprecated), with `rlang::is_installed()` for non-dependency checks.  
 - Update vignettes with new features and bug fixes from old code.  
+- Temporary removal of `Variable_Features_ALL_LIGER` until rliger returns to CRAN.  
    
 
 ## Fixes  
