@@ -16,6 +16,7 @@
 #' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
 #'
 #' @import cli
+#' @importFrom magrittr "%>%"
 #' @importFrom purrr reduce
 #'
 #' @return A Seurat Object
@@ -979,6 +980,7 @@ Add_Sample_Meta <- function(
 #'
 #' @import cli
 #' @importFrom dplyr any_of grouped_df select slice
+#' @importFrom magrittr "%>%"
 #'
 #' @export
 #'
