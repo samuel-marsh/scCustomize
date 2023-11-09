@@ -988,16 +988,16 @@ Add_Sample_Meta <- function(
 #'
 #' @examples
 #' library(Seurat)
-#' pbmc_small$batch <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
+#' pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 #'
 #' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident")
 #'
 #' # Only return specific columns from meta data (orig.ident and batch)
-#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
 #' variables_include = "batch")
 #'
 #' # Return all columns from meta data
-#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
 #' include_all = TRUE)
 #'
 
