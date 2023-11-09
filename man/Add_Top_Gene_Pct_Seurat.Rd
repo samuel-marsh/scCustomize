@@ -34,8 +34,10 @@ A Seurat Object
 Add the percentage of counts occupied by the top XX most highly expressed genes in each cell.
 }
 \examples{
+\dontrun{
 library(Seurat)
 pbmc_small <- Add_Top_Gene_Pct_Seurat(seurat_object = pbmc_small, num_top_genes = 50)
+}
 
 }
 \references{
