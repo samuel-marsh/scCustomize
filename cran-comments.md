@@ -23,8 +23,3 @@ This is a major version update to v2.0.0. In this version I have:
     - I have worked to move/remove as many IMPORTS to SUGGESTS as possible.  This package aims to simplify a number of different
     visualizations/code tasks in scRNA-seq analysis and as such does have diverse array of dependencies.  I will monitor
     to ensure package functionality.  
-2. Suggests or Enhances not in mainstream repositories:
-     rliger  
-     - I hope this issue to be fixed soon as the maintainers have assigned team member to fix issue
-     (https://github.com/welch-lab/liger/issues/293).  However, in the interim this loss will not effect package global package
-     functionality.  Those looking for rliger functionality can still easily download versions from CRAN archive and GitHub.  
