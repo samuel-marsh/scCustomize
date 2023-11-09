@@ -42,6 +42,7 @@ Returns a by identity meta.data data.frame with one row per sample.  Useful for 
 quick view of sample breakdown, meta data table creation, and/or use in pseudobulk analysis
 }
 \examples{
+\dontrun{
 library(Seurat)
 pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 
@@ -54,6 +55,7 @@ variables_include = "batch")
 # Return all columns from meta data
 sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
 include_all = TRUE)
+}
 
 }
 \concept{object_util}
