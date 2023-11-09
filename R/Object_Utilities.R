@@ -637,7 +637,7 @@ Add_Cell_QC_Metrics <- function(
       cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, and Drosophila} are not currently supported.",
                            "i" = "No column will be added to object meta.data"))
     } else {
-      cli_inform(message = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages.} to meta.data.")
+      cli_inform(message = "Adding {.field IEG Percentages.} to meta.data.")
       seurat_object <- Add_IEG_Seurat(seurat_object = seurat_object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
     }
   }
