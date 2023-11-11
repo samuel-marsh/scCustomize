@@ -182,6 +182,7 @@ kMeans_Elbow <- function(
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom dplyr filter
 #' @importFrom magrittr "%>%"
 #' @importFrom Seurat FeatureScatter
 #' @importFrom stats cor
