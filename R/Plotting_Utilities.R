@@ -293,7 +293,7 @@ scCustomze_Split_FeatureScatter <- function(
 
     cor_values <- lapply(1:length(x = meta_sample_list), function(i) {
       cor_data_filtered <- cor_data %>%
-        filter(.data[[split.by]] == meta_sample_list[[i]])
+        dplyr::filter(.data[[split.by]] == meta_sample_list[[i]])
       round(x = cor(x = cor_data_filtered[, "nCount_RNA"], y = cor_data_filtered[, "nFeature_RNA"]), digits = 2)
     })
   } else {
