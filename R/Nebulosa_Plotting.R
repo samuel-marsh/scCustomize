@@ -36,7 +36,7 @@
 #' \donttest{
 #' library(Seurat)
 #' Plot_Density_Custom(seurat_object = pbmc_small, features = "CD3E")
-#'}
+#' }
 #'
 
 Plot_Density_Custom <- function(
@@ -144,7 +144,7 @@ Plot_Density_Custom <- function(
 #' \donttest{
 #' library(Seurat)
 #' Plot_Density_Joint_Only(seurat_object = pbmc_small, features = c("CD8A", "CD3E"))
-#'}
+#' }
 #'
 
 Plot_Density_Joint_Only <- function(
