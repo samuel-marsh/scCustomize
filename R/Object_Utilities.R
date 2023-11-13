@@ -626,7 +626,7 @@ Add_Cell_QC_Metrics <- function(
       cli_warn(message = c("{.val Marmoset} is not currently a part of MSigDB gene list database.",
                            "i" = "No columns will be added to object meta.data"))
     } else {
-      cli_inform(message = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages.} to meta.data.")
+      cli_inform(message = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data.")
       seurat_object <- Add_MSigDB_Seurat(seurat_object = seurat_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite)
     }
   }
@@ -637,7 +637,7 @@ Add_Cell_QC_Metrics <- function(
       cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, and Drosophila} are not currently supported.",
                            "i" = "No column will be added to object meta.data"))
     } else {
-      cli_inform(message = "Adding {.field IEG Percentages.} to meta.data.")
+      cli_inform(message = "Adding {.field IEG Percentages} to meta.data.")
       seurat_object <- Add_IEG_Seurat(seurat_object = seurat_object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
     }
   }
