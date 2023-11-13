@@ -2663,7 +2663,7 @@ VariableFeaturePlot_scCustom <- function(
 #' @concept seurat_plotting
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(Seurat)
 #'
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
