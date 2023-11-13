@@ -242,7 +242,7 @@ glue_collapse_scCustom <- function(
     last_sep <- " or "
   }
 
-  if (input_length < 3) {
+  if (input_length <= 3) {
     glue_collapse(x = input_string, sep = ", ", last = last_sep)
   } else {
     glue_collapse(x = input_string, sep = ", ", last = paste0(",", last_sep))
