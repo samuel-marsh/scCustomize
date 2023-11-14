@@ -26,8 +26,8 @@ This is a major version update to v2.0.0. In this version I have:
 
 ## Other Notes
 1. GitHub Actions check returning strange errors only on macos (release).  
-    - The errors are from failures running package examples.  This includes functions that have been part of prior CRAN releases. 
+    - The errors are from failures running package examples.  This includes functions that have been part of prior CRAN releases.
     NO errors are found when checking locally on macos platform using R 4.3.2 and none are found in GitHub Actions check on linux
     or windows platforms.  I believe to be error in GitHub Actions workflow and I have therefore refrained from adding `dontrun`
     to examples that run fine on other platforms.  If error occurs during CRAN check during submission I will re-evaluate changes
-    required.
+    required.  
