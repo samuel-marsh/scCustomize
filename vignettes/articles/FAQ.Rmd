@@ -44,7 +44,7 @@ Yes!  If you use scCustomize in your research I would really appreciate citing t
 
 ***Marsh SE (2021). scCustomize: Custom Visualizations & Functions for Streamlined Analyses of Single Cell Sequencing.  https://doi.org/10.5281/zenodo.5706430. RRID:SCR_024675.***
 
-Only journals in Cell Press family require the RRID # but great to as part of reference citation regardless of journal.  
+Only journals in Cell Press family require the RRID # but great to include as part of reference citation and in methods section regardless of journal.  
 
 ### *Something isn't working*
 If you run into any issues or bugs please submit a [GitHub Issue](https://github.com/samuel-marsh/scCustomize/issues) with details of the issue.   
