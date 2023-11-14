@@ -11,7 +11,7 @@ This is a major version update to v2.0.0. In this version I have:
 0 errors | 0 warnings | 1 notes
 
 ### Test environments  
-- Run locally, R4.3.1, Platform: x86_64-apple-darwin17.0 (64-bit) with `devtools:check()`.  
+- Run locally, R4.3.2, Platform: x86_64-apple-darwin20 (64-bit) with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
 
