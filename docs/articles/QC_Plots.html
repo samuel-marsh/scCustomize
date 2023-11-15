@@ -173,10 +173,13 @@ the SeuratData package.</p>
 <span></span>
 <span><span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM5"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span></span>
 <span>    <span class="st">"MantonBM6"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM7"</span> <span class="op">|</span> <span class="va">hca_bm</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">orig.ident</span> <span class="op">==</span> <span class="st">"MantonBM8"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Group 2"</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="adding-qc-metrics">Adding QC Metrics<a class="anchor" aria-label="anchor" href="#adding-qc-metrics"></a>
+</h3>
+<p>This is the starting point of nearly every single cell analysis and
+scCustomize contains a number of helper functions to make the process
+fast and easy.</p>
 </div>
-<div class="section level2">
-<h2 id="adding-qc-metrics">Adding QC Metrics<a class="anchor" aria-label="anchor" href="#adding-qc-metrics"></a>
-</h2>
 <div class="section level3">
 <h3 id="add-mitochondrial-and-ribosomal-gene-percentages">Add Mitochondrial and Ribosomal Gene Percentages<a class="anchor" aria-label="anchor" href="#add-mitochondrial-and-ribosomal-gene-percentages"></a>
 </h3>
@@ -484,14 +487,14 @@ QC metrics. For instance:</p>
 <span>    add_top_pct <span class="op">=</span> <span class="cn">TRUE</span>, add_IEG <span class="op">=</span> <span class="cn">TRUE</span>, add_MSigDB <span class="op">=</span> <span class="cn">FALSE</span>, add_cell_cycle <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="plotting-qc-metrics">Plotting QC Metrics<a class="anchor" aria-label="anchor" href="#plotting-qc-metrics"></a>
-</h2>
+<div class="section level3">
+<h3 id="plotting-qc-metrics">Plotting QC Metrics<a class="anchor" aria-label="anchor" href="#plotting-qc-metrics"></a>
+</h3>
 <p>scCustomize has a number of quick QC plotting options for ease of
 use.<br><em>NOTE: Most scCustomize plotting functions contain <code>...</code>
 parameter to allow user to supply any of the parameters for the original
 Seurat function that is being used under the hood.</em></p>
+</div>
 <div class="section level3">
 <h3 id="vlnplot-based-qc-plots">
 <code>VlnPlot</code>-Based QC Plots<a class="anchor" aria-label="anchor" href="#vlnplot-based-qc-plots"></a>
