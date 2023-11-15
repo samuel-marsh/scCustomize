@@ -72,7 +72,8 @@ hca_bm <- UpdateSeuratObject(hca_bm)
 accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
 ```
 
-# Adding QC Metrics
+## Adding QC Metrics
+This is the starting point of nearly every single cell analysis and scCustomize contains a number of helper functions to make the process fast and easy.  
 
 ## Add Mitochondrial and Ribosomal Gene Percentages
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot.  If you are using mouse, human, rat, zebrafish, drosophila, marmoset, or macaque data all you need to do is specify the `species` parameter.
@@ -165,7 +166,7 @@ hca_bm <- Add_Cell_QC_Metrics(seurat_object = hca_bm, species = "human", add_mit
 
 
 
-# Plotting QC Metrics
+## Plotting QC Metrics
 scCustomize has a number of quick QC plotting options for ease of use.  
 *NOTE: Most scCustomize plotting functions contain `...` parameter to allow user to supply any of the parameters for the original Seurat function that is being used under the hood.*
 
