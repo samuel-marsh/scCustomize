@@ -11,7 +11,7 @@ Liger_to_Seurat(
   use.liger.genes = TRUE,
   by.dataset = FALSE,
   keep_meta = TRUE,
-  reduction_label = NULL,
+  reduction_label = "UMAP",
   seurat_assay = "RNA"
 )
 }

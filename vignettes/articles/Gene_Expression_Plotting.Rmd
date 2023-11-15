@@ -47,7 +47,9 @@ Even simple things like adding the same two ggplot2 themeing options to every pl
 For this tutorial, I will be utilizing microglia data from Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) the mouse microglia (Figure 1) referred to as `marsh_mouse_micro` and the human post-mortem snRNA-seq (Figure 3) referred to as `marsh_human_pm` in addition to the pbmc3k dataset from SeuratData package.
 
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(viridis)
 library(Seurat)
@@ -81,9 +83,9 @@ pbmc$treatment <- sample(c("Treatment1", "Treatment2", "Treatment3", "Treatment4
 ```{r include=FALSE}
 marsh_mouse_micro <- FindVariableFeatures(object = marsh_mouse_micro, selection.method = "vst", nfeatures = 497)
 
-marsh_mouse_micro <- UpdateSeuratObject(object = marsh_mouse_micro)
+# marsh_mouse_micro <- UpdateSeuratObject(object = marsh_mouse_micro)
 
-marsh_human_pm <- UpdateSeuratObject(marsh_human_pm)
+# marsh_human_pm <- UpdateSeuratObject(marsh_human_pm)
 
 # Add misc data to objects
 marsh_mouse_micro[["sample_id"]] <- paste0("Sample ", marsh_mouse_micro@meta.data$orig.ident)
@@ -137,6 +139,8 @@ p4 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_featur
 wrap_plots(p1, p2, p3, p4) + plot_annotation(tag_levels = "A")
 ```
 
+#### Label custom features  
+In addition to labeling the top variable genes `VariableFeaturePlot_scCustom` also supports labeling a custom set of genes using the `custom_features` parameter.  
 
 ### Plotting PC heatmaps and loadings.
 For ease in evaluating PCA results scCustomize provides function `PC_Plotting()` which returns both PC heatmap and Feature Loading plot in single patchwork layout.
@@ -314,6 +318,10 @@ In certain situations returning a plot from two different assays within the same
 cell_bender_example <- qread("assets/astro_nuc_seq.qs")
 ```
 
+```{r include=FALSE}
+cell_bender_example <- UpdateSeuratObject(cell_bender_example)
+```
+
 
 ```{r, fig.height=4, fig.width=13, fig.align='center'}
 FeaturePlot_DualAssay(seurat_object = cell_bender_example, features = "Syt1", assay1 = "RAW", assay2 = "RNA")
@@ -412,6 +420,21 @@ p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", raster = TRUE)
 wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
 ```
 
+#### Further customization  
+scCustomize `VlnPlot_scCustom` can be further customized to display the median value for each idenity or add boxplot on top of the violin.
+```{r eval=FALSE}
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", plot_median = TRUE) & NoLegend()
+VlnPlot_scCustom(seurat_object = pbmc, features = "PTPRC", plot_boxplot = TRUE) & NoLegend()
+```
+
+```{r echo=FALSE, fig.height=5, fig.width=13, fig.cap="***A.** Add median value to plot.  **B.** Add boxplot on top of plot.*", fig.align='center'}
+# Create Plots
+p1 <- VlnPlot_scCustom(seurat_object = pbmc, features = "FOS", plot_median = TRUE) & NoLegend()
+p2 <- VlnPlot_scCustom(seurat_object = pbmc, features = "FOS", plot_boxplot = TRUE) & NoLegend()
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+
 ### Custom DotPlots
 Seurat's `DotPlot()` function is really good but lacks the ability to provide custom color gradient of more than 2 colors.
 
@@ -460,20 +483,25 @@ For a more advanced take on the `DotPlot` scCustomize contains a separate functi
 *The original version of this function was written by Ming Tang and [posted on his blog](https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/).  Function is included with permission, authorship, and assistance.*
 
 ```{r eval=FALSE}
-all_markers <- FindAllMarkers(object = pbmc)
+# Find markers and limit to those expressed in greater than 75% of target population
+all_markers <- FindAllMarkers(object = pbmc) %>% 
+  Add_Pct_Diff() %>% 
+  filter(pct_diff > 0.6)
 
-top5_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, named_vector = FALSE, make_unique = TRUE)
+top_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 7, named_vector = FALSE, make_unique = TRUE)
 
-Clustered_DotPlot(seurat_object = pbmc, features = top5_markers)
+Clustered_DotPlot(seurat_object = pbmc, features = top_markers)
 ```
 
 
 ```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
-all_markers <- FindAllMarkers(object = pbmc)
+all_markers <- FindAllMarkers(object = pbmc) %>% 
+  Add_Pct_Diff() %>% 
+  filter(pct_diff > 0.6)
 
-top5_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, named_vector = FALSE, make_unique = TRUE)
+top_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 7, named_vector = FALSE, make_unique = TRUE)
 
-plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers)
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
@@ -481,22 +509,22 @@ plots[[2]]
 ```
 
 
-#### Cluster Plot on Gene Expression Patterns
+#### Cluster Plot on Gene Expression Patterns  
 By default `Clustered_DotPlot` performs k-means clustering with k value set to 1.  However, users can change this value to enable better visualization of expression patterns.
 ```{r eval=FALSE}
-Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 9)
+Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8)
 ```
 
 
 ```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
-plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7)
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8)
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
 plots[[2]]
 ```
 
-#### Clustered_DotPlot() k-means Clustering Optional Parameters
+#### Clustered_DotPlot() k-means Clustering Optional Parameters  
   
 **Determining Optimal k Value**  
 There are many methods that can be used to aid in determining an optimal value for k in k-means clustering.  One of the simplest is to the look at the elbow in sum of squares error plot.  By default `Clustered_DotPlot` will return this plot when using the function.  However, it can be turned off by setting `plot_km_elbow = FALSE`.
@@ -509,7 +537,7 @@ The number of k values plotted must be 1 less than number of features.  Default 
 **Consensus k-means Clustering**  
 By default `Clustered_DotPlot` uses consensus k-means clustering with 1000 repeats for both the columns and rows.  However, user can reduce or increase these values as desired by supplying new value to either or both of `row_km_repeats`/`column_km_repeats`
 
-#### Clustered_DotPlot() Expression Scale Optional Parameters
+#### Clustered_DotPlot() Expression Scale Optional Parameters  
 There are a number of optional parameters that can be modified by user depending on the desired resulting plot.
 
 - `colors_use_exp` to provide custom color scale
@@ -518,7 +546,7 @@ There are a number of optional parameters that can be modified by user depending
 - `exp_color_middle` can be used to change what value is used for the middle of the color scale.  By default is set to the middle of `exp_color_min`/`exp_color_max` but can be modified if a skewed visualization is desired.
 
 ```{r eval=FALSE}
-Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, print_exp_quantiles = T)
+Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, print_exp_quantiles = T)
 ```
 
 ```{r eval=FALSE}
@@ -529,11 +557,11 @@ Quantiles of gene expression data are:
 
 Here we can adjust the expression clipping based on the range of the data in this specific dataset and list of features and change the color scale to use `Seurat::PurpleAndYellow()`
 ```{r eval=FALSE}
-Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
+Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
 ```
 
 ```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
-plots <- Clustered_DotPlot(seurat_object = pbmc, features = top5_markers, k = 7, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, exp_color_min = -1, exp_color_max = 2, colors_use_exp = PurpleAndYellow())
 ```
 
 ```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
@@ -547,14 +575,24 @@ plots[[2]]
 - `row_label_size` Change size of row text (gene symbols).  
 - `raster` Whether to rasterize the plot (faster and smaller file size). Default is FALSE.  
 
-### `Split_FeatureScatter()` 
-This is simple function to add functionality that `Seurat::FeatureScatter()` lacks.  
+### FeatureScater Plots
+The scCustomize function `FeatureScatter_scCustom()` is a slightly modified version of `Seurat::FeatureScatter()` with some different default settings and parameter options.
 
-`FeatureScatter()` plots can be very useful when comparing between two genes/features or comparing module scores.  However, Seurat's implementation lacks the ability to split the plot by a meta data variable.
+`FeatureScatter_scCustom()` plots can be very useful when comparing between two genes/features or comparing module scores.  By default scCustomize version sets `shuffle = TRUE` to ensure that points are not hidden due to order of plotting.
 
-```{r, fig.height=10, fig.width=13, fig.cap="*`Split_FeatureScatter()` solves this issue and allows for splitting of `FeatureScatter` plots by meta variable.*", fig.align='center'}
+```{r, fig.height=10, fig.width=13, fig.align='center'}
 # Create Plots
-Split_FeatureScatter(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, split.by = "Transcription_Method", group.by = "ident", num_columns = 2, pt.size = 1)
+FeatureScatter_scCustom(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, group.by = "ident", num_columns = 2, pt.size = 1) 
+```
+
+#### Split FeatureScatter Plots  
+scCustomize previously contained function `Split_FeatureScatter` as Seurat's plot lacked that functionality.  However, that is now present and `Split_FeatureScatter` has therefore been deprecated and it's functionality moved within `FeatureScatter_scCustom`.  
+
+`FeatureScatter_scCustom()` contains two options for splitting plots (similar to `DimPlot_scCustom`.  The default is to return each plot with their own x and y axes, which has a number of advantages (see `DimPlot_scCustom` section).
+
+```{r, fig.height=10, fig.width=13, fig.align='center'}
+# Create Plots
+FeatureScatter_scCustom(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, split.by = "Transcription_Method", group.by = "ident", num_columns = 2, pt.size = 1)
 ```
 
 ## DimPlots: Plot Meta Data in 2D Space (PCA/tSNE/UMAP)

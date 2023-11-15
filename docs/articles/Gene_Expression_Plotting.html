@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #1: Analysis Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 13,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Gene_Expression_Plotting.Rmd" class="external-link"><code>vignettes/articles/Gene_Expression_Plotting.Rmd</code></a></small>
       <div class="hidden name"><code>Gene_Expression_Plotting.Rmd</code></div>
@@ -162,7 +163,9 @@ Neuroscience</em></a>) the mouse microglia (Figure 1) referred to as
 (Figure 3) referred to as <code>marsh_human_pm</code> in addition to the
 pbmc3k dataset from SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sjmgarnier.github.io/viridis/" class="external-link">viridis</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
@@ -251,6 +254,14 @@ Plot can be modified by changing function parameters:
 <strong>D.</strong> Setting <code>y_axis_log=TRUE</code> to plot y-axis
 in log scale.</em>
 </p>
+</div>
+<div class="section level5">
+<h5 id="label-custom-features">Label custom features<a class="anchor" aria-label="anchor" href="#label-custom-features"></a>
+</h5>
+<p>In addition to labeling the top variable genes
+<code>VariableFeaturePlot_scCustom</code> also supports labeling a
+custom set of genes using the <code>custom_features</code>
+parameter.</p>
 </div>
 </div>
 <div class="section level4">
@@ -467,7 +478,7 @@ Functionality vignette for more info.</p>
 <code class="sourceCode R"><span><span class="va">cell_bender_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"assets/astro_nuc_seq.qs"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/FeaturePlot_DualAssay.html">FeaturePlot_DualAssay</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">cell_bender_example</span>, features <span class="op">=</span> <span class="st">"Syt1"</span>, assay1 <span class="op">=</span> <span class="st">"RAW"</span>, assay2 <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-25-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-26-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -491,7 +502,7 @@ authorship.</em></p>
 <span><span class="co"># Create Plots</span></span>
 <span><span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="va">gene_list_plot</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    colors_use <span class="op">=</span> <span class="va">human_colors_list</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-26-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-27-1.png" width="960" style="display: block; margin: auto;"></p>
 <div class="section level5">
 <h5 id="stacked_vlnplot-also-supports-any-additional-parameters-that-are-part-of-seuratvlnplot">
 <code>Stacked_VlnPlot</code> also supports any additional parameters
@@ -505,7 +516,7 @@ that are part of <code>Seurat::VlnPlot()</code><a class="anchor" aria-label="anc
 <span><span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="va">gene_list_plot</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    colors_use <span class="op">=</span> <span class="va">sample_colors</span>, split.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-27-1.png" alt="*Example plot adding the `split.by` parameter to view expression by sample and cell type.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-28-1.png" alt="*Example plot adding the `split.by` parameter to view expression by sample and cell type.*" width="1248"><p class="caption">
 <em>Example plot adding the <code>split.by</code> parameter to view
 expression by sample and cell type.</em>
 </p>
@@ -525,7 +536,7 @@ parameters.</p>
 <span><span class="co"># Double the space between plots</span></span>
 <span><span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD3E"</span>, <span class="st">"CD14"</span>, <span class="st">"MS4A1"</span>, <span class="st">"FCER1A"</span>, <span class="st">"PPBP"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    plot_spacing <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-29-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-30-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level5">
 <h5 id="adjusting-plot-size">Adjusting Plot Size<a class="anchor" aria-label="anchor" href="#adjusting-plot-size"></a>
@@ -542,7 +553,7 @@ object@meta.data variables (i.e. mito% or module scores).<a class="anchor" aria
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Stacked_VlnPlot.html">Stacked_VlnPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"percent_mito"</span>, <span class="st">"percent_ribo"</span><span class="op">)</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    colors_use <span class="op">=</span> <span class="va">human_colors_list</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-30-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-31-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level5">
 <h5 id="point-size-and-rasterization">Point Size and Rasterization<a class="anchor" aria-label="anchor" href="#point-size-and-rasterization"></a>
@@ -571,7 +582,7 @@ plotting<a class="anchor" aria-label="anchor" href="#vlnplot_sccustom-provides-u
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">VlnPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"PTPRC"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"PTPRC"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-32-1.png" alt="***A.** Default `VlnPlot` with ggplot2 default color scheme.  **B.** `VlnPlot_scCustom` shares color palette choice with other scCustomize functions.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-33-1.png" alt="***A.** Default `VlnPlot` with ggplot2 default color scheme.  **B.** `VlnPlot_scCustom` shares color palette choice with other scCustomize functions.*" width="1248"><p class="caption">
 <em><strong>A.</strong> Default <code>VlnPlot</code> with ggplot2
 default color scheme. <strong>B.</strong> <code>VlnPlot_scCustom</code>
 shares color palette choice with other scCustomize functions.</em>
@@ -593,9 +604,25 @@ accelerate plotting when vector plots are not necessary.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"PTPRC"</span>, raster <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"PTPRC"</span>, raster <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-34-1.png" alt="***A.** `raster = FALSE`.  **B.** `raster = TRUE`.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-35-1.png" alt="***A.** `raster = FALSE`.  **B.** `raster = TRUE`.*" width="1248"><p class="caption">
 <em><strong>A.</strong> <code>raster = FALSE</code>. <strong>B.</strong>
 <code>raster = TRUE</code>.</em>
+</p>
+</div>
+</div>
+<div class="section level5">
+<h5 id="further-customization">Further customization<a class="anchor" aria-label="anchor" href="#further-customization"></a>
+</h5>
+<p>scCustomize <code>VlnPlot_scCustom</code> can be further customized
+to display the median value for each idenity or add boxplot on top of
+the violin.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"PTPRC"</span>, plot_median <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="st">"PTPRC"</span>, plot_boxplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-37-1.png" alt="***A.** Add median value to plot.  **B.** Add boxplot on top of plot.*" width="1248"><p class="caption">
+<em><strong>A.</strong> Add median value to plot. <strong>B.</strong>
+Add boxplot on top of plot.</em>
 </p>
 </div>
 </div>
@@ -610,14 +637,14 @@ ability to provide custom color gradient of more than 2 colors.</p>
 <code>DotPlot_scCustom()</code> allows for plotting with custom
 gradients.<a class="anchor" aria-label="anchor" href="#dotplot_sccustom-allows-for-plotting-with-custom-gradients-"></a>
 </h5>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">micro_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Trem2"</span>, <span class="st">"Tmem119"</span>, <span class="st">"Cx3cr1"</span>, <span class="st">"Hexb"</span>, <span class="st">"Tgfbr1"</span>, <span class="st">"Sparc"</span>, <span class="st">"P2ry13"</span>,</span>
 <span>    <span class="st">"Olfml3"</span>, <span class="st">"Adgrg1"</span>, <span class="st">"C1qa"</span>, <span class="st">"C1qb"</span>, <span class="st">"C1qc"</span>, <span class="st">"Csf1r"</span>, <span class="st">"Fcgr3"</span>, <span class="st">"Ly86"</span>, <span class="st">"Laptm5"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DotPlot.html" class="external-link">DotPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, cols <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/DotPlot_scCustom.html">DotPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, colors_use <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-36-1.png" alt="***A.** Default `DotPlot` only takes the first few colors when a gradient is provided.  **B.** `DotPlot_scCustom` allows for use of gradients in full while maintaining visualization.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-39-1.png" alt="***A.** Default `DotPlot` only takes the first few colors when a gradient is provided.  **B.** `DotPlot_scCustom` allows for use of gradients in full while maintaining visualization.*" width="1248"><p class="caption">
 <em><strong>A.</strong> Default <code>DotPlot</code> only takes the
 first few colors when a gradient is provided. <strong>B.</strong>
 <code>DotPlot_scCustom</code> allows for use of gradients in full while
@@ -644,7 +671,7 @@ FALSE.</li>
 <code>remove_axis_titles</code> remove the x- and y-axis labels.
 Default is TRUE</li>
 </ul>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DotPlot_scCustom.html">DotPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/DotPlot_scCustom.html">DotPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, y_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/DotPlot_scCustom.html">DotPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, flip_axes <span class="op">=</span> <span class="cn">T</span>,</span>
@@ -652,7 +679,7 @@ Default is TRUE</li>
 <span><span class="fu"><a href="../reference/DotPlot_scCustom.html">DotPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="va">micro_genes</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, flip_axes <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>    remove_axis_titles <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-38-1.png" alt="***A.** Rotate x-axis text, **B.** Rotate y-axis text, **C.** flip axes and rotate x-axis text, and **D.** Add axis labels (removed by default).*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-41-1.png" alt="***A.** Rotate x-axis text, **B.** Rotate y-axis text, **C.** flip axes and rotate x-axis text, and **D.** Add axis labels (removed by default).*" width="1248"><p class="caption">
 <em><strong>A.</strong> Rotate x-axis text, <strong>B.</strong> Rotate
 y-axis text, <strong>C.</strong> flip axes and rotate x-axis text, and
 <strong>D.</strong> Add axis labels (removed by default).</em>
@@ -670,23 +697,26 @@ identities in the final plot. <em>The original version of this function
 was written by Ming Tang and <a href="https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/" class="external-link">posted
 on his blog</a>. Function is included with permission, authorship, and
 assistance.</em></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">all_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Find markers and limit to those expressed in greater than 75% of target population</span></span>
+<span><span class="va">all_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="../reference/Add_Pct_Diff.html">Add_Pct_Diff</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pct_diff</span> <span class="op">&gt;</span> <span class="fl">0.6</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">top5_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">5</span>, named_vector <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span><span class="va">top_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">all_markers</span>, num_genes <span class="op">=</span> <span class="fl">7</span>, named_vector <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    make_unique <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top5_markers</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-41-1.png" width="960" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top_markers</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-44-1.png" width="960" style="display: block; margin: auto;"></p>
 <div class="section level5">
 <h5 id="cluster-plot-on-gene-expression-patterns">Cluster Plot on Gene Expression Patterns<a class="anchor" aria-label="anchor" href="#cluster-plot-on-gene-expression-patterns"></a>
 </h5>
 <p>By default <code>Clustered_DotPlot</code> performs k-means clustering
 with k value set to 1. However, users can change this value to enable
 better visualization of expression patterns.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top5_markers</span>, k <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-44-1.png" width="960" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top_markers</span>, k <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-47-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level5">
 <h5 id="clustered_dotplot-k-means-clustering-optional-parameters">Clustered_DotPlot() k-means Clustering Optional Parameters<a class="anchor" aria-label="anchor" href="#clustered_dotplot-k-means-clustering-optional-parameters"></a>
@@ -698,7 +728,7 @@ the elbow in sum of squares error plot. By default
 <code>Clustered_DotPlot</code> will return this plot when using the
 function. However, it can be turned off by setting
 <code>plot_km_elbow = FALSE</code>.
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-45-1.png" width="480" style="display: block; margin: auto;"></p>
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-48-1.png" width="480" style="display: block; margin: auto;"></p>
 <p>The number of k values plotted must be 1 less than number of
 features. Default is to plot 20 values but users can customize number of
 k values plotted using <code>elbow_kmax</code> parameter.</p>
@@ -730,18 +760,18 @@ used for the middle of the color scale. By default is set to the middle
 of <code>exp_color_min</code>/<code>exp_color_max</code> but can be
 modified if a skewed visualization is desired.</li>
 </ul>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top5_markers</span>, k <span class="op">=</span> <span class="fl">7</span>, print_exp_quantiles <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>Quantiles of gene expression data are<span class="sc">:</span></span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>       <span class="dv">10</span><span class="sc">%        50%</span>        <span class="dv">90</span><span class="sc">%        99%</span> </span>
-<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="sc">-</span><span class="fl">0.6555988</span> <span class="sc">-</span><span class="fl">0.3595223</span>  <span class="fl">1.7742718</span>  <span class="fl">2.6666597</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top_markers</span>, k <span class="op">=</span> <span class="fl">8</span>, print_exp_quantiles <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>Quantiles of gene expression data are<span class="sc">:</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>       <span class="dv">10</span><span class="sc">%        50%</span>        <span class="dv">90</span><span class="sc">%        99%</span> </span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="sc">-</span><span class="fl">0.6555988</span> <span class="sc">-</span><span class="fl">0.3595223</span>  <span class="fl">1.7742718</span>  <span class="fl">2.6666597</span></span></code></pre></div>
 <p>Here we can adjust the expression clipping based on the range of the
 data in this specific dataset and list of features and change the color
 scale to use <code><a href="https://satijalab.org/seurat/reference/CustomPalette.html" class="external-link">Seurat::PurpleAndYellow()</a></code></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top5_markers</span>, k <span class="op">=</span> <span class="fl">7</span>, exp_color_min <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, exp_color_max <span class="op">=</span> <span class="fl">2</span>,</span>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Clustered_DotPlot.html">Clustered_DotPlot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="va">top_markers</span>, k <span class="op">=</span> <span class="fl">8</span>, exp_color_min <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, exp_color_max <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    colors_use_exp <span class="op">=</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/CustomPalette.html" class="external-link">PurpleAndYellow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-50-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-53-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level5">
 <h5 id="clustered_dotplot-other-optional-parameters">Clustered_DotPlot() Other Optional Parameters<a class="anchor" aria-label="anchor" href="#clustered_dotplot-other-optional-parameters"></a>
@@ -767,25 +797,38 @@ smaller file size). Default is FALSE.</li>
 </div>
 </div>
 <div class="section level4">
-<h4 id="split_featurescatter">
-<code>Split_FeatureScatter()</code><a class="anchor" aria-label="anchor" href="#split_featurescatter"></a>
+<h4 id="featurescater-plots">FeatureScater Plots<a class="anchor" aria-label="anchor" href="#featurescater-plots"></a>
 </h4>
-<p>This is simple function to add functionality that
-<code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter()</a></code> lacks.</p>
-<p><code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">FeatureScatter()</a></code> plots can be very useful when comparing
-between two genes/features or comparing module scores. However, Seurat’s
-implementation lacks the ability to split the plot by a meta data
-variable.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<p>The scCustomize function <code><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom()</a></code> is a
+slightly modified version of <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">Seurat::FeatureScatter()</a></code> with
+some different default settings and parameter options.</p>
+<p><code><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom()</a></code> plots can be very useful when
+comparing between two genes/features or comparing module scores. By
+default scCustomize version sets <code>shuffle = TRUE</code> to ensure
+that points are not hidden due to order of plotting.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create Plots</span></span>
-<span><span class="fu"><a href="../reference/Split_FeatureScatter.html">Split_FeatureScatter</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, feature1 <span class="op">=</span> <span class="st">"exAM_Score1"</span>, feature2 <span class="op">=</span> <span class="st">"Microglia_Score1"</span>,</span>
+<span><span class="fu"><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, feature1 <span class="op">=</span> <span class="st">"exAM_Score1"</span>, feature2 <span class="op">=</span> <span class="st">"Microglia_Score1"</span>,</span>
+<span>    colors_use <span class="op">=</span> <span class="va">mouse_colors</span>, group.by <span class="op">=</span> <span class="st">"ident"</span>, num_columns <span class="op">=</span> <span class="fl">2</span>, pt.size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-54-1.png" width="1248" style="display: block; margin: auto;"></p>
+<div class="section level5">
+<h5 id="split-featurescatter-plots">Split FeatureScatter Plots<a class="anchor" aria-label="anchor" href="#split-featurescatter-plots"></a>
+</h5>
+<p>scCustomize previously contained function
+<code>Split_FeatureScatter</code> as Seurat’s plot lacked that
+functionality. However, that is now present and
+<code>Split_FeatureScatter</code> has therefore been deprecated and it’s
+functionality moved within <code>FeatureScatter_scCustom</code>.</p>
+<p><code><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom()</a></code> contains two options for
+splitting plots (similar to <code>DimPlot_scCustom</code>. The default
+is to return each plot with their own x and y axes, which has a number
+of advantages (see <code>DimPlot_scCustom</code> section).</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create Plots</span></span>
+<span><span class="fu"><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, feature1 <span class="op">=</span> <span class="st">"exAM_Score1"</span>, feature2 <span class="op">=</span> <span class="st">"Microglia_Score1"</span>,</span>
 <span>    colors_use <span class="op">=</span> <span class="va">mouse_colors</span>, split.by <span class="op">=</span> <span class="st">"Transcription_Method"</span>, group.by <span class="op">=</span> <span class="st">"ident"</span>, num_columns <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    pt.size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-51-1.png" alt="*`Split_FeatureScatter()` solves this issue and allows for splitting of `FeatureScatter` plots by meta variable.*" width="1248"><p class="caption">
-<em><code><a href="../reference/Split_FeatureScatter.html">Split_FeatureScatter()</a></code> solves this issue and allows for
-splitting of <code>FeatureScatter</code> plots by meta variable.</em>
-</p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-55-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
@@ -817,11 +860,11 @@ palette will be used.</li>
 </ul>
 <p>To best demonstrate rationale for this I’m going to use
 over-clustered version of the <code>marsh_mouse_micro</code> object.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_mouse_over</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_over</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-54-1.png" alt="*`DimPlot_scCustom` also sets `label = TRUE` if `group.by = NULL` by default.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-58-1.png" alt="*`DimPlot_scCustom` also sets `label = TRUE` if `group.by = NULL` by default.*" width="1248"><p class="caption">
 <em><code>DimPlot_scCustom</code> also sets <code>label = TRUE</code> if
 <code>group.by = NULL</code> by default.</em>
 </p>
@@ -837,11 +880,11 @@ default as I believe this setting is more often the visualization that
 provides the most clarity.</p>
 <p>Here is example when plotting by donor in the human dataset to
 determine how well the dataset integration worked.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_human_pm</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-56-1.png" alt="***A.** Cannot tell how well integrated the samples are due to plotting one on top of the other.  **B.** Default plot using scCustomize `DimPlot_scCustom`.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-60-1.png" alt="***A.** Cannot tell how well integrated the samples are due to plotting one on top of the other.  **B.** Default plot using scCustomize `DimPlot_scCustom`.*" width="1248"><p class="caption">
 <em><strong>A.</strong> Cannot tell how well integrated the samples are
 due to plotting one on top of the other. <strong>B.</strong> Default
 plot using scCustomize <code>DimPlot_scCustom</code>.</em>
@@ -854,11 +897,11 @@ plot using scCustomize <code>DimPlot_scCustom</code>.</em>
 <p>When plotting a split plot <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot()</a></code> simplifies
 the axes by implementing shared axes depending on the number of columns
 specified.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"sample_id"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-58-1.png" alt="***A.** The default Seurat split.by looks ok when plots are all present on single row.  **B.** However, the visualization isn't so good when you starting wrapping plots into multiple rows.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-62-1.png" alt="***A.** The default Seurat split.by looks ok when plots are all present on single row.  **B.** However, the visualization isn't so good when you starting wrapping plots into multiple rows.*" width="1248"><p class="caption">
 <em><strong>A.</strong> The default Seurat split.by looks ok when plots
 are all present on single row. <strong>B.</strong> However, the
 visualization isn’t so good when you starting wrapping plots into
@@ -868,10 +911,10 @@ multiple rows.</em>
 <p>By default when using <code>split.by</code> with
 <code>DimPlot_scCustom</code> the layout is returned with an axes for
 each plot to make visualization of large numbers of splits easier.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span>, num_columns <span class="op">=</span> <span class="fl">4</span>, repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-60-1.png" alt="*Simplified visualization without having to think about the number of variables that are being plotted.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-64-1.png" alt="*Simplified visualization without having to think about the number of variables that are being plotted.*" width="1248"><p class="caption">
 <em>Simplified visualization without having to think about the number of
 variables that are being plotted.</em>
 </p>
@@ -880,9 +923,9 @@ variables that are being plotted.</em>
 maintaining all of the other modifications in
 <code>DimPlot_scCustom</code> by supplying
 <code>split_seurat = TRUE</code></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span>, num_columns <span class="op">=</span> <span class="fl">4</span>, repel <span class="op">=</span> <span class="cn">TRUE</span>, split_seurat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-61-1.png" width="1248"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-65-1.png" width="1248"></p>
 </div>
 <div class="section level5">
 <h5 id="figure-plotting">Figure Plotting<a class="anchor" aria-label="anchor" href="#figure-plotting"></a>
@@ -891,9 +934,9 @@ maintaining all of the other modifications in
 the axes from the plot and simply add an axis legend. To do this with
 <code>DimPlot_scCustom</code> simply set
 <code>figure_plot = TRUE</code>.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, figure_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-63-1.png" width="576"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-67-1.png" width="576"></p>
 </div>
 </div>
 <div class="section level4">
@@ -910,14 +953,14 @@ will simply pull from seurat_object@active.ident slot which may or may
 not be cluster results depending on user settings. For creating
 highlight plots of meta data variables see next section on
 <code>Meta_Highlight_Plot</code>.</em></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_over</span>, cluster_name <span class="op">=</span> <span class="st">"7"</span>, highlight_color <span class="op">=</span> <span class="st">"navy"</span>,</span>
 <span>    background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_over</span>, cluster_name <span class="op">=</span> <span class="st">"8"</span>, highlight_color <span class="op">=</span> <span class="st">"forestgreen"</span>,</span>
 <span>    background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-65-1.png" alt="*`Cluster_Highlight_Plot` takes identity or vector of identities and plots them in front of remaining unselected cells.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-69-1.png" alt="*`Cluster_Highlight_Plot` takes identity or vector of identities and plots them in front of remaining unselected cells.*" width="1248"><p class="caption">
 <em><code>Cluster_Highlight_Plot</code> takes identity or vector of
 identities and plots them in front of remaining unselected cells.</em>
 </p>
@@ -927,10 +970,10 @@ identities and plots them in front of remaining unselected cells.</em>
 </h5>
 <p><code><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot()</a></code> also supports the ability to
 plot multiple identities in the same plot.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_over</span>, cluster_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"7"</span>, <span class="st">"8"</span><span class="op">)</span>, highlight_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"navy"</span>,</span>
 <span>    <span class="st">"forestgreen"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-67-1.png" width="576"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-71-1.png" width="576"></p>
 <p><em>NOTE: If no value is provided to <code>highlight_color</code>
 then all clusters provided to <code>cluster_name</code> will be plotted
 using single default color (navy).</em></p>
@@ -945,10 +988,10 @@ of any valid @meta.data variable. Meta data variables must be one of
 class(): “factor”, “character”, or “logical” to be highlighted.<br><em>Numeric variables representing things like “batch” can be converted
 using <code>as.character</code> or <code>as.factor</code> first to allow
 for plotting.</em></p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
 <span>    meta_data_highlight <span class="op">=</span> <span class="st">"ENZYMATIC_NONE"</span>, highlight_color <span class="op">=</span> <span class="st">"firebrick"</span>, background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-68-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-72-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="section level5">
 <h5 id="highlight-2-factor-levels-in-the-same-plot">Highlight 2+ factor levels in the same plot<a class="anchor" aria-label="anchor" href="#highlight-2-factor-levels-in-the-same-plot"></a>
 </h5>
@@ -956,11 +999,11 @@ for plotting.</em></p>
 levels from the same meta data column in the same plot, similar to
 plotting multiple identities with
 <code><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot()</a></code></p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
 <span>    meta_data_highlight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ENZYMATIC_NONE"</span>, <span class="st">"DOUNCE_NONE"</span><span class="op">)</span>, highlight_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"firebrick"</span>, <span class="st">"dodgerblue"</span><span class="op">)</span>,</span>
 <span>    background_color <span class="op">=</span> <span class="st">"lightgray"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-69-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-73-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level4">
@@ -973,7 +1016,7 @@ can use <code>Cell_Highlight_Plot</code>.</p>
 <code>cells_highlight</code> parameter must be a named list.</em></p>
 <p>Let’s say we want to highlight cells with expression of
 <em>MS4A1</em> above certain threshold.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get cell names</span></span>
 <span><span class="va">MS4A1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/WhichCells.html" class="external-link">WhichCells</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, expression <span class="op">=</span> <span class="va">MS4A1</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -982,7 +1025,7 @@ can use <code>Cell_Highlight_Plot</code>.</p>
 <span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="../reference/Cell_Highlight_Plot.html">Cell_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, cells_highlight <span class="op">=</span> <span class="va">cells</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-71-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-75-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="section level5">
 <h5 id="highlight-2-sets-of-cells-in-the-same-plot">Highlight 2+ sets of cells in the same plot<a class="anchor" aria-label="anchor" href="#highlight-2-sets-of-cells-in-the-same-plot"></a>
 </h5>
@@ -990,7 +1033,7 @@ can use <code>Cell_Highlight_Plot</code>.</p>
 sets of cells in the same plot, similar to plotting multiple identities
 with
 <code><a href="../reference/Cluster_Highlight_Plot.html">Cluster_Highlight_Plot()</a></code>/<code><a href="../reference/Meta_Highlight_Plot.html">Meta_Highlight_Plot()</a></code>.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get cell names and make list</span></span>
 <span><span class="va">MS4A1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/WhichCells.html" class="external-link">WhichCells</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, expression <span class="op">=</span> <span class="va">MS4A1</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">GZMB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/WhichCells.html" class="external-link">WhichCells</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, expression <span class="op">=</span> <span class="va">GZMB</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -998,7 +1041,7 @@ with
 <span><span class="va">cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>MS4A1 <span class="op">=</span> <span class="va">MS4A1</span>, GZMB <span class="op">=</span> <span class="va">GZMB</span><span class="op">)</span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="../reference/Cell_Highlight_Plot.html">Cell_Highlight_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, cells_highlight <span class="op">=</span> <span class="va">cells</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-73-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-77-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level4">
@@ -1007,19 +1050,19 @@ with
 <p>Sometimes can be beneficial to create layouts where there is no
 grouping variable and plots are simply colored by the split
 variable.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_All_Samples.html">DimPlot_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, meta_data_column <span class="op">=</span> <span class="st">"sample_id"</span>, num_col <span class="op">=</span> <span class="fl">3</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-74-1.png" alt="*Visualize all samples in simple plot layout.*" width="1248"><p class="caption">
+<img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-78-1.png" alt="*Visualize all samples in simple plot layout.*" width="1248"><p class="caption">
 <em>Visualize all samples in simple plot layout.</em>
 </p>
 </div>
 <p>Can unique color each plot by providing a vector of colors instead of
 single value</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_All_Samples.html">DimPlot_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, meta_data_column <span class="op">=</span> <span class="st">"Transcription"</span>, num_col <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    pt.size <span class="op">=</span> <span class="fl">0.5</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"firebrick3"</span>, <span class="st">"dodgerblue3"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-75-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Gene_Expression_Plotting_files/figure-html/unnamed-chunk-79-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

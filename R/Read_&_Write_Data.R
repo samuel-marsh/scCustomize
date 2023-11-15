@@ -15,8 +15,8 @@
 #' @import cli
 #' @importFrom Matrix readMM
 # #' @importFrom DropletUtils write10xCounts
+#' @importFrom rlang is_installed
 #' @importFrom Seurat Read10X
-#' @importFrom SeuratObject PackageCheck
 #'
 #' @return A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.
 #'
@@ -36,8 +36,8 @@ Create_10X_H5 <- function(
   save_file_path,
   save_name
 ) {
-  DropletUtils_check <- PackageCheck("DropletUtils", error = FALSE)
-  if (!DropletUtils_check[1]) {
+  DropletUtils_check <- is_installed(pkg = "DropletUtils")
+  if (isFALSE(DropletUtils_check)) {
     cli_abort(message = c(
       "Please install the {.val DropletUtils} package to use {.code Create_10X_H5}",
       "i" = "This can be accomplished with the following commands: ",
@@ -69,8 +69,8 @@ Create_10X_H5 <- function(
                         fileext=".h5")
   DropletUtils::write10xCounts(path = temp_file,
                  x = count_matrix,
-                 barcodes = colnames(count_matrix),
-                 gene.symbol = rownames(count_matrix),
+                 barcodes = colnames(x = count_matrix),
+                 gene.symbol = rownames(x = count_matrix),
                  gene.type = "Gene Expression",
                  type = "HDF5",
                  version = "3")
@@ -118,7 +118,7 @@ Create_CellBender_Merged_Seurat <- function(
   ...
 ) {
   # Filter Cell Bender matrix for Cell Ranger cells
-  cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(raw_cell_bender_matrix))
+  cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(x = raw_cell_bender_matrix))
 
   cli_inform(message = "{.field Filtering Cell Bender matrix for cells present in raw counts matrix.}")
 
@@ -132,13 +132,13 @@ Create_CellBender_Merged_Seurat <- function(
   cell_names_seurat <- colnames(x = cell_bender_seurat)
   gene_names_seurat <- rownames(x = cell_bender_seurat)
 
-  # Filter raw counts by created Seurat parameters
-  cli_inform(message = "{.field Filtering raw counts matrix to match Seurat Object.}")
-  raw_counts_matrix <- raw_counts_matrix[gene_names_seurat, cell_names_seurat]
-
   # Create raw counts assay object
   cli_inform(message = "{.field Creating raw counts Seurat Assay Object.}")
   counts <- CreateAssayObject(counts = raw_counts_matrix, min.cells = 0, min.features = 0)
+
+  # Filter raw counts by created Seurat parameters
+  cli_inform(message = "{.field Filtering raw counts Assay Object to match Seurat Object.}")
+  counts <- subset(x = counts, cells = Cells(x = cell_bender_seurat), features = rownames(x = cell_bender_seurat))
 
   # Add counts assay to Seurat Object
   cli_inform(message = "{.field Adding assay to Seurat Object.}")
@@ -223,7 +223,7 @@ Read10X_GEO <- function(
   }
 
   # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
 
@@ -243,7 +243,7 @@ Read10X_GEO <- function(
 
   cli_inform(message = "{.field Reading 10X files from directory}")
   pboptions(char = "=")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
@@ -257,7 +257,7 @@ Read10X_GEO <- function(
       if (!file.exists(barcode.loc)) {
         cli_abort(message = "Barcode file missing. Expecting {val {basename(path = barcode.loc)}}")
       }
-      if (!pre_ver_3 && !file.exists(features.loc) ) {
+      if (isFALSE(x = pre_ver_3) && !file.exists(features.loc) ) {
         cli_abort(message = "Gene name or features file missing. Expecting {val {basename(path = features.loc)}}")
       }
       if (!file.exists(matrix.loc)) {
@@ -302,7 +302,7 @@ Read10X_GEO <- function(
         replacement.column <- ifelse(test = gene.column == 2, yes = 1, no = 2)
         feature.names[na.features, gene.column] <- feature.names[na.features, replacement.column]
       }
-      if (unique.features) {
+      if (isTRUE(x = unique.features)) {
         fcols = ncol(x = feature.names)
         if (fcols < gene.column) {
           cli_abort(message = c("{.code gene.column} was set to {.val {gene.column}}, but feature.tsv.gz (or genes.tsv) only has {.field {cols}} columns.",
@@ -350,7 +350,7 @@ Read10X_GEO <- function(
       if (!file.exists(barcode.loc)) {
         cli_abort(message = "Barcode file missing. Expecting {.val {basename(path = barcode.loc)}}")
       }
-      if (!pre_ver_3 && !file.exists(features.loc) ) {
+      if (isFALSE(x = pre_ver_3) && !file.exists(features.loc) ) {
         cli_abort(message = "Gene name or features file missing. Expecting {.val {basename(path = features.loc)}}")
       }
       if (!file.exists(matrix.loc)) {
@@ -395,7 +395,7 @@ Read10X_GEO <- function(
         replacement.column <- ifelse(test = gene.column == 2, yes = 1, no = 2)
         feature.names[na.features, gene.column] <- feature.names[na.features, replacement.column]
       }
-      if (unique.features) {
+      if (isTRUE(x = unique.features)) {
         fcols = ncol(x = feature.names)
         if (fcols < gene.column) {
           cli_abort(message = c("{.code gene.column} was set to {.val {gene.column}}, but feature.tsv.gz (or genes.tsv) only has {.field {cols}} columns.",
@@ -458,14 +458,14 @@ Read10X_GEO <- function(
 
   # Name the list
   if (!is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   } else {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   }
 
   # Merge data
   if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -534,12 +534,17 @@ Read10X_h5_GEO <- function(
   }
 
   # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
 
   file.list <- list.files(path = data_dir, pattern = ".h5", full.names = FALSE)
-  # Remove "barcodes.tsv.gz" file suffix
+
+  # Remove file suffix if provided
+  if (!is.null(x = shared_suffix)) {
+    shared_suffix <- gsub(pattern = ".h5", replacement = "", x = shared_suffix)
+  }
+
   if (is.null(x = sample_list)) {
     if (is.null(x = shared_suffix)) {
       sample_list <- gsub(pattern = ".h5", x = file.list, replacement = "")
@@ -555,7 +560,7 @@ Read10X_h5_GEO <- function(
 
   cli_inform(message = "{.field Reading 10X H5 files from directory}")
   pboptions(char = "=")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
@@ -572,14 +577,14 @@ Read10X_h5_GEO <- function(
 
   # Name the matrices
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Merge data
-  if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+  if (isTRUE(x = merge)) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -654,16 +659,16 @@ Read10X_Multi_Directory <- function(
     sample_list <- Pull_Directory_List(base_path = base_path)
   }
   # Add file path for 10X default directories
-  if (default_10X_path && !is.null(x = secondary_path)) {
+  if (isTRUE(x = default_10X_path) && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
 
-  if (!default_10X_path && !is.null(x = secondary_path) && cellranger_multi) {
+  if (isFALSE(x = default_10X_path) && !is.null(x = secondary_path) && isTRUE(x = cellranger_multi)) {
     cli_abort(message = "If {.code cellranger_multi = TRUE} then {.code default_10X_path} must be TRUE")
   }
 
-  if (default_10X_path) {
-    if (cellranger_multi) {
+  if (isTRUE(x = default_10X_path)) {
+    if (isTRUE(x = cellranger_multi)) {
       secondary_path <- "/outs/per_sample_outs/"
       multi_extra_path <- "count/sample_filtered_feature_bc_matrix"
     } else {
@@ -682,13 +687,13 @@ Read10X_Multi_Directory <- function(
   }
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
-      if (cellranger_multi) {
+      if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
       } else {
         file_path <- file.path(base_path, sample_list[x], secondary_path)
@@ -701,7 +706,7 @@ Read10X_Multi_Directory <- function(
       if (is.null(x = secondary_path)) {
         file_path <- file.path(base_path, sample_list[x])
       } else {
-        if (cellranger_multi) {
+        if (isTRUE(x = cellranger_multi)) {
           file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
         } else {
           file_path <- file.path(base_path, sample_list[x], secondary_path)
@@ -712,13 +717,13 @@ Read10X_Multi_Directory <- function(
   }
   # Name the list items
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
   # Merge data
-  if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+  if (isTRUE(x = merge)) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
   return(raw_data_list)
@@ -804,7 +809,7 @@ Read10X_h5_Multi_Directory <- function(
   }
 
   # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
   # Confirm directory exists
@@ -817,16 +822,16 @@ Read10X_h5_Multi_Directory <- function(
   }
 
   # Add file path for 10X default directories
-  if (default_10X_path && !is.null(x = secondary_path)) {
+  if (isTRUE(x = default_10X_path) && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
 
-  if (!default_10X_path && !is.null(x = secondary_path) && cellranger_multi) {
+  if (isFALSE(x = default_10X_path) && !is.null(x = secondary_path) && isTRUE(x = cellranger_multi)) {
     cli_abort(message = "If {.code cellranger_multi = TRUE} then {.code default_10X_path} must be TRUE")
   }
 
-  if (default_10X_path) {
-    if (cellranger_multi) {
+  if (isTRUE(x = default_10X_path)) {
+    if (isTRUE(x = cellranger_multi)) {
       secondary_path <- "/outs/per_sample_outs/"
       multi_extra_path <- "count/"
     } else {
@@ -847,13 +852,13 @@ Read10X_h5_Multi_Directory <- function(
 
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
-      if (cellranger_multi) {
+      if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
       } else {
         file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
@@ -863,12 +868,8 @@ Read10X_h5_Multi_Directory <- function(
     })
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
-      if (is.null(x = secondary_path)) {
-        if (cellranger_multi) {
-          file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
-        } else {
-          file_path <- file.path(base_path, sample_list[x], h5_filename)
-        }
+      if (isTRUE(x = cellranger_multi)) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
       } else {
         file_path <- file.path(base_path, sample_list[x], secondary_path, h5_filename)
       }
@@ -877,18 +878,18 @@ Read10X_h5_Multi_Directory <- function(
   }
   # Name the list items
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Replace Suffixes
-  if (replace_suffix) {
+  if (isTRUE(x = replace_suffix)) {
     if (is.null(x = new_suffix_list)) {
       cli_abort(message = "No values provided to {.code new_suffix_list} but {.code replace_suffix = TRUE}.")
     }
 
-    current_suffix_list <- sapply(1:length(raw_data_list), function(x) {
+    current_suffix_list <- sapply(1:length(x = raw_data_list), function(x) {
       unique(str_extract(string = colnames(x = raw_data_list[[x]]), pattern = "-.$"))
     })
 
@@ -901,8 +902,8 @@ Read10X_h5_Multi_Directory <- function(
   }
 
   # Merge data
-  if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+  if (isTRUE(x = merge)) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
   return(raw_data_list)
@@ -990,14 +991,14 @@ Read_GEO_Delim <- function(
   }
 
   # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
 
   # Read in subset of files
   if (!is.null(x = sample_list)) {
     # Add suffix
-    if (full_names) {
+    if (isTRUE(x = full_names)) {
       file_list <- sample_list
     } else {
       file_list <- paste0(sample_list, file_suffix)
@@ -1026,20 +1027,20 @@ Read_GEO_Delim <- function(
   # Read in files
   cli_inform(message = "{.field Reading gene expression files from directory}")
   pboptions(char = "=")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
-      if (move_genes_rownames) {
-        first_col_name <- colnames(data[1])
+      if (isTRUE(x = move_genes_rownames)) {
+        first_col_name <- colnames(x = data[1])
         data <- data %>%
           column_to_rownames(first_col_name)
       }
-      if (barcode_suffix_period) {
-        colnames(data) <- gsub("\\.", "-", colnames(data))
+      if (isTRUE(x = barcode_suffix_period)) {
+        colnames(x = data) <- gsub("\\.", "-", colnames(x = data))
       }
       data_sparse <- as(data, "Matrix")
       return(data_sparse)
@@ -1048,8 +1049,8 @@ Read_GEO_Delim <- function(
     raw_data_list <- pblapply(1:length(x = file_list), function(i) {
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
-      if (move_genes_rownames) {
-        first_col_name <- colnames(data[1])
+      if (isTRUE(x = move_genes_rownames)) {
+        first_col_name <- colnames(x = data[1])
         data <- data %>%
           column_to_rownames(first_col_name)
       }
@@ -1059,8 +1060,8 @@ Read_GEO_Delim <- function(
         cli_abort(message = c("One or more columns in the file: {.val {dge_loc}} contains non-numeric data.",
                               "i" = "Please check original file and/or that parameter {.code move_genes_rownames} is set appropriately."))
       }
-      if (barcode_suffix_period) {
-        colnames(data) <- gsub("\\.", "-", colnames(data))
+      if (isTRUE(x = barcode_suffix_period)) {
+        colnames(x = data) <- gsub("\\.", "-", colnames(x = data))
       }
       data_sparse <- as(data, "Matrix")
       return(data_sparse)
@@ -1068,7 +1069,7 @@ Read_GEO_Delim <- function(
   }
 
   # Name the items in list
-  names(raw_data_list) <- sample_names
+  names(x = raw_data_list) <- sample_names
 
   # Check matrices
   for (i in 1:length(x = raw_data_list)) {
@@ -1076,8 +1077,8 @@ Read_GEO_Delim <- function(
   }
 
   # Merge data
-  if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+  if (isTRUE(x = merge)) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -1110,6 +1111,7 @@ Read_GEO_Delim <- function(
 #'
 #' @import cli
 #' @import Matrix
+#' @importFrom rlang is_installed
 #'
 #' @export
 #'
@@ -1129,8 +1131,8 @@ Read_CellBender_h5_Mat <- function(
     feature_slot_name = "features"
 ) {
   # Check hdf5r installed
-  hdf5r_check <- PackageCheck("hdf5r", error = FALSE)
-  if (!hdf5r_check[1]) {
+  hdf5r_check <- is_installed(pkg = "hdf5r")
+  if (isFALSE(x = hdf5r_check)) {
     cli_abort(message = c(
       "Please install the {.val hdf5r} package to use {.code Read_CellBender_h5_Mat} and read HDF5 files.",
       "i" = "This can be accomplished with the following commands: ",
@@ -1159,13 +1161,13 @@ Read_CellBender_h5_Mat <- function(
 
   # Check feature_slot_name is correct
   if (!length(x = grep(pattern = feature_slot_name, x = h5_dataset_list, value = TRUE)) > 0) {
-    cli::cli_abort(message = c("{.code feature_slot_name}: {.val {feature_slot_name}} not found in H5 file.",
+    cli_abort(message = c("{.code feature_slot_name}: {.val {feature_slot_name}} not found in H5 file.",
                                "i" = "Check contents of H5 file {.code rhdf5::h5ls('{file_name}')} to confirm correct {.code feature_slot_name}."))
   }
 
   # Assign feature slot name
   if (feature_slot_name == "features") {
-    if (use.names) {
+    if (isTRUE(x = use.names)) {
       feature_slot <- 'features/name'
     }
     else {
@@ -1174,7 +1176,7 @@ Read_CellBender_h5_Mat <- function(
   }
 
   if (feature_slot_name == "genes") {
-    if (use.names) {
+    if (isTRUE(x = use.names)) {
       feature_slot <- 'gene_names'
     }
     else {
@@ -1186,7 +1188,7 @@ Read_CellBender_h5_Mat <- function(
   group_names <- names(x = infile)
 
   if (!is.null(x = h5_group_name) && !h5_group_name %in% group_names) {
-    cli::cli_abort(message = c("{.code h5_group_name} {.val {h5_group_name}} not found.",
+    cli_abort(message = c("{.code h5_group_name} {.val {h5_group_name}} not found.",
                                "i" = "Check H5 file group names {.code rhdf5::h5ls('{file_name}')}."))
   }
 
@@ -1209,7 +1211,7 @@ Read_CellBender_h5_Mat <- function(
     } else {
       # check subgroups
       if (is.null(x = h5_group_name)) {
-        cli::cli_abort(message = c("H5 file contains multiple sub-groups.",
+        cli_abort(message = c("H5 file contains multiple sub-groups.",
                                    "i" = "Please provide {.code h5_group_name} specifying which subgroup contains count data."))
       } else {
         counts <- infile[[paste0(h5_group_name, '/data')]]
@@ -1231,7 +1233,7 @@ Read_CellBender_h5_Mat <- function(
     repr = "T"
   )
 
-  if (unique.features) {
+  if (isTRUE(x = unique.features)) {
     features <- make.unique(names = features)
   }
 
@@ -1309,7 +1311,7 @@ Read_CellBender_h5_Multi_Directory <- function(
   ...
 ) {
   # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
   # Confirm directory exists
@@ -1330,7 +1332,7 @@ Read_CellBender_h5_Multi_Directory <- function(
     if (length(x = file_ext) == 0) {
       cli_abort(message = "'custom_name' must end with file extension '.h5'.")
     }
-  } else if (filtered_h5) {
+  } else if (isTRUE(x = filtered_h5)) {
     file_suffix <- "_out_filtered.h5"
   } else {
     file_suffix <- "_out.h5"
@@ -1351,7 +1353,7 @@ Read_CellBender_h5_Multi_Directory <- function(
 
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
@@ -1376,13 +1378,13 @@ Read_CellBender_h5_Multi_Directory <- function(
   }
   # Name the list items
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Replace Suffixes
-  if (replace_suffix) {
+  if (isTRUE(x = replace_suffix)) {
     if (is.null(x = new_suffix_list)) {
       cli_abort(message = "No values provided to {.code new_suffix_list} but {.code replace_suffix = TRUE}.")
     }
@@ -1400,8 +1402,8 @@ Read_CellBender_h5_Multi_Directory <- function(
   }
 
   # Merge data
-  if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+  if (isTRUE(x = merge)) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
   return(raw_data_list)
@@ -1471,7 +1473,7 @@ Read_CellBender_h5_Multi_File <- function(
   }
 
   # Confirm num_cores specified
-  if (parallel && is.null(x = num_cores)) {
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
 
@@ -1484,7 +1486,7 @@ Read_CellBender_h5_Multi_File <- function(
     if (length(x = file_ext) == 0) {
       cli_abort(message = "'custom_name' must end with file extension '.h5'.")
     }
-  } else if (filtered_h5) {
+  } else if (isTRUE(x = filtered_h5)) {
     file_suffix <- "_out_filtered.h5"
   } else {
     file_suffix <- "_out.h5"
@@ -1503,7 +1505,7 @@ Read_CellBender_h5_Multi_File <- function(
 
   cli_inform(message = "{.field Reading Cell Bender H5 files from directory}")
   pboptions(char = "=")
-  if (parallel) {
+  if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
                            "NOTE: Parallel processing will not report informative error messages.", "
                            If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
@@ -1520,14 +1522,14 @@ Read_CellBender_h5_Multi_File <- function(
 
   # Name the matrices
   if (is.null(x = sample_names)) {
-    names(raw_data_list) <- sample_list
+    names(x = raw_data_list) <- sample_list
   } else {
-    names(raw_data_list) <- sample_names
+    names(x = raw_data_list) <- sample_names
   }
 
   # Merge data
-  if (merge) {
-    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(raw_data_list))
+  if (isTRUE(x = merge)) {
+    raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
 
@@ -1549,6 +1551,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @param secondary_path path from the parent directory to count "outs/" folder which contains the
 #' "metrics_summary.csv" file.
 #' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param cellranger_multi logical, whether or not metrics come from Cell Ranger `count` or from Cell Ranger `multi`.  Default is FALSE.
 #' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
 #' in all samples in parent directory.
 #' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
@@ -1559,6 +1562,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows
+#' @importFrom magrittr "%>%"
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @export
@@ -1575,6 +1579,7 @@ Read_Metrics_10X <- function(
   base_path,
   secondary_path = NULL,
   default_10X = TRUE,
+  cellranger_multi = FALSE,
   lib_list = NULL,
   lib_names = NULL
 ) {
@@ -1588,11 +1593,15 @@ Read_Metrics_10X <- function(
   }
 
   # Add file path for 10X default directories
-  if (default_10X && !is.null(x = secondary_path)) {
+  if (isTRUE(x = default_10X) && !is.null(x = secondary_path)) {
     cli_abort(message = "If {.code default_10X_path = TRUE} then {.code secondary_path} must be NULL.")
   }
-  if (default_10X) {
-    secondary_path <- "outs/"
+  if (isTRUE(x = default_10X)) {
+    if (isTRUE(x = cellranger_multi)) {
+      secondary_path <- "outs/per_sample_outs/"
+    } else {
+      secondary_path <- "outs/"
+    }
   }
   if (is.null(x = secondary_path)) {
     secondary_path <- ""
@@ -1605,35 +1614,36 @@ Read_Metrics_10X <- function(
     }
   }
 
-  # Read in raw data
-  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+  if (isTRUE(x = cellranger_multi)) {
     if (is.null(x = secondary_path)) {
-      file_path <- file.path(base_path, lib_list[x])
+      s1_file_path <- file.path(base_path, lib_list[1])
     } else {
-      file_path <- file.path(base_path, lib_list[x], secondary_path)
+      s1_file_path <- file.path(base_path, lib_list[1], secondary_path, lib_list[1])
     }
 
-    raw_data <- read.csv(file = paste0(file_path, "metrics_summary.csv"), stringsAsFactors = F)
-    # Change format of numeric columns to due commas in data csv output.
-    column_numbers <- grep(pattern = ",", x = raw_data[1, ])
-    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
-    return(raw_data)
-  })
+    modalities <- read.csv(file = file.path(s1_file_path, "metrics_summary.csv"), stringsAsFactors = F)$Library.Type %>%
+      unique()
 
-  # Name the list items
-  if (is.null(x = lib_names)) {
-    names(raw_data_list) <- lib_list
+    if ("Gene Expression" %in% modalities) {
+      multi_gex_metrics <- Metrics_Multi_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
+
+    if ("VDJ T" %in% modalities) {
+      multi_vdjt_metrics <- Metrics_Multi_VDJT(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
+
+    # Return data
+    data_list <- list(
+      multi_gex_metrics = multi_gex_metrics,
+      multi_vdjt_metrics = multi_vdjt_metrics
+    )
+
+    return(data_list)
   } else {
-    names(raw_data_list) <- lib_names
+    count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+
+    return(count_gex_metrics)
   }
-
-  # Combine the list and add sample_id column
-  full_data <- bind_rows(raw_data_list, .id = "sample_id")
-
-  # Change column nams to use "_" separator instead of "." for readability
-  colnames(full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
-
-  return(full_data)
 }
 
 

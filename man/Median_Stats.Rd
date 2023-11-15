@@ -17,7 +17,8 @@ Median_Stats(
 \item{group_by_var}{Column in meta.data slot to group results by (default = "orig.ident").}
 
 \item{default_var}{logical.  Whether to include the default meta.data variables of: "nCount_RNA",
-"nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo" in addition to variables supplied to \code{median_var}.}
+"nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
+in addition to variables supplied to \code{median_var}.}
 
 \item{median_var}{Column(s) in \verb{@meta.data} to calculate medians for in addition to defaults.
 Must be of \code{class()} integer or numeric.}

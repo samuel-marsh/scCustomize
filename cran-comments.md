@@ -1,7 +1,9 @@
 ## Minor Version Update 
-This is a hotfix minor update from v1.1.2 to v1.1.3. In this version I have:  
+This is a major version update to v2.0.0. In this version I have:  
 
-- Fixed parameter documentation in function help/manual that slipped through release (see News.md). I'm sorry this was missed in submission yesterday.  Parameter input changed substantially in v1.1.2 and therefore accurate documentation is required with hotfix instead of waiting until next release. 
+- Added a number of new functions, added new function parameters, and fixed bugs (see News.md).  
+- Ensured compatibility with major version of Seurat package.  
+- Fixed in example code causing current CRAN check errors with current package version (v1.1.3).
 
 
 ## R CMD check results
@@ -9,7 +11,7 @@ This is a hotfix minor update from v1.1.2 to v1.1.3. In this version I have:
 0 errors | 0 warnings | 1 notes
 
 ### Test environments  
-- Run locally, R4.1.2, Platform: x86_64-apple-darwin17.0 (64-bit) with `devtools:check()`.  
+- Run locally, R4.3.2, Platform: x86_64-apple-darwin20 (64-bit) with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
 
@@ -20,4 +22,12 @@ This is a hotfix minor update from v1.1.2 to v1.1.3. In this version I have:
   use conditionally.  
     - I have worked to move/remove as many IMPORTS to SUGGESTS as possible.  This package aims to simplify a number of different
     visualizations/code tasks in scRNA-seq analysis and as such does have diverse array of dependencies.  I will monitor
-    to ensure package functionality.
+    to ensure package functionality.  
+
+## Other Notes
+1. GitHub Actions check returning strange errors only on macos (release).  
+    - The errors are from failures running package examples.  This includes functions that have been part of prior CRAN releases.
+    NO errors are found when checking locally on macos platform using R 4.3.2 and none are found in GitHub Actions check on linux
+    or windows platforms.  I believe to be error in GitHub Actions workflow and I have therefore refrained from adding `dontrun`
+    to examples that run fine on other platforms.  If error occurs during CRAN check during submission I will re-evaluate changes
+    required.  

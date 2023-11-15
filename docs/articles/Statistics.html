@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -130,7 +130,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Statistics Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: July 20, 2023</h4>
+            <h4 data-toc-skip class="date">Compiled: November 13,
+2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Statistics.Rmd" class="external-link"><code>vignettes/articles/Statistics.Rmd</code></a></small>
       <div class="hidden name"><code>Statistics.Rmd</code></div>
@@ -154,7 +155,9 @@ metrics of interest.</p>
 SeuratData package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span>
@@ -232,28 +235,28 @@ Naive CD4 T
 26.4215315
 </td>
 <td style="text-align:right;">
-177
+168
 </td>
 <td style="text-align:right;">
-148
+176
 </td>
 <td style="text-align:right;">
-181
+161
 </td>
 <td style="text-align:right;">
-191
+192
 </td>
 <td style="text-align:right;">
-25.6894049
+26.6666667
 </td>
 <td style="text-align:right;">
-23.8709677
+25.1788269
 </td>
 <td style="text-align:right;">
-29.052969
+24.845679
 </td>
 <td style="text-align:right;">
-27.0538244
+29.0468986
 </td>
 </tr>
 <tr>
@@ -267,28 +270,28 @@ Memory CD4 T
 18.3093252
 </td>
 <td style="text-align:right;">
-133
+106
+</td>
+<td style="text-align:right;">
+134
 </td>
 <td style="text-align:right;">
 113
 </td>
 <td style="text-align:right;">
-109
+130
 </td>
 <td style="text-align:right;">
-128
+16.8253968
 </td>
 <td style="text-align:right;">
-19.3033382
+19.1702432
 </td>
 <td style="text-align:right;">
-18.2258065
+17.438272
 </td>
 <td style="text-align:right;">
-17.495987
-</td>
-<td style="text-align:right;">
-18.1303116
+19.6671710
 </td>
 </tr>
 <tr>
@@ -302,28 +305,28 @@ CD14+ Mono
 18.1956027
 </td>
 <td style="text-align:right;">
+108
+</td>
+<td style="text-align:right;">
+138
+</td>
+<td style="text-align:right;">
 116
 </td>
 <td style="text-align:right;">
-119
+118
 </td>
 <td style="text-align:right;">
-113
+17.1428571
 </td>
 <td style="text-align:right;">
-132
+19.7424893
 </td>
 <td style="text-align:right;">
-16.8359942
+17.901235
 </td>
 <td style="text-align:right;">
-19.1935484
-</td>
-<td style="text-align:right;">
-18.138042
-</td>
-<td style="text-align:right;">
-18.6968839
+17.8517398
 </td>
 </tr>
 <tr>
@@ -337,28 +340,28 @@ B
 13.0401820
 </td>
 <td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
 83
 </td>
 <td style="text-align:right;">
-90
+12.8571429
 </td>
 <td style="text-align:right;">
-82
+11.4449213
 </td>
 <td style="text-align:right;">
-89
+15.432099
 </td>
 <td style="text-align:right;">
-12.0464441
-</td>
-<td style="text-align:right;">
-14.5161290
-</td>
-<td style="text-align:right;">
-13.162119
-</td>
-<td style="text-align:right;">
-12.6062323
+12.5567322
 </td>
 </tr>
 <tr>
@@ -372,28 +375,28 @@ CD8 T
 10.2729340
 </td>
 <td style="text-align:right;">
-80
+76
 </td>
 <td style="text-align:right;">
-70
-</td>
-<td style="text-align:right;">
-57
+75
 </td>
 <td style="text-align:right;">
 64
 </td>
 <td style="text-align:right;">
-11.6110305
+56
 </td>
 <td style="text-align:right;">
-11.2903226
+12.0634921
 </td>
 <td style="text-align:right;">
-9.149278
+10.7296137
 </td>
 <td style="text-align:right;">
-9.0651558
+9.876543
+</td>
+<td style="text-align:right;">
+8.4720121
 </td>
 </tr>
 <tr>
@@ -407,28 +410,28 @@ FCGR3A+ Mono
 6.1410159
 </td>
 <td style="text-align:right;">
-47
+45
 </td>
 <td style="text-align:right;">
-30
+37
 </td>
 <td style="text-align:right;">
-35
+44
 </td>
 <td style="text-align:right;">
-50
+36
 </td>
 <td style="text-align:right;">
-6.8214804
+7.1428571
 </td>
 <td style="text-align:right;">
-4.8387097
+5.2932761
 </td>
 <td style="text-align:right;">
-5.617978
+6.790123
 </td>
 <td style="text-align:right;">
-7.0821530
+5.4462935
 </td>
 </tr>
 <tr>
@@ -442,28 +445,28 @@ NK
 5.8756634
 </td>
 <td style="text-align:right;">
-40
+35
 </td>
 <td style="text-align:right;">
-39
+48
 </td>
 <td style="text-align:right;">
-38
+41
 </td>
 <td style="text-align:right;">
-38
+31
 </td>
 <td style="text-align:right;">
-5.8055152
+5.5555556
 </td>
 <td style="text-align:right;">
-6.2903226
+6.8669528
 </td>
 <td style="text-align:right;">
-6.099519
+6.327160
 </td>
 <td style="text-align:right;">
-5.3824363
+4.6898638
 </td>
 </tr>
 <tr>
@@ -477,28 +480,28 @@ DC
 1.2130402
 </td>
 <td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
 8
 </td>
 <td style="text-align:right;">
-13
+7
 </td>
 <td style="text-align:right;">
-1.0159652
+7
 </td>
 <td style="text-align:right;">
-0.6451613
+10
 </td>
 <td style="text-align:right;">
-1.284109
+1.2698413
 </td>
 <td style="text-align:right;">
-1.8413598
+1.0014306
+</td>
+<td style="text-align:right;">
+1.080247
+</td>
+<td style="text-align:right;">
+1.5128593
 </td>
 </tr>
 <tr>
@@ -512,28 +515,28 @@ Platelet
 0.5307051
 </td>
 <td style="text-align:right;">
-6
+3
 </td>
 <td style="text-align:right;">
-7
+4
 </td>
 <td style="text-align:right;">
-0
+2
 </td>
 <td style="text-align:right;">
-1
+5
 </td>
 <td style="text-align:right;">
-0.8708273
+0.4761905
 </td>
 <td style="text-align:right;">
-1.1290323
+0.5722461
 </td>
 <td style="text-align:right;">
-0.000000
+0.308642
 </td>
 <td style="text-align:right;">
-0.1416431
+0.7564297
 </td>
 </tr>
 <tr>
@@ -547,16 +550,16 @@ Total
 100.0000000
 </td>
 <td style="text-align:right;">
-689
+630
 </td>
 <td style="text-align:right;">
-620
+699
 </td>
 <td style="text-align:right;">
-623
+648
 </td>
 <td style="text-align:right;">
-706
+661
 </td>
 <td style="text-align:right;">
 100.0000000
@@ -616,16 +619,16 @@ Naive CD4 T
 26.4215315
 </td>
 <td style="text-align:right;">
-358
+329
 </td>
 <td style="text-align:right;">
-339
+368
 </td>
 <td style="text-align:right;">
-27.2865854
+25.7433490
 </td>
 <td style="text-align:right;">
-25.5656109
+27.0588235
 </td>
 </tr>
 <tr>
@@ -639,16 +642,16 @@ Memory CD4 T
 18.3093252
 </td>
 <td style="text-align:right;">
-242
+219
 </td>
 <td style="text-align:right;">
-241
+264
 </td>
 <td style="text-align:right;">
-18.4451220
+17.1361502
 </td>
 <td style="text-align:right;">
-18.1749623
+19.4117647
 </td>
 </tr>
 <tr>
@@ -662,16 +665,16 @@ CD14+ Mono
 18.1956027
 </td>
 <td style="text-align:right;">
-229
+224
 </td>
 <td style="text-align:right;">
-251
+256
 </td>
 <td style="text-align:right;">
-17.4542683
+17.5273865
 </td>
 <td style="text-align:right;">
-18.9291101
+18.8235294
 </td>
 </tr>
 <tr>
@@ -685,16 +688,16 @@ B
 13.0401820
 </td>
 <td style="text-align:right;">
-165
+181
 </td>
 <td style="text-align:right;">
-179
+163
 </td>
 <td style="text-align:right;">
-12.5762195
+14.1627543
 </td>
 <td style="text-align:right;">
-13.4992459
+11.9852941
 </td>
 </tr>
 <tr>
@@ -708,16 +711,16 @@ CD8 T
 10.2729340
 </td>
 <td style="text-align:right;">
-137
+140
 </td>
 <td style="text-align:right;">
-134
+131
 </td>
 <td style="text-align:right;">
-10.4420732
+10.9546166
 </td>
 <td style="text-align:right;">
-10.1055807
+9.6323529
 </td>
 </tr>
 <tr>
@@ -731,16 +734,16 @@ FCGR3A+ Mono
 6.1410159
 </td>
 <td style="text-align:right;">
-82
+89
 </td>
 <td style="text-align:right;">
-80
+73
 </td>
 <td style="text-align:right;">
-6.2500000
+6.9640063
 </td>
 <td style="text-align:right;">
-6.0331825
+5.3676471
 </td>
 </tr>
 <tr>
@@ -754,16 +757,16 @@ NK
 5.8756634
 </td>
 <td style="text-align:right;">
-78
+76
 </td>
 <td style="text-align:right;">
-77
+79
 </td>
 <td style="text-align:right;">
-5.9451220
+5.9467919
 </td>
 <td style="text-align:right;">
-5.8069382
+5.8088235
 </td>
 </tr>
 <tr>
@@ -783,10 +786,10 @@ DC
 17
 </td>
 <td style="text-align:right;">
-1.1432927
+1.1737089
 </td>
 <td style="text-align:right;">
-1.2820513
+1.2500000
 </td>
 </tr>
 <tr>
@@ -800,16 +803,16 @@ Platelet
 0.5307051
 </td>
 <td style="text-align:right;">
-6
+5
 </td>
 <td style="text-align:right;">
-8
+9
 </td>
 <td style="text-align:right;">
-0.4573171
+0.3912363
 </td>
 <td style="text-align:right;">
-0.6033183
+0.6617647
 </td>
 </tr>
 <tr>
@@ -823,10 +826,10 @@ Total
 100.0000000
 </td>
 <td style="text-align:right;">
-1312
+1278
 </td>
 <td style="text-align:right;">
-1326
+1360
 </td>
 <td style="text-align:right;">
 100.0000000
@@ -959,16 +962,16 @@ variable if desired.</p>
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-sample2
+sample3
 </th>
 <th style="text-align:right;">
-sample1
+sample2
 </th>
 <th style="text-align:right;">
 sample4
 </th>
 <th style="text-align:right;">
-sample3
+sample1
 </th>
 </tr></thead>
 <tbody>
@@ -977,16 +980,16 @@ sample3
 CD4
 </td>
 <td style="text-align:right;">
-11.12903
+11.11111
 </td>
 <td style="text-align:right;">
-10.59507
+11.87411
 </td>
 <td style="text-align:right;">
-14.730878
+11.95159
 </td>
 <td style="text-align:right;">
-10.11236
+11.90476
 </td>
 </tr>
 <tr>
@@ -994,16 +997,16 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-11.77419
+10.49383
 </td>
 <td style="text-align:right;">
-14.36865
+13.16166
 </td>
 <td style="text-align:right;">
-9.490085
+12.40545
 </td>
 <td style="text-align:right;">
-11.55698
+10.95238
 </td>
 </tr>
 </tbody>
@@ -1021,34 +1024,34 @@ expression within group split by meta data variable</p>
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-Naive.CD4.T_Group.2
-</th>
-<th style="text-align:right;">
 Naive.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
-Memory.CD4.T_Group.1
+Naive.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
 Memory.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
-CD14..Mono_Group.1
+Memory.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
 CD14..Mono_Group.2
 </th>
 <th style="text-align:right;">
-B_Group.2
+CD14..Mono_Group.1
 </th>
 <th style="text-align:right;">
 B_Group.1
 </th>
 <th style="text-align:right;">
-CD8.T_Group.2
+B_Group.2
 </th>
 <th style="text-align:right;">
 CD8.T_Group.1
+</th>
+<th style="text-align:right;">
+CD8.T_Group.2
 </th>
 <th style="text-align:right;">
 FCGR3A..Mono_Group.1
@@ -1063,16 +1066,16 @@ NK_Group.2
 NK_Group.1
 </th>
 <th style="text-align:right;">
-DC_Group.2
-</th>
-<th style="text-align:right;">
 DC_Group.1
 </th>
 <th style="text-align:right;">
-Platelet_Group.1
+DC_Group.2
 </th>
 <th style="text-align:right;">
 Platelet_Group.2
+</th>
+<th style="text-align:right;">
+Platelet_Group.1
 </th>
 </tr></thead>
 <tbody>
@@ -1081,52 +1084,52 @@ Platelet_Group.2
 CD4
 </td>
 <td style="text-align:right;">
-8.259587
+6.382979
 </td>
 <td style="text-align:right;">
-5.307263
+7.065217
 </td>
 <td style="text-align:right;">
-14.87603
+15.909091
 </td>
 <td style="text-align:right;">
-17.012448
+15.981735
 </td>
 <td style="text-align:right;">
-21.397380
+23.04688
 </td>
 <td style="text-align:right;">
-27.0916335
+25.892857
 </td>
 <td style="text-align:right;">
-1.117318
+1.657459
 </td>
 <td style="text-align:right;">
-1.818182
+1.226994
 </td>
 <td style="text-align:right;">
-2.985075
+3.571429
 </td>
 <td style="text-align:right;">
-2.189781
+1.526718
 </td>
 <td style="text-align:right;">
-19.512195
+25.842697
 </td>
 <td style="text-align:right;">
-35.0
+28.767123
 </td>
 <td style="text-align:right;">
-0.000000
+1.265823
 </td>
 <td style="text-align:right;">
-1.282051
+0.00000
 </td>
 <td style="text-align:right;">
-11.76471
+13.33333
 </td>
 <td style="text-align:right;">
-60.000000
+52.941176
 </td>
 <td style="text-align:right;">
 0
@@ -1140,52 +1143,52 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-12.684366
+11.854103
 </td>
 <td style="text-align:right;">
-13.966480
+14.673913
 </td>
 <td style="text-align:right;">
-11.15702
+9.090909
 </td>
 <td style="text-align:right;">
-6.639004
+8.675799
 </td>
 <td style="text-align:right;">
-3.056769
+2.34375
 </td>
 <td style="text-align:right;">
-0.7968127
+1.339286
 </td>
 <td style="text-align:right;">
-2.234637
+3.314917
 </td>
 <td style="text-align:right;">
-3.030303
+1.840491
 </td>
 <td style="text-align:right;">
-50.000000
+42.142857
 </td>
 <td style="text-align:right;">
-51.094890
+59.541985
 </td>
 <td style="text-align:right;">
-4.878049
+3.370786
 </td>
 <td style="text-align:right;">
-2.5
+4.109589
 </td>
 <td style="text-align:right;">
-7.792208
+6.329114
 </td>
 <td style="text-align:right;">
-8.974359
+10.52632
 </td>
 <td style="text-align:right;">
 0.00000
 </td>
 <td style="text-align:right;">
-6.666667
+5.882353
 </td>
 <td style="text-align:right;">
 0
@@ -1349,19 +1352,19 @@ Median_percent_mito_ribo
 sample1
 </td>
 <td style="text-align:right;">
-2217.0
+2175.5
 </td>
 <td style="text-align:right;">
-825
+820.5
 </td>
 <td style="text-align:right;">
-1.979265
+2.062129
 </td>
 <td style="text-align:right;">
-37.05882
+36.51243
 </td>
 <td style="text-align:right;">
-39.01665
+38.72930
 </td>
 </tr>
 <tr>
@@ -1369,19 +1372,19 @@ sample1
 sample2
 </td>
 <td style="text-align:right;">
-2170.5
+2237.0
 </td>
 <td style="text-align:right;">
-818
+820.0
 </td>
 <td style="text-align:right;">
-2.048064
+2.005975
 </td>
 <td style="text-align:right;">
-36.95382
+36.31425
 </td>
 <td style="text-align:right;">
-39.07426
+38.63042
 </td>
 </tr>
 <tr>
@@ -1389,19 +1392,19 @@ sample2
 sample3
 </td>
 <td style="text-align:right;">
-2191.0
+2255.5
 </td>
 <td style="text-align:right;">
-809
+828.5
 </td>
 <td style="text-align:right;">
-2.033599
+2.025659
 </td>
 <td style="text-align:right;">
-36.66191
+37.03454
 </td>
 <td style="text-align:right;">
-38.80668
+39.09636
 </td>
 </tr>
 <tr>
@@ -1409,19 +1412,19 @@ sample3
 sample4
 </td>
 <td style="text-align:right;">
-2250.5
+2189.0
 </td>
 <td style="text-align:right;">
-823
+806.0
 </td>
 <td style="text-align:right;">
-1.983932
+1.960784
 </td>
 <td style="text-align:right;">
-37.06706
+37.43363
 </td>
 <td style="text-align:right;">
-39.41305
+39.74237
 </td>
 </tr>
 <tr>
@@ -1432,7 +1435,7 @@ Totals (All Cells)
 2213.0
 </td>
 <td style="text-align:right;">
-819
+819.0
 </td>
 <td style="text-align:right;">
 2.010702
@@ -1486,22 +1489,22 @@ Median_module_score1
 sample1
 </td>
 <td style="text-align:right;">
-2217.0
+2175.5
 </td>
 <td style="text-align:right;">
-825
+820.5
 </td>
 <td style="text-align:right;">
-1.979265
+2.062129
 </td>
 <td style="text-align:right;">
-37.05882
+36.51243
 </td>
 <td style="text-align:right;">
-39.01665
+38.72930
 </td>
 <td style="text-align:right;">
--0.1320305
+-0.0918005
 </td>
 </tr>
 <tr>
@@ -1509,22 +1512,22 @@ sample1
 sample2
 </td>
 <td style="text-align:right;">
-2170.5
+2237.0
 </td>
 <td style="text-align:right;">
-818
+820.0
 </td>
 <td style="text-align:right;">
-2.048064
+2.005975
 </td>
 <td style="text-align:right;">
-36.95382
+36.31425
 </td>
 <td style="text-align:right;">
-39.07426
+38.63042
 </td>
 <td style="text-align:right;">
--0.1394421
+-0.0646868
 </td>
 </tr>
 <tr>
@@ -1532,22 +1535,22 @@ sample2
 sample3
 </td>
 <td style="text-align:right;">
-2191.0
+2255.5
 </td>
 <td style="text-align:right;">
-809
+828.5
 </td>
 <td style="text-align:right;">
-2.033599
+2.025659
 </td>
 <td style="text-align:right;">
-36.66191
+37.03454
 </td>
 <td style="text-align:right;">
-38.80668
+39.09636
 </td>
 <td style="text-align:right;">
--0.0468948
+-0.1521147
 </td>
 </tr>
 <tr>
@@ -1555,22 +1558,22 @@ sample3
 sample4
 </td>
 <td style="text-align:right;">
-2250.5
+2189.0
 </td>
 <td style="text-align:right;">
-823
+806.0
 </td>
 <td style="text-align:right;">
-1.983932
+1.960784
 </td>
 <td style="text-align:right;">
-37.06706
+37.43363
 </td>
 <td style="text-align:right;">
-39.41305
+39.74237
 </td>
 <td style="text-align:right;">
--0.0621651
+-0.0593373
 </td>
 </tr>
 <tr>
@@ -1581,7 +1584,7 @@ Totals (All Cells)
 2213.0
 </td>
 <td style="text-align:right;">
-819
+819.0
 </td>
 <td style="text-align:right;">
 2.010702
@@ -1599,6 +1602,140 @@ Totals (All Cells)
 </tbody>
 </table>
 </div>
+<div class="section level4">
+<h4 id="calculate-median-absolute-deviations">Calculate Median Absolute Deviations<a class="anchor" aria-label="anchor" href="#calculate-median-absolute-deviations"></a>
+</h4>
+<p>In addition to calculating the median values scCustomize includes
+function to calculate the median absolute deviation for each of those
+features with function <code>MAD_Stats</code>. By setting the parameter
+<code>mad_num</code> the function will retrun the MAD*mad_num.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MAD_Stats.html">MAD_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, mad_num <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+orig.ident
+</th>
+<th style="text-align:right;">
+MAD x 2 nCount_RNA
+</th>
+<th style="text-align:right;">
+MAD x 2 nFeature_RNA
+</th>
+<th style="text-align:right;">
+MAD x 2 percent_mito
+</th>
+<th style="text-align:right;">
+MAD x 2 percent_ribo
+</th>
+<th style="text-align:right;">
+MAD x 2 percent_mito_ribo
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+sample1
+</td>
+<td style="text-align:right;">
+703.4937
+</td>
+<td style="text-align:right;">
+186.0663
+</td>
+<td style="text-align:right;">
+0.7930814
+</td>
+<td style="text-align:right;">
+12.21083
+</td>
+<td style="text-align:right;">
+11.91618
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sample2
+</td>
+<td style="text-align:right;">
+782.8128
+</td>
+<td style="text-align:right;">
+194.2206
+</td>
+<td style="text-align:right;">
+0.7781392
+</td>
+<td style="text-align:right;">
+12.54379
+</td>
+<td style="text-align:right;">
+12.56013
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sample3
+</td>
+<td style="text-align:right;">
+719.0610
+</td>
+<td style="text-align:right;">
+182.3598
+</td>
+<td style="text-align:right;">
+0.7518263
+</td>
+<td style="text-align:right;">
+11.42940
+</td>
+<td style="text-align:right;">
+11.52044
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sample4
+</td>
+<td style="text-align:right;">
+664.2048
+</td>
+<td style="text-align:right;">
+188.2902
+</td>
+<td style="text-align:right;">
+0.7614907
+</td>
+<td style="text-align:right;">
+11.14546
+</td>
+<td style="text-align:right;">
+10.82339
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Totals (All Cells)
+</td>
+<td style="text-align:right;">
+721.2849
+</td>
+<td style="text-align:right;">
+189.7728
+</td>
+<td style="text-align:right;">
+0.7721931
+</td>
+<td style="text-align:right;">
+11.86828
+</td>
+<td style="text-align:right;">
+11.69341
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section level3">
 <h3 id="plotting-median-data">Plotting Median Data<a class="anchor" aria-label="anchor" href="#plotting-median-data"></a>
@@ -1611,13 +1748,13 @@ results of these median calculations:</p>
 <li><code><a href="../reference/Plot_Median_Mito.html">Plot_Median_Mito()</a></code></li>
 <li><code><a href="../reference/Plot_Median_Other.html">Plot_Median_Other()</a></code></li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Statistics_files/figure-html/unnamed-chunk-20-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Statistics_files/figure-html/unnamed-chunk-22-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
   </div>

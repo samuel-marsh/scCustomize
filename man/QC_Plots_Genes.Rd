@@ -14,6 +14,7 @@ QC_Plots_Genes(
   high_cutoff = NULL,
   pt.size = NULL,
   plot_median = FALSE,
+  plot_boxplot = FALSE,
   median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
@@ -43,6 +44,8 @@ default is the current active.ident of the object.}
 \item{pt.size}{Point size for plotting.}
 
 \item{plot_median}{logical, whether to plot median for each ident on the plot (Default is FALSE).}
+
+\item{plot_boxplot}{logical, whether to plot boxplot inside of violin (Default is FALSE).}
 
 \item{median_size}{Shape size for the median is plotted.}
 

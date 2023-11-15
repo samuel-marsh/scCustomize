@@ -63,14 +63,23 @@ groups plotted is greater than 36.  Default = 123.}
 A ggplot object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Create FeatureScatter using split.by
 }
 \examples{
+\dontrun{
+# Function now DEPRECATED.
 library(Seurat)
 pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 
+# OLD Code
 Split_FeatureScatter(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
 split.by = "sample_id")
+
+# NEW Code
+FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA",
+feature2 = "nFeature_RNA", split.by = "sample_id")
+}
 
 }
 \concept{seurat_plotting}

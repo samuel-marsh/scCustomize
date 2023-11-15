@@ -18,7 +18,8 @@ FeaturePlot_DualAssay(
   na_cutoff = 1e-09,
   raster = NULL,
   raster.dpi = c(512, 512),
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   num_columns = NULL,
   alpha_exp = NULL,
   alpha_na_exp = NULL,
@@ -55,7 +56,9 @@ greater than 200,000 cells.}
 \item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(512, 512).}
 
-\item{slot}{Which slot to pull expression data from?  Default is "data".}
+\item{slot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{layer}}
+
+\item{layer}{Which layer to pull expression data from?  Default is "data".}
 
 \item{num_columns}{Number of columns in plot layout.  If number of features > 1 then \code{num_columns}
 dictates the number of columns in overall layout (\code{num_columns = 1} means stacked layout & \code{num_columns = 2}

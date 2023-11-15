@@ -8,6 +8,7 @@ Read_Metrics_10X(
   base_path,
   secondary_path = NULL,
   default_10X = TRUE,
+  cellranger_multi = FALSE,
   lib_list = NULL,
   lib_names = NULL
 )
@@ -19,6 +20,8 @@ Read_Metrics_10X(
 "metrics_summary.csv" file.}
 
 \item{default_10X}{logical (default TRUE) sets the secondary path variable to the default 10X directory structure.}
+
+\item{cellranger_multi}{logical, whether or not metrics come from Cell Ranger \code{count} or from Cell Ranger \code{multi}.  Default is FALSE.}
 
 \item{lib_list}{a list of sample names (matching directory names) to import.  If \code{NULL} will read
 in all samples in parent directory.}

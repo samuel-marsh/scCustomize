@@ -40,12 +40,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-# QC Plots
+# QC Metrics & Plots
 One of the first steps in all scRNA-seq analyses is performing a number of QC checks and plots so that data can be appropriately filtered.  scCustomize contains a number of functions that can be used to quickly and easily generate some of the most relevant QC plots.
 
 For this tutorial, I will be utilizing HCA bone marrow cell data from the SeuratData package.
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(Seurat)
 library(scCustomize)
@@ -61,14 +63,20 @@ hca_bm@meta.data$group[hca_bm@meta.data$orig.ident == "MantonBM5" | hca_bm@meta.
 
 ```
 
+```{r include=FALSE}
+hca_bm <- UpdateSeuratObject(hca_bm)
+```
+
 
 ```{r include=FALSE}
 accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
 ```
 
+## Adding 
+
 ## Add Mitochondrial and Ribosomal Gene Percentages
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot.  If you are using mouse, human, rat, zebrafish, drosophila, marmoset, or macaque data all you need to do is specify the `species` parameter.
-```{r}
+```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
 hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human")
 ```
@@ -104,13 +112,55 @@ hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", ensemb
 ```
 
 
-## Add Cell Complexity/Novelty QC Metric
+## Add Cell Complexity/Novelty QC Metrics  
+In addition to metrics like number of features and UMIs it can often be helpful to analyze the complexity of expression within a single cell.  scCustomize provides functions to add two of these metrics to meta data.  
+
+### Cell Complexity (log10(nFeature) / log10(nCount))
 scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
-```{r}
+```{r eval = FALSE}
 # These defaults can be run just by providing accepted species name
 hca_bm <- Add_Cell_Complexity_Seurat(seurat_object = hca_bm)
 ```
 *NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER`) but QC plotting functions currently only support Seurat objects.*
+
+
+### Add Top Percent Expression QC Metric  
+Additionally, (or alternatively), scCustomize contains another metric of complexity which is the top percent expression.  The user supplies an integer value for `num_top_genes` (default is 50) which species the number of genes and the function returns percentage of counts occupied by top XX genes in each cell.
+```{r eval = FALSE}
+# These defaults can be run just by providing accepted species name
+hca_bm <- Add_Top_Gene_Pct_Seurat(seurat_object = hca_bm, num_top_genes = 50)
+```
+
+## Add QC Metrics from Pathway Gene Lists  
+In addition to those standard QC metrics it can be helpful when using network based QC analysis to add the percent of expression of genes related to common pathways.  This function and the network-based analysis is further extension of the analysis/QC from our recent publication: Gazestani & Kamath et al., 2023 ([*Cell*](https://doi.org/10.1016/j.cell.2023.08.005)).
+
+In scCustomize the percent of gene expression from the following gene lists can be added as part of the `Add_Cell_QC_Metrics` (see next section for more details):  
+* Immediate Early Genes (for human and mouse only)  
+  - Can be used in part to examine potential impact of dissociation or post-mortem signatures ([*Marsh et al., 2022*](https://doi.org/10.1038/s41593-022-01022-8)) (gene list from [*Wu et al., 2017*](https://doi.org/10.1016/j.neuron.2017.09.026))  
+* Oxidative Phosphorylation, Apoptosis, & DNA Repair (all default species except Marmoset)
+ - Species specific gene lists from [MSigDB Hallmark Gene Sets](https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H) 
+
+
+## Add All Cell QC Metrics with Single Function
+To simplify the process of adding cell QC metrics scCustomize contains a wrapper function which can be customized to add all or some of the available QC metrics.  The default parameters of the function `Add_Cell_QC_Metrics` will add:  
+
+* Mitochondrial and Ribosomal Percentages (default and custom species).
+* Cell Complexity (log10(nFeature) / log10(nCount).
+* Top XX Gene Percentage.
+* Percentage of counts for IEG (human and mouse only).
+* OXPHOS, APOP, and DNA Repair pathways (supported species only).
+* Cell Cycle Scoring (Human only).
+
+```{r}
+hca_bm <- Add_Cell_QC_Metrics(seurat_object = hca_bm, species = "human")
+```
+
+### Customizing metrics  
+By changing the function parameters you can add a subset of available QC metrics.  For instance:
+```{r eval=FALSE}
+hca_bm <- Add_Cell_QC_Metrics(seurat_object = hca_bm, species = "human", add_mito_ribo = TRUE, add_complexity = FALSE, add_top_pct = TRUE, add_IEG = TRUE, add_MSigDB = FALSE, add_cell_cycle = FALSE)
+```
+
 
 
 ## Plotting QC Metrics
@@ -118,9 +168,9 @@ scCustomize has a number of quick QC plotting options for ease of use.
 *NOTE: Most scCustomize plotting functions contain `...` parameter to allow user to supply any of the parameters for the original Seurat function that is being used under the hood.*
 
 ## `VlnPlot`-Based QC Plots  
-scCustomize contains 4 functions which wrap `Seurat::VlnPlot()`.  
+scCustomize contains a number of shortcut/wrapper functions for QC plotting, which are wrappers around `Seurat::VlnPlot()`/`VlnPlot_scCustom`.  
 
-* `QC_Plots_Genes()` Plots genes per cell/nucleus.
+* `QC_Plots_Genes()` Plots genes/features per cell/nucleus.
 * `QC_Plots_UMIs()` Plots UMIs per cell/nucleus.  
 * `QC_Plots_Mito()` Plots mito% (named "percent_mito") per cell/nucleus.
 * `QC_Plots_Complexity()` Plots cell complexity metric (log10GenesPerUMI) per cell/nucleus.
@@ -135,7 +185,7 @@ scCustomize functions have the added benefit of:
 
 ```{r eval=FALSE}
 # All functions contain 
-p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500)
+p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 600, high_cutoff = 5500)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20)
 p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8)
@@ -143,7 +193,7 @@ p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8)
 
 ```{r echo=FALSE}
 # All functions contain 
-p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 800, high_cutoff = 5500, pt.size = 0.1)
+p1 <- QC_Plots_Genes(seurat_object = hca_bm, low_cutoff = 600, high_cutoff = 5500, pt.size = 0.1)
 p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0.1)
 p3 <- QC_Plots_Mito(seurat_object = hca_bm, high_cutoff = 20, pt.size = 0.1)
 p4 <- QC_Plots_Complexity(seurat_object = hca_bm, high_cutoff = 0.8, pt.size = 0.1)
@@ -160,7 +210,8 @@ In addition to being able to supply Seurat parameters with `...` these plots lik
 * `x_axis_label`/`y_axis_label`: Change axis labels.
 * `x_lab_rotate`: Should x-axis label be rotated 45 degrees?
 * `y_axis_log`: Should y-axis in linear or log10 scale.  
-* `plot_median` & `median_size`: Plot a line at the median of each x-axis identity.
+* `plot_median` & `median_size`: Plot a line at the median of each x-axis identity.  
+* `plot_boxplot`: Plot boxplot on top of the violin.
 
 
 ```{r, fig.height=5, fig.width=13, fig.align='center', fig.cap="*Setting `y_axis_log` can be very helpful for initial plots where outliers skew the visualization of the majority of the data without excluding data by setting y-axis limit.*"}
@@ -179,12 +230,20 @@ wrap_plots(p1, p2, ncol = 2)
 
 ```
 
+```{r, fig.height=5, fig.width=13, fig.align='center', fig.cap="*Plotting boxplot by setting the `plot_boxplot = TRUE` parameter.*"}
+p1 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0, plot_boxplot = TRUE)
+p2 <- QC_Plots_UMIs(seurat_object = hca_bm, low_cutoff = 1200, high_cutoff = 45000, pt.size = 0, y_axis_log = TRUE, plot_boxplot = TRUE)
+
+wrap_plots(p1, p2, ncol = 2)
+
+```
+
 
 ### Combined Plotting Function
 As a shortcut you can return single patchwork plot of the 3 main QC Plots (Genes, UMIs, %Mito) by using single function, `QC_Plots_Combined_Vln()`.
 
 ```{r, fig.height=7, fig.width=13}
-QC_Plots_Combined_Vln(seurat_object = hca_bm, feature_cutoffs = c(800, 5500), UMI_cutoffs = c(1200, 45000), mito_cutoffs = 20, pt.size = 0.1)
+QC_Plots_Combined_Vln(seurat_object = hca_bm, feature_cutoffs = c(600, 5500), UMI_cutoffs = c(1200, 45000), mito_cutoffs = 20, pt.size = 0.1)
 ```
 
 
@@ -204,14 +263,14 @@ scCustomize contains 3 functions which wrap `Seurat::FeatureScatter()` with adde
 
 ```{r eval=FALSE}
 # All functions contain 
-QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 800, high_cutoff_gene = 5500, low_cutoff_UMI = 500, high_cutoff_UMI = 50000)
-QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_feature = 20)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 600, high_cutoff_gene = 5500, low_cutoff_UMI = 500, high_cutoff_UMI = 50000)
+QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_feature = 20)
 ```
 
 ```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
 # All functions contain 
-p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 400, high_cutoff_gene = 5500, low_cutoff_UMI = 1200, high_cutoff_UMI = 45000, x_axis_label = "UMIs per Cell")
-p2 <- QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_feature = 20)
+p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, low_cutoff_gene = 600, high_cutoff_gene = 5500, low_cutoff_UMI = 1200, high_cutoff_UMI = 45000, x_axis_label = "UMIs per Cell")
+p2 <- QC_Plot_GenevsFeature(seurat_object = hca_bm, feature1 = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_feature = 20)
 
 wrap_plots(p1, p2, ncol = 2)
 ```
@@ -221,13 +280,13 @@ wrap_plots(p1, p2, ncol = 2)
 `QC_Plot_UMIvsGene` contains the ability to color points by continuous meta data variables.  
 This can be used to plot % of mito reads in addition to UMI vs. Gene comparisons
 ```{r eval=FALSE}
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
 ```
 
 ```{r echo=FALSE, fig.height=7, fig.width=13, fig.cap="*`QC_Plot_UMIvsGene()` when using `meta_gradient_name` outputs plot colored by meta data variable (left) to view only points above potential cutoff `meta_gradient_low_cutoff` can be specified to alter the plotting (right).*", fig.align='center'}
-p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
-p2 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
+p1 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000)
+p2 <- QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20)
 
 wrap_plots(p1, p2, ncol = 2)
 ```
@@ -235,8 +294,20 @@ wrap_plots(p1, p2, ncol = 2)
 ### Combination Plots
 If you are interested in viewing `QC_Plot_UMIvsGene` both by discrete grouping variable and by continuous variable without writing function twice you can use `combination = TRUE` and plot output will contain both plots.
 ```{r, fig.height=7, fig.width=13, fig.cap="*`QC_Plot_UMIvsGene()` when using `combination = TRUE` will output both the Gene x UMI by active identity and with meta data gradient coloring.*", fig.align='center'}
-QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 800, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20, combination = TRUE)
+QC_Plot_UMIvsGene(seurat_object = hca_bm, meta_gradient_name = "percent_mito", low_cutoff_gene = 600, high_cutoff_gene = 5500, high_cutoff_UMI = 45000, meta_gradient_low_cutoff = 20, combination = TRUE)
 ```
+
+## Histogram-Based QC Plots  
+Finally, scCustomize contains a function to plot QC metrics as histogram instead of violin for visualization of the distribution of feature.  
+
+```{r, fig.height=7, fig.width=7, fig.align='center'}
+QC_Histogram(seurat_object = hca_bm, features = "percent_mito", low_cutoff = 15)
+```
+
+```{r, fig.height=7, fig.width=13, fig.cap="*`QC_Histogram` also supports splitting plots by meta.data variables*", fig.align='center'}
+QC_Histogram(seurat_object = hca_bm, features = "percent_mito", low_cutoff = 15, split.by = "group")
+```
+
 
 ## Analyze Median QC Values per Sample/Library
 scCustomize also contains a few helpful functions for returning and plotting the median values for these metrics on per sample/library basis.

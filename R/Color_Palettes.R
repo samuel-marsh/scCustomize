@@ -215,7 +215,7 @@ NavyAndOrange <- function(
   flip_order = FALSE
 ) {
   navy_orange <- c("navy", "orange")
-  if (flip_order) {
+  if (isTRUE(x = flip_order)) {
     navy_orange <- rev(x = navy_orange)
   }
   return(navy_orange)
@@ -376,7 +376,7 @@ varibow_scCustom <- function(
 #' @import cli
 # #' @importFrom colorway varibow (now directly ported for CRAN compatibility)
 #' @importFrom paletteer paletteer_d
-#' @importFrom SeuratObject PackageCheck
+#' @importFrom rlang is_installed
 #'
 #' @return A vector of colors
 #'
@@ -428,8 +428,8 @@ DiscretePalette_scCustomize <- function(
 
   # dittoseq check
   if (palette == "ditto_seq") {
-    dittoseq_check <- PackageCheck("dittoSeq", error = FALSE)
-    if (!dittoseq_check[1]) {
+    dittoseq_check <- is_installed(pkg = "dittoSeq")
+    if (isFALSE(x = dittoseq_check[1])) {
       cli_abort(message = c(
         "Please install the {.val dittoSeq} package to {.code palette = {symbol$dquote_left}ditto_seq{symbol$dquote_right}}",
         "i" = "This can be accomplished with the following commands:",
@@ -467,7 +467,7 @@ DiscretePalette_scCustomize <- function(
                           "i" = "Please adjust {.code num_colors} to be less than or equal to {.field {length(x = palette_out)}} or select a different {.code palette}.")
     )
   }
-  if (shuffle_pal) {
+  if (isTRUE(x = shuffle_pal)) {
     set.seed(seed = seed)
     palette_out <- sample(x = palette_out[1:num_colors])
   } else {
@@ -484,7 +484,8 @@ DiscretePalette_scCustomize <- function(
 #' @param num_groups number of groups to be plotted. If `ggplot_default_colors = FALSE` then by default:
 #' \itemize{
 #'       \item If number of levels plotted equal to 2 then colors will be `NavyAndOrange()`.
-#'       \item If If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from `DiscretePalette_scCustomize`.
+#'       \item If number of levels plotted greater than 2 but less than or equal to 8 it will use `ColorBlind_Pal()`.
+#'       \item If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from `DiscretePalette_scCustomize()`.
 #'       \item If greater than 36 will use "varibow" with shuffle = TRUE from `DiscretePalette_scCustomize`.
 #'       }
 #' @param ggplot_default_colors logical.  Whether to use default ggplot hue palette or not.
@@ -503,11 +504,11 @@ DiscretePalette_scCustomize <- function(
 
 scCustomize_Palette <- function(
   num_groups,
-  ggplot_default_colors,
+  ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
   # Set color palette depending on group length
-  if (ggplot_default_colors) {
+  if (isTRUE(x = ggplot_default_colors)) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
     if (num_groups == 1) {
@@ -516,7 +517,10 @@ scCustomize_Palette <- function(
     if (num_groups == 2) {
       colors_use <- NavyAndOrange()
     }
-    if (num_groups > 2 && num_groups <= 36) {
+    if (num_groups > 2 && num_groups <= 8) {
+      colors_use <- ColorBlind_Pal()
+    }
+    if (num_groups > 8 && num_groups <= 36) {
       colors_use <- DiscretePalette_scCustomize(num_colors = num_groups, palette = "polychrome")
     }
     if (num_groups > 36) {
@@ -585,7 +589,7 @@ PalettePlot <- function(
 
   # Plot
   # Label plot
-  if (label_color_num) {
+  if (isTRUE(x = label_color_num)) {
     palette_plot <- ggplot(palette_data) +
       geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
       geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +

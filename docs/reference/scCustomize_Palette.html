@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -110,14 +110,19 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scCustomize_Palette</span><span class="op">(</span><span class="va">num_groups</span>, <span class="va">ggplot_default_colors</span>, color_seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scCustomize_Palette</span><span class="op">(</span></span>
+<span>  <span class="va">num_groups</span>,</span>
+<span>  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color_seed <span class="op">=</span> <span class="fl">123</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>num_groups</dt>
 <dd><p>number of groups to be plotted. If <code>ggplot_default_colors = FALSE</code> then by default:</p><ul><li><p>If number of levels plotted equal to 2 then colors will be <code><a href="NavyAndOrange.html">NavyAndOrange()</a></code>.</p></li>
-<li><p>If If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from <code>DiscretePalette_scCustomize</code>.</p></li>
+<li><p>If number of levels plotted greater than 2 but less than or equal to 8 it will use <code><a href="ColorBlind_Pal.html">ColorBlind_Pal()</a></code>.</p></li>
+<li><p>If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from <code><a href="DiscretePalette_scCustomize.html">DiscretePalette_scCustomize()</a></code>.</p></li>
 <li><p>If greater than 36 will use "varibow" with shuffle = TRUE from <code>DiscretePalette_scCustomize</code>.</p></li>
 </ul></dd>
 

@@ -1,5 +1,5 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### HELPERS ####################
+#################### OBJECT HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #' Check if genes/features are present
@@ -22,7 +22,9 @@
 #' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
 #' Defaults to  `DefaultAssay(OBJ)` if NULL.
 #'
+#' @import cli
 #' @importFrom purrr reduce
+#' @importFrom SeuratObject Features
 #' @importFrom stringr str_to_upper str_to_sentence
 #'
 #' @return A list of length 3 containing 1) found features, 2) not found features, 3) features found if
@@ -56,7 +58,7 @@ Gene_Present <- function(
     # set assay (if null set to active assay)
     assay <- seurat_assay %||% DefaultAssay(object = data)
 
-    possible_features <- rownames(x = GetAssayData(object = data, assay = assay))
+    possible_features <- Features(x = data, assay = seurat_assay)
   } else if ((class(x = data)[[1]] == "liger")) {
     # get complete gene list
     length_liger <- length(x = data@raw.data)
@@ -81,7 +83,7 @@ Gene_Present <- function(
     bad_features <- gene_list[!gene_list %in% possible_features]
     found_features <- gene_list[gene_list %in% possible_features]
     if (length(x = found_features) == 0) {
-      if (return_none) {
+      if (isTRUE(x = return_none)) {
         # Combine into list and return
         feature_list <- list(
           found_features = NULL,
@@ -95,14 +97,14 @@ Gene_Present <- function(
     }
 
     # Return message of features not found
-    if (length(x = bad_features) > 0 && omit_warn) {
+    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following features were omitted as they were not found:",
                             "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
     }
 
     # Check if features found if case is changed.
-    if (case_check) {
+    if (isTRUE(x = case_check)) {
       upper_bad_features <- str_to_upper(string = bad_features)
       upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
 
@@ -114,7 +116,7 @@ Gene_Present <- function(
 
       # Additional messages if found.
       if (length(x = wrong_case_found_features) > 0) {
-        if (case_check_msg) {
+        if (isTRUE(x = case_check_msg)) {
           cli_warn(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
                                 "i" = "Please check intended case of features provided.")
           )
@@ -138,7 +140,7 @@ Gene_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All features present.")
   }
 
@@ -162,9 +164,15 @@ Gene_Present <- function(
 #' @param case_check_msg logical. Whether to print message to console if alternate case features are
 #' found in addition to inclusion in returned list.  Default is TRUE.
 #' @param return_features logical. Whether to return vector of alternate case features.  Default is TRUE.
+#' @param assay Name of assay to pull feature names from. If NULL will use the result of `DefaultAssay(seurat_object)`.
+#'
+#' @import cli
+#' @importFrom SeuratObject Features
+#' @importFrom stringr str_to_sentence str_to_upper
 #'
 #' @return If features found returns vector of found alternate case features and prints message depending on
 #' parameters specified.
+#'
 #' @export
 #'
 #' @concept helper_util
@@ -179,10 +187,14 @@ Case_Check <- function(
   seurat_object,
   gene_list,
   case_check_msg = TRUE,
-  return_features = TRUE
+  return_features = TRUE,
+  assay = NULL
 ) {
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
   # get all features
-  possible_features <- rownames(x = GetAssayData(object = seurat_object))
+  possible_features <- Features(x = seurat_object, assay = assay)
 
   upper_bad_features <- str_to_upper(string = gene_list)
   upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
@@ -195,12 +207,12 @@ Case_Check <- function(
 
   # Additional messages if found.
   if (length(x = wrong_case_found_features) > 0) {
-    if (case_check_msg) {
+    if (isTRUE(x = case_check_msg)) {
       cli_inform(message = c("{col_cyan('*NOTE*')}: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
                              "i" = "Please check intended case of features provided.")
       )
     }
-    if (return_features) {
+    if (isTRUE(x = return_features)) {
       return(wrong_case_found_features)
     }
   }
@@ -251,7 +263,7 @@ Meta_Present <- function(
     bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
     found_meta <- meta_col_names[meta_col_names %in% possible_features]
 
-    if (!return_none) {
+    if (isFALSE(return_none)) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
                               "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
@@ -260,7 +272,7 @@ Meta_Present <- function(
     }
 
     # Return message of features not found
-    if (length(x = bad_meta) > 0 && omit_warn) {
+    if (length(x = bad_meta) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following @meta.data columns were omitted as they were not found:",
                             "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
       )
@@ -276,7 +288,7 @@ Meta_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All @meta.data columns present.")
   }
 
@@ -382,7 +394,7 @@ Reduction_Loading_Present <- function(
 ) {
   # If no reductions are present
   if (length(x = seurat_object@reductions) == 0) {
-    if (return_none) {
+    if (isTRUE(x = return_none)) {
       # Combine into list and return
       feature_list <- list(
         found_features = NULL,
@@ -390,12 +402,12 @@ Reduction_Loading_Present <- function(
       )
       return(feature_list)
     } else {
-      cli_abort(message ="No requested features found.")
+      cli_abort(message ="No reductions present in object.")
     }
   }
 
   # Get all reduction names
-  possible_reduction_names <- unlist(x = lapply(1:length(seurat_object@reductions), function(z) {
+  possible_reduction_names <- unlist(x = lapply(1:length(x = seurat_object@reductions), function(z) {
     names <- names(x = seurat_object@reductions[[z]])
   })
   )
@@ -405,7 +417,7 @@ Reduction_Loading_Present <- function(
     bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
     found_features <- reduction_names[reduction_names %in% possible_reduction_names]
     if (length(x = found_features) == 0) {
-      if (return_none) {
+      if (isTRUE(x = return_none)) {
         # Combine into list and return
         feature_list <- list(
           found_features = NULL,
@@ -418,7 +430,7 @@ Reduction_Loading_Present <- function(
     }
 
     # Return message of features not found
-    if (length(x = bad_features) > 0 && omit_warn) {
+    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following features were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
@@ -433,7 +445,7 @@ Reduction_Loading_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All features present.")
   }
 
@@ -561,7 +573,7 @@ Merge_Sparse_Data_All <- function(
     duplicated() %>%
     any()
 
-  if (duplicated_barcodes && is.null(x = add_cell_ids)) {
+  if (isTRUE(x = duplicated_barcodes) && is.null(x = add_cell_ids)) {
     cli_abort(message = c("There are overlapping cell barcodes present in the input matrices.",
                           "i" = "Please provide prefixes/suffixes to {.code add_cell_ids} parameter to make unique.")
     )
@@ -579,14 +591,14 @@ Merge_Sparse_Data_All <- function(
     })
 
     new_names <- lapply(X = 1:length(x = matrix_list), function(x){
-      colnames(x = matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(matrix_list[[x]]))
+      colnames(x = matrix_list[[x]]) <- paste0(add_cell_ids[x], cell_id_delimiter, colnames(x = matrix_list[[x]]))
     })
 
     are_duplicates <- unlist(x = new_names) %>%
       duplicated() %>%
       any()
 
-    if (are_duplicates) {
+    if (isTRUE(x = are_duplicates)) {
       cli_abort(message = c("Supplied {.code add_cell_ids} will result in overlapping barcodes names if provided cell prefixes/suffixes are not unique.",
                             "i" = "Please change and re-run.")
       )
@@ -610,10 +622,10 @@ Merge_Sparse_Data_All <- function(
 
     # Update full cell names
     if (!is.null(x = add_cell_ids)) {
-      if (prefix) {
-        cellnames <- paste0(add_cell_ids [i], cell_id_delimiter, colnames(curr))
+      if (isTRUE(x = prefix)) {
+        cellnames <- paste0(add_cell_ids [i], cell_id_delimiter, colnames(x = curr))
       } else {
-        cellnames <- paste0(colnames(curr), cell_id_delimiter, add_cell_ids [i])
+        cellnames <- paste0(colnames(x = curr), cell_id_delimiter, add_cell_ids [i])
       }
     } else {
       cellnames <- colnames(x = curr)
@@ -694,7 +706,7 @@ Extract_Modality <- function(
     return(modality_list)
   })
 
-  names(split_list) <- modality_names
+  names(x = split_list) <- modality_names
   return(split_list)
 }
 
@@ -817,87 +829,6 @@ CheckMatrix_scCustom <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### OBJECT UTILS ####################
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-#' Merge a list of Seurat Objects
-#'
-#' Enables easy merge of a list of Seurat Objects.  See  See \code{\link[SeuratObject]{merge}} for more information,
-#'
-#' @param list_seurat list composed of multiple Seurat Objects.
-#' @param add.cell.ids A character vector of equal length to the number of objects in `list_seurat`.
-#' Appends the corresponding values to the start of each objects' cell names.  See \code{\link[SeuratObject]{merge}}.
-#' @param merge.data Merge the data slots instead of just merging the counts (which requires renormalization).
-#' This is recommended if the same normalization approach was applied to all objects.
-#' See \code{\link[SeuratObject]{merge}}.
-#' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
-#'
-#' @import cli
-#' @importFrom purrr reduce
-#'
-#' @return A Seurat Object
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' object_list <- list(obj1, obj2, obj3, ...)
-#' merged_object <- Merge_Seurat_List(list_seurat = object_list)
-#' }
-#'
-
-Merge_Seurat_List <- function(
-  list_seurat,
-  add.cell.ids = NULL,
-  merge.data = TRUE,
-  project = "SeuratProject"
-) {
-  # Check list_seurat is list
-  if (!inherits(x = list_seurat, what = "list")) {
-    cli_abort(message = "{.code list_seurat} must be environmental variable of class {.val list}")
-  }
-
-  # Check list_seurat is only composed of Seurat objects
-  for (i in 1:length(x = list_seurat)) {
-    if (!inherits(x = list_seurat[[i]], what = "Seurat")) {
-      cli_abort("One or more of entries in {.code list_seurat} are not objects of class {.val Seurat}")
-    }
-  }
-
-  # Check all barcodes are unique to begin with
-  duplicated_barcodes <- list_seurat %>%
-    lapply(colnames) %>%
-    unlist() %>%
-    duplicated() %>%
-    any()
-
-  if (duplicated_barcodes && is.null(x = add.cell.ids)) {
-    cli_abort(message = c("There are overlapping cell barcodes present in the input objects",
-                          "i" = "Please rename cells or provide prefixes to {.code add.cell.ids} parameter to make unique.")
-    )
-  }
-
-  # Check right number of suffix/prefix ids are provided
-  if (!is.null(x = add.cell.ids) && length(x = add.cell.ids) != length(x = list_seurat)) {
-    cli_abort(message = "The number of prefixes in {.code add.cell.ids} must be equal to the number of objects supplied to {.code list_seurat}.")
-  }
-
-  # Rename cells if provided
-  list_seurat <- lapply(1:length(x = list_seurat), function(x) {
-    list_seurat[[x]] <- RenameCells(object = list_seurat[[x]], add.cell.id = add.cell.ids[x])
-  })
-
-  # Merge objects
-  merged_object <- reduce(list_seurat, function(x, y) {
-    merge(x = x, y = y, merge.data = merge.data, project = project)
-  })
-}
-
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### BARCODE UTILS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -961,7 +892,7 @@ Replace_Suffix <- function(
     }
 
     # Is current suffix found in all cell names
-    check_suffixes <- sapply(1:length(data), FUN = function(j){
+    check_suffixes <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_suffix_regexp[[j]], x = current_cell_names[[j]]))
     })
 
@@ -1040,7 +971,7 @@ Change_Delim_Suffix <- function(
     })
 
     # Is current suffix delim found in all cell names
-    check_suffix_delim <- sapply(1:length(data), FUN = function(j){
+    check_suffix_delim <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_delim, x = current_cell_names[[j]], fixed = TRUE))
     })
 
@@ -1118,7 +1049,7 @@ Change_Delim_Prefix <- function(
     })
 
     # Is current prefix delim found in all cell names
-    check_prefix_delim <- sapply(1:length(data), FUN = function(j){
+    check_prefix_delim <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_delim, x = current_cell_names[[j]], fixed = TRUE))
     })
 
@@ -1194,7 +1125,7 @@ Change_Delim_All <- function(
     })
 
     # Is current prefix delim found in all cell names
-    check_prefix_delim <- sapply(1:length(data), FUN = function(j){
+    check_prefix_delim <- sapply(1:length(x = data), FUN = function(j){
       all(grepl(pattern = current_delim, x = current_cell_names[[j]], fixed = TRUE))
     })
 
@@ -1283,7 +1214,7 @@ Add_Pct_Diff <- function(
   # Check if percent difference exists already
   if ("pct_diff" %in% colnames(marker_dataframe)) {
     df_name <- deparse(expr = substitute(expr = marker_dataframe))
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",
                             "i" = "To overwrite previous results set `overwrite = TRUE`.")
       )
@@ -1364,7 +1295,7 @@ Extract_Top_Markers <- function(
   }
 
   # Check gene column is present
-  if (!gene_column %in% colnames(x = marker_dataframe) && !gene_rownames_to_column) {
+  if (!gene_column %in% colnames(x = marker_dataframe) && isFALSE(x = gene_rownames_to_column)) {
     cli_abort(message = c("{.code gene_column}: '{gene_column}' not found in column names of {.code marker_dataframe}.",
                           "i" = "Set {.code gene_rownames_to_column} to move genes from rownames to column.")
     )
@@ -1385,13 +1316,13 @@ Extract_Top_Markers <- function(
       column_to_rownames("rownames")
   }
 
-  if (gene_rownames_to_column) {
+  if (isTRUE(x = gene_rownames_to_column)) {
     filtered_markers <- filtered_markers %>%
       rownames_to_column(gene_column)
   }
 
   # return data.frame
-  if (data_frame) {
+  if (isTRUE(x = data_frame)) {
     return(filtered_markers)
   }
 
@@ -1400,22 +1331,22 @@ Extract_Top_Markers <- function(
 
   # should gene list be named
   # check naming
-  if (named_vector && is.null(x = group_by)) {
+  if (isTRUE(x = named_vector) && is.null(x = group_by)) {
     cli_warn(message = c("Cannot return named vector if {.code group_by} is NULL.",
                          "i" = "Returning unnamed vector.")
     )
   }
 
-  if (named_vector && !is.null(x = group_by)) {
-    if (make_unique) {
+  if (isTRUE(x = named_vector) && !is.null(x = group_by)) {
+    if (isTRUE(x = make_unique)) {
       cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
-    names(gene_list) <- filtered_markers[[group_by]]
+    names(x = gene_list) <- filtered_markers[[group_by]]
     return(gene_list)
   }
 
   # make unique
-  if (make_unique) {
+  if (isTRUE(x = make_unique)) {
     gene_list <- unique(x = gene_list)
   }
 
@@ -1589,12 +1520,12 @@ Pull_Cluster_Annotation <- function(
 
   # Create list elements per cluster
   cell_type_list <- unique(x = annotation_table[[cell_type_col]])
-  cluster_annotation_list <- lapply(c(1:length(cell_type_list)), function(x){
+  cluster_annotation_list <- lapply(c(1:length(x = cell_type_list)), function(x){
     cluster <- annotation_table %>%
       filter(.data[[cell_type_col]] == cell_type_list[x]) %>%
       pull(cluster_name_col)
   })
-  names(cluster_annotation_list) <- cell_type_list
+  names(x = cluster_annotation_list) <- cell_type_list
 
   # Create list elements for renaming idents
   new_cluster_ids <- annotation_table %>%
@@ -1605,7 +1536,7 @@ Pull_Cluster_Annotation <- function(
   secondary_ids_list <- list(secondary_ids)
   # Name the new cluster ids list
   names(x = new_cluster_ids_list) <- "new_cluster_idents"
-  names(x = secondary_ids_list) <- colnames(annotation_table)[[3]]
+  names(x = secondary_ids_list) <- colnames(x = annotation_table)[[3]]
 
   # Combine and return both lists as single list
   final_cluster_annotation_list <- c(cluster_annotation_list, new_cluster_ids_list, secondary_ids_list)
@@ -1651,7 +1582,7 @@ Rename_Clusters <- function(
   # Check equivalent lengths
   if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
     cli_abort(message = c("Length of {.code new_idents} must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(levels(x = seurat_object))}}.")
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(x = levels(x = seurat_object))}}.")
     )
   }
 
@@ -1662,7 +1593,7 @@ Rename_Clusters <- function(
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
     cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(levels(x = seurat_object))}}.")
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(x = levels(x = seurat_object))}}.")
     )
   }
 

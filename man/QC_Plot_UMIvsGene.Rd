@@ -19,6 +19,7 @@ QC_Plot_UMIvsGene(
   meta_gradient_low_cutoff = NULL,
   cells = NULL,
   combination = FALSE,
+  ident_legend = TRUE,
   pt.size = 1,
   group.by = NULL,
   raster = NULL,
@@ -62,6 +63,9 @@ below this value will be plotted using \code{meta_gradient_na_color}.}
 
 \item{combination}{logical (default FALSE).  Whether or not to return a plot layout with both the
 plot colored by identity and the meta data gradient plot.}
+
+\item{ident_legend}{logical, whether to plot the legend containing identities (left plot) when
+\code{combination = TRUE}.  Default is TRUE.}
 
 \item{pt.size}{Passes size of points to both \code{\link[Seurat]{FeatureScatter}} and \code{geom_point}.}
 

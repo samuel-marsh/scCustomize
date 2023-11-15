@@ -11,7 +11,8 @@ Percent_Expressing(
   group_by = NULL,
   split_by = NULL,
   entire_object = FALSE,
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   assay = NULL
 )
 }
@@ -29,7 +30,9 @@ Percent_Expressing(
 \item{entire_object}{logical (default = FALSE).  Whether to calculate percent of expressing cells
 across the entire object as opposed to by cluster or by \code{group_by} variable.}
 
-\item{slot}{Slot to pull feature data for.  Default is "data".}
+\item{slot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{layer}}
+
+\item{layer}{Which layer to pull expression data from?  Default is "data".}
 
 \item{assay}{Assay to pull feature data from.  Default is active assay.}
 }

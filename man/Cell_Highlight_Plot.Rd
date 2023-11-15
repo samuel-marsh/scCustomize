@@ -11,6 +11,7 @@ Cell_Highlight_Plot(
   background_color = "lightgray",
   pt.size = NULL,
   aspect_ratio = NULL,
+  figure_plot = FALSE,
   raster = NULL,
   raster.dpi = c(512, 512),
   label = FALSE,
@@ -33,6 +34,9 @@ Cell_Highlight_Plot(
 
 \item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 Default is NULL.}
+
+\item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting
+axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}

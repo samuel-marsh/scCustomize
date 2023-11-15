@@ -119,7 +119,7 @@ Plot_Median_Genes <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -257,7 +257,7 @@ Plot_Median_UMIs <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -396,7 +396,7 @@ Plot_Median_Mito <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -550,7 +550,7 @@ Plot_Median_Other <- function(
   }
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -670,7 +670,7 @@ Plot_Cells_per_Sample <- function(
     xlab("")
 
   # Modify base plot
-  if (x_lab_rotate) {
+  if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
   }
 
@@ -699,6 +699,8 @@ Plot_Cells_per_Sample <- function(
 #' @param label logical, whether or not to label the features that have largest percent difference
 #' between raw and CellBender counts (Default is TRUE).
 #' @param num_labels Number of features to label if `label = TRUE`, (default is 20).
+#' @param min_count_label Minimum number of raw counts per feature necessary to be included in
+#' plot labels (default is 1)
 #' @param repel logical, whether to use geom_text_repel to create a nicely-repelled labels; this is
 #' slow when a lot of points are being plotted. If using repel, set xnudge and ynudge to 0, (Default is TRUE).
 #' @param custom_labels A custom set of features to label instead of the features most different between
@@ -749,6 +751,7 @@ CellBender_Diff_Plot <- function(
   num_features = NULL,
   label = TRUE,
   num_labels = 20,
+  min_count_label = 1,
   repel = TRUE,
   custom_labels = NULL,
   plot_line = TRUE,
@@ -767,9 +770,9 @@ CellBender_Diff_Plot <- function(
 ) {
   # Remove unshared features
   feature_diff_df_filtered <- feature_diff_df %>%
-    drop_na(.data[["Raw_Counts"]], .data[["CellBender_Counts"]])
+    drop_na(all_of(c("Raw_Counts", "CellBender_Counts")))
 
-  diff_features <- symdiff(x = rownames(feature_diff_df), y = rownames(feature_diff_df_filtered))
+  diff_features <- symdiff(x = rownames(x = feature_diff_df), y = rownames(x = feature_diff_df_filtered))
 
   if (length(x = diff_features > 0)) {
     cli_warn(message = c("The following features are not present in both assays and were omitted:",
@@ -813,9 +816,23 @@ CellBender_Diff_Plot <- function(
     }
 
   # Label points
-  if (label) {
+  if (isTRUE(x = label)) {
     if (is.null(x = custom_labels)) {
-      plot <- LabelPoints(plot = plot, points = rownames(x = feature_diff_df_filtered)[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+      # Subset the labels based on min count threshold
+      labels_use <- feature_diff_df_filtered %>%
+        filter(.data[["Raw_Counts"]] >= min_count_label) %>%
+        rownames()
+
+      # Return message of features not found
+      if (length(x = labels_use) == 0) {
+        cli_warn(message = c("No features met the labeling criteria.",
+                             "i" = "Try adjusting {.field min_count_label} and/or {.field pct_diff_threshold}.")
+        )
+
+        plot <- plot
+      } else {
+        plot <- LabelPoints(plot = plot, points = labels_use[1:num_labels], repel = repel, xnudge = xnudge, ynudge = ynudge, max.overlaps = max.overlaps, color = label_color, fontface = fontface, size = label_size, bg.color = bg.color, bg.r = bg.r, ...)
+      }
     } else {
       # check for features
       features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
@@ -845,7 +862,7 @@ CellBender_Diff_Plot <- function(
     }
   }
 
-  if (plot_line) {
+  if (isTRUE(x = plot_line)) {
     plot <- plot + geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red")
   }
 

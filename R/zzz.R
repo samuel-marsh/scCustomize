@@ -18,6 +18,9 @@
 #'    \item{\code{scCustomize_warn_DimPlot_split_type}}{Show message about \code{\link{DimPlot_scCustom}}
 #'    parameter `split.by` and `split_seurat` to alert user to difference in returned plots between
 #'    scCustomize and Seurat.}
+#'    \item{\code{scCustomize_warn_FeatureScatter_split_type}}{Show message about \code{\link{FeatureScatter_scCustom}}
+#'    parameter `split.by` and `split_seurat` to alert user to difference in returned plots between
+#'    scCustomize and Seurat.}
 #'    \item{\code{scCustomize_warn_LIGER_dim_labels_plotFactors}}{Show message about \code{\link{plotFactors_scCustom}}
 #'    parameter `reduction_label` as LIGER objects do not store dimensionality reduction name and
 #'    and therefore needs to be set manually.}
@@ -41,7 +44,8 @@ scCustomize_default_options <- list(
   scCustomize_warn_vln_raster_iterative = TRUE,
   scCustomize_warn_LIGER_dim_labels = TRUE,
   scCustomize_warn_LIGER_dim_labels_plotFactors = TRUE,
-  scCustomize_warn_DimPlot_split_type = TRUE
+  scCustomize_warn_DimPlot_split_type = TRUE,
+  scCustomize_warn_FeatureScatter_split_type = TRUE
 )
 
 

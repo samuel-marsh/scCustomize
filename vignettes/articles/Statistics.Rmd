@@ -46,7 +46,9 @@ scCustomize contains a couple simple helper functions to return metrics of inter
 For this vignette I will be utilizing pbmc3k dataset from the SeuratData package.
 ```{r init}
 # Load Packages
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(Seurat)
 library(scCustomize)
 library(qs)
@@ -200,6 +202,21 @@ median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", 
 median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
 
 median_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+### Calculate Median Absolute Deviations
+In addition to calculating the median values scCustomize includes function to calculate the median absolute deviation for each of those features with function `MAD_Stats`.  By setting the parameter `mad_num` the function will retrun the MAD*mad_num.
+
+```{r eval=FALSE}
+mad <- MAD_Stats(seurat_object = pbmc, group_by_var = "orig.ident", mad_num = 2)
+```
+
+```{r echo=FALSE}
+mad <- MAD_Stats(seurat_object = pbmc, group_by_var = "orig.ident", mad_num = 2)
+
+mad %>%
   kableExtra::kbl() %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
 ```

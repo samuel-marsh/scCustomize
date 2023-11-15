@@ -44,7 +44,9 @@ scCustomize has several helper functions to simplify/streamline common tasks in 
 Let's load packages and raw data object for this tutorial.
 ```{r init}
 # Load Packages
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(patchwork)
 library(Seurat)
 library(scCustomize)
@@ -142,7 +144,10 @@ liger_obj <- Add_Mito_Ribo_Seurat(seurat_object = liger_obj, species = "human")
 ```
 
 
-## Add Cell Complexity/Novelty QC Metric
+## Add Cell Complexity/Novelty QC Metrics  
+In addition to metrics like number of features and UMIs it can often be helpful to analyze the complexity of expression within a single cell.  scCustomize provides functions to add two of these metrics to meta data.  
+
+### Cell Complexity (log10(nFeature) / log10(nCount))
 scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
 ```{r eval = FALSE}
 # These defaults can be run just by providing accepted species name
@@ -151,6 +156,27 @@ pbmc <- Add_Cell_Complexity_Seurat(seurat_object = pbmc)
 *NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER()`).*
 
 
+### Add Top Percent Expression QC Metric  
+Additionally, (or alternatively), scCustomize contains another metric of complexity which is the top percent expression.  The user supplies an integer value for `num_top_genes` (default is 50) which species the number of genes and the function returns percentage of counts occupied by top XX genes in each cell.
+```{r eval = FALSE}
+# These defaults can be run just by providing accepted species name
+pbmc <- Add_Top_Gene_Pct_Seurat(seurat_object = pbmc, num_top_genes = 50)
+```
+
+
+## Add All Cell QC Metrics with Single Function
+To simplify the process of adding cell QC metrics scCustomize contains a wrapper function which can be customized to add all or some of the available QC metrics.  The default parameters of the function `Add_Cell_QC_Metrics` will add:  
+
+* Mitochondrial and Ribosomal Percentages (default and custom species).
+* Cell Complexity (log10(nFeature) / log10(nCount).
+* Top XX Gene Percentage.
+* Percentage of counts for IEG (human and mouse only).
+* OXPHOS, APOP, and DNA Repair pathways (supported species only).
+* Cell Cycle Scoring (Human only).
+
+```{r eval=FALSE}
+pbmc <- Add_Cell_QC_Metrics(seurat_object = pbmc, species = "human")
+```
 
 
 

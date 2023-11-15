@@ -132,7 +132,7 @@ Assay_Present <- function(
     }
 
     # Return message of assays not found
-    if (length(x = bad_assays) > 0 && omit_warn) {
+    if (length(x = bad_assays) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following assays were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_assays, and = TRUE)}}.")
       )
@@ -147,7 +147,7 @@ Assay_Present <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All assays present.")
   }
 
@@ -158,6 +158,33 @@ Assay_Present <- function(
     bad_assays = NULL
   )
   return(assay_list)
+}
+
+
+#' Check whether assay is V5
+#
+#' Checks Seurat object to verify whether it is composed of "Assay" or "Assay5" slots.
+#'
+#' @param seurat_object Seurat object name.
+#' @param assay name of assay to check, default is NULL.
+#'
+#' @return TRUE if seurat_object contains "Assay5" class.
+#'
+#' @noRd
+#'
+
+Assay5_Check <- function(
+    seurat_object,
+    assay = NULL
+){
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  if (inherits(x = seurat_object@assays[[assay]], what = "Assay")) {
+    return(FALSE)
+  }
+  if (inherits(x = seurat_object@assays[[assay]], what = "Assay5")) {
+    return(TRUE)
+  }
 }
 
 
@@ -209,13 +236,13 @@ glue_collapse_scCustom <- function(
   input_length <- length(x = input_string)
 
   # set last seperator
-  if (and) {
+  if (isTRUE(x = and)) {
     last_sep <- " and "
   } else {
     last_sep <- " or "
   }
 
-  if (input_length < 3) {
+  if (input_length <= 3) {
     glue_collapse(x = input_string, sep = ", ", last = last_sep)
   } else {
     glue_collapse(x = input_string, sep = ", ", last = paste0(",", last_sep))
@@ -230,6 +257,7 @@ glue_collapse_scCustom <- function(
 #'
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
+#' @param assay Assay to use (default is the current object default assay).
 #'
 #' @return vector of features and/or meta data that were found in object.
 #'
@@ -240,10 +268,14 @@ glue_collapse_scCustom <- function(
 
 Feature_PreCheck <- function(
     object,
-    features
+    features,
+    assay = NULL
 ) {
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = object)
+
   # Check features and meta to determine which features present
-  features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+  features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
 
   meta_list <- Meta_Present(seurat_object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
@@ -276,6 +308,576 @@ Feature_PreCheck <- function(
   # return all found features
   return(all_found_features)
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### QC HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Ensembl Mito IDs
+#'
+#' Retrieves Ensembl IDs for mitochondrial genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Mito <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% marmoset_options) {
+    cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
+  }
+
+  if (species %in% mouse_options) {
+    mito_ensembl <- ensembl_mito_id$Mus_musculus_mito_ensembl
+  }
+  if (species %in% human_options) {
+    mito_ensembl <- ensembl_mito_id$Homo_sapiens_mito_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    mito_ensembl <- ensembl_mito_id$Danio_rerio_mito_ensembl
+  }
+  if (species %in% rat_options) {
+    mito_ensembl <- ensembl_mito_id$Rattus_norvegicus_mito_ensembl
+  }
+  if (species %in% drosophila_options) {
+    mito_ensembl <- ensembl_mito_id$Drosophila_melanogaster_mito_ensembl
+  }
+  if (species %in% macaque_options) {
+    mito_ensembl <- ensembl_mito_id$Macaca_mulatta_mito_ensembl
+  }
+
+  return(mito_ensembl)
+}
+
+
+#' Ensembl Ribo IDs
+#'
+#' Retrieves Ensembl IDs for ribosomal genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Ribo <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  if (species %in% mouse_options) {
+    ribo_ensembl <- ensembl_ribo_id$Mus_musculus_ribo_ensembl
+  }
+  if (species %in% human_options) {
+    ribo_ensembl <- ensembl_ribo_id$Homo_sapiens_ribo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    ribo_ensembl <- ensembl_ribo_id$Callithrix_jacchus_ribo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    ribo_ensembl <- ensembl_ribo_id$Danio_rerio_ribo_ensembl
+  }
+  if (species %in% rat_options) {
+    ribo_ensembl <- ensembl_ribo_id$Rattus_norvegicus_ribo_ensembl
+  }
+  if (species %in% drosophila_options) {
+    ribo_ensembl <- ensembl_ribo_id$Drosophila_melanogaster_ribo_ensembl
+  }
+  if (species %in% macaque_options) {
+    ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
+  }
+
+  return(ribo_ensembl)
+}
+
+
+#' Retrieve MSigDB Gene Lists
+#'
+#' Retrieves species specific gene lists for MSigDB QC Hallmark lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 3 sets of gene_symbols
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+ Retrieve_MSigDB_Lists <- function(
+     species
+ ) {
+   # Accepted species names
+   accepted_names <- data.frame(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   # Species Spelling Options
+   mouse_options <- accepted_names$Mouse_Options
+   human_options <- accepted_names$Human_Options
+   marmoset_options <- accepted_names$Marmoset_Options
+   zebrafish_options <- accepted_names$Zebrafish_Options
+   rat_options <- accepted_names$Rat_Options
+   drosophila_options <- accepted_names$Drosophila_Options
+   macaque_options <- accepted_names$Macaque_Options
+
+   if (species %in% marmoset_options) {
+     cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
+   }
+
+   # set prefix
+   if (species %in% mouse_options) {
+     prefix <- "Mus_musculus_"
+   }
+   if (species %in% human_options) {
+     prefix <- "Homo_sapiens_"
+   }
+   if (species %in% zebrafish_options) {
+     prefix <- "Dario_rerio_"
+   }
+   if (species %in% rat_options) {
+     prefix <- "Rattus_norvegicus_"
+   }
+   if (species %in% drosophila_options) {
+     prefix <- "Drosophila_melanogaster_"
+   }
+   if (species %in% macaque_options) {
+     prefix <- "Macaca_mulatta_"
+   }
+
+   # set list names
+   oxphos <- paste0(prefix, "msigdb_oxphos")
+   apop <- paste0(prefix, "msigdb_apop")
+   dna_repair <- paste0(prefix, "msigdb_dna_repair")
+
+   # pull lists
+   qc_gene_list <- list(
+     oxphos = msigdb_qc_gene_list[[oxphos]],
+     apop = msigdb_qc_gene_list[[apop]],
+     dna_repair = msigdb_qc_gene_list[[dna_repair]]
+   )
+
+   return(qc_gene_list)
+ }
+
+
+ #' Retrieve IEG Gene Lists
+ #'
+ #' Retrieves species specific IEG gene lists
+ #'
+ #' @param species species to retrieve IDs.
+ #'
+ #' @return list of 2 sets of gene_symbols
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+ Retrieve_IEG_Lists <- function(
+    species
+ ) {
+   # Accepted species names
+   accepted_names <- data.frame(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   # Species Spelling Options
+   mouse_options <- accepted_names$Mouse_Options
+   human_options <- accepted_names$Human_Options
+   marmoset_options <- accepted_names$Marmoset_Options
+   zebrafish_options <- accepted_names$Zebrafish_Options
+   rat_options <- accepted_names$Rat_Options
+   drosophila_options <- accepted_names$Drosophila_Options
+   macaque_options <- accepted_names$Macaque_Options
+
+   if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options)) {
+     cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
+   }
+
+   # set prefix
+   if (species %in% mouse_options) {
+     prefix <- "Mus_musculus_"
+   }
+   if (species %in% human_options) {
+     prefix <- "Homo_sapiens_"
+   }
+
+   # set list names
+   ieg <- paste0(prefix, "IEG")
+
+   # pull lists
+   qc_gene_list <- list(
+     ieg = ieg_gene_list[[ieg]]
+   )
+
+   return(qc_gene_list)
+ }
+
+
+ #' Add MSigDB Gene Lists Percentages
+ #'
+ #' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+ #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+ #'
+ #' @param seurat_object object name.
+ #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+ #' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
+ #' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
+ #' phosphorylation counts. Default is "percent_oxphos".
+ #' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
+ #' Default is "percent_apop".
+ #' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
+ #' Default is "percent_oxphos".
+ #' @param assay Assay to use (default is the current object default assay).
+ #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+ #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
+ #' `mito_ribo_name` is present in meta.data slot.
+ #'
+ #' @return Seurat object
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+
+ Add_MSigDB_Seurat <- function(
+     seurat_object,
+     species,
+     oxphos_name = "percent_oxphos",
+     apop_name = "percent_apop",
+     dna_repair_name = "percent_dna_repair",
+     assay = NULL,
+     overwrite = FALSE
+ ) {
+   # Accepted species names
+   accepted_names <- list(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   if (!species %in% unlist(x = accepted_names)) {
+     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+   }
+
+   # Check Seurat
+   Is_Seurat(seurat_object = seurat_object)
+
+   # Check name collision
+   if (any(duplicated(x = c(oxphos_name, apop_name, dna_repair_name)))) {
+     cli_abort(message = "One or more of values provided to {.code oxphos_name}, {.code apop_name}, {.code dna_repair_name} are identical.")
+   }
+
+   # Overwrite check
+   if (oxphos_name %in% colnames(x = seurat_object@meta.data) || apop_name %in% colnames(x = seurat_object@meta.data) || dna_repair_name %in% colnames(x = seurat_object@meta.data)) {
+     if (isFALSE(x = overwrite)) {
+       cli_abort(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
+                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code oxphos_name}, {.code apop_name}, and/or {.code dna_repair_name}*")
+       )
+     }
+     cli_inform(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
+                            "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
+     )
+   }
+
+   # Set default assay
+   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+   # Retrieve gene lists
+   msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
+
+   oxphos_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["oxphos"]])
+   apop_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["apop"]])
+   dna_repair_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["dna_repair"]])
+
+   # Add mito and ribo columns
+   if (length(x = oxphos_found) > 0) {
+     seurat_object[[oxphos_name]] <- PercentageFeatureSet(object = seurat_object, features = oxphos_found, assay = assay)
+   }
+   if (length(x = apop_found) > 0) {
+     seurat_object[[apop_name]] <- PercentageFeatureSet(object = seurat_object, features = apop_found, assay = assay)
+   }
+   if (length(x = dna_repair_found) > 0) {
+     seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
+   }
+
+   # return final object
+   return(seurat_object)
+ }
+
+
+
+ #' Add IEG Gene List Percentages
+ #'
+ #' Adds percentage of counts from IEG genes from mouse and human.
+ #'
+ #' @param seurat_object object name.
+ #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+ #' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+ #' @param assay Assay to use (default is the current object default assay).
+ #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+ #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
+ #'
+ #' @return Seurat object
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+
+ Add_IEG_Seurat <- function(
+    seurat_object,
+    species,
+    ieg_name = "percent_ieg",
+    assay = NULL,
+    overwrite = FALSE
+ ) {
+   # Accepted species names
+   accepted_names <- list(
+     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+   )
+
+   if (!species %in% unlist(x = accepted_names)) {
+     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+   }
+
+   # Check Seurat
+   Is_Seurat(seurat_object = seurat_object)
+
+   # Overwrite check
+   if (ieg_name %in% colnames(x = seurat_object@meta.data)) {
+     if (isFALSE(x = overwrite)) {
+       cli_abort(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
+                             "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_name}*")
+       )
+     }
+     cli_inform(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
+                            "i" = "Overwriting those column as .code {overwrite = TRUE.}")
+     )
+   }
+
+   # Set default assay
+   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+   # Retrieve gene lists
+   ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+
+   ieg_found <- Feature_PreCheck(object = seurat_object, features = ieg_gene_list[["ieg"]])
+
+   # Add mito and ribo columns
+   if (length(x = ieg_found) > 0) {
+     seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
+   }
+
+   # return final object
+   return(seurat_object)
+ }
+
+
+ #' Return default QC features
+ #'
+ #' Returns default QC features full names when provided with shortcut name.
+ #'
+ #' @param seurat_object object name.
+ #' @param features vector of features to check against defaults.
+ #' @param print_defaults return the potential accepted default values.
+ #'
+ #' @return list of found and not found features
+ #'
+ #' @import cli
+ #'
+ #' @keywords internal
+ #'
+ #' @noRd
+ #'
+
+ Return_QC_Defaults <- function(
+    seurat_object,
+    features,
+    print_defaults = FALSE
+ ) {
+   # default values
+   feature_defaults <- list(
+     feature = c("features", "Features", "genes", "Genes"),
+     UMIs = c("counts", "Counts", "umis", "umi", "UMI", "UMIs", "UMIS"),
+     mito = c("mito", "Mito"),
+     ribo = c("ribo", "Ribo"),
+     mito_ribo = c("mito_ribo", "Mito_Ribo"),
+     complexity = c("complexity", "Complexity"),
+     top_pct = c("top_pct", "Top_Pct"),
+     IEG = c("ieg", "IEG"),
+     OXPHOS = c("oxphos", "OXPHOS"),
+     APOP = c("apop", "Apop"),
+     DNA_Repair = c("dna_repair", "DNA_Repair")
+   )
+
+   # if print is TRUE
+   if (isTRUE(x = print_defaults)) {
+     cli_inform(message = c("Accepted default values are:",
+                            "{.field {glue_collapse_scCustom(input_string = unlist(feature_defaults), and = TRUE)}}"))
+     stop_quietly()
+   }
+
+   # Assign values
+   if (any(features %in% feature_defaults[[1]])) {
+     default1 <- "nFeature_RNA"
+   } else {
+     default1 <- NULL
+   }
+   if (any(features %in% feature_defaults[[2]])) {
+     default2 <- "nCount_RNA"
+   } else {
+     default2 <- NULL
+   }
+   if (any(features %in% feature_defaults[[3]])) {
+     default3 <- "percent_mito"
+   } else {
+     default3 <- NULL
+   }
+   if (any(features %in% feature_defaults[[4]])) {
+     default4 <- "percent_ribo"
+   } else {
+     default4 <- NULL
+   }
+   if (any(features %in% feature_defaults[[5]])) {
+     default5 <- "percent_mito_ribo"
+   } else {
+     default5 <- NULL
+   }
+   if (any(features %in% feature_defaults[[6]])) {
+     default6 <- "log10GenesPerUMI"
+   } else {
+     default6 <- NULL
+   }
+   if (any(features %in% feature_defaults[[7]])) {
+     default7 <- grep(pattern = "percent_top", x = colnames(x = seurat_object@meta.data), value = TRUE)
+   } else {
+     default7 <- NULL
+   }
+   if (any(features %in% feature_defaults[[8]])) {
+     default8 <- "percent_ieg"
+   } else {
+     default8 <- NULL
+   }
+   if (any(features %in% feature_defaults[[9]])) {
+     default9 <- "percent_oxphos"
+   } else {
+     default9 <- NULL
+   }
+   if (any(features %in% feature_defaults[[10]])) {
+     default10 <- "percent_apop"
+   } else {
+     default10 <- NULL
+   }
+   if (any(features %in% feature_defaults[[11]])) {
+     default11 <- "percent_dna_repair"
+   } else {
+     default11 <- NULL
+   }
+
+   # All found defaults
+   all_found_defaults <- c(default1, default2, default3, default4, default5, default6, default7, default8, default9, default10, default11)
+
+   # get not found features
+   not_found_defaults <- features[!features %in% unlist(feature_defaults)]
+
+   # create return list
+   feat_list <- list(
+     found_defaults = all_found_defaults,
+     not_found_defaults = not_found_defaults
+   )
+
+   # return feature list
+   return(feat_list)
+ }
+
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -381,130 +983,309 @@ symdiff <- function(
 }
 
 
-#' Ensembl Mito IDs
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### METRICS HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Read Gene Expression Statistics from 10X Cell Ranger Count
 #'
-#' Retrieves Ensembl IDs for mitochondrial genes
+#' Get data.frame with all metrics from the Cell Ranger `count` analysis (present in web_summary.html)
 #'
-#' @param species species to retrieve IDs.
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
 #'
-#' @return vector of Ensembl Gene IDs
+#' @return A data frame with sample metrics produced by Cell Ranger `count` pipeline.
 #'
 #' @import cli
+#' @import pbapply
+#' @importFrom dplyr bind_rows setdiff
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @keywords internal
 #'
 #' @noRd
 #'
+#' @examples
+#' \dontrun{
+#' count_metrics <- Metrics_Count_GEX(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
 
-Retrieve_Ensembl_Mito <- function(
-  species
-) {
-  # Accepted species names
-  accepted_names <- data.frame(
-    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
-  )
+Metrics_Count_GEX <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+){
+  cli_inform(message = "Reading {.field Gene Expression} Metrics")
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path)
+    }
 
-  # Species Spelling Options
-  mouse_options <- accepted_names$Mouse_Options
-  human_options <- accepted_names$Human_Options
-  marmoset_options <- accepted_names$Marmoset_Options
-  zebrafish_options <- accepted_names$Zebrafish_Options
-  rat_options <- accepted_names$Rat_Options
-  drosophila_options <- accepted_names$Drosophila_Options
-  macaque_options <- accepted_names$Macaque_Options
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+    # Change format of numeric columns to due commas in data csv output.
+    column_numbers <- grep(pattern = ",", x = raw_data[1, ])
+    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
 
-  if (species %in% marmoset_options) {
-    cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
-  }
 
-  if (species %in% mouse_options) {
-    mito_ensembl <- ensembl_mito_id$Mus_musculus_mito_ensembl
-  }
-  if (species %in% human_options) {
-    mito_ensembl <- ensembl_mito_id$Homo_sapiens_mito_ensembl
-  }
-  if (species %in% zebrafish_options) {
-    mito_ensembl <- ensembl_mito_id$Danio_rerio_mito_ensembl
-  }
-  if (species %in% rat_options) {
-    mito_ensembl <- ensembl_mito_id$Rattus_norvegicus_mito_ensembl
-  }
-  if (species %in% drosophila_options) {
-    mito_ensembl <- ensembl_mito_id$Drosophila_melanogaster_mito_ensembl
-  }
-  if (species %in% macaque_options) {
-    mito_ensembl <- ensembl_mito_id$Macaca_mulatta_mito_ensembl
+    column_numbers_pct <- grep(pattern = "%", x = raw_data[1, ])
+    all_columns <- 1:ncol(x = raw_data)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data[,c(column_numbers_numeric)] <- lapply(raw_data[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
   }
 
-  return(mito_ensembl)
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+
 }
 
 
-#' Ensembl Ribo IDs
+#' Read Gene Expression Statistics from 10X Cell Ranger multi
 #'
-#' Retrieves Ensembl IDs for ribsomal genes
+#' Get data.frame with all gene expression metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
 #'
-#' @param species species to retrieve IDs.
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
 #'
-#' @return vector of Ensembl Gene IDs
+#' @return A data frame with sample gene expression metrics produced by Cell Ranger `multi` pipeline.
 #'
 #' @import cli
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter rename select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @keywords internal
 #'
 #' @noRd
 #'
+#' @examples
+#' \dontrun{
+#' count_multi_metrics <- Metrics_Multi_GEX(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
 
-Retrieve_Ensembl_Ribo <- function(
-  species
-) {
-  # Accepted species names
-  accepted_names <- data.frame(
-    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
-  )
+Metrics_Multi_GEX <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+){
+  cli_inform(message = "Reading {.field Gene Expression} Metrics")
 
-  # Species Spelling Options
-  mouse_options <- accepted_names$Mouse_Options
-  human_options <- accepted_names$Human_Options
-  marmoset_options <- accepted_names$Marmoset_Options
-  zebrafish_options <- accepted_names$Zebrafish_Options
-  rat_options <- accepted_names$Rat_Options
-  drosophila_options <- accepted_names$Drosophila_Options
-  macaque_options <- accepted_names$Macaque_Options
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
 
-  if (species %in% mouse_options) {
-    ribo_ensembl <- ensembl_ribo_id$Mus_musculus_ribo_ensembl
-  }
-  if (species %in% human_options) {
-    ribo_ensembl <- ensembl_ribo_id$Homo_sapiens_ribo_ensembl
-  }
-  if (species %in% zebrafish_options) {
-    ribo_ensembl <- ensembl_ribo_id$Callithrix_jacchus_ribo_ensembl
-  }
-  if (species %in% zebrafish_options) {
-    ribo_ensembl <- ensembl_ribo_id$Danio_rerio_ribo_ensembl
-  }
-  if (species %in% rat_options) {
-    ribo_ensembl <- ensembl_ribo_id$Rattus_norvegicus_ribo_ensembl
-  }
-  if (species %in% drosophila_options) {
-    ribo_ensembl <- ensembl_ribo_id$Drosophila_melanogaster_ribo_ensembl
-  }
-  if (species %in% macaque_options) {
-    ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+
+    # Change format to column based and select relevant metrics
+    GEX_metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]] == "Physical library ID" & .data[["Library.Type"]] == "Gene Expression") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    GEX_metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_gex <- cbind(GEX_metrics, GEX_metrics2)
+
+    # Change format of numeric columns to due commas in data csv output.
+    column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
+    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+    # Rename multi columns to match names from count
+    names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                          Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                          Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                          Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                          Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                          Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                          Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                          Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                          Estimated.Number.of.Cells = "Estimated.number.of.cells",
+                          Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                          Median.Genes.per.Cell = "Median.genes.per.cell",
+                          Number.of.Reads = "Number.of.reads",
+                          Valid.Barcodes = "Valid.barcodes",
+                          Sequencing.Saturation = "Sequencing.saturation",
+                          Total.Genes.Detected = "Total.genes.detected",
+                          Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+
+    raw_data_gex <- raw_data_gex %>%
+      rename(all_of(names_to_replace))
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_gex[1, ])
+    all_columns <- 1:ncol(x = raw_data_gex)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_gex)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
   }
 
-  return(ribo_ensembl)
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
 }
+
+
+#' Read VDJ T Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all VDJ T metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample VDJ T metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' vdj_multi_metrics <- Metrics_Multi_VDJT(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_VDJT <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+){
+  cli_inform(message = "Reading {.field VDJ T} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+
+    VDJ_T_Metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    VDJ_T_Metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
+    raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
+    all_columns <- 1:ncol(x = raw_data_vdjt)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_vdjt[,c(column_numbers_numeric)] <- lapply(raw_data_vdjt[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_vdjt)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # test_return <- lapply(1:length(test_return), function(i) {
+  #   test_return[[i]]$Estimated.number.of.cells <- as.numeric(test_return[[i]]$Estimated.number.of.cells)
+  # })
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+

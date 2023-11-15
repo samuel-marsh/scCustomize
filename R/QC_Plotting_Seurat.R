@@ -17,6 +17,7 @@
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -53,6 +54,7 @@ QC_Plots_Genes <- function(
   high_cutoff = NULL,
   pt.size = NULL,
   plot_median = FALSE,
+  plot_boxplot = FALSE,
   median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
@@ -68,7 +70,7 @@ QC_Plots_Genes <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -76,18 +78,13 @@ QC_Plots_Genes <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -109,6 +106,7 @@ QC_Plots_Genes <- function(
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -146,6 +144,7 @@ QC_Plots_UMIs <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -160,7 +159,7 @@ QC_Plots_UMIs <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -168,18 +167,13 @@ QC_Plots_UMIs <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -203,6 +197,7 @@ QC_Plots_UMIs <- function(
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -241,6 +236,7 @@ QC_Plots_Mito <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -255,7 +251,7 @@ QC_Plots_Mito <- function(
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -263,18 +259,13 @@ QC_Plots_Mito <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -297,6 +288,7 @@ QC_Plots_Mito <- function(
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -337,6 +329,7 @@ QC_Plots_Feature <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -354,7 +347,7 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...) +
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -362,18 +355,13 @@ QC_Plots_Feature <- function(
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
 
   # Rotate x axis label
-  if (!x_lab_rotate) {
+  if (isFALSE(x = x_lab_rotate)) {
     plot <- plot + UnRotate_X()
   }
 
   # return log10 y axis
-  if (y_axis_log) {
+  if (isTRUE(x = y_axis_log)) {
     plot <- plot + scale_y_log10()
-  }
-
-  # plot median
-  if (plot_median) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   return(plot)
@@ -396,6 +384,7 @@ QC_Plots_Feature <- function(
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -434,6 +423,7 @@ QC_Plots_Complexity <- function(
   high_cutoff = NULL,
   pt.size = NULL,
   plot_median = FALSE,
+  plot_boxplot = FALSE,
   median_size = 15,
   colors_use = NULL,
   x_lab_rotate = TRUE,
@@ -443,7 +433,7 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
-  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
   return(plot)
 }
@@ -464,6 +454,7 @@ QC_Plots_Complexity <- function(
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
+#' @param plot_boxplot logical, whether to plot boxplot inside of violin (Default is FALSE).
 #' @param colors_use vector of colors to use for plot.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is TRUE).
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
@@ -502,6 +493,7 @@ QC_Plots_Combined_Vln <- function(
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
+  plot_boxplot = FALSE,
   colors_use = NULL,
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
@@ -534,11 +526,11 @@ QC_Plots_Combined_Vln <- function(
   }
 
   # Create Individual Plots
-  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
-  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
-  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, ...)
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
 
   # wrap plots
   plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
@@ -546,6 +538,163 @@ QC_Plots_Combined_Vln <- function(
   return(plots)
 }
 
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### OBJECT QC HISTOGRAM ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' QC Histogram Plots
+#'
+#' Custom histogram for initial QC checks including lines for thresholding
+#'
+#' @param seurat_object Seurat object name.
+#' @param features Feature from meta.data, assay features, or feature name shortcut to plot.
+#' @param low_cutoff Plot line a potential low threshold for filtering.
+#' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param bins number of bins to plot default is 250.
+#' @param colors_use color to fill histogram bars, default is "dodgerblue".
+#' @param num_columns Number of columns in plot layout.
+#' @param plot_title optional, vector to use for plot title.  Default is the name of the
+#' variable being plotted.
+#' @param assay assay to pull features from, default is active assay.
+#' @param print_defaults return list of accepted default shortcuts to provide to `features` instead
+#' of full name.
+#'
+#' @return A patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom cowplot theme_cowplot
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
+#' @importFrom patchwork wrap_plots plot_annotation
+#'
+#' @export
+#'
+#' @concept object_qc_plotting
+#'
+#' @examples
+#' \dontrun{
+#' QC_Histogram(seurat_object = object, features = "nFeature_RNA")
+#' }
+#'
+
+QC_Histogram <- function(
+    seurat_object,
+    features,
+    low_cutoff = NULL,
+    high_cutoff = NULL,
+    split.by = NULL,
+    bins = 250,
+    colors_use = "dodgerblue",
+    num_columns = NULL,
+    plot_title = NULL,
+    assay = NULL,
+    print_defaults = FALSE
+){
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # default features
+  found_defaults <- Return_QC_Defaults(seurat_object = seurat_object, features = features, print_defaults = print_defaults)
+
+  # set assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Check split valid
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Check feature length if split.by provided
+  if (!is.null(x = split.by)) {
+    if (length(x = features) != 1) {
+      cli_abort(message = "Only 1 feature can be plotted when {.code split.by = TRUE}.")
+    }
+  }
+
+  # Check against object
+  found_features <- Gene_Present(data = seurat_object, gene_list = found_defaults[[2]], omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
+
+  found_meta <- Meta_Present(seurat_object = seurat_object, meta_col_names = found_features[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+
+  # Combine lists
+  all_not_found_features <- found_meta[[2]]
+
+  all_found_features <- c(found_defaults[[1]], found_features[[1]], found_meta[[1]])
+
+  # Warn not found
+  if (length(x = all_not_found_features > 0)) {
+    cli_warn(message = c("The following features were omitted as they not found in default values or in Seurat object:",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = all_not_found_features, and = TRUE)}}"))
+  }
+
+  # Check and set titles
+  if (is.null(x = plot_title) && is.null(x = split.by)) {
+    plot_titles <- all_found_features
+  }
+
+  if (!is.null(x = plot_title) && length(x = plot_title) != features) {
+    cli_abort(message = "The number of {.code plot_title} (.field {length(x = plot_title)}}) does not equal number of features ({.field {length(x = all_found_features)}})")
+  }
+
+  # Plot
+  if (is.null(x = split.by)) {
+    plot_list <- lapply(1:length(x = all_found_features), function(x) {
+      plot <- ggplot(data = seurat_object@meta.data, aes(x = .data[[all_found_features[x]]])) +
+        geom_histogram(color = "black", fill = colors_use, bins = bins) +
+        theme_cowplot() +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+        ggtitle(plot_titles[x])
+    })
+
+    # wrap and return plots
+    plots <- wrap_plots(plot_list, ncol = num_columns)
+
+    return(plots)
+
+  } else {
+    # Pull required data
+    data_to_plot <- FetchData(object = seurat_object, vars = c(all_found_features, split.by))
+
+    # Extract split.by list of values
+    if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+      meta_sample_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+    } else {
+      meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+    }
+
+    if (length(x = colors_use) != length(x = meta_sample_list)) {
+      if (length(x = colors_use == 1)) {
+        if (colors_use == "dodgerblue") {
+          colors_use <- scCustomize_Palette(num_groups = length(x = meta_sample_list))
+        }
+      } else {
+        cli_abort(message = c("The number of colors must match the number of variables in {.code split.by}.",
+                              "i" = "The length of {.code colors_use} is {.field {length(x = colors_use)}} but the number of variables in {.code spliut.by} is {.field {length(x = split.by)}}"))
+      }
+    }
+
+    # Plot
+    plot_list <- lapply(1:length(x = meta_sample_list), function(x) {
+      sub_data <- data_to_plot %>%
+        filter(.data[[split.by]] == meta_sample_list[x])
+
+      plot <- ggplot(data = sub_data, aes(x = .data[[all_found_features]])) +
+        geom_histogram(color = "black", fill = colors_use[x], bins = bins) +
+        theme_cowplot() +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+        ggtitle(meta_sample_list[x])
+    })
+
+    # wrap and return plots
+    plots <- wrap_plots(plot_list, ncol = num_columns) + plot_annotation(title = all_found_features, theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = rel(1.5))))
+
+    return(plots)
+  }
+}
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### OBJECT QC SCATTER ####################
@@ -575,6 +724,8 @@ QC_Plots_Combined_Vln <- function(
 #' @param cells Cells to include on the scatter plot (default is all cells).
 #' @param combination logical (default FALSE).  Whether or not to return a plot layout with both the
 #' plot colored by identity and the meta data gradient plot.
+#' @param ident_legend logical, whether to plot the legend containing identities (left plot) when
+#' `combination = TRUE`.  Default is TRUE.
 #' @param pt.size Passes size of points to both \code{\link[Seurat]{FeatureScatter}} and `geom_point`.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
 #' Default is `@active.ident`.
@@ -624,6 +775,7 @@ QC_Plot_UMIvsGene <- function(
   meta_gradient_low_cutoff = NULL,
   cells = NULL,
   combination = FALSE,
+  ident_legend = TRUE,
   pt.size = 1,
   group.by = NULL,
   raster = NULL,
@@ -637,10 +789,10 @@ QC_Plot_UMIvsGene <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Default raster check
-  if (combination) {
-    raster <- raster %||% (length(x = colnames(x = seurat_object)) > 1e5)
+  if (isTRUE(x = combination)) {
+    raster <- raster %||% (length(x = Cells(x = seurat_object)) > 1e5)
   } else {
-    raster <- raster %||% (length(x = colnames(x = seurat_object)) > 2e5)
+    raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
   }
 
   # select color palette if not specified
@@ -650,7 +802,7 @@ QC_Plot_UMIvsGene <- function(
     group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use <- Hue_Pal(group_by_length)
     } else {
       if (group_by_length <= 2) {
@@ -668,12 +820,17 @@ QC_Plot_UMIvsGene <- function(
     }
   }
 
+  if (isFALSE(x = ident_legend) && isFALSE(x = combination)) {
+    cli_warn(message = "{.code ident_legend} parameter ignored as {.code combination = FALSE}")
+  }
+
+
   # Pull meta data
   featurescatter_data <- Fetch_Meta(object = seurat_object) %>%
     rownames_to_column("barcodes")
   # Check valid meta variable
   if (!is.null(x = meta_gradient_name)) {
-    meta_names <- colnames(featurescatter_data)
+    meta_names <- colnames(x = featurescatter_data)
     if (meta_gradient_name %in% meta_names == FALSE) {
       cli_abort(message = "The meta data variable {.val {meta_gradient_name}} could not be found in object@metadata.")
     }
@@ -718,8 +875,8 @@ QC_Plot_UMIvsGene <- function(
   plot_cor_filtered <- round(x = cor(x = featurescatter_data_sort_filter[, "nCount_RNA"], y = featurescatter_data_sort_filter[, "nFeature_RNA"]), digits = 2)
 
   # Plot with meta gradient
-  if (!is.null(x = meta_gradient_name) && combination == FALSE) {
-    if (raster) {
+  if (!is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
+    if (isTRUE(x = raster)) {
       p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
@@ -745,7 +902,7 @@ QC_Plot_UMIvsGene <- function(
     return(p1)
   }
   # Plot by identity
-  if (is.null(x = meta_gradient_name) && combination == FALSE) {
+  if (is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
     p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
@@ -755,7 +912,7 @@ QC_Plot_UMIvsGene <- function(
     return(p1)
   }
 
-  if (combination) {
+  if (isTRUE(x = combination)) {
     # Plot by identity
     p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
@@ -763,8 +920,12 @@ QC_Plot_UMIvsGene <- function(
       xlab(x_axis_label) +
       ylab(y_axis_label) + ggtitle("")
 
+    if (isFALSE(x = ident_legend)) {
+      p1 <- p1 + NoLegend()
+    }
+
     # Plot with meta gradient
-    if (raster) {
+    if (isTRUE(x = raster)) {
       p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
@@ -869,7 +1030,7 @@ QC_Plot_GenevsFeature <- function(
     group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use <- Hue_Pal(group_by_length)
     } else {
       if (group_by_length <= 2) {
@@ -972,7 +1133,7 @@ QC_Plot_UMIvsFeature <- function(
     group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
   }
   if (is.null(x = colors_use)) {
-    if (ggplot_default_colors) {
+    if (isTRUE(x = ggplot_default_colors)) {
       colors_use <- Hue_Pal(group_by_length)
     } else {
       if (group_by_length <= 2) {

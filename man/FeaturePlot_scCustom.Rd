@@ -18,8 +18,10 @@ FeaturePlot_scCustom(
   split.by = NULL,
   split_collect = NULL,
   aspect_ratio = NULL,
+  figure_plot = FALSE,
   num_columns = NULL,
-  slot = "data",
+  slot = deprecated(),
+  layer = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
   label = FALSE,
@@ -61,9 +63,14 @@ Default is TRUE if one value is provided to \code{features} otherwise is set to 
 \item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 Default is NULL.}
 
+\item{figure_plot}{logical.  Whether to remove the axes and plot with legend on left of plot denoting
+axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
+
 \item{num_columns}{Number of columns in plot layout.}
 
-\item{slot}{Which slot to pull expression data from?  Default is "data".}
+\item{slot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{layer}}
+
+\item{layer}{Which layer to pull expression data from?  Default is "data".}
 
 \item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be
 value between 0-1.}

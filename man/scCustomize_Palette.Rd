@@ -4,13 +4,18 @@
 \alias{scCustomize_Palette}
 \title{Color Palette Selection for scCustomize}
 \usage{
-scCustomize_Palette(num_groups, ggplot_default_colors, color_seed = 123)
+scCustomize_Palette(
+  num_groups,
+  ggplot_default_colors = FALSE,
+  color_seed = 123
+)
 }
 \arguments{
 \item{num_groups}{number of groups to be plotted. If \code{ggplot_default_colors = FALSE} then by default:
 \itemize{
 \item If number of levels plotted equal to 2 then colors will be \code{NavyAndOrange()}.
-\item If If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from \code{DiscretePalette_scCustomize}.
+\item If number of levels plotted greater than 2 but less than or equal to 8 it will use \code{ColorBlind_Pal()}.
+\item If number of levels plotted greater than 2 but less than or equal to 36 it will use "polychrome" from \code{DiscretePalette_scCustomize()}.
 \item If greater than 36 will use "varibow" with shuffle = TRUE from \code{DiscretePalette_scCustomize}.
 }}
 

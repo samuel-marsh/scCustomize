@@ -35,3 +35,56 @@
 #' @concept data
 #'
 "ensembl_ribo_id"
+
+
+#' QC Gene Lists
+#'
+#' Gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
+#' "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @format A list of 18 vectors
+#' \describe{
+#'   \item{Homo_sapiens_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for human}
+#'   \item{Homo_sapiens_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for human}
+#'   \item{Homo_sapiens_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for human}
+#'   \item{Mus_musculus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for mouse}
+#'   \item{Mus_musculus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for mouse}
+#'   \item{Mus_musculus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for mouse}
+#'   \item{Rattus_norvegicus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for rat}
+#'   \item{Rattus_norvegicus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for rat}
+#'   \item{Rattus_norvegicus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for rat}
+#'   \item{Drosophila_melanogaster_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for fly}
+#'   \item{Drosophila_melanogaster_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for fly}
+#'   \item{Drosophila_melanogaster_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for fly}
+#'   \item{Dario_rerio_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for zebrafish}
+#'   \item{Dario_rerio_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for zebrafish}
+#'   \item{Dario_rerio_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for zebrafish}
+#'   \item{Macaca_mulatta_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for macaque}
+#'   \item{Macaca_mulatta_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for macaque}
+#'   \item{Macaca_mulatta_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for macaque}
+#'
+#' }
+#' @concept data
+#'
+#' @source MSigDB gene sets via msigdbr package \url{https://cran.r-project.org/package=msigdbr}
+#'
+"msigdb_qc_gene_list"
+
+
+#' Immediate Early Gene (IEG) gene lists
+#'
+#' Gene symbols for immediate early genes
+#'
+#' @format A list of seven vectors
+#' \describe{
+#'   \item{Mus_musculus_IEGs}{Gene symbols for IEGs from source publication (see below)}
+#'   \item{Homo_sapiens_IEGs}{Human gene symbols for homologous genes from mouse gene list}
+#'
+#' }
+#' @concept data
+#'
+#' @source Mouse gene list is from: SI Table 4 from \doi{10.1016/j.neuron.2017.09.026}.  Human
+#' gene list was compiled by first creating homologous gene list using biomaRt and then adding some manually curated
+#' homologs according to HGNC.
+#'
+"ieg_gene_list"

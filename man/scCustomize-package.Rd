@@ -29,6 +29,9 @@ and therefore needs to be set manually.}
 \item{\code{scCustomize_warn_DimPlot_split_type}}{Show message about \code{\link{DimPlot_scCustom}}
 parameter \code{split.by} and \code{split_seurat} to alert user to difference in returned plots between
 scCustomize and Seurat.}
+\item{\code{scCustomize_warn_FeatureScatter_split_type}}{Show message about \code{\link{FeatureScatter_scCustom}}
+parameter \code{split.by} and \code{split_seurat} to alert user to difference in returned plots between
+scCustomize and Seurat.}
 \item{\code{scCustomize_warn_LIGER_dim_labels_plotFactors}}{Show message about \code{\link{plotFactors_scCustom}}
 parameter \code{reduction_label} as LIGER objects do not store dimensionality reduction name and
 and therefore needs to be set manually.}

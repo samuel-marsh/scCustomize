@@ -9,9 +9,9 @@
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
-#' Default is "percent_mito".
+#' Default is "percent_ribo".
 #' @param mito_ribo_name name to use for the new meta.data column containing percent mitochondrial+ribosomal
-#' counts.  Default is "percent_mito".
+#' counts.  Default is "percent_mito_ribo".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically
 #' if species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes (will set automatically
@@ -72,7 +72,7 @@ Add_Mito_Ribo_LIGER <- function(
   )
 
   # Return list of accepted default species name options
-  if (list_species_names) {
+  if (isTRUE(x = list_species_names)) {
     return(accepted_names)
     stop_quietly()
   }
@@ -87,7 +87,7 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Overwrite check
   if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}.*")
       )
@@ -114,7 +114,7 @@ Add_Mito_Ribo_LIGER <- function(
   macaque_options <- accepted_names$Macaque_Options
 
   # Check ensembl vs patterns
-  if (ensembl_ids && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
+  if (isTRUE(x = ensembl_ids) && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
     cli_warn(message = c("When using a default species and setting {.code ensembl_ids = TRUE} provided patterns or features are ignored.",
                          "*" = "Supplied {.code mito_pattern}, {.code ribo_pattern}, {.code mito_features}, {.code ribo_features} will be disregarded.")
     )
@@ -155,13 +155,13 @@ Add_Mito_Ribo_LIGER <- function(
   }
 
   # Check that values are provided for mito and ribo
-  if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_pattern)) {
+  if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_features)) {
     cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
                           "i" = "Please provide a default species name or pattern/features."))
   }
 
   # Retrieve ensembl ids if TRUE
-  if (ensembl_ids) {
+  if (isTRUE(x = ensembl_ids)) {
     mito_features <- Retrieve_Ensembl_Mito(species = species)
     ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
@@ -257,7 +257,7 @@ Add_Cell_Complexity_LIGER <- function(
 
   # Check columns for overwrite
   if (meta_col_name %in% colnames(x = liger_object@cell.data)) {
-    if (!overwrite) {
+    if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in cell.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
       )
@@ -331,7 +331,7 @@ Meta_Present_LIGER <- function(
   }
 
   # Print all found message if TRUE
-  if (print_msg) {
+  if (isTRUE(x = print_msg)) {
     cli_inform(message = "All @cell.data columns present.")
   }
 
@@ -428,10 +428,10 @@ Generate_Plotting_df_LIGER <- function(object,
     tsne_df[[split_by]] <- object@cell.data[[split_by]]
   }
 
-  if (reorder.idents == TRUE){
+  if (isTRUE(x = reorder.idents)) {
     tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
   }
-  c_names <- names(object@clusters)
+  c_names <- names(x = object@clusters)
   if (is.null(x = clusters)) {
     # if clusters have not been set yet
     if (length(x = object@clusters) == 0) {
@@ -444,7 +444,7 @@ Generate_Plotting_df_LIGER <- function(object,
   }
   tsne_df[['Cluster']] <- clusters[c_names]
 
-  if (shuffle) {
+  if (isTRUE(x = shuffle)) {
     set.seed(shuffle_seed)
     idx <- sample(x = 1:nrow(tsne_df))
     tsne_df <- tsne_df[idx, ]
@@ -576,7 +576,7 @@ Plot_By_Cluster_LIGER <- function(
   y_axis_label <- paste0(reduction_label, "_2")
 
   # plot
-  if (raster) {
+  if (isTRUE(x = raster)) {
     if (!is.null(x = split_by)) {
       p2 <- lapply(1:length(x = list_of_splits), function(x){
         p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
@@ -592,14 +592,14 @@ Plot_By_Cluster_LIGER <- function(
           xlab(x_axis_label) +
           ylab(y_axis_label)
 
-        if (label_box) {
+        if (isTRUE(x = label_box)) {
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
             mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
-        } else if (label) {
+        } else if (isTRUE(x = label)) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
@@ -623,14 +623,14 @@ Plot_By_Cluster_LIGER <- function(
         xlab(x_axis_label) +
         ylab(y_axis_label)
 
-      if (label_box) {
+      if (isTRUE(x = label_box)) {
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
           mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
-      } else if (label) {
+      } else if (isTRUE(x = label)) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
@@ -658,14 +658,14 @@ Plot_By_Cluster_LIGER <- function(
           xlab(x_axis_label) +
           ylab(y_axis_label)
 
-        if (label_box) {
+        if (isTRUE(x = label_box)) {
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
             mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
-        } else if (label) {
+        } else if (isTRUE(x = label)) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
@@ -689,14 +689,14 @@ Plot_By_Cluster_LIGER <- function(
         xlab(x_axis_label) +
         ylab(y_axis_label)
 
-      if (label_box) {
+      if (isTRUE(x = label_box)) {
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
           mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
-      } else if (label) {
+      } else if (isTRUE(x = label)) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
@@ -825,7 +825,7 @@ Plot_By_Meta_LIGER <- function(
 
   group_by <- sym(x = group_by)
 
-  if (raster) {
+  if (isTRUE(x = raster)) {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x){
         ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
@@ -1013,14 +1013,14 @@ Variable_Features_ALL_LIGER <- function(
 #' }
 
 Liger_to_Seurat <- function(
-  liger_object,
-  nms = names(liger_object@H),
-  renormalize = TRUE,
-  use.liger.genes = TRUE,
-  by.dataset = FALSE,
-  keep_meta = TRUE,
-  reduction_label = NULL,
-  seurat_assay = "RNA"
+    liger_object,
+    nms = names(liger_object@H),
+    renormalize = TRUE,
+    use.liger.genes = TRUE,
+    by.dataset = FALSE,
+    keep_meta = TRUE,
+    reduction_label = "UMAP",
+    seurat_assay = "RNA"
 ) {
   if (is.null(x = reduction_label)) {
     cli_abort(message = c("{.code reduction_label} parameter was not set.",
@@ -1061,16 +1061,23 @@ Liger_to_Seurat <- function(
       var.genes <- gsub("_", replacement = "-", var.genes)
     }
     inmf.loadings <- t(x = liger_object@W)
+    rinmf.loadings <- t(x = liger_object@W)
+
     inmf.embeddings <- liger_object@H.norm
+    rinmf.embeddings <- do.call(what = 'rbind', args = liger_object@H)
+
     ncol_Hnorm <- ncol(x = liger_object@H.norm)
     colnames(x = inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
+    colnames(x = rinmf.embeddings) <- paste0("rawiNMF_", 1:ncol_Hnorm)
 
     tsne.embeddings <- liger_object@tsne.coords
     colnames(x = tsne.embeddings) <- paste0(key_name, 1:2)
     rownames(x = inmf.loadings) <- var.genes
     rownames(x = inmf.embeddings) <-
+      rownames(x = rinmf.embeddings) <-
       rownames(x = tsne.embeddings) <-
       rownames(x = scale.data)
+
     inmf.obj <- CreateDimReducObject(
       embeddings = inmf.embeddings,
       loadings = inmf.loadings,
@@ -1078,6 +1085,15 @@ Liger_to_Seurat <- function(
       global = TRUE,
       assay = seurat_assay
     )
+
+    rinmf.obj <- CreateDimReducObject(
+      embeddings = rinmf.embeddings,
+      loadings = rinmf.loadings,
+      key = "rawiNMF_",
+      global = TRUE,
+      assay = seurat_assay
+    )
+
     tsne.obj <- CreateDimReducObject(
       embeddings = tsne.embeddings,
       key = key_name,
@@ -1086,13 +1102,13 @@ Liger_to_Seurat <- function(
     )
   }
   new.seurat <- CreateSeuratObject(raw.data)
-  if (renormalize) {
+  if (isTRUE(x = renormalize)) {
     new.seurat <- NormalizeData(new.seurat)
   }
-  if (by.dataset) {
+  if (isTRUE(x = by.dataset)) {
     ident.use <- as.character(x = unlist(x = lapply(1:length(liger_object@raw.data), function(i) {
       dataset.name <- names(x = liger_object@raw.data)[i]
-      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(liger_object@raw.data[[i]])]))
+      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(x = liger_object@raw.data[[i]])]))
     })))
   } else {
     if (maj_version < 3) {
@@ -1108,19 +1124,21 @@ Liger_to_Seurat <- function(
     }
     new.seurat@scale.data <- t(scale.data)
     new.seurat@dr[[reduction_label]] <- tsne.obj
-    new.seurat@dr$inmf <- inmf.obj
+    new.seurat@dr$iNMF <- inmf.obj
+    new.seurat@dr$iNMF <- rinmf.obj
     new.seurat <- SetIdent(new.seurat, ident.use = ident.use)
 
   } else {
-    if (use.liger.genes) {
+    if (isTRUE(x = use.liger.genes)) {
       VariableFeatures(new.seurat) <- var.genes
     }
     SetAssayData(new.seurat, slot = "scale.data",  t(scale.data), assay = "RNA")
     new.seurat[[reduction_label]] <- tsne.obj
-    new.seurat[['inmf']] <- inmf.obj
+    new.seurat[['iNMF']] <- inmf.obj
+    new.seurat[['rawiNMF']] <- rinmf.obj
     Idents(object = new.seurat) <- ident.use
   }
-  if (keep_meta){
+  if (isTRUE(x = keep_meta)) {
     # extract meta data from liger object
     liger_meta <- Fetch_Meta(object = liger_object)
     # remove meta data values already transferred
@@ -1141,4 +1159,3 @@ Liger_to_Seurat <- function(
 
   return(new.seurat)
 }
-

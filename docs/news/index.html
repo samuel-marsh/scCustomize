@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -104,6 +104,73 @@
       <small>Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.0.0" id="sccustomize-200-2023-11-13">scCustomize 2.0.0 (2023-11-13)<a class="anchor" aria-label="anchor" href="#sccustomize-200-2023-11-13"></a></h2>
+<div class="section level3">
+<h3 id="added-2-0-0">Added<a class="anchor" aria-label="anchor" href="#added-2-0-0"></a></h3>
+<ul><li>Added support for metrics produced by Cell Ranger <code>multi</code> pipeline to <code>Read10X_Metrics</code> via new parameter <code>cellranger_multi</code>.</li>
+<li>Added <code>dot_size</code> parameter to <code>Seq_QC_Plot_*</code> family of functions.<br></li>
+<li>Added two new sequencing QC functions to create and iterate barcode rank plots: <code>Barcode_Plot</code> and <code>Iterate_Barcode_Rank_Plot</code>.<br></li>
+<li>Added <code>ident_legend</code> parameter to <code>QC_Plot_UMIvsGene</code> to control show/hide of the identity legend (<a href="https://github.com/samuel-marsh/scCustomize/issues/121" class="external-link">#121</a>).<br></li>
+<li>Added support for sparse matrix input in <code>CellBender_Feature_Diff</code>.<br></li>
+<li>Added <code>min_count_label</code> in <code>CellBender_Diff_Plot</code> to better control feature labeling.<br></li>
+<li>Allow specification of meta data column containing sample names/IDs in <code>Iterate_DimPlot_bySample</code> using new <code>sample_column</code> parameter.<br></li>
+<li>Added new function <code>MAD_Stats</code> to calculate to the median absolute deviation of meta.data columns by grouping variable and across entire object.<br></li>
+<li>Added new function <code>Add_Top_Gene_Pct_Seurat</code> to add another QC measure of cell complexity to object meta.data. Returns percentage of counts occupied by top XX genes in each cell.<br></li>
+<li>Added ability to provide set of custom features to <code>VariableFeaturePlot_scCustom</code> using <code>custom_features</code> parameter.<br></li>
+<li>Added new overall cell QC metric function <code>Add_Cell_QC_Metrics</code> to simplify adding cell QC metrics. Single function call to add Mito/Ribo Percentages, Cell Complexity, Top Gene Percentages, MSigDB Percentages, IEG Percentages, and/or Cell Cycle Scoring (human only).<br></li>
+<li>Added 2 new gene lists to package data for use in <code>Add_Cell_QC_Metrics</code> function: “msigdb_qc_gene_list” and “ieg_gene_list”.</li>
+<li>Added several internal functions to support new MsigDB and IEG capabilities of <code>Add_Cell_QC_Metrics</code>.<br></li>
+<li>Added new parameters <code>plot_median</code> and <code>plot_boxplot</code> to <code>VlnPlot_scCustom</code> (and <code>VlnPlot_scCustom</code>-based plots; e.g., <code>QC_Plot_*</code> family) for added visualization.<br></li>
+<li>Added <code>QC_Histogram</code> to plot QC features (or any feature) using simple histogram.<br></li>
+<li>Added <code>FeatureScatter_scCustom</code> function to customize Seurat’s <code>FeatureScatter</code> plots.<br></li>
+<li>Added <code>figure_plot</code> parameter to all 2D DR (t-SNE, UMAP, etc) based plots (<a href="https://github.com/samuel-marsh/scCustomize/issues/127" class="external-link">#127</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-2-0-0">Changed<a class="anchor" aria-label="anchor" href="#changed-2-0-0"></a></h3>
+<ul><li>Large scale under the hood code adjustments to ensure compatibility with Seurat V5 object structure.<br></li>
+<li>Internal code syntax updates independent of Seurat functionality.<br></li>
+<li>
+<strong>HARD DEPRECATION</strong> <code>Split_FeatureScatter</code> function has been completely deprecated and it’s functionality has been moved to new <code>FeatureScatter_scCustom</code>.<br></li>
+<li>
+<strong>SOFT DEPRECATION</strong> The parameter <code>gene_list</code> in <code>Iterate_FeaturePlot_scCustom</code> and <code>Iterate_VlnPlot_scCustom</code> has been soft-deprecated and replaced by <code>features</code> parameter. Specifying <code>gene_list</code> will display deprecation warning but continue to function until next major update.<br></li>
+<li>The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features (<a href="https://github.com/samuel-marsh/scCustomize/issues/123" class="external-link">#123</a>).<br></li>
+<li>Internal rewrite of <code>Read10X_Metrics</code> to use new internal helper functions.<br></li>
+<li>Changed <code>Liger_to_Seurat</code> to transfer the <a href="mailto:liger_object@H" class="email">liger_object@H</a> slot in addition to H.norm slot already moved.<br></li>
+<li>Replaced <code>length(x = colnames(x = obj)</code> with <code>length(x = Cells(x = obj)</code> for accurate plotting based on V5 object structure.<br></li>
+<li>
+<code>Gene_Present</code> now accepts <code>assay</code> parameter.<br></li>
+<li>Internal reorganization of some functions within <code>R/</code> for better organization.<br></li>
+<li>Updated default scCustomize color palettes (<code>scCustomize_Palette</code>). Now if number of colors is greater than 2 but less than 8 the default palette will be <code>ColorBlind_Pal</code> (previously it was “polychrome”). Polychrome remains the default when number of colors is between 9-36.<br></li>
+<li>Updated parameter default within <code>scCustomize_Palette</code> to <code>ggplot_default_colors = FALSE</code> to avoid uncessary error when no value supplied.<br></li>
+<li>Minimum version of scattermore package updated to v1.2.<br></li>
+<li>
+<code>DimPlot_scCustom</code> will now set <code>label = TRUE</code> if <code>label.box</code> is set to TRUE but <code>label</code> is not changed from default.<br></li>
+<li>Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependency installs when not completely needed).<br></li>
+<li>Replace Seurat <code>PackageCheck</code> (now deprecated), with <code><a href="https://rlang.r-lib.org/reference/is_installed.html" class="external-link">rlang::is_installed()</a></code> for non-dependency checks.<br></li>
+<li>Update vignettes with new features and bug fixes from old code.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-2-0-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-2-0-0"></a></h3>
+<ul><li>Fixed issue in <code>Read10X_Metrics</code> that caused errors when reading files on windows operating system (<a href="https://github.com/samuel-marsh/scCustomize/issues/115" class="external-link">#115</a>).<br></li>
+<li>Fixed issue in <code>Create_CellBender_Merged_Seurat</code> when feature names are changed (underscore to dash) during object creation (<a href="https://github.com/samuel-marsh/scCustomize/issues/118" class="external-link">#118</a>).<br></li>
+<li>Fixed error in <code>Read10X_h5_Mutli_Directory</code> when reading Cell Ranger <code>multi</code> directories.<br></li>
+<li>Added new checks to <code>VlnPlot_scCustom</code>, <code>DimPlot_scCustom</code>, and <code>DotPlot_scCustom</code> to avoid otherwise ambiguous error messages (<a href="https://github.com/samuel-marsh/scCustomize/issues/120" class="external-link">#120</a>).<br></li>
+<li>Fixed internal check message accidentally user facing in <code>VlnPlot_scCustom</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/122" class="external-link">#122</a>).<br></li>
+<li>Fixed cli warning in <code>Cell_Highlight_Plot</code> that could cause function to error without proper error message.<br></li>
+<li>Fixed handling of file names in <code>Read_*</code> functions to avoid unnecessary errors.<br></li>
+<li>Replace superseded dplyr syntax/functionality <code>drop_na(.data[[var]]</code>, with current dplyr syntax.<br></li>
+<li>Internal code fixes to accelerate plotting functions.<br></li>
+<li>Fixed default plot colors in <code>VlnPlot</code>-based plots when <code>split.by</code> is not NULL.<br></li>
+<li>Fixed error when trying to plot more than two variables with <code>group.by</code> when using <code>DimPlot_scCustom</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/128" class="external-link">#128</a>).<br></li>
+<li>Fixed errors in parameter description for <code>Add_Mito_Ribo_Seurat</code> and <code>Add_Mito_Ribo_LIGER</code> which incorrectly stated the names of new meta.data/cell.data columns to be added.<br></li>
+<li>Fixed bug in <code>DotPlot_scCustom</code> that prevented it from working unless <code>group.by</code> parameter was explicitly added.<br></li>
+<li>Fixed bug in <code>Case_Check</code> caused by typo.<br></li>
+<li>Fixed color warning messages in <code>Cluster_Highlight_Plot</code> and <code>Meta_Highlight_Plot</code> that were too verbose.<br></li>
+<li>Fixed bug in <code>Add_Mito_Ribo_Seurat</code> and <code>Add_Mito_Ribo_LIGER</code> which caused error when supplying custom list of features for non-default organism (<a href="https://github.com/samuel-marsh/scCustomize/issues/133" class="external-link">#133</a>).<br></li>
+<li>Fixed bug in <code>DimPlot_scCustom</code> preventing that errored when trying to split plot and use <code>figure_plot</code> at same time.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.3" id="sccustomize-113-2023-07-19">scCustomize 1.1.3 (2023-07-19)<small>2023-07-19</small><a class="anchor" aria-label="anchor" href="#sccustomize-113-2023-07-19"></a></h2>
 <div class="section level3">

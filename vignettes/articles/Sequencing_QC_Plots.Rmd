@@ -45,7 +45,9 @@ In addition to other QC metrics previously discussed it can also be helpful to p
 For this tutorial, I will be utilizing de-identified example data from my own experience but I will walk through process for using your own data.
 
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(Seurat)
 library(scCustomize)
 library(qs)
@@ -58,7 +60,8 @@ meta_metrics <- qread("assets/seq_metrics_dataframe_meta.qs")
 
 
 ## Loading Data  
-Before we can plot these metrics we first need to import raw data.
+Before we can plot these metrics we first need to import raw data.  
+
 ### Accepted Data Types  
 These functions currently only work with data from 10X Genomics processed via Cell Ranger.  If there is interest in adapting to other platforms I'd be happy to entertain PRs.
 
@@ -83,6 +86,9 @@ Parent_Directory
 ```
 
 *NOTE: If the path to these files on your system is different that the default 10X path be sure to specify the `secondary_path` param and set `default_10X = FALSE` when importing data.*
+
+### Support for Cell Ranger `multi` pipeline  
+`Read_Metrics_10X` includes support for data processed using Cell Ranger `multi` pipeline by setting the parameter `cellranger_multi = TRUE`.  The function will automatically alter it's default secondary path value and will return both gene expression and TCR metrics as separate data.frames.  
 
 ### Read Data
 We can read all metrics files within a given parent directory using the `Read_Metrics_10X` function.
@@ -149,8 +155,26 @@ Seq_QC_Plot_Alignment_Combined(metrics_dataframe = metrics_final, plot_by = "Ful
 ```
 
 ### Basic Statistics
-All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means`.  
+All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means()`.  
 ***NOTE: See function help pages and ggpubr for more info to make sure the right test is being used for your data.***
 ```{r, fig.height=9, fig.width=13}
 Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch", significance = T)
 ```
+
+### Barcode Rank Plots
+scCustomize can also be used to create customized barcode rank plots from raw feature barcode data using outputs from DropletUtils package.  scCustomize provides the function `Iterate_Barcode_Rank_Plot` which reads data, processes using DropletUtils, and returns plots.
+
+The plots are adaptation of the plots from DropletUtils package moved to ggplot2 framework with some additional customization and the ability to return rastered plots.
+
+```{r eval=FALSE}
+Iterate_Barcode_Rank_Plot(dir_path_h5 = "assets/Barcode_Rank_Example/", plateau = 20000, file_path = "plots/", file_name = "Barcode_Rank_Plots.pdf")
+```
+
+```{r message=TRUE, include=FALSE}
+Iterate_Barcode_Rank_Plot(dir_path_h5 = "assets/Barcode_Rank_Example/", plateau = 20000, file_path = "~/Downloads/", file_name = "Barcode_Rank_Plots.pdf", )
+```
+
+<center>
+<img src="../reference/figures/assets/Barcode_Rank_Plot_Example.jpg" width=75%>
+*Example of barcode rank plot output.  (10K PBMCs from 10X Genomics Public Data).*
+</center>

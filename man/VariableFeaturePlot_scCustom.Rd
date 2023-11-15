@@ -7,6 +7,7 @@
 VariableFeaturePlot_scCustom(
   seurat_object,
   num_features = 10,
+  custom_features = NULL,
   label = TRUE,
   pt.size = 1,
   colors_use = c("black", "red"),
@@ -21,6 +22,9 @@ VariableFeaturePlot_scCustom(
 \item{seurat_object}{Seurat object name.}
 
 \item{num_features}{Number of top variable features to highlight by color/label.}
+
+\item{custom_features}{A vector of custom feature names to label on plot instead of labeling top
+variable genes.}
 
 \item{label}{logical. Whether to label the top features.  Default is TRUE.}
 

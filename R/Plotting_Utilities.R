@@ -151,6 +151,255 @@ kMeans_Elbow <- function(
 }
 
 
+#' Split FeatureScatter
+#'
+#' Create FeatureScatter using split.by
+#'
+#' @param seurat_object Seurat object name.
+#' @param feature1 First feature to plot.
+#' @param feature2 Second feature to plot.
+#' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
+#' Use 'ident' to group.by active.ident class.
+#' @param colors_use color for the points on plot.
+#' @param pt.size Adjust point size for plotting.
+#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
+#' Default is NULL.
+#' @param title_size size for plot title labels.
+#' @param num_columns number of columns in final layout plot.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 100,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{FeatureScatter}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
+#' @importFrom Seurat FeatureScatter
+#' @importFrom stats cor
+#'
+#' @noRd
+#'
+
+scCustomze_Split_FeatureScatter <- function(
+    seurat_object,
+    feature1 = NULL,
+    feature2 = NULL,
+    split.by = NULL,
+    group.by = NULL,
+    colors_use = NULL,
+    pt.size = NULL,
+    aspect_ratio = NULL,
+    title_size = 15,
+    num_columns = NULL,
+    raster = NULL,
+    raster.dpi = c(512, 512),
+    ggplot_default_colors = FALSE,
+    color_seed = 123,
+    ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # split.by present
+  if (is.null(x = split.by)) {
+    cli_abort(message = "No value supplied to {.code split.by}.")
+  }
+
+  # Check split.by is valid
+  if (split.by %in% colnames(seurat_object@meta.data) == FALSE) {
+    cli_abort(message = c("The meta data variable: {.val {split.by}} could not be found in object@meta.data.",
+                          "i" = "Please check the spelling and column names of meta.data slot.")
+    )
+  }
+
+  # Set column and row lengths
+  split.by_length <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
+
+  if (is.null(x = num_columns)) {
+    num_columns <- split.by_length
+  }
+  # Calculate number of rows for selected number of columns
+  num_rows <- ceiling(x = split.by_length/num_columns)
+
+  # Check column and row compatibility
+  if (num_columns > split.by_length) {
+    cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                          "*" = "{.val {split.by}} only contains {.field {split.by_length}} variables.",
+                          "i" = "Please adjust {.code num_columns} to be less than or equal to {.field {split.by_length}}.")
+    )
+  }
+
+  # Check features are present
+  possible_features <- c(rownames(x = seurat_object), colnames(x = seurat_object@meta.data))
+  check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
+  if (length(x = check_features) > 0) {
+    cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field {check_features}}'")
+  }
+
+  # Extract min/maxes of features
+  data_to_plot <- FetchData(object = seurat_object, vars = c(feature1, feature2))
+  cor_data_features <- c("nCount_RNA", "nFeature_RNA")
+  if (feature1 %in% cor_data_features && feature2 %in% cor_data_features) {
+    min_feature1 <- min(data_to_plot[, feature1])-1
+    max_feature1 <- max(data_to_plot[, feature1])+1
+    min_feature2 <- min(data_to_plot[, feature2])-1
+    max_feature2 <- max(data_to_plot[, feature2])+1
+  } else {
+    min_feature1 <- min(data_to_plot[, feature1])-0.05
+    max_feature1 <- max(data_to_plot[, feature1])+0.05
+    min_feature2 <- min(data_to_plot[, feature2])-0.05
+    max_feature2 <- max(data_to_plot[, feature2])+0.05
+  }
+
+  # Extract split.by list of values
+  if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+    meta_sample_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+  } else {
+    meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+  }
+
+  # Extract cell names per meta data list of values
+  cell_names <- lapply(meta_sample_list, function(x) {
+    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[, split.by] == x)]})
+
+  # raster check
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
+  # Set uniform point size is pt.size = NULL (based on plot with most cells)
+  if (is.null(x = pt.size)) {
+    # cells per meta data
+    cells_by_meta <- data.frame(table(seurat_object@meta.data[, split.by]))
+    # Identity with greatest number of cells
+    max_cells <- max(cells_by_meta$Freq)
+    # modified version of the autopointsize function from Seurat
+    pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+  }
+
+  # Add correlations if applicable
+  cor_data_features <- c("nCount_RNA", "nFeature_RNA")
+  if (feature1 %in% cor_data_features && feature2 %in% cor_data_features) {
+    plot_cor <- TRUE
+    cor_data <- FetchData(object = seurat_object, vars = c("nCount_RNA", "nFeature_RNA", split.by))
+
+    cor_values <- lapply(1:length(x = meta_sample_list), function(i) {
+      cor_data_filtered <- cor_data %>%
+        filter(.data[[split.by]] == meta_sample_list[[i]])
+      round(x = cor(x = cor_data_filtered[, "nCount_RNA"], y = cor_data_filtered[, "nFeature_RNA"]), digits = 2)
+    })
+  } else {
+    plot_cor <- FALSE
+  }
+
+  # Set colors
+  group.by <- group.by %||% 'ident'
+
+  if (group.by == "ident") {
+    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  } else {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+  }
+
+  if (is.null(x = colors_use)) {
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+  }
+
+  # Plots
+  plots <- lapply(1:length(x = meta_sample_list), function(j) {
+    plot <- FeatureScatter(seurat_object, feature1 = feature1, feature2 = feature2, cells = cell_names[[j]], group.by = group.by, cols = colors_use, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, ...) +
+      theme(plot.title = element_text(hjust = 0.5, size = title_size),
+            legend.position = "right") +
+      xlim(min_feature1, max_feature1) +
+      ylim(min_feature2, max_feature2)
+    if (isTRUE(x = plot_cor)) {
+      plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[j]))
+    } else {
+      plot + ggtitle(paste(meta_sample_list[[j]]))
+    }
+  })
+
+  # Wrap Plots into single output
+  plot_comb <- wrap_plots(plots, ncol = num_columns, nrow = num_rows) + plot_layout(guides = 'collect')
+
+  # Aspect ratio changes
+  if (!is.null(x = aspect_ratio)) {
+    if (!is.numeric(x = aspect_ratio)) {
+      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    }
+    plot_comb <- plot_comb & theme(aspect.ratio = aspect_ratio)
+  }
+
+  return(plot_comb)
+}
+
+
+#' Figure Plots
+#'
+#' Removes the axes from 2D DR plots and makes them into plot label.
+#' Used for `figure_plot` parameter in plotting functions.
+#'
+#' @param plot 2D DR plot
+#'
+#' @return A modified plot
+#'
+#' @import ggplot2
+#' @import patchwork
+#'
+#' @references parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
+#'
+#' @noRd
+#'
+
+Figure_Plot <- function(
+    plot
+){
+  # pull axis labels
+  x_lab_reduc <- plot$labels$x
+  y_lab_reduc <- plot$labels$y
+
+  plot <- plot & NoAxes()
+
+  axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
+    geom_point() +
+    xlim(c(0, 10)) + ylim(c(0, 10)) +
+    theme_classic() +
+    ylab(y_lab_reduc) + xlab(x_lab_reduc) +
+    theme(plot.background = element_rect(fill = "transparent", colour = NA),
+          panel.background = element_rect(fill = "transparent"),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks = element_blank(),
+          axis.line = element_line(
+            arrow = arrow(angle = 15, length = unit(.5, "cm"), type = "closed")
+          )
+    )
+
+  figure_layout <- c(
+    area(t = 1, l = 2, b = 11, r = 11),
+    area(t = 10, l = 1, b = 12, r = 2))
+
+  plot_figure <- plot + axis_plot +
+    plot_layout(design = figure_layout)
+
+  return(plot_figure)
+}
+
+
+
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### TEST/HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -236,7 +485,7 @@ Test_Integer <- function(
   x
   ) {
   test <- all.equal(x, as.integer(x), check.attributes = FALSE)
-  if (test == TRUE) {
+  if (isTRUE(x = test)) {
     return(TRUE)
   } else {
       return(FALSE)
@@ -457,3 +706,5 @@ No_Right <- function() {
   )
   return(no.right)
 }
+
+

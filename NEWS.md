@@ -1,3 +1,65 @@
+# scCustomize 2.0.0 (2023-11-13)  
+## Added  
+- Added support for metrics produced by Cell Ranger `multi` pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
+- Added `dot_size` parameter to `Seq_QC_Plot_*` family of functions.  
+- Added two new sequencing QC functions to create and iterate barcode rank plots: `Barcode_Plot` and `Iterate_Barcode_Rank_Plot`.  
+- Added `ident_legend` parameter to `QC_Plot_UMIvsGene` to control show/hide of the identity legend ([#121](https://github.com/samuel-marsh/scCustomize/issues/121)).  
+- Added support for sparse matrix input in `CellBender_Feature_Diff`.  
+- Added `min_count_label` in `CellBender_Diff_Plot` to better control feature labeling.  
+- Allow specification of meta data column containing sample names/IDs in `Iterate_DimPlot_bySample` using new `sample_column` parameter.  
+- Added new function `MAD_Stats` to calculate to the median absolute deviation of meta.data columns by grouping variable and across entire object.  
+- Added new function `Add_Top_Gene_Pct_Seurat` to add another QC measure of cell complexity to object meta.data.  Returns percentage of counts occupied by top XX genes in each cell.  
+- Added ability to provide set of custom features to `VariableFeaturePlot_scCustom` using `custom_features` parameter.  
+- Added new overall cell QC metric function `Add_Cell_QC_Metrics` to simplify adding cell QC metrics.  Single function call to add Mito/Ribo Percentages, Cell Complexity, Top Gene Percentages, MSigDB Percentages, IEG Percentages, and/or Cell Cycle Scoring (human only).  
+- Added 2 new gene lists to package data for use in `Add_Cell_QC_Metrics` function: "msigdb_qc_gene_list" and "ieg_gene_list".
+- Added several internal functions to support new MsigDB and IEG capabilities of `Add_Cell_QC_Metrics`.  
+- Added new parameters `plot_median` and `plot_boxplot` to `VlnPlot_scCustom` (and `VlnPlot_scCustom`-based plots; e.g., `QC_Plot_*` family) for added visualization.  
+- Added `QC_Histogram` to plot QC features (or any feature) using simple histogram.  
+- Added `FeatureScatter_scCustom` function to customize Seurat's `FeatureScatter` plots.  
+- Added `figure_plot` parameter to all 2D DR (t-SNE, UMAP, etc) based plots ([#127](https://github.com/samuel-marsh/scCustomize/issues/127)).  
+
+  
+## Changed  
+- Large scale under the hood code adjustments to ensure compatibility with Seurat V5 object structure.  
+- Internal code syntax updates independent of Seurat functionality.  
+- **HARD DEPRECATION** `Split_FeatureScatter` function has been completely deprecated and it's functionality has been moved to new `FeatureScatter_scCustom`.  
+- **SOFT DEPRECATION** The parameter `gene_list` in `Iterate_FeaturePlot_scCustom` and `Iterate_VlnPlot_scCustom` has been soft-deprecated and replaced by `features` parameter.  Specifying `gene_list` will display deprecation warning but continue to function until next major update.  
+- The above soft deprecation was to clarify that other features besides genes can be plotted and coincides with update to functions to allow for iterative plots of meta.data or reductions in addition to assay features ([#123](https://github.com/samuel-marsh/scCustomize/issues/123)).  
+- Internal rewrite of `Read10X_Metrics` to use new internal helper functions.  
+- Changed `Liger_to_Seurat` to transfer the liger_object@H slot in addition to H.norm slot already moved.  
+- Replaced `length(x = colnames(x = obj)` with `length(x = Cells(x = obj)` for accurate plotting based on V5 object structure.  
+- `Gene_Present` now accepts `assay` parameter.  
+- Internal reorganization of some functions within `R/` for better organization.  
+- Updated default scCustomize color palettes (`scCustomize_Palette`).  Now if number of colors is greater than 2 but less than 8 the default palette will be `ColorBlind_Pal` (previously it was "polychrome").  Polychrome remains the default when number of colors is between 9-36.  
+- Updated parameter default within `scCustomize_Palette` to `ggplot_default_colors = FALSE` to avoid uncessary error when no value supplied.  
+- Minimum version of scattermore package updated to v1.2.  
+- `DimPlot_scCustom` will now set `label = TRUE` if `label.box` is set to TRUE but `label` is not changed from default.  
+- Removed loading of full tidyverse in vignettes to remove from package suggests (lessen dependency installs when not completely needed).  
+- Replace Seurat `PackageCheck` (now deprecated), with `rlang::is_installed()` for non-dependency checks.  
+- Update vignettes with new features and bug fixes from old code.  
+   
+
+## Fixes  
+- Fixed issue in `Read10X_Metrics` that caused errors when reading files on windows operating system ([#115](https://github.com/samuel-marsh/scCustomize/issues/115)).  
+- Fixed issue in `Create_CellBender_Merged_Seurat` when feature names are changed (underscore to dash) during object creation ([#118](https://github.com/samuel-marsh/scCustomize/issues/118)).  
+- Fixed error in `Read10X_h5_Mutli_Directory` when reading Cell Ranger `multi` directories.  
+- Added new checks to `VlnPlot_scCustom`, `DimPlot_scCustom`, and `DotPlot_scCustom` to avoid otherwise ambiguous error messages ([#120](https://github.com/samuel-marsh/scCustomize/issues/120)).  
+- Fixed internal check message accidentally user facing in `VlnPlot_scCustom` ([#122](https://github.com/samuel-marsh/scCustomize/issues/122)).  
+- Fixed cli warning in `Cell_Highlight_Plot` that could cause function to error without proper error message.  
+- Fixed handling of file names in `Read_*` functions to avoid unnecessary errors.  
+- Replace superseded dplyr syntax/functionality `drop_na(.data[[var]]`, with current dplyr syntax.  
+- Internal code fixes to accelerate plotting functions.  
+- Fixed default plot colors in `VlnPlot`-based plots when `split.by` is not NULL.  
+- Fixed error when trying to plot more than two variables with `group.by` when using `DimPlot_scCustom` ([#128](https://github.com/samuel-marsh/scCustomize/issues/128)).  
+- Fixed errors in parameter description for `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` which incorrectly stated the names of new meta.data/cell.data columns to be added.  
+- Fixed bug in `DotPlot_scCustom` that prevented it from working unless `group.by` parameter was explicitly added.  
+- Fixed bug in `Case_Check` caused by typo.  
+- Fixed color warning messages in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` that were too verbose.  
+- Fixed bug in `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER` which caused error when supplying custom list of features for non-default organism ([#133](https://github.com/samuel-marsh/scCustomize/issues/133)).  
+- Fixed bug in `DimPlot_scCustom` preventing that errored when trying to split plot and use `figure_plot` at same time.  
+
+
+
 # scCustomize 1.1.3 (2023-07-19)  
 ## Added  
 - None.   

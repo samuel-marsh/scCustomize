@@ -25,7 +25,8 @@
 #' @import ggplot2
 #' @import patchwork
 # #' @importFrom Nebulosa plot_density
-#' @importFrom SeuratObject DefaultDimReduc PackageCheck
+#' @importFrom rlang is_installed
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -35,7 +36,7 @@
 #' \donttest{
 #' library(Seurat)
 #' Plot_Density_Custom(seurat_object = pbmc_small, features = "CD3E")
-#'}
+#' }
 #'
 
 Plot_Density_Custom <- function(
@@ -51,8 +52,8 @@ Plot_Density_Custom <- function(
   ...
 ) {
   # Check Nebulosa installed
-  Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
-  if (!Nebulosa_check[1]) {
+  Nebulosa_check <- is_installed(pkg = "Nebulosa")
+  if (isFALSE(x = Nebulosa_check)) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Plot_Density_Custom}",
       "i" = "This can be accomplished with the following commands: ",
@@ -132,7 +133,8 @@ Plot_Density_Custom <- function(
 #' @import cli
 #' @import ggplot2
 # #' @importFrom Nebulosa plot_density
-#' @importFrom SeuratObject DefaultDimReduc PackageCheck
+#' @importFrom rlang is_installed
+#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -142,7 +144,7 @@ Plot_Density_Custom <- function(
 #' \donttest{
 #' library(Seurat)
 #' Plot_Density_Joint_Only(seurat_object = pbmc_small, features = c("CD8A", "CD3E"))
-#'}
+#' }
 #'
 
 Plot_Density_Joint_Only <- function(
@@ -156,8 +158,8 @@ Plot_Density_Joint_Only <- function(
   ...
 ) {
   # Check Nebulosa installed
-  Nebulosa_check <- PackageCheck("Nebulosa", error = FALSE)
-  if (!Nebulosa_check[1]) {
+  Nebulosa_check <- is_installed(pkg = "Nebulosa")
+  if (isFALSE(x = Nebulosa_check)) {
     cli_abort(message = c(
       "Please install the {.val Nebulosa} package to use {.code Plot_Density_Joint_Only}",
       "i" = "This can be accomplished with the following commands: ",

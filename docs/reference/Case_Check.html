@@ -20,7 +20,7 @@ Checks Seurat object for the presence of features with the same spelling but alt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
       </span>
     </div>
 
@@ -119,7 +119,8 @@ Checks Seurat object for the presence of features with the same spelling but alt
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">gene_list</span>,</span>
 <span>  case_check_msg <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_features <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  return_features <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  assay <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -140,6 +141,10 @@ found in addition to inclusion in returned list.  Default is TRUE.</p></dd>
 
 <dt>return_features</dt>
 <dd><p>logical. Whether to return vector of alternate case features.  Default is TRUE.</p></dd>
+
+
+<dt>assay</dt>
+<dd><p>Name of assay to pull feature names from. If NULL will use the result of <code>DefaultAssay(seurat_object)</code>.</p></dd>
 
 </dl></div>
     <div id="value">

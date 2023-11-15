@@ -46,7 +46,9 @@ scCustomize has several helper functions to assist with identification of marker
 Load packages & Data
 ```{r init}
 # Load Packages
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(Seurat)
 library(scCustomize)
 library(qs)

@@ -45,7 +45,9 @@ Seurat and other packages provide excellent tools for importing data however whe
   
 For this tutorial, I will be utilizing several publicly available data sets from NCBI GEO.
 ```{r init}
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
 library(Seurat)
 library(scCustomize)
 ```

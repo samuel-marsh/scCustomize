@@ -31,10 +31,10 @@ generate mito_pattern and ribo_pattern values.}
 Default is "percent_mito".}
 
 \item{ribo_name}{name to use for the new meta.data column containing percent ribosomal counts.
-Default is "percent_mito".}
+Default is "percent_ribo".}
 
 \item{mito_ribo_name}{name to use for the new meta.data column containing percent
-mitochondrial+ribosomal counts.  Default is "percent_mito".}
+mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".}
 
 \item{mito_pattern}{A regex pattern to match features against for mitochondrial genes (will set automatically if
 species is mouse or human; marmoset features list saved separately).}
@@ -68,8 +68,9 @@ A Seurat Object
 Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
 }
 \examples{
-library(Seurat)
-pbmc_small <- Add_Mito_Ribo_Seurat(seurat_object = pbmc_small, species = "human")
+\dontrun{
+obj <- Add_Mito_Ribo_Seurat(seurat_object = obj, species = "human")
+}
 
 }
 \concept{object_util}
