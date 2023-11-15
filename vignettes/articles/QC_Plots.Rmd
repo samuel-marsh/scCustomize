@@ -135,10 +135,12 @@ hca_bm <- Add_Top_Gene_Pct_Seurat(seurat_object = hca_bm, num_top_genes = 50)
 In addition to those standard QC metrics it can be helpful when using network based QC analysis to add the percent of expression of genes related to common pathways.  This function and the network-based analysis is further extension of the analysis/QC from our recent publication: Gazestani & Kamath et al., 2023 ([*Cell*](https://doi.org/10.1016/j.cell.2023.08.005)).
 
 In scCustomize the percent of gene expression from the following gene lists can be added as part of the `Add_Cell_QC_Metrics` (see next section for more details):  
+
 * Immediate Early Genes (for human and mouse only)  
-  - Can be used in part to examine potential impact of dissociation or post-mortem signatures ([*Marsh et al., 2022*](https://doi.org/10.1038/s41593-022-01022-8)) (gene list from [*Wu et al., 2017*](https://doi.org/10.1016/j.neuron.2017.09.026))  
-* Oxidative Phosphorylation, Apoptosis, & DNA Repair (all default species except Marmoset)
- - Species specific gene lists from [MSigDB Hallmark Gene Sets](https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H) 
+  - Can be used in part to examine potential impact of dissociation or post-mortem signatures ([*Marsh et al., 2022*](https://doi.org/10.1038/s41593-022-01022-8)) or to identify acutely perturbed populations (gene list from [*Wu et al., 2017*](https://doi.org/10.1016/j.neuron.2017.09.026))  
+  
+* Oxidative Phosphorylation, Apoptosis, & DNA Repair (all default species except Marmoset)  
+    - Species specific gene lists from [MSigDB Hallmark Gene Sets](https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H) 
 
 
 ## Add All Cell QC Metrics with Single Function
