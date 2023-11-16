@@ -636,7 +636,7 @@ QC_Histogram <- function(
     plot_titles <- all_found_features
   }
 
-  if (!is.null(x = plot_title) && length(x = plot_title) != features) {
+  if (!is.null(x = plot_title) && length(x = plot_title) != length(x = features)) {
     cli_abort(message = "The number of {.code plot_title} (.field {length(x = plot_title)}}) does not equal number of features ({.field {length(x = all_found_features)}})")
   }
 
