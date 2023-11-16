@@ -2582,12 +2582,6 @@ VariableFeaturePlot_scCustom <- function(
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
-  if (isTRUE(x = Assay5_Check(seurat_object = seurat_object, assay = assay))) {
-    cli_inform(message = c("!" = "Currently labeling top variable genes from Assay5 object will not correctly label top variable features due to changes in Seurat5.",
-                                "i" = "This feature will be updated when more information comes from Seurat Dev team.",
-                                "i" = "For now the top variable features can be manually extracted and provided to {.code custom_features} parameter."))
-  }
-
   # Extract num of desired features
   top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, selection.method = selection.method), num_features)
 
