@@ -4,7 +4,7 @@
 
   
 ## Changed  
-- Changes.  
+- Removed warning in `VariableFeaturePlot_scCustom` now fixed in Seurat release.  
    
 
 ## Fixes  
