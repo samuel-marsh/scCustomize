@@ -183,7 +183,7 @@ Add_Mito_Ribo_Seurat <- function(
       )
     }
     cli_inform(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in meta.data slot.",
-                           "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE.}")
     )
   }
 
@@ -469,7 +469,7 @@ Add_Top_Gene_Pct_Seurat <- function(
   }
 
   # Extract matrix
-  count_mat <- LayerData(object = seurat_object, assay = assay)
+  count_mat <- LayerData(object = seurat_object, assay = assay, layer = "counts")
 
   # calculate
   res <- as.data.frame(scuttle::perCellQCMetrics(x = count_mat, percent.top = num_top_genes))
