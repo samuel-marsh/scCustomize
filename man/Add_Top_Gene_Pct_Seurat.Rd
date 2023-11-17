@@ -9,7 +9,8 @@ Add_Top_Gene_Pct_Seurat(
   num_top_genes = 50,
   meta_col_name = NULL,
   assay = "RNA",
-  overwrite = FALSE
+  overwrite = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ storing corrected and uncorrected assays in same object (e.g. outputs of both Ce
 
 \item{overwrite}{Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 function will abort if column with name provided to \code{meta_col_name} is present in meta.data slot.}
+
+\item{verbose}{logical, whether to print messages with status updates, default is TRUE.}
 }
 \value{
 A Seurat Object
