@@ -1,6 +1,6 @@
 # scCustomize 2.0.1 (2023-11-17)  
 ## Added  
-- Additions.  
+- None.   
 
   
 ## Changed  
