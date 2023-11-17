@@ -393,7 +393,7 @@ Add_Cell_Complexity_Seurat <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
 #' @import cli
-#' @importFrom dplyr select all_of
+#' @importFrom dplyr select all_of bind_rows
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang is_installed
 #' @importFrom SeuratObject LayerData
