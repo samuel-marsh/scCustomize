@@ -27,5 +27,5 @@ This is a hotfix update with bug fixes now v2.0.1; apologies for not catching th
     - The errors are from failures running package examples.  This includes functions that have been part of prior CRAN releases.
     NO errors are found when checking locally on macos platform using R 4.3.2 and none are found in GitHub Actions check on linux
     or windows platforms.  I believe to be error in GitHub Actions workflow and I have therefore refrained from adding `dontrun`
-    to examples that run fine on other platforms.  If error occurs during CRAN check during submission I will re-evaluate changes
-    required.  
+    to examples that run fine on other platforms.  This was also the case with v2.0.0 which passed macos checks on CRAN,
+    furthering it is likely a GitHub Actions issue.
