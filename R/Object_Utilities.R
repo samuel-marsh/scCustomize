@@ -468,15 +468,36 @@ Add_Top_Gene_Pct_Seurat <- function(
     )
   }
 
+  count_layers_present <- Layers(object = seurat_object, search = "counts")
+
   # Extract matrix
-  count_mat <- LayerData(object = seurat_object, assay = assay, layer = "counts")
+  if (length(x = count_layers_present) == 1) {
+    count_mat <- LayerData(object = seurat_object, assay = assay, layer = "counts")
 
-  # calculate
-  res <- as.data.frame(scuttle::perCellQCMetrics(x = count_mat, percent.top = num_top_genes))
+    # calculate
+    res <- as.data.frame(scuttle::perCellQCMetrics(x = count_mat, percent.top = num_top_genes))
 
-  # select percent column
-  res <- res %>%
-    select(all_of(scuttle_colname))
+    # select percent column
+    res <- res %>%
+      select(all_of(scuttle_colname))
+  }
+
+
+  if (length(x = count_layers_present) > 1) {
+    res_list <- lapply(1:length(x = count_layers_present), function(x) {
+      # Get layer data
+      layer_count <- LayerData(object = seurat_object, assay = assay, layer = count_layers_present[x])
+
+      # run scuttle
+      layer_res <- as.data.frame(scuttle::perCellQCMetrics(x = layer_count, percent.top = num_top_genes))
+      # select results column
+      layer_res <- layer_res %>%
+        select(all_of(scuttle_colname))
+    })
+
+    # combine results
+    res <- bind_rows(res_list)
+  }
 
   # Add to object and return
   seurat_object <- AddMetaData(object = seurat_object, metadata = res, col.name = meta_col_name)
