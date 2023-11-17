@@ -391,6 +391,7 @@ Add_Cell_Complexity_Seurat <- function(
 #' storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#' @param verbose logical, whether to print messages with status updates, default is TRUE.
 #'
 #' @import cli
 #' @importFrom dplyr select all_of bind_rows
@@ -425,7 +426,8 @@ Add_Top_Gene_Pct_Seurat <- function(
     num_top_genes = 50,
     meta_col_name = NULL,
     assay = "RNA",
-    overwrite = FALSE
+    overwrite = FALSE,
+    verbose = TRUE
 ){
   # Check for scuttle first
   scuttle_check <- is_installed(pkg = "scuttle")
@@ -472,7 +474,10 @@ Add_Top_Gene_Pct_Seurat <- function(
 
   # Extract matrix
   if (length(x = count_layers_present) == 1) {
-    cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present}}")
+    if (isTRUE(x = verbose)) {
+      cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present}}")
+    }
+
     count_mat <- LayerData(object = seurat_object, assay = assay, layer = "counts")
 
     # calculate
@@ -486,7 +491,10 @@ Add_Top_Gene_Pct_Seurat <- function(
 
   if (length(x = count_layers_present) > 1) {
     res_list <- lapply(1:length(x = count_layers_present), function(x) {
-      cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present[x]}}")
+      if (isTRUE(x = verbose)) {
+        cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present[x]}}")
+      }
+
       # Get layer data
       layer_count <- LayerData(object = seurat_object, assay = assay, layer = count_layers_present[x])
 
@@ -498,7 +506,9 @@ Add_Top_Gene_Pct_Seurat <- function(
     })
 
     # combine results
-    cli_inform(message = "Combining data from: {.field {count_layers_present}}")
+    if (isTRUE(x = verbose)) {
+      cli_inform(message = "Combining data from: {.field {count_layers_present}}")
+    }
     res <- bind_rows(res_list)
   }
 
