@@ -1,9 +1,7 @@
 ## Minor Version Update 
-This is a major version update to v2.0.0. In this version I have:  
+This is a hotfix update with bug fixes now v2.0.1; apologies for not catching these in v2.0.0 submission last week. In this version I have:  
 
-- Added a number of new functions, added new function parameters, and fixed bugs (see News.md).  
-- Ensured compatibility with major version of Seurat package.  
-- Fixed in example code causing current CRAN check errors with current package version (v1.1.3).
+- Fixed 4 bugs presented in v2.0.0 release.
 
 
 ## R CMD check results
