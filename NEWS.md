@@ -9,8 +9,8 @@
 
 ## Fixes  
 - Fixed error in `Add_Mito_Ribo_Seurat` causing failure due to error message when `overwrite = TRUE`.  
-- Fixed error in `Add_Top_Gene_Pct_Seurat` to avoid issue that accidentally could call normalized data.  
-- Fixed error in `QC_Histogram` that prevented plotting when manually setting title.  
+- Fixed error in `Add_Top_Gene_Pct_Seurat` to avoid issue that accidentally could call function on normalized data.  
+- Fixed error in `QC_Histogram` that prevented plotting or titling of plots.  
 
 
 
