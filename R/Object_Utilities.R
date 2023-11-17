@@ -472,6 +472,7 @@ Add_Top_Gene_Pct_Seurat <- function(
 
   # Extract matrix
   if (length(x = count_layers_present) == 1) {
+    cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present}}")
     count_mat <- LayerData(object = seurat_object, assay = assay, layer = "counts")
 
     # calculate
@@ -485,6 +486,7 @@ Add_Top_Gene_Pct_Seurat <- function(
 
   if (length(x = count_layers_present) > 1) {
     res_list <- lapply(1:length(x = count_layers_present), function(x) {
+      cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present[x]}}")
       # Get layer data
       layer_count <- LayerData(object = seurat_object, assay = assay, layer = count_layers_present[x])
 
@@ -496,6 +498,7 @@ Add_Top_Gene_Pct_Seurat <- function(
     })
 
     # combine results
+    cli_inform(message = "Combining data from: {.field {count_layers_present}}")
     res <- bind_rows(res_list)
   }
 
