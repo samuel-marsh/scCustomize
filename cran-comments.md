@@ -1,7 +1,7 @@
 ## Minor Version Update 
 This is a hotfix update with bug fixes now v2.0.1; apologies for not catching these in v2.0.0 submission last week. In this version I have:  
 
-- Fixed 4 bugs presented in v2.0.0 release.
+- Fixed 5 minor bugs presented in v2.0.0 release.
 
 
 ## R CMD check results
