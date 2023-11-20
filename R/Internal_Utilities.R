@@ -654,7 +654,7 @@ Retrieve_Ensembl_Ribo <- function(
        )
      }
      cli_inform(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
-                            "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
+                            "i" = "Overwriting those columns as {.code overwrite = TRUE.}")
      )
    }
 
@@ -739,7 +739,7 @@ Retrieve_Ensembl_Ribo <- function(
        )
      }
      cli_inform(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
-                            "i" = "Overwriting those column as .code {overwrite = TRUE.}")
+                            "i" = "Overwriting those column as {.code overwrite = TRUE.}")
      )
    }
 

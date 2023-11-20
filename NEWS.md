@@ -1,3 +1,20 @@
+# scCustomize 2.0.1 (2023-11-17)  
+## Added  
+- None.   
+
+  
+## Changed  
+- Removed warning in `VariableFeaturePlot_scCustom` now fixed in Seurat release.  
+   
+
+## Fixes  
+- Fixed error in `Add_Mito_Ribo_Seurat` causing failure due to error message when `overwrite = TRUE`.  
+- Fixed error in `Add_Top_Gene_Pct_Seurat` to avoid issue that accidentally could call function on normalized data.  
+- Fixed error in `Add_Top_Gene_Pct_Seurat` that caused error if more than one counts layer was present.
+- Fixed error in `QC_Histogram` that prevented plotting or titling of plots.  
+
+
+
 # scCustomize 2.0.0 (2023-11-13)  
 ## Added  
 - Added support for metrics produced by Cell Ranger `multi` pipeline to `Read10X_Metrics` via new parameter `cellranger_multi`.
