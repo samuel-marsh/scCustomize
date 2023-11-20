@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
       </span>
     </div>
 
@@ -115,7 +115,8 @@
 <span>  num_top_genes <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  meta_col_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  assay <span class="op">=</span> <span class="st">"RNA"</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -143,6 +144,10 @@ storing corrected and uncorrected assays in same object (e.g. outputs of both Ce
 <dt>overwrite</dt>
 <dd><p>Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 function will abort if column with name provided to <code>meta_col_name</code> is present in meta.data slot.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>logical, whether to print messages with status updates, default is TRUE.</p></dd>
 
 </dl></div>
     <div id="value">
