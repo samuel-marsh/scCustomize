@@ -67,9 +67,6 @@ QC_Plots_Genes <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # Add pt.size check
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
-
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
@@ -155,9 +152,6 @@ QC_Plots_UMIs <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Add pt.size check
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
@@ -248,9 +242,6 @@ QC_Plots_Mito <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # Add pt.size check
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
-
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
     xlab(x_axis_label) +
@@ -340,9 +331,6 @@ QC_Plots_Feature <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Add pt.size check
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
@@ -504,9 +492,6 @@ QC_Plots_Combined_Vln <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Add pt.size check
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Setup cutoff values
   if (length(x = feature_cutoffs) > 2 || length(x = UMI_cutoffs) > 2 || length(x = mito_cutoffs) > 2) {
