@@ -949,7 +949,7 @@ Stacked_VlnPlot <- function(
   # Set rasterization
   num_cells <- length(x = Cells(x = seurat_object))
 
-  if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
+  if (num_cells * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
     cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
                            "i" = "To plot in vector form set {.code raster=FALSE}")
