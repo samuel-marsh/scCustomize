@@ -940,6 +940,10 @@ Stacked_VlnPlot <- function(
   # set pt.size (default is no points)
   if (is.null(x = pt.size)) {
     pt.size <- 0
+    if (isTRUE(x = raster)) {
+      cli_inform(message = "Default pt.size is 0, setting {.code raster = FALSE}.")
+    }
+    raster <- FALSE
   }
 
   # Set rasterization
