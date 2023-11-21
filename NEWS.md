@@ -9,6 +9,7 @@
 
 ## Fixes  
 - Fixed point size check in some QC functions to avoid unnecessary error message.  
+- Fixed redundent warning messages in `Stacked_VlnPlot` due to rasterization defaults.  
 
 
 
