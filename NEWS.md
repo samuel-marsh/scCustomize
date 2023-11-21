@@ -1,3 +1,18 @@
+# scCustomize 2.X.X (202X-XX-XX)  
+## Added  
+- None.   
+
+  
+## Changed  
+- Fixes.  
+   
+
+## Fixes  
+- Fixed point size check in some QC functions to avoid unnecessary error message.  
+
+
+
+
 # scCustomize 2.0.1 (2023-11-17)  
 ## Added  
 - None.   
