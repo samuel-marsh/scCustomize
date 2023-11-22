@@ -109,6 +109,8 @@ Iterate_PC_Loading_Plots <- function(
 #' @param reduction Dimensionality Reduction to use (default is object default).
 #' @param dims Dimensions to plot.
 #' @param pt.size Adjust point size for plotting.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
@@ -146,6 +148,7 @@ Iterate_DimPlot_bySample <- function(
   reduction = NULL,
   dims = c(1, 2),
   pt.size = NULL,
+  raster = NULL,
   ...
 ) {
   # Check Seurat
@@ -218,17 +221,21 @@ Iterate_DimPlot_bySample <- function(
     row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[[sample_column]] == sample)]
   })
 
+  # Add raster check for scCustomize
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
+
   # Single PDF option
   if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
     all_plots <- pblapply(cells_per_sample,function(cells) {
       if (isTRUE(x = legend)) {
-        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
+        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
           xlim(x_axis) +
           ylim(y_axis)
       } else {
-        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
+        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
           xlim(x_axis) +
           ylim(y_axis) +
           NoLegend()
@@ -251,11 +258,11 @@ Iterate_DimPlot_bySample <- function(
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         if (isTRUE(x = legend)) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis)
         } else {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
             NoLegend()
@@ -271,11 +278,11 @@ Iterate_DimPlot_bySample <- function(
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
         if (isTRUE(x = legend)) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis)
         } else {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, ...) +
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
             NoLegend()
