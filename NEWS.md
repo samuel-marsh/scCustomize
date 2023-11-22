@@ -1,10 +1,10 @@
 # scCustomize 2.X.X (202X-XX-XX)  
 ## Added  
-- None.   
+- Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with ``Meta_Highlight_Plot`.  
 
   
 ## Changed  
-- Fixes.  
+- Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
    
 
 ## Fixes  
