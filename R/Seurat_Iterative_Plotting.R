@@ -159,6 +159,9 @@ Iterate_DimPlot_bySample <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # Harmonize pt.size across all plots
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+
   # Check meta.data column if not orig.ident
   if (sample_column != "orig.ident") {
     # Check meta data
