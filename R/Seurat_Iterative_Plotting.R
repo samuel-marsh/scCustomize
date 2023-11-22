@@ -104,7 +104,11 @@ Iterate_PC_Loading_Plots <- function(
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
 #' @param color color scheme to use.
-#' @param legend logical, whether or not to include plot legend, default is TRUE.
+#' @param no_legend logical, whether or not to include plot legend, default is TRUE.
+#' @param title_prefix Value that should be used for plot title prefix if `no_legend = TRUE`.
+#' If NULL the value of `meta_data_column` will be used.  Default is NULL.
+#' @param title_prefix Value that should be used for plot title prefix if `no_legend = TRUE`.
+#' If NULL the value of `meta_data_column` will be used.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (default is object default).
 #' @param dims Dimensions to plot.
@@ -144,7 +148,8 @@ Iterate_DimPlot_bySample <- function(
   single_pdf = FALSE,
   dpi = 600,
   color = "black",
-  legend = TRUE,
+  no_legend = TRUE,
+  title_prefix = NULL,
   reduction = NULL,
   dims = c(1, 2),
   pt.size = NULL,
@@ -213,8 +218,28 @@ Iterate_DimPlot_bySample <- function(
   y_axis <- c(min(reduc_coordinates[, 2]),
               max(reduc_coordinates[, 2]))
 
-  # Extract orig.ident
+  # Extract sample id column
   column_list <- as.character(x = unique(x = seurat_object@meta.data[[sample_column]]))
+  num_idents <- length(x = column_list)
+
+  # Create plot titles if needed.
+  if (!is.null(x = title_prefix) && isFALSE(x = no_legend)) {
+    cli_warn(message = "{.code title_prefix} was omitted as {.code no_legend = FALSE}.")
+  }
+
+  if (is.null(x = title_prefix) && isTRUE(x = no_legend)) {
+    plot_title <- lapply(1:num_idents, function(z) {
+      paste0(sample_column, ": ", column_list[z])
+    })
+  } else {
+    plot_title <- lapply(1:num_idents, function(z) {
+      paste0(title_prefix, ": ", column_list[z])
+    })
+  }
+
+  if (!is.null(x = title_prefix) && length(x = title_prefix) != 1 && isTRUE(x = no_legend)) {
+    cli_abort(message = "{.field `title_prefix`} must be vector of length 1.")
+  }
 
   # Create list of cells per sample
   cells_per_sample <- lapply(column_list, function(sample) {
@@ -229,16 +254,17 @@ Iterate_DimPlot_bySample <- function(
   if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
     pboptions(char = "=")
-    all_plots <- pblapply(cells_per_sample,function(cells) {
-      if (isTRUE(x = legend)) {
-        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
-          xlim(x_axis) +
-          ylim(y_axis)
-      } else {
-        DimPlot(object = seurat_object, cells = cells, group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+    all_plots <- pblapply(1:num_idents,function(x) {
+      if (isTRUE(x = no_legend)) {
+        DimPlot(object = seurat_object, cells = cells_per_sample[x], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
           xlim(x_axis) +
           ylim(y_axis) +
-          NoLegend()
+          ggtitle(plot_title[x]) +
+          CenterTitle()
+      } else {
+        DimPlot(object = seurat_object, cells = cells_per_sample[x], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+          xlim(x_axis) +
+          ylim(y_axis)
       }
       })
     cli_inform(message = "{.field Saving plots to file}")
@@ -257,15 +283,16 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        if (isTRUE(x = legend)) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
-            xlim(x_axis) +
-            ylim(y_axis)
-        } else {
+        if (isTRUE(x = no_legend)) {
           DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
-            NoLegend()
+            ggtitle(plot_title[i]) +
+            CenterTitle()
+        } else {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+            xlim(x_axis) +
+            ylim(y_axis)
         }
         suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi))
         setTxtProgressBar(pb = pb, value = i)
@@ -277,15 +304,16 @@ Iterate_DimPlot_bySample <- function(
       cli_inform(message = "{.field Generating plots and saving plots to file}")
       pb <- txtProgressBar(min = 0, max = length(cells_per_sample), style = 3, file = stderr())
       for (i in 1:length(cells_per_sample)) {
-        if (isTRUE(x = legend)) {
-          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
-            xlim(x_axis) +
-            ylim(y_axis)
-        } else {
+        if (isTRUE(x = no_legend)) {
           DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
-            NoLegend()
+            ggtitle(plot_title[i]) +
+            CenterTitle()
+        } else {
+          DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+            xlim(x_axis) +
+            ylim(y_axis)
         }
         suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE))
         setTxtProgressBar(pb = pb, value = i)
@@ -649,6 +677,7 @@ Iterate_Meta_Highlight_Plot <- function(
       highlight_color <- highlight_color
     }
   }
+
   # Create plot titles if needed.
   if (!is.null(x = title_prefix) && isFALSE(x = no_legend)) {
     cli_warn(message = "{.code title_prefix} was omitted as {.code no_legend = FALSE}.")
