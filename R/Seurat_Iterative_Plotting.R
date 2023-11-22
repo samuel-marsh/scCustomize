@@ -256,13 +256,13 @@ Iterate_DimPlot_bySample <- function(
     pboptions(char = "=")
     all_plots <- pblapply(1:num_idents,function(x) {
       if (isTRUE(x = no_legend)) {
-        DimPlot(object = seurat_object, cells = cells_per_sample[x], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+        DimPlot(object = seurat_object, cells = cells_per_sample[[x]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
           xlim(x_axis) +
           ylim(y_axis) +
           ggtitle(plot_title[x]) +
           CenterTitle()
       } else {
-        DimPlot(object = seurat_object, cells = cells_per_sample[x], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
+        DimPlot(object = seurat_object, cells = cells_per_sample[[x]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
           xlim(x_axis) +
           ylim(y_axis)
       }
