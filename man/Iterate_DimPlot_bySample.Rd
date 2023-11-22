@@ -13,10 +13,12 @@ Iterate_DimPlot_bySample(
   single_pdf = FALSE,
   dpi = 600,
   color = "black",
-  legend = TRUE,
+  no_legend = TRUE,
+  title_prefix = NULL,
   reduction = NULL,
   dims = c(1, 2),
   pt.size = NULL,
+  raster = NULL,
   ...
 )
 }
@@ -37,13 +39,19 @@ Iterate_DimPlot_bySample(
 
 \item{color}{color scheme to use.}
 
-\item{legend}{logical, whether or not to include plot legend, default is TRUE.}
+\item{no_legend}{logical, whether or not to include plot legend, default is TRUE.}
+
+\item{title_prefix}{Value that should be used for plot title prefix if \code{no_legend = TRUE}.
+If NULL the value of \code{meta_data_column} will be used.  Default is NULL.}
 
 \item{reduction}{Dimensionality Reduction to use (default is object default).}
 
 \item{dims}{Dimensions to plot.}
 
 \item{pt.size}{Adjust point size for plotting.}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 200,000 cells.}
 
 \item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
 }
