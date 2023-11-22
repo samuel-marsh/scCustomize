@@ -259,6 +259,7 @@ Iterate_DimPlot_bySample <- function(
         DimPlot(object = seurat_object, cells = cells_per_sample[[x]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
           xlim(x_axis) +
           ylim(y_axis) +
+          NoLegend() +
           ggtitle(plot_title[x]) +
           CenterTitle()
       } else {
@@ -287,6 +288,7 @@ Iterate_DimPlot_bySample <- function(
           DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
+            NoLegend() +
             ggtitle(plot_title[i]) +
             CenterTitle()
         } else {
@@ -308,6 +310,7 @@ Iterate_DimPlot_bySample <- function(
           DimPlot(object = seurat_object, cells = cells_per_sample[[i]], group.by = sample_column, cols = color, reduction = reduction, pt.size = pt.size, raster = raster, ...) +
             xlim(x_axis) +
             ylim(y_axis) +
+            NoLegend() +
             ggtitle(plot_title[i]) +
             CenterTitle()
         } else {
