@@ -207,13 +207,9 @@ FeaturePlot_scCustom <- function(
     cli_warn(message = "{.code alpha_na_exp} is not currently supported for Seurat v5+")
   }
 
-  # Set alphas if NULL
-  if (is.null(x = alpha_exp)) {
-    alpha_exp <- 1
-  }
-
-  if (is.null(x = alpha_na_exp)) {
-    alpha_na_exp <- 1
+  # Set alpha if NULL
+  if (is.null(x = alpha_exp) && seurat_version >= 5) {
+      alpha_exp <- 1
   }
 
   # plot no split & combined
