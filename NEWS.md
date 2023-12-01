@@ -10,6 +10,7 @@
 ## Fixes  
 - Fixed point size check in some QC functions to avoid unnecessary error message.  
 - Fixed redundant warning messages in `Stacked_VlnPlot` due to rasterization defaults.  
+- Fixxed issue setting `alpha_na_exp` appropriately in `FeaturePlot_scCustom`.  
 
 
 
