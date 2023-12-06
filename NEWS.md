@@ -12,6 +12,7 @@
 - Fixed redundant warning messages in `Stacked_VlnPlot` due to rasterization defaults.  
 - Fixed issue setting `alpha_na_exp` appropriately in `FeaturePlot_scCustom`.  
 - Fixed issue setting `alpha_exp` between Seurat versions 4 and 5 ([#144](https://github.com/samuel-marsh/scCustomize/issues/144)).  
+- Fix duplicate legends in `DimPlot_scCustom` when levels are missing from a split plot.  
 
 
 
