@@ -2403,7 +2403,7 @@ DimPlot_scCustom <- function(
           ylim(y_axis)
 
         # Normalize the colors across all plots
-        plot <- suppressMessages(plot + scale_color_manual(values = colors_overall))
+        plot <- suppressMessages(plot + scale_color_manual(values = colors_overall, drop = FALSE))
 
         if (!is.null(x = group.by)) {
           plot <- plot + labs(color=group.by)
