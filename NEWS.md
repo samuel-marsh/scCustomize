@@ -1,6 +1,7 @@
 # scCustomize 2.X.X (202X-XX-XX)  
 ## Added  
 - Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with ``Meta_Highlight_Plot`.  
+- Added function `Split_Vector` to split vector in chunks of predetermined sizes.  
 
   
 ## Changed  
