@@ -1609,6 +1609,56 @@ Rename_Clusters <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### General Helpers ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Split vector into list
+#'
+#' Splits vector into chunks of x sizes
+#'
+#' @param x vector to split
+#' @param chunk_size size of chunks for vector to be split into, default is 100.
+#' @param verbose logical, print details of vector and split, default is FALSE.
+#'
+#' @return list with vector of X length
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @references Base code from stackoverflow post:
+#' \url{https://stackoverflow.com/a/3321659/15568251}
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' vector <- c("gene1", "gene2", "gene3", "gene4", "gene5", "gene6")
+#'
+#' vector_list <- Split_Vector(x = vector, chunk_size = 3)
+#'
+
+Split_Vector <- function(
+    x,
+    chunk_size = 100,
+    verbose = FALSE
+) {
+  vector_list <- split(x, ceiling(x = seq_along(x)/chunk_size))
+
+  # Report info
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("Original vector length: ({.field {length(x = x)}}.",
+                           "Split into {.field {length(x = vector_list)}} vectors of {.field {chunk_size}} items." ))
+  }
+
+  # return list
+  return(vector_list)
+
+}
+
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### PROJECT ORGANIZATION ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
