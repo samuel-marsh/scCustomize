@@ -429,6 +429,13 @@ AutoPointSize_scCustom <- function(data, raster = NULL) {
       yes = 1,
       no = min(1583 / data, 1)
     ))
+  }
+  if (inherits(what = "Seurat", x = data)) {
+    return(ifelse(
+      test = isTRUE(x = raster),
+      yes = 1,
+      no = min(1583 / Cells(x = data), 1)
+    ))
   } else {
     # for data frame/object based values (from Seurat, see documentation)
     return(ifelse(
