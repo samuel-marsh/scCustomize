@@ -276,7 +276,7 @@ FeaturePlot_scCustom <- function(
   # plotting split multiple features
   if (!is.null(x = split.by) && length(x = all_found_features) > 1) {
 
-    plot_list <- lapply(1:length(x = features), function(i){
+    plot_list <- lapply(1:length(x = all_found_features), function(i){
       feature_data <- FetchData(
         object = seurat_object,
         vars = all_found_features[i],
