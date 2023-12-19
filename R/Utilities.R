@@ -1939,9 +1939,9 @@ Updated_HGNC_Symbols <- function(
   symbols_not_found <- data.frame(input_features = symbols_not_approved[!symbols_not_approved %in% input_features_updated_df$input_features]) %>%
     mutate(Not_Found_Symbol = input_features)
 
-  merged_df <- left_join(input_features_df, y = input_features_df_approved) %>%
-    left_join(symbols_not_found) %>%
-    left_join(input_features_updated_df) %>%
+  merged_df <- left_join(input_features_df, y = input_features_df_approved, by = join_by(input_features)) %>%
+    left_join(symbols_not_found, by = join_by(input_features)) %>%
+    left_join(input_features_updated_df, by = join_by(input_features)) %>%
     mutate(across(everything(), ~str_replace_na(string = .x, replacement = ""))) %>%
     mutate(Output_Features = str_c(Approved_Symbol, Not_Found_Symbol, Updated_Symbol)) %>%
     mutate(across(everything(), ~str_replace(string = .x, pattern = "^$", replacement = NA_character_))) %>%
