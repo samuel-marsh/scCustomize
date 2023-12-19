@@ -1825,7 +1825,7 @@ Copy_From_GCP <- function(
 
 #' Update HGNC Gene Symbols
 #'
-#' Update human gene symbols using data from HGNC.
+#' Update human gene symbols using data from HGNC.  This function will store cached data in package directory using (BiocFileCache).  Use of this function requires internet connection on first use (or if setting `update_symbol_data = TRUE`).  Subsequent use does not require connection and will pull from cached data.
 #'
 #' @param input_data Data source containing gene names.  Accepted formats are:
 #' \itemize{
