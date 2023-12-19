@@ -4,7 +4,12 @@
 \alias{Updated_HGNC_Symbols}
 \title{Update HGNC Gene Symbols}
 \usage{
-Updated_HGNC_Symbols(input_data, update_symbol_data = NULL, verbose = TRUE)
+Updated_HGNC_Symbols(
+  input_data,
+  update_symbol_data = NULL,
+  case_check_as_warn = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input_data}{Data source containing gene names.  Accepted formats are:
@@ -20,6 +25,10 @@ Updated_HGNC_Symbols(input_data, update_symbol_data = NULL, verbose = TRUE)
 If \code{NULL} BiocFileCache will check and prompt for update if cache is stale.
 If \code{FALSE} the BiocFileCache stale check will be skipped and current cache will be used.
 If \code{TRUE} the BiocFileCache stale check will be skipped and HGNC data will be downloaded.}
+
+\item{case_check_as_warn}{logical, whether case checking of features should cause abort or
+only warn, default is FALSE (abort).  Set to TRUE if atypical names (i.e. old LOC naming) are
+present in input_data.}
 
 \item{verbose}{logical, whether to print results detailing numbers of symbols, found, updated,
 and not found; default is TRUE.}
