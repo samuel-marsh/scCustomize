@@ -1839,6 +1839,9 @@ Copy_From_GCP <- function(
 #' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
 #' If `FALSE` the BiocFileCache stale check will be skipped and current cache will be used.
 #' If `TRUE` the BiocFileCache stale check will be skipped and HGNC data will be downloaded.
+#' @param case_check_as_warn logical, whether case checking of features should cause abort or
+#' only warn, default is FALSE (abort).  Set to TRUE if atypical names (i.e. old LOC naming) are
+#' present in input_data.
 #' @param verbose logical, whether to print results detailing numbers of symbols, found, updated,
 #' and not found; default is TRUE.
 #'
@@ -1865,6 +1868,7 @@ Copy_From_GCP <- function(
 Updated_HGNC_Symbols <- function(
     input_data,
     update_symbol_data = NULL,
+    case_check_as_warn = FALSE,
     verbose = TRUE
 ) {
   # Check BiocFileCache installed
@@ -1910,8 +1914,12 @@ Updated_HGNC_Symbols <- function(
   # Currently two genes that are case anomolies so correcting them here
   case_check <- gsub(pattern = "HSA-MIR-", replacement = "hsa-mir-", x = case_check)
 
-  if (isFALSE(x = identical(x = input_symbols, y = case_check))) {
+  if (isFALSE(x = identical(x = input_symbols, y = case_check)) && isFALSE(x = case_check_as_warn)) {
     cli_abort("Uncovered potential errors in case/capitalization of input symbols.  Please check case is correct.")
+  }
+  if (isFALSE(x = identical(x = input_symbols, y = case_check)) && isTRUE(x = case_check_as_warn)) {
+    cli_warn(c("Uncovered potential errors in case/capitalization of input symbols.  This may cause errors in updating gene symbols.",
+               "i" = "Please check case is correct and re-run if errors are found."))
   }
 
   # Download and process HGNC dataset if not already cached
