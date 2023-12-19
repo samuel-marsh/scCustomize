@@ -28,7 +28,7 @@ and not found; default is TRUE.}
 data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in HGNC; output unchanged), Updated_Symbol (new symbol from HGNC; output updated).
 }
 \description{
-Update human gene symbols using data from HGNC.
+Update human gene symbols using data from HGNC.  This function will store cached data in package directory using (BiocFileCache).  Use of this function requires internet connection on first use (or if setting \code{update_symbol_data = TRUE}).  Subsequent use does not require connection and will pull from cached data.
 }
 \examples{
 \dontrun{
