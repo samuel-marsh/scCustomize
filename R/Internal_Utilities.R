@@ -1289,3 +1289,120 @@ Metrics_Multi_VDJT <- function(
   return(full_data)
 }
 
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### GENE NAME/FILE CACHE HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#' BiocFileCache Interface
+#'
+#' Internal function to manage/call BiocFileCache.
+#'
+#' @return cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cache-to-manage-package-data}
+#'
+#' @noRd
+#'
+
+.get_bioc_cache <- function(
+) {
+    cache <- tools::R_user_dir(package = "scCustomize", which="cache")
+    BiocFileCache::BiocFileCache(cache)
+  }
+
+
+#' Download HGNC Dataset
+#'
+#' Internal function to download and cache the latest version of HGNC dataset for use with renaming genes.
+#'
+#' @param update logical, whether to manually override update parameters and download new data.
+#'
+#' @import cli
+#'
+#' @return path to data cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
+#'
+#' @noRd
+#'
+
+
+download_hgnc_data <- function(
+    update = NULL
+) {
+  # Get cache
+  bfc <- .get_bioc_cache()
+
+  # URL from https://www.genenames.org/download/statistics-and-files/
+  hgnc_ftp_url <- "https://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/hgnc_complete_set.txt"
+
+  # bfc <- BiocFileCache::BiocFileCache(hgnc_ftp_url)
+
+  rid <- BiocFileCache::bfcquery(bfc, hgnc_ftp_url, "fpath")$rid
+  if (!length(rid)) {               # not in cache, add but do not download
+    rid <- names(BiocFileCache::bfcadd(bfc, hgnc_ftp_url, download = FALSE))
+  }
+
+  if (isTRUE(x = update)) {
+    update <- update
+  } else {
+    update <- BiocFileCache::bfcneedsupdate(bfc, rid)  # TRUE if newly added or stale
+  }
+
+  # download & process
+  if (!isFALSE(x = update)) {
+    cli_inform(message = "Downloading HGNC data from: {.field {hgnc_ftp_url}}")
+    BiocFileCache::bfcdownload(bfc, rid, ask = FALSE, FUN = process_hgnc_data)
+  }
+
+  rpath <- BiocFileCache::bfcrpath(bfc, rids=rid)    # path to processed result
+
+  return(rpath)
+}
+
+
+#' Process HGNC Dataset
+#'
+#' Internal function process/filter and save HGNC dataset during cache process
+#'
+#' @param from input (cache location).
+#' @param to output (cached data).
+#'
+#' @importFrom dplyr mutate select filter
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr separate_wider_delim pivot_longer
+#'
+#' @return path to data cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
+#'
+#' @noRd
+#'
+
+process_hgnc_data <- function(
+    from,
+    to
+) {
+  # read in data
+  hgnc_full_data <- data.table::fread(file = from, data.table = F)
+
+  # filter data: Approved Genes > select relevant categories
+  hgnc_filtered_data <- hgnc_full_data %>%
+    filter(status == "Approved") %>%
+    select(hgnc_id, symbol, status, alias_symbol, prev_symbol, date_symbol_changed, entrez_id, ensembl_gene_id)
+
+  # Select needed for renaming > split prev symbol column by number of additional columns needed > pivot wider without NAs > mutate
+  hgnc_long_data <- hgnc_filtered_data %>%
+    select(symbol, prev_symbol) %>%
+    separate_wider_delim(cols = prev_symbol, delim = "|", names_sep = "_", names = NULL, too_few = "align_start") %>%
+    pivot_longer(cols = contains("_symbol"),
+                 names_to = "column",
+                 values_to = "prev_symbol",
+                 values_drop_na = TRUE) %>%
+    mutate(prev_symbol = ifelse(prev_symbol %in% "", symbol, prev_symbol))
+
+  # save processed data
+  saveRDS(hgnc_long_data, file = to)
+  TRUE
+}
