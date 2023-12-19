@@ -1911,7 +1911,7 @@ Updated_HGNC_Symbols <- function(
   # Check input symbols have correct case
   case_check <- str_to_upper(input_symbols)
   case_check <- gsub(pattern = "(.*C[0-9XY]+)ORF(.+)", replacement = "\\1orf\\2", x = case_check)
-  # Currently two genes that are case anomolies so correcting them here
+  # Currently two genes that are case anomalies so correcting them here
   case_check <- gsub(pattern = "HSA-MIR-", replacement = "hsa-mir-", x = case_check)
 
   if (isFALSE(x = identical(x = input_symbols, y = case_check)) && isFALSE(x = case_check_as_warn)) {
