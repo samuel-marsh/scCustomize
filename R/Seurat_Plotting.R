@@ -812,7 +812,7 @@ VlnPlot_scCustom <- function(
   # set size if NULL
   if (isTRUE(x = plot_boxplot)) {
     if (!is.null(x = pt.size)) {
-      cli::cli_warn(message = c("Provided value for {.code pt.size} ({.field {pt.size}}) will be ignored.",
+      cli_warn(message = c("Provided value for {.code pt.size} ({.field {pt.size}}) will be ignored.",
                                 "When setting {.field plot_boxplot = TRUE}, {.code pt.size} is automatically set to 0."))
     }
     pt.size <- 0
