@@ -1845,7 +1845,7 @@ Copy_From_GCP <- function(
 #' @return data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in HGNC; output unchanged), Updated_Symbol (new symbol from HGNC; output updated).
 #'
 #' @import cli
-#' @importFrom dplyr mutate filter select across left_join
+#' @importFrom dplyr mutate filter select across left_join join_by
 #' @importFrom magrittr "%>%"
 #' @importFrom stats complete.cases
 #' @importFrom stringr str_to_upper str_replace_na str_c str_replace
