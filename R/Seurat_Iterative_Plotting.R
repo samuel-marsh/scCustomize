@@ -885,6 +885,9 @@ Iterate_FeaturePlot_scCustom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  features_per_page = 1,
+  num_columns = NULL,
+  landscape = FALSE,
   dpi = 600,
   pt.size = NULL,
   reduction = NULL,
@@ -903,7 +906,6 @@ Iterate_FeaturePlot_scCustom <- function(
     )
     features <- gene_list
   }
-
 
   # temp turn off message call from FeaturePlot_scCustomize
   op <- options(scCustomize_warn_na_cutoff = FALSE)
@@ -939,6 +941,19 @@ Iterate_FeaturePlot_scCustom <- function(
   # Check if file name provided
   if (is.null(x = file_name) && isFALSE(return_plots)) {
     cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
+  }
+
+  # multi-plot checks
+  if (isFALSE(x = single_pdf) && features_per_page != 1) {
+    cli_warn(message = "{.code features_per_page} only applicable when {.code single_pdf = TRUE}.")
+  }
+
+  if (isFALSE(x = is.numeric(x = features_per_page))) {
+    cli_abort(message = "{.code features_per_page} must be numeric value.")
+  }
+
+  if (isTRUE(x = is.numeric(x = features_per_page)) && isFALSE(x = check_whole_num(x = features_per_page))) {
+    cli_abort(message = "{.code features_per_page} must be whole numeric value.")
   }
 
   # Extract default reduction
@@ -995,30 +1010,90 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Single PDF option
   if (isTRUE(x = single_pdf)) {
-    cli_inform(message = "{.field Generating plots}")
-    pboptions(char = "=")
-    all_plots <- pblapply(all_found_features,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
-    cli_inform(message = "{.field Saving plots to file}")
-    # save plots with cluster annotation
-    if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
-      pdf(paste(file_path, file_name, file_type, sep=""))
-      pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-      for (i in 1:length(all_plots)) {
-        print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
-        setTxtProgressBar(pb = pb, value = i)
+    # plot if one fearture per page
+    if (features_per_page == 1) {
+      cli_inform(message = "{.field Generating plots}")
+      pboptions(char = "=")
+      all_plots <- pblapply(all_found_features,function(gene) {FeaturePlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp,...)})
+      cli_inform(message = "{.field Saving plots to file}")
+      # save plots with cluster annotation
+      if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
+        pdf(paste(file_path, file_name, file_type, sep=""))
+        pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+        for (i in 1:length(all_plots)) {
+          print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
+          setTxtProgressBar(pb = pb, value = i)
+        }
+        close(con = pb)
+        dev.off()
+      } else {
+        # Save plots without cluster annotation
+        pdf(paste(file_path, file_name, file_type, sep=""))
+        pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+        for (i in 1:length(all_plots)) {
+          print(all_plots[[i]])
+          setTxtProgressBar(pb = pb, value = i)
+        }
+        close(con = pb)
+        dev.off()
       }
-      close(con = pb)
-      dev.off()
     } else {
-      # Save plots without cluster annotation
-      pdf(paste(file_path, file_name, file_type, sep=""))
-      pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-      for (i in 1:length(all_plots)) {
-        print(all_plots[[i]])
-        setTxtProgressBar(pb = pb, value = i)
+      # for plotting multiple features per page
+
+      # split features by
+      features_split <- Split_Vector(x = all_found_features, chunk_size = plots_per_page, verbose = TRUE)
+
+      cli_inform(message = "{.field Generating plots}")
+      pboptions(char = "=")
+      all_plots <- pblapply(features_split, function(z) {FeaturePlot_scCustom(seurat_object = seurat_object, features = z, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, num_columns = num_columns, ...)})
+
+
+
+      cli_inform(message = "{.field Saving plots to file}")
+      if (isTRUE(x = landscape)) {
+        # save plots with cluster annotation
+        if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 11, height = 8.5)
+          pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+          for (i in 1:length(all_plots)) {
+            print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
+            setTxtProgressBar(pb = pb, value = i)
+          }
+          close(con = pb)
+          dev.off()
+        } else {
+          # Save plots without cluster annotation
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 11, height = 8.5)
+          pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+          for (i in 1:length(all_plots)) {
+            print(all_plots[[i]])
+            setTxtProgressBar(pb = pb, value = i)
+          }
+          close(con = pb)
+          dev.off()
+        }
+      } else {
+        if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 8.5, height = 11)
+          pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+          for (i in 1:length(all_plots)) {
+            print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
+            setTxtProgressBar(pb = pb, value = i)
+          }
+          close(con = pb)
+          dev.off()
+        } else {
+          # Save plots without cluster annotation
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 8.5, height = 11)
+          pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
+          for (i in 1:length(all_plots)) {
+            print(all_plots[[i]])
+            setTxtProgressBar(pb = pb, value = i)
+          }
+          close(con = pb)
+          dev.off()
+        }
       }
-      close(con = pb)
-      dev.off()
     }
   }
   else {
