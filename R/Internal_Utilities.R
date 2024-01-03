@@ -679,6 +679,9 @@ Retrieve_Ensembl_Ribo <- function(
      seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
    }
 
+   # Log Command
+   seurat_object <- LogSeuratCommand(object = seurat_object)
+
    # return final object
    return(seurat_object)
  }
@@ -755,6 +758,9 @@ Retrieve_Ensembl_Ribo <- function(
    if (length(x = ieg_found) > 0) {
      seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
    }
+
+   # Log Command
+   seurat_object <- LogSeuratCommand(object = seurat_object)
 
    # return final object
    return(seurat_object)

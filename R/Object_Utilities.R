@@ -376,6 +376,9 @@ Add_Cell_Complexity_Seurat <- function(
   # Add score
   seurat_object[[meta_col_name]] <- log10(seurat_object[[feature_name]]) / log10(seurat_object[[count_name]])
 
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
+
   #return object
   return(seurat_object)
 }
@@ -517,6 +520,9 @@ Add_Top_Gene_Pct_Seurat <- function(
 
   # Add to object and return
   seurat_object <- AddMetaData(object = seurat_object, metadata = res, col.name = meta_col_name)
+
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
 
   return(seurat_object)
 }
@@ -709,6 +715,9 @@ Add_Cell_QC_Metrics <- function(
     }
   }
 
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
+
   # return object
   return(seurat_object)
 }
@@ -773,6 +782,9 @@ Add_CellBender_Diff <- function(
 
   # Add back to Seurat Object
   seurat_object <- AddMetaData(object = seurat_object, metadata = meta_modified)
+
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
 
   return(seurat_object)
 }
