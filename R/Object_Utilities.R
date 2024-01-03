@@ -309,6 +309,9 @@ Add_Mito_Ribo_Seurat <- function(
     seurat_object <- AddMetaData(object = seurat_object, metadata = object_meta)
   }
 
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
+
   # return final object
   return(seurat_object)
 }
