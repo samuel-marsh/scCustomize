@@ -3,6 +3,7 @@
 - Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with ``Meta_Highlight_Plot`.  
 - Added function `Split_Vector` to split vector in chunks of predetermined sizes.  
 - Added new function `Updated_HGNC_Symbols` to update human gene symbols.  After first use does not require internet connection.  
+- Added command logging to QC metric-related commands using `Seurat::LogSeuratCommand()`.  
 
   
 ## Changed  
