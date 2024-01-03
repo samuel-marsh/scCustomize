@@ -989,6 +989,29 @@ symdiff <- function(
 }
 
 
+#' Whole number check
+#'
+#' Checks whether a number is whole
+#'
+#' @param x number to check
+#'
+#' @return NULL or error message if number is not whole
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+check_whole_num <- function(
+    x
+) {
+  round_x <- round(x = x)
+
+  res <-  identical(x = x, y = round_x)
+
+  return(res)
+}
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### METRICS HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
