@@ -836,7 +836,12 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
-#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param single_pdf saves all plots to single PDF file (default = FALSE).
+#' @param features_per_page numeric, number of features to plot on single page if `single_pdf = TRUE`.  Default is 1.
+#' @param num_columns Number of columns in plot layout (only applicable if `single_pdf = TRUE` AND
+#' +`features_per_page` > 1).
+#' @param landscape logical, when plotting multiple features per page in single PDF whether to use landscape or portrait
+#' page dimensions (default is TRUE).
 #' @param dpi dpi for image saving.
 #' @param pt.size Adjust point size for plotting.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
@@ -887,7 +892,7 @@ Iterate_FeaturePlot_scCustom <- function(
   single_pdf = FALSE,
   features_per_page = 1,
   num_columns = NULL,
-  landscape = FALSE,
+  landscape = TRUE,
   dpi = 600,
   pt.size = NULL,
   reduction = NULL,
