@@ -12,6 +12,7 @@ plotFactors_scCustom(
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
   reduction_label = "UMAP",
+  plot_legend = TRUE,
   raster = TRUE,
   raster.dpi = c(512, 512),
   order = FALSE,
@@ -43,6 +44,9 @@ coordinates (tSNE/UMAP).  Default is c('lemonchiffon', 'red'),}
 
 \item{reduction_label}{What to label the x and y axes of resulting plots.  LIGER does not store name of
 technique and therefore needs to be set manually.  Default is "UMAP".}
+
+\item{plot_legend}{logical, whether to plot the legend on factor loading plots, default is TRUE.
+Helpful if number of datasets is large to avoid crowding the plot with legend.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
