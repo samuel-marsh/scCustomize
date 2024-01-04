@@ -1041,7 +1041,7 @@ Iterate_FeaturePlot_scCustom <- function(
       # for plotting multiple features per page
 
       # split features by
-      features_split <- Split_Vector(x = all_found_features, chunk_size = plots_per_page, verbose = TRUE)
+      features_split <- Split_Vector(x = all_found_features, chunk_size = features_per_page, verbose = TRUE)
 
       cli_inform(message = "{.field Generating plots}")
       pboptions(char = "=")
