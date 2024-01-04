@@ -1647,7 +1647,7 @@ Split_Vector <- function(
 
   # Report info
   if (isTRUE(x = verbose)) {
-    cli_inform(message = c("Original vector length: ({.field {length(x = x)}}.",
+    cli_inform(message = c("Original vector length: ({.field {length(x = x)}}).",
                            "Split into {.field {length(x = vector_list)}} vectors of {.field {chunk_size}} items." ))
   }
 
