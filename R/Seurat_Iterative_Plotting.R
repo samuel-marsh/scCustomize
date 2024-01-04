@@ -1058,7 +1058,7 @@ Iterate_FeaturePlot_scCustom <- function(
       if (isTRUE(x = landscape)) {
         # save plots with cluster annotation
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
-          pdf(paste(file_path, file_name, file_type, sep=""), width = 11, height = 8.5)
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 22, height = 17)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
           for (i in 1:length(all_plots)) {
             print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
@@ -1068,7 +1068,7 @@ Iterate_FeaturePlot_scCustom <- function(
           dev.off()
         } else {
           # Save plots without cluster annotation
-          pdf(paste(file_path, file_name, file_type, sep=""), width = 11, height = 8.5)
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 22, height = 17)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
           for (i in 1:length(all_plots)) {
             print(all_plots[[i]])
@@ -1079,7 +1079,7 @@ Iterate_FeaturePlot_scCustom <- function(
         }
       } else {
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
-          pdf(paste(file_path, file_name, file_type, sep=""), width = 8.5, height = 11)
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 17, height = 22)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
           for (i in 1:length(all_plots)) {
             print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
@@ -1089,7 +1089,7 @@ Iterate_FeaturePlot_scCustom <- function(
           dev.off()
         } else {
           # Save plots without cluster annotation
-          pdf(paste(file_path, file_name, file_type, sep=""), width = 8.5, height = 11)
+          pdf(paste(file_path, file_name, file_type, sep=""), width = 17, height = 22)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
           for (i in 1:length(all_plots)) {
             print(all_plots[[i]])
