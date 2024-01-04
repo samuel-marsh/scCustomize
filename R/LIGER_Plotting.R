@@ -305,6 +305,7 @@ plotFactors_scCustom <- function(
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
   reduction_label = "UMAP",
+  plot_legend = TRUE,
   raster = TRUE,
   raster.dpi = c(512, 512),
   order = FALSE,
@@ -431,6 +432,10 @@ plotFactors_scCustom <- function(
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
+      if (isTRUE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
         labs(x = 'Cell', y = 'H_norm Score') +
@@ -439,6 +444,9 @@ plotFactors_scCustom <- function(
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
 
+      if (isTRUE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
 
     } else {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
@@ -448,6 +456,10 @@ plotFactors_scCustom <- function(
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
+      if (isTRUE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
         labs(x = 'Cell', y = 'H_norm Score') +
@@ -455,6 +467,10 @@ plotFactors_scCustom <- function(
               legend.title = element_blank()) +
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
+
+      if (isTRUE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
 
     }
 
