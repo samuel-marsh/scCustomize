@@ -1,6 +1,6 @@
 # scCustomize 2.X.X (202X-XX-XX)  
 ## Added  
-- Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with ``Meta_Highlight_Plot`.  
+- Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with `Meta_Highlight_Plot`.  
 - Added function `Split_Vector` to split vector in chunks of predetermined sizes.  
 - Added new function `Updated_HGNC_Symbols` to update human gene symbols.  After first use does not require internet connection.  
 - Added command logging to QC metric-related commands using `Seurat::LogSeuratCommand()`.  
@@ -11,6 +11,7 @@
    
 
 ## Fixes  
+- General typo and style fixes.  
 - Fixed point size check in some QC functions to avoid unnecessary error message.  
 - Fixed redundant warning messages in `Stacked_VlnPlot` due to rasterization defaults.  
 - Fixed issue setting `alpha_na_exp` appropriately in `FeaturePlot_scCustom`.  
