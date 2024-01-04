@@ -257,6 +257,8 @@ DimPlot_LIGER <- function(
 #' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
 #' technique and therefore needs to be set manually.  Default is "UMAP".
+#' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
+#' Helpful if number of datasets is large to avoid crowding the plot with legend.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
