@@ -434,7 +434,7 @@ plotFactors_scCustom <- function(
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
-      if (isTRUE(x = plot_legend)) {
+      if (isFALSE(x = plot_legend)) {
         top <- top + NoLegend()
       }
 
@@ -446,7 +446,7 @@ plotFactors_scCustom <- function(
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
 
-      if (isTRUE(x = plot_legend)) {
+      if (isFALSE(x = plot_legend)) {
         bottom <- bottom + NoLegend()
       }
 
@@ -458,7 +458,7 @@ plotFactors_scCustom <- function(
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
-      if (isTRUE(x = plot_legend)) {
+      if (isFALSE(x = plot_legend)) {
         top <- top + NoLegend()
       }
 
@@ -470,7 +470,7 @@ plotFactors_scCustom <- function(
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
 
-      if (isTRUE(x = plot_legend)) {
+      if (isFALSE(x = plot_legend)) {
         bottom <- bottom + NoLegend()
       }
 
