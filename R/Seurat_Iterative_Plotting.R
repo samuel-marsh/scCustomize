@@ -839,7 +839,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).
 #' @param features_per_page numeric, number of features to plot on single page if `single_pdf = TRUE`.  Default is 1.
 #' @param num_columns Number of columns in plot layout (only applicable if `single_pdf = TRUE` AND
-#' +`features_per_page` > 1).
+#' `features_per_page` > 1).
 #' @param landscape logical, when plotting multiple features per page in single PDF whether to use landscape or portrait
 #' page dimensions (default is TRUE).
 #' @param dpi dpi for image saving.
@@ -1060,8 +1060,11 @@ Iterate_FeaturePlot_scCustom <- function(
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
           pdf(paste(file_path, file_name, file_type, sep=""), width = 22, height = 17)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-          for (i in 1:length(all_plots)) {
-            print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
+          for (i in 1:length(features_per_page)) {
+            cluster_names <- names(x = features_split[[i]])
+            feature_names <- features_split[[i]]
+
+            print(all_plots[[i]] + ggtitle((paste0(feature_names, "_", cluster_names))))
             setTxtProgressBar(pb = pb, value = i)
           }
           close(con = pb)
@@ -1081,8 +1084,11 @@ Iterate_FeaturePlot_scCustom <- function(
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
           pdf(paste(file_path, file_name, file_type, sep=""), width = 17, height = 22)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-          for (i in 1:length(all_plots)) {
-            print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
+          for (i in 1:length(features_per_page)) {
+            cluster_names <- names(x = features_split[[i]])
+            feature_names <- features_split[[i]]
+
+            print(all_plots[[i]] + ggtitle((paste0(feature_names, "_", cluster_names))))
             setTxtProgressBar(pb = pb, value = i)
           }
           close(con = pb)
