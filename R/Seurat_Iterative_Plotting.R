@@ -1060,7 +1060,7 @@ Iterate_FeaturePlot_scCustom <- function(
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
           pdf(paste(file_path, file_name, file_type, sep=""), width = 22, height = 17)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-          for (i in 1:length(features_per_page)) {
+          for (i in 1:length(x = features_split)) {
             cluster_names <- names(x = features_split[[i]])
             feature_names <- features_split[[i]]
 
@@ -1084,7 +1084,7 @@ Iterate_FeaturePlot_scCustom <- function(
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
           pdf(paste(file_path, file_name, file_type, sep=""), width = 17, height = 22)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-          for (i in 1:length(features_per_page)) {
+          for (i in 1:length(x = features_split)) {
             cluster_names <- names(x = features_split[[i]])
             feature_names <- features_split[[i]]
 
