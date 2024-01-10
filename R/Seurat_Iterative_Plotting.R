@@ -1060,11 +1060,23 @@ Iterate_FeaturePlot_scCustom <- function(
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
           pdf(paste(file_path, file_name, file_type, sep=""), width = 22, height = 17)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-          for (i in 1:length(x = features_split)) {
-            cluster_names <- names(x = features_split[[i]])
-            feature_names <- features_split[[i]]
 
-            print(all_plots[[i]] + ggtitle((paste0(feature_names, "_", cluster_names))))
+          list_names <- lapply(1:length(features_split), function(k){
+            feat_name <- feat_split[[k]]
+            clu_name <- names(feat_split[[k]])
+            new_names <- paste0(feat_name, "_", clu_name)
+          })
+
+          new_plots <- lapply(1:length(all_plots), function (j){
+            plot_split <- all_plots[[j]]
+            for (k in 1:length(list_names[[j]])) {
+              plot_split[[k]][["labels"]][["title"]] <- list_names[[j]][k]
+            }
+            return(plot_split)
+          })
+
+          for (i in 1:length(x = all_plots)) {
+            print(all_plots[[i]])
             setTxtProgressBar(pb = pb, value = i)
           }
           close(con = pb)
@@ -1084,11 +1096,23 @@ Iterate_FeaturePlot_scCustom <- function(
         if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
           pdf(paste(file_path, file_name, file_type, sep=""), width = 17, height = 22)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
-          for (i in 1:length(x = features_split)) {
-            cluster_names <- names(x = features_split[[i]])
-            feature_names <- features_split[[i]]
 
-            print(all_plots[[i]] + ggtitle((paste0(feature_names, "_", cluster_names))))
+          list_names <- lapply(1:length(features_split), function(k){
+            feat_name <- feat_split[[k]]
+            clu_name <- names(feat_split[[k]])
+            new_names <- paste0(feat_name, "_", clu_name)
+          })
+
+          new_plots <- lapply(1:length(all_plots), function (j){
+            plot_split <- all_plots[[j]]
+            for (k in 1:length(list_names[[j]])) {
+              plot_split[[k]][["labels"]][["title"]] <- list_names[[j]][k]
+            }
+            return(plot_split)
+          })
+
+          for (i in 1:length(x = all_plots)) {
+            print(all_plots[[i]])
             setTxtProgressBar(pb = pb, value = i)
           }
           close(con = pb)
