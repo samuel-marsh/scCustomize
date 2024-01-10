@@ -931,6 +931,13 @@ Iterate_FeaturePlot_scCustom <- function(
     }
   }
 
+  # Check num_columns validity
+  if (!is.null(x = num_columns) && !isTRUE(x = single_pdf)) {
+    cli_warn(message = c("{.code num_columns} is only valid when {.code single_pdf = TRUE}",
+                         "i" = "Setting {.num_columns = NULL}"))
+    num_columns <- NULL
+  }
+
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
