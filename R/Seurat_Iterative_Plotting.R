@@ -1061,15 +1061,15 @@ Iterate_FeaturePlot_scCustom <- function(
           pdf(paste(file_path, file_name, file_type, sep=""), width = 22, height = 17)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
 
-          list_names <- lapply(1:length(features_split), function(k){
-            feat_name <- feat_split[[k]]
-            clu_name <- names(feat_split[[k]])
+          list_names <- lapply(1:length(x = features_split), function(k){
+            feat_name <- features_split[[k]]
+            clu_name <- names(x = features_split[[k]])
             new_names <- paste0(feat_name, "_", clu_name)
           })
 
-          new_plots <- lapply(1:length(all_plots), function (j){
+          all_plots <- lapply(1:length(x = all_plots), function (j){
             plot_split <- all_plots[[j]]
-            for (k in 1:length(list_names[[j]])) {
+            for (k in 1:length(x = list_names[[j]])) {
               plot_split[[k]][["labels"]][["title"]] <- list_names[[j]][k]
             }
             return(plot_split)
@@ -1097,15 +1097,15 @@ Iterate_FeaturePlot_scCustom <- function(
           pdf(paste(file_path, file_name, file_type, sep=""), width = 17, height = 22)
           pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
 
-          list_names <- lapply(1:length(features_split), function(k){
-            feat_name <- feat_split[[k]]
-            clu_name <- names(feat_split[[k]])
+          list_names <- lapply(1:length(x = features_split), function(k){
+            feat_name <- features_split[[k]]
+            clu_name <- names(x = features_split[[k]])
             new_names <- paste0(feat_name, "_", clu_name)
           })
 
-          new_plots <- lapply(1:length(all_plots), function (j){
+          all_plots <- lapply(1:length(x = all_plots), function (j){
             plot_split <- all_plots[[j]]
-            for (k in 1:length(list_names[[j]])) {
+            for (k in 1:length(x = list_names[[j]])) {
               plot_split[[k]][["labels"]][["title"]] <- list_names[[j]][k]
             }
             return(plot_split)
