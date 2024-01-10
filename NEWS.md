@@ -5,6 +5,7 @@
 - Added new function `Updated_HGNC_Symbols` to update human gene symbols.  After first use does not require internet connection.  
 - Added command logging to QC metric-related commands using `Seurat::LogSeuratCommand()`.  
 - Added parameter `plot_legend` to `plotFactors_scCustom` to allow for removal to legend in factor loading plots.  
+- Added new functionality to `Iterate_FeaturePlot_scCustom` to allow for plotting multiple plots per page when saving to single PDF document (see new parameters: `features_per_page` and `landscape`.  
 
   
 ## Changed  
