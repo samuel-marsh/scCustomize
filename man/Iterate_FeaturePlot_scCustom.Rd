@@ -61,7 +61,7 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 \item{features_per_page}{numeric, number of features to plot on single page if \code{single_pdf = TRUE}.  Default is 1.}
 
 \item{num_columns}{Number of columns in plot layout (only applicable if \code{single_pdf = TRUE} AND
-+\code{features_per_page} > 1).}
+\code{features_per_page} > 1).}
 
 \item{landscape}{logical, when plotting multiple features per page in single PDF whether to use landscape or portrait
 page dimensions (default is TRUE).}
