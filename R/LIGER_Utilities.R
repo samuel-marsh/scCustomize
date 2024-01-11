@@ -340,6 +340,51 @@ Meta_Present_LIGER <- function(
 }
 
 
+#' Extract Features from LIGER Object
+#'
+#' Extract all unique features from LIGER object
+#'
+#' @param liger_object LIGER object name.
+#' @param by_dataset logical, whether to return list with vector of features for each dataset in
+#' LIGER object or to return single vector of unique features across all datasets in object
+#' (default is FALSE; return vector of unique features)
+#'
+#' @return vector or list depending on `by_dataset` parameter
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return single vector of all unique features
+#' all_features <- LIGER_Features(liger_object = object, by_dataset = FALSE)
+#'
+#' # return list of vectors containing features from each individual dataset in object
+#' dataset_features <- LIGER_Features(liger_object = object, by_dataset = TRUE)
+#' }
+#'
+
+LIGER_Features <- function(
+    liger_object,
+    by_dataset = FALSE
+) {
+  Is_LIGER(liger_object = liger_object)
+
+  # Extract features
+  features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
+    rownames(liger_object@raw.data[[x]])
+  })
+
+  if (isFALSE(x = by_dataset)) {
+    features <- unique(x = unlist(x = features_by_dataset))
+    return(features)
+  } else {
+    return(features_by_dataset)
+  }
+}
+
+
 #' Extract top loading genes for LIGER factor
 #'
 #' Extract vector to the top loading genes for specified LIGER iNMF factor
@@ -1028,20 +1073,21 @@ Liger_to_Seurat <- function(
                           "i" = "In order to retain proper labels in Seurat object please set {.code reduction_label} to {.val tSNE}, {.val UMAP}, {.val etc}."))
   }
 
-  # get Seurat version
-  maj_version <- packageVersion('Seurat')$major
-  if (class(liger_object@raw.data[[1]])[1] != 'dgCMatrix') {
-    # mat <- as(x, 'CsparseMatrix')
-    liger_object@raw.data <- lapply(liger_object@raw.data, function(x) {
-      as(x, 'CsparseMatrix')
-    })
+  # adjust raw data slot if needed
+  if (!inherits(object@raw.data[[1]], 'dgCMatrix')) {
+    object@raw.data <- lapply(object@raw.data, as, Class = "CsparseMatrix")
   }
 
+  # Adjust name for dimreduc key
   key_name <- paste0(reduction_label, "_")
 
+
+
   raw.data <- Merge_Sparse_Data_All(liger_object@raw.data, nms)
-  scale.data <- do.call(rbind, liger_object@scale.data)
-  rownames(x = scale.data) <- colnames(x = raw.data)
+
+
+  # scale.data <- do.call(rbind, liger_object@scale.data)
+  # rownames(x = scale.data) <- colnames(x = raw.data)
   if (maj_version < 3) {
     var.genes <- liger_object@var.genes
     inmf.obj <- new(
