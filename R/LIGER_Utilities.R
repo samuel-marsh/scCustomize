@@ -167,14 +167,14 @@ Add_Mito_Ribo_LIGER <- function(
   }
 
   # get features from patterns
-  mito_features <- mito_features %||% grep(pattern = mito_pattern, x = rownames(x = liger_object@raw.data[[1]]), value = TRUE)
+  mito_features <- mito_features %||% grep(pattern = mito_pattern, x = all_features, value = TRUE)
 
-  ribo_features <- ribo_features %||% grep(pattern = ribo_pattern, x = rownames(x = liger_object@raw.data[[1]]), value = TRUE)
+  ribo_features <- ribo_features %||% grep(pattern = ribo_pattern, x = all_features, value = TRUE)
 
   # Check features are present in object
-  length_mito_features <- length(x = intersect(x = mito_features, y = rownames(x = liger_object@raw.data[[1]])))
+  length_mito_features <- length(x = intersect(x = mito_features, y = all_features))
 
-  length_ribo_features <- length(x = intersect(x = ribo_features, y = rownames(x = liger_object@raw.data[[1]])))
+  length_ribo_features <- length(x = intersect(x = ribo_features, y = all_features))
 
   # Check length of mito and ribo features found in object
   if (length_mito_features < 1 && length_ribo_features < 1) {
@@ -195,14 +195,14 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Add mito and ribo percent
   if (length_mito_features > 0) {
-    good_mito <- mito_features[mito_features %in% rownames(x = liger_object@raw.data)]
+    good_mito <- mito_features[mito_features %in% all_features]
     percent_mito <- unlist(lapply(liger_object@raw.data, function(x) {
       (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
     liger_object@cell.data[ , mito_name] <- percent_mito
   }
 
   if (length_ribo_features > 0){
-    good_ribo <- ribo_features[ribo_features %in% rownames(x = liger_object@raw.data)]
+    good_ribo <- ribo_features[ribo_features %in% all_features]
     percent_ribo <- unlist(lapply(liger_object@raw.data, function(x) {
       (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
     liger_object@cell.data[ , ribo_name] <- percent_ribo
