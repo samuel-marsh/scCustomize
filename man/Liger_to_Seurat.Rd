@@ -12,7 +12,10 @@ Liger_to_Seurat(
   by.dataset = FALSE,
   keep_meta = TRUE,
   reduction_label = "UMAP",
-  seurat_assay = "RNA"
+  seurat_assay = "RNA",
+  add_barcode_names = FALSE,
+  barcode_prefix = TRUE,
+  barcode_cell_id_delimiter = "_"
 )
 }
 \arguments{
@@ -35,6 +38,15 @@ to new Seurat Object.  Default is TRUE.}
 or name to Seurat object instead of defaulting to "tSNE".}
 
 \item{seurat_assay}{Name to set for assay in Seurat Object.  Default is "RNA".}
+
+\item{add_barcode_names}{logical, whether to add dataset names to the cell barcodes when
+creating Seurat object, default is FALSE.}
+
+\item{barcode_prefix}{logical, if \code{add_barcode_names = TRUE} should the names be added as
+prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).}
+
+\item{barcode_cell_id_delimiter}{The delimiter to use when adding dataset id to barcode
+prefix/suffix.  Default is "_".}
 }
 \value{
 Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
