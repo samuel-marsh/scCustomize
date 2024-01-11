@@ -6,7 +6,7 @@
 - Added command logging to QC metric-related commands using `Seurat::LogSeuratCommand()`.  
 - Added parameter `plot_legend` to `plotFactors_scCustom` to allow for removal to legend in factor loading plots.  
 - Added new functionality to `Iterate_FeaturePlot_scCustom` to allow for plotting multiple plots per page when saving to single PDF document (see new parameters: `features_per_page` and `landscape`.  
-- Added `LIGER_Features` utility function for LIGER objects (analogous to `Seurat::Features()`) ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
+- Added `LIGER_Features` utility function for LIGER objects (analogous to `Seurat::Features()`).  
 
 
   
@@ -23,6 +23,7 @@
 - Fix duplicate legends in `DimPlot_scCustom` when levels are missing from a split plot.  
 - Fixed bug in `FeaturePlot_scCustom` that could cause plots to be mislabeled when using `split.by` and depending on the order of features provided ([#150](https://github.com/samuel-marsh/scCustomize/issues/150)).  
 - Fixes issue with automatic point size calculation for Seurat Objects.  
+- Added check for presence of dimensionality reduction in `DimPlot_LIGER` ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
 
 
 
