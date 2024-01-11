@@ -6,6 +6,8 @@
 - Added command logging to QC metric-related commands using `Seurat::LogSeuratCommand()`.  
 - Added parameter `plot_legend` to `plotFactors_scCustom` to allow for removal to legend in factor loading plots.  
 - Added new functionality to `Iterate_FeaturePlot_scCustom` to allow for plotting multiple plots per page when saving to single PDF document (see new parameters: `features_per_page` and `landscape`.  
+- Added `LIGER_Features` utility function for LIGER objects (analogous to `Seurat::Features()`) ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
+
 
   
 ## Changed  
