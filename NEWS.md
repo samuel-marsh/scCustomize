@@ -12,6 +12,7 @@
   
 ## Changed  
 - Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
+- Updated `Liger_to_Seurat` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
    
 
 ## Fixes  
