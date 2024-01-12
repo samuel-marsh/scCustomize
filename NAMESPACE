@@ -3,6 +3,7 @@
 S3method(Fetch_Meta,Seurat)
 S3method(Fetch_Meta,liger)
 S3method(as.LIGER,Seurat)
+S3method(as.LIGER,list)
 export(Add_CellBender_Diff)
 export(Add_Cell_Complexity_LIGER)
 export(Add_Cell_Complexity_Seurat)
