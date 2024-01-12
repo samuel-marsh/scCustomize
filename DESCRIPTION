@@ -38,7 +38,7 @@ Imports:
     patchwork,
     pbapply,
     purrr,
-    rlang (>= 1.0.1),
+    rlang (>= 1.1.3),
     scales,
     scattermore (>= 1.2), 
     SeuratObject (>= 5.0.0),
