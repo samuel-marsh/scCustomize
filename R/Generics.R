@@ -4,7 +4,7 @@
 
 #' Convert objects to LIGER objects
 #'
-#' @param x An object(s) to convert to class \code{LIGER}
+#' @param x Seurat object
 #' @param ... Arguments passed to other methods
 #'
 #' @rdname as.LIGER

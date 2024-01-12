@@ -1261,7 +1261,8 @@ as.LIGER.Seurat <- function(
     use_seurat_dimreduc = FALSE,
     reduction = NULL,
     keep_meta = TRUE,
-    verbose = TRUE
+    verbose = TRUE,
+    ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = x)
@@ -1442,7 +1443,8 @@ as.LIGER.list <- function(
     use_seurat_var_genes = FALSE,
     var_genes_method = "intersect",
     keep_meta = TRUE,
-    verbose = TRUE
+    verbose = TRUE,
+    ...
 ) {
   # Check Seurat
   seurat_check <- unlist(lapply(x, function(x) {
