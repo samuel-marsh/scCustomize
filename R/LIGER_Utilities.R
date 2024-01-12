@@ -1249,7 +1249,7 @@ Liger_to_Seurat <- function(
 
 as.LIGER.Seurat <- function(
     x,
-    group.by = orig.ident,
+    group.by = "orig.ident",
     assay = "RNA",
     remove_missing = FALSE,
     renormalize = TRUE,
