@@ -5,7 +5,7 @@
 \title{Create liger object from one or more Seurat objects}
 \usage{
 \method{as.LIGER}{Seurat}(
-  objects,
+  x,
   combined.seurat = FALSE,
   names = "use-projects",
   meta.var = NULL,
@@ -21,8 +21,6 @@
 )
 }
 \arguments{
-\item{objects}{One or more Seurat v2 objects. If passing multiple objects, should be in list.}
-
 \item{combined.seurat}{Whether Seurat object (single) already contains multiple datasets (default
 FALSE).}
 
@@ -65,6 +63,8 @@ analysis Seurat object). Useful for plotting directly afterwards. (default TRUE)
 \item{cca.to.H}{Carry over CCA (and aligned) loadings and insert them into H (and H.norm) slot in
 liger object (only meaningful for combined analysis Seurat object). Useful for plotting directly
 afterwards. (default FALSE)}
+
+\item{objects}{One or more Seurat v2 objects. If passing multiple objects, should be in list.}
 }
 \value{
 \code{liger} object.
