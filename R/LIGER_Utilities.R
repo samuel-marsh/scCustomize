@@ -1249,6 +1249,7 @@ Liger_to_Seurat <- function(
 #'
 
 as.LIGER.Seurat <- function(
+    x,
     group.by = "orig.ident",
     assay = "RNA",
     remove_missing = FALSE,
@@ -1429,6 +1430,7 @@ as.LIGER.Seurat <- function(
 #'
 
 as.LIGER.list <- function(
+    x,
     group.by = "orig.ident",
     dataset_names = NULL,
     assay = "RNA",
