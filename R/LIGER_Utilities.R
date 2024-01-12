@@ -1260,7 +1260,7 @@ as.LIGER.Seurat <- function(
     verbose = TRUE
 ) {
   # Check Seurat
-  scCustomize:::Is_Seurat(seurat_object = x)
+  Is_Seurat(seurat_object = x)
 
   # Run update to ensure functionality
   if (isTRUE(x = verbose)) {
@@ -1459,7 +1459,7 @@ as.LIGER.list <- function(
 
   # Check Assay5 for multiple layers
   for (i in x) {
-    if (isTRUE(x = scCustomize:::Assay5_Check(seurat_object = i, assay = assay))) {
+    if (isTRUE(x = Assay5_Check(seurat_object = i, assay = assay))) {
       layers_check <- Layers(object = i, search = "counts")
       if (length(x = layers_check) > 1) {
         cli_abort(message = c("Multiple layers containing raw counts present {.field {head(x = layers_check, n = 2)}}.",
