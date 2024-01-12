@@ -1240,6 +1240,7 @@ Liger_to_Seurat <- function(
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @export
+#' @rdname as.LIGER
 #'
 #' @examples
 #' \dontrun{
@@ -1388,247 +1389,216 @@ as.LIGER.Seurat <- function(
 }
 
 
-#' Create liger object from one or more Seurat objects
+#' Create liger object from one Seurat Object
 #'
-#' This function creates a \code{liger} object from multiple (disjoint) Seurat objects or a single
-#' (combined-analysis) Seurat object. It includes options for keeping the variable genes and cluster
-#' identities from the original Seurat objects. Seurat V2 and V3 supported (though all objects
-#' should share the same major version).
+#' This function is part of generic `as.LIGER` for conversion of Seurat Objects.  Updated for Seurat5 compatibility and enhanced functionality.
 #'
-#' @param objects One or more Seurat v2 objects. If passing multiple objects, should be in list.
-#' @param combined.seurat Whether Seurat object (single) already contains multiple datasets (default
-#'   FALSE).
-#' @param names Names to use for datasets in new liger object. If use-projects, takes project names
-#'   from individual Seurat objects; if use-meta, takes value of object meta.data in meta.var column
-#'   for each dataset; otherwise, user can pass in vector of names with same length
-#'   as number of datasets. If combined.seurat, infers project names based on whether meta.var
-#'   or assays.use is present (at least one required).
-#' @param meta.var Seurat meta.data column name to use in naming datasets. Either meta.var or
-#'   assays.use required if combined.seurat is TRUE (default NULL).
-#' @param assays.use Names of Seurat v3 assays to use as separate datasets in conversion (e.g. RNA,
-#'   ADT) (default NULL).
-#' @param raw.assay Name of Seurat v3 assay to use for raw data if meta.var used to split combined
-#'   Seurat object -- in case integrated assay has been set as default (default "RNA").
-#' @param remove.missing Whether to remove missing genes/cells when converting raw.data to liger object
-#'   (default TRUE).
-#' @param renormalize Whether to automatically normalize raw.data once \code{liger} object is created
-#'   (default TRUE).
-#' @param use.seurat.genes Carry over variable genes from Seurat objects. If num.hvg.info is set, uses
-#'   that value to get top most highly variable genes from hvg.info slot in Seurat objects. Otherwise
-#'   uses var.genes slot in Seurat objects. For multiple datasets, takes the union of the variable
-#'   genes. (default TRUE)
-#' @param num.hvg.info Number of highly variable genes to include from each object's hvg.info slot.
-#'   Only available for Seurat v2 objects. If set, recommended value is 2000 (default NULL).
-#' @param use.idents Carry over cluster identities from Seurat objects. If multiple objects with
-#'   overlapping cluster names, will preface cluster names by dataset names to distinguish. (default
-#'   TRUE).
-#' @param use.tsne Carry over t-SNE coordinates from Seurat object (only meaningful for combined
-#'   analysis Seurat object). Useful for plotting directly afterwards. (default TRUE)
-#' @param cca.to.H Carry over CCA (and aligned) loadings and insert them into H (and H.norm) slot in
-#'   liger object (only meaningful for combined analysis Seurat object). Useful for plotting directly
-#'   afterwards. (default FALSE)
+#' @param group.by Variable in meta data which contains variable to split data by, (default is "orig.ident").
+#' @param dataset_names optional, vector of names to use for naming datasets.
+#' @param assay Assay containing raw data to use, (default is "RNA").
+#' @param remove_missing logical, whether to remove missing genes with no counts when converting to
+#' LIGER object (default is FALSE).
+#' @param renormalize logical, whether to perform normalization after LIGER object creation (default is TRUE).
+#' @param use_seurat_var_genes logical, whether to transfer variable features from Seurat object to
+#' new LIGER object (default is FALSE).
+#' @param var_genes_method how variable genes should be selected from Seurat objects if `use_seurat_var_genes = TRUE`.  Can be either "intersect" or "union", (default is "intersect").
+#' @param keep_meta logical, whether to transfer columns in Seurat meta.data slot to LIGER cell.data
+#' slot (default is TRUE).
+#' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
+#'
+#'
+#' @references modified and enhanced version of `rliger::seuratToLiger`.
+#'
 #' @method as.LIGER list
-#' @return \code{liger} object.
+#' @return liger object.
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @import Seurat
+#' @importFrom dplyr left_join join_by select any_of bind_rows union intersect
+#' @importFrom stringr str_to_lower
+#' @importFrom tibble rownames_to_column column_to_rownames
+#'
 #' @export
+#' @rdname as.LIGER
+#'
+#' @examples
+#' \dontrun{
+#' liger_object <- as.LIGER(x = seurat_object_list)
+#' }
+#'
 
 as.LIGER.list <- function(
     x,
-    combined.seurat = FALSE,
-    names = "use-projects",
-    meta.var = NULL,
-    assays.use = NULL,
-    raw.assay = "RNA",
-    remove.missing = TRUE,
+    group.by = "orig.ident",
+    dataset_names = NULL,
+    assay = "RNA",
+    remove_missing = FALSE,
     renormalize = TRUE,
-    use.seurat.genes = TRUE,
-    num.hvg.info = NULL,
-    use.idents = TRUE,
-    use.tsne = TRUE,
-    cca.to.H = FALSE
+    use_seurat_var_genes = FALSE,
+    var_genes_method = "intersect",
+    keep_meta = TRUE,
+    verbose = TRUE
 ) {
-  if (!requireNamespace("Seurat", quietly = TRUE)) {
-    stop("Package \"Seurat\" needed for this function to work. Please install it.",
-         call. = FALSE
-    )
+  # Check Seurat
+  seurat_check <- unlist(lapply(x, function(x) {
+    inherits(x = x, what = "Seurat")
+  }))
+
+  if (any(seurat_check) == "FALSE") {
+    cli_abort(message = "One or more of items in list are not Seurat Objects.")
   }
 
-  # Remind to set combined.seurat
-  if ((typeof(objects) != "list") & (!combined.seurat)) {
-    stop("Please pass a list of objects or set combined.seurat = TRUE")
+  # Run update to ensure functionality
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = "Checking Seurat object validity")
   }
-  # Get Seurat versions
-  if (typeof(objects) != "list") {
-    version <- package_version(objects@version)$major
+
+  x <- lapply(x, function(y) {
+    suppressMessages(UpdateSeuratObject(object = y))
+  })
+
+  # Check Assay5 for multiple layers
+  for (i in x) {
+    if (isTRUE(x = scCustomize:::Assay5_Check(seurat_object = i, assay = assay))) {
+      layers_check <- Layers(object = i, search = "counts")
+      if (length(x = layers_check) > 1) {
+        cli_abort(message = c("Multiple layers containing raw counts present {.field {head(x = layers_check, n = 2)}}.",
+                              "i" = "Please run {.code JoinLayers} before converting to LIGER object."))
+      }
+    }
+  }
+
+  # Check meta data
+  if (is.null(x = dataset_names)) {
+    for (j in x) {
+      group.by <- Meta_Present(seurat_object = j, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+
+      # stop if none found
+      if (length(x = group.by) == 0) {
+        cli_abort(message = c("{.code group.by} was not found in all objects in list.",
+                              "i" = "All objects must contain column in meta.data named: {.val {group.by}}.")
+        )
+      }
+    }
+
   } else {
-    version <- sapply(objects, function(x) {
-      package_version(x@version)$major
-    })
-    if (min(version) != max(version)) {
-      stop("Please ensure all Seurat objects have the same major version.")
-    } else {
-      version <- version[1]
+    if (length(x = dataset_names) != length(x = x)) {
+      cli_abort(message = "The number of {.code dataset_names} provided ({.field {length(x = dataset_names)}}) does not match number of Seurat objects in list ({.field {length(x = x)}}).")
     }
   }
 
-  # Only a single seurat object expected if combined.seurat
-  if (combined.seurat) {
-    if ((is.null(meta.var)) & (is.null(assays.use))) {
-      stop("Please provide Seurat meta.var or assays.use to use in identifying individual datasets.")
+  # Check & Set Assay
+  for (k in x) {
+    if (!assay %in% Assays(object = k)) {
+      cli_abort(message = "Provided assay {.field {assay}} not found in all Seurat objects in list.")
     }
-    if (!is.null(meta.var)) {
-      # using meta.var column as division split
-      if (version > 2) {
-        # if integrated assay present, want to make sure to use original raw data
-        object.raw <- Seurat::GetAssayData(objects, assay = raw.assay, slot = "counts")
-      } else {
-        object.raw <- objects@raw.data
+  }
+
+  for (l in x) {
+    if (assay != DefaultAssay(object = l)) {
+      cli_inform("Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}}).")
+      DefaultAssay(l) <- assay
+    }
+  }
+
+  if (isTRUE(x = use_seurat_var_genes)) {
+    var_genes <- lapply(x, function(z) {
+      VariableFeatures(object = z)
+    })
+
+    for (m in var_genes) {
+      if (!length(x = m) > 0) {
+        cli_abort(message ="{.code use_seurat_var_genes = TRUE}, but not all objects in list have variable features.")
       }
-      if (nrow(objects@meta.data) != ncol(object.raw)) {
-        message("Warning: Mismatch between meta.data and raw.data in this Seurat object. \nSome cells",
-                "will not be assigned to a raw dataset. \nRepeat Seurat analysis without filters to",
-                "allow all cells to be assigned.\n")
-      }
-      raw.data <- lapply(unique(objects@meta.data[[meta.var]]), function(x) {
-        cells <- rownames(objects@meta.data[objects@meta.data[[meta.var]] == x, ])
-        object.raw[, cells]
-      })
-      names(raw.data) <- unique(objects@meta.data[[meta.var]])
-    } else {
-      # using different assays in v3 object
-      raw.data <- lapply(assays.use, function(x) {
-        Seurat::GetAssayData(objects, assay = x, slot = "counts")
-      })
-      names(raw.data) <- assays.use
     }
 
-    if (version > 2) {
-      var.genes <- Seurat::VariableFeatures(objects)
-      idents <- Seurat::Idents(objects)
-      if (is.null(objects@reductions$tsne)) {
-        message("Warning: no t-SNE coordinates available for this Seurat object.")
-        tsne.coords <- NULL
-      } else {
-        tsne.coords <- objects@reductions$tsne@cell.embeddings
-      }
-    } else {
-      # Get var.genes
-      var.genes <- objects@var.genes
-      # Get idents/clusters
-      idents <- objects@ident
-      # Get tsne.coords
-      if (is.null(objects@dr$tsne)) {
-        message("Warning: no t-SNE coordinates available for this Seurat object.")
-        tsne.coords <- NULL
-      } else {
-        tsne.coords <- objects@dr$tsne@cell.embeddings
-      }
+    var_genes_method <- str_to_lower(string = var_genes_method)
+    if (!var_genes_method %in% c("intersect", "union")) {
+      cli_abort(message = "{.code var_genes_method} must be either {.field intersect} or {.field union}.")
     }
+
+    if (var_genes_method == "union") {
+      var_genes <- reduce(var_genes, function(a, b) {
+        union(x = a, y = b)})
+    }
+    if (var_genes_method == "intersect") {
+      var_genes <- reduce(var_genes, function(c, d) {
+        intersect(x = c, y = d)
+      })
+    }
+  }
+
+  # Get raw data & cells
+  raw_data_list <- lapply(x, function(e){
+    LayerData(object = e, layer = "counts")
+  })
+
+  if (is.null(x = dataset_names)) {
+    group_names <- unique(x = sapply(1:length(x = x), function(f) {
+      obj_meta <- Fetch_Meta(object = x[[f]]) %>%
+        select(any_of(group.by)) %>%
+        unique()
+      if (length(x = obj_meta) > 1) {
+        cli_abort(message = c("Some objects in list have multiple values within the {.field {group.by}} column.",
+                              "i" = "This column must only contain one value per object"))
+      }
+    }))
+
+    if (length(x = group_names) != length(x = x)) {
+      cli_abort(message = c("Some objects in list have the same values within the {.field {group.by}} column.",
+                            "i" = "All objects must have unique value in this column."))
+    }
+
+    names(x = raw_data_list) <- group_names
   } else {
-    # for multiple Seurat objects
-    raw.data <- lapply(objects, function(x) {
-      if (version > 2) {
-        # assuming default assays have been set for each v3 object
-        Seurat::GetAssayData(x, slot = "counts")
-      } else {
-        x@raw.data
-      }
-    })
-    names(raw.data) <- lapply(seq_along(objects), function(x) {
-      if (identical(names, "use-projects")) {
-        if (!is.null(meta.var)) {
-          message("Warning: meta.var value is set - set names = 'use-meta' to use meta.var for names.\n")
-        }
-        objects[[x]]@project.name
-      } else if (identical(names, "use-meta")) {
-        if (is.null(meta.var)) {
-          stop("Please provide meta.var to use in naming individual datasets.")
-        }
-        objects[[x]]@meta.data[[meta.var]][1]
-      } else {
-        names[x]
-      }
-    })
-    # tsne coords not very meaningful for separate objects
-    tsne.coords <- NULL
+    names(x = raw_data_list) <- dataset_names
+  }
 
-    if (version > 2) {
-      var.genes <- Reduce(union, lapply(objects, function(x) {
-        Seurat::VariableFeatures(x)
-      }))
-      # Get idents, label by dataset
-      idents <- unlist(lapply(seq_along(objects), function(x) {
-        idents <- rep("NA", ncol(raw.data[[x]]))
-        names(idents) <- colnames(raw.data[[x]])
-        idents[names(Seurat::Idents(objects[[x]]))] <- as.character(Seurat::Idents(objects[[x]]))
-        idents <- paste0(names(raw.data)[x], idents)
-      }))
-      idents <- factor(idents)
-    } else {
-      var.genes <- Reduce(union, lapply(objects, function(x) {
-        if (!is.null(num.hvg.info)) {
-          rownames(head(x@hvg.info, num.hvg.info))
-        } else {
-          x@var.genes
-        }
-      }))
-      # Get idents, label by dataset
-      idents <- unlist(lapply(seq_along(objects), function(x) {
-        idents <- rep("NA", ncol(objects[[x]]@raw.data))
-        names(idents) <- colnames(objects[[x]]@raw.data)
-        idents[names(objects[[x]]@ident)] <- as.character(objects[[x]]@ident)
-        idents <- paste0(names(raw.data)[x], idents)
-      }))
-      idents <- factor(idents)
-    }
-  }
-  new.liger <- createLiger(raw.data = raw.data, remove.missing = remove.missing)
-  if (renormalize) {
-    new.liger <- normalize(new.liger)
-  }
-  if (use.seurat.genes) {
-    # Include only genes which appear in all datasets
-    for (i in 1:length(new.liger@raw.data)) {
-      var.genes <- intersect(var.genes, rownames(new.liger@raw.data[[i]]))
-      # Seurat has an extra CheckGenes step which we can include here
-      # Remove genes with no expression anywhere
-      var.genes <- var.genes[rowSums(new.liger@raw.data[[i]][var.genes, ]) > 0]
-      var.genes <- var.genes[!is.na(var.genes)]
-    }
 
-    new.liger@var.genes <- var.genes
+  # Create LIGER Object
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = "Creating LIGER object.")
   }
-  if (use.idents) {
-    new.liger@clusters <- idents
-  }
-  if ((use.tsne) & (!is.null(tsne.coords))) {
-    new.liger@tsne.coords <- tsne.coords
-  }
-  # Get CCA loadings if requested
-  if (cca.to.H & combined.seurat) {
-    if (version > 2) {
-      message("Warning: no CCA loadings available for Seurat v3 objects.\n")
-      return(new.liger)
+
+  liger_object <- createLiger(raw.data = raw_data_list, remove.missing = remove_missing)
+
+  if (isTRUE(x = renormalize)) {
+    if (isTRUE(x = verbose)) {
+      cli_inform(message = "Normalizing data.")
     }
-    if (is.null(objects@dr$cca)) {
-      message("Warning: no CCA loadings available for this Seurat object.\n")
-    } else {
-      new.liger@H <- lapply(unique(objects@meta.data[[meta.var]]), function(x) {
-        cells <- rownames(objects@meta.data[objects@meta.data[[meta.var]] == x, ])
-        objects@dr$cca@cell.embeddings[cells, ]
-      })
-      new.liger@H <- lapply(seq_along(new.liger@H), function(x) {
-        addMissingCells(new.liger@raw.data[[x]], new.liger@H[[x]])
-      })
-      names(new.liger@H) <- names(new.liger@raw.data)
-    }
-    if (is.null(objects@dr$cca.aligned)) {
-      message("Warning: no aligned CCA loadings available for this Seurat object.\n")
-    } else {
-      new.liger@H.norm <- objects@dr$cca.aligned@cell.embeddings
-      new.liger@H.norm <- addMissingCells(Reduce(rbind, new.liger@H), new.liger@H.norm,
-                                          transpose = TRUE)
-    }
+    liger_object <- rliger::normalize(object = liger_object, remove.missing = remove_missing)
   }
-  return(new.liger)
+
+  # Add var genes
+  if (isTRUE(x = use_seurat_var_genes)) {
+    liger_object@var.genes <- var_genes
+  }
+
+  # transfer meta
+  if (isTRUE(x = keep_meta)) {
+    # extract meta data from seurat object
+    seurat_meta <- lapply(x, function(g) {
+      obj_meta <- Fetch_Meta(object = g) %>%
+        select(-any_of(c("nFeature_RNA", "nCount_RNA", group.by)))
+    })
+
+    seurat_meta <- bind_rows(seurat_meta) %>%
+      rownames_to_column("barcodes")
+
+    # pull current liger meta
+    liger_meta <- Fetch_Meta(object = liger_object) %>%
+      rownames_to_column("barcodes")
+
+    # join meta
+    new_liger_meta <- suppressMessages(left_join(x = liger_meta, y = seurat_meta, by = join_by("barcodes"))) %>%
+      column_to_rownames("barcodes")
+
+    # Add to LIGER object
+    liger_object@cell.data <- new_liger_meta
+  }
+
+  # return object
+  return(liger_object)
 }
-
