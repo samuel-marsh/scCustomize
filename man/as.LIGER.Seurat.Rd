@@ -2,76 +2,57 @@
 % Please edit documentation in R/LIGER_Utilities.R
 \name{as.LIGER.Seurat}
 \alias{as.LIGER.Seurat}
-\title{Create liger object from one or more Seurat objects}
+\title{Create liger object from one Seurat Object}
 \usage{
 \method{as.LIGER}{Seurat}(
   x,
-  combined.seurat = FALSE,
-  names = "use-projects",
-  meta.var = NULL,
-  assays.use = NULL,
-  raw.assay = "RNA",
-  remove.missing = TRUE,
+  group.by = orig.ident,
+  assay = "RNA",
+  remove_missing = FALSE,
   renormalize = TRUE,
-  use.seurat.genes = TRUE,
-  num.hvg.info = NULL,
-  use.idents = TRUE,
-  use.tsne = TRUE,
-  cca.to.H = FALSE
+  use_seurat_var_genes = FALSE,
+  use_seurat_dimreduc = FALSE,
+  reduction = NULL,
+  keep_meta = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{combined.seurat}{Whether Seurat object (single) already contains multiple datasets (default
-FALSE).}
+\item{group.by}{Variable in meta data which contains variable to split data by, (default is "orig.ident").}
 
-\item{names}{Names to use for datasets in new liger object. If use-projects, takes project names
-from individual Seurat objects; if use-meta, takes value of object meta.data in meta.var column
-for each dataset; otherwise, user can pass in vector of names with same length
-as number of datasets. If combined.seurat, infers project names based on whether meta.var
-or assays.use is present (at least one required).}
+\item{assay}{Assay containing raw data to use, (default is "RNA").}
 
-\item{meta.var}{Seurat meta.data column name to use in naming datasets. Either meta.var or
-assays.use required if combined.seurat is TRUE (default NULL).}
+\item{remove_missing}{logical, whether to remove missing genes with no counts when converting to
+LIGER object (default is FALSE).}
 
-\item{assays.use}{Names of Seurat v3 assays to use as separate datasets in conversion (e.g. RNA,
-ADT) (default NULL).}
+\item{renormalize}{logical, whether to perform normalization after LIGER object creation (default is TRUE).}
 
-\item{raw.assay}{Name of Seurat v3 assay to use for raw data if meta.var used to split combined
-Seurat object -- in case integrated assay has been set as default (default "RNA").}
+\item{use_seurat_var_genes}{logical, whether to transfer variable features from Seurat object to
+new LIGER object (default is FALSE).}
 
-\item{remove.missing}{Whether to remove missing genes/cells when converting raw.data to liger object
-(default TRUE).}
+\item{use_seurat_dimreduc}{logical, whether to transfer dimensionality reduction coordinates from
+Seurat to new LIGER object (default is FALSE).}
 
-\item{renormalize}{Whether to automatically normalize raw.data once \code{liger} object is created
-(default TRUE).}
+\item{reduction}{Name of Seurat reduction to transfer if \code{use_seurat_dimreduc = TRUE}.}
 
-\item{use.seurat.genes}{Carry over variable genes from Seurat objects. If num.hvg.info is set, uses
-that value to get top most highly variable genes from hvg.info slot in Seurat objects. Otherwise
-uses var.genes slot in Seurat objects. For multiple datasets, takes the union of the variable
-genes. (default TRUE)}
+\item{keep_meta}{logical, whether to transfer columns in Seurat meta.data slot to LIGER cell.data
+slot (default is TRUE).}
 
-\item{num.hvg.info}{Number of highly variable genes to include from each object's hvg.info slot.
-Only available for Seurat v2 objects. If set, recommended value is 2000 (default NULL).}
-
-\item{use.idents}{Carry over cluster identities from Seurat objects. If multiple objects with
-overlapping cluster names, will preface cluster names by dataset names to distinguish. (default
-TRUE).}
-
-\item{use.tsne}{Carry over t-SNE coordinates from Seurat object (only meaningful for combined
-analysis Seurat object). Useful for plotting directly afterwards. (default TRUE)}
-
-\item{cca.to.H}{Carry over CCA (and aligned) loadings and insert them into H (and H.norm) slot in
-liger object (only meaningful for combined analysis Seurat object). Useful for plotting directly
-afterwards. (default FALSE)}
-
-\item{objects}{One or more Seurat v2 objects. If passing multiple objects, should be in list.}
+\item{verbose}{logical, whether to print status messages during object conversion (default is TRUE).}
 }
 \value{
-\code{liger} object.
+liger object.
 }
 \description{
-This function creates a \code{liger} object from multiple (disjoint) Seurat objects or a single
-(combined-analysis) Seurat object. It includes options for keeping the variable genes and cluster
-identities from the original Seurat objects. Seurat V2 and V3 supported (though all objects
-should share the same major version).
+This function is part of generic \code{as.LIGER} for conversion of Seurat Objects.  Updated for Seurat5 compatibility and enhanced functionality.
 }
+\examples{
+\dontrun{
+liger_object <- as.LIGER(x = seurat_object)
+}
+
+}
+\references{
+modified and enhanced version of \code{rliger::seuratToLiger}.
+}
+\concept{object_conversion}
