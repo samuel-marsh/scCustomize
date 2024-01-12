@@ -1418,7 +1418,7 @@ process_hgnc_data <- function(
 
   # filter data: Approved Genes > select relevant categories
   hgnc_filtered_data <- hgnc_full_data %>%
-    filter(status == "Approved") %>%
+    filter(.data[["status"]] == "Approved") %>%
     select(any_of(c("hgnc_id", "symbol", "status", "alias_symbol", "prev_symbol", "date_symbol_changed", "entrez_id", "ensembl_gene_id")))
 
   # Select needed for renaming > split prev symbol column by number of additional columns needed > pivot wider without NAs > mutate
