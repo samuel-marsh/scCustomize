@@ -500,7 +500,7 @@ Fetch_Meta.Seurat <- function(
   object
 ) {
   # Pull meta data
-  object_meta <- object_meta <- slot(object = object, name = "meta.data")
+  object_meta <- slot(object = object, name = "meta.data")
 
   return(object_meta)
 }
