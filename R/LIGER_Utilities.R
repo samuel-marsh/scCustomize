@@ -1254,7 +1254,7 @@ Liger_to_Seurat <- function(
 
 
 as.LIGER.Seurat <- function(
-    objects,
+    x,
     combined.seurat = FALSE,
     names = "use-projects",
     meta.var = NULL,
