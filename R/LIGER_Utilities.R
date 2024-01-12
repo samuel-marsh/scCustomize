@@ -166,6 +166,8 @@ Add_Mito_Ribo_LIGER <- function(
     ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
 
+  all_features <- LIGER_Features(liger_object = liger_object)
+
   # get features from patterns
   mito_features <- mito_features %||% grep(pattern = mito_pattern, x = all_features, value = TRUE)
 
