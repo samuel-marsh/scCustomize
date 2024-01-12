@@ -1952,7 +1952,7 @@ Updated_HGNC_Symbols <- function(
     mutate(across(everything(), ~str_replace_na(string = .x, replacement = ""))) %>%
     mutate(Output_Features = str_c(.data[["Approved_Symbol"]], .data[["Not_Found_Symbol"]], .data[["Updated_Symbol"]])) %>%
     mutate(across(everything(), ~str_replace(string = .x, pattern = "^$", replacement = NA_character_))) %>%
-    filter(!(.data[["input_features"]] == "QARS" & Updated_Symbol == "EPRS1"))
+    filter(!(.data[["input_features"]] == "QARS" & .data[["Updated_Symbol"]] == "EPRS1"))
 
   # Report the results
   if (isTRUE(x = verbose)) {
