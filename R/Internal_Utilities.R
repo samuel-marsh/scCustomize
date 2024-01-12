@@ -1398,7 +1398,7 @@ download_hgnc_data <- function(
 #' @param from input (cache location).
 #' @param to output (cached data).
 #'
-#' @importFrom dplyr mutate select filter
+#' @importFrom dplyr mutate select filter any_of contains
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr separate_wider_delim pivot_longer
 #'
