@@ -1423,7 +1423,7 @@ process_hgnc_data <- function(
 
   # Select needed for renaming > split prev symbol column by number of additional columns needed > pivot wider without NAs > mutate
   hgnc_long_data <- hgnc_filtered_data %>%
-    select(symbol, prev_symbol) %>%
+    select(any_of(c("symbol", "prev_symbol"))) %>%
     separate_wider_delim(cols = prev_symbol, delim = "|", names_sep = "_", names = NULL, too_few = "align_start") %>%
     pivot_longer(cols = contains("_symbol"),
                  names_to = "column",
