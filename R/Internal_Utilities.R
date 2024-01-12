@@ -1424,12 +1424,12 @@ process_hgnc_data <- function(
   # Select needed for renaming > split prev symbol column by number of additional columns needed > pivot wider without NAs > mutate
   hgnc_long_data <- hgnc_filtered_data %>%
     select(any_of(c("symbol", "prev_symbol"))) %>%
-    separate_wider_delim(cols = prev_symbol, delim = "|", names_sep = "_", names = NULL, too_few = "align_start") %>%
+    separate_wider_delim(cols = "prev_symbol", delim = "|", names_sep = "_", names = NULL, too_few = "align_start") %>%
     pivot_longer(cols = contains("_symbol"),
                  names_to = "column",
                  values_to = "prev_symbol",
                  values_drop_na = TRUE) %>%
-    mutate(prev_symbol = ifelse(prev_symbol %in% "", symbol, prev_symbol))
+    mutate("prev_symbol" = ifelse(.data[["prev_symbol"]] %in% "", .data[["symbol"]], .data[["prev_symbol"]]))
 
   # save processed data
   saveRDS(hgnc_long_data, file = to)
