@@ -1251,8 +1251,6 @@ Liger_to_Seurat <- function(
 #' @return \code{liger} object.
 #' @export
 
-
-
 as.LIGER.Seurat <- function(
     x,
     combined.seurat = FALSE,
