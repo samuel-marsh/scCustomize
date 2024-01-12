@@ -7,7 +7,7 @@
 as.LIGER(x, ...)
 }
 \arguments{
-\item{x}{An object to convert to class \code{LIGER}}
+\item{x}{An object(s) to convert to class \code{LIGER}}
 
 \item{...}{Arguments passed to other methods}
 }
