@@ -6,7 +6,7 @@
 \usage{
 \method{as.LIGER}{Seurat}(
   x,
-  group.by = orig.ident,
+  group.by = "orig.ident",
   assay = "RNA",
   remove_missing = FALSE,
   renormalize = TRUE,
