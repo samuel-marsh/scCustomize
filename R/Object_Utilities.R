@@ -120,6 +120,7 @@ Merge_Seurat_List <- function(
 #' @import cli
 #' @importFrom dplyr mutate select intersect all_of
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang ":="
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'

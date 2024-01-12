@@ -32,6 +32,7 @@
 #' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang ":="
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @return A LIGER Object
@@ -1564,7 +1565,7 @@ as.LIGER.list <- function(
     cli_inform(message = "Creating LIGER object.")
   }
 
-  liger_object <- createLiger(raw.data = raw_data_list, remove.missing = remove_missing)
+  liger_object <- rliger::createLiger(raw.data = raw_data_list, remove.missing = remove_missing)
 
   if (isTRUE(x = renormalize)) {
     if (isTRUE(x = verbose)) {
