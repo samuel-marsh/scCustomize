@@ -21,7 +21,7 @@ as.LIGER <- function(x, ...) {
 #' @param ... Arguments passed to other methods
 #'
 #' @rdname as.Seurat
-#' @export as.Seurat
+#' @importMethodsFrom Seurat as.Seurat
 #'
 
 as.Seurat <- function(x, ...) {
