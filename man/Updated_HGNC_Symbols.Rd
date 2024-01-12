@@ -41,7 +41,6 @@ Update human gene symbols using data from HGNC.  This function will store cached
 }
 \examples{
 \dontrun{
-# Function supports various inputs including: Seurat Objects, character vectors, data.frame, and sparse matrices (with genes as rows)
 new_names <- Updated_HGNC_Symbols(input_data = Seurat_Object)
 }
 
