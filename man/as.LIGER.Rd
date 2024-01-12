@@ -18,7 +18,8 @@ as.LIGER(x, ...)
   use_seurat_dimreduc = FALSE,
   reduction = NULL,
   keep_meta = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 
 \method{as.LIGER}{list}(
@@ -31,11 +32,12 @@ as.LIGER(x, ...)
   use_seurat_var_genes = FALSE,
   var_genes_method = "intersect",
   keep_meta = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
-\item{x}{An object(s) to convert to class \code{LIGER}}
+\item{x}{Seurat object}
 
 \item{...}{Arguments passed to other methods}
 
