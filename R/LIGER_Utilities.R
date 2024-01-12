@@ -801,7 +801,7 @@ Plot_By_Cluster_LIGER <- function(
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom patchwork wrap_plots
-#' @importFrom rlang sym
+#' @importFrom rlang sym "!!"
 #' @importFrom scattermore geom_scattermore
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
@@ -1249,7 +1249,6 @@ Liger_to_Seurat <- function(
 #'
 
 as.LIGER.Seurat <- function(
-    x,
     group.by = "orig.ident",
     assay = "RNA",
     remove_missing = FALSE,
@@ -1430,7 +1429,6 @@ as.LIGER.Seurat <- function(
 #'
 
 as.LIGER.list <- function(
-    x,
     group.by = "orig.ident",
     dataset_names = NULL,
     assay = "RNA",
