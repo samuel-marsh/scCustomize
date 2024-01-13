@@ -300,7 +300,7 @@ Add_Cell_Complexity.liger <- function(
 #'
 #' @examples
 #' \dontrun{
-#' meta_variables <- Meta_Present_LIGER(liger_object = obj, gene_list = DEG_list, print_msg = TRUE)
+#' meta_variables <- Meta_Present_LIGER(liger_object = obj, meta_col_names = DEG_list, print_msg = TRUE)
 #' }
 #'
 
