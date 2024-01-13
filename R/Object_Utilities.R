@@ -324,7 +324,6 @@ Add_Mito_Ribo.Seurat <- function(
 #'
 #' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
 #'
-#' @param seurat_object object name.
 #' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
 #' @param assay assay to use in calculation.  Default is "RNA".  *Note* This should only be changed if
 #' storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).
@@ -333,9 +332,11 @@ Add_Mito_Ribo.Seurat <- function(
 #'
 #' @import cli
 #'
+#' @method Add_Cell_Complexity Seurat
 #' @return A Seurat Object
 #'
 #' @export
+#' @rdname Add_Cell_Complexity
 #'
 #' @concept object_util
 #'
@@ -344,14 +345,15 @@ Add_Mito_Ribo.Seurat <- function(
 #' pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
 #'
 
-Add_Cell_Complexity_Seurat <- function(
-  seurat_object,
+Add_Cell_Complexity.Seurat <- function(
+  object,
   meta_col_name = "log10GenesPerUMI",
   assay = "RNA",
-  overwrite = FALSE
+  overwrite = FALSE,
+  ...
 ) {
   # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
+  Is_Seurat(seurat_object = object)
 
   # Add assay warning message
   if (assay != "RNA") {
@@ -361,7 +363,7 @@ Add_Cell_Complexity_Seurat <- function(
   }
 
   # Check columns for overwrite
-  if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
+  if (meta_col_name %in% colnames(x = object@meta.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in meta.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
@@ -377,13 +379,13 @@ Add_Cell_Complexity_Seurat <- function(
   count_name <- paste0("nCount_", assay)
 
   # Add score
-  seurat_object[[meta_col_name]] <- log10(seurat_object[[feature_name]]) / log10(seurat_object[[count_name]])
+  object[[meta_col_name]] <- log10(object[[feature_name]]) / log10(object[[count_name]])
 
   # Log Command
-  seurat_object <- LogSeuratCommand(object = seurat_object)
+  object <- LogSeuratCommand(object = object)
 
   #return object
-  return(seurat_object)
+  return(object)
 }
 
 

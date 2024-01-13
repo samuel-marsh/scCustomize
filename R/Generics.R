@@ -28,3 +28,17 @@ as.LIGER <- function(x, ...) {
 Add_Mito_Ribo <- function(object, ...) {
   UseMethod(generic = 'Add_Mito_Ribo', object = object)
 }
+
+
+#' Add Cell Complexity
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname Add_Cell_Complexity
+#' @export Add_Cell_Complexity
+#'
+
+Add_Cell_Complexity <- function(object, ...) {
+  UseMethod(generic = 'Add_Cell_Complexity', object = object)
+}

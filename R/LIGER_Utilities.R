@@ -240,28 +240,31 @@ Add_Mito_Ribo.liger <- function(
 #'
 #' @import cli
 #'
-#' @return A LIGER Object
+#' @method Add_Cell_Complexity liger
+#' @return A liger Object
 #'
 #' @export
+#' @rdname Add_Cell_Complexity
 #'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Cell_Complexity_LIGER(liger_object = object)
+#' object <- Add_Cell_Complexity(object = object)
 #' }
 #'
 
-Add_Cell_Complexity_LIGER <- function(
-  liger_object,
+Add_Cell_Complexity.liger <- function(
+  object,
   meta_col_name = "log10GenesPerUMI",
-  overwrite = FALSE
+  overwrite = FALSE,
+  ...
 ) {
   # Check Seurat
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = object)
 
   # Check columns for overwrite
-  if (meta_col_name %in% colnames(x = liger_object@cell.data)) {
+  if (meta_col_name %in% colnames(x = object@cell.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in cell.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
@@ -273,10 +276,10 @@ Add_Cell_Complexity_LIGER <- function(
   }
 
   # Add score
-  liger_object@cell.data[ , meta_col_name] <- log10(liger_object@cell.data$nGene) / log10(liger_object@cell.data$nUMI)
+  object@cell.data[ , meta_col_name] <- log10(object@cell.data$nGene) / log10(object@cell.data$nUMI)
 
   #return object
-  return(liger_object)
+  return(object)
 }
 
 
