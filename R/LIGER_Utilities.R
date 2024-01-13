@@ -1,8 +1,7 @@
 #' Add Mito and Ribo percentages to LIGER
 #'
-#' Add Mito, Ribo, percentages to meta.data slot of LIGER Object
+#' Add Mito, Ribo, percentages to cell.data slot of LIGER Object
 #'
-#' @param liger_object LIGER object name.
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
@@ -35,20 +34,22 @@
 #' @importFrom rlang ":="
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
-#' @return A LIGER Object
+#' @method Add_Mito_Ribo liger
+#' @return A liger Object
 #'
 #' @export
+#' @rdname Add_Mito_Ribo
 #'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Mito_Ribo_LIGER(liger_object = object, species = "mouse")
+#' object <- Add_Mito_Ribo(object = object, species = "mouse")
 #' }
 #'
 
-Add_Mito_Ribo_LIGER <- function(
-  liger_object,
+Add_Mito_Ribo.liger <- function(
+  object,
   species,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
@@ -59,7 +60,8 @@ Add_Mito_Ribo_LIGER <- function(
   ribo_features = NULL,
   ensembl_ids = FALSE,
   overwrite = FALSE,
-  list_species_names = FALSE
+  list_species_names = FALSE,
+  ...
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -79,7 +81,7 @@ Add_Mito_Ribo_LIGER <- function(
   }
 
   # LIGER object check
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = object)
 
   # Check name collision
   if (any(duplicated(x = c(mito_name, ribo_name, mito_ribo_name)))) {
@@ -87,7 +89,7 @@ Add_Mito_Ribo_LIGER <- function(
   }
 
   # Overwrite check
-  if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
+  if (mito_name %in% colnames(x = object@cell.data) || ribo_name %in% colnames(x = object@cell.data) || mito_ribo_name %in% colnames(x = object@cell.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}.*")
@@ -167,7 +169,7 @@ Add_Mito_Ribo_LIGER <- function(
     ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
 
-  all_features <- LIGER_Features(liger_object = liger_object)
+  all_features <- LIGER_Features(liger_object = object)
 
   # get features from patterns
   mito_features <- mito_features %||% grep(pattern = mito_pattern, x = all_features, value = TRUE)
@@ -199,31 +201,31 @@ Add_Mito_Ribo_LIGER <- function(
   # Add mito and ribo percent
   if (length_mito_features > 0) {
     good_mito <- mito_features[mito_features %in% all_features]
-    percent_mito <- unlist(lapply(liger_object@raw.data, function(x) {
+    percent_mito <- unlist(lapply(object@raw.data, function(x) {
       (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data[ , mito_name] <- percent_mito
+    object@cell.data[ , mito_name] <- percent_mito
   }
 
   if (length_ribo_features > 0){
     good_ribo <- ribo_features[ribo_features %in% all_features]
-    percent_ribo <- unlist(lapply(liger_object@raw.data, function(x) {
+    percent_ribo <- unlist(lapply(object@raw.data, function(x) {
       (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data[ , ribo_name] <- percent_ribo
+    object@cell.data[ , ribo_name] <- percent_ribo
   }
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
-    object_meta <- Fetch_Meta(object = liger_object) %>%
+    object_meta <- Fetch_Meta(object = object) %>%
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
       mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
 
-    liger_object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
+    object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
   }
 
   # return object
-  return(liger_object)
+  return(object)
 }
 
 
