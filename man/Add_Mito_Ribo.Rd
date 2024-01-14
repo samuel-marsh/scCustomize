@@ -4,12 +4,29 @@
 \name{Add_Mito_Ribo}
 \alias{Add_Mito_Ribo}
 \alias{Add_Mito_Ribo.liger}
+\alias{Add_Mito_Ribo.default}
 \alias{Add_Mito_Ribo.Seurat}
 \title{Add Mitochondrial & Ribosomal Percentages}
 \usage{
 Add_Mito_Ribo(object, ...)
 
 \method{Add_Mito_Ribo}{liger}(
+  object,
+  species,
+  mito_name = "percent_mito",
+  ribo_name = "percent_ribo",
+  mito_ribo_name = "percent_mito_ribo",
+  mito_pattern = NULL,
+  ribo_pattern = NULL,
+  mito_features = NULL,
+  ribo_features = NULL,
+  ensembl_ids = FALSE,
+  overwrite = FALSE,
+  list_species_names = FALSE,
+  ...
+)
+
+\method{Add_Mito_Ribo}{default}(
   object,
   species,
   mito_name = "percent_mito",
@@ -94,10 +111,16 @@ A Seurat Object
 Add Mito, Ribo, percentages to cell.data slot of LIGER Object
 
 Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
+
+Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
 }
 \examples{
 \dontrun{
 object <- Add_Mito_Ribo(object = object, species = "mouse")
+}
+
+\dontrun{
+obj <- Add_Mito_Ribo(object = obj, species = "human")
 }
 
 \dontrun{
