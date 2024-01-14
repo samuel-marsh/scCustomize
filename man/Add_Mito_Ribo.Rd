@@ -64,7 +64,7 @@ Add_Mito_Ribo(object, ...)
 
 \item{...}{Arguments passed to other methods}
 
-\item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+\item{species}{Species of origin for given Object.  If mouse, human, marmoset, zebrafish, rat,
 drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 generate mito_pattern and ribo_pattern values.}
 

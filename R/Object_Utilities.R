@@ -89,7 +89,7 @@ Merge_Seurat_List <- function(
 #'
 #' Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
 #'
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' @param species Species of origin for given Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
