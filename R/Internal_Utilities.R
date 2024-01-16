@@ -1012,6 +1012,58 @@ check_whole_num <- function(
   return(res)
 }
 
+
+#' Remove single value columns of data.frame
+#'
+#' Checks all columns within data.frame and returns data.frame minus columns that have the same value in all rows.
+#'
+#' @param df data.frame to filter
+#'
+#' @references Code used in function has been slightly modified from `sceasy:::.regularise_df` function of
+#' sceasy package \url{https://github.com/cellgeni/sceasy} (License: GPL-3).
+#' Code modified to match scCustomize & tidyverse style, add error checks, and
+#' add cli formatted messages.
+#'
+#' @import cli
+#' @importFrom dplyr select all_of
+#' @importFrom magrittr "%>%"
+#'
+#' @return data.frame
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+drop_single_value_cols <- function(
+    df
+) {
+  if (!inherits(what = "data.frame", x = df)) {
+    cli_abort(message = "{.code df} must of be of class data.frame.")
+  }
+
+  single_val_columns <- sapply(df, function(x) {
+    length(x = unique(x = x)) == 1
+    })
+
+  col_names_single <- df %>%
+    select((all_of(col_names_single))) %>%
+    colnames()
+
+  if (length(x = col_names_single) > 0) {
+    cli_inform(message = c("The following columns were removed as they contain identical values for all rows:",
+                           "i" = "{.field {col_names_single}}"))
+  }
+
+  # filter df
+  df_filtered <- df %>%
+    select(-(all_of(col_names_single)))
+
+  # return df
+  return(df_filtered)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### METRICS HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
