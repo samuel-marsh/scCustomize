@@ -16,6 +16,20 @@ as.LIGER <- function(x, ...) {
 }
 
 
+#' Convert objects to anndata objects
+#'
+#' @param x Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname as.anndata
+#' @export as.anndata
+#'
+
+as.anndata <- function(x, ...) {
+  UseMethod(generic = 'as.anndata', object = x)
+}
+
+
 #' Add Mitochondrial & Ribosomal Percentages
 #'
 #' @param object Seurat or LIGER object
