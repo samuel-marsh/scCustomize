@@ -8,6 +8,7 @@
 - Added new functionality to `Iterate_FeaturePlot_scCustom` to allow for plotting multiple plots per page when saving to single PDF document (see new parameters: `features_per_page` and `landscape`.  
 - Added `LIGER_Features` utility function for LIGER objects (analogous to `Seurat::Features()`).  
 - Added new generic `as.LIGER` as enhanced method for conversion of Seurat objects or lists of Seurat objects to single LIGER object.  
+- Added new generic `as.anndata` to support conversion of Seurat (and XXX) to anndata format.  
 
 
   
