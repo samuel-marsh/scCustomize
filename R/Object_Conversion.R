@@ -597,3 +597,188 @@ Liger_to_Seurat <- function(
   # return object
   return(new.seurat)
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### CONVERT TO ANNDATA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Create & Save Anndata Object
+#'
+#' This function is part of generic `as.anndata` for conversion of Seurat Objects to anndata objects.
+#'
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_name file name.
+#' @param assay Assay containing data to use, (default is "RNA").
+#' @param main_layer the layer of data to become default layer in anndata object (default is "data").
+#' @param other_layers other data layers to transfer to anndata object (default is "counts").
+#' @param transer_dimreduc logical, whether to transfer dimensionality reduction coordinates from
+#' Seurat to anndata object (default is TRUE).
+#' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
+#'
+#'
+#' @references modified and enhanced version of `sceasy::seurat2anndata` (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.  Function has additional checks and supports Seurat V3 and V5 object structure.
+#'
+#' @method as.anndata Seurat
+#' @return saved anndata object to at path provided.
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @import Seurat
+#' @importFrom stringr str_to_lower
+#'
+#' @export
+#' @rdname as.anndata
+#'
+#' @examples
+#' \dontrun{
+#' as.anndata(x = seurat_object, file_path = "/folder_name", file_name = "anndata_converted.h5ad")
+#' }
+#'
+
+as.anndata.Seurat <- function(
+    x,
+    file_path,
+    file_name,
+    assay = "RNA",
+    main_layer = "data",
+    other_layers = "counts",
+    transer_dimreduc = TRUE,
+    verbose = TRUE,
+    ...
+) {
+  # Check reticulate installed
+  reticulate_check <- is_installed(pkg = "reticulate")
+  if (isFALSE(x = reticulate_check)) {
+    cli_abort(message = c(
+      "Please install the {.val reticulate} package to use {.code as.anndata}.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}reticulate{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+  if (!is.null(x = file_path) && file_path == "") {
+    file_path <- NULL
+  }
+
+  # Check file path is valid
+  if (!is.null(x = file_path)) {
+    if (!dir.exists(paths = file_path)) {
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
+    }
+  }
+
+  # Check if file name provided
+  if (is.null(x = file_name)) {
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
+  }
+
+  file_ext <- grep(x = file_name, pattern = ".h5ad$")
+
+  if (length(x = file_ext) == 0) {
+    file_name <- paste0(file_name, ".h5ad")
+  }
+
+  if (!is.null(x = file_path)) {
+    full_path_name <- file.path(file_path, file_name)
+  } else {
+    full_path_name <- file.path(file_name)
+  }
+
+
+  # Run update to ensure functionality
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Checking Seurat object validity & Extracting Data"))
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = x)
+
+  # Run update to ensure functionality
+  x <- suppressMessages(UpdateSeuratObject(object = x))
+
+  # Check Assay5 for multiple layers
+  if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
+    layers_check <- Layers(object = x, search = main_layer)
+    if (length(x = layers_check) > 1) {
+      cli_abort(message = c("Multiple data layers present {.field {head(x = layers_check, n = 2)}}.",
+                            "i" = "Please run {.code JoinLayers} before converting to anndata object."))
+    }
+  }
+
+  main_approved_slots <- Layers(object = x, search = c("counts", "data"))
+
+  if (!main_layer %in% main_approved_slots) {
+    cli_abort(message = "{.code main_layer} must be one of {.field {main_approved_slots}}")
+  }
+
+  if (main_layer %in% other_layers) {
+    cli_abort(message = "{.code main_layer} and {.code other_layers} cannot overlap.")
+  }
+
+  if (isFALSE(x = all(other_layers %in% Layers(object = x)))) {
+    cli_abort(message = "One or more of {.field {other_layers}} were not found in Seurat object.")
+  }
+
+  # Extract Data
+  main_layer_data <- LayerData(object = x, assay = assay, layer = main_layer)
+
+  meta_data <- Fetch_Meta(object = x)
+
+  meta_data <- drop_single_value_cols(df = meta_data)
+
+  if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
+    seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
+  } else {
+    seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+  }
+
+  if (isTRUE(x = transer_dimreduc)) {
+    dim_reducs_present <- Reductions(object = x)
+    if (length(x = dim_reducs_present) > 0) {
+      dim_reducs_list <- lapply(dim_reducs_present, function(z) {
+        as.matrix(x = Embeddings(object = x, reduction = z))
+      })
+      names(x = dim_reducs_list) <- paste0("X_", str_to_lower(string = dim_reducs_present))
+    } else {
+      dim_reducs_present <- NULL
+    }
+  } else {
+    dim_reducs_present <- NULL
+  }
+
+  if (length(x = other_layers) > 0) {
+    other_layers_list <- lapply(other_layers, function(i) {
+      Matrix::t(LayerData(object = x, layer = i, assay = assay))
+    })
+    names(x = other_layers_list) <- other_layers
+  } else {
+    other_layers_list <- list()
+  }
+
+  # convert
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Creating anndata object."))
+  }
+  anndata <- reticulate::import("anndata", convert = FALSE)
+
+  adata <- anndata$AnnData(
+    X = Matrix::t(main_layer_data),
+    obs = meta_data,
+    var = seurat_var_info,
+    obsm = dim_reducs_list,
+    layers = other_layers_list
+  )
+
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Writing anndata file: {.val {full_path_name}}"))
+  }
+  adata$write(full_path_name, compression = "gzip")
+
+  adata
+}
