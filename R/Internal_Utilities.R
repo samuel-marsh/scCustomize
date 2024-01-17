@@ -1047,7 +1047,7 @@ drop_single_value_cols <- function(
     })
 
   col_names_single <- df %>%
-    select((all_of(single_val_columns))) %>%
+    select(which(single_val_columns)) %>%
     colnames()
 
   if (length(x = col_names_single) > 0) {
