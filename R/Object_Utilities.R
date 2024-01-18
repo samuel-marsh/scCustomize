@@ -342,7 +342,7 @@ Add_Mito_Ribo.Seurat <- function(
 #'
 #' @examples
 #' library(Seurat)
-#' pbmc_small <- Add_Cell_Complexity(seurat_object = pbmc_small)
+#' pbmc_small <- Add_Cell_Complexity(object = pbmc_small)
 #'
 
 Add_Cell_Complexity.Seurat <- function(

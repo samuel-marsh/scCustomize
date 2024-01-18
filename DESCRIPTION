@@ -57,6 +57,7 @@ Suggests:
     knitr,
     Nebulosa,
     remotes,
+    reticulate,
     rliger,
     rmarkdown,
     scuttle,

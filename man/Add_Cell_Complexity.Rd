@@ -53,7 +53,7 @@ object <- Add_Cell_Complexity(object = object)
 }
 
 library(Seurat)
-pbmc_small <- Add_Cell_Complexity(seurat_object = pbmc_small)
+pbmc_small <- Add_Cell_Complexity(object = pbmc_small)
 
 }
 \concept{liger_object_util}
