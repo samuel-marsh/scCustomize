@@ -17,7 +17,6 @@
     - `Add_Mito_Ribo` replaces `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
     - `Add_Cell_Complexity` replaces `Add_Cell_Complexity_Seurat` and `Add_Cell_Complexity_LIGER`.  
     - `Meta_Present` replaces `Meta_Present_LIGER`.  
-    - `DimPlot_scCustom` replaces `DimPlot_LIGER`.  
 - Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
 - Updated `Liger_to_Seurat` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
    
