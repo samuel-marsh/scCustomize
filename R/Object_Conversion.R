@@ -32,6 +32,7 @@
 #' @import cli
 #' @import Seurat
 #' @importFrom dplyr left_join join_by select any_of
+#' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @export
@@ -213,6 +214,7 @@ as.LIGER.Seurat <- function(
 #' @import cli
 #' @import Seurat
 #' @importFrom dplyr left_join join_by select any_of bind_rows union intersect
+#' @importFrom magrittr "%>%"
 #' @importFrom stringr str_to_lower
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -442,6 +444,7 @@ as.LIGER.list <- function(
 #' @import cli
 #' @import Matrix
 #' @importFrom dplyr any_of pull select
+#' @importFrom magrittr "%>%"
 #' @importFrom methods as new
 #' @importFrom utils packageVersion
 #'
@@ -690,7 +693,6 @@ as.anndata.Seurat <- function(
     full_path_name <- file.path(file_name)
   }
 
-
   # Run update to ensure functionality
   if (isTRUE(x = verbose)) {
     cli_inform(message = c("*" = "Checking Seurat object validity & Extracting Data"))
@@ -775,6 +777,226 @@ as.anndata.Seurat <- function(
     layers = other_layers_list
   )
 
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Writing anndata file: {.val {full_path_name}}"))
+  }
+  adata$write(full_path_name, compression = "gzip")
+
+  adata
+}
+
+
+#' Create & Save Anndata Object
+#'
+#' This function is part of generic `as.anndata` for conversion of Seurat Objects to anndata objects.
+#'
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_name file name.
+#' @param reduction_label What to label the visualization dimensionality reduction.
+#' LIGER does not store name of technique and therefore needs to be set manually.
+#' @param add_barcode_names logical, whether to add dataset names to the cell barcodes when
+#' merging object data, default is FALSE.
+#' @param barcode_prefix logical, if `add_barcode_names = TRUE` should the names be added as
+#' prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).
+#' @param barcode_cell_id_delimiter The delimiter to use when adding dataset id to barcode
+#' prefix/suffix.  Default is "_".
+#' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
+#'
+#'
+#' @references Inspired by `sceasy::seurat2anndata` modified and updated to apply to LIGER objects (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.
+#'
+#' @method as.anndata liger
+#' @return saved anndata object to at path provided.
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @importFrom dplyr mutate
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tibble column_to_rownames
+#'
+#' @export
+#' @rdname as.anndata
+#'
+#' @examples
+#' \dontrun{
+#' as.anndata(x = liger_object, file_path = "/folder_name", file_name = "anndata_converted.h5ad")
+#' }
+#'
+
+as.anndata.liger <- function(
+    x,
+    file_path,
+    file_name,
+    reduction_label = NULL,
+    add_barcode_names = FALSE,
+    barcode_prefix = TRUE,
+    barcode_cell_id_delimiter = "_",
+    verbose = TRUE,
+    ...
+) {
+  # Check hdf5r installed
+  reticulate_check <- is_installed(pkg = "reticulate")
+  if (isFALSE(x = reticulate_check)) {
+    cli_abort(message = c(
+      "Please install the {.val reticulate} package to use {.code as.anndata}.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}reticulate{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Check all barcodes are unique to begin with
+  duplicated_barcodes <- x@raw.data %>%
+    lapply(colnames) %>%
+    unlist() %>%
+    duplicated() %>%
+    any()
+
+  if (isTRUE(x = duplicated_barcodes) && is.null(x = add_barcode_names)) {
+    cli_abort(message = c("There are overlapping cell barcodes present in the input data",
+                          "i" = "Please set {.code add_barcode_names = TRUE} to make all cell barcodes unique.")
+    )
+  }
+
+  if (is.null(x = reduction_label)) {
+    cli_abort(message = c("{.code reduction_label} parameter was not set.",
+                          "*" = "LIGER objects do not store name of dimensionality reduction technique used.",
+                          "i" = "In order to retain proper labels in Seurat object please set {.code reduction_label} to {.val tSNE}, {.val UMAP}, {.val etc}."))
+  }
+
+  # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+  if (!is.null(x = file_path) && file_path == "") {
+    file_path <- NULL
+  }
+
+  # Check file path is valid
+  if (!is.null(x = file_path)) {
+    if (!dir.exists(paths = file_path)) {
+      cli_abort(message = "Provided {.code file_path}: {symbol$dquote_left}{.field {file_path}}{symbol$dquote_right} does not exist.")
+    }
+  }
+
+  # Check if file name provided
+  if (is.null(x = file_name)) {
+    cli_abort(message = "No file name provided.  Please provide a file name using {.code file_name}.")
+  }
+
+  file_ext <- grep(x = file_name, pattern = ".h5ad$")
+
+  if (length(x = file_ext) == 0) {
+    file_name <- paste0(file_name, ".h5ad")
+  }
+
+  if (!is.null(x = file_path)) {
+    full_path_name <- file.path(file_path, file_name)
+  } else {
+    full_path_name <- file.path(file_name)
+  }
+
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Creating main layer from {.field raw.data}"))
+  }
+  if (isTRUE(x = add_barcode_names)) {
+    main_layer_data <- Merge_Sparse_Data_All(matrix_list = x@raw.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
+  } else {
+    main_layer_data <- Merge_Sparse_Data_All(matrix_list = x@raw.data)
+  }
+
+  # merge norm data
+  if (isTRUE(x = transfer_norm.data)) {
+    cli_inform(message = c("*" = "Creating other layer from {.field norm.data}"))
+    if (isTRUE(x = add_barcode_names)) {
+      norm_data <- Merge_Sparse_Data_All(matrix_list = x@norm.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
+    } else {
+      norm_data <- Merge_Sparse_Data_All(matrix_list = x@norm.data)
+    }
+
+    other_layers <- list("norm.data" = Matrix::t(norm_data)
+    )
+  } else {
+    other_layers <- list()
+  }
+
+  # pull var genes
+  liger_var_genes <- x@var.genes
+  total_features <- data.frame("all_genes" = LIGER_Features(liger_object = x))
+
+  liger_var_df <- total_features %>%
+    mutate("variable_genes" = ifelse(.data[["all_genes"]] %in% liger_var_genes, .data[["all_genes"]], NA)) %>%
+    column_to_rownames("all_genes")
+
+  # Prep reductions
+  if (all(dim(x = x@W) > 0) && all(dim(x = x@H.norm) > 0)) {
+    inmf.loadings <- Matrix::t(x = x@W)
+    rinmf.loadings <- inmf.loadings
+
+    dimnames(x = inmf.loadings) <- list(x@var.genes,
+                                        paste0("iNMF_", seq_len(ncol(inmf.loadings))))
+    dimnames(x = rinmf.loadings) <- list(x@var.genes,
+                                         paste0("rawiNMF_", seq_len(ncol(rinmf.loadings))))
+
+    inmf.embeddings <- x@H.norm
+    rinmf.embeddings <- do.call(what = 'rbind', args = x@H)
+
+    dimnames(x = inmf.embeddings) <- list(unlist(x = lapply(x@scale.data, rownames), use.names = FALSE),
+                                          paste0("iNMF_", seq_len(ncol(inmf.loadings))))
+    dimnames(x = rinmf.embeddings) <- list(unlist(x = lapply(x@scale.data, rownames), use.names = FALSE),
+                                           paste0("rawiNMF_", seq_len(ncol(x = inmf.loadings))))
+
+    inmf.obj <- CreateDimReducObject(
+      embeddings = inmf.embeddings,
+      loadings = inmf.embeddings,
+      global = TRUE,
+      key = "iNMF_"
+    )
+
+    inmf_anndata <- as.matrix(x = Embeddings(object = inmf.obj))
+
+    rinmf.obj <- CreateDimReducObject(
+      embeddings = rinmf.embeddings,
+      loadings = rinmf.loadings,
+      key = "rawiNMF_",
+      global = TRUE
+    )
+
+    rinmf_anndata <- as.matrix(x = Embeddings(object = rinmf.obj))
+  }
+
+  # prep visualization reduction
+  dimreduc.embeddings <- x@tsne.coords
+  dimnames(x = dimreduc.embeddings) <- list(rownames(x@H.norm),
+                                            paste0(reduction_label, 1:2))
+
+  # create reducs list
+  reducs <- list(inmf_anndata,
+                 rinmf_anndata,
+                 dimreduc.embeddings)
+
+  names(x = reducs) <- paste0("X_", str_to_lower(c("inmf", "rinmf", reduction_label)))
+
+  # get meta and drop single value columns
+  liger_meta <- Fetch_Meta(object = x)
+
+  liger_meta <- scCustomize:::drop_single_value_cols(df = liger_meta)
+
+  # Create anndata
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Creating anndata object."))
+  }
+  anndata <- reticulate::import("anndata", convert = FALSE)
+
+  adata <- anndata$AnnData(
+    X = Matrix::t(main_layer_data),
+    obs = liger_meta,
+    var = liger_var_genes,
+    obsm = reducs,
+    layers = other_layers
+  )
+
+  # write file
   if (isTRUE(x = verbose)) {
     cli_inform(message = c("*" = "Writing anndata file: {.val {full_path_name}}"))
   }
