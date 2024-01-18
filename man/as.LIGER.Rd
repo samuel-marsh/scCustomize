@@ -89,7 +89,5 @@ liger_object <- as.LIGER(x = seurat_object_list)
 }
 \references{
 modified and enhanced version of \code{rliger::seuratToLiger}.
-
-modified and enhanced version of \code{rliger::seuratToLiger}.
 }
 \concept{object_conversion}

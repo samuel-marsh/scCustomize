@@ -204,8 +204,6 @@ as.LIGER.Seurat <- function(
 #' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
 #'
 #'
-#' @references modified and enhanced version of `rliger::seuratToLiger`.
-#'
 #' @method as.LIGER list
 #' @return liger object.
 #'
@@ -621,7 +619,7 @@ Liger_to_Seurat <- function(
 #' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
 #'
 #'
-#' @references modified and enhanced version of `sceasy::seurat2anndata` (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.  Function has additional checks and supports Seurat V3 and V5 object structure.
+#' @references Seurat version modified and enhanced version of `sceasy::seurat2anndata` (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.  Function has additional checks and supports Seurat V3 and V5 object structure.
 #'
 #' @method as.anndata Seurat
 #' @return saved anndata object to at path provided.
@@ -801,7 +799,7 @@ as.anndata.Seurat <- function(
 #' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
 #'
 #'
-#' @references Inspired by `sceasy::seurat2anndata` modified and updated to apply to LIGER objects (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.
+#' @references LIGER version inspired by `sceasy::seurat2anndata` modified and updated to apply to LIGER objects (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.
 #'
 #' @method as.anndata liger
 #'
