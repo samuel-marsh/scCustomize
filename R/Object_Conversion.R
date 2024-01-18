@@ -622,7 +622,6 @@ Liger_to_Seurat <- function(
 #' @references Seurat version modified and enhanced version of `sceasy::seurat2anndata` (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.  Function has additional checks and supports Seurat V3 and V5 object structure.
 #'
 #' @method as.anndata Seurat
-#' @return saved anndata object to at path provided.
 #'
 #' @concept object_conversion
 #'
@@ -799,7 +798,6 @@ as.anndata.Seurat <- function(
 #' @param barcode_cell_id_delimiter The delimiter to use when adding dataset id to barcode
 #' prefix/suffix.  Default is "_".
 #' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
-#'
 #'
 #' @references LIGER version inspired by `sceasy::seurat2anndata` modified and updated to apply to LIGER objects (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.
 #'
