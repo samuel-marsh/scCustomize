@@ -788,8 +788,6 @@ as.anndata.Seurat <- function(
 
 #' Create & Save Anndata Object
 #'
-#' This function is part of generic `as.anndata` for conversion of Seurat Objects to anndata objects.
-#'
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name file name.
 #' @param reduction_label What to label the visualization dimensionality reduction.
@@ -803,7 +801,7 @@ as.anndata.Seurat <- function(
 #' @param verbose logical, whether to print status messages during object conversion (default is TRUE).
 #'
 #'
-#' @references Inspired by `sceasy::seurat2anndata` modified and updated to apply to LIGER objects (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.
+#' @references Inspired by `sceasy::seurat2anndata` modified and updated to apply to LIGER objects (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.
 #'
 #' @method as.anndata liger
 #' @return saved anndata object to at path provided.

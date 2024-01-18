@@ -87,6 +87,6 @@ as.anndata(x = liger_object, file_path = "/folder_name", file_name = "anndata_co
 \references{
 modified and enhanced version of \code{sceasy::seurat2anndata} (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.  Function has additional checks and supports Seurat V3 and V5 object structure.
 
-Inspired by \code{sceasy::seurat2anndata} modified and updated to apply to LIGER objects (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.
+Inspired by \code{sceasy::seurat2anndata} modified and updated to apply to LIGER objects (sceasy package: \url{https://github.com/cellgeni/sceasy}; License: GPL-3.
 }
 \concept{object_conversion}

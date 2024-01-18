@@ -18,6 +18,8 @@ as.LIGER <- function(x, ...) {
 
 #' Convert objects to anndata objects
 #'
+#' This function is part of generic `as.anndata` for conversion of Seurat Objects to anndata objects.
+#'
 #' @param x Seurat or LIGER object
 #' @param ... Arguments passed to other methods
 #'
