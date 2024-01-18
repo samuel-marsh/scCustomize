@@ -23,6 +23,8 @@ as.LIGER <- function(x, ...) {
 #' @param x Seurat or LIGER object
 #' @param ... Arguments passed to other methods
 #'
+#' @return saved anndata object to at path provided.
+#'
 #' @rdname as.anndata
 #' @export as.anndata
 #'
