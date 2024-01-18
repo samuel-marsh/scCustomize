@@ -3,6 +3,7 @@
 \name{as.anndata}
 \alias{as.anndata}
 \alias{as.anndata.Seurat}
+\alias{as.anndata.liger}
 \title{Convert objects to anndata objects}
 \usage{
 as.anndata(x, ...)
@@ -15,6 +16,18 @@ as.anndata(x, ...)
   main_layer = "data",
   other_layers = "counts",
   transer_dimreduc = TRUE,
+  verbose = TRUE,
+  ...
+)
+
+\method{as.anndata}{liger}(
+  x,
+  file_path,
+  file_name,
+  reduction_label = NULL,
+  add_barcode_names = FALSE,
+  barcode_prefix = TRUE,
+  barcode_cell_id_delimiter = "_",
   verbose = TRUE,
   ...
 )
@@ -38,11 +51,27 @@ as.anndata(x, ...)
 Seurat to anndata object (default is TRUE).}
 
 \item{verbose}{logical, whether to print status messages during object conversion (default is TRUE).}
+
+\item{reduction_label}{What to label the visualization dimensionality reduction.
+LIGER does not store name of technique and therefore needs to be set manually.}
+
+\item{add_barcode_names}{logical, whether to add dataset names to the cell barcodes when
+merging object data, default is FALSE.}
+
+\item{barcode_prefix}{logical, if \code{add_barcode_names = TRUE} should the names be added as
+prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).}
+
+\item{barcode_cell_id_delimiter}{The delimiter to use when adding dataset id to barcode
+prefix/suffix.  Default is "_".}
 }
 \value{
 saved anndata object to at path provided.
+
+saved anndata object to at path provided.
 }
 \description{
+This function is part of generic \code{as.anndata} for conversion of Seurat Objects to anndata objects.
+
 This function is part of generic \code{as.anndata} for conversion of Seurat Objects to anndata objects.
 }
 \examples{
@@ -50,8 +79,14 @@ This function is part of generic \code{as.anndata} for conversion of Seurat Obje
 as.anndata(x = seurat_object, file_path = "/folder_name", file_name = "anndata_converted.h5ad")
 }
 
+\dontrun{
+as.anndata(x = liger_object, file_path = "/folder_name", file_name = "anndata_converted.h5ad")
+}
+
 }
 \references{
 modified and enhanced version of \code{sceasy::seurat2anndata} (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.  Function has additional checks and supports Seurat V3 and V5 object structure.
+
+Inspired by \code{sceasy::seurat2anndata} modified and updated to apply to LIGER objects (sceasy package: \url {https://github.com/cellgeni/sceasy}; License: GPL-3.
 }
 \concept{object_conversion}
