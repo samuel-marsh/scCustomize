@@ -36,8 +36,6 @@ function will abort if column with name provided to \code{meta_col_name} is pres
 
 \item{assay}{assay to use in calculation.  Default is "RNA".  \emph{Note} This should only be changed if
 storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).}
-
-\item{liger_object}{object name.}
 }
 \value{
 A liger Object
@@ -55,7 +53,7 @@ object <- Add_Cell_Complexity(object = object)
 }
 
 library(Seurat)
-pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
+pbmc_small <- Add_Cell_Complexity(seurat_object = pbmc_small)
 
 }
 \concept{liger_object_util}

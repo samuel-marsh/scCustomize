@@ -24,6 +24,7 @@ as.anndata(x, ...)
   x,
   file_path,
   file_name,
+  transfer_norm.data = FALSE,
   reduction_label = NULL,
   add_barcode_names = FALSE,
   barcode_prefix = TRUE,
@@ -51,6 +52,9 @@ as.anndata(x, ...)
 Seurat to anndata object (default is TRUE).}
 
 \item{verbose}{logical, whether to print status messages during object conversion (default is TRUE).}
+
+\item{transfer_norm.data}{logical, whether to transfer the norm.data in addition to
+raw.data, default is FALSE.}
 
 \item{reduction_label}{What to label the visualization dimensionality reduction.
 LIGER does not store name of technique and therefore needs to be set manually.}
