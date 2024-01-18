@@ -233,7 +233,6 @@ Add_Mito_Ribo.liger <- function(
 #'
 #' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
 #'
-#' @param liger_object object name.
 #' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
@@ -300,7 +299,8 @@ Add_Cell_Complexity.liger <- function(
 #'
 #' @examples
 #' \dontrun{
-#' meta_variables <- Meta_Present_LIGER(liger_object = obj, meta_col_names = DEG_list, print_msg = TRUE)
+#' meta_variables <- Meta_Present_LIGER(liger_object = obj, meta_col_names = DEG_list,
+#' print_msg = TRUE)
 #' }
 #'
 

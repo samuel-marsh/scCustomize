@@ -788,6 +788,8 @@ as.anndata.Seurat <- function(
 #'
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name file name.
+#' @param transfer_norm.data logical, whether to transfer the norm.data in addition to
+#' raw.data, default is FALSE.
 #' @param reduction_label What to label the visualization dimensionality reduction.
 #' LIGER does not store name of technique and therefore needs to be set manually.
 #' @param add_barcode_names logical, whether to add dataset names to the cell barcodes when
@@ -824,6 +826,7 @@ as.anndata.liger <- function(
     x,
     file_path,
     file_name,
+    transfer_norm.data = FALSE,
     reduction_label = NULL,
     add_barcode_names = FALSE,
     barcode_prefix = TRUE,
@@ -895,6 +898,7 @@ as.anndata.liger <- function(
     cli_inform(message = c("*" = "Creating main layer from {.field raw.data}"))
   }
   if (isTRUE(x = add_barcode_names)) {
+    nms <-  names(x = x@H)
     main_layer_data <- Merge_Sparse_Data_All(matrix_list = x@raw.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
   } else {
     main_layer_data <- Merge_Sparse_Data_All(matrix_list = x@raw.data)
@@ -904,6 +908,7 @@ as.anndata.liger <- function(
   if (isTRUE(x = transfer_norm.data)) {
     cli_inform(message = c("*" = "Creating other layer from {.field norm.data}"))
     if (isTRUE(x = add_barcode_names)) {
+      nms <-  names(x = x@H)
       norm_data <- Merge_Sparse_Data_All(matrix_list = x@norm.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
     } else {
       norm_data <- Merge_Sparse_Data_All(matrix_list = x@norm.data)
@@ -975,7 +980,7 @@ as.anndata.liger <- function(
   # get meta and drop single value columns
   liger_meta <- Fetch_Meta(object = x)
 
-  liger_meta <- scCustomize:::drop_single_value_cols(df = liger_meta)
+  liger_meta <- drop_single_value_cols(df = liger_meta)
 
   # Create anndata
   if (isTRUE(x = verbose)) {

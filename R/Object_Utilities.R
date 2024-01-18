@@ -342,7 +342,7 @@ Add_Mito_Ribo.Seurat <- function(
 #'
 #' @examples
 #' library(Seurat)
-#' pbmc_small <- Add_Cell_Complexity_Seurat(seurat_object = pbmc_small)
+#' pbmc_small <- Add_Cell_Complexity(seurat_object = pbmc_small)
 #'
 
 Add_Cell_Complexity.Seurat <- function(
@@ -653,13 +653,13 @@ Add_Cell_QC_Metrics <- function(
   # Add mito/ribo
   if (isTRUE(x = add_mito_ribo)) {
     cli_inform(message = "Adding {.field Mito/Ribo Percentages} to meta.data.")
-    seurat_object <- Add_Mito_Ribo_Seurat(seurat_object = seurat_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
+    seurat_object <- Add_Mito_Ribo(object = seurat_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
   }
 
   # Add complexity
   if (isTRUE(x = add_complexity)) {
     cli_inform(message = "Adding {.field Cell Complexity #1 (log10GenesPerUMI)} to meta.data.")
-    seurat_object <- Add_Cell_Complexity_Seurat(seurat_object = seurat_object, meta_col_name = complexity_name, assay = assay, overwrite = overwrite)
+    seurat_object <- Add_Cell_Complexity(object = seurat_object, meta_col_name = complexity_name, assay = assay, overwrite = overwrite)
   }
 
   # Add top gene expression percent
