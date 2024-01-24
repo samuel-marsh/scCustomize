@@ -37,6 +37,8 @@ navbar:
           href: articles/Helpers_and_Utilities.html
         - text: "Read & Write Data Functions"
           href: articles/Read_and_Write_Functions.html
+        - text: "Object Format Conversion"
+          href: articles/Object_Conversion.html
         - text: "Marker Identification & Cluster Annotation Helpers"
           href: articles/Markers_and_Cluster_Annotation.html
         - text: "Statistics Functions"
@@ -110,6 +112,11 @@ reference:
   desc: "Functions to provide ease of use for frequently used code from LIGER Objects."
 - contents:
   - has_concept("liger_object_util")
+
+- title: "Object Conversion Functions"
+  desc: "Functions to convert between different single cell object formats (R & Python)."
+- contents:
+  - has_concept("object_conversion")
 
 - title: "Cluster/Marker Annotation Utilities"
   desc: "Functions to provide ease of use or add functionality to DEG and cluster annotation."
