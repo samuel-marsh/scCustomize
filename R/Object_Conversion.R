@@ -687,7 +687,8 @@ as.anndata.Seurat <- function(
   }
 
   if (!is.null(x = file_path)) {
-    full_path_name <- file.path(file_path, file_name)
+    norm_path <- normalizePath(path = file_path)
+    full_path_name <- file.path(norm_path, file_name)
   } else {
     full_path_name <- file.path(file_name)
   }
@@ -889,7 +890,8 @@ as.anndata.liger <- function(
   }
 
   if (!is.null(x = file_path)) {
-    full_path_name <- file.path(file_path, file_name)
+    norm_path <- normalizePath(path = file_path)
+    full_path_name <- file.path(norm_path, file_name)
   } else {
     full_path_name <- file.path(file_name)
   }
