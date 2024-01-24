@@ -69,4 +69,4 @@ Original function is part of LIGER package \url{https://github.com/welch-lab/lig
 Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
 PR to liger GitHub.
 }
-\concept{object_util}
+\concept{object_conversion}

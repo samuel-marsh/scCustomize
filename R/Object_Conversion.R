@@ -450,7 +450,7 @@ as.LIGER.list <- function(
 #'
 #' @export
 #'
-#' @concept object_util
+#' @concept object_conversion
 #'
 #' @examples
 #' \dontrun{
