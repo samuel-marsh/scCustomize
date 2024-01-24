@@ -74,6 +74,7 @@ as.LIGER.Seurat <- function(
       cli_abort(message = c("Multiple layers containing raw counts present {.field {head(x = layers_check, n = 2)}}.",
                             "i" = "Please run {.code JoinLayers} before converting to LIGER object."))
     }
+    layers_check <- Layers(object = x, search = "counts")
   }
 
   # Check meta data
