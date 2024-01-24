@@ -68,22 +68,22 @@ pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 ## Add Mitochondrial & Ribosomal Percentages
 As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
-### Seurat Objects: `Add_Mito_Ribo_Seurat()`
+### Seurat Objects: `Add_Mito_Ribo()`
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, drosophila, or rhesus macaque data all you need to do is specify the `species` parameter.
 ```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "human")
 ```
 
 To view list of accepted values for default species names simply set `list_species_names = TRUE`.
 
 ```{r eval=FALSE}
-Add_Mito_Ribo_Seurat(list_species_names = TRUE)
+Add_Mito_Ribo(list_species_names = TRUE)
 ```
 
 
 ```{r echo=FALSE}
-accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
+accepted_names <- Add_Mito_Ribo(list_species_names = TRUE)
 
 accepted_names %>%
   kableExtra::kbl(row.names = TRUE) %>%
@@ -95,22 +95,22 @@ However custom prefixes can be used for non-human/mouse/marmoset/rat/zebrafish/d
 *NOTE: If desired please submit issue on GitHub for additional default species.  Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.*
 ```{r eval=FALSE}
 # Using gene name patterns
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "other", mito_pattern = "regexp_pattern", ribo_pattern = "regexp_pattern")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "other", mito_pattern = "regexp_pattern", ribo_pattern = "regexp_pattern")
 
 # Using feature name lists
 mito_gene_list <- c("gene1", "gene2", "etc")
 ribo_gene_list <- c("gene1", "gene2", "etc")
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
 
 # Using combination of gene lists and gene name patterns
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
 ```
 
 ### Warning Messages
-The added benefit of `Add_Mito_Ribo_Seurat` & `Add_Mito_Ribo_LIGER` is that they will return informative warnings if no Mitochondrial or Ribosomal features are found using the current species, features, or pattern specification.
+The added benefit of `Add_Mito_Ribo` & `Add_Mito_Ribo` is that they will return informative warnings if no Mitochondrial or Ribosomal features are found using the current species, features, or pattern specification.
 ```{r message=TRUE, warning=TRUE, error=TRUE}
 # For demonstration purposes we can set `species = mouse` for this object of human cells
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "mouse")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "mouse")
 ```
 
 ```{r include=FALSE}
@@ -121,26 +121,26 @@ pbmc <- UpdateSeuratObject(object = pbmc)
 
 ```{r message=TRUE, warning=TRUE, error=TRUE}
 # Or if providing custom patterns/lists and features not found
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "other", mito_pattern = "^MT-", ribo_pattern = "BAD_PATTERN")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "other", mito_pattern = "^MT-", ribo_pattern = "BAD_PATTERN")
 ```
 
-`Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER()` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
+`Add_Mito_Ribo` and `Add_Mito_Ribo()` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
 ```{r include=FALSE}
 pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(object = pbmc)
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "human")
 ```
 
 ```{r message=TRUE, warning=TRUE, error=TRUE}
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
+pbmc <- Add_Mito_Ribo(seurat_object = pbmc, species = "human")
 ```
 
 
 
-### LIGER Objects: `Add_Mito_Ribo_LIGER()`
-scCustomize also contains identical function for use with LIGER objects.  `Add_Mito_Ribo_LIGER` contains equivalent parameters and capabilities as `Add_Mito_Ribo_Seurat`
+### LIGER Objects: `Add_Mito_Ribo()`
+scCustomize also contains identical function for use with LIGER objects.  `Add_Mito_Ribo` contains equivalent parameters and capabilities as `Add_Mito_Ribo`
 ```{r eval=FALSE}
-liger_obj <- Add_Mito_Ribo_Seurat(seurat_object = liger_obj, species = "human")
+liger_obj <- Add_Mito_Ribo(seurat_object = liger_obj, species = "human")
 ```
 
 
@@ -151,9 +151,9 @@ In addition to metrics like number of features and UMIs it can often be helpful 
 scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
 ```{r eval = FALSE}
 # These defaults can be run just by providing accepted species name
-pbmc <- Add_Cell_Complexity_Seurat(seurat_object = pbmc)
+pbmc <- Add_Cell_Complexity(seurat_object = pbmc)
 ```
-*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER()`).*
+*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity()`).*
 
 
 ### Add Top Percent Expression QC Metric  
