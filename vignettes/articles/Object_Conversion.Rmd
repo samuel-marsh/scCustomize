@@ -41,7 +41,10 @@ knitr::opts_chunk$set(
 
 # Converting between scRNA-seq package formats  
 While many packages are have some object converters they are not always as feature complete as desired.  scCustomize provides a few straightforward converter functions.  
-For now these functions are limited to conversions to and from Seurat and LIGER.  However, other conversions functions may be added in the future.  
+
+***FYI: Object converters can be fragile and/or not very flexible.  I have tried to make these functions to avoid those issues.  However, if that proves too hard a task to maintain long-term I may move them to separate package/deprecate them.***  
+
+
 ```{r init}
 # Load Packages
 library(Seurat)
@@ -50,22 +53,39 @@ library(scCustomize)
 library(qs)
 ```
 
-
-```{r eval=FALSE}
+Load Seurat Object & Add QC Data
+```{r}
 # read object
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
+pbmc <- UpdateSeuratObject(pbmc)
+
+pbmc <- Add_Cell_QC_Metrics(seurat_object = pbmc, species = "human")
 ```
+
+We'll also add some random meta data variables to pbmc data form use in this vignette
+```{r}
+pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
+```
+
 
 ## Convert Seurat Objects to LIGER Objects
 scCustomize contains the conversion function `as.LIGER()`.  This function has a few advantages over the conversion function `rliger::seuratToLiger()`.  
-- `as.liger` will transfer meta data from Seurat to LIGER by default.  
+- `as.liger` will *keep all meta data* and transfer it to LIGER by default.  
 - If a dimensionality reduction is transferred `as.liger` will also store a reduction key for use with scCustomize LIGER plotting functions to correctly set plot axes.  
 - If converting a list of Seurat objects and keeping Seurat variable genes then `as.liger` can either take union or intersection of genes between objects.  
 - `as.liger` has additional internal checks to ensure compatibility with both Seurat V3/4 & V5 object structures.
 
-```{r eval=FALSE}
-pbmc_liger <- as.LIGER(x = pbmc)
+```{r message=TRUE}
+pbmc_liger <- as.LIGER(x = pbmc, group.by = "sample_id")
+
+pbmc_liger
 ```
+
+Confirm that information from meta.data slot was transferred to LIGER object.
+```{r}
+head(colnames(x = pbmc_liger@cell.data), 10)
+```
+
 
 
 ## Convert LIGER objects to Seurat Objects  
@@ -81,7 +101,27 @@ scCustomize contains modified version of this function named `Liger_to_Seurat()`
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
 * `seurat_assay` Name of assay to use for data in Seurat object.  Default is "RNA".
 
-```{r eval=FALSE}
-seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UMAP")
+```{r message=TRUE}
+new_seurat <- Liger_to_Seurat(liger_object = pbmc_liger, reduction_label = "UMAP")
 ```
+
+
+## Convert Seurat or LIGER objects to Anndata objects  
+scCustomize also allows for the conversion of Seurat or LIGER objects to python [anndata](https://anndata.readthedocs.io/en/latest/) objects for analysis in [scanpy](https://scanpy.readthedocs.io/en/stable/) or other compatible python packages via the function `as.anndata`.  These functions were inspired/modified/updated from [sceasy R package](https://github.com/cellgeni/sceasy) (see `as.anndata` documentation).  
+
+* `as.anndata` works with Seurat V3/4, Seurat V5, and LIGER objects.  
+* `as.anndata` requires users have [reticulate R package](https://CRAN.R-project.org/package=reticulate) and linked python installation with anndata installed.  
+    - See [reticulate website](https://rstudio.github.io/reticulate/) for more information on installation and setup of reticulate in R.
+    - See [anndata website](https://anndata.readthedocs.io/en/latest/) for more information on installation and use of anndata in python.
+
+```{r include=FALSE}
+Sys.setenv(RETICULATE_PYTHON = "/Users/marsh_mbp/.virtualenvs/r-reticulate/bin/python")
+```
+
+```{r message=TRUE}
+as.anndata(x = pbmc, file_path = "~/Desktop", file_name = "pbmc_anndata.h5ad")
+```
+
+
+
 
