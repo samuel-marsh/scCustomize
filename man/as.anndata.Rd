@@ -70,8 +70,6 @@ prefix/suffix.  Default is "_".}
 }
 \value{
 saved anndata object to at path provided.
-
-saved anndata object to at path provided.
 }
 \description{
 This function is part of generic \code{as.anndata} for conversion of Seurat Objects to anndata objects.
