@@ -74,7 +74,6 @@ as.LIGER.Seurat <- function(
       cli_abort(message = c("Multiple layers containing raw counts present {.field {head(x = layers_check, n = 2)}}.",
                             "i" = "Please run {.code JoinLayers} before converting to LIGER object."))
     }
-    layers_check <- Layers(object = x, search = "counts")
   }
 
   # Check meta data
@@ -88,7 +87,7 @@ as.LIGER.Seurat <- function(
   }
 
   # Set ident to grouping variable
-  Idents(x) <- group.by
+  Idents(object = x) <- group.by
 
   # Check & Set Assay
   if (!assay %in% Assays(object = x)) {
@@ -121,7 +120,8 @@ as.LIGER.Seurat <- function(
   }
 
   # Get raw data & cells
-  raw_data_full <- LayerData(object = x, layer = layers_check)
+  counts_layer <- Layers(object = x, search = "counts")
+  raw_data_full <- LayerData(object = x, layer = counts_layer)
 
   cells_per_dataset <- CellsByIdentities(object = x)
 
@@ -330,7 +330,8 @@ as.LIGER.list <- function(
 
   # Get raw data & cells
   raw_data_list <- lapply(x, function(e){
-    LayerData(object = e, layer = "counts")
+    counts_layer <- Layers(object = e, search = "counts")
+    LayerData(object = e, layer = counts_layer)
   })
 
   if (is.null(x = dataset_names)) {
