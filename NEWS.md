@@ -19,6 +19,7 @@
     - `Meta_Present` replaces `Meta_Present_LIGER`.  
 - Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
 - Updated `Liger_to_Seurat` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
+- Default color palette change from v2.0.0 when number of groups is between 3-8 has been reverted.  Polychrome palette is default when number of groups is between 3-36.  
    
 
 ## Fixes  
