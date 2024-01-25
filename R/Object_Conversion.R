@@ -1006,3 +1006,110 @@ as.anndata.liger <- function(
 
   adata
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### CONVERT SEURAT ASSAYS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Convert between Seurat Assay types
+#'
+#' Will convert assays within a Seurat object between "Assay" and "Assay5" types.
+#'
+#' @param seurat_object Seurat object name.
+#' @param assay name(s) of assays to convert.  Default is NULL and will check with users
+#' which assays they want to convert.
+#' @param convert_to value of what assay type to convert current assays to.
+#' #' \itemize{
+#'       \item Accepted values for V3/4 are: "Assay", "assay", "V3", or "v3".
+#'       \item Accepted values for V5 are: "Assay5", "assay5", "V5", or "v5".
+#'       }
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @importFrom dplyr mutate
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tibble column_to_rownames
+#'
+#' @export
+#' @rdname as.anndata
+#'
+#' @examples
+#' \dontrun{
+#' # Convert to V3/4 assay
+#' obj <- Convert_Assay(seurat_object = obj, convert_to = "V3")
+#'
+#' # Convert to 5 assay
+#' obj <- Convert_Assay(seurat_object = obj, convert_to = "V5")
+#' }
+#'
+
+Convert_Assay <- function(
+    seurat_object,
+    assay = NULL,
+    convert_to = "V3"
+) {
+  # Check accepted
+  accepted_V3 <- c("Assay", "assay", "V3", "v3")
+  accepted_V5 <- c("Assay5", "assay5", "V5", "v5")
+
+  if (!convert_to %in% c(accepted_V5, accepted_V3)) {
+    cli_abort(message = c("Value provided to {.code convert_to} ({.field {convert_to}}) was not accepted value.",
+                          "i" = "Accepted values to convert to V3/4 are: {.field {accepted_V3}}",
+                          "i" = "Accepted values to convert to V5 are: {.field {accepted_V5}}"))
+  }
+
+  # set assay value
+  if (convert_to %in% accepted_V5) {
+    convert_to <- "Assay5"
+    convert_from <- "Assay"
+  }
+  if (convert_to %in% accepted_V3) {
+    convert_to <- "Assay"
+    convert_from <- "Assay5"
+  }
+
+  if (is.null(x = assay)) {
+    num_assays <- length(x = Assays(object = seurat_object))
+    if (num_assays > 1) {
+      if (yesno("Multiple assays ({.field {Assays(object = seurat_object)}}) are present.  Should all assays be converted to assay type: {.field {convert_to}}?")) {
+        cli_inform(message = c("!" = "To only convert specific assays please specify assay names using {.code assay} parameter."))
+        return(invisible())
+      }
+    }
+  }
+
+  # Check assays are present if provided
+  if (!is.null(x = assay)) {
+    assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = assay, print_msg = FALSE, omit_warn = TRUE)[[2]]
+
+    if (!is.null(x = assays_not_found)) {
+      stop_quietly()
+    }
+  }
+
+  # set assays to convert
+  assays_convert <- assay %||% Assays(object = seurat_object)
+
+  # Check against current assay class
+  current_assay_classes <- sapply(assays_convert, function(x) {
+    class(x = seurat_object[[x]])
+  })
+
+  if (convert_to %in% current_assay_classes) {
+    cli_abort(message = c("Attempting to assays to {.field {convert_to}}, however one or more of current assays is already of that type",
+                          "i" = "Check assay type and/or whether {.code {convert_to}} value is correct."))
+  }
+
+  # convert assays
+  for (i in assays_convert) {
+    cli_inform(message = "Converting assay {.val {i}} from {.field {convert_from}} to {.field {convert_to}}.")
+    suppressWarnings(seurat_object[[i]] <- as(seurat_object[[i]], convert_to))
+  }
+
+  # return object
+  return(seurat_object)
+}
