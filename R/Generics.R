@@ -34,7 +34,10 @@ as.anndata <- function(x, ...) {
 }
 
 
-#' Add Mitochondrial & Ribosomal Percentages
+#' Add Mito and Ribo percentages
+#'
+#' Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object or
+#' cell.data slot of Liger object
 #'
 #' @param object Seurat or LIGER object
 #' @param ... Arguments passed to other methods
