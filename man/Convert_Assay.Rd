@@ -4,7 +4,7 @@
 \alias{Convert_Assay}
 \title{Convert between Seurat Assay types}
 \usage{
-Convert_Assay(seurat_object, assay = NULL, convert_to = "V3")
+Convert_Assay(seurat_object, assay = NULL, convert_to)
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
