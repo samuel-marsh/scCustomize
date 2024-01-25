@@ -127,6 +127,8 @@ The release of Seurat V5+ has brought about two different types of assay structu
 
 scCustomize provides `Convert_Assay()` for easy method to convert from Assay>Assay5 (V3/4>5) or Assay5>Assay (V5>V3/4).  
 
+### Convert V3/4 to V5  
+
 ```{r}
 # Convert to V5/Assay5 structure
 pbmc_V5 <- Convert_Assay(seurat_object = pbmc, convert_to = "V5")
@@ -135,6 +137,7 @@ pbmc_V5[["RNA"]]
 ```
 
 
+### Convert V5 > V3/4  
 
 ```{r}
 # Convert to V3/4/Assay structure
