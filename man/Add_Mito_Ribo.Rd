@@ -4,8 +4,9 @@
 \name{Add_Mito_Ribo}
 \alias{Add_Mito_Ribo}
 \alias{Add_Mito_Ribo.liger}
+\alias{Add_Mito_Ribo.default}
 \alias{Add_Mito_Ribo.Seurat}
-\title{Add Mitochondrial & Ribosomal Percentages}
+\title{Add Mito and Ribo percentages}
 \usage{
 Add_Mito_Ribo(object, ...)
 
@@ -24,6 +25,8 @@ Add_Mito_Ribo(object, ...)
   list_species_names = FALSE,
   ...
 )
+
+\method{Add_Mito_Ribo}{Default}(object, list_species_names = FALSE, ...)
 
 \method{Add_Mito_Ribo}{Seurat}(
   object,
@@ -88,12 +91,15 @@ rhesus macaque).  Default is FALSE.}
 \value{
 A liger Object
 
+data.frame
+
 A Seurat Object
 }
 \description{
-Add Mito, Ribo, percentages to cell.data slot of LIGER Object
+Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object or
+cell.data slot of Liger object
 
-Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
+Add Mito, Ribo, percentages to cell.data slot of LIGER Object
 }
 \examples{
 \dontrun{
