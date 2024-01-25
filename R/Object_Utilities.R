@@ -85,10 +85,49 @@ Merge_Seurat_List <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-#' Add Mito and Ribo percentages
+#' @param list_species_names returns list of all accepted values to use for default
 #'
-#' Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object
+#' @import cli
+#' @importFrom dplyr mutate select intersect all_of
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang ":="
+#' @importFrom Seurat PercentageFeatureSet AddMetaData
+#' @importFrom tibble rownames_to_column column_to_rownames
 #'
+#' @method Add_Mito_Ribo Default
+#' @return data.frame
+#'
+#' @export
+#' @rdname Add_Mito_Ribo
+#'
+#' @concept object_util
+#'
+
+Add_Mito_Ribo.default <- function(
+    object,
+    list_species_names = FALSE,
+    ...
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Return list of accepted default species name options
+  if (isTRUE(x = list_species_names)) {
+    return(accepted_names)
+    stop_quietly()
+  }
+}
+
+
+
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
