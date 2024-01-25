@@ -550,20 +550,20 @@ Retrieve_Ensembl_Ribo <- function(
  }
 
 
- #' Retrieve IEG Gene Lists
- #'
- #' Retrieves species specific IEG gene lists
- #'
- #' @param species species to retrieve IDs.
- #'
- #' @return list of 2 sets of gene_symbols
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Retrieve IEG Gene Lists
+#'
+#' Retrieves species specific IEG gene lists
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 2 sets of gene_symbols
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
  Retrieve_IEG_Lists <- function(
     species
@@ -612,33 +612,33 @@ Retrieve_Ensembl_Ribo <- function(
  }
 
 
- #' Add MSigDB Gene Lists Percentages
- #'
- #' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
- #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
- #'
- #' @param seurat_object object name.
- #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
- #' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
- #' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
- #' phosphorylation counts. Default is "percent_oxphos".
- #' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
- #' Default is "percent_apop".
- #' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
- #' Default is "percent_oxphos".
- #' @param assay Assay to use (default is the current object default assay).
- #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
- #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
- #' `mito_ribo_name` is present in meta.data slot.
- #'
- #' @return Seurat object
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Add MSigDB Gene Lists Percentages
+#'
+#' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+#' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
+#' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
+#' phosphorylation counts. Default is "percent_oxphos".
+#' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
+#' Default is "percent_apop".
+#' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
+#' Default is "percent_oxphos".
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
+#' `mito_ribo_name` is present in meta.data slot.
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
 
  Add_MSigDB_Seurat <- function(
@@ -715,25 +715,25 @@ Retrieve_Ensembl_Ribo <- function(
 
 
 
- #' Add IEG Gene List Percentages
- #'
- #' Adds percentage of counts from IEG genes from mouse and human.
- #'
- #' @param seurat_object object name.
- #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
- #' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
- #' @param assay Assay to use (default is the current object default assay).
- #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
- #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
- #'
- #' @return Seurat object
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Add IEG Gene List Percentages
+#'
+#' Adds percentage of counts from IEG genes from mouse and human.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
 
  Add_IEG_Seurat <- function(
@@ -794,22 +794,22 @@ Retrieve_Ensembl_Ribo <- function(
  }
 
 
- #' Return default QC features
- #'
- #' Returns default QC features full names when provided with shortcut name.
- #'
- #' @param seurat_object object name.
- #' @param features vector of features to check against defaults.
- #' @param print_defaults return the potential accepted default values.
- #'
- #' @return list of found and not found features
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Return default QC features
+#'
+#' Returns default QC features full names when provided with shortcut name.
+#'
+#' @param seurat_object object name.
+#' @param features vector of features to check against defaults.
+#' @param print_defaults return the potential accepted default values.
+#'
+#' @return list of found and not found features
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
  Return_QC_Defaults <- function(
     seurat_object,
