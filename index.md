@@ -137,8 +137,8 @@ scCustomize aims to achieve these goals through:
   - scCustomize provides checks/warnings, using the cli/rlang packages,
     wrapped inside its functions to help and provide more informative
     error/warning messages. Two examples include:  
-  - `Add_Mito_Ribo_Seurat()` will warn you if no mitochondrial or
-    ribosomal features are found and won’t create new metadata column.  
+  - `Add_Mito_Ribo()` will warn you if no mitochondrial or ribosomal
+    features are found and won’t create new metadata column.  
   - `Rename_Clusters()` will check and make sure the right number of
     unique new names are provided and provide one of two error messages
     if not before attempting to rename the object idents.
