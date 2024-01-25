@@ -90,11 +90,10 @@ scCustomize aims to achieve these goals through:
   errors in code reproducibility.
   - *Example of adding new parameters:* Adding the percentage of counts
     aligning to mitochondrial (and/or ribosomal) genes is common early
-    step in analysis. scCustomize provides `Add_Mito_Ribo_Seurat()` (and
-    LIGER version) to simplify this. Basic use requires only one line of
-    code and two parameters.
+    step in analysis. scCustomize provides `Add_Mito_Ribo()` to simplify
+    this. Basic use requires only one line of code and two parameters.
 
-        Add_Mito_Ribo_Seurat(seurat_object = obj_name, species = "Human") 
+        Add_Mito_Ribo(object = obj_name, species = "Human") 
 
     - Function already knows the defaults for Human, Mouse, Rat,
       Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit a PR
