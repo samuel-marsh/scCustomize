@@ -69,7 +69,7 @@ hca_bm <- UpdateSeuratObject(hca_bm)
 
 
 ```{r include=FALSE}
-accepted_names <- Add_Mito_Ribo_Seurat(list_species_names = TRUE)
+# accepted_names <- Add_Mito_Ribo(list_species_names = TRUE)
 ```
 
 ## Adding QC Metrics
@@ -79,37 +79,37 @@ This is the starting point of nearly every single cell analysis and scCustomize 
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal count percentages to meta.data slot.  If you are using mouse, human, rat, zebrafish, drosophila, marmoset, or macaque data all you need to do is specify the `species` parameter.
 ```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human")
+hca_bm <- Add_Mito_Ribo(object = hca_bm, species = "Human")
 ```
 *NOTE: There is analogous function for LIGER objects (see: `Add_Mito_Ribo_LIGER`) but QC plotting functions currently only support Seurat objects.*
 
 To view list of accepted values for default species names simply set `list_species_names = TRUE`.
 ```{r echo=FALSE}
-accepted_names %>%
-  kableExtra::kbl() %>%
-  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+#accepted_names %>%
+#  kableExtra::kbl() %>%
+#  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", #"responsive", "striped")) 
 ```
 
 However custom prefixes can be used for non-human/mouse/marmoset species with different annotations. Simply specify `species = other` and supply feature lists or regex patterns for your species of interest.  
 *NOTE: If desired please submit issue on GitHub for additional default species.  Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.*
 ```{r eval=FALSE}
 # Using gene name patterns
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_pattern = "regexp_pattern", ribo_pattern = "regexp_pattern")
+hca_bm <- Add_Mito_Ribo(object = hca_bm, species = "other", mito_pattern = "regexp_pattern", ribo_pattern = "regexp_pattern")
 
 # Using feature name lists
 mito_gene_list <- c("gene1", "gene2", "etc")
 ribo_gene_list <- c("gene1", "gene2", "etc")
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
+hca_bm <- Add_Mito_Ribo(object = hca_bm, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
 
 # Using combination of gene lists and gene name patterns
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
+hca_bm <- Add_Mito_Ribo(object = hca_bm, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
 ```
 
 #### Use of Ensembl IDs
 scCustomize contains built in list of ensembl IDs that correspond to mitochondrial and ribosomal genes for all default species.  If your object using ensembl IDs as features names then simply add `ensembl_ids` parameter.
 ```{r eval=FALSE}
 # Using gene name patterns
-hca_bm <- Add_Mito_Ribo_Seurat(seurat_object = hca_bm, species = "Human", ensembl_ids = TRUE)
+hca_bm <- Add_Mito_Ribo(object = hca_bm, species = "Human", ensembl_ids = TRUE)
 ```
 
 
@@ -120,9 +120,9 @@ In addition to metrics like number of features and UMIs it can often be helpful 
 scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
 ```{r eval = FALSE}
 # These defaults can be run just by providing accepted species name
-hca_bm <- Add_Cell_Complexity_Seurat(seurat_object = hca_bm)
+hca_bm <- Add_Cell_Complexity(object = hca_bm)
 ```
-*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity_LIGER`) but QC plotting functions currently only support Seurat objects.*
+*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity`) but QC plotting functions currently only support Seurat objects.*
 
 
 ### Add Top Percent Expression QC Metric  

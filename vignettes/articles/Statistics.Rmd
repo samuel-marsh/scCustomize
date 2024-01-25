@@ -65,7 +65,7 @@ pbmc <- UpdateSeuratObject(pbmc)
 Now let's add some extra meta data for use with tutorial
 ```{r}
 # Add mito and ribo data
-pbmc <- Add_Mito_Ribo_Seurat(seurat_object = pbmc, species = "human")
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
 
 # Add random sample and group variables
 pbmc$orig.ident <- sample(c("sample1", "sample2", "sample3", "sample4"), size = ncol(pbmc), replace = TRUE)
