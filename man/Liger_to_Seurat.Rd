@@ -13,6 +13,7 @@ Liger_to_Seurat(
   keep_meta = TRUE,
   reduction_label = "UMAP",
   seurat_assay = "RNA",
+  assay_type = NULL,
   add_barcode_names = FALSE,
   barcode_prefix = TRUE,
   barcode_cell_id_delimiter = "_"
@@ -38,6 +39,10 @@ to new Seurat Object.  Default is TRUE.}
 or name to Seurat object instead of defaulting to "tSNE".}
 
 \item{seurat_assay}{Name to set for assay in Seurat Object.  Default is "RNA".}
+
+\item{assay_type}{what type of Seurat assay to create in new object (Assay vs Assay5).
+Default is NULL which will default to the current user settings.
+See \code{\link{Convert_Assay}} parameter \code{convert_to} for acceptable values.}
 
 \item{add_barcode_names}{logical, whether to add dataset names to the cell barcodes when
 creating Seurat object, default is FALSE.}
