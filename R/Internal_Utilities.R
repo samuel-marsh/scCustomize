@@ -310,6 +310,33 @@ Feature_PreCheck <- function(
 }
 
 
+#' Ask yes/no question to proceed
+#'
+#' Asks the user to answer yes/no question and returns logical value depending on
+#' the answer.
+#'
+#' @return logical
+#'
+#' @references function modified from function in devtools R package (License: MIT) \url{https://github.com/r-lib/devtools}.
+#' @details \url{https://github.com/r-lib/devtools/blob/9f27cc3e6335e74d6f51ed331509ebda56747901/R/release.R#L147-L156}.
+#'
+#' @import cli
+#'
+#' @noRd
+#'
+
+yesno <- function(msg, .envir = parent.frame()) {
+  yeses <- c("Yes")
+  nos <- c("No")
+
+  cli_inform(message = msg, .envir = .envir)
+  qs <- c("Yes", "No")
+  rand <- sample(length(qs))
+
+  utils::menu(qs[rand]) != which(rand == 1)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### QC HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
