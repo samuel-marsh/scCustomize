@@ -4,7 +4,6 @@
 \name{Add_Mito_Ribo}
 \alias{Add_Mito_Ribo}
 \alias{Add_Mito_Ribo.liger}
-\alias{Add_Mito_Ribo.default}
 \alias{Add_Mito_Ribo.Seurat}
 \title{Add Mito and Ribo percentages}
 \usage{
@@ -25,8 +24,6 @@ Add_Mito_Ribo(object, ...)
   list_species_names = FALSE,
   ...
 )
-
-\method{Add_Mito_Ribo}{default}(object, list_species_names = FALSE, ...)
 
 \method{Add_Mito_Ribo}{Seurat}(
   object,
@@ -90,8 +87,6 @@ rhesus macaque).  Default is FALSE.}
 }
 \value{
 A liger Object
-
-data.frame
 
 A Seurat Object
 }
