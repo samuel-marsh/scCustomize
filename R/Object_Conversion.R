@@ -428,6 +428,9 @@ as.LIGER.list <- function(
 #' @param reduction_label Name of dimensionality reduction technique used.  Enables accurate transfer
 #' or name to Seurat object instead of defaulting to "tSNE".
 #' @param seurat_assay Name to set for assay in Seurat Object.  Default is "RNA".
+#' @param assay_type what type of Seurat assay to create in new object (Assay vs Assay5).
+#' Default is NULL which will default to the current user settings.
+#' See \code{\link{Convert_Assay}} parameter `convert_to` for acceptable values.
 #' @param add_barcode_names logical, whether to add dataset names to the cell barcodes when
 #' creating Seurat object, default is FALSE.
 #' @param barcode_prefix logical, if `add_barcode_names = TRUE` should the names be added as
@@ -466,6 +469,7 @@ Liger_to_Seurat <- function(
     keep_meta = TRUE,
     reduction_label = "UMAP",
     seurat_assay = "RNA",
+    assay_type = NULL,
     add_barcode_names = FALSE,
     barcode_prefix = TRUE,
     barcode_cell_id_delimiter = "_"
@@ -482,6 +486,32 @@ Liger_to_Seurat <- function(
   # adjust raw data slot if needed
   if (!inherits(x = liger_object@raw.data[[1]], what = 'dgCMatrix')) {
     liger_object@raw.data <- lapply(liger_object@raw.data, as, Class = "CsparseMatrix")
+  }
+
+  # check assay_type is ok
+  if (!is.null(x = assay_type)) {
+    # Check accepted
+    accepted_V3 <- c("Assay", "assay", "V3", "v3")
+    accepted_V5 <- c("Assay5", "assay5", "V5", "v5")
+
+    if (!convert_to %in% c(accepted_V5, accepted_V3)) {
+      cli_abort(message = c("Value provided to {.code convert_to} ({.field {convert_to}}) was not accepted value.",
+                            "i" = "Accepted values to convert to V3/4 are: {.field {accepted_V3}}",
+                            "i" = "Accepted values to convert to V5 are: {.field {accepted_V5}}"))
+    }
+
+    # set assay value
+    if (convert_to %in% accepted_V5) {
+      if (packageVersion(pkg = 'Seurat') < 5) {
+        cli_abort(message = "Seurat version must be v5.0.0 or greater to create To create Assay5.")
+      }
+
+      convert_to <- "v5"
+    }
+
+    if (convert_to %in% accepted_V3) {
+      convert_to <- "v3"
+    }
   }
 
   # merge raw data
@@ -594,6 +624,14 @@ Liger_to_Seurat <- function(
       new.seurat <- AddMetaData(object = new.seurat,
                                 metadata = meta_transfer,
                                 col.name = meta_var)
+    }
+  }
+
+
+  if (!is.null(x = assay_type)) {
+    options_list <- options()
+    if (options_list$Seurat.object.assay.version != convert_to) {
+      new.seurat <- Convert_Assay(seurat_object = new.seurat, convert_to = convert_to)
     }
   }
 
@@ -1033,9 +1071,9 @@ as.anndata.liger <- function(
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_to_lower
 #' @importFrom tibble column_to_rownames
+#' @importFrom utils packageVersion
 #'
 #' @export
-#' @rdname as.anndata
 #'
 #' @examples
 #' \dontrun{
@@ -1064,6 +1102,10 @@ Convert_Assay <- function(
 
   # set assay value
   if (convert_to %in% accepted_V5) {
+    if (packageVersion(pkg = 'Seurat') < 5) {
+      cli_abort(message = "Seurat version must be v5.0.0 or greater to create To create Assay5.")
+    }
+
     convert_to <- "Assay5"
     convert_from <- "Assay"
   }
