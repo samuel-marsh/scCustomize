@@ -94,7 +94,7 @@ Merge_Seurat_List <- function(
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
-#' @method Add_Mito_Ribo Default
+#' @method Add_Mito_Ribo default
 #' @return data.frame
 #'
 #' @export
