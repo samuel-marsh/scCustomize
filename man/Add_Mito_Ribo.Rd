@@ -26,7 +26,7 @@ Add_Mito_Ribo(object, ...)
   ...
 )
 
-\method{Add_Mito_Ribo}{Default}(object, list_species_names = FALSE, ...)
+\method{Add_Mito_Ribo}{default}(object, list_species_names = FALSE, ...)
 
 \method{Add_Mito_Ribo}{Seurat}(
   object,
