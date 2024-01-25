@@ -123,6 +123,37 @@ as.anndata(x = pbmc, file_path = "~/Desktop", file_name = "pbmc_anndata.h5ad")
 ```
 
 ## Convert Seurat assay type within an object  
-The release of Seurat V5+ has brought about two different types of assay structure that can exist within a Seurat object.  
+The release of Seurat V5+ has brought about two different types of assay structure that can exist within a Seurat object.  However, some community tools that interact with Seurat objects have not been updated to work with both assay formats.  Therefore it becomes necessary to change assay format for use with certain tools.  
 
+scCustomize provides `Convert_Assay()` for easy method to convert from Assay>Assay5 (V3/4>5) or Assay5>Assay (V5>V3/4).  
+
+```{r}
+# Convert to V5/Assay5 structure
+pbmc_V5 <- Convert_Assay(seurat_object = pbmc, convert_to = "V5")
+
+pbmc_V5[["RNA"]]
+```
+
+
+
+```{r}
+# Convert to V3/4/Assay structure
+pbmc_V3 <- Convert_Assay(seurat_object = pbmc_V5, convert_to = "V3")
+
+pbmc_V3[["RNA"]]
+```
+
+### Accepted values for `convert_to`  
+`Convert_Assay` will accept a range of accepted values for the `convert_to` parameter to specify desired format.  
+
+
+```{r echo=FALSE}
+library(magrittr)
+accepted_format_names <- data.frame(V3_Assay_Options = c("Assay", "assay", "V3", "v3"),
+                                    V5_Assay5_Options = c("Assay5", "assay5", "V5", "v5"))
+
+accepted_format_names %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
 
