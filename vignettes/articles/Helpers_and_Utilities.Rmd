@@ -83,11 +83,11 @@ Add_Mito_Ribo(list_species_names = TRUE)
 
 
 ```{r echo=FALSE}
-#accepted_names <- Add_Mito_Ribo(list_species_names = TRUE)
+accepted_names <- Add_Mito_Ribo(object = pbmc, list_species_names = TRUE)
 
-#accepted_names %>%
-#  kableExtra::kbl(row.names = TRUE) %>%
-#  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", #"responsive", "striped")) 
+accepted_names %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
 ```
 
 #### Non-default species

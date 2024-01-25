@@ -269,6 +269,7 @@ scCustomize contains modified version of this function named `Liger_to_Seurat()`
 * `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
 * `seurat_assay` Name of assay to use for data in Seurat object.  Default is "RNA".
+* `assay_type` Specify whether to create V3/4 vs V5 Seurat assays.  
 
 ```{r eval=FALSE}
 seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UMAP")
@@ -276,7 +277,7 @@ seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UM
 
 
 ## Add Mitochondrial & Ribosomal Percentages  
-For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo` which is analogous to `Add_Mito_Ribo`.
+For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo`.
 
 
 ## Variable Gene Selection  

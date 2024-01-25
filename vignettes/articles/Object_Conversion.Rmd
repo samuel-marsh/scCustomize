@@ -122,6 +122,7 @@ Sys.setenv(RETICULATE_PYTHON = "/Users/marsh_mbp/.virtualenvs/r-reticulate/bin/p
 as.anndata(x = pbmc, file_path = "~/Desktop", file_name = "pbmc_anndata.h5ad")
 ```
 
-
+## Convert Seurat assay type within an object  
+The release of Seurat V5+ has brought about two different types of assay structure that can exist within a Seurat object.  
 
 
