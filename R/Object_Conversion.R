@@ -1088,7 +1088,7 @@ as.anndata.liger <- function(
 Convert_Assay <- function(
     seurat_object,
     assay = NULL,
-    convert_to = "V3"
+    convert_to
 ) {
   # Check accepted
   accepted_V3 <- c("Assay", "assay", "V3", "v3")
