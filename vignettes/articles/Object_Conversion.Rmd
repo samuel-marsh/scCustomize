@@ -1,11 +1,11 @@
 ---
-title: "Object Conversion"
+title: "Object Format Conversion"
 date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable
 vignette: >
-  %\VignetteIndexEntry{Object Conversion}
+  %\VignetteIndexEntry{Object Format Conversion}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

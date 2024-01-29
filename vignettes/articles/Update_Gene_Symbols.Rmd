@@ -1,11 +1,11 @@
 ---
-title: "Update_Gene_Symbols"
+title: "Updating Gene Symbols"
 date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
 output: rmarkdown::html_vignette
 theme: united
 df_print: kable
 vignette: >
-  %\VignetteIndexEntry{Object Conversion}
+  %\VignetteIndexEntry{Updating Gene Symbols}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
