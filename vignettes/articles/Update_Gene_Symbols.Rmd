@@ -1,0 +1,154 @@
+---
+title: "Update_Gene_Symbols"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Object Conversion}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+# Upating Human Gene Symbols
+The official gene symbols used in a dataset can change depending on the reference version used in aligning that particular dataset.  For human genes the official symbols are set by [HGNC](https://www.genenames.org/).  
+
+In the absence of more static identifier (Ensembl ID or Entrez ID Numbers) the only way to update gene symbols is to examine the current and past symbols for all genes in the HGNC database.  However, many of the functions that perform this task come with caveats that vary from lack of ease of updating to newest HGNC data or at worst potentially improperly renaming symbols.  
+
+
+```{r init}
+# Load Packages
+library(Seurat)
+library(scCustomize)
+library(qs)
+```
+
+Load Seurat Object & Add QC Data
+```{r}
+# read object
+pbmc <- pbmc3k.SeuratData::pbmc3k.final
+pbmc <- UpdateSeuratObject(pbmc)
+```
+
+## Issues with other functions  
+In order to understand how scCustomize's `Update_HGNC_Symbols()` improves process it is important to be aware of the caveats of some other tools.  
+
+### Seurat's `UpdateSymbolList()`  
+The first is the Seurat's `UpdateSymbolList()` which takes an input vector of symbols and uses active connection to HGNC to query for updated symbols.  However, there are two caveats with this function 1) it requires user to have internet connection anytime using the function, 2) it can potentially rename symbols incorrectly.  
+
+To illustrate the second issue I will use 3 gene symbols that have been current for some time: MCM2, MCM7, CCNL1.  However, let's take a look at some of the previous symbols for each of these genes:  
+- Previous Symbols for MCM2 are: CCNL1 & CDCL1  
+- Previous symbols for MCM7 are: MCM2  
+- Previous symbols for CCNL1 are: None  
+
+Now see what happens when we use `UpdateSymbolList`.  
+
+```{r}
+test_symbols <- c("MCM2", "MCM7", "CCNL1")
+
+UpdateSymbolList(symbols = test_symbols)
+```
+
+As you can see the functions does the following:  
+- Renames MCM2 > MCM7 because MCM2 is a previous symbol.  
+- Leaves MCM7 the same because no other gene has MCM7 as previous symbol.  
+- Renames CCNL1 > MCM2 because CCNL1 is previous symbol.  
+
+The reason that this happens is because `UpdateSymbolList` queries each symbol in isolation and not in the context of all of the genes being queried.  
+
+
+### HGNChelper Package  
+After developing this function I was made aware of the HGNChelper package which also aims to provide symbol updates.  It solves renaming issue in similar fashion to scCustomize (see below).  It also provides a solution for requirement of internet access.
+
+It does this by storing HGNC dataset as package data so that it comes bundled with the package.  However, there is an issue with the way this is implemented.  First, the bundled data is from 2019 so is approached 5 years old.  Updated data can be downloaded interactively using a package function but this must be done in every R session where the data is needed requiring internet access to use current data.  The authors do provide a solution to this but it involves cloning the github repo and running source scripts which may be beyond many R users.  
+
+
+## Solving the Issue with scCustomize's `Update_HGNC_Symbols`  
+scCustomize now provides the function `Update_HGNC_Symbols` to attempt to solve both of these caveats.  
+
+### Requirement of internet access  
+`Update_HGNC_Symbols` does require internet access the first time the function is being used to download most recent data from HGNC.  However, it then stores the downloaded data using [BiocFileCache package](https://bioconductor.org/packages/release/bioc/html/BiocFileCache.html), meaning subsequent uses don't require any internet access.  This also significant improves the speed of the function.
+
+### Inappropriate renaming  
+Second, `Update_HGNC_Symbols` uses the full input list and first automatically approves any symbol that is already an approved gene symbol so that there is not a chance of improperly updating any symbols.  It then checks the remaining symbols for any symbol updates.
+
+Let's run our test symbol set:
+```{r message=TRUE}
+results <- Updated_HGNC_Symbols(input_data = test_symbols)
+```
+
+```{r echo=FALSE}
+library(magrittr)
+
+results %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+
+As mentioned before the function is also very quick.  Returning updated symbols for 36,000 genes in ~1 second.
+```{r message=TRUE}
+# Read in full 10X reference genome feature list
+features <- Read10X_h5("assets/Barcode_Rank_Example/sample1/outs/raw_feature_bc_matrix.h5")
+
+features <- rownames(features)
+
+# Load tictoc to give timing
+library(tictoc)
+
+# Get updated symbols
+tic()
+results <- Updated_HGNC_Symbols(input_data = features)
+toc()
+```
+
+
+### Examining the Results  
+Now let's take a look at the output from `Updated_HGNC_Symbols`, which also has some detail advtanages vs other methods.  
+
+For this example I have picked section of the results that contains all 3 potential results.  
+```{r eval=FALSE}
+results[168:177,]
+```
+
+```{r echo=FALSE}
+results[168:177,] %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))
+```
+
+
+As you can see the majority of these symbols are already updated so the input symbol matches the output symbol.
+
+In the case of "AL031847.1" that annotation was not found in HGNC and therefore the symbol was left unchanged.  
+
+Finally in the case of "LINC00337" there was an updated symbol of "ICMT-DT" so the output symbol was updated to that current symbol.
