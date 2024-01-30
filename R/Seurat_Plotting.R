@@ -1512,11 +1512,13 @@ Clustered_DotPlot <- function(
   # Create legend for point size
   lgd_list = list(
     ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-    ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
+    ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
                            graphics = list(
+                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
+                                                              gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
                                                               gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.5) * unit(2, "mm"),
+                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
                                                               gp = gpar(fill = "black")),
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
                                                               gp = gpar(fill = "black")),
