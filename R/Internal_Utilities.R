@@ -1091,6 +1091,34 @@ drop_single_value_cols <- function(
 }
 
 
+#' Check valid color
+#'
+#' Checks if input values are valid colors representations in R.
+#'
+#' @param colors vector of color(s) to check
+#'
+#' @references Code for function \url{https://stackoverflow.com/a/13290832/15568251}.
+#' Renamed by Samuel Marsh.
+#'
+#' @importFrom grDevices col2rgb
+#'
+#' @return logical named vector
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Is_Color <- function(
+    color
+) {
+  sapply(colors, function(X) {
+    tryCatch(is.matrix(x = col2rgb(col = X)),
+             error = function(e) FALSE)
+  })
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### METRICS HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
