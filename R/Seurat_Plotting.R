@@ -1432,7 +1432,7 @@ Clustered_DotPlot <- function(
     if (length(x = grid_color) > 1) {
       cli_abort(message = "{.code grid_color} can only be a single value.")
     }
-    if (isTRUE(x = Is_Color(x = colors))) {
+    if (isTRUE(x = Is_Color(colors = grid_color))) {
       grid_color <- grid_color
     } else {
       cli_abort(message = "Value provided to {.code grid_color} ({.field {grid_color}}) is not valid value for color in R.")
