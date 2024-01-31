@@ -1184,10 +1184,8 @@ DotPlot_scCustom <- function(
 #' @param feature_km_repeats Number of k-means runs to get a consensus k-means clustering for features.
 #' Note if `feature_km_repeats` is set to value greater than one, the final number of groups might be
 #' smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.
-#' @param row_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `feature_km_repeats`
 #' @param ident_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar to
 #' `feature_km_repeats`.  Default is 1000.
-#' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param row_label_fontface Fontface to use for row labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param grid_color color to use for heatmap grid.  Default is NULL which "removes" grid by using NA color.
@@ -1257,8 +1255,6 @@ Clustered_DotPlot <- function(
   k = 1,
   feature_km_repeats = 1000,
   ident_km_repeats = 1000,
-  row_km_repeats = deprecated(),
-  column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
   grid_color = NULL,
@@ -1290,23 +1286,6 @@ Clustered_DotPlot <- function(
       "----------------------------------------"
     ))
   }
-
-  if (lifecycle::is_present(row_km_repeats)) {
-    lifecycle::deprecate_stop(when = "2.0.0",
-                              what = "Clustered_DotPlot(row_km_repeats)",
-                              with = "Clustered_DotPlot(feature_km_repeats)"
-    )
-    feature_km_repeats <- row_km_repeats
-  }
-
-  if (lifecycle::is_present(column_km_repeats)) {
-    lifecycle::deprecate_stop(when = "2.0.0",
-                              what = "Clustered_DotPlot(column_km_repeats)",
-                              with = "Clustered_DotPlot(ident_km_repeats)"
-    )
-    ident_km_repeats <- column_km_repeats
-  }
-
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
