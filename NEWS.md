@@ -11,6 +11,7 @@
 - Added new generic `as.anndata` to support conversion of Seurat and LIGER objects to anndata format.  
 - Added function `Convert_Assay` to perform easy conversions of Seurat assays between V3/4 (Assay) and V5 (Assay5) formats.  
 - Added parameter `assay_type` to allow manual control of assay type when creating Seurat object from LIGER using `Liger_to_Seurat`.  
+- Added param `grid_color` to `Clustered_DotPlot` to control the color of grid lines (default is no grid lines).  
 
 
   
