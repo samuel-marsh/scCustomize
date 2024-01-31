@@ -1190,6 +1190,7 @@ DotPlot_scCustom <- function(
 #' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param row_label_fontface Fontface to use for row labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param grid_color color to use for heatmap grid.  Default is NULL which "removes" grid by using NA color.
 #' @param cluster_feature logical, whether to cluster and reorder feature axis.  Default is TRUE.
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
@@ -1260,6 +1261,7 @@ Clustered_DotPlot <- function(
   column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
+  grid_color = NULL,
   cluster_feature = TRUE,
   cluster_ident = TRUE,
   column_label_size = 8,
@@ -1423,6 +1425,20 @@ Clustered_DotPlot <- function(
   names(x = identity_colors) <- Identity
   identity_colors_list <- list(Identity = identity_colors)
 
+  # check grid color
+  if (is.null(x = grid_color)) {
+    grid_color <- NA
+  } else {
+    if (length(x = grid_color) > 1) {
+      cli_abort(message = "{.code grid_color} can only be a single value.")
+    }
+    if (isTRUE(x = Is_Color(x = colors))) {
+      grid_color <- grid_color
+    } else {
+      cli_abort(message = "Value provided to {.code grid_color} ({.field {grid_color}}) is not valid value for color in R.")
+    }
+  }
+
   # Create identity annotation
   if (isTRUE(x = flip)) {
     column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
@@ -1479,14 +1495,14 @@ Clustered_DotPlot <- function(
     if (isTRUE(x = raster)) {
       layer_fun_flip = function(i, j, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
+                  gp = gpar(col = grid_color, fill = NA))
         grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
                     gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
       }
     } else {
       cell_fun_flip = function(i, j, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
+                  gp = gpar(col = grid_color, fill = NA))
         grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
                     gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
       }
@@ -1495,14 +1511,14 @@ Clustered_DotPlot <- function(
     if (isTRUE(x = raster)) {
       layer_fun = function(j, i, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
+                  gp = gpar(col = grid_color, fill = NA))
         grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
                     gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
       }
     } else {
       cell_fun = function(j, i, x, y, w, h, fill) {
         grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
+                  gp = gpar(col = grid_color, fill = NA))
         grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
                     gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
       }
