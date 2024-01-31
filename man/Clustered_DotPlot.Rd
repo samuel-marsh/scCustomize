@@ -18,8 +18,6 @@ Clustered_DotPlot(
   k = 1,
   feature_km_repeats = 1000,
   ident_km_repeats = 1000,
-  row_km_repeats = deprecated(),
-  column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
   grid_color = NULL,
@@ -81,10 +79,6 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 
 \item{ident_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar to
 \code{feature_km_repeats}.  Default is 1000.}
-
-\item{row_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{feature_km_repeats}}
-
-\item{column_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{ident_km_repeats}}
 
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
