@@ -1110,7 +1110,7 @@ drop_single_value_cols <- function(
 #'
 
 Is_Color <- function(
-    color
+    colors
 ) {
   sapply(colors, function(X) {
     tryCatch(is.matrix(x = col2rgb(col = X)),
