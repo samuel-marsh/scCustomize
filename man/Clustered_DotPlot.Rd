@@ -22,6 +22,7 @@ Clustered_DotPlot(
   column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
+  grid_color = NULL,
   cluster_feature = TRUE,
   cluster_ident = TRUE,
   column_label_size = 8,
@@ -88,6 +89,8 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
 \item{row_label_fontface}{Fontface to use for row labels.  Provided to \code{row_names_gp} in Heatmap call.}
+
+\item{grid_color}{color to use for heatmap grid.  Default is NULL which "removes" grid by using NA color.}
 
 \item{cluster_feature}{logical, whether to cluster and reorder feature axis.  Default is TRUE.}
 
