@@ -37,6 +37,7 @@
 - Added check for presence of dimensionality reduction in `DimPlot_LIGER` ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
 - Fixed bug in `Add_Mito_Ribo_LIGER` that caused it to return value of 0 for all cells (Now part of renamed `Add_Mito_Ribo` S3 generic).  
 - Fixed legend display is `Clustered_DotPlot` to display percentage instead of proportion to match legend text.  
+- Fixed `Percent_Expressing` error when `group_by = "ident"`.  
 
 
 
