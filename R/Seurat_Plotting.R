@@ -1290,6 +1290,9 @@ Clustered_DotPlot <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
   # Check acceptable fontface
   if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
     cli_abort(message = c("{.code row_label_face} {.val {row_label_face}} not recognized.",
@@ -1369,9 +1372,6 @@ Clustered_DotPlot <- function(
     cli_inform(message = "Quantiles of gene expression data are:")
     print(quantile(exp_mat, c(0.1, 0.5, 0.9, 0.99)))
   }
-
-  # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Set default color palette based on number of levels being plotted
   if (is.null(x = group.by)) {
