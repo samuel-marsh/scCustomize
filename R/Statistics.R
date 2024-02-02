@@ -144,6 +144,10 @@ Percent_Expressing <- function(
   features_list <- Gene_Present(data = seurat_object, gene_list = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
 
   # Check group_by is in object
+  if (!is.null(x = group_by) && group_by == "ident") {
+    group_by <- NULL
+  }
+
   if (!is.null(x = group_by)) {
     possible_groups <- colnames(x = seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
