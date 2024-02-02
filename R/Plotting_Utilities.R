@@ -1054,7 +1054,7 @@ Clustered_DotPlot_Multi_Group <- function(
   group.by <- group.by %||% "ident"
 
   # Get data
-  exp_mat_df <- data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by, split.by), assays = assay, layer = "data")[[assay]])
+  exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by, split.by), assays = assay, layer = "data")[[assay]]))
 
   # Data is returned in non-log space after averaging, return to log space for plotting
   exp_mat <- data.frame(lapply(exp_mat_df, function(x){
