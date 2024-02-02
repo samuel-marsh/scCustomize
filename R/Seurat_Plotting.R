@@ -1160,6 +1160,7 @@ DotPlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param split.by Variable in `@meta.data` to split the identities plotted by.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
 #' Default is -2.
@@ -1167,6 +1168,8 @@ DotPlot_scCustom <- function(
 #' By default will be set to value in middle of `exp_color_min` and `exp_color_max`.
 #' @param exp_color_max Minimum scaled average expression threshold (everything smaller will be set to this).
 #' Default is 2.
+#' @param exp_value_type Whether to plot average normalized expression or
+#' scaled average normalized expression.  Only valid when `split.by` is provided.
 #' @param print_exp_quantiles Whether to print the quantiles of expression data in addition to plots.
 #' Default is FALSE.  NOTE: These values will be altered by choices of `exp_color_min` and `exp_color_min`
 #' if there are values below or above those cutoffs, respectively.
@@ -1244,10 +1247,12 @@ DotPlot_scCustom <- function(
 Clustered_DotPlot <- function(
   seurat_object,
   features,
+  split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
   exp_color_middle = NULL,
   exp_color_max = 2,
+  exp_value_type = "scaled",
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
@@ -1274,346 +1279,71 @@ Clustered_DotPlot <- function(
   color_seed = 123,
   seed = 123
 ) {
-  # Check for packages
-  ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
-  if (isFALSE(x = ComplexHeatmap_check)) {
-    cli_abort(message = c(
-      "Please install the {.val ComplexHeatmap} package to use {.code Clustered_DotPlot}",
-      "i" = "This can be accomplished with the following commands: ",
-      "----------------------------------------",
-      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
-      "{.field `BiocManager::install({symbol$dquote_left}ComplexHeatmap{symbol$dquote_right})`}",
-      "----------------------------------------"
-    ))
-  }
-
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = seurat_object)
-
-  # Check acceptable fontface
-  if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
-    cli_abort(message = c("{.code row_label_face} {.val {row_label_face}} not recognized.",
-                          "i" = "Must be one of {.val plain}, {.val bold}, {.val italic}, {.val olique}, or {.val bold.italic}."))
-  }
-
-  # Check unique features
-  features_unique <- unique(x = features)
-
-  if (length(x = features_unique) != length(x = features)) {
-    cli_warn("Feature list contains duplicates, making unique.")
-  }
-
-  # Check features and meta to determine which features present
-  all_found_features <- Feature_PreCheck(object = seurat_object, features = features_unique, assay = assay)
-
-  # Check exp min/max set correctly
-  if (!exp_color_min < exp_color_max) {
-    cli_abort(message = c("Expression color min/max values are not compatible.",
-                          "i" = "The value for {.code exp_color_min}: {.field {exp_color_min}} must be less than the value for {.code exp_color_max}: {.field {exp_color_max}}.")
-    )
-  }
-
-  # Get DotPlot data
-  seurat_plot <- DotPlot(object = seurat_object, features = all_found_features, assay = assay, group.by = group.by, scale = TRUE, idents = idents, col.min = NULL, col.max = NULL)
-
-  data <- seurat_plot$data
-
-  # Get expression data
-  exp_mat <- data %>%
-    select(-any_of(c("pct.exp", "avg.exp"))) %>%
-    pivot_wider(names_from = any_of("id"), values_from = any_of("avg.exp.scaled")) %>%
-    as.data.frame()
-
-  row.names(x = exp_mat) <- exp_mat$features.plot
-
-  # Check NAs if idents
-  if (!is.null(x = idents)) {
-    # Find NA features and print warning
-    excluded_features <- exp_mat[rowSums(is.na(x = exp_mat)) > 0,] %>%
-      rownames()
-    cli_warn(message = c("Some scaled data missing.",
-                         "*" = "The following features were removed as there is no scaled expression present in subset (`idents`) of object provided:",
-                         "i" = "{.field {glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}}.")
-    )
-
-    # Extract good features
-    good_features <- rownames(x = exp_mat)
-
-    # Remove rows with NAs
-    exp_mat <- exp_mat %>%
-      filter(.data[["features.plot"]] %in% good_features)
-  }
-
-  exp_mat <- exp_mat[,-1] %>%
-    as.matrix()
-
-  # Get percent expressed data
-  percent_mat <- data %>%
-    select(-any_of(c("avg.exp", "avg.exp.scaled"))) %>%
-    pivot_wider(names_from = any_of("id"), values_from = any_of("pct.exp")) %>%
-    as.data.frame()
-
-  row.names(x = percent_mat) <- percent_mat$features.plot
-
-  # Subset dataframe for NAs if idents so that exp_mat and percent_mat match
-  if (!is.null(x = idents)) {
-    percent_mat <- percent_mat %>%
-      filter(.data[["features.plot"]] %in% good_features)
-  }
-
-  percent_mat <- percent_mat[,-1] %>%
-    as.matrix()
-
-  # print quantiles
-  if (isTRUE(x = print_exp_quantiles)) {
-    cli_inform(message = "Quantiles of gene expression data are:")
-    print(quantile(exp_mat, c(0.1, 0.5, 0.9, 0.99)))
-  }
-
-  # Set default color palette based on number of levels being plotted
-  if (is.null(x = group.by)) {
-    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  # check split
+  if (is.null(x = split.by)) {
+    Clustered_DotPlot_Single_Group(seurat_object = seurat_object,
+                                   features = features,
+                                   colors_use_exp = colors_use_exp,
+                                   exp_color_min = exp_color_min,
+                                   exp_color_middle = exp_color_middle,
+                                   exp_color_max = exp_color_max,
+                                   print_exp_quantiles = print_exp_quantiles,
+                                   colors_use_idents = colors_use_idents,
+                                   x_lab_rotate = x_lab_rotate,
+                                   flip = flip,
+                                   k = k,
+                                   feature_km_repeats = feature_km_repeats,
+                                   ident_km_repeats = ident_km_repeats,
+                                   row_label_size = row_label_size,
+                                   row_label_fontface = row_label_fontface,
+                                   grid_color = grid_color,
+                                   cluster_feature = cluster_feature,
+                                   cluster_ident = cluster_ident,
+                                   column_label_size = column_label_size,
+                                   legend_label_size = legend_label_size,
+                                   legend_title_size = legend_title_size,
+                                   raster = raster,
+                                   plot_km_elbow = plot_km_elbow,
+                                   elbow_kmax = elbow_kmax,
+                                   assay = assay,
+                                   group.by = group.by,
+                                   idents = idents,
+                                   show_parent_dend_line = show_parent_dend_line,
+                                   ggplot_default_colors = ggplot_default_colors,
+                                   color_seed = color_seed,
+                                   seed = seed)
   } else {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
+                                  features = features,
+                                  split.by = split.by,
+                                  colors_use_exp = colors_use_exp,
+                                  exp_color_min = exp_color_min,
+                                  exp_color_middle = exp_color_middle,
+                                  exp_color_max = exp_color_max,
+                                  exp_value_type = exp_value_type,
+                                  print_exp_quantiles = print_exp_quantiles,
+                                  x_lab_rotate = x_lab_rotate,
+                                  flip = flip,
+                                  k = k,
+                                  feature_km_repeats = feature_km_repeats,
+                                  ident_km_repeats = ident_km_repeats,
+                                  row_label_size = row_label_size,
+                                  row_label_fontface = row_label_fontface,
+                                  grid_color = grid_color,
+                                  cluster_feature = cluster_feature,
+                                  cluster_ident = cluster_ident,
+                                  column_label_size = column_label_size,
+                                  legend_label_size = legend_label_size,
+                                  legend_title_size = legend_title_size,
+                                  raster = raster,
+                                  plot_km_elbow = plot_km_elbow,
+                                  elbow_kmax = elbow_kmax,
+                                  assay = assay,
+                                  group.by = group.by,
+                                  idents = idents,
+                                  show_parent_dend_line = show_parent_dend_line,
+                                  seed = seed)
   }
-
-  # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use_idents) && isTRUE(x = ggplot_default_colors)) {
-    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
-  }
-  if (is.null(x = colors_use_idents)) {
-    # set default plot colors
-    colors_use_idents <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-  }
-
-  # Reduce color length list due to naming requirement
-  colors_use_idents <- colors_use_idents[1:group_by_length]
-
-  # Modify if class = "colors"
-  if (inherits(x = colors_use_idents, what = "colors")) {
-    colors_use_idents <- as.vector(x = colors_use_idents)
-  }
-
-  # Pull Annotation and change colors to ComplexHeatmap compatible format
-  Identity <- colnames(x = exp_mat)
-
-  identity_colors <- colors_use_idents
-  names(x = identity_colors) <- Identity
-  identity_colors_list <- list(Identity = identity_colors)
-
-  # check grid color
-  if (is.null(x = grid_color)) {
-    grid_color <- NA
-  } else {
-    if (length(x = grid_color) > 1) {
-      cli_abort(message = "{.code grid_color} can only be a single value.")
-    }
-    if (isTRUE(x = Is_Color(colors = grid_color))) {
-      grid_color <- grid_color
-    } else {
-      cli_abort(message = "Value provided to {.code grid_color} ({.field {grid_color}}) is not valid value for color in R.")
-    }
-  }
-
-  # Create identity annotation
-  if (isTRUE(x = flip)) {
-    column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
-                                               col =  identity_colors_list,
-                                               na_col = "grey",
-                                               name = "Identity",
-                                               show_legend = FALSE
-    )
-  } else {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
-                                                   col =  identity_colors_list,
-                                                   na_col = "grey",
-                                                   name = "Identity",
-                                                   show_legend = FALSE
-    )
-  }
-
-  # Set middle of color scale if not specified
-  if (is.null(x = exp_color_middle)) {
-    exp_color_middle <- Middle_Number(min = exp_color_min, max = exp_color_max)
-  }
-
-  palette_length <- length(x = colors_use_exp)
-  palette_middle <- Middle_Number(min = 0, max = palette_length)
-
-  # Create palette
-  col_fun = colorRamp2(c(exp_color_min, exp_color_middle, exp_color_max), colors_use_exp[c(1,palette_middle, palette_length)])
-
-  # Calculate and plot Elbow
-  if (isTRUE(x = plot_km_elbow)) {
-    # if elbow_kmax not NULL check it is usable
-    if (!is.null(x = elbow_kmax) && elbow_kmax > (nrow(x = exp_mat) - 1)) {
-      elbow_kmax <- nrow(x = exp_mat) - 1
-      cli_warn(message = c("The value provided for {.code elbow_kmax} is too large.",
-                           "i" = "Changing to (length(x = features)-1): {.field {elbow_kmax}}.")
-      )
-    }
-
-    # if elbow_kmax is NULL set value based on input feature list
-    if (is.null(x = elbow_kmax)) {
-      # set to (length(x = features)-1) if less than 21 features OR to 20 if greater than 21 features
-      if (nrow(x = exp_mat) > 21) {
-        elbow_kmax <- 20
-      } else {
-        elbow_kmax <- nrow(x = exp_mat) - 1
-      }
-    }
-
-    km_elbow_plot <- kMeans_Elbow(data = exp_mat, k_max = elbow_kmax)
-  }
-
-  # prep heatmap
-  if (isTRUE(x = flip)) {
-    if (isTRUE(x = raster)) {
-      layer_fun_flip = function(i, j, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = grid_color, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
-      }
-    } else {
-      cell_fun_flip = function(i, j, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = grid_color, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
-      }
-    }
-  } else {
-    if (isTRUE(x = raster)) {
-      layer_fun = function(j, i, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = grid_color, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
-      }
-    } else {
-      cell_fun = function(j, i, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = grid_color, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
-      }
-    }
-  }
-
-  # Create legend for point size
-  lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-    ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
-                           graphics = list(
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                              gp = gpar(fill = "black"))),
-                           labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
-    )
-  )
-
-  # Set x label roration
-  if (is.numeric(x = x_lab_rotate)) {
-    x_lab_rotate <- x_lab_rotate
-  } else if (isTRUE(x = x_lab_rotate)) {
-    x_lab_rotate <- 45
-  } else {
-    x_lab_rotate <- 0
-  }
-
-  # Create Plot
-  set.seed(seed = seed)
-  if (isTRUE(x = raster)) {
-    if (isTRUE(x = flip)) {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  column_km = k,
-                                                  row_km_repeats = ident_km_repeats,
-                                                  border = "black",
-                                                  left_annotation = column_ha,
-                                                  column_km_repeats = feature_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
-    } else {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  row_km = k,
-                                                  row_km_repeats = feature_km_repeats,
-                                                  border = "black",
-                                                  top_annotation = column_ha,
-                                                  column_km_repeats = ident_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
-    }
-  } else {
-    if (isTRUE(x = flip)) {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  cell_fun = cell_fun_flip,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  column_km = k,
-                                                  row_km_repeats = ident_km_repeats,
-                                                  border = "black",
-                                                  left_annotation = column_ha,
-                                                  column_km_repeats = feature_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
-    } else {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  cell_fun = cell_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  row_km = k,
-                                                  row_km_repeats = feature_km_repeats,
-                                                  border = "black",
-                                                  top_annotation = column_ha,
-                                                  column_km_repeats = ident_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
-    }
-  }
-
-  # Add pt.size legend & return plots
-  if (isTRUE(x = plot_km_elbow)) {
-    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list)))
-  }
-  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
 }
 
 
