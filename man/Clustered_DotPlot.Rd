@@ -36,8 +36,6 @@ Clustered_DotPlot(
   idents = NULL,
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
-  plot_width = NULL,
-  plot_height = NULL,
   color_seed = 123,
   seed = 123
 )
