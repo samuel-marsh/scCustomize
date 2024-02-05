@@ -1023,15 +1023,15 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # extend plot to fit labels
   if (is.null(x = plot_width)) {
-    plot_width <- unit(6, "cm")
+    row_width <- unit(6, "cm")
   } else {
-    plot_width <- unit(plot_width, "cm")
+    row_width <- unit(plot_width, "cm")
   }
 
   if (is.null(x = plot_height)) {
-    plot_height <- unit(6, "cm")
+    column_height <- unit(6, "cm")
   } else {
-    plot_height <- unit(plot_height, "cm")
+    column_height <- unit(plot_height, "cm")
   }
 
   # Check split valid
