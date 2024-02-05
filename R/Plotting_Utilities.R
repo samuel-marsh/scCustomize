@@ -514,8 +514,6 @@ Clustered_DotPlot_Single_Group <- function(
     idents = NULL,
     show_parent_dend_line = TRUE,
     ggplot_default_colors = FALSE,
-    plot_width = NULL,
-    plot_height = NULL,
     color_seed = 123,
     seed = 123
 ) {
@@ -534,19 +532,6 @@ Clustered_DotPlot_Single_Group <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # extend plot to fit labels
-  if (is.null(x = plot_width)) {
-    heatmap_width <- unit(1, "npc")
-  } else {
-    heatmap_width <- unit(1, "npc") + unit(plot_width, "cm")
-  }
-
-  if (is.null(x = plot_height)) {
-    heatmap_height <- unit(1, "npc")
-  } else {
-    heatmap_height <- unit(1, "npc") + unit(plot_height, "cm")
-  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -810,9 +795,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -829,9 +812,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  cluster_columns = cluster_ident)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -850,9 +831,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -869,9 +848,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  cluster_columns = cluster_ident)
     }
   }
 
@@ -1001,8 +978,6 @@ Clustered_DotPlot_Multi_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
-    plot_width = NULL,
-    plot_height = NULL,
     seed = 123
 ) {
   # Check for packages
@@ -1020,19 +995,6 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # extend plot to fit labels
-  if (is.null(x = plot_width)) {
-    heatmap_width <- unit(1, "npc")
-  } else {
-    heatmap_width <- unit(1, "npc") + unit(plot_width, "cm")
-  }
-
-  if (is.null(x = plot_height)) {
-    heatmap_height <- unit(1, "npc")
-  } else {
-    heatmap_height <- unit(1, "npc") + unit(plot_height, "cm")
-  }
 
   # Check split valid
   if (!is.null(x = split.by)) {

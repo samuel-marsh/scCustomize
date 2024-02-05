@@ -1276,8 +1276,6 @@ Clustered_DotPlot <- function(
   idents = NULL,
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
-  plot_width = NULL,
-  plot_height = NULL,
   color_seed = 123,
   seed = 123
 ) {
@@ -1312,8 +1310,6 @@ Clustered_DotPlot <- function(
                                    idents = idents,
                                    show_parent_dend_line = show_parent_dend_line,
                                    ggplot_default_colors = ggplot_default_colors,
-                                   plot_width = plot_width,
-                                   plot_height = plot_height,
                                    color_seed = color_seed,
                                    seed = seed)
   } else {
@@ -1346,8 +1342,6 @@ Clustered_DotPlot <- function(
                                   group.by = group.by,
                                   idents = idents,
                                   show_parent_dend_line = show_parent_dend_line,
-                                  plot_width = plot_width,
-                                  plot_height = plot_height,
                                   seed = seed)
   }
 }
