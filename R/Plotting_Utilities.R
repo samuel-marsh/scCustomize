@@ -1283,7 +1283,8 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
                                                   row_names_max_width = row_width,
-                                                  column_names_max_height = column_height)
+                                                  column_names_max_height = column_height,
+                                                  heatmap_width = unit(1.5, "npc"))
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1301,7 +1302,8 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   row_names_max_width = row_width,
-                                                  column_names_max_height = column_height)
+                                                  column_names_max_height = column_height,
+                                                  heatmap_width = unit(1.5, "npc"))
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -1321,7 +1323,8 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
                                                   row_names_max_width = row_width,
-                                                  column_names_max_height = column_height)
+                                                  column_names_max_height = column_height,
+                                                  heatmap_width = unit(1.5, "npc"))
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1339,7 +1342,8 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   row_names_max_width = row_width,
-                                                  column_names_max_height = column_height)
+                                                  column_names_max_height = column_height,
+                                                  heatmap_width = unit(1.5, "npc"))
     }
   }
 
