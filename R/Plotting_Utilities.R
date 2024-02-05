@@ -1070,6 +1070,17 @@ Clustered_DotPlot_Multi_Group <- function(
     rownames(exp_mat) <- rownames(exp_mat_df)
   }
 
+  # check underscore present in split.by and replace if so
+  split_by_names <- Fetch_Meta(object = seurat_object) %>%
+    select(any_of(split.by))
+
+  under_score <- grep(pattern = "_", x = split_by_names, value = TRUE)
+
+  if (length(x = under_score) > 0) {
+    split_by_names <- gsub(pattern = "_", replacement = ".", x = split_by_names)
+    seurat_object[[split.by]] <- split_by_names
+  }
+
   percent_mat <- Percent_Expressing(seurat_object = seurat_object, features = all_found_features, split_by = split.by, group_by = group.by, assay = assay)
 
   # reorder columns to match
