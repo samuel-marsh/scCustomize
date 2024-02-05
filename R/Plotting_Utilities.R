@@ -924,7 +924,7 @@ Clustered_DotPlot_Single_Group <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
-#' @importFrom dplyr any_of filter select
+#' @importFrom dplyr any_of filter select pull
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang is_installed
@@ -1072,7 +1072,8 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # check underscore present in split.by and replace if so
   split_by_names <- Fetch_Meta(object = seurat_object) %>%
-    select(any_of(split.by))
+    select(any_of(split.by)) %>%
+    pull()
 
   under_score <- grep(pattern = "_", x = split_by_names, value = TRUE)
 
