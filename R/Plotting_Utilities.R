@@ -516,7 +516,7 @@ Clustered_DotPlot_Single_Group <- function(
     ggplot_default_colors = FALSE,
     color_seed = 123,
     seed = 123,
-    ...
+    plot_padding = NULL
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
@@ -536,6 +536,17 @@ Clustered_DotPlot_Single_Group <- function(
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # set padding
+  if (is.null(x = plot_padding)) {
+    padding <- unit(c(2, 20, 2, 2), "mm")
+  } else {
+    if (length(x = plot_padding) != 4) {
+      cli_abort(message = "{.code plot_padding} must be numeric vector of length 4.")
+    }
+    padding <- unit(plot_padding, "mm")
+  }
+
 
   # Check acceptable fontface
   if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
@@ -796,8 +807,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature,
-                                                  ...)
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -814,8 +824,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident,
-                                                  ...)
+                                                  cluster_columns = cluster_ident)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -834,8 +843,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature,
-                                                  ...)
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -852,16 +860,15 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident,
-                                                  ...)
+                                                  cluster_columns = cluster_ident)
     }
   }
 
   # Add pt.size legend & return plots
   if (isTRUE(x = plot_km_elbow)) {
-    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list)))
+    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding)))
   }
-  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
+  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding))
 }
 
 
@@ -984,7 +991,7 @@ Clustered_DotPlot_Multi_Group <- function(
     idents = NULL,
     show_parent_dend_line = TRUE,
     seed = 123,
-    ...
+    plot_padding = NULL
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
@@ -1014,6 +1021,16 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # set padding
+  if (is.null(x = plot_padding)) {
+    padding <- unit(c(2, 20, 2, 2), "mm")
+  } else {
+    if (length(x = plot_padding) != 4) {
+      cli_abort(message = "{.code plot_padding} must be numeric vector of length 4.")
+    }
+    padding <- unit(plot_padding, "mm")
+  }
 
   # Check expression value type
   accepted_exp_types <- c("scaled", "average")
@@ -1249,8 +1266,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature,
-                                                  ...)
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1266,8 +1282,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident,
-                                                  ...)
+                                                  cluster_columns = cluster_ident)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -1285,8 +1300,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature,
-                                                  ...)
+                                                  cluster_columns = cluster_feature)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1302,16 +1316,15 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident,
-                                                  ...)
+                                                  cluster_columns = cluster_ident)
     }
   }
 
   # Add pt.size legend & return plots
   if (isTRUE(x = plot_km_elbow)) {
-    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE)))
+    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding)))
   }
-  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE))
+  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding))
 }
 
 

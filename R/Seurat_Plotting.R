@@ -1278,7 +1278,7 @@ Clustered_DotPlot <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123,
   seed = 123,
-  ...
+  plot_padding = NULL
 ) {
   # check split
   if (is.null(x = split.by)) {
@@ -1313,7 +1313,7 @@ Clustered_DotPlot <- function(
                                    ggplot_default_colors = ggplot_default_colors,
                                    color_seed = color_seed,
                                    seed = seed,
-                                   ...)
+                                   plot_padding = plot_padding)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
                                   features = features,
@@ -1345,7 +1345,7 @@ Clustered_DotPlot <- function(
                                   idents = idents,
                                   show_parent_dend_line = show_parent_dend_line,
                                   seed = seed,
-                                  ...)
+                                  plot_padding = plot_padding)
   }
 }
 
