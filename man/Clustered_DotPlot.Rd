@@ -37,7 +37,8 @@ Clustered_DotPlot(
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
-  seed = 123
+  seed = 123,
+  ...
 )
 }
 \arguments{
