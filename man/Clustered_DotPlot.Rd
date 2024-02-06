@@ -38,7 +38,7 @@ Clustered_DotPlot(
   ggplot_default_colors = FALSE,
   color_seed = 123,
   seed = 123,
-  ...
+  plot_padding = NULL
 )
 }
 \arguments{
