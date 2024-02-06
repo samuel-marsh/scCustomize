@@ -515,7 +515,8 @@ Clustered_DotPlot_Single_Group <- function(
     show_parent_dend_line = TRUE,
     ggplot_default_colors = FALSE,
     color_seed = 123,
-    seed = 123
+    seed = 123,
+    ...
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
@@ -795,7 +796,8 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
+                                                  cluster_columns = cluster_feature,
+                                                  ...)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -812,7 +814,8 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
+                                                  cluster_columns = cluster_ident,
+                                                  ...)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -831,7 +834,8 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
+                                                  cluster_columns = cluster_feature,
+                                                  ...)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -848,7 +852,8 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
+                                                  cluster_columns = cluster_ident,
+                                                  ...)
     }
   }
 
@@ -978,7 +983,8 @@ Clustered_DotPlot_Multi_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
-    seed = 123
+    seed = 123,
+    ...
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
@@ -1244,8 +1250,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  ...)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1262,8 +1267,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  ...)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -1282,8 +1286,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  ...)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1300,8 +1303,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
-                                                  heatmap_width = heatmap_width,
-                                                  heatmap_height = heatmap_height)
+                                                  ...)
     }
   }
 
