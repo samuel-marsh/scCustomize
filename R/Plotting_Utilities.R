@@ -538,15 +538,16 @@ Clustered_DotPlot_Single_Group <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # set padding
-  if (is.null(x = plot_padding)) {
-    padding <- unit(c(2, 20, 2, 2), "mm")
-  } else {
-    if (length(x = plot_padding) != 4) {
-      cli_abort(message = "{.code plot_padding} must be numeric vector of length 4.")
+  if (!is.null(x = plot_padding)) {
+    if (isTRUE(x = plot_padding)) {
+      padding <- unit(c(2, 2, 2, 2), "mm")
+    } else {
+      if (length(x = plot_padding) != 4) {
+        cli_abort(message = "{.code plot_padding} must be numeric vector of length 4 (corresponding to bottom, left, top, right).")
+      }
+      padding <- unit(plot_padding, "mm")
     }
-    padding <- unit(plot_padding, "mm")
   }
-
 
   # Check acceptable fontface
   if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
@@ -1023,13 +1024,15 @@ Clustered_DotPlot_Multi_Group <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # set padding
-  if (is.null(x = plot_padding)) {
-    padding <- unit(c(2, 20, 2, 2), "mm")
-  } else {
-    if (length(x = plot_padding) != 4) {
-      cli_abort(message = "{.code plot_padding} must be numeric vector of length 4.")
+  if (!is.null(x = plot_padding)) {
+    if (isTRUE(x = plot_padding)) {
+      padding <- unit(c(2, 2, 2, 2), "mm")
+    } else {
+      if (length(x = plot_padding) != 4) {
+        cli_abort(message = "{.code plot_padding} must be numeric vector of length 4 (corresponding to bottom, left, top, right).")
+      }
+      padding <- unit(plot_padding, "mm")
     }
-    padding <- unit(plot_padding, "mm")
   }
 
   # Check expression value type
@@ -1322,9 +1325,18 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # Add pt.size legend & return plots
   if (isTRUE(x = plot_km_elbow)) {
-    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding)))
+    if (!is.null(x = plot_padding)) {
+      return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding)))
+    } else {
+      return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE)))
+    }
+
   }
-  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding))
+  if (!is.null(x = plot_padding)) {
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding))
+  } else {
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE))
+  }
 }
 
 
