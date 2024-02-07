@@ -21,7 +21,7 @@ Add_Cell_Complexity_LIGER(...)
 
 Use \code{\link[=Add_Mito_Ribo]{Add_Mito_Ribo()}} instead of \code{Add_Mito_Ribo_Seurat()}.
 
-Use \code{\link[=Add_Mito_LIGER]{Add_Mito_LIGER()}} instead of \code{Add_Mito_Ribo_Seurat()}.
+Use \code{\link[=Add_Mito_LIGER]{Add_Mito_LIGER()}} instead of \code{Add_Mito_Ribo_LIGER()}.
 
 Use \code{\link[=Add_Cell_Complexity]{Add_Cell_Complexity()}} instead of \code{Add_Cell_Complexity_Seurat()}.
 
