@@ -1322,5 +1322,5 @@ Store_Palette_Seurat <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 .Add_Mito_Ribo_Seurat <- function(...) {
-  lifecycle::deprecate_warn(when = "2.1.0", what = "Add_Mito_Ribo_Seurat", with = "Add_Mito_Ribo")
+  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Mito_Ribo_Seurat()", with = "Add_Mito_Ribo()")
 }
