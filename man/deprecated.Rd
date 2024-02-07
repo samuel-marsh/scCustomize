@@ -3,13 +3,28 @@
 \name{deprecated}
 \alias{deprecated}
 \alias{Add_Mito_Ribo_Seurat}
+\alias{Add_Mito_Ribo_LIGER}
+\alias{Add_Cell_Complexity_Seurat}
+\alias{Add_Cell_Complexity_LIGER}
 \title{Deprecated functions}
 \usage{
 Add_Mito_Ribo_Seurat(...)
+
+Add_Mito_Ribo_LIGER(...)
+
+Add_Cell_Complexity_Seurat(...)
+
+Add_Cell_Complexity_LIGER(...)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 Use \code{\link[=Add_Mito_Ribo]{Add_Mito_Ribo()}} instead of \code{Add_Mito_Ribo_Seurat()}.
+
+Use \code{\link[=Add_Mito_LIGER]{Add_Mito_LIGER()}} instead of \code{Add_Mito_Ribo_Seurat()}.
+
+Use \code{\link[=Add_Cell_Complexity]{Add_Cell_Complexity()}} instead of \code{Add_Cell_Complexity_Seurat()}.
+
+Use \code{\link[=Add_Cell_Complexity]{Add_Cell_Complexity()}} instead of \code{Add_Cell_Complexity_LIGER()}.
 }
 \keyword{internal}
