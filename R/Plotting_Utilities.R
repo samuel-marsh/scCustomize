@@ -540,7 +540,10 @@ Clustered_DotPlot_Single_Group <- function(
   # set padding
   if (!is.null(x = plot_padding)) {
     if (isTRUE(x = plot_padding)) {
-      padding <- unit(c(2, 2, 2, 2), "mm")
+      # Default extra padding
+          # 2 bottom typically mirrors unpadded plot
+          # 10 left to make rotated labels fit in plot window
+      padding <- unit(c(2, 10, 0, 0), "mm")
     } else {
       if (length(x = plot_padding) != 4) {
         cli_abort(message = "{.code plot_padding} must be numeric vector of length 4 (corresponding to bottom, left, top, right).")
@@ -1026,6 +1029,9 @@ Clustered_DotPlot_Multi_Group <- function(
   # set padding
   if (!is.null(x = plot_padding)) {
     if (isTRUE(x = plot_padding)) {
+      # Default extra padding
+          # 2 bottom typically mirrors unpadded plot
+          # 10 left to make rotated labels fit in plot window
       padding <- unit(c(2, 2, 2, 2), "mm")
     } else {
       if (length(x = plot_padding) != 4) {
