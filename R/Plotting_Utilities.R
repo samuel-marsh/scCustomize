@@ -418,6 +418,11 @@ Figure_Plot <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
+#' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
+#' The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+#' c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+#' vector of length 4 specifying the amount of padding in millimeters.
+#' Default is NULL, no padding.
 #' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 #' columns = idents.
 #' @param k Value to use for k-means clustering on features  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
@@ -494,6 +499,7 @@ Clustered_DotPlot_Single_Group <- function(
     print_exp_quantiles = FALSE,
     colors_use_idents = NULL,
     x_lab_rotate = TRUE,
+    plot_padding = NULL,
     flip = FALSE,
     k = 1,
     feature_km_repeats = 1000,
@@ -515,8 +521,7 @@ Clustered_DotPlot_Single_Group <- function(
     show_parent_dend_line = TRUE,
     ggplot_default_colors = FALSE,
     color_seed = 123,
-    seed = 123,
-    plot_padding = NULL
+    seed = 123
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
@@ -541,12 +546,15 @@ Clustered_DotPlot_Single_Group <- function(
   if (!is.null(x = plot_padding)) {
     if (isTRUE(x = plot_padding)) {
       # Default extra padding
-          # 2 bottom typically mirrors unpadded plot
-          # 10 left to make rotated labels fit in plot window
+          # 2 bottom: typically mirrors unpadded plot
+          # 10 left: usually enough to make rotated labels fit in plot window
       padding <- unit(c(2, 10, 0, 0), "mm")
     } else {
       if (length(x = plot_padding) != 4) {
-        cli_abort(message = "{.code plot_padding} must be numeric vector of length 4 (corresponding to bottom, left, top, right).")
+        cli_abort(message = c("{.code plot_padding} must be numeric vector of length 4 or TRUE",
+                              "i" = "Numeric vector will correspond to amount of padding to be added to bottom, left, top, right).",
+                              "i" = "Seeting {.field TRUE} will set padding to {.code c(2, 10, 0, 0)}",
+                              "i" = "Default is {.val NULL} for no extra padding."))
       }
       padding <- unit(plot_padding, "mm")
     }
@@ -901,6 +909,11 @@ Clustered_DotPlot_Single_Group <- function(
 #' if there are values below or above those cutoffs, respectively.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
+#' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
+#' The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+#' c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+#' vector of length 4 specifying the amount of padding in millimeters.
+#' Default is NULL, no padding.
 #' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 #' columns = idents.
 #' @param k Value to use for k-means clustering on features  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
@@ -975,6 +988,7 @@ Clustered_DotPlot_Multi_Group <- function(
     exp_value_type = "scaled",
     print_exp_quantiles = FALSE,
     x_lab_rotate = TRUE,
+    plot_padding = NULL,
     flip = FALSE,
     k = 1,
     feature_km_repeats = 1000,
@@ -994,8 +1008,7 @@ Clustered_DotPlot_Multi_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
-    seed = 123,
-    plot_padding = NULL
+    seed = 123
 ) {
   # Check for packages
   ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
@@ -1030,12 +1043,15 @@ Clustered_DotPlot_Multi_Group <- function(
   if (!is.null(x = plot_padding)) {
     if (isTRUE(x = plot_padding)) {
       # Default extra padding
-          # 2 bottom typically mirrors unpadded plot
-          # 10 left to make rotated labels fit in plot window
+          # 2 bottom: typically mirrors unpadded plot
+          # 10 left: usually enough to make rotated labels fit in plot window
       padding <- unit(c(2, 2, 2, 2), "mm")
     } else {
       if (length(x = plot_padding) != 4) {
-        cli_abort(message = "{.code plot_padding} must be numeric vector of length 4 (corresponding to bottom, left, top, right).")
+        cli_abort(message = c("{.code plot_padding} must be numeric vector of length 4 or TRUE",
+                              "i" = "Numeric vector will correspond to amount of padding to be added to bottom, left, top, right).",
+                              "i" = "Seeting {.field TRUE} will set padding to {.code c(2, 10, 0, 0)}",
+                              "i" = "Default is {.val NULL} for no extra padding."))
       }
       padding <- unit(plot_padding, "mm")
     }

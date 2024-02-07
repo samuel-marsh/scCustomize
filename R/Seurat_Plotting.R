@@ -1178,6 +1178,11 @@ DotPlot_scCustom <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
+#' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
+#' The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+#' c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+#' vector of length 4 specifying the amount of padding in millimeters.
+#' Default is NULL, no padding.
 #' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 #' columns = idents.
 #' @param k Value to use for k-means clustering on features  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
@@ -1256,6 +1261,7 @@ Clustered_DotPlot <- function(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  plot_padding = NULL,
   flip = FALSE,
   k = 1,
   feature_km_repeats = 1000,
@@ -1277,8 +1283,7 @@ Clustered_DotPlot <- function(
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
-  seed = 123,
-  plot_padding = NULL
+  seed = 123
 ) {
   # check split
   if (is.null(x = split.by)) {
@@ -1291,6 +1296,7 @@ Clustered_DotPlot <- function(
                                    print_exp_quantiles = print_exp_quantiles,
                                    colors_use_idents = colors_use_idents,
                                    x_lab_rotate = x_lab_rotate,
+                                   plot_padding = plot_padding,
                                    flip = flip,
                                    k = k,
                                    feature_km_repeats = feature_km_repeats,
@@ -1312,8 +1318,7 @@ Clustered_DotPlot <- function(
                                    show_parent_dend_line = show_parent_dend_line,
                                    ggplot_default_colors = ggplot_default_colors,
                                    color_seed = color_seed,
-                                   seed = seed,
-                                   plot_padding = plot_padding)
+                                   seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
                                   features = features,
@@ -1325,6 +1330,7 @@ Clustered_DotPlot <- function(
                                   exp_value_type = exp_value_type,
                                   print_exp_quantiles = print_exp_quantiles,
                                   x_lab_rotate = x_lab_rotate,
+                                  plot_padding = plot_padding,
                                   flip = flip,
                                   k = k,
                                   feature_km_repeats = feature_km_repeats,
@@ -1344,8 +1350,7 @@ Clustered_DotPlot <- function(
                                   group.by = group.by,
                                   idents = idents,
                                   show_parent_dend_line = show_parent_dend_line,
-                                  seed = seed,
-                                  plot_padding = plot_padding)
+                                  seed = seed)
   }
 }
 
