@@ -19,7 +19,7 @@ Add_Mito_Ribo_Seurat <- function(...) {
 }
 
 #' @description
-#' Use [Add_Mito_LIGER()] instead of `Add_Mito_Ribo_Seurat()`.
+#' Use [Add_Mito_LIGER()] instead of `Add_Mito_Ribo_LIGER()`.
 #'
 #' @export
 #' @keywords internal
