@@ -81,7 +81,7 @@ scCustomize contains easy wrapper function to automatically add both Mitochondri
 # These defaults can be run just by providing accepted species name
 hca_bm <- Add_Mito_Ribo(object = hca_bm, species = "Human")
 ```
-*NOTE: There is analogous function for LIGER objects (see: `Add_Mito_Ribo_LIGER`) but QC plotting functions currently only support Seurat objects.*
+*NOTE: This function works seemlessly for both Seurat and LIGER objects.*
 
 To view list of accepted values for default species names simply set `list_species_names = TRUE`.
 ```{r echo=FALSE}
@@ -122,7 +122,7 @@ scCustomize contains easy shortcut function to add a measure of cell complexity/
 # These defaults can be run just by providing accepted species name
 hca_bm <- Add_Cell_Complexity(object = hca_bm)
 ```
-*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity`) but QC plotting functions currently only support Seurat objects.*
+*NOTE: This function works seemlessly for both Seurat and LIGER objects.*  
 
 
 ### Add Top Percent Expression QC Metric  

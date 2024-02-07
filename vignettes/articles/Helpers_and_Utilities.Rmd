@@ -68,7 +68,7 @@ pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 ## Add Mitochondrial & Ribosomal Percentages
 As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
-### Seurat Objects: `Add_Mito_Ribo()`
+### `Add_Mito_Ribo()`
 scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, drosophila, or rhesus macaque data all you need to do is specify the `species` parameter.
 ```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
@@ -107,7 +107,7 @@ pbmc <- Add_Mito_Ribo(object = pbmc, species = "Human", mito_features = mito_gen
 ```
 
 ### Warning Messages
-The added benefit of `Add_Mito_Ribo` & `Add_Mito_Ribo` is that they will return informative warnings if no Mitochondrial or Ribosomal features are found using the current species, features, or pattern specification.
+The added benefit of `Add_Mito_Ribo` is that it will return informative warnings if no Mitochondrial or Ribosomal features are found using the current species, features, or pattern specification.
 ```{r message=TRUE, warning=TRUE, error=TRUE}
 # For demonstration purposes we can set `species = mouse` for this object of human cells
 pbmc <- Add_Mito_Ribo(object = pbmc, species = "mouse")
@@ -124,7 +124,7 @@ pbmc <- UpdateSeuratObject(object = pbmc)
 pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "^MT-", ribo_pattern = "BAD_PATTERN")
 ```
 
-`Add_Mito_Ribo` and `Add_Mito_Ribo()` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
+`Add_Mito_Ribo` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
 ```{r include=FALSE}
 pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(object = pbmc)
@@ -138,7 +138,7 @@ pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
 
 
 ### LIGER Objects: `Add_Mito_Ribo()`
-scCustomize also contains identical function for use with LIGER objects.  `Add_Mito_Ribo` contains equivalent parameters and capabilities as `Add_Mito_Ribo`
+scCustomize `Add_Mito_Ribo` also works seemlessly with LIGER objects.  
 ```{r eval=FALSE}
 liger_obj <- Add_Mito_Ribo(object = liger_obj, species = "human")
 ```
@@ -153,7 +153,7 @@ scCustomize contains easy shortcut function to add a measure of cell complexity/
 # These defaults can be run just by providing accepted species name
 pbmc <- Add_Cell_Complexity(object = pbmc)
 ```
-*NOTE: There is analogous function for LIGER objects (see: `Add_Cell_Complexity()`).*
+*NOTE: The function also works seemlessly with LIGER objects.*
 
 
 ### Add Top Percent Expression QC Metric  
