@@ -1314,13 +1314,3 @@ Store_Palette_Seurat <- function(
   seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite)
   return(seurat_object)
 }
-
-
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### TEMP DEPRECATED ####################
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-.Add_Mito_Ribo_Seurat <- function(...) {
-  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Mito_Ribo_Seurat()", with = "Add_Mito_Ribo()")
-}
