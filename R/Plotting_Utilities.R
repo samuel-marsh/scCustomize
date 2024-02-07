@@ -878,9 +878,18 @@ Clustered_DotPlot_Single_Group <- function(
 
   # Add pt.size legend & return plots
   if (isTRUE(x = plot_km_elbow)) {
-    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding)))
+    if (!is.null(x = plot_padding)) {
+      return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding)))
+    } else {
+      return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list)))
+    }
+
   }
-  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding))
+  if (!is.null(x = plot_padding)) {
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding))
+  } else {
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
+  }
 }
 
 
