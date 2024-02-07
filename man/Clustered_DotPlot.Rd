@@ -16,6 +16,7 @@ Clustered_DotPlot(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  plot_padding = NULL,
   flip = FALSE,
   k = 1,
   feature_km_repeats = 1000,
@@ -37,8 +38,7 @@ Clustered_DotPlot(
   show_parent_dend_line = TRUE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
-  seed = 123,
-  plot_padding = NULL
+  seed = 123
 )
 }
 \arguments{
@@ -72,6 +72,12 @@ will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomi
 
 \item{x_lab_rotate}{How to rotate column labels.  By default set to \code{TRUE} which rotates labels 45 degrees.
 If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.}
+
+\item{plot_padding}{if plot needs extra white space padding so no plot or labels are cutoff.
+The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+vector of length 4 specifying the amount of padding in millimeters.
+Default is NULL, no padding.}
 
 \item{flip}{logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 columns = idents.}
