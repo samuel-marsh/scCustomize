@@ -248,7 +248,7 @@ Case_Check <- function(
 
 Meta_Present <- function(
   object,
-  seurat_object,
+  seurat_object = deprecated(),
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,

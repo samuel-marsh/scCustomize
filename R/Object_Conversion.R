@@ -89,7 +89,7 @@ as.LIGER.Seurat <- function(
   }
 
   # Check meta data
-  group.by <- Meta_Present(seurat_object = x, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+  group.by <- Meta_Present(object = x, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
   # stop if none found
   if (length(x = group.by) == 0) {
