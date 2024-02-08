@@ -265,11 +265,11 @@ Meta_Present <- function(
   }
 
   # Set possible variables based on object type
-  if (inherits(x = input_data, what = "Seurat")) {
+  if (inherits(x = object, what = "Seurat")) {
     possible_features <- colnames(x = object@meta.data)
   }
 
-  if (inherits(x = input_data, what = "liger")) {
+  if (inherits(x = object, what = "liger")) {
     possible_features <- colnames(x = object@cell.data)
   }
 
