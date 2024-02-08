@@ -20,7 +20,7 @@
 - **BREAKING CHANGES** Several methods have been moved to S3 generics to function for both Seurat and LIGER objects using single function name and therefore some function names have changed.  Old functions will give deprecation warning and direct users to new functions.  
     - `Add_Mito_Ribo` replaces `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
     - `Add_Cell_Complexity` replaces `Add_Cell_Complexity_Seurat` and `Add_Cell_Complexity_LIGER`.  
-    - `Meta_Present` replaces `Meta_Present_LIGER`.  
+- **BREAKING CHANGES** `Meta_Present_LIGER` has been deprecated and wrapped inside of `Meta_Present`.  
 - Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
 - Updated `Liger_to_Seurat` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
 - Default color palette change from v2.0.0 when number of groups is between 3-8 has been reverted.  Polychrome palette is default when number of groups is between 3-36.  
