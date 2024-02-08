@@ -82,7 +82,7 @@ as.LIGER.Seurat <- function(
 
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
     if (length(x = count_layers) > 1 && group.by != "orig.ident") {
-      cli_inform(message = c("Multiple layers containing raw counts present {.field {count_layers[1], count_layers[2], ...}} and a non-default value was provided to {.code group.by}.",
+      cli_inform(message = c("Multiple layers containing raw counts present ({.field {count_layers[1]}}, {.field {count_layers[2]}}, {.field ...}) and a non-default value was provided to {.code group.by}.",
                             "i" = "To group LIGER object by assay layers do not change value of {.code group.by}",
                             "i" = "If {.code group.by} variable is different than the split layers please run {.code JoinLayers} first."))
     }
