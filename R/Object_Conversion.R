@@ -62,7 +62,7 @@ as.LIGER.Seurat <- function(
 
   # Run update to ensure functionality
   if (isTRUE(x = verbose)) {
-    cli_inform(message = "Checking Seurat object validity")
+    cli_inform(message = c("*" = "Checking Seurat object validity"))
   }
 
   x <- suppressMessages(UpdateSeuratObject(object = x))
@@ -73,7 +73,7 @@ as.LIGER.Seurat <- function(
   }
 
   if (assay != DefaultAssay(object = x)) {
-    cli_inform("Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}}).")
+    cli_inform(c("*" = "Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}})."))
     DefaultAssay(x) <- assay
   }
 
@@ -152,14 +152,14 @@ as.LIGER.Seurat <- function(
 
   # Create LIGER Object
   if (isTRUE(x = verbose)) {
-    cli_inform(message = "Creating LIGER object.")
+    cli_inform(message = c("*" = "Creating LIGER object."))
   }
 
   liger_object <- rliger::createLiger(raw.data = raw_data_list, remove.missing = remove_missing)
 
   if (isTRUE(x = renormalize)) {
     if (isTRUE(x = verbose)) {
-      cli_inform(message = "Normalizing data.")
+      cli_inform(message = c("*" = "Normalizing data."))
     }
     liger_object <- rliger::normalize(object = liger_object, remove.missing = remove_missing)
   }
@@ -266,7 +266,7 @@ as.LIGER.list <- function(
 
   # Run update to ensure functionality
   if (isTRUE(x = verbose)) {
-    cli_inform(message = "Checking Seurat object validity")
+    cli_inform(message = c("*" = "Checking Seurat object validity"))
   }
 
   x <- lapply(x, function(y) {
@@ -312,7 +312,7 @@ as.LIGER.list <- function(
 
   for (l in x) {
     if (assay != DefaultAssay(object = l)) {
-      cli_inform("Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}}).")
+      cli_inform(c("*" = "Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}})."))
       DefaultAssay(l) <- assay
     }
   }
@@ -374,14 +374,14 @@ as.LIGER.list <- function(
 
   # Create LIGER Object
   if (isTRUE(x = verbose)) {
-    cli_inform(message = "Creating LIGER object.")
+    cli_inform(message = c("*" = "Creating LIGER object."))
   }
 
   liger_object <- rliger::createLiger(raw.data = raw_data_list, remove.missing = remove_missing)
 
   if (isTRUE(x = renormalize)) {
     if (isTRUE(x = verbose)) {
-      cli_inform(message = "Normalizing data.")
+      cli_inform(message = c("*" = "Normalizing data."))
     }
     liger_object <- rliger::normalize(object = liger_object, remove.missing = remove_missing)
   }
