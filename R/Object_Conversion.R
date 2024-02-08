@@ -99,7 +99,7 @@ as.LIGER.Seurat <- function(
   }
 
   # Set ident to grouping variable
-  if (length(x = layers_check) == 1) {
+  if (length(x = count_layers) == 1) {
     Idents(object = x) <- group.by
   }
 
