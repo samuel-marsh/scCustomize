@@ -5,6 +5,7 @@
 \title{Check if meta data are present}
 \usage{
 Meta_Present(
+  object,
   seurat_object,
   meta_col_names,
   print_msg = TRUE,
@@ -13,7 +14,9 @@ Meta_Present(
 )
 }
 \arguments{
-\item{seurat_object}{object name.}
+\item{object}{Seurat or Liger object name.}
+
+\item{seurat_object}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} deprecated.  Please use \code{object} instead.}
 
 \item{meta_col_names}{vector of column names to check.}
 
