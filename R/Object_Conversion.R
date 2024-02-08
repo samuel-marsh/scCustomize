@@ -67,12 +67,24 @@ as.LIGER.Seurat <- function(
 
   x <- suppressMessages(UpdateSeuratObject(object = x))
 
+  # Check & Set Assay
+  if (!assay %in% Assays(object = x)) {
+    cli_abort(message = "Provided assay {.field {assay}} not found in Seurat object.")
+  }
+
+  if (assay != DefaultAssay(object = x)) {
+    cli_inform("Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}}).")
+    DefaultAssay(x) <- assay
+  }
+
   # Check Assay5 for multiple layers
+  count_layers <- Layers(object = x, search = "counts")
+
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
-    layers_check <- Layers(object = x, search = "counts")
-    if (length(x = layers_check) > 1) {
-      cli_abort(message = c("Multiple layers containing raw counts present {.field {head(x = layers_check, n = 2)}}.",
-                            "i" = "Please run {.code JoinLayers} before converting to LIGER object."))
+    if (length(x = count_layers) > 1 && group.by != "orig.ident") {
+      cli_abort(message = c("Multiple layers containing raw counts present {.field {head(x = count_layers, n = 2)}} and a non-default value was provided to {.code group.by}.",
+                            "i" = "To group LIGER object by assay layers do not change value of {.code group.by}",
+                            "i" = "If {.code group.by} variable is different than the split layers please run {.code JoinLayers} first."))
     }
   }
 
@@ -87,16 +99,8 @@ as.LIGER.Seurat <- function(
   }
 
   # Set ident to grouping variable
-  Idents(object = x) <- group.by
-
-  # Check & Set Assay
-  if (!assay %in% Assays(object = x)) {
-    cli_abort(message = "Provided assay {.field {assay}} not found in Seurat object.")
-  }
-
-  if (assay != DefaultAssay(object = x)) {
-    cli_inform("Changing object DefaultAssay from ({.field {DefaultAssay(object = x)}}) to provided assay ({.field {assay}}).")
-    DefaultAssay(x) <- assay
+  if (length(x = layers_check) == 1) {
+    Idents(object = x) <- group.by
   }
 
   # Check & Pull other relevant data
@@ -120,19 +124,31 @@ as.LIGER.Seurat <- function(
   }
 
   # Get raw data & cells
-  counts_layer <- Layers(object = x, search = "counts")
-  raw_data_full <- LayerData(object = x, layer = counts_layer)
+  if (length(x = count_layers) == 1) {
+    raw_data_full <- LayerData(object = x, layer = count_layers)
 
-  cells_per_dataset <- CellsByIdentities(object = x)
+    cells_per_dataset <- CellsByIdentities(object = x)
 
-  # Split data by dataset
-  idents <- names(x = cells_per_dataset)
+    # Split data by dataset
+    idents <- names(x = cells_per_dataset)
 
-  raw_data_list <- lapply(idents, function(x){
-    raw_data_full[, cells_per_dataset[[x]]]
-  })
+    raw_data_list <- lapply(idents, function(x){
+      raw_data_full[, cells_per_dataset[[x]]]
+    })
 
-  names(raw_data_list) <- idents
+    names(raw_data_list) <- idents
+  }
+
+  # If multiple layers
+  if (length(x = count_layers) > 1) {
+    raw_data_list <- lapply(count_layers, function (i){
+      counts <- LayerData(object = x, layer = i)
+    })
+
+    new_names <- gsub(pattern = "counts.", replacement = "", x = count_layers)
+
+    names(raw_data_list) <- new_names
+  }
 
   # Create LIGER Object
   if (isTRUE(x = verbose)) {
