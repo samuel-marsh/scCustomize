@@ -3,6 +3,7 @@
 S3method(Add_Cell_Complexity,Seurat)
 S3method(Add_Cell_Complexity,liger)
 S3method(Add_Mito_Ribo,Seurat)
+S3method(Add_Mito_Ribo,SingleCellExperiment)
 S3method(Add_Mito_Ribo,liger)
 S3method(Fetch_Meta,Seurat)
 S3method(Fetch_Meta,liger)
