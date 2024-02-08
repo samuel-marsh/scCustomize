@@ -36,7 +36,7 @@ Return warning messages for meta data columns not found.
 }
 \examples{
 \dontrun{
-meta_variables <- Meta_Present(seurat_object = obj_name, gene_list = DEG_list, print_msg = TRUE)
+meta_variables <- Meta_Present(object = obj_name, gene_list = DEG_list, print_msg = TRUE)
 }
 
 }
