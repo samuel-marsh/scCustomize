@@ -590,7 +590,7 @@ QC_Histogram <- function(
 
   # Check split valid
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Check feature length if split.by provided
@@ -603,7 +603,7 @@ QC_Histogram <- function(
   # Check against object
   found_features <- Gene_Present(data = seurat_object, gene_list = found_defaults[[2]], omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
 
-  found_meta <- Meta_Present(seurat_object = seurat_object, meta_col_names = found_features[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+  found_meta <- Meta_Present(object = seurat_object, meta_col_names = found_features[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
   # Combine lists
   all_not_found_features <- found_meta[[2]]

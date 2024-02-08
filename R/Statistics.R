@@ -255,12 +255,12 @@ Median_Stats <- function(
   }
 
   # Check group variable present
-  group_by_var <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+  group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
   # Check stats variables present
   all_variables <- c(default_var, median_var)
 
-  all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
+  all_variables <- Meta_Present(object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
 
   # Filter meta data for columns of interest
   meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
@@ -345,12 +345,12 @@ MAD_Stats <- function(
   }
 
   # Check group variable present
-  group_by_var <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+  group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
   # Check stats variables present
   all_variables <- c(default_var, mad_var)
 
-  all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
+  all_variables <- Meta_Present(object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
 
   # Filter meta data for columns of interest
   meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%

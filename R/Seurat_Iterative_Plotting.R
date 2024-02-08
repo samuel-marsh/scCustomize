@@ -165,7 +165,7 @@ Iterate_DimPlot_bySample <- function(
   # Check meta.data column if not orig.ident
   if (sample_column != "orig.ident") {
     # Check meta data
-    sample_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
+    sample_column <- Meta_Present(object = seurat_object, meta_col_names = sample_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
 
     # stop if none found
     if (length(x = sample_column) == 0) {
@@ -591,7 +591,7 @@ Iterate_Meta_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check meta data
-  meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
+  meta_data_column <- Meta_Present(object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
 
   # stop if none found
   if (length(x = meta_data_column) == 0) {

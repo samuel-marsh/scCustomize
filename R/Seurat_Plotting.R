@@ -104,7 +104,7 @@ FeaturePlot_scCustom <- function(
 
   # Check meta
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Set or check split_collect values
@@ -792,12 +792,12 @@ VlnPlot_scCustom <- function(
 
   # Check split valid
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
@@ -965,7 +965,7 @@ Stacked_VlnPlot <- function(
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
@@ -1116,7 +1116,7 @@ DotPlot_scCustom <- function(
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
@@ -1557,7 +1557,7 @@ Meta_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check meta data
-  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+  good_meta_data_column <- Meta_Present(object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
@@ -1907,15 +1907,15 @@ DimPlot_scCustom <- function(
   }
 
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (length(x = group.by) > 1) {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   } else {
     if (!is.null(x = group.by) && group.by != "ident") {
-      Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+      Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
     }
   }
 
@@ -2464,15 +2464,15 @@ FeatureScatter_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (length(x = group.by) > 1) {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   } else {
     if (!is.null(x = group.by) && group.by != "ident") {
-      Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+      Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
     }
   }
 
