@@ -1162,8 +1162,7 @@ Convert_Assay <- function(
 #' Split Assay5 of Seurat object into layers by variable in meta.data
 #'
 #' @param seurat_object Seurat object name.
-#' @param assay name(s) of assays to convert.  Default is NULL and will check with users
-#' which assays they want to convert.
+#' @param assay name(s) of assays to convert.  Defaults to current active assay.
 #' @param split.by Variable in meta.data to use for splitting layers.
 #'
 #' @concept object_conversion
@@ -1184,15 +1183,22 @@ Split_Layers <- function(
     assay = "RNA",
     split.by
 ) {
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Check v3 vs. v5 and convert if needed
   if (isFALSE(x = Assay5_Check(seurat_object = seurat_object, assay = assay))) {
     cli_inform(message = c("i" = "Selected {.code assay} is not Assay5, converting to Assay5 before splitting."))
 
     seurat_object <- Convert_Assay(seurat_object = seurat_object, assay = assay, convert_to = "V5")
   }
 
+  # check split is valid
   split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
+  # split layers
   seurat_object[[assay]] <- split(seurat_object[[assay]], f = seurat_object@meta.data[[split.by]])
 
+  # return object
   return(seurat_object)
 }
