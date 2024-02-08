@@ -224,7 +224,8 @@ Case_Check <- function(
 #' Check if meta data columns are present in object and return vector of found columns
 #' Return warning messages for meta data columns not found.
 #'
-#' @param seurat_object object name.
+#' @param object Seurat or Liger object name.
+#' @param seurat_object `r lifecycle::badge("deprecated")` deprecated.  Please use `object` instead.
 #' @param meta_col_names vector of column names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object. Default is TRUE.
@@ -246,17 +247,31 @@ Case_Check <- function(
 #'
 
 Meta_Present <- function(
+  object,
   seurat_object,
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
   return_none = FALSE
 ) {
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
+  # Check is slot is supplied
+  if (lifecycle::is_present(seurat_object)) {
+    lifecycle::deprecate_stop(when = "2.1.0",
+                              what = "seurat_object",
+                              with = "object",
+                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
+                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    )
+  }
 
-  # get all features
-  possible_features <- colnames(x = seurat_object@meta.data)
+  # Set possible variables based on object type
+  if (inherits(x = input_data, what = "Seurat")) {
+    possible_features <- colnames(x = object@meta.data)
+  }
+
+  if (inherits(x = input_data, what = "liger")) {
+    possible_features <- colnames(x = object@cell.data)
+  }
 
   # If any features not found
   if (any(!meta_col_names %in% possible_features)) {
