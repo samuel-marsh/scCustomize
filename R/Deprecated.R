@@ -1,6 +1,18 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### TEMP DEPRECATED ####################
+#################### DEPRECATED FUNCTIONS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' @description
+#' Use [FeatureScatter_scCustom()] instead of `Split_FeatureScatter()`.
+#'
+#' @export
+#' @keywords internal
+#' @rdname deprecated
+
+Split_FeatureScatter <- function(...) {
+  lifecycle::deprecate_stop(when = "2.0.0", what = "Split_FeatureScatter()", with = "FeatureScatter_scCustom()")
+}
 
 
 #' Deprecated functions
