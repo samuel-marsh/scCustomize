@@ -315,7 +315,7 @@ LIGER_Features <- function(
 
   # Extract features
   features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
-    rownames(liger_object@raw.data[[x]])
+    rownames(x = liger_object@raw.data[[x]])
   })
 
   if (isFALSE(x = by_dataset)) {
