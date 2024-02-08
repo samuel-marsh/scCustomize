@@ -13,6 +13,7 @@
 - Added parameter `assay_type` to allow manual control of assay type when creating Seurat object from LIGER using `Liger_to_Seurat`.  
 - Added param `grid_color` to `Clustered_DotPlot` to control the color of grid lines (default is no grid lines).  
 - Added ability to split identities in `Clustered_DotPlot` by additional variable and maintain expression information.  
+- Added `Split_Layers` function for V5 objects.  
 
 
   
