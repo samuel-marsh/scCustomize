@@ -1199,21 +1199,36 @@ Split_Layers <- function(
     assay = "RNA",
     split.by
 ) {
-  # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = seurat_object)
-
-  # Check v3 vs. v5 and convert if needed
-  if (isFALSE(x = Assay5_Check(seurat_object = seurat_object, assay = assay))) {
-    cli_inform(message = c("i" = "Selected {.code assay} is not Assay5, converting to Assay5 before splitting."))
-
-    seurat_object <- Convert_Assay(seurat_object = seurat_object, assay = assay, convert_to = "V5")
+  # Make sure single assay
+  if (length(x = assay) > 1) {
+    cli_abort(message = c("Multiple assays specified ({.field {assay}}).",
+                          "i" = "{.code Split_Layers} only supports splitting one assay at a time."))
   }
+
+  # Check assay present
+  assay_present <- Assay_Present(seurat_object = seurat_object, assay_list = assay, print_msg = FALSE, omit_warn = TRUE)[[1]]
 
   # check split is valid
   split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-  # split layers
-  seurat_object[[assay]] <- split(seurat_object[[assay]], f = seurat_object@meta.data[[split.by]])
+  # Check for already split layers
+  check_split <- Layers(object = pbmc, search = "counts", assay = assay_present)
+
+  if (length(x = check_split) > 1) {
+    cli_warn(message = "Layers in the assay: {.field {assay_present}} already appear split.  Skipping assay.")
+  } else {
+    # Check v3 vs. v5 and convert if needed
+    cli_inform(message = c("*" = "Splitting assay: {.field {assay_present}}"))
+    if (isFALSE(x = Assay5_Check(seurat_object = seurat_object, assay = assay_present))) {
+      cli_inform(message = c("i" = "Selected {.code assay} ({.field {assay_present}}) is not Assay5, converting to Assay5 before splitting."))
+
+      seurat_object <- suppressMessages(Convert_Assay(seurat_object = seurat_object, assay = assay_present, convert_to = "V5"))
+    }
+
+    # split layers
+    seurat_object[[assay_present]] <- split(seurat_object[[assay_present]], f = seurat_object@meta.data[[split.by]])
+  }
+
 
   # return object
   return(seurat_object)
