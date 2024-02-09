@@ -316,7 +316,7 @@ check_symbols <- UpdateSymbolList(symbols = genes_present[[2]], verbose = TRUE)
 ```
 
 
-## Merging Data/Objects
+## Merging & Splitting Data/Objects
 
 ### Merging raw data
 It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later.  scCustomize features a modified version of the internal LIGER function `MergeSparseDataAll()`.
@@ -349,6 +349,16 @@ cell_ids <- c("sample1", "sample2", "sample3", ..., "sample10")
 
 merged_seurat <- Merge_Seurat_List(list_seurat = list_of_objects, add.cell.ids = cell_ids)
 ```
+
+
+### Splitting Seurat V5 Layers  
+Seurat V5 objects now have the ability to split within the object into layers.  However, I find that the syntax to do this is not the most intuitive and can be simplified with a new simple wrapper function: `Split_Layers()`
+
+```{r message=TRUE, warning=TRUE}
+pbmc <- Split_Layers(seurat_object = pbmc, split.by = "sample_id")
+```
+
+`Split_Layers()` defaults to "RNA" assay but can be used for any assay present in object (users should check whether splitting assay other than "RNA" is valid before proceeding).
 
 
 ## Storing Misc Information in Seurat Objects
