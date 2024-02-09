@@ -1214,7 +1214,7 @@ Split_Layers <- function(
   length_split <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
 
   # Check for already split layers
-  check_split <- Layers(object = pbmc, search = "counts", assay = assay_present)
+  check_split <- Layers(object = seurat_object, search = "counts", assay = assay_present)
 
   if (length(x = check_split) > 1) {
     cli_warn(message = "Layers in the assay: {.field {assay_present}} already appear split.  Skipping assay.")
