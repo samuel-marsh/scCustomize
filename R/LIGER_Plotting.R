@@ -104,10 +104,8 @@ DimPlot_LIGER <- function(
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
   if (!is.null(x = split_by)) {
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
-
-  group_by_var <- Meta_Present(object = liger_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
   # Add one time dim label warning
   if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
