@@ -1208,8 +1208,10 @@ Split_Layers <- function(
   # Check assay present
   assay_present <- Assay_Present(seurat_object = seurat_object, assay_list = assay, print_msg = FALSE, omit_warn = TRUE)[[1]]
 
-  # check split is valid
+  # check split is valid and length
   split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+  length_split <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
 
   # Check for already split layers
   check_split <- Layers(object = pbmc, search = "counts", assay = assay_present)
@@ -1217,10 +1219,10 @@ Split_Layers <- function(
   if (length(x = check_split) > 1) {
     cli_warn(message = "Layers in the assay: {.field {assay_present}} already appear split.  Skipping assay.")
   } else {
+    cli_inform(message = c("*" = "Splitting assay: {.field {assay_present}} into {.field {length_split} layers} by {.val {split.by}}"))
     # Check v3 vs. v5 and convert if needed
-    cli_inform(message = c("*" = "Splitting assay: {.field {assay_present}}"))
     if (isFALSE(x = Assay5_Check(seurat_object = seurat_object, assay = assay_present))) {
-      cli_inform(message = c("i" = "Selected {.code assay} ({.field {assay_present}}) is not Assay5, converting to Assay5 before splitting."))
+      cli_inform(message = c("i" = "({.field {assay_present}}) is not Assay5, converting to Assay5 before splitting."))
 
       seurat_object <- suppressMessages(Convert_Assay(seurat_object = seurat_object, assay = assay_present, convert_to = "V5"))
     }
@@ -1228,7 +1230,6 @@ Split_Layers <- function(
     # split layers
     seurat_object[[assay_present]] <- split(seurat_object[[assay_present]], f = seurat_object@meta.data[[split.by]])
   }
-
 
   # return object
   return(seurat_object)
