@@ -1037,12 +1037,12 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # Check split valid
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # set assay (if null set to active assay)

@@ -287,7 +287,7 @@ as.LIGER.list <- function(
   # Check meta data
   if (is.null(x = dataset_names)) {
     for (j in x) {
-      group.by <- Meta_Present(seurat_object = j, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+      group.by <- Meta_Present(object = j, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
       # stop if none found
       if (length(x = group.by) == 0) {

@@ -256,12 +256,12 @@ Meta_Present <- function(
 ) {
   # Check is slot is supplied
   if (lifecycle::is_present(seurat_object)) {
-    lifecycle::deprecate_stop(when = "2.1.0",
-                              what = "seurat_object",
-                              with = "object",
-                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
+    lifecycle::deprecate_warn(when = "2.1.0",
+                              what = "Meta_Present(seurat_object)",
+                              with = "Meta_Present(object)",
+                              details = c("!" = "Please adjust code now to prepare for full deprecation in v2.2.0.")
     )
+
   }
 
   # Set possible variables based on object type

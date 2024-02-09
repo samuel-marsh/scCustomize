@@ -94,8 +94,8 @@ FeaturePlot_scCustom <- function(
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
     lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "slot",
-                              with = "layer",
+                              what = "FeaturePlot_scCustom(slot)",
+                              with = "FeaturePlot_scCustom(layer)",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
                                           "i" = "Please adjust code now to prepare for full deprecation.")
     )
@@ -431,8 +431,8 @@ FeaturePlot_DualAssay <- function(
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
     lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "slot",
-                              with = "layer",
+                              what = "FeaturePlot_DualAssay(slot)",
+                              with = "FeaturePlot_DualAssay(layer)",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
                                           "i" = "Please adjust code now to prepare for full deprecation.")
     )

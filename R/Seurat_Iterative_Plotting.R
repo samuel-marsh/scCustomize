@@ -903,7 +903,7 @@ Iterate_FeaturePlot_scCustom <- function(
 ) {
   # Deprecation warning
   if (lifecycle::is_present(gene_list)) {
-    lifecycle::deprecate_warn(when = "1.2.0",
+    lifecycle::deprecate_warn(when = "2.0.0",
                               what = "Iterate_FeaturePlot_scCustom(gene_list)",
                               with = "Iterate_FeaturePlot_scCustom(features)",
                               details = c("v" = "The parameter will remain functional until next major update.",
