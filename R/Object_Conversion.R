@@ -1222,7 +1222,7 @@ Split_Layers <- function(
     cli_inform(message = c("*" = "Splitting layers within assay: {.field {assay_present}} into {.field {length_split} parts} by {.val {split.by}}"))
     # Check v3 vs. v5 and convert if needed
     if (isFALSE(x = Assay5_Check(seurat_object = seurat_object, assay = assay_present))) {
-      cli_inform(message = c("i" = "({.field {assay_present}}) is not Assay5, converting to Assay5 before splitting."))
+      cli_inform(message = c("i" = "{.field {assay_present}} is not Assay5, converting to Assay5 before splitting."))
 
       seurat_object <- suppressMessages(Convert_Assay(seurat_object = seurat_object, assay = assay_present, convert_to = "V5"))
     }
