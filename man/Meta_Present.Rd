@@ -6,7 +6,7 @@
 \usage{
 Meta_Present(
   object,
-  seurat_object,
+  seurat_object = deprecated(),
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
