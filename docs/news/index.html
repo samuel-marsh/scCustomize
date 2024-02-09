@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
       </span>
     </div>
 
@@ -59,10 +59,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -329,7 +335,7 @@
 <h3 id="added-1-0-0">Added<a class="anchor" aria-label="anchor" href="#added-1-0-0"></a></h3>
 <ul><li>Added <code>mito_name</code> parameter to <code>QC_Plots_Mito</code> to allow for custom specification of meta data column name that contains mitochondrial information.</li>
 <li>Added <code><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln()</a></code> function to return patchwork layout of 3 QC plots.</li>
-<li>Added Rhesus Macaque (macaca mulatta) to the accepted species list for <code><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> and <code><a href="../reference/Add_Mito_Ribo_LIGER.html">Add_Mito_Ribo_LIGER()</a></code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/28" class="external-link">#28</a>).</li>
+<li>Added Rhesus Macaque (macaca mulatta) to the accepted species list for <code>Add_Mito_Ribo_Seurat()</code> and <code>Add_Mito_Ribo_LIGER()</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/28" class="external-link">#28</a>).</li>
 <li>Added <code>alpha_exp</code> and <code>alpha_na_exp</code> parameters to <code>FeaturePlot_scCustom</code> to allow for control of color scale transparency (<a href="https://github.com/samuel-marsh/scCustomize/issues/21" class="external-link">#21</a>).</li>
 <li>
 <code>*_Highlight_Plot</code> functions can now plot multiple variables simultaneously using either one color for all variables or one color per variable (<a href="https://github.com/samuel-marsh/scCustomize/issues/34" class="external-link">#34</a>).</li>
@@ -344,7 +350,7 @@
 <li>Added <code>ensembl_ids</code> parameter for <code>Add_Mito_Ribo_*</code> functions. If <code>ensembl_ids = TRUE</code> functions will retrieve stored ensembl IDs representing mitochondrial and ribosomal genes for accepted default species.<br></li>
 <li>Added parameter <code>label_feature_yaxis</code> to <code>FeaturePlot_scCustom</code>. Allows for plotting of feature names on secondary y-axis when using <code>split.by</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/60" class="external-link">#60</a>).<br></li>
 <li>Added <code>Add_Sample_Meta</code> function for addition of sample-level meta data to cell-level <code>@meta.data</code> slot of Seurat objects.<br></li>
-<li>Added a matrix check in <code>Read_GEO_Delim</code> to check for issues with imported matrices. Check is modified version of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CheckMatrix.html" class="external-link">SeuratObject::CheckMatrix</a></code> called <code><a href="../reference/CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code>. Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.<br></li>
+<li>Added a matrix check in <code>Read_GEO_Delim</code> to check for issues with imported matrices. Check is modified version of <code><a href="https://rdrr.io/pkg/SeuratObject/man/CheckMatrix.html" class="external-link">SeuratObject::CheckMatrix</a></code> called <code><a href="../reference/CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code>. Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.<br></li>
 <li>
 <code>QC_Plot_UMIvsGene</code> will now returned filtered correlation value that takes into account <code>meta_gradient_name</code> if provided in addition to nFeature_RNA and nCount_RNA.</li>
 <li>Added new function <code>Variable_Features_ALL_LIGER</code> which allows for detection/selection of variable genes from entire LIGER object instead of iterating by dataset.</li>

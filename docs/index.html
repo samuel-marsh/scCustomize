@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
       </span>
     </div>
 
@@ -78,10 +78,16 @@
       <a href="articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="articles/Object_Conversion.html">Object Format Conversion</a>
+    </li>
+    <li>
       <a href="articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="articles/Misc_Functions.html">Misc Functions</a>
@@ -182,8 +188,8 @@ Many plotting functions can be easily automated with loops, apply, purrr etc. Ho
 Goal is to both speed up and simplify coding and reduce the use of copy/paste of the same lines of code which is more likely to lead to errors in code reproducibility.
 <ul>
 <li>
-<p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> (and LIGER version) to simplify this. Basic use requires only one line of code and two parameters.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">Add_Mito_Ribo_Seurat</span>(<span class="at">seurat_object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
+<p><em>Example of adding new parameters:</em> Adding the percentage of counts aligning to mitochondrial (and/or ribosomal) genes is common early step in analysis. scCustomize provides <code><a href="reference/Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> to simplify this. Basic use requires only one line of code and two parameters.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">Add_Mito_Ribo</span>(<span class="at">object =</span> obj_name, <span class="at">species =</span> <span class="st">"Human"</span>) </span></code></pre></div>
 <ul>
 <li>Function already knows the defaults for Human, Mouse, Rat, Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit a PR if you would like more species added!).</li>
 </ul>
@@ -223,7 +229,7 @@ Base R error messages resulting from error deep inside Seurat (or other package)
 <li>scCustomize provides checks/warnings, using the cli/rlang packages, wrapped inside its functions to help and provide more informative error/warning messages. Two examples include:<br>
 </li>
 <li>
-<code><a href="reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> will warn you if no mitochondrial or ribosomal features are found and won’t create new metadata column.<br>
+<code><a href="reference/Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> will warn you if no mitochondrial or ribosomal features are found and won’t create new metadata column.<br>
 </li>
 <li>
 <code><a href="reference/Rename_Clusters.html">Rename_Clusters()</a></code> will check and make sure the right number of unique new names are provided and provide one of two error messages if not before attempting to rename the object idents.</li>

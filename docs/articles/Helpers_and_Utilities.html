@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
       </span>
     </div>
 
@@ -78,10 +78,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -130,8 +136,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>General Helpers &amp; Utilities</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 20,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: February 02,
+2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Helpers_and_Utilities.Rmd" class="external-link"><code>vignettes/articles/Helpers_and_Utilities.Rmd</code></a></small>
       <div class="hidden name"><code>Helpers_and_Utilities.Rmd</code></div>
@@ -176,7 +182,7 @@ Plotting vignette</a> one the first steps after creating object if often
 to calculate and add mitochondrial and ribosomal count percentages per
 cell/nucleus.</p>
 <div class="section level4">
-<h4 id="seurat-objects-add_mito_ribo_seurat">Seurat Objects: <code>Add_Mito_Ribo_Seurat()</code><a class="anchor" aria-label="anchor" href="#seurat-objects-add_mito_ribo_seurat"></a>
+<h4 id="seurat-objects-add_mito_ribo">Seurat Objects: <code>Add_Mito_Ribo()</code><a class="anchor" aria-label="anchor" href="#seurat-objects-add_mito_ribo"></a>
 </h4>
 <p>scCustomize contains easy wrapper function to automatically add both
 Mitochondrial and Ribosomal percentages to meta.data slot. If you are
@@ -185,11 +191,11 @@ macaque data all you need to do is specify the <code>species</code>
 parameter.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
 <p>To view list of accepted values for default species names simply set
 <code>list_species_names = TRUE</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>list_species_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>list_species_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -388,59 +394,56 @@ mitochondrial and ribosomal genes and I will add additional built-in
 defaults to the function.</em></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Using gene name patterns</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span>,</span>
-<span>    ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using feature name lists</span></span>
 <span><span class="va">mito_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
 <span><span class="va">ribo_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>,</span>
-<span>    ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using combination of gene lists and gene name patterns</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"Human"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>,</span>
-<span>    ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"Human"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level4">
 <h4 id="warning-messages">Warning Messages<a class="anchor" aria-label="anchor" href="#warning-messages"></a>
 </h4>
-<p>The added benefit of <code>Add_Mito_Ribo_Seurat</code> &amp;
-<code>Add_Mito_Ribo_LIGER</code> is that they will return informative
-warnings if no Mitochondrial or Ribosomal features are found using the
-current species, features, or pattern specification.</p>
+<p>The added benefit of <code>Add_Mito_Ribo</code> &amp;
+<code>Add_Mito_Ribo</code> is that they will return informative warnings
+if no Mitochondrial or Ribosomal features are found using the current
+species, features, or pattern specification.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For demonstration purposes we can set `species = mouse` for this object of human cells</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `Add_Mito_Ribo_Seurat()`:</span></span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `Add_Mito_Ribo()`:</span></span></span>
 <span><span class="co">## <span style="color: #BBBB00;">!</span> No Mito or Ribo features found in object using patterns/feature list</span></span>
 <span><span class="co">##   provided.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Please check pattern/feature list and/or gene names in object.</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Or if providing custom patterns/lists and features not found</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"^MT-"</span>, ribo_pattern <span class="op">=</span> <span class="st">"BAD_PATTERN"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"^MT-"</span>, ribo_pattern <span class="op">=</span> <span class="st">"BAD_PATTERN"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: No Ribo features found in object using pattern/feature list provided.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> No column will be added to meta.data.</span></span></code></pre>
-<p><code>Add_Mito_Ribo_Seurat</code> and
-<code><a href="../reference/Add_Mito_Ribo_LIGER.html">Add_Mito_Ribo_LIGER()</a></code> will also return warnings if columns
-are already present in <code>@meta.data</code> slot and prompt you to
-provide override if you want to run the function.</p>
+<p><code>Add_Mito_Ribo</code> and <code><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> will also
+return warnings if columns are already present in
+<code>@meta.data</code> slot and prompt you to provide override if you
+want to run the function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `Add_Mito_Ribo_Seurat()`:</span></span></span>
+<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `Add_Mito_Ribo()`:</span></span></span>
 <span><span class="co">## <span style="color: #BBBB00;">!</span> Columns with <span style="color: #0000BB;">"percent_mito"</span> and/or <span style="color: #0000BB;">"percent_ribo"</span> already present in</span></span>
 <span><span class="co">##   meta.data slot.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> *To run function and overwrite columns set parameter `overwrite = TRUE` or</span></span>
 <span><span class="co">##   change respective `mito_name`, `ribo_name`, and/or `mito_ribo_name`*</span></span></code></pre>
 </div>
 <div class="section level4">
-<h4 id="liger-objects-add_mito_ribo_liger">LIGER Objects: <code>Add_Mito_Ribo_LIGER()</code><a class="anchor" aria-label="anchor" href="#liger-objects-add_mito_ribo_liger"></a>
+<h4 id="liger-objects-add_mito_ribo">LIGER Objects: <code>Add_Mito_Ribo()</code><a class="anchor" aria-label="anchor" href="#liger-objects-add_mito_ribo"></a>
 </h4>
 <p>scCustomize also contains identical function for use with LIGER
-objects. <code>Add_Mito_Ribo_LIGER</code> contains equivalent parameters
-and capabilities as <code>Add_Mito_Ribo_Seurat</code></p>
+objects. <code>Add_Mito_Ribo</code> contains equivalent parameters and
+capabilities as <code>Add_Mito_Ribo</code></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">liger_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">liger_obj</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">liger_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">liger_obj</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -459,9 +462,9 @@ cells. The metric is calculated by calculating the result of
 log10(nFeature) / log10(nCount).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Complexity_Seurat.html">Add_Cell_Complexity_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Complexity.html">Add_Cell_Complexity</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
 <p><em>NOTE: There is analogous function for LIGER objects (see:
-<code><a href="../reference/Add_Cell_Complexity_LIGER.html">Add_Cell_Complexity_LIGER()</a></code>).</em></p>
+<code><a href="../reference/Add_Cell_Complexity.html">Add_Cell_Complexity()</a></code>).</em></p>
 </div>
 <div class="section level4">
 <h4 id="add-top-percent-expression-qc-metric">Add Top Percent Expression QC Metric<a class="anchor" aria-label="anchor" href="#add-top-percent-expression-qc-metric"></a>
@@ -573,10 +576,10 @@ pbmc3k
 B
 </td>
 <td style="text-align:left;">
-sample2
+sample6
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -596,10 +599,10 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample4
+sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -619,10 +622,10 @@ pbmc3k
 CD14+ Mono
 </td>
 <td style="text-align:left;">
-sample6
+sample4
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -642,7 +645,7 @@ pbmc3k
 NK
 </td>
 <td style="text-align:left;">
-sample3
+sample5
 </td>
 <td style="text-align:left;">
 Batch2
@@ -668,7 +671,7 @@ Memory CD4 T
 sample6
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -688,10 +691,10 @@ pbmc3k
 CD8 T
 </td>
 <td style="text-align:left;">
-sample4
+sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -711,7 +714,7 @@ pbmc3k
 CD8 T
 </td>
 <td style="text-align:left;">
-sample2
+sample6
 </td>
 <td style="text-align:left;">
 Batch2
@@ -734,10 +737,10 @@ pbmc3k
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-sample4
+sample6
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -757,7 +760,7 @@ pbmc3k
 FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
-sample2
+sample3
 </td>
 <td style="text-align:left;">
 Batch2
@@ -800,13 +803,13 @@ batch
 pbmc3k
 </td>
 <td style="text-align:left;">
-B
+CD8 T
 </td>
 <td style="text-align:left;">
 sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -817,7 +820,7 @@ Batch2
 pbmc3k
 </td>
 <td style="text-align:left;">
-B
+Naive CD4 T
 </td>
 <td style="text-align:left;">
 sample2
@@ -834,7 +837,7 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-NK
+FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
 sample3
@@ -868,13 +871,13 @@ Batch2
 pbmc3k
 </td>
 <td style="text-align:left;">
-Naive CD4 T
+Memory CD4 T
 </td>
 <td style="text-align:left;">
 sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -885,7 +888,7 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-CD14+ Mono
+B
 </td>
 <td style="text-align:left;">
 sample6
@@ -928,7 +931,7 @@ batch
 sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -972,7 +975,7 @@ Batch2
 sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -1029,13 +1032,13 @@ Median_nFeature_RNA
 sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 <td style="text-align:right;">
-2173.0
+2183.0
 </td>
 <td style="text-align:right;">
-809.0
+812
 </td>
 </tr>
 <tr>
@@ -1049,10 +1052,10 @@ sample2
 Batch1
 </td>
 <td style="text-align:right;">
-2163.5
+2138.0
 </td>
 <td style="text-align:right;">
-803.0
+810
 </td>
 </tr>
 <tr>
@@ -1066,10 +1069,10 @@ sample3
 Batch2
 </td>
 <td style="text-align:right;">
-2190.0
+2237.0
 </td>
 <td style="text-align:right;">
-823.5
+821
 </td>
 </tr>
 <tr>
@@ -1083,10 +1086,10 @@ sample4
 Batch2
 </td>
 <td style="text-align:right;">
-2209.0
+2218.0
 </td>
 <td style="text-align:right;">
-815.0
+826
 </td>
 </tr>
 <tr>
@@ -1097,13 +1100,13 @@ Batch2
 sample5
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2161.0
+2214.5
 </td>
 <td style="text-align:right;">
-820.0
+807
 </td>
 </tr>
 <tr>
@@ -1117,10 +1120,10 @@ sample6
 Batch2
 </td>
 <td style="text-align:right;">
-2286.0
+2206.0
 </td>
 <td style="text-align:right;">
-827.0
+823
 </td>
 </tr>
 <tr>
@@ -1137,7 +1140,7 @@ NA
 2196.0
 </td>
 <td style="text-align:right;">
-816.0
+816
 </td>
 </tr>
 </tbody>
@@ -1290,7 +1293,7 @@ return named lists of matrices and the ability to specify sample
 <span><span class="va">GEO_10X_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Sparse_Data_All.html">Merge_Sparse_Data_All</a></span><span class="op">(</span>matrix_list <span class="op">=</span> <span class="va">GEO_10X</span>, add_cell_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">GEO_10X</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create Seurat Object and specify orig.ident location</span></span>
-<span><span class="va">GEO_10X_Seurat</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">GEO_10X_merged</span>, names.field <span class="op">=</span> <span class="fl">1</span>, names.delim <span class="op">=</span> <span class="st">"_"</span>,</span>
+<span><span class="va">GEO_10X_Seurat</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">GEO_10X_merged</span>, names.field <span class="op">=</span> <span class="fl">1</span>, names.delim <span class="op">=</span> <span class="st">"_"</span>,</span>
 <span>    min.features <span class="op">=</span> <span class="fl">200</span>, min.cells <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">

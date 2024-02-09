@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
       </span>
     </div>
 
@@ -78,10 +78,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -129,8 +135,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>LIGER Plotting &amp; Functionality</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 20,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: February 02,
+2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/LIGER_Functions.Rmd" class="external-link"><code>vignettes/articles/LIGER_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>LIGER_Functions.Rmd</code></div>
@@ -433,6 +439,9 @@ correctly in Seurat object.</li>
 <li>
 <code>seurat_assay</code> Name of assay to use for data in Seurat
 object. Default is “RNA”.</li>
+<li>
+<code>assay_type</code> Specify whether to create V3/4 vs V5 Seurat
+assays.</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">liger_object</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></code></pre></div>
@@ -443,8 +452,7 @@ object. Default is “RNA”.</li>
 <p>For more information on adding mitochondrial and ribosomal count
 percentages to LIGER objects see <a href="https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html">General
 Utilities and Helpers Vignette</a> for information on
-<code>Add_Mito_Ribo_LIGER</code> which is analogous to
-<code>Add_Mito_Ribo_Seurat</code>.</p>
+<code>Add_Mito_Ribo</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="variable-gene-selection">Variable Gene Selection<a class="anchor" aria-label="anchor" href="#variable-gene-selection"></a>

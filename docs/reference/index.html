@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
       </span>
     </div>
 
@@ -59,10 +59,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -517,19 +523,27 @@ Checks Seurat object for the presence of features with the same spelling but alt
         </td>
         <td><p>Replace barcode suffixes</p></td>
       </tr><tr><td>
+          <p><code><a href="Split_Vector.html">Split_Vector()</a></code> </p>
+        </td>
+        <td><p>Split vector into list</p></td>
+      </tr><tr><td>
+          <p><code><a href="Updated_HGNC_Symbols.html">Updated_HGNC_Symbols()</a></code> </p>
+        </td>
+        <td><p>Update HGNC Gene Symbols</p></td>
+      </tr><tr><td>
           <p><code><a href="Add_CellBender_Diff.html">Add_CellBender_Diff()</a></code> </p>
         </td>
         <td><p>Calculate and add differences post-cell bender analysis</p></td>
       </tr><tr><td>
-          <p><code><a href="Add_Cell_Complexity_Seurat.html">Add_Cell_Complexity_Seurat()</a></code> </p>
+          <p><code><a href="Add_Cell_Complexity.html">Add_Cell_Complexity()</a></code> </p>
         </td>
-        <td><p>Add Cell Complexity Value</p></td>
+        <td><p>Add Cell Complexity</p></td>
       </tr><tr><td>
           <p><code><a href="Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics()</a></code> </p>
         </td>
         <td><p>Add Multiple Cell Quality Control Values with Single Function</p></td>
       </tr><tr><td>
-          <p><code><a href="Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat()</a></code> </p>
+          <p><code><a href="Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> </p>
         </td>
         <td><p>Add Mito and Ribo percentages</p></td>
       </tr><tr><td>
@@ -544,10 +558,6 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p><code><a href="Extract_Sample_Meta.html">Extract_Sample_Meta()</a></code> </p>
         </td>
         <td><p>Extract sample level meta.data</p></td>
-      </tr><tr><td>
-          <p><code><a href="Liger_to_Seurat.html">Liger_to_Seurat()</a></code> </p>
-        </td>
-        <td><p>Create a Seurat object containing the data from a liger object</p></td>
       </tr><tr><td>
           <p><code><a href="Merge_Seurat_List.html">Merge_Seurat_List()</a></code> </p>
         </td>
@@ -573,13 +583,17 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p class="section-desc"></p><p>Functions to provide ease of use for frequently used code from LIGER Objects.</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="Add_Cell_Complexity_LIGER.html">Add_Cell_Complexity_LIGER()</a></code> </p>
+          <p><code><a href="Add_Cell_Complexity.html">Add_Cell_Complexity()</a></code> </p>
         </td>
-        <td><p>Add Cell Complexity Value</p></td>
+        <td><p>Add Cell Complexity</p></td>
       </tr><tr><td>
-          <p><code><a href="Add_Mito_Ribo_LIGER.html">Add_Mito_Ribo_LIGER()</a></code> </p>
+          <p><code><a href="Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> </p>
         </td>
-        <td><p>Add Mito and Ribo percentages to LIGER</p></td>
+        <td><p>Add Mito and Ribo percentages</p></td>
+      </tr><tr><td>
+          <p><code><a href="LIGER_Features.html">LIGER_Features()</a></code> </p>
+        </td>
+        <td><p>Extract Features from LIGER Object</p></td>
       </tr><tr><td>
           <p><code><a href="Meta_Present_LIGER.html">Meta_Present_LIGER()</a></code> </p>
         </td>
@@ -592,6 +606,26 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p><code><a href="Variable_Features_ALL_LIGER.html">Variable_Features_ALL_LIGER()</a></code> </p>
         </td>
         <td><p>Perform variable gene selection over whole dataset</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="object-conversion-functions">Object Conversion Functions <a href="#object-conversion-functions" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions to convert between different single cell object formats (R &amp; Python).</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Convert_Assay.html">Convert_Assay()</a></code> </p>
+        </td>
+        <td><p>Convert between Seurat Assay types</p></td>
+      </tr><tr><td>
+          <p><code><a href="Liger_to_Seurat.html">Liger_to_Seurat()</a></code> </p>
+        </td>
+        <td><p>Create a Seurat object containing the data from a liger object</p></td>
+      </tr><tr><td>
+          <p><code><a href="as.LIGER.html">as.LIGER()</a></code> </p>
+        </td>
+        <td><p>Convert objects to LIGER objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="as.anndata.html">as.anndata()</a></code> </p>
+        </td>
+        <td><p>Convert objects to anndata objects</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="cluster-marker-annotation-utilities">Cluster/Marker Annotation Utilities <a href="#cluster-marker-annotation-utilities" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to provide ease of use or add functionality to DEG and cluster annotation.</p>
