@@ -1039,6 +1039,7 @@ Add_Sample_Meta <- function(
 #' @concept object_util
 #'
 #' @examples
+#' \donttest{
 #' library(Seurat)
 #' pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 #'
@@ -1051,6 +1052,7 @@ Add_Sample_Meta <- function(
 #' # Return all columns from meta data
 #' sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
 #' include_all = TRUE)
+#' }
 #'
 
 Extract_Sample_Meta <- function(
