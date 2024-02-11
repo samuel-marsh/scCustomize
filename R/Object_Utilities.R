@@ -1039,7 +1039,7 @@ Add_Sample_Meta <- function(
 #' @concept object_util
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(Seurat)
 #' pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 #'
