@@ -33,7 +33,7 @@
 #' @concept other_seurat_plotting
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(Seurat)
 #' Plot_Density_Custom(seurat_object = pbmc_small, features = "CD3E")
 #' }
