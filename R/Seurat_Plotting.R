@@ -2194,7 +2194,7 @@ VariableFeaturePlot_scCustom <- function(
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
-#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' @param ggplot_default_colosrs logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
