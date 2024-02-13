@@ -93,8 +93,6 @@ A Seurat Object
 \description{
 Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object or
 cell.data slot of Liger object
-
-Add Mito, Ribo, percentages to cell.data slot of LIGER Object
 }
 \examples{
 \dontrun{
