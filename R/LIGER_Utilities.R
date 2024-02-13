@@ -1,6 +1,4 @@
-#' Add Mito and Ribo percentages to LIGER
-#'
-#' Add Mito, Ribo, percentages to cell.data slot of LIGER Object
+#' Add Mito and Ribo percentages
 #'
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
