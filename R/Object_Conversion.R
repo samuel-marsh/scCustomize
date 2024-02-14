@@ -419,6 +419,35 @@ as.LIGER.list <- function(
 }
 
 
+#' Convert to Seurat Object
+#'
+#' @method as.Seurat liger
+#' @return Seurat object.
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @import Seurat
+#'
+#' @export
+#' @rdname as.Seurat
+#'
+#' @examples
+#' \dontrun{
+#' liger_object <- as.Seurat(x = seurat_object_list)
+#' }
+#'
+
+as.Seurat <- function(
+    x,
+    meta_data = TRUE,
+    ...
+) {
+  print("hi")
+}
+
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### CONVERT TO SEURAT ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
