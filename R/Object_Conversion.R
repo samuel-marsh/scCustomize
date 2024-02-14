@@ -423,13 +423,43 @@ as.LIGER.list <- function(
 #################### CONVERT TO SEURAT ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#' @importFrom SeuratObject as.Seurat
-#' @export
+
+#' Convert objects to \code{Seurat} objects
 #'
-SeuratObject::as.Seurat
-
-
-#' Convert to Seurat Object
+#' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
+#' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
+#'
+#' Stores original dataset identity by default in new object metadata if dataset names are passed
+#' in nms. iNMF factorization is stored in dim.reduction object with key "iNMF".
+#'
+#' @param x \code{liger} object.
+#' @param nms By default, labels cell names with dataset of origin (this is to account for cells in
+#' different datasets which may have same name). Other names can be passed here as vector, must have
+#' same length as the number of datasets. (default names(H)).
+#' @param renormalize Whether to log-normalize raw data using Seurat defaults (default TRUE).
+#' @param use.liger.genes Whether to carry over variable genes (default TRUE).
+#' @param by.dataset Include dataset of origin in cluster identity in Seurat object (default FALSE).
+#' @param keep_meta logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
+#' to new Seurat Object.  Default is TRUE.
+#' @param reduction_label Name of dimensionality reduction technique used.  Enables accurate transfer
+#' or name to Seurat object instead of defaulting to "tSNE".
+#' @param seurat_assay Name to set for assay in Seurat Object.  Default is "RNA".
+#' @param assay_type what type of Seurat assay to create in new object (Assay vs Assay5).
+#' Default is NULL which will default to the current user settings.
+#' See \code{\link{Convert_Assay}} parameter `convert_to` for acceptable values.
+#' @param add_barcode_names logical, whether to add dataset names to the cell barcodes when
+#' creating Seurat object, default is FALSE.
+#' @param barcode_prefix logical, if `add_barcode_names = TRUE` should the names be added as
+#' prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).
+#' @param barcode_cell_id_delimiter The delimiter to use when adding dataset id to barcode
+#' prefix/suffix.  Default is "_".
+#' @param ... description
+#'
+#' @return Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
+#'
+#' @references Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
+#' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
+#' PR to liger GitHub.
 #'
 #' @method as.Seurat liger
 #' @return Seurat object.
@@ -437,7 +467,12 @@ SeuratObject::as.Seurat
 #' @concept object_conversion
 #'
 #' @import cli
+#' @import Matrix
 #' @import Seurat
+#' @importFrom dplyr any_of pull select
+#' @importFrom magrittr "%>%"
+#' @importFrom methods as new
+#' @importFrom utils packageVersion
 #'
 #' @export
 #' @rdname as.Seurat
@@ -473,8 +508,8 @@ as.Seurat.liger <- function(
   key_name <- paste0(reduction_label, "_")
 
   # adjust raw data slot if needed
-  if (!inherits(x = liger_object@raw.data[[1]], what = 'dgCMatrix')) {
-    liger_object@raw.data <- lapply(liger_object@raw.data, as, Class = "CsparseMatrix")
+  if (!inherits(x = x@raw.data[[1]], what = 'dgCMatrix')) {
+    x@raw.data <- lapply(x@raw.data, as, Class = "CsparseMatrix")
   }
 
   # check assay_type is ok
@@ -505,9 +540,9 @@ as.Seurat.liger <- function(
 
   # merge raw data
   if (isTRUE(x = add_barcode_names)) {
-    raw.data <- Merge_Sparse_Data_All(matrix_list = liger_object@raw.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
+    raw.data <- Merge_Sparse_Data_All(matrix_list = x@raw.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
   } else {
-    raw.data <- Merge_Sparse_Data_All(matrix_list = liger_object@raw.data)
+    raw.data <- Merge_Sparse_Data_All(matrix_list = x@raw.data)
   }
 
   # create object
@@ -517,42 +552,42 @@ as.Seurat.liger <- function(
   if (isTRUE(x = renormalize)) {
     new.seurat <- Seurat::NormalizeData(new.seurat)
   } else {
-    if (length(x = liger_object@norm.data) > 0) {
+    if (length(x = x@norm.data) > 0) {
       if (isTRUE(x = add_barcode_names)) {
-        norm.data <- Merge_Sparse_Data_All(matrix_list = liger_object@norm.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
+        norm.data <- Merge_Sparse_Data_All(matrix_list = x@norm.data, add_cell_ids = nms, prefix = barcode_prefix, cell_id_delimiter = barcode_cell_id_delimiter)
       } else {
-        norm.data <- Merge_Sparse_Data_All(matrix_list = liger_object@norm.data)
+        norm.data <- Merge_Sparse_Data_All(matrix_list = x@norm.data)
       }
 
       new.seurat <- SetAssayData(object = new.seurat, layer = "data", slot = "data", new.data = norm.data)
     }
   }
 
-  if (length(x = liger_object@var.genes) > 0 && isTRUE(x = use.liger.genes)) {
-    VariableFeatures(object = new.seurat) <- liger_object@var.genes
+  if (length(x = x@var.genes) > 0 && isTRUE(x = use.liger.genes)) {
+    VariableFeatures(object = new.seurat) <- x@var.genes
   }
-  if (length(x = liger_object@scale.data) > 0) {
-    scale.data <- t(x = Reduce(rbind, liger_object@scale.data))
+  if (length(x = x@scale.data) > 0) {
+    scale.data <- t(x = Reduce(rbind, x@scale.data))
     colnames(x = scale.data) <- colnames(x = raw.data)
     new.seurat <- SetAssayData(object = new.seurat, layer = "scale.data", slot = "scale.data", new.data = scale.data)
   }
 
 
-  if (all(dim(x = liger_object@W) > 0) && all(dim(x = liger_object@H.norm) > 0)) {
-    inmf.loadings <- t(x = liger_object@W)
+  if (all(dim(x = x@W) > 0) && all(dim(x = x@H.norm) > 0)) {
+    inmf.loadings <- t(x = x@W)
     rinmf.loadings <- inmf.loadings
 
-    dimnames(x = inmf.loadings) <- list(liger_object@var.genes,
+    dimnames(x = inmf.loadings) <- list(x@var.genes,
                                         paste0("iNMF_", seq_len(ncol(inmf.loadings))))
-    dimnames(x = rinmf.loadings) <- list(liger_object@var.genes,
+    dimnames(x = rinmf.loadings) <- list(x@var.genes,
                                          paste0("rawiNMF_", seq_len(ncol(rinmf.loadings))))
 
-    inmf.embeddings <- liger_object@H.norm
-    rinmf.embeddings <- do.call(what = 'rbind', args = liger_object@H)
+    inmf.embeddings <- x@H.norm
+    rinmf.embeddings <- do.call(what = 'rbind', args = x@H)
 
-    dimnames(x = inmf.embeddings) <- list(unlist(x = lapply(liger_object@scale.data, rownames), use.names = FALSE),
+    dimnames(x = inmf.embeddings) <- list(unlist(x = lapply(x@scale.data, rownames), use.names = FALSE),
                                           paste0("iNMF_", seq_len(ncol(inmf.loadings))))
-    dimnames(x = rinmf.embeddings) <- list(unlist(x = lapply(liger_object@scale.data, rownames), use.names = FALSE),
+    dimnames(x = rinmf.embeddings) <- list(unlist(x = lapply(x@scale.data, rownames), use.names = FALSE),
                                            paste0("rawiNMF_", seq_len(ncol(x = inmf.loadings))))
 
 
@@ -575,9 +610,9 @@ as.Seurat.liger <- function(
   }
 
 
-  if (all(dim(x = liger_object@tsne.coords) > 0)) {
-    dimreduc.embeddings <- liger_object@tsne.coords
-    dimnames(x = dimreduc.embeddings) <- list(rownames(liger_object@H.norm),
+  if (all(dim(x = x@tsne.coords) > 0)) {
+    dimreduc.embeddings <- x@tsne.coords
+    dimnames(x = dimreduc.embeddings) <- list(rownames(x@H.norm),
                                               paste0(key_name, 1:2))
 
     dimreduc.obj <- CreateDimReducObject(
@@ -589,17 +624,17 @@ as.Seurat.liger <- function(
     new.seurat[[reduction_label]] <- dimreduc.obj
   }
 
-  new.seurat$orig.ident <- liger_object@cell.data$dataset
+  new.seurat$orig.ident <- x@cell.data$dataset
 
-  idents <- liger_object@clusters
+  idents <- x@clusters
 
-  if (length(x = idents) == 0 || isTRUE(x = by.dataset)) idents <- liger_object@cell.data$dataset
+  if (length(x = idents) == 0 || isTRUE(x = by.dataset)) idents <- x@cell.data$dataset
   Idents(object = new.seurat) <- idents
 
   # transfer meta
   if (isTRUE(x = keep_meta)) {
     # extract meta data from liger object
-    liger_meta <- Fetch_Meta(object = liger_object)
+    liger_meta <- Fetch_Meta(object = x)
     # remove meta data values already transferred
     liger_meta <- liger_meta %>%
       select(-any_of(c("nUMI", "nGene", "dataset")))
@@ -629,11 +664,7 @@ as.Seurat.liger <- function(
 }
 
 
-
-
-
-
-#' Create a Seurat object containing the data from a liger object
+#' Create a Seurat object containing the data from a liger object `r lifecycle::badge("deprecated")`
 #'
 #' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
 #' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
@@ -699,6 +730,14 @@ Liger_to_Seurat <- function(
     barcode_prefix = TRUE,
     barcode_cell_id_delimiter = "_"
 ) {
+  lifecycle::deprecate_soft(when = "2.1.0",
+                            what = "Liger_to_Seurat()",
+                            with = "as.Seurat()",
+                            details = c("i" = "Please adjust code now to prepare for full deprecation.")
+  )
+
+
+
   if (is.null(x = reduction_label)) {
     cli_abort(message = c("{.code reduction_label} parameter was not set.",
                           "*" = "LIGER objects do not store name of dimensionality reduction technique used.",
