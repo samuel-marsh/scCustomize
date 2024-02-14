@@ -438,7 +438,7 @@ as.LIGER.list <- function(
 #' }
 #'
 
-as.Seurat <- function(
+as.Seurat.liger <- function(
     x,
     meta_data = TRUE,
     ...
