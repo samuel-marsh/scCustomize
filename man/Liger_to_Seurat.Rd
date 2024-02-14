@@ -2,7 +2,7 @@
 % Please edit documentation in R/Object_Conversion.R
 \name{Liger_to_Seurat}
 \alias{Liger_to_Seurat}
-\title{Create a Seurat object containing the data from a liger object}
+\title{Create a Seurat object containing the data from a liger object \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 Liger_to_Seurat(
   liger_object,
