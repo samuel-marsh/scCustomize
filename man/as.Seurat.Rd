@@ -4,7 +4,21 @@
 \alias{as.Seurat.liger}
 \title{Convert to Seurat Object}
 \usage{
-\method{as.Seurat}{liger}(x, meta_data = TRUE, ...)
+\method{as.Seurat}{liger}(
+  x,
+  nms = names(liger_object@H),
+  renormalize = TRUE,
+  use.liger.genes = TRUE,
+  by.dataset = FALSE,
+  keep_meta = TRUE,
+  reduction_label = "UMAP",
+  seurat_assay = "RNA",
+  assay_type = NULL,
+  add_barcode_names = FALSE,
+  barcode_prefix = TRUE,
+  barcode_cell_id_delimiter = "_",
+  ...
+)
 }
 \value{
 Seurat object.
@@ -14,7 +28,7 @@ Convert to Seurat Object
 }
 \examples{
 \dontrun{
-liger_object <- as.Seurat(x = seurat_object_list)
+seurat_object <- as.Seurat(x = liger_object)
 }
 
 }
