@@ -423,6 +423,11 @@ as.LIGER.list <- function(
 #################### CONVERT TO SEURAT ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#' @importFrom SeuratObject as.Seurat
+#' @export
+#'
+SeuratObject::as.Seurat
+
 
 #' Convert to Seurat Object
 #'
