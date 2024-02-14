@@ -434,7 +434,7 @@ as.LIGER.list <- function(
 #' @import cli
 #' @import Seurat
 #'
-#' @export as.Seurat
+#' @export
 #' @rdname as.Seurat
 #'
 #' @examples
