@@ -420,8 +420,9 @@ as.LIGER.list <- function(
 
 #' Convert objects to \code{Seurat} objects
 #'
-#' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
-#' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
+#' Merges raw.data and scale.data of object, and creates Seurat object with these values along with slots
+#' containing dimensionality reduction coordinates, iNMF factorization, and cluster assignments.
+#' Supports Seurat V3/4 and V4.
 #'
 #' Stores original dataset identity by default in new object metadata if dataset names are passed
 #' in nms. iNMF factorization is stored in dim.reduction object with key "iNMF".
@@ -452,8 +453,7 @@ as.LIGER.list <- function(
 #' @return Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
 #'
 #' @references Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
-#' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
-#' PR to liger GitHub.
+#' Function was modified for use in scCustomize with additional parameters/functionality.
 #'
 #' @method as.Seurat liger
 #' @return Seurat object.
