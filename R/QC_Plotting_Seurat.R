@@ -601,7 +601,7 @@ QC_Histogram <- function(
   }
 
   # Check against object
-  found_features <- Gene_Present(data = seurat_object, gene_list = found_defaults[[2]], omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
+  found_features <- Feature_Present(data = seurat_object, features = found_defaults[[2]], omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
 
   found_meta <- Meta_Present(object = seurat_object, meta_col_names = found_features[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 

@@ -1004,8 +1004,6 @@ Iterate_FeaturePlot_scCustom <- function(
                          "i" = "Suggest splitting {.code features} and running {.field Iterate_FeaturePlot_scCustom} once for each feature list."))
   }
 
-  # gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
-
   # Modify Cluster Labels names if needed for saving plots
   if (!is.null(x = names(x = all_found_features)) && isFALSE(x = single_pdf)) {
     names_vec_mod <- gsub(pattern = "/", replacement = "-", x = names(x = all_found_features))
@@ -1311,9 +1309,6 @@ Iterate_VlnPlot_scCustom <- function(
     all_found_features <- features
   }
 
-  # # Check whether features are present in object
-  # gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
-
   # Set default color palette based on number of levels being plotted
   if (is.null(x = group.by)) {
     group_by_length <- length(x = unique(x = seurat_object@active.ident))
@@ -1507,7 +1502,7 @@ Iterate_Plot_Density_Custom <- function(
   }
 
   # Check whether features are present in object
-  gene_list <- Gene_Present(data = seurat_object, gene_list = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
+  gene_list <- Feature_Present(data = seurat_object, features = gene_list, print_msg = FALSE, case_check = TRUE)[[1]]
 
   # check palettes
   if (!is.null(x = custom_palette) && viridis_palette != "magma") {
@@ -1716,7 +1711,7 @@ Iterate_Plot_Density_Joint <- function(
 
   # Check whether features are present in object
   checked_gene_list <- lapply(1:length(gene_list), function(x){
-    genes <- Gene_Present(data = seurat_object, gene_list = gene_list[[x]], print_msg = FALSE, case_check = TRUE, return_none = TRUE)[[1]]
+    genes <- Feature_Present(data = seurat_object, features = gene_list[[x]], print_msg = FALSE, case_check = TRUE, return_none = TRUE)[[1]]
   })
 
   if (!is.null(x = names(x = gene_list))) {

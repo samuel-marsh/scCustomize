@@ -835,7 +835,7 @@ CellBender_Diff_Plot <- function(
       }
     } else {
       # check for features
-      features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+      features_list <- Feature_Present(data = feature_diff_df_filtered, features = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
 
       all_not_found_features <- features_list[[2]]
 

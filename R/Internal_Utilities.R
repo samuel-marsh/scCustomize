@@ -252,7 +252,7 @@ glue_collapse_scCustom <- function(
 
 #' Perform Feature and Meta Checks before plotting
 #'
-#' Wraps the `Gene_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
+#' Wraps the `Feature_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
 #' single function to perform feature checks before plotting.
 #'
 #' @param object Seurat object
@@ -275,7 +275,7 @@ Feature_PreCheck <- function(
   assay <- assay %||% Assays(object = object)
 
   # Check features and meta to determine which features present
-  features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
+  features_list <- Feature_Present(data = object, features = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
 
   meta_list <- Meta_Present(object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
