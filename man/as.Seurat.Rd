@@ -62,8 +62,9 @@ Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots 
 Seurat object.
 }
 \description{
-Merges raw.data and scale.data of object, and creates Seurat object with these values along with
-tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
+Merges raw.data and scale.data of object, and creates Seurat object with these values along with slots
+containing dimensionality reduction coordinates, iNMF factorization, and cluster assignments.
+Supports Seurat V3/4 and V4.
 }
 \details{
 Stores original dataset identity by default in new object metadata if dataset names are passed
@@ -77,7 +78,6 @@ seurat_object <- as.Seurat(x = liger_object)
 }
 \references{
 Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
-Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
-PR to liger GitHub.
+Function was modified for use in scCustomize with additional parameters/functionality.
 }
 \concept{object_conversion}
