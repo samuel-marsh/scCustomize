@@ -41,7 +41,7 @@
 - Fixed bug in `Add_Mito_Ribo_LIGER` that caused it to return value of 0 for all cells (Now part of renamed `Add_Mito_Ribo` S3 generic).  
 - Fixed legend display is `Clustered_DotPlot` to display percentage instead of proportion to match legend text.  
 - Fixed `Percent_Expressing` error when `group_by = "ident"`.  
-- Fixed error that caused features in non-default assays to be returned as not found when trying to plot.  
+- Fixed error that caused features in non-default assays to be returned as not found when attempting to plot.  
 
 
 
