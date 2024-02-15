@@ -4,8 +4,12 @@
 
 #' Convert objects to LIGER objects
 #'
-#' @param x Seurat object
+#' Convert objects (Seurat & lists of Seurat Objects) to anndata objects
+#'
+#' @param x An object to convert to class `liger`
 #' @param ... Arguments passed to other methods
+#'
+#' @return a liger object generated from `x`
 #'
 #' @rdname as.LIGER
 #' @export as.LIGER
@@ -18,12 +22,12 @@ as.LIGER <- function(x, ...) {
 
 #' Convert objects to anndata objects
 #'
-#' This function is part of generic `as.anndata` for conversion of Seurat Objects to anndata objects.
+#' Convert objects (Seurat & LIGER) to anndata objects
 #'
 #' @param x Seurat or LIGER object
 #' @param ... Arguments passed to other methods
 #'
-#' @return saved anndata object to at path provided.
+#' @return an anndata object generated from `x`, saved at path provided.
 #'
 #' @rdname as.anndata
 #' @export as.anndata

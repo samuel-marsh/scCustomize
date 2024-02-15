@@ -5,8 +5,6 @@
 
 #' Create liger object from one Seurat Object
 #'
-#' This function is part of generic `as.LIGER` for conversion of Seurat Objects.  Updated for Seurat5 compatibility and enhanced functionality.
-#'
 #' @param group.by Variable in meta data which contains variable to split data by, (default is "orig.ident").
 #' @param assay Assay containing raw data to use, (default is "RNA").
 #' @param remove_missing logical, whether to remove missing genes with no counts when converting to
@@ -25,7 +23,6 @@
 #' @references modified and enhanced version of `rliger::seuratToLiger`.
 #'
 #' @method as.LIGER Seurat
-#' @return liger object.
 #'
 #' @concept object_conversion
 #'
@@ -205,8 +202,6 @@ as.LIGER.Seurat <- function(
 
 #' Create liger object from one Seurat Object
 #'
-#' This function is part of generic `as.LIGER` for conversion of Seurat Objects.  Updated for Seurat5 compatibility and enhanced functionality.
-#'
 #' @param group.by Variable in meta data which contains variable to split data by, (default is "orig.ident").
 #' @param dataset_names optional, vector of names to use for naming datasets.
 #' @param assay Assay containing raw data to use, (default is "RNA").
@@ -222,7 +217,6 @@ as.LIGER.Seurat <- function(
 #'
 #'
 #' @method as.LIGER list
-#' @return liger object.
 #'
 #' @concept object_conversion
 #'
@@ -910,8 +904,6 @@ Liger_to_Seurat <- function(
 
 
 #' Create & Save Anndata Object
-#'
-#' This function is part of generic `as.anndata` for conversion of Seurat Objects to anndata objects.
 #'
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name file name.
