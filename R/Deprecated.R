@@ -2,8 +2,10 @@
 #################### DEPRECATED FUNCTIONS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+#' Deprecated functions
+#'
 #' @description
+#' `r lifecycle::badge("deprecated")`
 #' Use [FeatureScatter_scCustom()] instead of `Split_FeatureScatter()`.
 #'
 #' @export
@@ -15,11 +17,7 @@ Split_FeatureScatter <- function(...) {
 }
 
 
-#' Deprecated functions
-#'
 #' @description
-#' `r lifecycle::badge("deprecated")`
-#'
 #' Use [Add_Mito_Ribo()] instead of `Add_Mito_Ribo_Seurat()`.
 #'
 #' @export
