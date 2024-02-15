@@ -272,7 +272,7 @@ Feature_PreCheck <- function(
     assay = NULL
 ) {
   # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% Assays(object = object)
 
   # Check features and meta to determine which features present
   features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
