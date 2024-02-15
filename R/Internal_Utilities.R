@@ -257,7 +257,7 @@ glue_collapse_scCustom <- function(
 #'
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
-#' @param assay Assay to use (default is the current object default assay).
+#' @param assay Assay to use (default all assays present).
 #'
 #' @return vector of features and/or meta data that were found in object.
 #'

@@ -20,7 +20,7 @@
 #' @param return_none logical. Whether list of found vs. bad features should still be returned if no
 #' features are found.  Default is FALSE.
 #' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
-#' Defaults to  `DefaultAssay(OBJ)` if NULL.
+#' Defaults to features in all assays if NULL.
 #'
 #' @import cli
 #' @importFrom purrr reduce
