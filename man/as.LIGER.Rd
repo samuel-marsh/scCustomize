@@ -37,7 +37,7 @@ as.LIGER(x, ...)
 )
 }
 \arguments{
-\item{x}{Seurat object}
+\item{x}{An object to convert to class \code{liger}}
 
 \item{...}{Arguments passed to other methods}
 
@@ -68,14 +68,10 @@ slot (default is TRUE).}
 \item{var_genes_method}{how variable genes should be selected from Seurat objects if \code{use_seurat_var_genes = TRUE}.  Can be either "intersect" or "union", (default is "intersect").}
 }
 \value{
-liger object.
-
-liger object.
+a liger object generated from \code{x}
 }
 \description{
-This function is part of generic \code{as.LIGER} for conversion of Seurat Objects.  Updated for Seurat5 compatibility and enhanced functionality.
-
-This function is part of generic \code{as.LIGER} for conversion of Seurat Objects.  Updated for Seurat5 compatibility and enhanced functionality.
+Convert objects (Seurat & lists of Seurat Objects) to anndata objects
 }
 \examples{
 \dontrun{

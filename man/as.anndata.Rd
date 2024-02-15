@@ -69,12 +69,10 @@ prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).}
 prefix/suffix.  Default is "_".}
 }
 \value{
-saved anndata object to at path provided.
+an anndata object generated from \code{x}, saved at path provided.
 }
 \description{
-This function is part of generic \code{as.anndata} for conversion of Seurat Objects to anndata objects.
-
-This function is part of generic \code{as.anndata} for conversion of Seurat Objects to anndata objects.
+Convert objects (Seurat & LIGER) to anndata objects
 }
 \examples{
 \dontrun{
