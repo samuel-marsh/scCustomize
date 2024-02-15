@@ -36,7 +36,7 @@ Default is TRUE.}
 features are found.  Default is FALSE.}
 
 \item{seurat_assay}{Name of assay to pull feature names from if \code{data} is Seurat Object.
-Defaults to  \code{DefaultAssay(OBJ)} if NULL.}
+Defaults to features in all assays if NULL.}
 }
 \value{
 A list of length 3 containing 1) found features, 2) not found features, 3) features found if
