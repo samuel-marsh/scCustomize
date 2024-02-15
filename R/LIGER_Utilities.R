@@ -33,7 +33,6 @@
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @method Add_Mito_Ribo liger
-#' @return A liger Object
 #'
 #' @export
 #' @rdname Add_Mito_Ribo
@@ -236,7 +235,6 @@ Add_Mito_Ribo.liger <- function(
 #' @import cli
 #'
 #' @method Add_Cell_Complexity liger
-#' @return A liger Object
 #'
 #' @export
 #' @rdname Add_Cell_Complexity

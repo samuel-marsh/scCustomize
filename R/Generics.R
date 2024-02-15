@@ -46,6 +46,8 @@ as.anndata <- function(x, ...) {
 #' @param object Seurat or LIGER object
 #' @param ... Arguments passed to other methods
 #'
+#' @return An object of the same class as `object` with columns added to object meta data.
+#'
 #' @rdname Add_Mito_Ribo
 #' @export Add_Mito_Ribo
 #'
@@ -61,6 +63,8 @@ Add_Mito_Ribo <- function(object, ...) {
 #'
 #' @param object Seurat or LIGER object
 #' @param ... Arguments passed to other methods
+#'
+#' @return An object of the same class as `object` with columns added to object meta data.
 #'
 #' @rdname Add_Cell_Complexity
 #' @export Add_Cell_Complexity

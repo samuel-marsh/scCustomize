@@ -120,7 +120,6 @@ Merge_Seurat_List <- function(
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
 #' @method Add_Mito_Ribo Seurat
-#' @return A Seurat Object
 #'
 #' @export
 #' @rdname Add_Mito_Ribo
@@ -327,7 +326,6 @@ Add_Mito_Ribo.Seurat <- function(
 #' @import cli
 #'
 #' @method Add_Cell_Complexity Seurat
-#' @return A Seurat Object
 #'
 #' @export
 #' @rdname Add_Cell_Complexity
