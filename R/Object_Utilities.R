@@ -318,8 +318,6 @@ Add_Mito_Ribo.Seurat <- function(
 
 #' Add Cell Complexity Value
 #'
-#' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
-#'
 #' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
 #' @param assay assay to use in calculation.  Default is "RNA".  *Note* This should only be changed if
 #' storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).

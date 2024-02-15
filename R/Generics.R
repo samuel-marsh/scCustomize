@@ -57,6 +57,8 @@ Add_Mito_Ribo <- function(object, ...) {
 
 #' Add Cell Complexity
 #'
+#' Add measure of cell complexity/novelty (log10GenesPerUMI) for data QC.
+#'
 #' @param object Seurat or LIGER object
 #' @param ... Arguments passed to other methods
 #'
