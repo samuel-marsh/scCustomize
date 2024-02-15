@@ -95,14 +95,16 @@ The liger/rliger package already contains a function `rliger::seuratToLiger()` t
 * Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
 * Seurat assay name not specified
 
-scCustomize contains modified version of this function named `Liger_to_Seurat()` that solves these issues with 3 extra parameters:  
+As of scCustomize v2.1.0 converting to Seurat objects from Liger can be accomplished using `as.liger` function which functions identically to previous function `Liger_to_Seurat()`.  `Liger_to_Seurat()` will continue to work until v2.2.0 at which point it will be completely deprecated.
+
+scCustomize contains modified version of this function named `as.Seurat()` that solves these issues with 3 extra parameters:  
   
 * `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
 * `seurat_assay` Name of assay to use for data in Seurat object.  Default is "RNA".
 
 ```{r message=TRUE}
-new_seurat <- Liger_to_Seurat(liger_object = pbmc_liger, reduction_label = "UMAP")
+new_seurat <- as.Seurat(x = pbmc_liger, reduction_label = "UMAP")
 ```
 
 
