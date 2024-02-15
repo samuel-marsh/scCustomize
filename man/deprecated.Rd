@@ -23,9 +23,8 @@ Add_Cell_Complexity_LIGER(...)
 Meta_Present_LIGER(...)
 }
 \description{
-Use \code{\link[=FeatureScatter_scCustom]{FeatureScatter_scCustom()}} instead of \code{Split_FeatureScatter()}.
-
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+Use \code{\link[=FeatureScatter_scCustom]{FeatureScatter_scCustom()}} instead of \code{Split_FeatureScatter()}.
 
 Use \code{\link[=Add_Mito_Ribo]{Add_Mito_Ribo()}} instead of \code{Add_Mito_Ribo_Seurat()}.
 
