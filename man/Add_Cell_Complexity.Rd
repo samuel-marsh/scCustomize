@@ -43,7 +43,7 @@ A liger Object
 A Seurat Object
 }
 \description{
-Add measure of cell complexity/novelty (log10PerUMI) for data QC.
+Add measure of cell complexity/novelty (log10GenesPerUMI) for data QC.
 
 Add measure of cell complexity/novelty (log10PerUMI) for data QC.
 }
