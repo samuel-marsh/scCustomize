@@ -2,7 +2,166 @@
 #################### OBJECT HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 #' Check if genes/features are present
+#'
+#' Check if genes are present in object and return vector of found genes.  Return warning messages for
+#' genes not found.
+#'
+#' @param data Name of input data.  Currently only data of classes: Seurat, liger, data.frame,
+#' dgCMatrix, dgTMatrix, tibble are accepted.  Gene_IDs must be present in rownames of the data.
+#' @param features vector of features to check.
+#' @param case_check logical. Whether or not to check if features are found if the case is changed from the
+#' input list (Sentence case to Upper and vice versa).  Default is TRUE.
+#' @param case_check_msg logical. Whether to print message to console if alternate case features are found
+#' in addition to inclusion in returned list.  Default is TRUE.
+#' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
+#' @param omit_warn logical. Whether to print message about features that are not found in current object.
+#'  Default is TRUE.
+#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
+#' features are found.  Default is FALSE.
+#' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
+#' Default is NULL which will check against features from all assays present.
+#'
+#' @import cli
+#' @importFrom purrr reduce
+#' @importFrom SeuratObject Features
+#' @importFrom stringr str_to_upper str_to_sentence
+#'
+#' @return A list of length 3 containing 1) found features, 2) not found features, 3) features found if
+#' case was modified.
+#'
+#' @export
+#'
+#' @concept helper_util
+#'
+#' @examples
+#' \dontrun{
+#' features <- Feature_Present(data = obj_name, features = DEG_list, print_msg = TRUE, case_check = TRUE)
+#' found_features <- features[[1]]
+#' }
+#'
+
+Feature_Present <- function(
+    data,
+    features,
+    case_check = TRUE,
+    case_check_msg = TRUE,
+    print_msg = TRUE,
+    omit_warn = TRUE,
+    return_none = FALSE,
+    seurat_assay = NULL
+) {
+  # Check object type
+  # Seurat
+  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
+  if (inherits(x = data, what = "Seurat")) {
+    # set assay (if null set to active assay)
+    assays_present <- seurat_assay %||% Assays(object = data)
+
+    possible_features <- lapply(assays_present, function(j) {
+      Features(x = data, assay = j)
+    })
+
+    possible_features <- unlist(possible_features)
+  } else if ((class(x = data)[[1]] == "liger")) {
+    # get complete gene list
+    length_liger <- length(x = data@raw.data)
+
+    list_genes <- lapply(1:length_liger, function(x){
+      rownames(x = data@raw.data[[x]])
+    })
+
+    possible_features <- reduce(list_genes, function(x, y) {
+      union(x = x, y = y)})
+  } else if ((class(x = data) %in% accepted_types)) {
+    possible_features <- rownames(x = data)
+  } else {
+    all_accepted <- c(accepted_types, "Seurat", "liger")
+    cli_abort(message = c("Input data is currently accepted only in the following formats:",
+                          "i" = "{.field {glue_collapse_scCustom(input_string = all_accepted, and = FALSE)}}.")
+    )
+  }
+
+  # If any features not found
+  if (any(!features %in% possible_features)) {
+    bad_features <- features[!features %in% possible_features]
+    found_features <- features[features %in% possible_features]
+    if (length(x = found_features) == 0) {
+      if (isTRUE(x = return_none)) {
+        # Combine into list and return
+        feature_list <- list(
+          found_features = NULL,
+          bad_features = bad_features,
+          wrong_case_found_features = NULL
+        )
+        return(feature_list)
+      } else {
+        cli_abort(message ="No requested features found.")
+      }
+    }
+
+    # Return message of features not found
+    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
+      cli_warn(message = c("The following features were omitted as they were not found:",
+                           "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
+      )
+    }
+
+    # Check if features found if case is changed.
+    if (isTRUE(x = case_check)) {
+      upper_bad_features <- str_to_upper(string = bad_features)
+      upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
+
+      sentence_bad_features <- str_to_sentence(string = bad_features)
+      sentence_found_features <- sentence_bad_features[sentence_bad_features %in% possible_features]
+
+      # Combine case check
+      wrong_case_found_features <- c(upper_found_features, sentence_found_features)
+
+      # Additional messages if found.
+      if (length(x = wrong_case_found_features) > 0) {
+        if (isTRUE(x = case_check_msg)) {
+          cli_warn(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
+                               "i" = "Please check intended case of features provided.")
+          )
+        }
+        # Combine into list and return
+        feature_list <- list(
+          found_features = found_features,
+          bad_features = bad_features,
+          wrong_case_found_features = wrong_case_found_features
+        )
+        return(feature_list)
+      }
+    }
+    # Combine into list and return
+    feature_list <- list(
+      found_features = found_features,
+      bad_features = bad_features,
+      wrong_case_found_features = "NA (check not performed.  Set 'case_check = TRUE' to perform check."
+    )
+    return(feature_list)
+  }
+
+  # Print all found message if TRUE
+  if (isTRUE(x = print_msg)) {
+    cli_inform(message = "All features present.")
+  }
+
+  # Return full input gene list.
+  # Combine into list and return
+  feature_list <- list(
+    found_features = features,
+    bad_features = NULL,
+    wrong_case_found_features = NULL
+  )
+  return(feature_list)
+}
+
+
+
+#' Check if genes/features are present  `r lifecycle::badge("soft-deprecated")`
 #'
 #' Check if genes are present in object and return vector of found genes.  Return warning messages for
 #' genes not found.
@@ -20,7 +179,7 @@
 #' @param return_none logical. Whether list of found vs. bad features should still be returned if no
 #' features are found.  Default is FALSE.
 #' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
-#' Defaults to features in all assays if NULL.
+#' Default is NULL which will check against features from all assays present.
 #'
 #' @import cli
 #' @importFrom purrr reduce
@@ -51,6 +210,12 @@ Gene_Present <- function(
   return_none = FALSE,
   seurat_assay = NULL
 ) {
+  lifecycle::deprecate_soft(when = "2.1.0",
+                            what = "Gene_Present()",
+                            with = "Feature_Present()",
+                            details = c("i" = "Please adjust code now to prepare for full deprecation.")
+  )
+
   # Check object type
   # Seurat
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
@@ -246,7 +411,7 @@ Case_Check <- function(
 #'
 #' @examples
 #' \dontrun{
-#' meta_variables <- Meta_Present(object = obj_name, gene_list = DEG_list, print_msg = TRUE)
+#' meta_variables <- Meta_Present(object = obj_name, meta_col_names = "percent_mito", print_msg = TRUE)
 #' }
 #'
 
