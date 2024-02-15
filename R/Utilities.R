@@ -56,9 +56,13 @@ Gene_Present <- function(
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
   if (inherits(x = data, what = "Seurat")) {
     # set assay (if null set to active assay)
-    assay <- seurat_assay %||% Assays(object = data)
+    assays_present <- seurat_assay %||% Assays(object = data)
 
-    possible_features <- Features(x = data, assay = assay)
+    possible_features <- lapply(assays_present, function(j) {
+      Features(x = data, assay = assays_present)
+    })
+
+    possible_features <- unlist(possible_features)
   } else if ((class(x = data)[[1]] == "liger")) {
     # get complete gene list
     length_liger <- length(x = data@raw.data)
