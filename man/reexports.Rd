@@ -6,7 +6,7 @@
 \alias{as.Seurat}
 \title{Objects exported from other packages}
 \note{
-See \code{as.Seurat.liger()} for scCustomize extension of this generic to converting Liger objects.
+See \code{\link{as.Seurat.liger}} for scCustomize extension of this generic to converting Liger objects.
 }
 \keyword{internal}
 \description{
