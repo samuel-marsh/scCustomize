@@ -59,7 +59,7 @@ Gene_Present <- function(
     assays_present <- seurat_assay %||% Assays(object = data)
 
     possible_features <- lapply(assays_present, function(j) {
-      Features(x = data, assay = assays_present)
+      Features(x = data, assay = j)
     })
 
     possible_features <- unlist(possible_features)
