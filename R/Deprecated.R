@@ -2,10 +2,9 @@
 #################### DEPRECATED FUNCTIONS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#' Deprecated functions
+#' Deprecated functions `r lifecycle::badge("deprecated")`
 #'
 #' @description
-#' `r lifecycle::badge("deprecated")`
 #' Use [FeatureScatter_scCustom()] instead of `Split_FeatureScatter()`.
 #'
 #' @export
