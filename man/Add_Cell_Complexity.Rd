@@ -45,9 +45,11 @@ Add measure of cell complexity/novelty (log10GenesPerUMI) for data QC.
 }
 \examples{
 \dontrun{
-object <- Add_Cell_Complexity(object = object)
+# Liger
+liger_object <- Add_Cell_Complexity(object = liger_object)
 }
 
+# Seurat
 library(Seurat)
 pbmc_small <- Add_Cell_Complexity(object = pbmc_small)
 

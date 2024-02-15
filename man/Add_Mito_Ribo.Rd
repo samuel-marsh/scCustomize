@@ -94,11 +94,13 @@ cell.data slot of Liger object
 }
 \examples{
 \dontrun{
-object <- Add_Mito_Ribo(object = object, species = "mouse")
+# Liger
+liger_object <- Add_Mito_Ribo(object = liger_object, species = "human")
 }
 
 \dontrun{
-obj <- Add_Mito_Ribo(object = obj, species = "human")
+# Seurat
+seurat_object <- Add_Mito_Ribo(object = seurat_object, species = "human")
 }
 
 }
