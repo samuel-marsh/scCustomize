@@ -447,7 +447,7 @@ as.LIGER.list <- function(
 #' prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).
 #' @param barcode_cell_id_delimiter The delimiter to use when adding dataset id to barcode
 #' prefix/suffix.  Default is "_".
-#' @param ... description
+#' @param ... unused.
 #'
 #' @return Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
 #'
