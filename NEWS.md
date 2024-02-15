@@ -23,6 +23,7 @@
     - `Add_Cell_Complexity()` replaces `Add_Cell_Complexity_Seurat` and `Add_Cell_Complexity_LIGER`.  
 - **BREAKING CHANGES** `Meta_Present_LIGER` has been deprecated and wrapped inside of `Meta_Present`.  
 - **SOFT-DEPRECATION** The function `Liger_to_Seurat()` has been soft-deprecated.  It is replaced by new extension of Seurat generic `as.Seurat` with added support for Liger objects, using all the same parameters as `Liger_to_Seurat`.  Full deprecation will occur in v2.2.0.  
+- **SOFT-DEPRECATION** The function `Gene_Present` has been soft-deprecated.  It is replaced by `Feature_Present` which functions identically but better reflects that features present may also be proteins.  Full deprecation will occur in v2.2.0.  
 - Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
 - Updated `Liger_to_Seurat()` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  Now part of `as.Seurat`.
 - Default color palette change from v2.0.0 when number of groups is between 3-8 has been reverted.  Polychrome palette is default when number of groups is between 3-36.  
