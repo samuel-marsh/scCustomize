@@ -258,13 +258,13 @@ head(top20_factor6, 5)
 
 
 ## Convert LIGER to Seurat  
-The liger/rliger package already contains a function `seuratToLiger()` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
+The liger/rliger package already contains a function `ligerToSeurat()` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
   
 * All meta data except the "dataset" column from liger_object\@cell.data is lost.
 * Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
 * Seurat assay name not specified
 
-scCustomize contains modified version of this function named `Liger_to_Seurat()` that solves these issues with 3 extra parameters:  
+scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](`as.Seurat.liger()`) that solves these issues with some extra parameters:  
   
 * `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
@@ -272,7 +272,7 @@ scCustomize contains modified version of this function named `Liger_to_Seurat()`
 * `assay_type` Specify whether to create V3/4 vs V5 Seurat assays.  
 
 ```{r eval=FALSE}
-seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UMAP")
+seurat_obj <- as.Seurat(x = liger_object, reduction_label = "UMAP")
 ```
 
 
