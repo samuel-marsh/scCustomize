@@ -54,7 +54,7 @@ prefix to current cell barcodes/names or a suffix (default is TRUE; prefix).}
 \item{barcode_cell_id_delimiter}{The delimiter to use when adding dataset id to barcode
 prefix/suffix.  Default is "_".}
 
-\item{...}{description}
+\item{...}{unused.}
 }
 \value{
 Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
