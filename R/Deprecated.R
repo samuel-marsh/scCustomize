@@ -4,6 +4,7 @@
 
 #' Deprecated functions `r lifecycle::badge("deprecated")`
 #'
+#'
 #' @description
 #' Use [FeatureScatter_scCustom()] instead of `Split_FeatureScatter()`.
 #'

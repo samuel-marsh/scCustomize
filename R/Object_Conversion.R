@@ -658,7 +658,7 @@ as.Seurat.liger <- function(
 }
 
 
-#' Create a Seurat object containing the data from a liger object `r lifecycle::badge("deprecated")`
+#' Create a Seurat object containing the data from a liger object `r lifecycle::badge("soft-deprecated")`
 #'
 #' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
 #' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.

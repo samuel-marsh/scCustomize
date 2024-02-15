@@ -264,7 +264,7 @@ The liger/rliger package already contains a function `ligerToSeurat()` to conver
 * Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
 * Seurat assay name not specified
 
-scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](/Users/marsh_mbp/Desktop/Bioinformatics Tools/scCustomize/docs/reference/as.Seurat.html) that solves these issues with some extra parameters:  
+scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](https://github.com/samuel-marsh/scCustomize/blob/develop/docs/reference/as.Seurat.html) that solves these issues with some extra parameters:  
   
 * `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
