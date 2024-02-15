@@ -800,7 +800,7 @@ Merge_Sparse_Multimodal_All <- function(
 #' @import cli
 #' @importFrom methods slot
 #'
-#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject \url{https://github.com/mojaveazure/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650} (License: MIT).
+#' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject \url{https://github.com/satijalab/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650} (License: MIT).
 #'
 #' @export
 #'
