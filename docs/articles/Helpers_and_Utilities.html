@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
-      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
     </li>
     <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
@@ -136,7 +136,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>General Helpers &amp; Utilities</h1>
             
-            <h4 data-toc-skip class="date">Compiled: February 02,
+            <h4 data-toc-skip class="date">Compiled: February 15,
 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Helpers_and_Utilities.Rmd" class="external-link"><code>vignettes/articles/Helpers_and_Utilities.Rmd</code></a></small>
@@ -182,7 +182,8 @@ Plotting vignette</a> one the first steps after creating object if often
 to calculate and add mitochondrial and ribosomal count percentages per
 cell/nucleus.</p>
 <div class="section level4">
-<h4 id="seurat-objects-add_mito_ribo">Seurat Objects: <code>Add_Mito_Ribo()</code><a class="anchor" aria-label="anchor" href="#seurat-objects-add_mito_ribo"></a>
+<h4 id="add_mito_ribo">
+<code>Add_Mito_Ribo()</code><a class="anchor" aria-label="anchor" href="#add_mito_ribo"></a>
 </h4>
 <p>scCustomize contains easy wrapper function to automatically add both
 Mitochondrial and Ribosomal percentages to meta.data slot. If you are
@@ -408,10 +409,10 @@ defaults to the function.</em></p>
 <div class="section level4">
 <h4 id="warning-messages">Warning Messages<a class="anchor" aria-label="anchor" href="#warning-messages"></a>
 </h4>
-<p>The added benefit of <code>Add_Mito_Ribo</code> &amp;
-<code>Add_Mito_Ribo</code> is that they will return informative warnings
-if no Mitochondrial or Ribosomal features are found using the current
-species, features, or pattern specification.</p>
+<p>The added benefit of <code>Add_Mito_Ribo</code> is that it will
+return informative warnings if no Mitochondrial or Ribosomal features
+are found using the current species, features, or pattern
+specification.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For demonstration purposes we can set `species = mouse` for this object of human cells</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span></code></pre></div>
@@ -424,10 +425,9 @@ species, features, or pattern specification.</p>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"^MT-"</span>, ribo_pattern <span class="op">=</span> <span class="st">"BAD_PATTERN"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: No Ribo features found in object using pattern/feature list provided.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> No column will be added to meta.data.</span></span></code></pre>
-<p><code>Add_Mito_Ribo</code> and <code><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> will also
-return warnings if columns are already present in
-<code>@meta.data</code> slot and prompt you to provide override if you
-want to run the function.</p>
+<p><code>Add_Mito_Ribo</code> will also return warnings if columns are
+already present in <code>@meta.data</code> slot and prompt you to
+provide override if you want to run the function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `Add_Mito_Ribo()`:</span></span></span>
@@ -439,9 +439,8 @@ want to run the function.</p>
 <div class="section level4">
 <h4 id="liger-objects-add_mito_ribo">LIGER Objects: <code>Add_Mito_Ribo()</code><a class="anchor" aria-label="anchor" href="#liger-objects-add_mito_ribo"></a>
 </h4>
-<p>scCustomize also contains identical function for use with LIGER
-objects. <code>Add_Mito_Ribo</code> contains equivalent parameters and
-capabilities as <code>Add_Mito_Ribo</code></p>
+<p>scCustomize <code>Add_Mito_Ribo</code> also works seemlessly with
+LIGER objects.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">liger_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">liger_obj</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -463,8 +462,8 @@ log10(nFeature) / log10(nCount).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Complexity.html">Add_Cell_Complexity</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span></code></pre></div>
-<p><em>NOTE: There is analogous function for LIGER objects (see:
-<code><a href="../reference/Add_Cell_Complexity.html">Add_Cell_Complexity()</a></code>).</em></p>
+<p><em>NOTE: The function also works seemlessly with LIGER
+objects.</em></p>
 </div>
 <div class="section level4">
 <h4 id="add-top-percent-expression-qc-metric">Add Top Percent Expression QC Metric<a class="anchor" aria-label="anchor" href="#add-top-percent-expression-qc-metric"></a>
@@ -553,7 +552,7 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample4
+sample1
 </td>
 <td style="text-align:left;">
 Batch2
@@ -576,7 +575,7 @@ pbmc3k
 B
 </td>
 <td style="text-align:left;">
-sample6
+sample5
 </td>
 <td style="text-align:left;">
 Batch2
@@ -602,7 +601,7 @@ Memory CD4 T
 sample5
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -645,7 +644,7 @@ pbmc3k
 NK
 </td>
 <td style="text-align:left;">
-sample5
+sample2
 </td>
 <td style="text-align:left;">
 Batch2
@@ -668,10 +667,10 @@ pbmc3k
 Memory CD4 T
 </td>
 <td style="text-align:left;">
-sample6
+sample1
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -717,7 +716,7 @@ CD8 T
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -737,7 +736,7 @@ pbmc3k
 Naive CD4 T
 </td>
 <td style="text-align:left;">
-sample6
+sample1
 </td>
 <td style="text-align:left;">
 Batch2
@@ -760,10 +759,10 @@ pbmc3k
 FCGR3A+ Mono
 </td>
 <td style="text-align:left;">
-sample3
+sample4
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 </tbody>
@@ -803,13 +802,13 @@ batch
 pbmc3k
 </td>
 <td style="text-align:left;">
-CD8 T
+Memory CD4 T
 </td>
 <td style="text-align:left;">
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -820,13 +819,13 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-Naive CD4 T
+NK
 </td>
 <td style="text-align:left;">
 sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -837,13 +836,13 @@ Batch1
 pbmc3k
 </td>
 <td style="text-align:left;">
-FCGR3A+ Mono
+NA
 </td>
 <td style="text-align:left;">
 sample3
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -854,13 +853,13 @@ Batch2
 pbmc3k
 </td>
 <td style="text-align:left;">
-Memory CD4 T
+CD14+ Mono
 </td>
 <td style="text-align:left;">
 sample4
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -871,7 +870,7 @@ Batch2
 pbmc3k
 </td>
 <td style="text-align:left;">
-Memory CD4 T
+B
 </td>
 <td style="text-align:left;">
 sample5
@@ -888,13 +887,13 @@ Batch2
 pbmc3k
 </td>
 <td style="text-align:left;">
-B
+CD8 T
 </td>
 <td style="text-align:left;">
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 </tbody>
@@ -931,7 +930,7 @@ batch
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -942,7 +941,7 @@ Batch1
 sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 </tr>
 <tr>
@@ -953,7 +952,7 @@ Batch1
 sample3
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -964,7 +963,7 @@ Batch2
 sample4
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 <tr>
@@ -986,7 +985,7 @@ Batch2
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 </tr>
 </tbody>
@@ -1032,13 +1031,13 @@ Median_nFeature_RNA
 sample1
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2183.0
+2245.0
 </td>
 <td style="text-align:right;">
-812
+823
 </td>
 </tr>
 <tr>
@@ -1049,13 +1048,13 @@ Batch1
 sample2
 </td>
 <td style="text-align:left;">
-Batch1
+Batch2
 </td>
 <td style="text-align:right;">
-2138.0
+2168.0
 </td>
 <td style="text-align:right;">
-810
+800
 </td>
 </tr>
 <tr>
@@ -1066,13 +1065,13 @@ Batch1
 sample3
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 <td style="text-align:right;">
-2237.0
+2277.5
 </td>
 <td style="text-align:right;">
-821
+839
 </td>
 </tr>
 <tr>
@@ -1083,13 +1082,13 @@ Batch2
 sample4
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 <td style="text-align:right;">
-2218.0
+2208.0
 </td>
 <td style="text-align:right;">
-826
+813
 </td>
 </tr>
 <tr>
@@ -1103,10 +1102,10 @@ sample5
 Batch2
 </td>
 <td style="text-align:right;">
-2214.5
+2149.5
 </td>
 <td style="text-align:right;">
-807
+806
 </td>
 </tr>
 <tr>
@@ -1117,13 +1116,13 @@ Batch2
 sample6
 </td>
 <td style="text-align:left;">
-Batch2
+Batch1
 </td>
 <td style="text-align:right;">
-2206.0
+2187.0
 </td>
 <td style="text-align:right;">
-823
+815
 </td>
 </tr>
 <tr>
@@ -1266,7 +1265,7 @@ to Seurat’s <code>UpdateSymbolList</code> function.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="merging-dataobjects">Merging Data/Objects<a class="anchor" aria-label="anchor" href="#merging-dataobjects"></a>
+<h3 id="merging-splitting-dataobjects">Merging &amp; Splitting Data/Objects<a class="anchor" aria-label="anchor" href="#merging-splitting-dataobjects"></a>
 </h3>
 <div class="section level4">
 <h4 id="merging-raw-data">Merging raw data<a class="anchor" aria-label="anchor" href="#merging-raw-data"></a>
@@ -1315,6 +1314,21 @@ single combined object</p>
 <span></span>
 <span><span class="va">merged_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Merge_Seurat_List.html">Merge_Seurat_List</a></span><span class="op">(</span>list_seurat <span class="op">=</span> <span class="va">list_of_objects</span>, add.cell.ids <span class="op">=</span> <span class="va">cell_ids</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level4">
+<h4 id="splitting-seurat-v5-layers">Splitting Seurat V5 Layers<a class="anchor" aria-label="anchor" href="#splitting-seurat-v5-layers"></a>
+</h4>
+<p>Seurat V5 objects now have the ability to split within the object
+into layers. However, I find that the syntax to do this is not the most
+intuitive and can be simplified with a new simple wrapper function:
+<code><a href="../reference/Split_Layers.html">Split_Layers()</a></code></p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Split_Layers.html">Split_Layers</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, split.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">•</span> Splitting layers within assay: <span style="color: #00BB00;">RNA</span> into <span style="color: #00BB00;">6 parts</span> by <span style="color: #0000BB;">"sample_id"</span></span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">RNA</span> is not Assay5, converting to Assay5 before splitting.</span></span></code></pre>
+<p><code><a href="../reference/Split_Layers.html">Split_Layers()</a></code> defaults to “RNA” assay but can be used
+for any assay present in object (users should check whether splitting
+assay other than “RNA” is valid before proceeding).</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="storing-misc-information-in-seurat-objects">Storing Misc Information in Seurat Objects<a class="anchor" aria-label="anchor" href="#storing-misc-information-in-seurat-objects"></a>
@@ -1324,7 +1338,7 @@ any extra information desired.<br>
 scCustomize contains two functions <code>Store_Misc_Info_Seurat</code>
 and a wrapper around that function <code>Store_Palette_Seurat</code> to
 make this process easy.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data can be vectors or data.frames</span></span>
 <span><span class="va">misc_info</span> <span class="op">&lt;-</span> <span class="st">"misc_vector_dataframe_list_etc"</span></span>
 <span></span>
@@ -1336,7 +1350,7 @@ make this process easy.</p>
 <p>If you are storing a list in the <code>@misc</code> slot there is
 additional parameter that dictates whether to store the information as a
 list or whether to store each entry in the list separately.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create list</span></span>
 <span><span class="va">misc_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"misc_item1"</span>, <span class="st">"misc_item2"</span>, <span class="va">etc</span><span class="op">)</span></span>
 <span></span>
@@ -1356,7 +1370,7 @@ palettes associated with clustering or subclustering.<br>
 To make it easier to remember function call in this situation
 scCustomize contains a wrapper function
 <code>Store_Palette_Seurat</code>.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data can be vectors or data.frames</span></span>
 <span><span class="va">annotated_color_palette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"color1"</span>, <span class="st">"color2"</span>, <span class="st">"color3"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
 <span></span>
@@ -1380,7 +1394,7 @@ process:</p>
 </h4>
 <p><code>Replace_Suffix</code> can be used on single matrix/data.frame
 or list of matrices/data.frames to modify to remove suffixes</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For single object</span></span>
 <span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Replace_Suffix.html">Replace_Suffix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_suffix <span class="op">=</span> <span class="st">"-1"</span>, new_suffix <span class="op">=</span> <span class="st">"-2"</span><span class="op">)</span></span>
 <span></span>
@@ -1405,7 +1419,7 @@ or list of matrices/data.frames to modify to remove suffixes</p>
 </h4>
 <p><code>Replace_Suffix</code> can also be used to strip suffixes from
 data</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For single object</span></span>
 <span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Replace_Suffix.html">Replace_Suffix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_suffix <span class="op">=</span> <span class="st">"-1"</span>, new_suffix <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -1426,7 +1440,7 @@ delimiter.</li>
 </ul>
 <p>These functions all take identical inputs and can be applied to
 either single matrix/data.frames or lists of matrices/data.frames.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Change_Delim_Prefix.html">Change_Delim_Prefix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_delim <span class="op">=</span> <span class="st">"."</span>, new_delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Change_Delim_Suffix.html">Change_Delim_Suffix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">raw_data</span>, current_delim <span class="op">=</span> <span class="st">"."</span>, new_delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span>

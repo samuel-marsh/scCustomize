@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -59,7 +59,7 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
-      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
     </li>
     <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
@@ -189,7 +189,7 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Add mito</span></span></span>
-<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu">Add_Mito_Ribo_Seurat</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="deprecated.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot</span></span></span>
 <span class="r-in"><span><span class="fu">Plot_Median_Mito</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,  group_by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></span>

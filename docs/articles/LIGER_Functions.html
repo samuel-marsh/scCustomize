@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
-      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
     </li>
     <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
@@ -135,7 +135,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>LIGER Plotting &amp; Functionality</h1>
             
-            <h4 data-toc-skip class="date">Compiled: February 02,
+            <h4 data-toc-skip class="date">Compiled: February 15,
 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/LIGER_Functions.Rmd" class="external-link"><code>vignettes/articles/LIGER_Functions.Rmd</code></a></small>
@@ -416,7 +416,7 @@ significant, etc.</em></p>
 <h3 id="convert-liger-to-seurat">Convert LIGER to Seurat<a class="anchor" aria-label="anchor" href="#convert-liger-to-seurat"></a>
 </h3>
 <p>The liger/rliger package already contains a function
-<code><a href="https://rdrr.io/pkg/rliger/man/seuratToLiger.html" class="external-link">seuratToLiger()</a></code> to convert LIGER objects to Seurat Objects.
+<code><a href="https://rdrr.io/pkg/rliger/man/ligerToSeurat.html" class="external-link">ligerToSeurat()</a></code> to convert LIGER objects to Seurat Objects.
 However, during this transfer a few things have issues crop up:</p>
 <ul>
 <li>All meta data except the “dataset” column from
@@ -425,9 +425,9 @@ liger_object@cell.data is lost.</li>
 used in LIGER analysis</li>
 <li>Seurat assay name not specified</li>
 </ul>
-<p>scCustomize contains modified version of this function named
-<code><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat()</a></code> that solves these issues with 3 extra
-parameters:</p>
+<p>scCustomize contains modified version of this function which extends
+the Seurat function <a href="%60scCustomize::as.Seurat()%60"><code>as.Seurat()</code></a> that
+solves these issues with some extra parameters:</p>
 <ul>
 <li>
 <code>keep_meta</code> logical. Whether to keep meta data from the
@@ -444,7 +444,7 @@ object. Default is “RNA”.</li>
 assays.</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">liger_object</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liger_object</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-mitochondrial-ribosomal-percentages">Add Mitochondrial &amp; Ribosomal Percentages<a class="anchor" aria-label="anchor" href="#add-mitochondrial-ribosomal-percentages"></a>

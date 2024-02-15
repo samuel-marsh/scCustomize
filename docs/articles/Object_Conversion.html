@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
-      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
     </li>
     <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
@@ -136,7 +136,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Object Format Conversion</h1>
             
-            <h4 data-toc-skip class="date">Compiled: February 02,
+            <h4 data-toc-skip class="date">Compiled: February 15,
 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Object_Conversion.Rmd" class="external-link"><code>vignettes/articles/Object_Conversion.Rmd</code></a></small>
@@ -185,22 +185,29 @@ in this vignette</p>
 </h3>
 <p>scCustomize contains the conversion function <code><a href="../reference/as.LIGER.html">as.LIGER()</a></code>.
 This function has a few advantages over the conversion function
-<code><a href="https://rdrr.io/pkg/rliger/man/seuratToLiger.html" class="external-link">rliger::seuratToLiger()</a></code>.<br>
-- <code>as.liger</code> will <em>keep all meta data</em> and transfer it
-to LIGER by default.<br>
-- If a dimensionality reduction is transferred <code>as.liger</code>
+<code><a href="https://rdrr.io/pkg/rliger/man/seuratToLiger.html" class="external-link">rliger::seuratToLiger()</a></code>.</p>
+<ul>
+<li>
+<code>as.liger</code> will <em>keep all meta data</em> and transfer
+it to LIGER by default.<br>
+</li>
+<li>If a dimensionality reduction is transferred <code>as.liger</code>
 will also store a reduction key for use with scCustomize LIGER plotting
 functions to correctly set plot axes.<br>
-- If converting a list of Seurat objects and keeping Seurat variable
+</li>
+<li>If converting a list of Seurat objects and keeping Seurat variable
 genes then <code>as.liger</code> can either take union or intersection
 of genes between objects.<br>
-- <code>as.liger</code> has additional internal checks to ensure
-compatibility with both Seurat V3/4 &amp; V5 object structures.</p>
+</li>
+<li>
+<code>as.liger</code> has additional internal checks to ensure
+compatibility with both Seurat V3/4 &amp; V5 object structures.</li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_liger</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as.LIGER.html">as.LIGER</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Checking Seurat object validity</span></span>
-<span><span class="co">## Creating LIGER object.</span></span>
-<span><span class="co">## Normalizing data.</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">•</span> Checking Seurat object validity</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> Creating LIGER object.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> Normalizing data.</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_liger</span></span></code></pre></div>
 <pre><code><span><span class="co">## An object of class liger </span></span>
@@ -229,9 +236,14 @@ liger_object@cell.data is lost.</li>
 used in LIGER analysis</li>
 <li>Seurat assay name not specified</li>
 </ul>
-<p>scCustomize contains modified version of this function named
-<code><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat()</a></code> that solves these issues with 3 extra
-parameters:</p>
+<p>As of scCustomize v2.1.0 converting to Seurat objects from Liger can
+be accomplished using <code>as.liger</code> function which functions
+identically to previous function <code><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat()</a></code>.
+<code><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat()</a></code> will continue to work until v2.2.0 at
+which point it will be completely deprecated.</p>
+<p>scCustomize contains modified version of this function which extends
+the Seurat function <a href="%60scCustomize::as.Seurat()%60"><code>as.Seurat()</code></a> that
+solves these issues with some extra parameters:</p>
 <ul>
 <li>
 <code>keep_meta</code> logical. Whether to keep meta data from the
@@ -242,10 +254,14 @@ technique used (e.g., tSNE, UMAP, etc). Ensures dim names are set
 correctly in Seurat object.</li>
 <li>
 <code>seurat_assay</code> Name of assay to use for data in Seurat
-object. Default is “RNA”.</li>
+object. Default is “RNA”.<br>
+</li>
+<li>
+<code>assay_type</code> Specify whether to create V3/4 vs V5 Seurat
+assays.</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">new_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">pbmc_liger</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">new_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pbmc_liger</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #00BB00;">Preparing &amp; merging matrices.</span></span></span>
 <span><span class="co">## <span style="color: #00BB00;">Creating final sparse matrix.</span></span></span>
 <span><span class="co">## Normalizing layer: counts</span></span></code></pre>

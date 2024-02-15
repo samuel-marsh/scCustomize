@@ -481,6 +481,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Split_FeatureScatter.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Split_Layers.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Split_Vector.html</loc>
   </url>
   <url>
@@ -514,7 +517,13 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/as.LIGER.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/as.Seurat.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/as.anndata.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/deprecated.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_mito_id.html</loc>
@@ -533,6 +542,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/plotFactors_scCustom.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/reexports.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/scCustomize-package.html</loc>

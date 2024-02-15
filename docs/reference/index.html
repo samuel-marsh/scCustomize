@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1.9046</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -59,7 +59,7 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
-      <a href="../articles/Object_Conversion.html">Object Format Conversion</a>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
     </li>
     <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
@@ -326,10 +326,6 @@
         </td>
         <td><p>PC Plots</p></td>
       </tr><tr><td>
-          <p><code><a href="Split_FeatureScatter.html">Split_FeatureScatter()</a></code> </p>
-        </td>
-        <td><p>Split FeatureScatter</p></td>
-      </tr><tr><td>
           <p><code><a href="Stacked_VlnPlot.html">Stacked_VlnPlot()</a></code> </p>
         </td>
         <td><p>Stacked Violin Plot</p></td>
@@ -595,10 +591,6 @@ Checks Seurat object for the presence of features with the same spelling but alt
         </td>
         <td><p>Extract Features from LIGER Object</p></td>
       </tr><tr><td>
-          <p><code><a href="Meta_Present_LIGER.html">Meta_Present_LIGER()</a></code> </p>
-        </td>
-        <td><p>Check if meta data are present</p></td>
-      </tr><tr><td>
           <p><code><a href="Top_Genes_Factor.html">Top_Genes_Factor()</a></code> </p>
         </td>
         <td><p>Extract top loading genes for LIGER factor</p></td>
@@ -617,11 +609,19 @@ Checks Seurat object for the presence of features with the same spelling but alt
       </tr><tr><td>
           <p><code><a href="Liger_to_Seurat.html">Liger_to_Seurat()</a></code> </p>
         </td>
-        <td><p>Create a Seurat object containing the data from a liger object</p></td>
+        <td><p>Create a Seurat object containing the data from a liger object <a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a></p></td>
+      </tr><tr><td>
+          <p><code><a href="Split_Layers.html">Split_Layers()</a></code> </p>
+        </td>
+        <td><p>Split Seurat object into layers</p></td>
       </tr><tr><td>
           <p><code><a href="as.LIGER.html">as.LIGER()</a></code> </p>
         </td>
         <td><p>Convert objects to LIGER objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="as.Seurat.html">as.Seurat(<i>&lt;liger&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Convert objects to <code>Seurat</code> objects</p></td>
       </tr><tr><td>
           <p><code><a href="as.anndata.html">as.anndata()</a></code> </p>
         </td>
