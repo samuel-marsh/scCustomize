@@ -86,9 +86,7 @@ rhesus macaque).  Default is FALSE.}
 \item{assay}{Assay to use (default is the current object default assay).}
 }
 \value{
-A liger Object
-
-A Seurat Object
+An object of the same class as \code{object} with columns added to object meta data.
 }
 \description{
 Add Mito, Ribo, & Mito+Ribo percentages to meta.data slot of Seurat Object or

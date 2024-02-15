@@ -38,14 +38,10 @@ function will abort if column with name provided to \code{meta_col_name} is pres
 storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).}
 }
 \value{
-A liger Object
-
-A Seurat Object
+An object of the same class as \code{object} with columns added to object meta data.
 }
 \description{
 Add measure of cell complexity/novelty (log10GenesPerUMI) for data QC.
-
-Add measure of cell complexity/novelty (log10PerUMI) for data QC.
 }
 \examples{
 \dontrun{
