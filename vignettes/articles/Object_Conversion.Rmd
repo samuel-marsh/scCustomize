@@ -98,7 +98,7 @@ The liger/rliger package already contains a function `rliger::seuratToLiger()` t
 
 As of scCustomize v2.1.0 converting to Seurat objects from Liger can be accomplished using `as.liger` function which functions identically to previous function `Liger_to_Seurat()`.  `Liger_to_Seurat()` will continue to work until v2.2.0 at which point it will be completely deprecated.
 
-scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](`scCustomize::as.Seurat()`) that solves these issues with some extra parameters:   
+scCustomize contains modified version of this function which extends the Seurat function `[as.Seurat()](https://github.com/samuel-marsh/scCustomize/blob/develop/docs/reference/as.Seurat.html)` that solves these issues with some extra parameters:   
   
 * `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
