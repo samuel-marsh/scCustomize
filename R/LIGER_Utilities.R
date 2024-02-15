@@ -41,7 +41,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Mito_Ribo(object = object, species = "mouse")
+#' # Liger
+#' liger_object <- Add_Mito_Ribo(object = liger_object, species = "human")
 #' }
 #'
 
@@ -243,7 +244,8 @@ Add_Mito_Ribo.liger <- function(
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Cell_Complexity(object = object)
+#' # Liger
+#' liger_object <- Add_Cell_Complexity(object = liger_object)
 #' }
 #'
 

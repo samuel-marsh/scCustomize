@@ -128,7 +128,8 @@ Merge_Seurat_List <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Add_Mito_Ribo(object = obj, species = "human")
+#' # Seurat
+#' seurat_object <- Add_Mito_Ribo(object = seurat_object, species = "human")
 #'}
 #'
 
@@ -333,6 +334,7 @@ Add_Mito_Ribo.Seurat <- function(
 #' @concept object_util
 #'
 #' @examples
+#' # Seurat
 #' library(Seurat)
 #' pbmc_small <- Add_Cell_Complexity(object = pbmc_small)
 #'
