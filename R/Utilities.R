@@ -33,7 +33,7 @@
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -191,7 +191,7 @@ Feature_Present <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -344,7 +344,7 @@ Gene_Present <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -407,7 +407,7 @@ Case_Check <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -500,7 +500,7 @@ Meta_Present <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -560,7 +560,7 @@ Meta_Numeric <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -660,7 +660,7 @@ Reduction_Loading_Present <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept get_set_util
 #'
 #' @rdname Fetch_Meta
 #'
@@ -677,7 +677,7 @@ Fetch_Meta <- function(object) {
 
 #' @rdname Fetch_Meta
 #' @export
-#' @concept helper_util
+#' @concept get_set_util
 #' @method Fetch_Meta Seurat
 
 Fetch_Meta.Seurat <- function(
@@ -973,7 +973,7 @@ Merge_Sparse_Multimodal_All <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept check_util
 #'
 #' @examples
 #' \dontrun{
@@ -1032,7 +1032,7 @@ CheckMatrix_scCustom <- function(
 #'
 #' @return matrix or data.frame with new column names.
 #'
-#' @concept helper_util
+#' @concept barcode_util
 #'
 #' @examples
 #' \dontrun{
@@ -1134,7 +1134,7 @@ Replace_Suffix <- function(
 #'
 #' @return matrix or data.frame with new column names.
 #'
-#' @concept helper_util
+#' @concept barcode_util
 #'
 #' @examples
 #' \dontrun{
@@ -1212,7 +1212,7 @@ Change_Delim_Suffix <- function(
 #'
 #' @return matrix or data.frame with new column names.
 #'
-#' @concept helper_util
+#' @concept barcode_util
 #'
 #' @examples
 #' \dontrun{
@@ -1288,7 +1288,7 @@ Change_Delim_Prefix <- function(
 #'
 #' @return matrix or data.frame with new column names.
 #'
-#' @concept helper_util
+#' @concept barcode_util
 #'
 #' @examples
 #' \dontrun{
