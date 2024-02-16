@@ -95,6 +95,10 @@ as.LIGER.Seurat <- function(
     )
   }
 
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Creating LIGER object."))
+  }
+
   # Set ident to grouping variable
   if (length(x = count_layers) == 1) {
     Idents(object = x) <- group.by
@@ -148,10 +152,6 @@ as.LIGER.Seurat <- function(
   }
 
   # Create LIGER Object
-  if (isTRUE(x = verbose)) {
-    cli_inform(message = c("*" = "Creating LIGER object."))
-  }
-
   liger_object <- rliger::createLiger(raw.data = raw_data_list, remove.missing = remove_missing)
 
   if (isTRUE(x = renormalize)) {
