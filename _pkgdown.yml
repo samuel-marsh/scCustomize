@@ -65,6 +65,10 @@ reference:
   desc: "Functions for reading and writing single cell sequencing data from raw data files."
 - contents:
   - has_concept("read_&_write")
+- subtitle: "Merge Data Utilities"
+  desc: "Utilities to merge raw data."
+- contents:
+  - has_concept("read_merge_util")
 - subtitle: "Edit Barcode Utilities"
   desc: "Utilities to edit cell barcodes"
 - contents:
