@@ -29,4 +29,4 @@ vector_list <- Split_Vector(x = vector, chunk_size = 3)
 Base code from stackoverflow post:
 \url{https://stackoverflow.com/a/3321659/15568251}
 }
-\concept{helper_util}
+\concept{misc_util}

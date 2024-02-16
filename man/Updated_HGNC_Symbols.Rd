@@ -45,4 +45,4 @@ new_names <- Updated_HGNC_Symbols(input_data = Seurat_Object)
 }
 
 }
-\concept{helper_util}
+\concept{misc_util}

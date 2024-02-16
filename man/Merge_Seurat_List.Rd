@@ -36,4 +36,4 @@ merged_object <- Merge_Seurat_List(list_seurat = object_list)
 }
 
 }
-\concept{object_util}
+\concept{misc_util}

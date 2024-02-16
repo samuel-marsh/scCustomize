@@ -28,4 +28,4 @@ head(meta_data, 5)
 
 }
 \concept{get_set_util}
-\concept{helper_util}
+\concept{liger_object_util}
