@@ -41,4 +41,4 @@ pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store =
 data_name = "rd1_colors")
 
 }
-\concept{object_util}
+\concept{get_set_util}

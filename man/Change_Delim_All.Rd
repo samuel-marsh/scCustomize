@@ -25,4 +25,4 @@ dge_matrix <- Change_Delim_All(data = dge_matrix, current_delim = ".", new_delim
 }
 
 }
-\concept{helper_util}
+\concept{barcode_util}

@@ -38,4 +38,4 @@ CheckMatrix_scCustom(object = mat)
 \references{
 Re-implementing \code{CheckMatrix} only for sparse matrices with modified warning messages.  Original function from SeuratObject \url{https://github.com/satijalab/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650} (License: MIT).
 }
-\concept{helper_util}
+\concept{check_util}

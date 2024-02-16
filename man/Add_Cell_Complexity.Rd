@@ -55,4 +55,4 @@ pbmc_small <- Add_Cell_Complexity(object = pbmc_small)
 
 }
 \concept{liger_object_util}
-\concept{object_util}
+\concept{qc_util}

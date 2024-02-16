@@ -27,4 +27,5 @@ meta_data <- Fetch_Meta(object = pbmc_small)
 head(meta_data, 5)
 
 }
+\concept{get_set_util}
 \concept{helper_util}

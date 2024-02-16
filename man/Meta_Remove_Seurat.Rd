@@ -34,4 +34,4 @@ object <- AddMetaData(object = object, metadata = new_meta)
 }
 
 }
-\concept{object_util}
+\concept{get_set_util}

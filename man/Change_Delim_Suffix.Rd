@@ -25,4 +25,4 @@ dge_matrix <- Change_Delim_Suffix(data = dge_matrix, current_delim = ".", new_de
 }
 
 }
-\concept{helper_util}
+\concept{barcode_util}

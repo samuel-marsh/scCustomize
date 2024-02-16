@@ -40,4 +40,4 @@ meta_variables <- Meta_Present(object = obj_name, meta_col_names = "percent_mito
 }
 
 }
-\concept{helper_util}
+\concept{check_util}

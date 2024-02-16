@@ -105,4 +105,4 @@ seurat_object <- Add_Mito_Ribo(object = seurat_object, species = "human")
 
 }
 \concept{liger_object_util}
-\concept{object_util}
+\concept{qc_util}
