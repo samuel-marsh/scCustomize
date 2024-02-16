@@ -692,7 +692,7 @@ Fetch_Meta.Seurat <- function(
 
 #' @rdname Fetch_Meta
 #' @export
-#' @concept helper_util
+#' @concept liger_object_util
 #' @method Fetch_Meta liger
 
 Fetch_Meta.liger <- function(
@@ -734,7 +734,7 @@ Fetch_Meta.liger <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept read_merge_util
 #'
 #' @examples
 #' \dontrun{
@@ -863,7 +863,7 @@ Merge_Sparse_Data_All <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept read_merge_util
 #'
 #' @examples
 #' \dontrun{
@@ -911,7 +911,7 @@ Extract_Modality <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept read_merge_util
 #'
 #' @examples
 #' \dontrun{
@@ -1745,7 +1745,7 @@ Pull_Cluster_Annotation <- function(
 #'
 #' @export
 #'
-#' @concept object_util
+#' @concept marker_annotation_util
 #'
 #' @examples
 #' \dontrun{
@@ -1814,7 +1814,7 @@ Rename_Clusters <- function(
 #' @references Base code from stackoverflow post:
 #' \url{https://stackoverflow.com/a/3321659/15568251}
 #'
-#' @concept helper_util
+#' @concept misc_util
 #'
 #' @examples
 #' vector <- c("gene1", "gene2", "gene3", "gene4", "gene5", "gene6")
@@ -2040,7 +2040,7 @@ Copy_From_GCP <- function(
 #'
 #' @export
 #'
-#' @concept helper_util
+#' @concept misc_util
 #'
 #' @examples
 #' \dontrun{

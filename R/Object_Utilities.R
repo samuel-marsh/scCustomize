@@ -23,7 +23,7 @@
 #'
 #' @export
 #'
-#' @concept object_util
+#' @concept misc_util
 #'
 #' @examples
 #' \dontrun{
