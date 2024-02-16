@@ -110,8 +110,6 @@ reference:
 
 - title: "Helper Utilities (Seurat)"
   desc: "Functions to provide ease of use for frequently used code from Seurat Objects."
-  - has_concept("helper_util")
-  - has_concept("object_util")
 - subtitle: "QC Utilities"
   desc: "Functions to add common QC variables to meta.data."
 - contents:
@@ -128,6 +126,11 @@ reference:
   desc: "Misc Utilities"
 - contents:
   - has_concept("misc_util")
+- subtitle: "OLD Utilities"
+  desc: "OLD Utilities test"
+- contents:
+  - has_concept("helper_util")
+  - has_concept("object_util")
 
 - title: "Helper Utilities (LIGER)"
   desc: "Functions to provide ease of use for frequently used code from LIGER Objects."
