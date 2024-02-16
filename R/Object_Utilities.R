@@ -1344,7 +1344,7 @@ Store_Palette_Seurat <- function(
 #'    # Either filtered_feature_bc or raw_feature_bc can be used as the features slot is identical
 #'    # Though it is faster to load filtered_feature_bc file due to droplet filtering
 #' obj <- Add_Alt_Feature_ID(seurat_object = obj,
-#' hdf5_file = "sample01/outs//outs/filtered_feature_bc_matrix.h5", assay = "RNA")
+#' hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5", assay = "RNA")
 #'}
 #'
 
