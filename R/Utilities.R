@@ -37,7 +37,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' features <- Feature_Present(data = obj_name, features = DEG_list, print_msg = TRUE, case_check = TRUE)
+#' features <- Feature_Present(data = obj_name, features = DEG_list, print_msg = TRUE,
+#' case_check = TRUE)
 #' found_features <- features[[1]]
 #' }
 #'
