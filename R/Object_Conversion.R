@@ -1405,6 +1405,10 @@ Convert_Assay <- function(
                           "i" = "Check assay type and/or whether {.code {convert_to}} value is correct."))
   }
 
+  if ("SCTAssay" %in% current_assay_classes) {
+    cli_abort(message = "Cannot convert assay of class {.field SCTAssay}.")
+  }
+
   # convert assays
   for (i in assays_convert) {
     cli_inform(message = "Converting assay {.val {i}} from {.field {convert_from}} to {.field {convert_to}}.")
