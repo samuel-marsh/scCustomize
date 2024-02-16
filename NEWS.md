@@ -14,6 +14,7 @@
 - Added param `grid_color` to `Clustered_DotPlot` to control the color of grid lines (default is no grid lines).  
 - Added ability to split identities in `Clustered_DotPlot` by additional variable and maintain expression information.  
 - Added `Split_Layers()` function for V5 objects.  
+- Added `Add_Alt_Feature_ID` to add alternative feature ids to an Assay5 meta.data slot.  
 
 
   
