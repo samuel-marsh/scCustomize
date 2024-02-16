@@ -1297,7 +1297,6 @@ Store_Misc_Info_Seurat <- function(
 #' pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
 #' data_name = "rd1_colors")
 #'
-#'
 
 Store_Palette_Seurat <- function(
   seurat_object,
@@ -1310,5 +1309,112 @@ Store_Palette_Seurat <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite)
+  return(seurat_object)
+}
+
+
+#' Add Alternative Feature IDs
+#'
+#' Add alternative feature ids to the assay level meta.data slot in Assay5 compatible object (Seurat V5.0.0 or greater)
+#'
+#' @param seurat_object object name.
+#' @param features_tsv_file output file from Cell Ranger used for creation of Seurat object.
+#' (Either provide this of `hdf5_file`)
+#' @param hdf5_file output file from Cell Ranger used for creation of Seurat object.
+#' (Either provide this of `features_tsv_file`)
+#' @param assay name of assay(s) to add the alternative features to.  Can specify "all"
+#' to add to all assays.
+#'
+#' @return Seurat Object with new entries in the `obj@assays$ASSAY@meta.data` slot.
+#'
+#' @export
+#'
+#' @concept object_util
+#'
+#' @examples
+#' \dontrun{
+#' test_obj <- Add_Alt_Feature_ID(seurat_object = test_obj,
+#' features_tsv = "/FILE_PATH/features.tsv.gz", assay = "RNA")
+#'}
+#'
+
+Add_Alt_Feature_ID <- function(
+    seurat_object,
+    features_tsv_file = NULL,
+    hdf5_file = NULL,
+    assay = NULL
+) {
+  if (packageVersion(pkg = 'Seurat') < 5) {
+    cli_abort(message = "Seurat version must be v5.0.0 or greater to add alternative features.")
+  }
+
+  # check file
+  if (is.null(x = features_tsv_file) && is.null(x = hdf5_file)) {
+    cli_abort(message = "Either {.code features_tsv_file} or {.code hdf5_file} must be provided.")
+  }
+
+  if (!is.null(x = features_tsv_file) && !is.null(x = hdf5_file)) {
+    cli_abort(message = "Both {.code features_tsv_file} and {.code hdf5_file} provided.  Please only supply one or the other parameter.")
+  }
+
+  # check assay
+  if (is.null(x = assay)) {
+    cli_abort(message = c("Must provide value to {.code assay} to add alternative featutres to assay meta.data",
+                          "i" = "Value can either be name of assay or {.val all} to add to all compatible assays present."))
+  }
+
+  # set assays to use
+  if (assay == "all") {
+    assays_use <- Assays(object = seurat_object)
+  } else {
+    assays_use <- assay
+  }
+
+  # check they are Assay5
+  current_assay_classes <- sapply(assays_use, function(x) {
+    class(x = seurat_object[[x]])
+  })
+
+  if (isFALSE(x = all(current_assay_classes == "Assay5"))) {
+    cli_abort(message = "All assays to features must be {.field Assay5}.")
+  }
+
+
+
+  # get features
+  object_features <- Features(x = seurat_object, assay = assays_use[1])
+
+  # if providing features_tsv
+  if (!is.null(x = features_tsv_file)) {
+    features_table <- data.table::fread(file = features_tsv_file, header = FALSE, data.table = FALSE)
+    colnames(features_table) <- c("Ensembl_ID", "Symbol", "Modality")
+
+    features_table$Symbol <- make.unique(features_table$Symbol)
+
+    features_present <- features_table %>%
+      filter(.data[["Symbol"]] %in% object_features)
+  }
+
+  if (!is.null(x = hdf5_file)) {
+    h5 <- Read10X_h5(filename = hdf5_file)
+    symbols <- rownames(h5)
+
+    h5 <- Read10X_h5(filename = hdf5_file, use.names = F)
+    ensembl <- rownames(test_h5)
+
+    features_table <- data.frame("Ensembl_ID" = ensembl,
+                                 "Symbol" = symbols)
+
+    features_present <- features_table %>%
+      filter(.data[["Symbol"]] %in% object_features)
+  }
+
+  # Add to object
+  for (i in assays_use) {
+    seurat_object[[i]]@meta.data$Ensembl_ID <- features_present$Ensembl_ID
+    seurat_object[[i]]@meta.data$Symbol <- features_present$Symbol
+  }
+
+  # return object
   return(seurat_object)
 }
