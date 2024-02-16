@@ -1347,8 +1347,11 @@ Convert_Assay <- function(
     convert_to
 ) {
   # Check accepted
-  accepted_V3 <- c("Assay", "assay", "V3", "v3")
-  accepted_V5 <- c("Assay5", "assay5", "V5", "v5")
+  accepted_V3 <- c("Assay", "assay", "V3", "v3", "3")
+  accepted_V5 <- c("Assay5", "assay5", "V5", "v5", "5")
+
+  # convert to character in case numeric provided
+  convert_to <- as.character(x = convert_to)
 
   if (!convert_to %in% c(accepted_V5, accepted_V3)) {
     cli_abort(message = c("Value provided to {.code convert_to} ({.field {convert_to}}) was not accepted value.",
