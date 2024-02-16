@@ -127,14 +127,9 @@ reference:
 - contents:
   - has_concept("check_util")
 - subtitle: "Misc Utilities"
-  desc: "Misc Utilities"
+  desc: "Miscellaneous Utilities"
 - contents:
   - has_concept("misc_util")
-- subtitle: "OLD Utilities"
-  desc: "OLD Utilities test"
-- contents:
-  - has_concept("helper_util")
-  - has_concept("object_util")
 
 - title: "Helper Utilities (LIGER)"
   desc: "Functions to provide ease of use for frequently used code from LIGER Objects."
