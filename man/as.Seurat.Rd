@@ -6,7 +6,7 @@
 \usage{
 \method{as.Seurat}{liger}(
   x,
-  nms = names(liger_object@H),
+  nms = names(x@H),
   renormalize = TRUE,
   use.liger.genes = TRUE,
   by.dataset = FALSE,

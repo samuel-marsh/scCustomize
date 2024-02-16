@@ -479,7 +479,7 @@ as.LIGER.list <- function(
 
 as.Seurat.liger <- function(
     x,
-    nms = names(liger_object@H),
+    nms = names(x@H),
     renormalize = TRUE,
     use.liger.genes = TRUE,
     by.dataset = FALSE,

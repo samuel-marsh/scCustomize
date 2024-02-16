@@ -1324,6 +1324,9 @@ Store_Palette_Seurat <- function(
 #' @param assay name of assay(s) to add the alternative features to.  Can specify "all"
 #' to add to all assays.
 #'
+#' @import cli
+#' @importFrom dplyr filter
+#'
 #' @return Seurat Object with new entries in the `obj@assays$ASSAY@meta.data` slot.
 #'
 #' @export
@@ -1378,8 +1381,6 @@ Add_Alt_Feature_ID <- function(
     cli_abort(message = "All assays to features must be {.field Assay5}.")
   }
 
-
-
   # get features
   object_features <- Features(x = seurat_object, assay = assays_use[1])
 
@@ -1396,10 +1397,10 @@ Add_Alt_Feature_ID <- function(
 
   if (!is.null(x = hdf5_file)) {
     h5 <- Read10X_h5(filename = hdf5_file)
-    symbols <- rownames(h5)
+    symbols <- rownames(x = h5)
 
     h5 <- Read10X_h5(filename = hdf5_file, use.names = F)
-    ensembl <- rownames(test_h5)
+    ensembl <- rownames(x = h5)
 
     features_table <- data.frame("Ensembl_ID" = ensembl,
                                  "Symbol" = symbols)
