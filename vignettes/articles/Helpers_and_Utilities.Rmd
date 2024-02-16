@@ -270,6 +270,24 @@ obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_meta, join_by_seu
 ```
 
 
+### Add feature meta data  
+Starting in Seurat V5 each assay now possess it's own meta.data slot which is feature-level meta data.  During course of normal analysis this is where information on variable features is stored.  However, we can also use it to store alternate feature names, in most cases this is Ensembl IDs matching the symbols used in object creation/analysis.
+
+scCustomize provides the function `Add_Alt_Feature_ID()` to automatically match and add these features using the same files used in object creation.  Users only need to supply either path to the features.tsv.gz file or the hdf5 file produced from Cell Ranger output.
+
+```{r eval=FALSE}
+# Using features.tsv.gz file
+obj <- Add_Alt_Feature_ID(seurat_object = obj,
+features_tsv = "sample01/outs/filtered_feature_bc_matrix/features.tsv.gz", assay = "RNA")
+
+# Using hdf5 file
+obj <- Add_Alt_Feature_ID(seurat_object = obj,
+hdf5_file = "sample01/outs//outs/filtered_feature_bc_matrix.h5"", assay = "RNA")
+```
+
+*NOTE:* If using features.tsv.gz file the file from either filtered or raw outputs can be used as they are identical.  
+
+*NOTE:* If using hdf5 file the file from either filtered_feature_bc or raw_feature_bc can be used as the features slot is identical. Though it is faster to load filtered_feature_bc file due to droplet filtering.  
 
 
 ## Check for Features/Genes
