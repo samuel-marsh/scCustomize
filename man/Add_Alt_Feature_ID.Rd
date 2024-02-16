@@ -31,8 +31,16 @@ Add alternative feature ids to the assay level meta.data slot in Assay5 compatib
 }
 \examples{
 \dontrun{
-test_obj <- Add_Alt_Feature_ID(seurat_object = test_obj,
-features_tsv = "/FILE_PATH/features.tsv.gz", assay = "RNA")
+# Using features.tsv.gz file
+   # Either file from filtered or raw outputs can be used as they are identical.
+obj <- Add_Alt_Feature_ID(seurat_object = obj,
+features_tsv = "sample01/outs/filtered_feature_bc_matrix/features.tsv.gz", assay = "RNA")
+
+#' # Using hdf5 file
+   # Either filtered_feature_bc or raw_feature_bc can be used as the features slot is identical
+   # Though it is faster to load filtered_feature_bc file due to droplet filtering
+obj <- Add_Alt_Feature_ID(seurat_object = obj,
+hdf5_file = "sample01/outs//outs/filtered_feature_bc_matrix.h5", assay = "RNA")
 }
 
 }
