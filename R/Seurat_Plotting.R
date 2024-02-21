@@ -906,7 +906,7 @@ DotPlot_scCustom <- function(
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Plot
-  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, ...) +
+  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, group.by = group.by, ...) +
                              scale_color_gradientn(colors = colors_use)
   )
   # Modify plot
