@@ -195,20 +195,20 @@ FeaturePlot_scCustom <- function(
   seurat_version <- packageVersion("Seurat")
 
   # Add alpha to color scales
-  if (!is.null(x = alpha_exp) && seurat_version < 5) {
+  if (!is.null(x = alpha_exp) && seurat_version < "5") {
     colors_use <- alpha(colors_use, alpha_exp)
   }
 
-  if (!is.null(x = alpha_na_exp) && seurat_version < 5) {
+  if (!is.null(x = alpha_na_exp) && seurat_version < "5") {
     na_color <- alpha(na_color, alpha_na_exp)
   }
 
-  if (!is.null(x = alpha_na_exp) && seurat_version >= 5) {
+  if (!is.null(x = alpha_na_exp) && seurat_version >= "5") {
     cli_warn(message = "{.code alpha_na_exp} is not currently supported for Seurat v5+")
   }
 
   # Set alpha if NULL
-  if (is.null(x = alpha_exp) && seurat_version >= 5) {
+  if (is.null(x = alpha_exp) && seurat_version >= "5") {
       alpha_exp <- 1
   }
 
