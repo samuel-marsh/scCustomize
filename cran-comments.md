@@ -1,5 +1,5 @@
 ## Major Version Update 
-This is major version update to v2.1.0.  See News.md for full changelog.  This is attempted re-submission after a check error in original v2.1.0 submission (Error did not show in my package checks before first submission of this version but as of today showed error and I was able to resolve).  
+This is major version update to v2.1.0.  See News.md for full changelog.  This is attempted re-submission after a check error in original v2.1.0 submission (Error did not show in my package checks before first submission of this version, but as of today they now show same error and I was able to resolve it).  
 
 - Number of new functions, changes, and bug fixes.
 - A few breaking changes owing to function/parameter deprecation (all are documented (see new Deprecated.R file) and have warnings/error messages using lifecycle package).  
