@@ -1,5 +1,5 @@
 ## Major Version Update 
-This is major version update to v2.1.0.  See News.md for full changelog.  
+This is major version update to v2.1.0.  See News.md for full changelog.  This is attempted re-submission after a check error in original v2.1.0 submission (I have resolved the errors).  
 
 - Number of new functions, changes, and bug fixes.
 - A few breaking changes owing to function/parameter deprecation (all are documented (see new Deprecated.R file) and have warnings/error messages using lifecycle package).  
@@ -13,6 +13,7 @@ This is major version update to v2.1.0.  See News.md for full changelog.
 - Run locally, R4.3.2, Platform: x86_64-apple-darwin20 (64-bit) with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
+- First submission
 
 ## NOTES
 1. Imports includes 28 non-default packages.
