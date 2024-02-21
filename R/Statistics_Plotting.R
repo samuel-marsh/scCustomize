@@ -18,6 +18,7 @@
 #' @return A ggplot object
 #'
 #' @import ggplot2
+#' @importFrom ggprism theme_prism
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
@@ -106,13 +107,13 @@ Plot_Median_Genes <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      ggprism::theme_prism()
+      theme_prism()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nFeature_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      ggprism::theme_prism()() +
+      theme_prism()() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -120,7 +121,7 @@ Plot_Median_Genes <- function(
 
   # Modify base plot
   if (isTRUE(x = x_lab_rotate)) {
-    plot <- plot + ggprism::theme_prism()(axis_text_angle = 45)
+    plot <- plot + theme_prism()(axis_text_angle = 45)
   }
 
   if (!is.null(x = x_axis_label)) {
@@ -156,6 +157,7 @@ Plot_Median_Genes <- function(
 #' @return A ggplot object
 #'
 #' @import ggplot2
+#' @importFrom ggprism theme_prism
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
@@ -244,13 +246,13 @@ Plot_Median_UMIs <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      ggprism::theme_prism()()
+      theme_prism()()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      ggprism::theme_prism()() +
+      theme_prism()() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -258,7 +260,7 @@ Plot_Median_UMIs <- function(
 
   # Modify base plot
   if (isTRUE(x = x_lab_rotate)) {
-    plot <- plot + ggprism::theme_prism()(axis_text_angle = 45)
+    plot <- plot + theme_prism()(axis_text_angle = 45)
   }
 
   if (!is.null(x = x_axis_label)) {
@@ -383,13 +385,13 @@ Plot_Median_Mito <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      ggprism::theme_prism()()
+      theme_prism()()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_percent_mito"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      ggprism::theme_prism()() +
+      theme_prism()() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -397,7 +399,7 @@ Plot_Median_Mito <- function(
 
   # Modify base plot
   if (isTRUE(x = x_lab_rotate)) {
-    plot <- plot + ggprism::theme_prism()(axis_text_angle = 45)
+    plot <- plot + theme_prism()(axis_text_angle = 45)
   }
 
   if (!is.null(x = x_axis_label)) {
@@ -537,13 +539,13 @@ Plot_Median_Other <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      ggprism::theme_prism()()
+      theme_prism()()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[[paste0("Median_", median_var)]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      ggprism::theme_prism()() +
+      theme_prism()() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -551,7 +553,7 @@ Plot_Median_Other <- function(
 
   # Modify base plot
   if (isTRUE(x = x_lab_rotate)) {
-    plot <- plot + ggprism::theme_prism()(axis_text_angle = 45)
+    plot <- plot + theme_prism()(axis_text_angle = 45)
   }
 
   if (!is.null(x = x_axis_label)) {
@@ -664,14 +666,14 @@ Plot_Cells_per_Sample <- function(
     geom_boxplot(fill = "white") +
     geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
     scale_fill_manual(values = colors_use) +
-    ggprism::theme_prism()() +
+    theme_prism()() +
     ggtitle(plot_title) +
     ylab(y_axis_label) +
     xlab("")
 
   # Modify base plot
   if (isTRUE(x = x_lab_rotate)) {
-    plot <- plot + ggprism::theme_prism()(axis_text_angle = 45)
+    plot <- plot + theme_prism()(axis_text_angle = 45)
   }
 
   if (!is.null(x = x_axis_label)) {
