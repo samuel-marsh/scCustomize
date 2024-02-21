@@ -113,7 +113,7 @@ Plot_Median_Genes <- function(
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      theme_prism()() +
+      theme_prism() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -246,13 +246,13 @@ Plot_Median_UMIs <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      theme_prism()()
+      theme_prism()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      theme_prism()() +
+      theme_prism() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -385,13 +385,13 @@ Plot_Median_Mito <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      theme_prism()()
+      theme_prism()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_percent_mito"]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      theme_prism()() +
+      theme_prism() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -539,13 +539,13 @@ Plot_Median_Other <- function(
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("") +
-      theme_prism()()
+      theme_prism()
   } else {
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[[paste0("Median_", median_var)]], fill = .data[[group_by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
-      theme_prism()() +
+      theme_prism() +
       ggtitle(plot_title) +
       ylab(y_axis_label) +
       xlab("")
@@ -666,7 +666,7 @@ Plot_Cells_per_Sample <- function(
     geom_boxplot(fill = "white") +
     geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
     scale_fill_manual(values = colors_use) +
-    theme_prism()() +
+    theme_prism() +
     ggtitle(plot_title) +
     ylab(y_axis_label) +
     xlab("")
