@@ -49,12 +49,14 @@ A ggplot object
 Plot of median genes per cell per sample grouped by desired meta data variable.
 }
 \examples{
+\dontrun{
 library(Seurat)
 # Create example groups
 pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 
 # Plot
 Plot_Median_Genes(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
+}
 
 }
 \concept{stats_plotting}
