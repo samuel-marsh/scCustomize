@@ -1157,6 +1157,69 @@ Extract_Sample_Meta <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### DATA ACCESS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Get meta data from object
+#'
+#' Quick function to properly pull meta.data from objects.
+#'
+#' @param object Object of class Seurat or liger.
+#'
+#' @importFrom methods slot
+#'
+#' @return A data.frame containing cell-level meta data
+#'
+#' @export
+#'
+#' @concept get_set_util
+#'
+#' @rdname Fetch_Meta
+#'
+#' @examples
+#' library(Seurat)
+#' meta_data <- Fetch_Meta(object = pbmc_small)
+#' head(meta_data, 5)
+#'
+
+Fetch_Meta <- function(object) {
+  UseMethod(generic = 'Fetch_Meta')
+}
+
+
+#' @rdname Fetch_Meta
+#' @export
+#' @concept get_set_util
+#' @method Fetch_Meta Seurat
+
+Fetch_Meta.Seurat <- function(
+    object
+) {
+  # Pull meta data
+  object_meta <- slot(object = object, name = "meta.data")
+
+  return(object_meta)
+}
+
+
+#' @rdname Fetch_Meta
+#' @export
+#' @concept liger_object_util
+#' @method Fetch_Meta liger
+
+Fetch_Meta.liger <- function(
+    object
+) {
+
+  # Pull meta data
+  object_meta <- object_meta <- slot(object = object, name = "cell.data")
+
+  return(object_meta)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### MISC OBJECT UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
