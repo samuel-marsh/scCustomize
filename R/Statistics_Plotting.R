@@ -27,12 +27,14 @@
 #' @concept stats_plotting
 #'
 #' @examples
+#' \dontrun{
 #' library(Seurat)
 #' # Create example groups
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
 #' # Plot
 #' Plot_Median_Genes(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
+#'}
 #'
 
 Plot_Median_Genes <- function(
@@ -165,12 +167,14 @@ Plot_Median_Genes <- function(
 #' @concept stats_plotting
 #'
 #' @examples
+#' \dontrun{
 #' library(Seurat)
 #' # Create example groups
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
 #' # Plot
 #' Plot_Median_UMIs(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
+#' }
 #'
 
 Plot_Median_UMIs <- function(
