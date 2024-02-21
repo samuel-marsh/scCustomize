@@ -520,7 +520,7 @@ as.Seurat.liger <- function(
 
     # set assay value
     if (convert_to %in% accepted_V5) {
-      if (packageVersion(pkg = 'Seurat') < 5) {
+      if (packageVersion(pkg = 'Seurat') < "5") {
         cli_abort(message = "Seurat version must be v5.0.0 or greater to create To create Assay5.")
       }
 
@@ -760,7 +760,7 @@ Liger_to_Seurat <- function(
 
     # set assay value
     if (convert_to %in% accepted_V5) {
-      if (packageVersion(pkg = 'Seurat') < 5) {
+      if (packageVersion(pkg = 'Seurat') < "5") {
         cli_abort(message = "Seurat version must be v5.0.0 or greater to create To create Assay5.")
       }
 
@@ -1361,7 +1361,7 @@ Convert_Assay <- function(
 
   # set assay value
   if (convert_to %in% accepted_V5) {
-    if (packageVersion(pkg = 'Seurat') < 5) {
+    if (packageVersion(pkg = 'Seurat') < "5") {
       cli_abort(message = "Seurat version must be v5.0.0 or greater to create Assay5.")
     }
 
