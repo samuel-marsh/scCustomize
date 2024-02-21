@@ -180,7 +180,7 @@ as.LIGER.Seurat <- function(
     seurat_meta <- Fetch_Meta(object = x)
     # remove meta data values already transferred
     seurat_meta <- seurat_meta %>%
-      select(-any_of(c("nFeature_RNA", "nCount_RNA", group.by))) %>%
+      select(-any_of(c("nFeature_RNA", "nCount_RNA"))) %>%
       rownames_to_column("barcodes")
 
     # pull current liger meta
@@ -390,7 +390,7 @@ as.LIGER.list <- function(
     # extract meta data from seurat object
     seurat_meta <- lapply(x, function(g) {
       obj_meta <- Fetch_Meta(object = g) %>%
-        select(-any_of(c("nFeature_RNA", "nCount_RNA", group.by)))
+        select(-any_of(c("nFeature_RNA", "nCount_RNA")))
     })
 
     seurat_meta <- bind_rows(seurat_meta) %>%
