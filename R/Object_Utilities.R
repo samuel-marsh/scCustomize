@@ -1354,7 +1354,7 @@ Add_Alt_Feature_ID <- function(
     hdf5_file = NULL,
     assay = NULL
 ) {
-  if (packageVersion(pkg = 'Seurat') < 5) {
+  if (packageVersion(pkg = 'Seurat') < "5") {
     cli_abort(message = "Seurat version must be v5.0.0 or greater to add alternative features.")
   }
 
