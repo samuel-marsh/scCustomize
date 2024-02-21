@@ -4,7 +4,7 @@ This is major version update to v2.1.0.  See News.md for full changelog.
 - Number of new functions, changes, and bug fixes.
 - A few breaking changes owing to function/parameter deprecation (all are documented (see new Deprecated.R file) and have warnings/error messages using lifecycle package).  
 
-This is attempted re-submission after a check error in original v2.1.0 submission. The error in CRAN report email I received did not show in my package checks before first submission of this version.  But as of today my checks started showing the same error on same platform and I have now resolved the issue.  
+This is attempted re-submission after a check error in second v2.1.0 submission. This time there was an error in function example in windows build that was not present on Feb-16th original check and in function that has not been changed in several releases.
 
 
 
@@ -16,7 +16,7 @@ This is attempted re-submission after a check error in original v2.1.0 submissio
 - Run locally, R4.3.2, Platform: x86_64-apple-darwin20 (64-bit) with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
-- First submission
+- third submission
 
 ## NOTES
 1. Imports includes 28 non-default packages.
