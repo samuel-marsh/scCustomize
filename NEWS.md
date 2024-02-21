@@ -44,6 +44,7 @@
 - Fixed legend display is `Clustered_DotPlot` to display percentage instead of proportion to match legend text.  
 - Fixed `Percent_Expressing` error when `group_by = "ident"`.  
 - Fixed error that caused features in non-default assays to be returned as not found when attempting to plot.  
+- Fixed error in `DotPlot_scCustom` that didn't correctly pass `group.by` when plotting ([#158](https://github.com/samuel-marsh/scCustomize/issues/158)).  
 
 
 
