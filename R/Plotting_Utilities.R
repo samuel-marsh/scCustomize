@@ -1644,7 +1644,9 @@ theme_ggprism_mod <- function(
               axis_text_angle = axis_text_angle,
               border = border) %+replace%
     theme(legend.title = element_text(hjust = 0),
-          axis.text = element_text(size = rel(0.95), face = "plain")
+          axis.text = element_text(size = rel(0.95), face = "plain",),
+          legend.text.align = NULL,
+          legend.title.align = NULL
     )
 }
 
