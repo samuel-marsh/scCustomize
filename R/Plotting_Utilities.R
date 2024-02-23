@@ -1635,7 +1635,7 @@ theme_ggprism_mod <- function(
   axis_text_angle = 0,
   border = FALSE
 ) {
-  theme_prism(palette = palette,
+  mod_theme <- theme_prism(palette = palette,
               base_size = base_size,
               base_family = base_family,
               base_fontface = base_fontface,
@@ -1647,9 +1647,9 @@ theme_ggprism_mod <- function(
           axis.text = element_text(size = rel(0.95), face = "plain")
     )
 
-   theme_prism[c("legend.text.align", "legend.title.align")] <- NULL
+  mod_theme[c("legend.text.align", "legend.title.align")] <- NULL
 
-   return(theme_prism)
+   return(mod_theme)
 }
 
 
