@@ -28,7 +28,7 @@
 - Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
 - Updated `Liger_to_Seurat()` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  Now part of `as.Seurat`.
 - Default color palette change from v2.0.0 when number of groups is between 3-8 has been reverted.  Polychrome palette is default when number of groups is between 3-36.  
-- In preparation of upcoming overhaul of rliger package, added package version checks to current rliger functions in order to prevent breaking errors.  Next update v2.2.0 will add cross-functionality between rliger package versions ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
+- In preparation of upcoming overhaul of rliger package, added package version checks to current rliger functions in order to prevent breaking errors.  Next update v2.2.0 will add cross-functionality between rliger package versions ([#161](https://github.com/samuel-marsh/scCustomize/issues/161)).  
    
 
 ## Fixes  
