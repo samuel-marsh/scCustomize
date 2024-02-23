@@ -4,7 +4,7 @@ This is major version update to v2.1.0.  See News.md for full changelog.
 - Number of new functions, changes, and bug fixes.
 - A few breaking changes owing to function/parameter deprecation (all are documented (see new Deprecated.R file) and have warnings/error messages using lifecycle package).  
 
-This is attempted re-submission after a check error in second v2.1.0 submission. I was able to diagnose error as related to upcoming ggplot2 v3.5.0 update which caused error in another package scCustomize depends on.  Until that package is fixed I have changed ggplot2 version requirement to be v3.4.4 or lower.  
+This is attempted re-submission after a check error in second v2.1.0 submission. I was able to diagnose error as related to upcoming ggplot2 v3.5.0 update which caused error in another package scCustomize depends on.  I have updated affected functions with a fix until other package is updated.   
 
 
 
