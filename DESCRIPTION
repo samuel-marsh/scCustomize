@@ -22,7 +22,7 @@ Imports:
     dplyr,
     forcats,
     ggbeeswarm,
-    ggplot2 (< 3.5.0),
+    ggplot2,
     ggprism,
     ggrastr,
     ggrepel,
