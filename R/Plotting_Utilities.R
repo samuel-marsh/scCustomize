@@ -1649,7 +1649,7 @@ theme_ggprism_mod <- function(
 
   mod_theme[c("legend.text.align", "legend.title.align")] <- NULL
 
-   return(mod_theme)
+  return(mod_theme)
 }
 
 
