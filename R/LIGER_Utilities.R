@@ -31,6 +31,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom rlang ":="
 #' @importFrom tibble rownames_to_column column_to_rownames
+#' @importFrom utils packageVersion
 #'
 #' @method Add_Mito_Ribo liger
 #'
@@ -61,6 +62,12 @@ Add_Mito_Ribo.liger <- function(
   list_species_names = FALSE,
   ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Accepted species names
   accepted_names <- data.frame(
     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
@@ -234,6 +241,7 @@ Add_Mito_Ribo.liger <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
 #' @import cli
+#' @importFrom utils packageVersion
 #'
 #' @method Add_Cell_Complexity liger
 #'
@@ -255,6 +263,12 @@ Add_Cell_Complexity.liger <- function(
   overwrite = FALSE,
   ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check Seurat
   Is_LIGER(liger_object = object)
 
@@ -289,6 +303,8 @@ Add_Cell_Complexity.liger <- function(
 #'
 #' @return vector or list depending on `by_dataset` parameter
 #'
+#' @importFrom utils packageVersion
+#'
 #' @export
 #'
 #' @concept liger_object_util
@@ -307,6 +323,12 @@ LIGER_Features <- function(
     liger_object,
     by_dataset = FALSE
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   Is_LIGER(liger_object = liger_object)
 
   # Extract features
@@ -334,6 +356,7 @@ LIGER_Features <- function(
 #' @return A LIGER Object
 #'
 #' @import cli
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -350,6 +373,12 @@ Top_Genes_Factor <- function(
   liger_factor,
   num_genes = 10
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # LIGER object check
   Is_LIGER(liger_object = liger_object)
 
@@ -385,6 +414,8 @@ Top_Genes_Factor <- function(
 #'
 #' @return A data.frame with information for plotting
 #'
+#' @importFrom utils packageVersion
+#'
 #' @references This function is encompasses the first part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to allow plotting other meta data variables.  In this case the function
 #' just returns the data.frame needed for plotting rather than plots themselves.
@@ -404,6 +435,12 @@ Generate_Plotting_df_LIGER <- function(object,
                                        group_by = "dataset",
                                        split_by = NULL
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   tsne_df <- data.frame(object@tsne.coords)
   colnames(x = tsne_df) <- c("tsne1", "tsne2")
   tsne_df[[group_by]] <- object@cell.data[[group_by]]
@@ -483,6 +520,7 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #' @importFrom stats median
+#' @importFrom utils packageVersion
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
@@ -517,6 +555,12 @@ Plot_By_Cluster_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Create plotting data.frame
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
@@ -741,6 +785,7 @@ Plot_By_Cluster_LIGER <- function(
 #' @importFrom patchwork wrap_plots
 #' @importFrom rlang sym "!!"
 #' @importFrom scattermore geom_scattermore
+#' @importFrom utils packageVersion
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
@@ -770,6 +815,11 @@ Plot_By_Meta_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
 
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
@@ -903,6 +953,7 @@ Plot_By_Meta_LIGER <- function(
 #' @return A LIGER Object with variable genes in correct slot.
 #'
 #' @import cli
+#' @importFrom utils packageVersion
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
 #' which is called by this function after creating new temporary object/dataset.
@@ -928,6 +979,12 @@ Variable_Features_ALL_LIGER <- function(
   pt.size = 0.3,
   chunk=1000
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   Is_LIGER(liger_object = liger_object)
 
   raw_data <- liger_object@raw.data

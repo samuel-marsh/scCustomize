@@ -42,6 +42,7 @@
 #'
 #' @import ggplot2
 #' @importFrom patchwork wrap_plots
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -76,6 +77,12 @@ DimPlot_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
@@ -289,6 +296,7 @@ DimPlot_LIGER <- function(
 #' @importFrom grDevices dev.off pdf
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -326,6 +334,12 @@ plotFactors_scCustom <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 

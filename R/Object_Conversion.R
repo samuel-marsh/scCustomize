@@ -31,6 +31,7 @@
 #' @importFrom dplyr left_join join_by select any_of
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
+#' @importFrom utils packageVersion
 #'
 #' @export
 #' @rdname as.LIGER
@@ -54,6 +55,12 @@ as.LIGER.Seurat <- function(
     verbose = TRUE,
     ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = x)
 
@@ -226,6 +233,7 @@ as.LIGER.Seurat <- function(
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_to_lower
 #' @importFrom tibble rownames_to_column column_to_rownames
+#' @importFrom utils packageVersion
 #'
 #' @export
 #' @rdname as.LIGER
@@ -249,6 +257,12 @@ as.LIGER.list <- function(
     verbose = TRUE,
     ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check Seurat
   seurat_check <- unlist(lapply(x, function(x) {
     inherits(x = x, what = "Seurat")
@@ -492,6 +506,12 @@ as.Seurat.liger <- function(
     barcode_cell_id_delimiter = "_",
     ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   if (is.null(x = reduction_label)) {
     cli_abort(message = c("{.code reduction_label} parameter was not set.",
                           "*" = "LIGER objects do not store name of dimensionality reduction technique used.",
@@ -1107,6 +1127,7 @@ as.anndata.Seurat <- function(
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_to_lower
 #' @importFrom tibble column_to_rownames
+#' @importFrom utils packageVersion
 #'
 #' @export
 #' @rdname as.anndata
@@ -1129,7 +1150,13 @@ as.anndata.liger <- function(
     verbose = TRUE,
     ...
 ) {
-  # Check hdf5r installed
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
+  # Check reticulate installed
   reticulate_check <- is_installed(pkg = "reticulate")
   if (isFALSE(x = reticulate_check)) {
     cli_abort(message = c(
