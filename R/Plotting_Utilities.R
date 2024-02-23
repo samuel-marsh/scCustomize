@@ -1646,6 +1646,10 @@ theme_ggprism_mod <- function(
     theme(legend.title = element_text(hjust = 0),
           axis.text = element_text(size = rel(0.95), face = "plain")
     )
+
+   theme_prism[c("legend.text.align", "legend.title.align")] <- NULL
+
+   return(theme_prism)
 }
 
 
