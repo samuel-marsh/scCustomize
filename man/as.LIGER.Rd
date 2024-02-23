@@ -11,6 +11,7 @@ as.LIGER(x, ...)
 \method{as.LIGER}{Seurat}(
   x,
   group.by = "orig.ident",
+  layers_name = NULL,
   assay = "RNA",
   remove_missing = FALSE,
   renormalize = TRUE,
@@ -42,6 +43,8 @@ as.LIGER(x, ...)
 \item{...}{Arguments passed to other methods}
 
 \item{group.by}{Variable in meta data which contains variable to split data by, (default is "orig.ident").}
+
+\item{layers_name}{name of meta.data column used to split layers if setting \code{group.by = "layers"}.}
 
 \item{assay}{Assay containing raw data to use, (default is "RNA").}
 
