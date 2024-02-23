@@ -82,7 +82,7 @@ as.LIGER.Seurat <- function(
   }
 
   # Check Assay5 for multiple layers
-  count_layers <- Layers(object = x, search = "counts")
+  count_layers <- Layers(object = x, search = "counts", assay = assay)
 
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
     if (length(x = count_layers) > 1 && group.by != "orig.ident") {
