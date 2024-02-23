@@ -162,6 +162,42 @@
         </td>
         <td><p>Read Overall Statistics from 10X Cell Ranger Count</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="merge-data-utilities">Merge Data Utilities <a href="#merge-data-utilities" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Utilities to merge raw data.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Extract_Modality.html">Extract_Modality()</a></code> </p>
+        </td>
+        <td><p>Extract multi-modal data into list by modality</p></td>
+      </tr><tr><td>
+          <p><code><a href="Merge_Sparse_Data_All.html">Merge_Sparse_Data_All()</a></code> </p>
+        </td>
+        <td><p>Merge a list of Sparse Matrices</p></td>
+      </tr><tr><td>
+          <p><code><a href="Merge_Sparse_Multimodal_All.html">Merge_Sparse_Multimodal_All()</a></code> </p>
+        </td>
+        <td><p>Merge a list of Sparse Matrices contain multi-modal data.</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="edit-barcode-utilities">Edit Barcode Utilities <a href="#edit-barcode-utilities" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Utilities to edit cell barcodes</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Change_Delim_All.html">Change_Delim_All()</a></code> </p>
+        </td>
+        <td><p>Change all delimiters in cell name</p></td>
+      </tr><tr><td>
+          <p><code><a href="Change_Delim_Prefix.html">Change_Delim_Prefix()</a></code> </p>
+        </td>
+        <td><p>Change barcode prefix delimiter</p></td>
+      </tr><tr><td>
+          <p><code><a href="Change_Delim_Suffix.html">Change_Delim_Suffix()</a></code> </p>
+        </td>
+        <td><p>Change barcode suffix delimiter</p></td>
+      </tr><tr><td>
+          <p><code><a href="Replace_Suffix.html">Replace_Suffix()</a></code> </p>
+        </td>
+        <td><p>Replace barcode suffixes</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="sequencing-metrics-qc-plots">Sequencing Metrics QC Plots <a href="#sequencing-metrics-qc-plots" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions plotting various QC metrics provides by 10X Genomics Cell Ranger Outputs</p>
         </th>
@@ -461,72 +497,11 @@
           <h2 id="helper-utilities-seurat-">Helper Utilities (Seurat) <a href="#helper-utilities-seurat-" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to provide ease of use for frequently used code from Seurat Objects.</p>
         </th>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="qc-utilities">QC Utilities <a href="#qc-utilities" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Functions to add common QC variables to meta.data.</p>
+        </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="Case_Check.html">Case_Check()</a></code> </p>
-        </td>
-        <td><p>Check for alternate case features
-Checks Seurat object for the presence of features with the same spelling but alternate case.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Change_Delim_All.html">Change_Delim_All()</a></code> </p>
-        </td>
-        <td><p>Change all delimiters in cell name</p></td>
-      </tr><tr><td>
-          <p><code><a href="Change_Delim_Prefix.html">Change_Delim_Prefix()</a></code> </p>
-        </td>
-        <td><p>Change barcode prefix delimiter</p></td>
-      </tr><tr><td>
-          <p><code><a href="Change_Delim_Suffix.html">Change_Delim_Suffix()</a></code> </p>
-        </td>
-        <td><p>Change barcode suffix delimiter</p></td>
-      </tr><tr><td>
-          <p><code><a href="CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code> </p>
-        </td>
-        <td><p>Check Matrix Validity</p></td>
-      </tr><tr><td>
-          <p><code><a href="Extract_Modality.html">Extract_Modality()</a></code> </p>
-        </td>
-        <td><p>Extract multi-modal data into list by modality</p></td>
-      </tr><tr><td>
-          <p><code><a href="Fetch_Meta.html">Fetch_Meta()</a></code> </p>
-        </td>
-        <td><p>Get meta data from object</p></td>
-      </tr><tr><td>
-          <p><code><a href="Gene_Present.html">Gene_Present()</a></code> </p>
-        </td>
-        <td><p>Check if genes/features are present</p></td>
-      </tr><tr><td>
-          <p><code><a href="Merge_Sparse_Data_All.html">Merge_Sparse_Data_All()</a></code> </p>
-        </td>
-        <td><p>Merge a list of Sparse Matrices</p></td>
-      </tr><tr><td>
-          <p><code><a href="Merge_Sparse_Multimodal_All.html">Merge_Sparse_Multimodal_All()</a></code> </p>
-        </td>
-        <td><p>Merge a list of Sparse Matrices contain multi-modal data.</p></td>
-      </tr><tr><td>
-          <p><code><a href="Meta_Numeric.html">Meta_Numeric()</a></code> </p>
-        </td>
-        <td><p>Check if meta data columns are numeric</p></td>
-      </tr><tr><td>
-          <p><code><a href="Meta_Present.html">Meta_Present()</a></code> </p>
-        </td>
-        <td><p>Check if meta data are present</p></td>
-      </tr><tr><td>
-          <p><code><a href="Reduction_Loading_Present.html">Reduction_Loading_Present()</a></code> </p>
-        </td>
-        <td><p>Check if reduction loadings are present</p></td>
-      </tr><tr><td>
-          <p><code><a href="Replace_Suffix.html">Replace_Suffix()</a></code> </p>
-        </td>
-        <td><p>Replace barcode suffixes</p></td>
-      </tr><tr><td>
-          <p><code><a href="Split_Vector.html">Split_Vector()</a></code> </p>
-        </td>
-        <td><p>Split vector into list</p></td>
-      </tr><tr><td>
-          <p><code><a href="Updated_HGNC_Symbols.html">Updated_HGNC_Symbols()</a></code> </p>
-        </td>
-        <td><p>Update HGNC Gene Symbols</p></td>
-      </tr><tr><td>
           <p><code><a href="Add_CellBender_Diff.html">Add_CellBender_Diff()</a></code> </p>
         </td>
         <td><p>Calculate and add differences post-cell bender analysis</p></td>
@@ -543,29 +518,33 @@ Checks Seurat object for the presence of features with the same spelling but alt
         </td>
         <td><p>Add Mito and Ribo percentages</p></td>
       </tr><tr><td>
-          <p><code><a href="Add_Sample_Meta.html">Add_Sample_Meta()</a></code> </p>
-        </td>
-        <td><p>Add Sample Level Meta Data</p></td>
-      </tr><tr><td>
           <p><code><a href="Add_Top_Gene_Pct_Seurat.html">Add_Top_Gene_Pct_Seurat()</a></code> </p>
         </td>
         <td><p>Add Percent of High Abundance Genes</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="getters-setters">Getters/Setters <a href="#getters-setters" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Functions to extract data from or add additional data to Seurat objects</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Add_Alt_Feature_ID.html">Add_Alt_Feature_ID()</a></code> </p>
+        </td>
+        <td><p>Add Alternative Feature IDs</p></td>
+      </tr><tr><td>
+          <p><code><a href="Add_Sample_Meta.html">Add_Sample_Meta()</a></code> </p>
+        </td>
+        <td><p>Add Sample Level Meta Data</p></td>
       </tr><tr><td>
           <p><code><a href="Extract_Sample_Meta.html">Extract_Sample_Meta()</a></code> </p>
         </td>
         <td><p>Extract sample level meta.data</p></td>
       </tr><tr><td>
-          <p><code><a href="Merge_Seurat_List.html">Merge_Seurat_List()</a></code> </p>
+          <p><code><a href="Fetch_Meta.html">Fetch_Meta()</a></code> </p>
         </td>
-        <td><p>Merge a list of Seurat Objects</p></td>
+        <td><p>Get meta data from object</p></td>
       </tr><tr><td>
           <p><code><a href="Meta_Remove_Seurat.html">Meta_Remove_Seurat()</a></code> </p>
         </td>
         <td><p>Remove meta data columns containing Seurat Defaults</p></td>
-      </tr><tr><td>
-          <p><code><a href="Rename_Clusters.html">Rename_Clusters()</a></code> </p>
-        </td>
-        <td><p>Rename Cluster Seurat</p></td>
       </tr><tr><td>
           <p><code><a href="Store_Misc_Info_Seurat.html">Store_Misc_Info_Seurat()</a></code> </p>
         </td>
@@ -574,6 +553,55 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p><code><a href="Store_Palette_Seurat.html">Store_Palette_Seurat()</a></code> </p>
         </td>
         <td><p>Store color palette in Seurat object</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="check-utilities">Check Utilities <a href="#check-utilities" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Functions to check validity of different aspects of object or object contents.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Case_Check.html">Case_Check()</a></code> </p>
+        </td>
+        <td><p>Check for alternate case features
+Checks Seurat object for the presence of features with the same spelling but alternate case.</p></td>
+      </tr><tr><td>
+          <p><code><a href="CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code> </p>
+        </td>
+        <td><p>Check Matrix Validity</p></td>
+      </tr><tr><td>
+          <p><code><a href="Feature_Present.html">Feature_Present()</a></code> </p>
+        </td>
+        <td><p>Check if genes/features are present</p></td>
+      </tr><tr><td>
+          <p><code><a href="Gene_Present.html">Gene_Present()</a></code> </p>
+        </td>
+        <td><p>Check if genes/features are present  <a href="https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated" class="external-link"><img src="figures/lifecycle-soft-deprecated.svg" alt="[Soft-deprecated]"></a></p></td>
+      </tr><tr><td>
+          <p><code><a href="Meta_Numeric.html">Meta_Numeric()</a></code> </p>
+        </td>
+        <td><p>Check if meta data columns are numeric</p></td>
+      </tr><tr><td>
+          <p><code><a href="Meta_Present.html">Meta_Present()</a></code> </p>
+        </td>
+        <td><p>Check if meta data are present</p></td>
+      </tr><tr><td>
+          <p><code><a href="Reduction_Loading_Present.html">Reduction_Loading_Present()</a></code> </p>
+        </td>
+        <td><p>Check if reduction loadings are present</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="misc-utilities">Misc Utilities <a href="#misc-utilities" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p><p>Miscellaneous Utilities</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="Merge_Seurat_List.html">Merge_Seurat_List()</a></code> </p>
+        </td>
+        <td><p>Merge a list of Seurat Objects</p></td>
+      </tr><tr><td>
+          <p><code><a href="Split_Vector.html">Split_Vector()</a></code> </p>
+        </td>
+        <td><p>Split vector into list</p></td>
+      </tr><tr><td>
+          <p><code><a href="Updated_HGNC_Symbols.html">Updated_HGNC_Symbols()</a></code> </p>
+        </td>
+        <td><p>Update HGNC Gene Symbols</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="helper-utilities-liger-">Helper Utilities (LIGER) <a href="#helper-utilities-liger-" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to provide ease of use for frequently used code from LIGER Objects.</p>
@@ -586,6 +614,10 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p><code><a href="Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> </p>
         </td>
         <td><p>Add Mito and Ribo percentages</p></td>
+      </tr><tr><td>
+          <p><code><a href="Fetch_Meta.html">Fetch_Meta()</a></code> </p>
+        </td>
+        <td><p>Get meta data from object</p></td>
       </tr><tr><td>
           <p><code><a href="LIGER_Features.html">LIGER_Features()</a></code> </p>
         </td>
@@ -646,6 +678,10 @@ Checks Seurat object for the presence of features with the same spelling but alt
           <p><code><a href="Pull_Cluster_Annotation.html">Pull_Cluster_Annotation()</a></code> </p>
         </td>
         <td><p>Pull cluster information from annotation csv file.</p></td>
+      </tr><tr><td>
+          <p><code><a href="Rename_Clusters.html">Rename_Clusters()</a></code> </p>
+        </td>
+        <td><p>Rename Cluster Seurat</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="project-organization-utilities">Project Organization Utilities <a href="#project-organization-utilities" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to provide ease of use for organization of analysis projects.</p>

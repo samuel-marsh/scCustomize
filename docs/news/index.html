@@ -111,7 +111,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.1.0" id="sccustomize-210-2024-02-15">scCustomize 2.1.0 (2024-02-15)<a class="anchor" aria-label="anchor" href="#sccustomize-210-2024-02-15"></a></h2>
+<h2 class="page-header" data-toc-text="2.1.0" id="sccustomize-210-2024-02-16">scCustomize 2.1.0 (2024-02-16)<a class="anchor" aria-label="anchor" href="#sccustomize-210-2024-02-16"></a></h2>
 <div class="section level3">
 <h3 id="added-2-1-0">Added<a class="anchor" aria-label="anchor" href="#added-2-1-0"></a></h3>
 <ul><li>Added <code>title_prefix</code> parameter to <code>Iterate_DimPlot_bySample</code> to unify with <code>Meta_Highlight_Plot</code>.<br></li>
@@ -127,7 +127,8 @@
 <li>Added parameter <code>assay_type</code> to allow manual control of assay type when creating Seurat object from LIGER using <code>Liger_to_Seurat</code>.<br></li>
 <li>Added param <code>grid_color</code> to <code>Clustered_DotPlot</code> to control the color of grid lines (default is no grid lines).<br></li>
 <li>Added ability to split identities in <code>Clustered_DotPlot</code> by additional variable and maintain expression information.<br></li>
-<li>Added <code><a href="../reference/Split_Layers.html">Split_Layers()</a></code> function for V5 objects.</li>
+<li>Added <code><a href="../reference/Split_Layers.html">Split_Layers()</a></code> function for V5 objects.<br></li>
+<li>Added <code>Add_Alt_Feature_ID</code> to add alternative feature ids to an Assay5 meta.data slot.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="changed-2-1-0">Changed<a class="anchor" aria-label="anchor" href="#changed-2-1-0"></a></h3>
@@ -142,6 +143,8 @@
 <strong>BREAKING CHANGES</strong> <code>Meta_Present_LIGER</code> has been deprecated and wrapped inside of <code>Meta_Present</code>.<br></li>
 <li>
 <strong>SOFT-DEPRECATION</strong> The function <code><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat()</a></code> has been soft-deprecated. It is replaced by new extension of Seurat generic <code>as.Seurat</code> with added support for Liger objects, using all the same parameters as <code>Liger_to_Seurat</code>. Full deprecation will occur in v2.2.0.<br></li>
+<li>
+<strong>SOFT-DEPRECATION</strong> The function <code>Gene_Present</code> has been soft-deprecated. It is replaced by <code>Feature_Present</code> which functions identically but better reflects that features present may also be proteins. Full deprecation will occur in v2.2.0.<br></li>
 <li>Parameter <code>legend</code> in <code>Iterate_DimPlot_bySample</code> has been inverted to <code>no_legend</code> to match <code>Meta_Highlight_Plot</code> parameters.<br></li>
 <li>Updated <code><a href="../reference/Liger_to_Seurat.html">Liger_to_Seurat()</a></code> for compatibility with Seurat V5 structure (<a href="https://github.com/samuel-marsh/scCustomize/issues/153" class="external-link">#153</a>). Now part of <code>as.Seurat</code>.</li>
 <li>Default color palette change from v2.0.0 when number of groups is between 3-8 has been reverted. Polychrome palette is default when number of groups is between 3-36.</li>
@@ -159,7 +162,8 @@
 <li>Added check for presence of dimensionality reduction in <code>DimPlot_LIGER</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/153" class="external-link">#153</a>).<br></li>
 <li>Fixed bug in <code>Add_Mito_Ribo_LIGER</code> that caused it to return value of 0 for all cells (Now part of renamed <code>Add_Mito_Ribo</code> S3 generic).<br></li>
 <li>Fixed legend display is <code>Clustered_DotPlot</code> to display percentage instead of proportion to match legend text.<br></li>
-<li>Fixed <code>Percent_Expressing</code> error when <code>group_by = "ident"</code>.</li>
+<li>Fixed <code>Percent_Expressing</code> error when <code>group_by = "ident"</code>.<br></li>
+<li>Fixed error that caused features in non-default assays to be returned as not found when attempting to plot.</li>
 </ul></div>
 </div>
     <div class="section level2">
