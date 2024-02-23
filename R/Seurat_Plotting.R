@@ -94,8 +94,8 @@ FeaturePlot_scCustom <- function(
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
     lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "slot",
-                              with = "layer",
+                              what = "FeaturePlot_scCustom(slot)",
+                              with = "FeaturePlot_scCustom(layer)",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
                                           "i" = "Please adjust code now to prepare for full deprecation.")
     )
@@ -104,7 +104,7 @@ FeaturePlot_scCustom <- function(
 
   # Check meta
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Set or check split_collect values
@@ -191,27 +191,52 @@ FeaturePlot_scCustom <- function(
   # Extract default reduction
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
+  # Get Seurat version
+  seurat_version <- packageVersion("Seurat")
+
   # Add alpha to color scales
-  if (!is.null(x = alpha_exp)) {
+  if (!is.null(x = alpha_exp) && seurat_version < "5") {
     colors_use <- alpha(colors_use, alpha_exp)
   }
 
-  if (!is.null(x = alpha_na_exp)) {
-    na_color <- alpha(na_color, alpha_exp)
+  if (!is.null(x = alpha_na_exp) && seurat_version < "5") {
+    na_color <- alpha(na_color, alpha_na_exp)
+  }
+
+  if (!is.null(x = alpha_na_exp) && seurat_version >= "5") {
+    cli_warn(message = "{.code alpha_na_exp} is not currently supported for Seurat v5+")
+  }
+
+  # Set alpha if NULL
+  if (is.null(x = alpha_exp) && seurat_version >= "5") {
+      alpha_exp <- 1
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && isTRUE(x = combine)) {
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    # Keep until Seurat version required is > 5
+    if (seurat_version >= "5") {
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    } else {
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+    }
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && isFALSE(x = combine)) {
-    plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
+    if (seurat_version >= "5") {
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...))
 
-    plot <- lapply(1:length(x = plot_list), function(i) {
-      p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
-    })
+      plot <- lapply(1:length(x = plot_list), function(i) {
+        p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      })
+    } else {
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
+
+      plot <- lapply(1:length(x = plot_list), function(i) {
+        p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      })
+    }
   }
 
 
@@ -226,7 +251,11 @@ FeaturePlot_scCustom <- function(
     max_exp_value <- max(feature_data)
     min_exp_value <- min(feature_data)
 
-    plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+    if (seurat_version >= "5") {
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+    } else {
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+    }
 
     if (isTRUE(x = label_feature_yaxis)) {
       plot <- plot + plot_layout(nrow = num_rows, ncol = num_columns)
@@ -247,7 +276,7 @@ FeaturePlot_scCustom <- function(
   # plotting split multiple features
   if (!is.null(x = split.by) && length(x = all_found_features) > 1) {
 
-    plot_list <- lapply(1:length(x = features), function(i){
+    plot_list <- lapply(1:length(x = all_found_features), function(i){
       feature_data <- FetchData(
         object = seurat_object,
         vars = all_found_features[i],
@@ -256,7 +285,12 @@ FeaturePlot_scCustom <- function(
       max_exp_value <- max(feature_data)
       min_exp_value <- min(feature_data)
 
-      single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+
+      if (seurat_version >= "5") {
+        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      } else {
+        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      }
 
       if (isTRUE(x = label_feature_yaxis)) {
         single_plot <- single_plot + plot_layout(nrow = num_rows, ncol = num_columns)
@@ -397,8 +431,8 @@ FeaturePlot_DualAssay <- function(
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
     lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "slot",
-                              with = "layer",
+                              what = "FeaturePlot_DualAssay(slot)",
+                              with = "FeaturePlot_DualAssay(layer)",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
                                           "i" = "Please adjust code now to prepare for full deprecation.")
     )
@@ -464,223 +498,6 @@ FeaturePlot_DualAssay <- function(
   }
 
   return(plots)
-}
-
-
-#' Split FeatureScatter
-#'
-#' `r lifecycle::badge("deprecated")`
-#' Create FeatureScatter using split.by
-#'
-#' @param seurat_object Seurat object name.
-#' @param feature1 First feature to plot.
-#' @param feature2 Second feature to plot.
-#' @param split.by Feature to split plots by (i.e. "orig.ident").
-#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
-#' Use 'ident' to group.by active.ident class.
-#' @param colors_use color for the points on plot.
-#' @param pt.size Adjust point size for plotting.
-#' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
-#' Default is NULL.
-#' @param title_size size for plot title labels.
-#' @param num_columns number of columns in final layout plot.
-#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
-#' greater than 100,000 cells.
-#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
-#' Default is c(512, 512).
-#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
-#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
-#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
-#' groups plotted is greater than 36.  Default = 123.
-#' @param ... Extra parameters passed to \code{\link[Seurat]{FeatureScatter}}.
-#'
-#' @return A ggplot object
-#'
-#' @import cli
-#' @import ggplot2
-#' @import patchwork
-#' @importFrom magrittr "%>%"
-#' @importFrom Seurat FeatureScatter
-#' @importFrom stats cor
-#'
-#' @export
-#'
-#' @concept seurat_plotting
-#'
-#' @examples
-#' \dontrun{
-#' # Function now DEPRECATED.
-#' library(Seurat)
-#' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
-#'
-#' # OLD Code
-#' Split_FeatureScatter(seurat_object = pbmc_small, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",
-#' split.by = "sample_id")
-#'
-#' # NEW Code
-#' FeatureScatter_scCustom(seurat_object = pbmc_small, feature1 = "nCount_RNA",
-#' feature2 = "nFeature_RNA", split.by = "sample_id")
-#'}
-#'
-
-Split_FeatureScatter <- function(
-  seurat_object,
-  feature1 = NULL,
-  feature2 = NULL,
-  split.by = NULL,
-  group.by = NULL,
-  colors_use = NULL,
-  pt.size = NULL,
-  aspect_ratio = NULL,
-  title_size = 15,
-  num_columns = NULL,
-  raster = NULL,
-  raster.dpi = c(512, 512),
-  ggplot_default_colors = FALSE,
-  color_seed = 123,
-  ...
-) {
-  lifecycle::deprecate_stop(when = "2.0.0",
-                            what = "Split_FeatureScatter()",
-                            with = "FeatureScatter_scCustom()",
-                            details = c("i" = "The functionality is now contained within `FeatureScatter_scCustom`")
-  )
-
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # split.by present
-  if (is.null(x = split.by)) {
-    cli_abort(message = "No value supplied to {.code split.by}.")
-  }
-
-  # Check split.by is valid
-  if (split.by %in% colnames(seurat_object@meta.data) == FALSE) {
-    cli_abort(message = c("The meta data variable: {.val {split.by}} could not be found in object@meta.data.",
-                          "i" = "Please check the spelling and column names of meta.data slot.")
-    )
-  }
-
-  # Set column and row lengths
-  split.by_length <- length(x = unique(x = seurat_object@meta.data[[split.by]]))
-
-   if (is.null(x = num_columns)) {
-    num_columns <- split.by_length
-  }
-  # Calculate number of rows for selected number of columns
-  num_rows <- ceiling(x = split.by_length/num_columns)
-
-  # Check column and row compatibility
-  if (num_columns > split.by_length) {
-    cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                          "*" = "{.val {split.by}} only contains {.field {split.by_length}} variables.",
-                          "i" = "Please adjust {.code num_columns} to be less than or equal to {.field {split.by_length}}.")
-    )
-  }
-
-  # Check features are present
-  possible_features <- c(rownames(x = seurat_object), colnames(x = seurat_object@meta.data))
-  check_features <- setdiff(x = c(feature1, feature2), y = possible_features)
-  if (length(x = check_features) > 0) {
-    cli_abort(message = "The following feature(s) were not present in Seurat object: '{.field {check_features}}'")
-  }
-
-  # Extract min/maxes of features
-  data_to_plot <- FetchData(object = seurat_object, vars = c(feature1, feature2))
-  cor_data_features <- c("nCount_RNA", "nFeature_RNA")
-  if (feature1 %in% cor_data_features && feature2 %in% cor_data_features) {
-    min_feature1 <- min(data_to_plot[, feature1])-1
-    max_feature1 <- max(data_to_plot[, feature1])+1
-    min_feature2 <- min(data_to_plot[, feature2])-1
-    max_feature2 <- max(data_to_plot[, feature2])+1
-  } else {
-    min_feature1 <- min(data_to_plot[, feature1])-0.05
-    max_feature1 <- max(data_to_plot[, feature1])+0.05
-    min_feature2 <- min(data_to_plot[, feature2])-0.05
-    max_feature2 <- max(data_to_plot[, feature2])+0.05
-  }
-
-  # Extract split.by list of values
-  if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-    meta_sample_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
-  } else {
-    meta_sample_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
-  }
-
-  # Extract cell names per meta data list of values
-  cell_names <- lapply(meta_sample_list, function(x) {
-    row.names(x = seurat_object@meta.data)[which(x = seurat_object@meta.data[, split.by] == x)]})
-
-  # raster check
-  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
-
-  # Set uniform point size is pt.size = NULL (based on plot with most cells)
-  if (is.null(x = pt.size)) {
-    # cells per meta data
-    cells_by_meta <- data.frame(table(seurat_object@meta.data[, split.by]))
-    # Identity with greatest number of cells
-    max_cells <- max(cells_by_meta$Freq)
-    # modified version of the autopointsize function from Seurat
-    pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
-  }
-
-  # Add correlations if applicable
-  cor_data_features <- c("nCount_RNA", "nFeature_RNA")
-  if (feature1 %in% cor_data_features && feature2 %in% cor_data_features) {
-    plot_cor <- TRUE
-    cor_data <- FetchData(object = seurat_object, vars = c("nCount_RNA", "nFeature_RNA", split.by))
-
-    cor_values <- lapply(1:length(x = meta_sample_list), function(i) {
-      cor_data_filtered <- cor_data %>%
-        filter(.data[[split.by]] == meta_sample_list[[i]])
-      round(x = cor(x = cor_data_filtered[, "nCount_RNA"], y = cor_data_filtered[, "nFeature_RNA"]), digits = 2)
-    })
-  } else {
-    plot_cor <- FALSE
-  }
-
-  # Set colors
-  group.by <- group.by %||% 'ident'
-
-  if (group.by == "ident") {
-    group_by_length <- length(x = unique(x = seurat_object@active.ident))
-  } else {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
-  }
-
-  if (is.null(x = colors_use)) {
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
-  }
-
-  # Plots
-  plots <- lapply(1:length(x = meta_sample_list), function(j) {
-    plot <- FeatureScatter(seurat_object, feature1 = feature1, feature2 = feature2, cells = cell_names[[j]], group.by = group.by, cols = colors_use, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, ...) +
-      theme(plot.title = element_text(hjust = 0.5, size = title_size),
-            legend.position = "right") +
-      xlim(min_feature1, max_feature1) +
-      ylim(min_feature2, max_feature2)
-    if (isTRUE(x = plot_cor)) {
-      plot + ggtitle(paste(meta_sample_list[[j]]), subtitle = paste0("Correlation: ", cor_values[j]))
-    } else {
-      plot + ggtitle(paste(meta_sample_list[[j]]))
-    }
-  })
-
-  # Wrap Plots into single output
-  plot_comb <- wrap_plots(plots, ncol = num_columns, nrow = num_rows) + plot_layout(guides = 'collect')
-
-  # Aspect ratio changes
-  if (!is.null(x = aspect_ratio)) {
-    if (!is.numeric(x = aspect_ratio)) {
-      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-    }
-    plot_comb <- plot_comb & theme(aspect.ratio = aspect_ratio)
-  }
-
-  return(plot_comb)
 }
 
 
@@ -758,12 +575,12 @@ VlnPlot_scCustom <- function(
 
   # Check split valid
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
@@ -778,7 +595,7 @@ VlnPlot_scCustom <- function(
   # set size if NULL
   if (isTRUE(x = plot_boxplot)) {
     if (!is.null(x = pt.size)) {
-      cli::cli_warn(message = c("Provided value for {.code pt.size} ({.field {pt.size}}) will be ignored.",
+      cli_warn(message = c("Provided value for {.code pt.size} ({.field {pt.size}}) will be ignored.",
                                 "When setting {.field plot_boxplot = TRUE}, {.code pt.size} is automatically set to 0."))
     }
     pt.size <- 0
@@ -931,7 +748,7 @@ Stacked_VlnPlot <- function(
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
@@ -940,12 +757,16 @@ Stacked_VlnPlot <- function(
   # set pt.size (default is no points)
   if (is.null(x = pt.size)) {
     pt.size <- 0
+    if (isTRUE(x = raster)) {
+      cli_inform(message = "Default pt.size is 0, setting {.code raster = FALSE}.")
+    }
+    raster <- FALSE
   }
 
   # Set rasterization
   num_cells <- length(x = Cells(x = seurat_object))
 
-  if (length(x = num_cells) * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
+  if (num_cells * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
     cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
                            "i" = "To plot in vector form set {.code raster=FALSE}")
@@ -1078,14 +899,14 @@ DotPlot_scCustom <- function(
 
   # Add check for group.by before getting to colors
   if (!is.null(x = group.by) && group.by != "ident") {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   }
 
   # Check features and meta to determine which features present
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Plot
-  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, ...) +
+  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, group.by = group.by, ...) +
                              scale_color_gradientn(colors = colors_use)
   )
   # Modify plot
@@ -1122,6 +943,7 @@ DotPlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param split.by Variable in `@meta.data` to split the identities plotted by.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
 #' Default is -2.
@@ -1129,6 +951,8 @@ DotPlot_scCustom <- function(
 #' By default will be set to value in middle of `exp_color_min` and `exp_color_max`.
 #' @param exp_color_max Minimum scaled average expression threshold (everything smaller will be set to this).
 #' Default is 2.
+#' @param exp_value_type Whether to plot average normalized expression or
+#' scaled average normalized expression.  Only valid when `split.by` is provided.
 #' @param print_exp_quantiles Whether to print the quantiles of expression data in addition to plots.
 #' Default is FALSE.  NOTE: These values will be altered by choices of `exp_color_min` and `exp_color_min`
 #' if there are values below or above those cutoffs, respectively.
@@ -1137,6 +961,11 @@ DotPlot_scCustom <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
+#' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
+#' The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+#' c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+#' vector of length 4 specifying the amount of padding in millimeters.
+#' Default is NULL, no padding.
 #' @param flip logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 #' columns = idents.
 #' @param k Value to use for k-means clustering on features  Sets (km) parameter in `ComplexHeatmap::Heatmap()`.
@@ -1146,12 +975,11 @@ DotPlot_scCustom <- function(
 #' @param feature_km_repeats Number of k-means runs to get a consensus k-means clustering for features.
 #' Note if `feature_km_repeats` is set to value greater than one, the final number of groups might be
 #' smaller than row_km, but this might mean the original row_km is not a good choice.  Default is 1000.
-#' @param row_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `feature_km_repeats`
 #' @param ident_km_repeats Number of k-means runs to get a consensus k-means clustering. Similar to
 #' `feature_km_repeats`.  Default is 1000.
-#' @param column_km_repeats `r lifecycle::badge("deprecated")` soft-deprecated.  See `ident_km_repeats`
 #' @param row_label_size Size of the feature labels.  Provided to `row_names_gp` in Heatmap call.
 #' @param row_label_fontface Fontface to use for row labels.  Provided to `row_names_gp` in Heatmap call.
+#' @param grid_color color to use for heatmap grid.  Default is NULL which "removes" grid by using NA color.
 #' @param cluster_feature logical, whether to cluster and reorder feature axis.  Default is TRUE.
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
@@ -1207,21 +1035,23 @@ DotPlot_scCustom <- function(
 Clustered_DotPlot <- function(
   seurat_object,
   features,
+  split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
   exp_color_middle = NULL,
   exp_color_max = 2,
+  exp_value_type = "scaled",
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  plot_padding = NULL,
   flip = FALSE,
   k = 1,
   feature_km_repeats = 1000,
   ident_km_repeats = 1000,
-  row_km_repeats = deprecated(),
-  column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
+  grid_color = NULL,
   cluster_feature = TRUE,
   cluster_ident = TRUE,
   column_label_size = 8,
@@ -1238,347 +1068,73 @@ Clustered_DotPlot <- function(
   color_seed = 123,
   seed = 123
 ) {
-  # Check for packages
-  ComplexHeatmap_check <- is_installed(pkg = "ComplexHeatmap")
-  if (isFALSE(x = ComplexHeatmap_check)) {
-    cli_abort(message = c(
-      "Please install the {.val ComplexHeatmap} package to use {.code Clustered_DotPlot}",
-      "i" = "This can be accomplished with the following commands: ",
-      "----------------------------------------",
-      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
-      "{.field `BiocManager::install({symbol$dquote_left}ComplexHeatmap{symbol$dquote_right})`}",
-      "----------------------------------------"
-    ))
-  }
-
-  if (lifecycle::is_present(row_km_repeats)) {
-    lifecycle::deprecate_stop(when = "2.0.0",
-                              what = "Clustered_DotPlot(row_km_repeats)",
-                              with = "Clustered_DotPlot(feature_km_repeats)"
-    )
-    feature_km_repeats <- row_km_repeats
-  }
-
-  if (lifecycle::is_present(column_km_repeats)) {
-    lifecycle::deprecate_stop(when = "2.0.0",
-                              what = "Clustered_DotPlot(column_km_repeats)",
-                              with = "Clustered_DotPlot(ident_km_repeats)"
-    )
-    ident_km_repeats <- column_km_repeats
-  }
-
-
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # Check acceptable fontface
-  if (!row_label_fontface %in% c("plain", "bold", "italic", "oblique", "bold.italic")) {
-    cli_abort(message = c("{.code row_label_face} {.val {row_label_face}} not recognized.",
-                          "i" = "Must be one of {.val plain}, {.val bold}, {.val italic}, {.val olique}, or {.val bold.italic}."))
-  }
-
-  # Check unique features
-  features_unique <- unique(x = features)
-
-  if (length(x = features_unique) != length(x = features)) {
-    cli_warn("Feature list contains duplicates, making unique.")
-  }
-
-  # Check features and meta to determine which features present
-  all_found_features <- Feature_PreCheck(object = seurat_object, features = features_unique, assay = assay)
-
-  # Check exp min/max set correctly
-  if (!exp_color_min < exp_color_max) {
-    cli_abort(message = c("Expression color min/max values are not compatible.",
-                          "i" = "The value for {.code exp_color_min}: {.field {exp_color_min}} must be less than the value for {.code exp_color_max}: {.field {exp_color_max}}.")
-    )
-  }
-
-  # Get DotPlot data
-  seurat_plot <- DotPlot(object = seurat_object, features = all_found_features, assay = assay, group.by = group.by, scale = TRUE, idents = idents, col.min = NULL, col.max = NULL)
-
-  data <- seurat_plot$data
-
-  # Get expression data
-  exp_mat <- data %>%
-    select(-any_of(c("pct.exp", "avg.exp"))) %>%
-    pivot_wider(names_from = any_of("id"), values_from = any_of("avg.exp.scaled")) %>%
-    as.data.frame()
-
-  row.names(x = exp_mat) <- exp_mat$features.plot
-
-  # Check NAs if idents
-  if (!is.null(x = idents)) {
-    # Find NA features and print warning
-    excluded_features <- exp_mat[rowSums(is.na(x = exp_mat)) > 0,] %>%
-      rownames()
-    cli_warn(message = c("Some scaled data missing.",
-                         "*" = "The following features were removed as there is no scaled expression present in subset (`idents`) of object provided:",
-                         "i" = "{.field {glue_collapse_scCustom(input_string = excluded_features, and = TRUE)}}.")
-    )
-
-    # Extract good features
-    good_features <- rownames(x = exp_mat)
-
-    # Remove rows with NAs
-    exp_mat <- exp_mat %>%
-      filter(.data[["features.plot"]] %in% good_features)
-  }
-
-  exp_mat <- exp_mat[,-1] %>%
-    as.matrix()
-
-  # Get percent expressed data
-  percent_mat <- data %>%
-    select(-any_of(c("avg.exp", "avg.exp.scaled"))) %>%
-    pivot_wider(names_from = any_of("id"), values_from = any_of("pct.exp")) %>%
-    as.data.frame()
-
-  row.names(x = percent_mat) <- percent_mat$features.plot
-
-  # Subset dataframe for NAs if idents so that exp_mat and percent_mat match
-  if (!is.null(x = idents)) {
-    percent_mat <- percent_mat %>%
-      filter(.data[["features.plot"]] %in% good_features)
-  }
-
-  percent_mat <- percent_mat[,-1] %>%
-    as.matrix()
-
-  # print quantiles
-  if (isTRUE(x = print_exp_quantiles)) {
-    cli_inform(message = "Quantiles of gene expression data are:")
-    print(quantile(exp_mat, c(0.1, 0.5, 0.9, 0.99)))
-  }
-
-  # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = seurat_object)
-
-  # Set default color palette based on number of levels being plotted
-  if (is.null(x = group.by)) {
-    group_by_length <- length(x = unique(x = seurat_object@active.ident))
+  # check split
+  if (is.null(x = split.by)) {
+    Clustered_DotPlot_Single_Group(seurat_object = seurat_object,
+                                   features = features,
+                                   colors_use_exp = colors_use_exp,
+                                   exp_color_min = exp_color_min,
+                                   exp_color_middle = exp_color_middle,
+                                   exp_color_max = exp_color_max,
+                                   print_exp_quantiles = print_exp_quantiles,
+                                   colors_use_idents = colors_use_idents,
+                                   x_lab_rotate = x_lab_rotate,
+                                   plot_padding = plot_padding,
+                                   flip = flip,
+                                   k = k,
+                                   feature_km_repeats = feature_km_repeats,
+                                   ident_km_repeats = ident_km_repeats,
+                                   row_label_size = row_label_size,
+                                   row_label_fontface = row_label_fontface,
+                                   grid_color = grid_color,
+                                   cluster_feature = cluster_feature,
+                                   cluster_ident = cluster_ident,
+                                   column_label_size = column_label_size,
+                                   legend_label_size = legend_label_size,
+                                   legend_title_size = legend_title_size,
+                                   raster = raster,
+                                   plot_km_elbow = plot_km_elbow,
+                                   elbow_kmax = elbow_kmax,
+                                   assay = assay,
+                                   group.by = group.by,
+                                   idents = idents,
+                                   show_parent_dend_line = show_parent_dend_line,
+                                   ggplot_default_colors = ggplot_default_colors,
+                                   color_seed = color_seed,
+                                   seed = seed)
   } else {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
+                                  features = features,
+                                  split.by = split.by,
+                                  colors_use_exp = colors_use_exp,
+                                  exp_color_min = exp_color_min,
+                                  exp_color_middle = exp_color_middle,
+                                  exp_color_max = exp_color_max,
+                                  exp_value_type = exp_value_type,
+                                  print_exp_quantiles = print_exp_quantiles,
+                                  x_lab_rotate = x_lab_rotate,
+                                  plot_padding = plot_padding,
+                                  flip = flip,
+                                  k = k,
+                                  feature_km_repeats = feature_km_repeats,
+                                  ident_km_repeats = ident_km_repeats,
+                                  row_label_size = row_label_size,
+                                  row_label_fontface = row_label_fontface,
+                                  grid_color = grid_color,
+                                  cluster_feature = cluster_feature,
+                                  cluster_ident = cluster_ident,
+                                  column_label_size = column_label_size,
+                                  legend_label_size = legend_label_size,
+                                  legend_title_size = legend_title_size,
+                                  raster = raster,
+                                  plot_km_elbow = plot_km_elbow,
+                                  elbow_kmax = elbow_kmax,
+                                  assay = assay,
+                                  group.by = group.by,
+                                  idents = idents,
+                                  show_parent_dend_line = show_parent_dend_line,
+                                  seed = seed)
   }
-
-  # Check colors use vs. ggplot2 color scale
-  if (!is.null(x = colors_use_idents) && isTRUE(x = ggplot_default_colors)) {
-    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
-  }
-  if (is.null(x = colors_use_idents)) {
-    # set default plot colors
-    colors_use_idents <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-  }
-
-  # Reduce color length list due to naming requirement
-  colors_use_idents <- colors_use_idents[1:group_by_length]
-
-  # Modify if class = "colors"
-  if (inherits(x = colors_use_idents, what = "colors")) {
-    colors_use_idents <- as.vector(x = colors_use_idents)
-  }
-
-  # Pull Annotation and change colors to ComplexHeatmap compatible format
-  Identity <- colnames(x = exp_mat)
-
-  identity_colors <- colors_use_idents
-  names(x = identity_colors) <- Identity
-  identity_colors_list <- list(Identity = identity_colors)
-
-  # Create identity annotation
-  if (isTRUE(x = flip)) {
-    column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
-                                               col =  identity_colors_list,
-                                               na_col = "grey",
-                                               name = "Identity",
-                                               show_legend = FALSE
-    )
-  } else {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
-                                                   col =  identity_colors_list,
-                                                   na_col = "grey",
-                                                   name = "Identity",
-                                                   show_legend = FALSE
-    )
-  }
-
-  # Set middle of color scale if not specified
-  if (is.null(x = exp_color_middle)) {
-    exp_color_middle <- Middle_Number(min = exp_color_min, max = exp_color_max)
-  }
-
-  palette_length <- length(x = colors_use_exp)
-  palette_middle <- Middle_Number(min = 0, max = palette_length)
-
-  # Create palette
-  col_fun = colorRamp2(c(exp_color_min, exp_color_middle, exp_color_max), colors_use_exp[c(1,palette_middle, palette_length)])
-
-  # Calculate and plot Elbow
-  if (isTRUE(x = plot_km_elbow)) {
-    # if elbow_kmax not NULL check it is usable
-    if (!is.null(x = elbow_kmax) && elbow_kmax > (nrow(x = exp_mat) - 1)) {
-      elbow_kmax <- nrow(x = exp_mat) - 1
-      cli_warn(message = c("The value provided for {.code elbow_kmax} is too large.",
-                           "i" = "Changing to (length(x = features)-1): {.field {elbow_kmax}}.")
-      )
-    }
-
-    # if elbow_kmax is NULL set value based on input feature list
-    if (is.null(x = elbow_kmax)) {
-      # set to (length(x = features)-1) if less than 21 features OR to 20 if greater than 21 features
-      if (nrow(x = exp_mat) > 21) {
-        elbow_kmax <- 20
-      } else {
-        elbow_kmax <- nrow(x = exp_mat) - 1
-      }
-    }
-
-    km_elbow_plot <- kMeans_Elbow(data = exp_mat, k_max = elbow_kmax)
-  }
-
-  # prep heatmap
-  if (isTRUE(x = flip)) {
-    if (isTRUE(x = raster)) {
-      layer_fun_flip = function(i, j, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
-      }
-    } else {
-      cell_fun_flip = function(i, j, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
-      }
-    }
-  } else {
-    if (isTRUE(x = raster)) {
-      layer_fun = function(j, i, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(ComplexHeatmap::pindex(percent_mat, i, j)/100)  * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(ComplexHeatmap::pindex(exp_mat, i, j)), col = NA))
-      }
-    } else {
-      cell_fun = function(j, i, x, y, w, h, fill) {
-        grid.rect(x = x, y = y, width = w, height = h,
-                  gp = gpar(col = NA, fill = NA))
-        grid.circle(x=x,y=y,r= sqrt(percent_mat[i, j]/100) * unit(2, "mm"),
-                    gp = gpar(fill = col_fun(exp_mat[i, j]), col = NA))
-      }
-    }
-  }
-
-  # Create legend for point size
-  lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-    ComplexHeatmap::Legend(labels = c(0.25,0.5,0.75,1), title = "Percent Expressing",
-                           graphics = list(
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.5) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                              gp = gpar(fill = "black"))),
-                           labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
-    )
-  )
-
-  # Set x label roration
-  if (is.numeric(x = x_lab_rotate)) {
-    x_lab_rotate <- x_lab_rotate
-  } else if (isTRUE(x = x_lab_rotate)) {
-    x_lab_rotate <- 45
-  } else {
-    x_lab_rotate <- 0
-  }
-
-  # Create Plot
-  set.seed(seed = seed)
-  if (isTRUE(x = raster)) {
-    if (isTRUE(x = flip)) {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  column_km = k,
-                                                  row_km_repeats = ident_km_repeats,
-                                                  border = "black",
-                                                  left_annotation = column_ha,
-                                                  column_km_repeats = feature_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
-    } else {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  layer_fun = layer_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  row_km = k,
-                                                  row_km_repeats = feature_km_repeats,
-                                                  border = "black",
-                                                  top_annotation = column_ha,
-                                                  column_km_repeats = ident_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
-    }
-  } else {
-    if (isTRUE(x = flip)) {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  cell_fun = cell_fun_flip,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  column_km = k,
-                                                  row_km_repeats = ident_km_repeats,
-                                                  border = "black",
-                                                  left_annotation = column_ha,
-                                                  column_km_repeats = feature_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
-    } else {
-      cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-                                                  col=col_fun,
-                                                  rect_gp = gpar(type = "none"),
-                                                  cell_fun = cell_fun,
-                                                  row_names_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface),
-                                                  column_names_gp = gpar(fontsize = column_label_size),
-                                                  row_km = k,
-                                                  row_km_repeats = feature_km_repeats,
-                                                  border = "black",
-                                                  top_annotation = column_ha,
-                                                  column_km_repeats = ident_km_repeats,
-                                                  show_parent_dend_line = show_parent_dend_line,
-                                                  column_names_rot = x_lab_rotate,
-                                                  cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
-    }
-  }
-
-  # Add pt.size legend & return plots
-  if (isTRUE(x = plot_km_elbow)) {
-    return(list(km_elbow_plot, ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list)))
-  }
-  return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
 }
 
 
@@ -1784,7 +1340,7 @@ Meta_Highlight_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check meta data
-  good_meta_data_column <- Meta_Present(seurat_object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+  good_meta_data_column <- Meta_Present(object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
   # stop if none found
   if (length(x = good_meta_data_column) == 0) {
@@ -2134,15 +1690,15 @@ DimPlot_scCustom <- function(
   }
 
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (length(x = group.by) > 1) {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   } else {
     if (!is.null(x = group.by) && group.by != "ident") {
-      Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+      Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
     }
   }
 
@@ -2365,7 +1921,7 @@ DimPlot_scCustom <- function(
           ylim(y_axis)
 
         # Normalize the colors across all plots
-        plot <- suppressMessages(plot + scale_color_manual(values = colors_overall))
+        plot <- suppressMessages(plot + scale_color_manual(values = colors_overall, drop = FALSE))
 
         if (!is.null(x = group.by)) {
           plot <- plot + labs(color=group.by)
@@ -2691,15 +2247,15 @@ FeatureScatter_scCustom <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(seurat_object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add check for group.by before getting to colors
   if (length(x = group.by) > 1) {
-    Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
   } else {
     if (!is.null(x = group.by) && group.by != "ident") {
-      Meta_Present(seurat_object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+      Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
     }
   }
 

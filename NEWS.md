@@ -1,3 +1,55 @@
+# scCustomize 2.1.0 (2024-02-21)  
+## Added  
+- Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with `Meta_Highlight_Plot`.  
+- Added function `Split_Vector` to split vector in chunks of predetermined sizes.  
+- Added new function `Updated_HGNC_Symbols` to update human gene symbols.  After first use does not require internet connection.  
+- Added command logging to QC metric-related commands using `Seurat::LogSeuratCommand()`.  
+- Added parameter `plot_legend` to `plotFactors_scCustom` to allow for removal to legend in factor loading plots.  
+- Added new functionality to `Iterate_FeaturePlot_scCustom` to allow for plotting multiple plots per page when saving to single PDF document (see new parameters: `features_per_page` and `landscape`.  
+- Added `LIGER_Features` utility function for LIGER objects (analogous to `Seurat::Features()`).  
+- Added new generic `as.LIGER()` as enhanced method for conversion of Seurat objects or lists of Seurat objects to single LIGER object.  
+- Added new generic `as.anndata()` to support conversion of Seurat and LIGER objects to anndata format.  
+- Added function `Convert_Assay()` to perform easy conversions of Seurat assays between V3/4 (Assay) and V5 (Assay5) formats.  
+- Added parameter `assay_type` to allow manual control of assay type when creating Seurat object from LIGER using `Liger_to_Seurat`.  Now `as.Seurat`.  
+- Added param `grid_color` to `Clustered_DotPlot` to control the color of grid lines (default is no grid lines).  
+- Added ability to split identities in `Clustered_DotPlot` by additional variable and maintain expression information.  
+- Added `Split_Layers()` function for V5 objects.  
+- Added `Add_Alt_Feature_ID` to add alternative feature ids to an Assay5 meta.data slot.  
+
+
+  
+## Changed  
+- **BREAKING CHANGES** Several methods have been moved to S3 generics to function for both Seurat and LIGER objects using single function name and therefore some function names have changed.  Old functions will give deprecation warning and direct users to new functions.  
+    - `Add_Mito_Ribo()` replaces `Add_Mito_Ribo_Seurat` and `Add_Mito_Ribo_LIGER`.  
+    - `Add_Cell_Complexity()` replaces `Add_Cell_Complexity_Seurat` and `Add_Cell_Complexity_LIGER`.  
+- **BREAKING CHANGES** `Meta_Present_LIGER` has been deprecated and wrapped inside of `Meta_Present`.  
+- **SOFT-DEPRECATION** The function `Liger_to_Seurat()` has been soft-deprecated.  It is replaced by new extension of Seurat generic `as.Seurat` with added support for Liger objects, using all the same parameters as `Liger_to_Seurat`.  Full deprecation will occur in v2.2.0.  
+- **SOFT-DEPRECATION** The function `Gene_Present` has been soft-deprecated.  It is replaced by `Feature_Present` which functions identically but better reflects that features present may also be proteins.  Full deprecation will occur in v2.2.0.  
+- Parameter `legend` in `Iterate_DimPlot_bySample` has been inverted to `no_legend` to match `Meta_Highlight_Plot` parameters.  
+- Updated `Liger_to_Seurat()` for compatibility with Seurat V5 structure ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  Now part of `as.Seurat`.
+- Default color palette change from v2.0.0 when number of groups is between 3-8 has been reverted.  Polychrome palette is default when number of groups is between 3-36.  
+- In preparation of upcoming overhaul of rliger package, added package version checks to current rliger functions in order to prevent breaking errors.  Next update v2.2.0 will add cross-functionality between rliger package versions ([#161](https://github.com/samuel-marsh/scCustomize/issues/161)).  
+   
+
+## Fixes  
+- General typo and style fixes.  
+- Fixed point size check in some QC functions to avoid unnecessary error message.  
+- Fixed redundant warning messages in `Stacked_VlnPlot` due to rasterization defaults.  
+- Fixed issue setting `alpha_na_exp` appropriately in `FeaturePlot_scCustom`.  
+- Fixed issue setting `alpha_exp` between Seurat versions 4 and 5 ([#144](https://github.com/samuel-marsh/scCustomize/issues/144)).  
+- Fix duplicate legends in `DimPlot_scCustom` when levels are missing from a split plot.  
+- Fixed bug in `FeaturePlot_scCustom` that could cause plots to be mislabeled when using `split.by` and depending on the order of features provided ([#150](https://github.com/samuel-marsh/scCustomize/issues/150)).  
+- Fixes issue with automatic point size calculation for Seurat Objects.  
+- Added check for presence of dimensionality reduction in `DimPlot_LIGER` ([#153](https://github.com/samuel-marsh/scCustomize/issues/153)).  
+- Fixed bug in `Add_Mito_Ribo_LIGER` that caused it to return value of 0 for all cells (Now part of renamed `Add_Mito_Ribo` S3 generic).  
+- Fixed legend display is `Clustered_DotPlot` to display percentage instead of proportion to match legend text.  
+- Fixed `Percent_Expressing` error when `group_by = "ident"`.  
+- Fixed error that caused features in non-default assays to be returned as not found when attempting to plot.  
+- Fixed error in `DotPlot_scCustom` that didn't correctly pass `group.by` when plotting ([#158](https://github.com/samuel-marsh/scCustomize/issues/158)).  
+
+
+
+
 # scCustomize 2.0.1 (2023-11-17)  
 ## Added  
 - None.   

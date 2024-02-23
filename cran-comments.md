@@ -1,7 +1,11 @@
-## Minor Version Update 
-This is a hotfix update with bug fixes now v2.0.1; apologies for not catching these in v2.0.0 submission last week. In this version I have:  
+## Major Version Update 
+This is major version update to v2.1.0.  See News.md for full changelog.  
 
-- Fixed 5 minor bugs presented in v2.0.0 release.
+- Number of new functions, changes, and bug fixes.
+- A few breaking changes owing to function/parameter deprecation (all are documented (see new Deprecated.R file) and have warnings/error messages using lifecycle package).  
+
+This is attempted re-submission after a check error in second v2.1.0 submission. I was able to diagnose error as related to upcoming ggplot2 v3.5.0 update which caused error in another package scCustomize depends on.  I have updated affected functions with a fix until other package is updated.   
+
 
 
 ## R CMD check results
@@ -12,6 +16,7 @@ This is a hotfix update with bug fixes now v2.0.1; apologies for not catching th
 - Run locally, R4.3.2, Platform: x86_64-apple-darwin20 (64-bit) with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
+- third submission
 
 ## NOTES
 1. Imports includes 28 non-default packages.
@@ -23,9 +28,9 @@ This is a hotfix update with bug fixes now v2.0.1; apologies for not catching th
     to ensure package functionality.  
 
 ## Other Notes
-1. GitHub Actions check returning strange errors only on macos (release).  
+1. GitHub Actions check returning strange errors only on macos (release) and only sometimes (This is NOT the error that caused the v2.1.0 CRAN check failure on first submission).  
     - The errors are from failures running package examples.  This includes functions that have been part of prior CRAN releases.
     NO errors are found when checking locally on macos platform using R 4.3.2 and none are found in GitHub Actions check on linux
     or windows platforms.  I believe to be error in GitHub Actions workflow and I have therefore refrained from adding `dontrun`
-    to examples that run fine on other platforms.  This was also the case with v2.0.0 which passed macos checks on CRAN,
+    to examples that run fine on other platforms.  This was also the case with v2.0.0 and v2.0.1 which passed macos checks on CRAN,
     furthering it is likely a GitHub Actions issue.

@@ -40,6 +40,5 @@ clu_pal <- c("red", "green", "blue")
 pbmc_small <- Store_Misc_Info_Seurat(seurat_object = pbmc_small, data_to_store = clu_pal,
 data_name = "rd1_colors")
 
-
 }
-\concept{object_util}
+\concept{get_set_util}

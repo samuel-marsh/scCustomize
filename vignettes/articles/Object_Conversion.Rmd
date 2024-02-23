@@ -1,0 +1,166 @@
+---
+title: "Object Format Conversion"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Object Format Conversion}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+# Converting between scRNA-seq package formats  
+While many packages are have some object converters they are not always as feature complete as desired.  scCustomize provides a few straightforward converter functions.  
+
+***FYI: Object converters can be fragile and/or not very flexible.  I have tried to make these functions to avoid those issues.  However, if that proves too hard a task to maintain long-term I may move them to separate package/deprecate them.***  
+
+
+```{r init}
+# Load Packages
+library(Seurat)
+library(rliger)
+library(scCustomize)
+library(qs)
+```
+
+Load Seurat Object & Add QC Data
+```{r}
+# read object
+pbmc <- pbmc3k.SeuratData::pbmc3k.final
+pbmc <- UpdateSeuratObject(pbmc)
+
+pbmc <- Add_Cell_QC_Metrics(seurat_object = pbmc, species = "human")
+```
+
+We'll also add some random meta data variables to pbmc data form use in this vignette
+```{r}
+pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
+```
+
+
+## Convert Seurat Objects to LIGER Objects
+scCustomize contains the conversion function `as.LIGER()`.  This function has a few advantages over the conversion function `rliger::seuratToLiger()`.  
+
+- `as.liger` will *keep all meta data* and transfer it to LIGER by default.  
+- If a dimensionality reduction is transferred `as.liger` will also store a reduction key for use with scCustomize LIGER plotting functions to correctly set plot axes.  
+- If converting a list of Seurat objects and keeping Seurat variable genes then `as.liger` can either take union or intersection of genes between objects.  
+- `as.liger` has additional internal checks to ensure compatibility with both Seurat V3/4 & V5 object structures.
+
+```{r message=TRUE}
+pbmc_liger <- as.LIGER(x = pbmc, group.by = "sample_id")
+
+pbmc_liger
+```
+
+Confirm that information from meta.data slot was transferred to LIGER object.
+```{r}
+head(colnames(x = pbmc_liger@cell.data), 10)
+```
+
+
+
+## Convert LIGER objects to Seurat Objects  
+The liger/rliger package already contains a function `rliger::seuratToLiger()` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
+  
+* All meta data except the "dataset" column from liger_object\@cell.data is lost.
+* Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
+* Seurat assay name not specified
+
+As of scCustomize v2.1.0 converting to Seurat objects from Liger can be accomplished using `as.liger` function which functions identically to previous function `Liger_to_Seurat()`.  `Liger_to_Seurat()` will continue to work until v2.2.0 at which point it will be completely deprecated.
+
+scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](https://github.com/samuel-marsh/scCustomize/blob/develop/docs/reference/as.Seurat.html) that solves these issues with some extra parameters:   
+  
+* `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
+* `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
+* `seurat_assay` Name of assay to use for data in Seurat object.  Default is "RNA".  
+* `assay_type` Specify whether to create V3/4 vs V5 Seurat assays.  
+
+```{r message=TRUE}
+new_seurat <- as.Seurat(x = pbmc_liger, reduction_label = "UMAP")
+```
+
+
+## Convert Seurat or LIGER objects to Anndata objects  
+scCustomize also allows for the conversion of Seurat or LIGER objects to python [anndata](https://anndata.readthedocs.io/en/latest/) objects for analysis in [scanpy](https://scanpy.readthedocs.io/en/stable/) or other compatible python packages via the function `as.anndata`.  These functions were inspired/modified/updated from [sceasy R package](https://github.com/cellgeni/sceasy) (see `as.anndata` documentation).  
+
+* `as.anndata` works with Seurat V3/4, Seurat V5, and LIGER objects.  
+* `as.anndata` requires users have [reticulate R package](https://CRAN.R-project.org/package=reticulate) and linked python installation with anndata installed.  
+    - See [reticulate website](https://rstudio.github.io/reticulate/) for more information on installation and setup of reticulate in R.
+    - See [anndata website](https://anndata.readthedocs.io/en/latest/) for more information on installation and use of anndata in python.
+
+```{r include=FALSE}
+Sys.setenv(RETICULATE_PYTHON = "/Users/marsh_mbp/.virtualenvs/r-reticulate/bin/python")
+```
+
+```{r message=TRUE}
+as.anndata(x = pbmc, file_path = "~/Desktop", file_name = "pbmc_anndata.h5ad")
+```
+
+## Convert Seurat assay type within an object  
+The release of Seurat V5+ has brought about two different types of assay structure that can exist within a Seurat object.  However, some community tools that interact with Seurat objects have not been updated to work with both assay formats.  Therefore it becomes necessary to change assay format for use with certain tools.  
+
+scCustomize provides `Convert_Assay()` for easy method to convert from Assay>Assay5 (V3/4>5) or Assay5>Assay (V5>V3/4).  
+
+### Convert V3/4 to V5  
+
+```{r}
+# Convert to V5/Assay5 structure
+pbmc_V5 <- Convert_Assay(seurat_object = pbmc, convert_to = "V5")
+
+pbmc_V5[["RNA"]]
+```
+
+
+### Convert V5 > V3/4  
+
+```{r}
+# Convert to V3/4/Assay structure
+pbmc_V3 <- Convert_Assay(seurat_object = pbmc_V5, convert_to = "V3")
+
+pbmc_V3[["RNA"]]
+```
+
+### Accepted values for `convert_to`  
+`Convert_Assay` will accept a range of accepted values for the `convert_to` parameter to specify desired format.  
+
+
+```{r echo=FALSE}
+library(magrittr)
+accepted_format_names <- data.frame(V3_Assay_Options = c("Assay", "assay", "V3", "v3"),
+                                    V5_Assay5_Options = c("Assay5", "assay5", "V5", "v5"))
+
+accepted_format_names %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+

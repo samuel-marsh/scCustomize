@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -78,10 +78,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -130,8 +136,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #2: QC Plots</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 20,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: February 16,
+2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/QC_Plots.Rmd" class="external-link"><code>vignettes/articles/QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>QC_Plots.Rmd</code></div>
@@ -190,10 +196,9 @@ data all you need to do is specify the <code>species</code>
 parameter.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
-<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></span></code></pre></div>
-<p><em>NOTE: There is analogous function for LIGER objects (see:
-<code>Add_Mito_Ribo_LIGER</code>) but QC plotting functions currently
-only support Seurat objects.</em></p>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></span></code></pre></div>
+<p><em>NOTE: This function works seemlessly for both Seurat and LIGER
+objects.</em></p>
 To view list of accepted values for default species names simply set
 <code>list_species_names = TRUE</code>.
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -370,18 +375,15 @@ mitochondrial and ribosomal genes and I will add additional built-in
 defaults to the function.</em></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Using gene name patterns</span></span>
-<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span>,</span>
-<span>    ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using feature name lists</span></span>
 <span><span class="va">mito_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
 <span><span class="va">ribo_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
-<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>,</span>
-<span>    ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span></span>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using combination of gene lists and gene name patterns</span></span>
-<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>,</span>
-<span>    ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level5">
 <h5 id="use-of-ensembl-ids">Use of Ensembl IDs<a class="anchor" aria-label="anchor" href="#use-of-ensembl-ids"></a>
 </h5>
@@ -391,7 +393,7 @@ object using ensembl IDs as features names then simply add
 <code>ensembl_ids</code> parameter.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Using gene name patterns</span></span>
-<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo_Seurat.html">Add_Mito_Ribo_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span>, ensembl_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hca_bm</span>, species <span class="op">=</span> <span class="st">"Human"</span>, ensembl_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -410,10 +412,9 @@ cells. The metric is calculated by calculating the result of
 log10(nFeature) / log10(nCount).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># These defaults can be run just by providing accepted species name</span></span>
-<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Complexity_Seurat.html">Add_Cell_Complexity_Seurat</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span><span class="op">)</span></span></code></pre></div>
-<p><em>NOTE: There is analogous function for LIGER objects (see:
-<code>Add_Cell_Complexity_LIGER</code>) but QC plotting functions
-currently only support Seurat objects.</em></p>
+<span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_Complexity.html">Add_Cell_Complexity</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hca_bm</span><span class="op">)</span></span></code></pre></div>
+<p><em>NOTE: This function works seemlessly for both Seurat and LIGER
+objects.</em></p>
 </div>
 <div class="section level4">
 <h4 id="add-top-percent-expression-qc-metric">Add Top Percent Expression QC Metric<a class="anchor" aria-label="anchor" href="#add-top-percent-expression-qc-metric"></a>

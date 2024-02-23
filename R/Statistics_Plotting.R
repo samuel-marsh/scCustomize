@@ -52,10 +52,10 @@ Plot_Median_Genes <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check group by is valid
-  group_by <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
-  sample_col <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
+  sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
   medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = "nFeature_RNA", default_var = FALSE) %>%
@@ -190,10 +190,10 @@ Plot_Median_UMIs <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check group by is valid
-  group_by <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
-  sample_col <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
+  sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
   medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = "nCount_RNA", default_var = FALSE) %>%
@@ -329,10 +329,10 @@ Plot_Median_Mito <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check group by is valid
-  group_by <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
-  sample_col <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
+  sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
   medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = "percent_mito", default_var = FALSE) %>%
@@ -483,10 +483,10 @@ Plot_Median_Other <- function(
   }
 
   # Check group by is valid
-  group_by <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
-  sample_col <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
+  sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
   medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = median_var, default_var = FALSE) %>%
@@ -588,7 +588,7 @@ Plot_Median_Other <- function(
 #'
 #' @import cli
 #' @import ggplot2
-#' @import rlang
+#' @importFrom rlang "%||%" ":="
 #' @importFrom dplyr select slice left_join rename all_of
 #' @importFrom magrittr "%>%"
 #'
@@ -624,10 +624,10 @@ Plot_Cells_per_Sample <- function(
   }
 
   # Check group by is valid
-  group_by <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
-  sample_col <- Meta_Present(seurat_object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
+  sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate total cells and merge with meta.data
   total_cells <- table(seurat_object@meta.data[[sample_col]]) %>%
@@ -835,7 +835,7 @@ CellBender_Diff_Plot <- function(
       }
     } else {
       # check for features
-      features_list <- Gene_Present(data = feature_diff_df_filtered, gene_list = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
+      features_list <- Feature_Present(data = feature_diff_df_filtered, features = custom_labels, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE)
 
       all_not_found_features <- features_list[[2]]
 

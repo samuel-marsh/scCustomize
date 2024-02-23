@@ -90,11 +90,10 @@ scCustomize aims to achieve these goals through:
   errors in code reproducibility.
   - *Example of adding new parameters:* Adding the percentage of counts
     aligning to mitochondrial (and/or ribosomal) genes is common early
-    step in analysis. scCustomize provides `Add_Mito_Ribo_Seurat()` (and
-    LIGER version) to simplify this. Basic use requires only one line of
-    code and two parameters.
+    step in analysis. scCustomize provides `Add_Mito_Ribo()` to simplify
+    this. Basic use requires only one line of code and two parameters.
 
-        Add_Mito_Ribo_Seurat(seurat_object = obj_name, species = "Human") 
+        Add_Mito_Ribo(object = obj_name, species = "Human") 
 
     - Function already knows the defaults for Human, Mouse, Rat,
       Zebrafish, Drosophila, Marmoset, and Rhesus Macaque (submit a PR
@@ -138,8 +137,8 @@ scCustomize aims to achieve these goals through:
   - scCustomize provides checks/warnings, using the cli/rlang packages,
     wrapped inside its functions to help and provide more informative
     error/warning messages. Two examples include:  
-  - `Add_Mito_Ribo_Seurat()` will warn you if no mitochondrial or
-    ribosomal features are found and won’t create new metadata column.  
+  - `Add_Mito_Ribo()` will warn you if no mitochondrial or ribosomal
+    features are found and won’t create new metadata column.  
   - `Rename_Clusters()` will check and make sure the right number of
     unique new names are provided and provide one of two error messages
     if not before attempting to rename the object idents.

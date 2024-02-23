@@ -54,4 +54,4 @@ normalisation and visualisation of single-cell RNA-seq data in R.” Bioinformat
 \seealso{
 \url{https://bioconductor.org/packages/release/bioc/html/scuttle.html}
 }
-\concept{object_util}
+\concept{qc_util}

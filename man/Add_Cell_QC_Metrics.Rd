@@ -117,4 +117,4 @@ obj <- Add_Cell_QC_Metrics(seurat_object = obj, species = "Human")
 }
 
 }
-\concept{object_util}
+\concept{qc_util}

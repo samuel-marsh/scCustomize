@@ -22,4 +22,4 @@ numeric_meta_columns <- Meta_Numeric(data = meta_data)
 }
 
 }
-\concept{helper_util}
+\concept{check_util}

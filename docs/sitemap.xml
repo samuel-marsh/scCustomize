@@ -37,6 +37,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/articles/Misc_Functions.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/articles/Object_Conversion.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html</loc>
   </url>
   <url>
@@ -47,6 +50,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/Statistics.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/articles/Update_Gene_Symbols.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/Cell_Bender_Functions.html</loc>
@@ -79,6 +85,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/Misc_Functions.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/Object_Conversion.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/QC_Plots.html</loc>
   </url>
   <url>
@@ -89,6 +98,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/Statistics.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/Update_Gene_Symbols.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/index.html</loc>
@@ -103,7 +115,13 @@
     <loc>https://samuel-marsh.github.io/scCustomize/news/index.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Alt_Feature_ID.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_CellBender_Diff.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_Complexity.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_Complexity_LIGER.html</loc>
@@ -113,6 +131,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Cell_QC_Metrics.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Mito_Ribo.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Mito_Ribo_LIGER.html</loc>
@@ -172,6 +193,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ColorBlind_Pal.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Convert_Assay.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Copy_From_GCP.html</loc>
   </url>
   <url>
@@ -223,6 +247,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/FeatureScatter_scCustom.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Feature_Present.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Fetch_Meta.html</loc>
   </url>
   <url>
@@ -260,6 +287,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/JCO_Four.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/LIGER_Features.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Liger_to_Seurat.html</loc>
@@ -457,6 +487,12 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Split_FeatureScatter.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Split_Layers.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Split_Vector.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Stacked_VlnPlot.html</loc>
   </url>
   <url>
@@ -472,6 +508,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/UnRotate_X.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Updated_HGNC_Symbols.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/VariableFeaturePlot_scCustom.html</loc>
   </url>
   <url>
@@ -479,6 +518,18 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/VlnPlot_scCustom.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/as.LIGER.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/as.Seurat.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/as.anndata.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/deprecated.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_mito_id.html</loc>
@@ -497,6 +548,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/plotFactors_scCustom.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/reexports.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/scCustomize-package.html</loc>

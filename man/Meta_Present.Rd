@@ -5,7 +5,8 @@
 \title{Check if meta data are present}
 \usage{
 Meta_Present(
-  seurat_object,
+  object,
+  seurat_object = deprecated(),
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
@@ -13,7 +14,9 @@ Meta_Present(
 )
 }
 \arguments{
-\item{seurat_object}{object name.}
+\item{object}{Seurat or Liger object name.}
+
+\item{seurat_object}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} deprecated.  Please use \code{object} instead.}
 
 \item{meta_col_names}{vector of column names to check.}
 
@@ -33,8 +36,8 @@ Return warning messages for meta data columns not found.
 }
 \examples{
 \dontrun{
-meta_variables <- Meta_Present(seurat_object = obj_name, gene_list = DEG_list, print_msg = TRUE)
+meta_variables <- Meta_Present(object = obj_name, meta_col_names = "percent_mito", print_msg = TRUE)
 }
 
 }
-\concept{helper_util}
+\concept{check_util}

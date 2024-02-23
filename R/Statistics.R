@@ -129,8 +129,8 @@ Percent_Expressing <- function(
   # Check is slot is supplied
   if (lifecycle::is_present(slot)) {
     lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "slot",
-                              with = "layer",
+                              what = "Percent_Expressing(slot)",
+                              with = "Percent_Expressing(layer)",
                               details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
                                           "i" = "Please adjust code now to prepare for full deprecation.")
     )
@@ -141,9 +141,13 @@ Percent_Expressing <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Check features exist in object
-  features_list <- Gene_Present(data = seurat_object, gene_list = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
+  features_list <- Feature_Present(data = seurat_object, features = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
 
   # Check group_by is in object
+  if (!is.null(x = group_by) && group_by == "ident") {
+    group_by <- NULL
+  }
+
   if (!is.null(x = group_by)) {
     possible_groups <- colnames(x = seurat_object@meta.data)
     if (!group_by %in% possible_groups) {
@@ -251,12 +255,12 @@ Median_Stats <- function(
   }
 
   # Check group variable present
-  group_by_var <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+  group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
   # Check stats variables present
   all_variables <- c(default_var, median_var)
 
-  all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
+  all_variables <- Meta_Present(object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
 
   # Filter meta data for columns of interest
   meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%
@@ -341,12 +345,12 @@ MAD_Stats <- function(
   }
 
   # Check group variable present
-  group_by_var <- Meta_Present(seurat_object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+  group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
   # Check stats variables present
   all_variables <- c(default_var, mad_var)
 
-  all_variables <- Meta_Present(seurat_object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
+  all_variables <- Meta_Present(object = seurat_object, meta_col_names = all_variables, print_msg = FALSE)[[1]]
 
   # Filter meta data for columns of interest
   meta_numeric_check <- Fetch_Meta(object = seurat_object) %>%

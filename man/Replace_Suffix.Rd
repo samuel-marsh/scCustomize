@@ -28,4 +28,4 @@ dge_matrix <- Replace_Suffix(data = dge_matrix, current_suffix = "-1", new_suffi
 }
 
 }
-\concept{helper_util}
+\concept{barcode_util}

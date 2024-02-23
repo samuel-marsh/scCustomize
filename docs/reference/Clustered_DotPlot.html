@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -59,10 +59,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -113,21 +119,23 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Clustered_DotPlot</span><span class="op">(</span></span>
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">features</span>,</span>
+<span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use_exp <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,</span>
 <span>  exp_color_min <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
 <span>  exp_color_middle <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  exp_color_max <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  exp_value_type <span class="op">=</span> <span class="st">"scaled"</span>,</span>
 <span>  print_exp_quantiles <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  colors_use_idents <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  plot_padding <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  flip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  feature_km_repeats <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  ident_km_repeats <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  row_km_repeats <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  column_km_repeats <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  row_label_size <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  row_label_fontface <span class="op">=</span> <span class="st">"plain"</span>,</span>
+<span>  grid_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cluster_feature <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cluster_ident <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  column_label_size <span class="op">=</span> <span class="fl">8</span>,</span>
@@ -156,6 +164,10 @@
 <dd><p>Features to plot.</p></dd>
 
 
+<dt>split.by</dt>
+<dd><p>Variable in <code>@meta.data</code> to split the identities plotted by.</p></dd>
+
+
 <dt>colors_use_exp</dt>
 <dd><p>Color palette to use for plotting expression scale.  Default is <code>viridis::plasma(n = 20, direction = -1)</code>.</p></dd>
 
@@ -175,6 +187,11 @@ By default will be set to value in middle of <code>exp_color_min</code> and <cod
 Default is 2.</p></dd>
 
 
+<dt>exp_value_type</dt>
+<dd><p>Whether to plot average normalized expression or
+scaled average normalized expression.  Only valid when <code>split.by</code> is provided.</p></dd>
+
+
 <dt>print_exp_quantiles</dt>
 <dd><p>Whether to print the quantiles of expression data in addition to plots.
 Default is FALSE.  NOTE: These values will be altered by choices of <code>exp_color_min</code> and <code>exp_color_min</code>
@@ -190,6 +207,14 @@ will use "varibow" with shuffle = TRUE both from <code>DiscretePalette_scCustomi
 <dt>x_lab_rotate</dt>
 <dd><p>How to rotate column labels.  By default set to <code>TRUE</code> which rotates labels 45 degrees.
 If set <code>FALSE</code> rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.</p></dd>
+
+
+<dt>plot_padding</dt>
+<dd><p>if plot needs extra white space padding so no plot or labels are cutoff.
+The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+vector of length 4 specifying the amount of padding in millimeters.
+Default is NULL, no padding.</p></dd>
 
 
 <dt>flip</dt>
@@ -215,20 +240,16 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 <code>feature_km_repeats</code>.  Default is 1000.</p></dd>
 
 
-<dt>row_km_repeats</dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated.  See <code>feature_km_repeats</code></p></dd>
-
-
-<dt>column_km_repeats</dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated.  See <code>ident_km_repeats</code></p></dd>
-
-
 <dt>row_label_size</dt>
 <dd><p>Size of the feature labels.  Provided to <code>row_names_gp</code> in Heatmap call.</p></dd>
 
 
 <dt>row_label_fontface</dt>
 <dd><p>Fontface to use for row labels.  Provided to <code>row_names_gp</code> in Heatmap call.</p></dd>
+
+
+<dt>grid_color</dt>
+<dd><p>color to use for heatmap grid.  Default is NULL which "removes" grid by using NA color.</p></dd>
 
 
 <dt>cluster_feature</dt>

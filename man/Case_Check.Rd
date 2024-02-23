@@ -39,4 +39,4 @@ alt_features <- Case_Check(seurat_object = obj_name, gene_list = DEG_list)
 }
 
 }
-\concept{helper_util}
+\concept{check_util}

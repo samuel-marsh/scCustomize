@@ -18,7 +18,7 @@ Return warning messages for meta data columns not found."><!-- mathjax --><scrip
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -60,10 +60,16 @@ Return warning messages for meta data columns not found."><!-- mathjax --><scrip
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -113,7 +119,8 @@ Return warning messages for meta data columns not found.</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Meta_Present</span><span class="op">(</span></span>
-<span>  <span class="va">seurat_object</span>,</span>
+<span>  <span class="va">object</span>,</span>
+<span>  seurat_object <span class="op">=</span> <span class="fu"><a href="deprecated.html">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">meta_col_names</span>,</span>
 <span>  print_msg <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  omit_warn <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -123,8 +130,12 @@ Return warning messages for meta data columns not found.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>seurat_object</dt>
-<dd><p>object name.</p></dd>
+    <dl><dt>object</dt>
+<dd><p>Seurat or Liger object name.</p></dd>
+
+
+<dt>seurat_object</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> deprecated.  Please use <code>object</code> instead.</p></dd>
 
 
 <dt>meta_col_names</dt>
@@ -154,7 +165,7 @@ Return warning messages for meta data columns not found.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">meta_variables</span> <span class="op">&lt;-</span> <span class="fu">Meta_Present</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj_name</span>, gene_list <span class="op">=</span> <span class="va">DEG_list</span>, print_msg <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">meta_variables</span> <span class="op">&lt;-</span> <span class="fu">Meta_Present</span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj_name</span>, meta_col_names <span class="op">=</span> <span class="st">"percent_mito"</span>, print_msg <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

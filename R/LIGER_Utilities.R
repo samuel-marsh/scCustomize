@@ -1,8 +1,5 @@
-#' Add Mito and Ribo percentages to LIGER
+#' Add Mito and Ribo percentages
 #'
-#' Add Mito, Ribo, percentages to meta.data slot of LIGER Object
-#'
-#' @param liger_object LIGER object name.
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
@@ -32,22 +29,26 @@
 #' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang ":="
 #' @importFrom tibble rownames_to_column column_to_rownames
+#' @importFrom utils packageVersion
 #'
-#' @return A LIGER Object
+#' @method Add_Mito_Ribo liger
 #'
 #' @export
+#' @rdname Add_Mito_Ribo
 #'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Mito_Ribo_LIGER(liger_object = object, species = "mouse")
+#' # Liger
+#' liger_object <- Add_Mito_Ribo(object = liger_object, species = "human")
 #' }
 #'
 
-Add_Mito_Ribo_LIGER <- function(
-  liger_object,
+Add_Mito_Ribo.liger <- function(
+  object,
   species,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
@@ -58,8 +59,15 @@ Add_Mito_Ribo_LIGER <- function(
   ribo_features = NULL,
   ensembl_ids = FALSE,
   overwrite = FALSE,
-  list_species_names = FALSE
+  list_species_names = FALSE,
+  ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Accepted species names
   accepted_names <- data.frame(
     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
@@ -78,7 +86,7 @@ Add_Mito_Ribo_LIGER <- function(
   }
 
   # LIGER object check
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = object)
 
   # Check name collision
   if (any(duplicated(x = c(mito_name, ribo_name, mito_ribo_name)))) {
@@ -86,7 +94,7 @@ Add_Mito_Ribo_LIGER <- function(
   }
 
   # Overwrite check
-  if (mito_name %in% colnames(x = liger_object@cell.data) || ribo_name %in% colnames(x = liger_object@cell.data) || mito_ribo_name %in% colnames(x = liger_object@cell.data)) {
+  if (mito_name %in% colnames(x = object@cell.data) || ribo_name %in% colnames(x = object@cell.data) || mito_ribo_name %in% colnames(x = object@cell.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}.*")
@@ -166,15 +174,17 @@ Add_Mito_Ribo_LIGER <- function(
     ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
 
-  # get features from patterns
-  mito_features <- mito_features %||% grep(pattern = mito_pattern, x = rownames(x = liger_object@raw.data[[1]]), value = TRUE)
+  all_features <- LIGER_Features(liger_object = object)
 
-  ribo_features <- ribo_features %||% grep(pattern = ribo_pattern, x = rownames(x = liger_object@raw.data[[1]]), value = TRUE)
+  # get features from patterns
+  mito_features <- mito_features %||% grep(pattern = mito_pattern, x = all_features, value = TRUE)
+
+  ribo_features <- ribo_features %||% grep(pattern = ribo_pattern, x = all_features, value = TRUE)
 
   # Check features are present in object
-  length_mito_features <- length(x = intersect(x = mito_features, y = rownames(x = liger_object@raw.data[[1]])))
+  length_mito_features <- length(x = intersect(x = mito_features, y = all_features))
 
-  length_ribo_features <- length(x = intersect(x = ribo_features, y = rownames(x = liger_object@raw.data[[1]])))
+  length_ribo_features <- length(x = intersect(x = ribo_features, y = all_features))
 
   # Check length of mito and ribo features found in object
   if (length_mito_features < 1 && length_ribo_features < 1) {
@@ -195,68 +205,75 @@ Add_Mito_Ribo_LIGER <- function(
 
   # Add mito and ribo percent
   if (length_mito_features > 0) {
-    good_mito <- mito_features[mito_features %in% rownames(x = liger_object@raw.data)]
-    percent_mito <- unlist(lapply(liger_object@raw.data, function(x) {
+    good_mito <- mito_features[mito_features %in% all_features]
+    percent_mito <- unlist(lapply(object@raw.data, function(x) {
       (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data[ , mito_name] <- percent_mito
+    object@cell.data[ , mito_name] <- percent_mito
   }
 
   if (length_ribo_features > 0){
-    good_ribo <- ribo_features[ribo_features %in% rownames(x = liger_object@raw.data)]
-    percent_ribo <- unlist(lapply(liger_object@raw.data, function(x) {
+    good_ribo <- ribo_features[ribo_features %in% all_features]
+    percent_ribo <- unlist(lapply(object@raw.data, function(x) {
       (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
-    liger_object@cell.data[ , ribo_name] <- percent_ribo
+    object@cell.data[ , ribo_name] <- percent_ribo
   }
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
-    object_meta <- Fetch_Meta(object = liger_object) %>%
+    object_meta <- Fetch_Meta(object = object) %>%
       rownames_to_column("barcodes")
 
     object_meta <- object_meta %>%
       mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
 
-    liger_object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
+    object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
   }
 
   # return object
-  return(liger_object)
+  return(object)
 }
 
 
 #' Add Cell Complexity Value
 #'
-#' Add measure of cell complexity/novelty (log10PerUMI) for data QC.
-#'
-#' @param liger_object object name.
 #' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
 #' @import cli
+#' @importFrom utils packageVersion
 #'
-#' @return A LIGER Object
+#' @method Add_Cell_Complexity liger
 #'
 #' @export
+#' @rdname Add_Cell_Complexity
 #'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
-#' object <- Add_Cell_Complexity_LIGER(liger_object = object)
+#' # Liger
+#' liger_object <- Add_Cell_Complexity(object = liger_object)
 #' }
 #'
 
-Add_Cell_Complexity_LIGER <- function(
-  liger_object,
+Add_Cell_Complexity.liger <- function(
+  object,
   meta_col_name = "log10GenesPerUMI",
-  overwrite = FALSE
+  overwrite = FALSE,
+  ...
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check Seurat
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = object)
 
   # Check columns for overwrite
-  if (meta_col_name %in% colnames(x = liger_object@cell.data)) {
+  if (meta_col_name %in% colnames(x = object@cell.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in cell.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
@@ -268,23 +285,25 @@ Add_Cell_Complexity_LIGER <- function(
   }
 
   # Add score
-  liger_object@cell.data[ , meta_col_name] <- log10(liger_object@cell.data$nGene) / log10(liger_object@cell.data$nUMI)
+  object@cell.data[ , meta_col_name] <- log10(object@cell.data$nGene) / log10(object@cell.data$nUMI)
 
   #return object
-  return(liger_object)
+  return(object)
 }
 
 
-#' Check if meta data are present
+#' Extract Features from LIGER Object
 #'
-#' Check if meta data columns are present in object and return vector of found columns  Return warning
-#' messages for meta data columns not found.
+#' Extract all unique features from LIGER object
 #'
-#' @param liger_object object name.
-#' @param meta_col_names vector of column names to check.
-#' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
+#' @param liger_object LIGER object name.
+#' @param by_dataset logical, whether to return list with vector of features for each dataset in
+#' LIGER object or to return single vector of unique features across all datasets in object
+#' (default is FALSE; return vector of unique features)
 #'
-#' @return vector of meta data columns that are present
+#' @return vector or list depending on `by_dataset` parameter
+#'
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -292,51 +311,37 @@ Add_Cell_Complexity_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' meta_variables <- Meta_Present_LIGER(liger_object = obj, gene_list = DEG_list, print_msg = TRUE)
+#' # return single vector of all unique features
+#' all_features <- LIGER_Features(liger_object = object, by_dataset = FALSE)
+#'
+#' # return list of vectors containing features from each individual dataset in object
+#' dataset_features <- LIGER_Features(liger_object = object, by_dataset = TRUE)
 #' }
 #'
 
-Meta_Present_LIGER <- function(
-  liger_object,
-  meta_col_names,
-  print_msg = TRUE
+LIGER_Features <- function(
+    liger_object,
+    by_dataset = FALSE
 ) {
-  # Check Seurat
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   Is_LIGER(liger_object = liger_object)
 
-  # get all features
-  possible_features <- colnames(x = liger_object@cell.data)
+  # Extract features
+  features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
+    rownames(x = liger_object@raw.data[[x]])
+  })
 
-  # If any features not found
-  if (any(!meta_col_names %in% possible_features)) {
-    bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
-    found_meta <- meta_col_names[meta_col_names %in% possible_features]
-
-    # Return message of features not found
-    if (length(x = found_meta) < 1) {
-      cli_abort(message = c("No valid meta data column names found.",
-                            "*" = "None of the provided @cell.data columns were found:",
-                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
-      )
-    }
-
-    if (length(x = bad_meta) > 0) {
-      cli_warn(message = c("The following @cell.data columns were omitted as they were not found:",
-                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
-      )
-    }
-
-    # Return the found features omitting the not found ones.
-    return(found_meta)
+  if (isFALSE(x = by_dataset)) {
+    features <- unique(x = unlist(x = features_by_dataset))
+    return(features)
+  } else {
+    return(features_by_dataset)
   }
-
-  # Print all found message if TRUE
-  if (isTRUE(x = print_msg)) {
-    cli_inform(message = "All @cell.data columns present.")
-  }
-
-  # Return full input gene list.
-  return(meta_col_names)
 }
 
 
@@ -351,6 +356,7 @@ Meta_Present_LIGER <- function(
 #' @return A LIGER Object
 #'
 #' @import cli
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -367,6 +373,12 @@ Top_Genes_Factor <- function(
   liger_factor,
   num_genes = 10
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # LIGER object check
   Is_LIGER(liger_object = liger_object)
 
@@ -402,6 +414,8 @@ Top_Genes_Factor <- function(
 #'
 #' @return A data.frame with information for plotting
 #'
+#' @importFrom utils packageVersion
+#'
 #' @references This function is encompasses the first part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to allow plotting other meta data variables.  In this case the function
 #' just returns the data.frame needed for plotting rather than plots themselves.
@@ -421,6 +435,12 @@ Generate_Plotting_df_LIGER <- function(object,
                                        group_by = "dataset",
                                        split_by = NULL
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   tsne_df <- data.frame(object@tsne.coords)
   colnames(x = tsne_df) <- c("tsne1", "tsne2")
   tsne_df[[group_by]] <- object@cell.data[[group_by]]
@@ -500,6 +520,7 @@ Generate_Plotting_df_LIGER <- function(object,
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #' @importFrom stats median
+#' @importFrom utils packageVersion
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
@@ -534,6 +555,12 @@ Plot_By_Cluster_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Create plotting data.frame
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
@@ -756,8 +783,9 @@ Plot_By_Cluster_LIGER <- function(
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom patchwork wrap_plots
-#' @importFrom rlang sym
+#' @importFrom rlang sym "!!"
 #' @importFrom scattermore geom_scattermore
+#' @importFrom utils packageVersion
 #'
 #' @references This function is encompasses part of the LIGER function plotByDatasetAndCluster.
 #' However, this function is modified to just return cluster plots based on `Generate_Plotting_df_LIGER`.
@@ -787,6 +815,11 @@ Plot_By_Meta_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
 
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
@@ -920,6 +953,7 @@ Plot_By_Meta_LIGER <- function(
 #' @return A LIGER Object with variable genes in correct slot.
 #'
 #' @import cli
+#' @importFrom utils packageVersion
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
 #' which is called by this function after creating new temporary object/dataset.
@@ -945,6 +979,12 @@ Variable_Features_ALL_LIGER <- function(
   pt.size = 0.3,
   chunk=1000
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   Is_LIGER(liger_object = liger_object)
 
   raw_data <- liger_object@raw.data
@@ -967,195 +1007,4 @@ Variable_Features_ALL_LIGER <- function(
 
   liger_object@var.genes <- var_genes
   return(liger_object)
-}
-
-
-#' Create a Seurat object containing the data from a liger object
-#'
-#' Merges raw.data and scale.data of object, and creates Seurat object with these values along with
-#' tsne.coords, iNMF factorization, and cluster assignments. Supports Seurat V2 and V3.
-#'
-#' Stores original dataset identity by default in new object metadata if dataset names are passed
-#' in nms. iNMF factorization is stored in dim.reduction object with key "iNMF".
-#'
-#' @param liger_object \code{liger} object.
-#' @param nms By default, labels cell names with dataset of origin (this is to account for cells in
-#' different datasets which may have same name). Other names can be passed here as vector, must have
-#' same length as the number of datasets. (default names(H)).
-#' @param renormalize Whether to log-normalize raw data using Seurat defaults (default TRUE).
-#' @param use.liger.genes Whether to carry over variable genes (default TRUE).
-#' @param by.dataset Include dataset of origin in cluster identity in Seurat object (default FALSE).
-#' @param keep_meta logical. Whether to transfer additional metadata (nGene/nUMI/dataset already transferred)
-#' to new Seurat Object.  Default is TRUE.
-#' @param reduction_label Name of dimensionality reduction technique used.  Enables accurate transfer
-#' or name to Seurat object instead of defaulting to "tSNE".
-#' @param seurat_assay Name to set for assay in Seurat Object.  Default is "RNA".
-#'
-#' @return Seurat object with raw.data, scale.data, reduction_label, iNMF, and ident slots set.
-#'
-#' @references Original function is part of LIGER package \url{https://github.com/welch-lab/liger} (Licence: GPL-3).
-#' Function was slightly modified for use in scCustomize with keep.meta parameter.  Also posted as
-#' PR to liger GitHub.
-#'
-#' @import cli
-#' @import Matrix
-#' @importFrom dplyr any_of pull select
-#' @importFrom methods as new
-#' @importFrom utils packageVersion
-#'
-#' @export
-#'
-#' @concept object_util
-#'
-#' @examples
-#' \dontrun{
-#' seurat_object <- Liger_to_Seurat(liger_object = LIGER_OBJ, reduction_label = "UMAP")
-#' }
-
-Liger_to_Seurat <- function(
-    liger_object,
-    nms = names(liger_object@H),
-    renormalize = TRUE,
-    use.liger.genes = TRUE,
-    by.dataset = FALSE,
-    keep_meta = TRUE,
-    reduction_label = "UMAP",
-    seurat_assay = "RNA"
-) {
-  if (is.null(x = reduction_label)) {
-    cli_abort(message = c("{.code reduction_label} parameter was not set.",
-                          "*" = "LIGER objects do not store name of dimensionality reduction technique used.",
-                          "i" = "In order to retain proper labels in Seurat object please set {.code reduction_label} to {.val tSNE}, {.val UMAP}, {.val etc}."))
-  }
-
-  # get Seurat version
-  maj_version <- packageVersion('Seurat')$major
-  if (class(liger_object@raw.data[[1]])[1] != 'dgCMatrix') {
-    # mat <- as(x, 'CsparseMatrix')
-    liger_object@raw.data <- lapply(liger_object@raw.data, function(x) {
-      as(x, 'CsparseMatrix')
-    })
-  }
-
-  key_name <- paste0(reduction_label, "_")
-
-  raw.data <- Merge_Sparse_Data_All(liger_object@raw.data, nms)
-  scale.data <- do.call(rbind, liger_object@scale.data)
-  rownames(x = scale.data) <- colnames(x = raw.data)
-  if (maj_version < 3) {
-    var.genes <- liger_object@var.genes
-    inmf.obj <- new(
-      Class = "dim.reduction", gene.loadings = t(liger_object@W),
-      cell.embeddings = liger_object@H.norm, key = "iNMF_"
-    )
-    rownames(x = inmf.obj@gene.loadings) <- var.genes
-
-    tsne.obj <- new(
-      Class = "dim.reduction", cell.embeddings = liger_object@tsne.coords,
-      key = key_name
-    )
-  } else {
-    var.genes <- liger_object@var.genes
-    if (any(grepl('_', var.genes))) {
-      print("Warning: Seurat v3 genes cannot have underscores, replacing with dashes ('-')")
-      var.genes <- gsub("_", replacement = "-", var.genes)
-    }
-    inmf.loadings <- t(x = liger_object@W)
-    rinmf.loadings <- t(x = liger_object@W)
-
-    inmf.embeddings <- liger_object@H.norm
-    rinmf.embeddings <- do.call(what = 'rbind', args = liger_object@H)
-
-    ncol_Hnorm <- ncol(x = liger_object@H.norm)
-    colnames(x = inmf.embeddings) <- paste0("iNMF_", 1:ncol_Hnorm)
-    colnames(x = rinmf.embeddings) <- paste0("rawiNMF_", 1:ncol_Hnorm)
-
-    tsne.embeddings <- liger_object@tsne.coords
-    colnames(x = tsne.embeddings) <- paste0(key_name, 1:2)
-    rownames(x = inmf.loadings) <- var.genes
-    rownames(x = inmf.embeddings) <-
-      rownames(x = rinmf.embeddings) <-
-      rownames(x = tsne.embeddings) <-
-      rownames(x = scale.data)
-
-    inmf.obj <- CreateDimReducObject(
-      embeddings = inmf.embeddings,
-      loadings = inmf.loadings,
-      key = "iNMF_",
-      global = TRUE,
-      assay = seurat_assay
-    )
-
-    rinmf.obj <- CreateDimReducObject(
-      embeddings = rinmf.embeddings,
-      loadings = rinmf.loadings,
-      key = "rawiNMF_",
-      global = TRUE,
-      assay = seurat_assay
-    )
-
-    tsne.obj <- CreateDimReducObject(
-      embeddings = tsne.embeddings,
-      key = key_name,
-      global = TRUE,
-      assay = seurat_assay
-    )
-  }
-  new.seurat <- CreateSeuratObject(raw.data)
-  if (isTRUE(x = renormalize)) {
-    new.seurat <- NormalizeData(new.seurat)
-  }
-  if (isTRUE(x = by.dataset)) {
-    ident.use <- as.character(x = unlist(x = lapply(1:length(liger_object@raw.data), function(i) {
-      dataset.name <- names(x = liger_object@raw.data)[i]
-      paste0(dataset.name, as.character(x = liger_object@clusters[colnames(x = liger_object@raw.data[[i]])]))
-    })))
-  } else {
-    if (maj_version < 3) {
-      ident.use <- as.character(x = liger_object@clusters)
-    } else {
-      ident.use <- liger_object@clusters
-    }
-  }
-
-  if (maj_version < 3) {
-    if (use.liger.genes) {
-      new.seurat@var.genes <- var.genes
-    }
-    new.seurat@scale.data <- t(scale.data)
-    new.seurat@dr[[reduction_label]] <- tsne.obj
-    new.seurat@dr$iNMF <- inmf.obj
-    new.seurat@dr$iNMF <- rinmf.obj
-    new.seurat <- SetIdent(new.seurat, ident.use = ident.use)
-
-  } else {
-    if (isTRUE(x = use.liger.genes)) {
-      VariableFeatures(new.seurat) <- var.genes
-    }
-    SetAssayData(new.seurat, slot = "scale.data",  t(scale.data), assay = "RNA")
-    new.seurat[[reduction_label]] <- tsne.obj
-    new.seurat[['iNMF']] <- inmf.obj
-    new.seurat[['rawiNMF']] <- rinmf.obj
-    Idents(object = new.seurat) <- ident.use
-  }
-  if (isTRUE(x = keep_meta)) {
-    # extract meta data from liger object
-    liger_meta <- Fetch_Meta(object = liger_object)
-    # remove meta data values already transferred
-    liger_meta <- liger_meta %>%
-      select(-any_of(c("nUMI", "nGene", "dataset")))
-    # extract meta data names
-    meta_names <- colnames(x = liger_meta)
-    # add meta data to new seurat object
-    for (meta_var in meta_names){
-      meta_transfer <- liger_meta %>%
-        pull(meta_var)
-      names(x = meta_transfer) <- colnames(x = new.seurat)
-      new.seurat <- AddMetaData(object = new.seurat,
-                                metadata = meta_transfer,
-                                col.name = meta_var)
-    }
-  }
-
-  return(new.seurat)
 }

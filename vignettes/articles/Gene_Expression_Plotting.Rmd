@@ -524,6 +524,50 @@ plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8)
 plots[[2]]
 ```
 
+#### Clustered_DotPlot() split by additional grouping variable  
+`Clustered_DotPlot` can now plot with additional grouping variable provided to `split.by` parameter.
+
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun", "Egr1", "Aif1", "P2ry12", "Tmem119"), split.by = "Transcription_Method")
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plot_split <- Clustered_DotPlot(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun", "Egr1", "Aif1", "P2ry12", "Tmem119"), split.by = "Transcription_Method")
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plot_split[[2]]
+```
+
+However, you'll notice that the labels on the bottom get cutoff on the left-hand side of the plot.  There are two solutions to this.
+
+Keep bottom labels rotated but add extra white-space padding on left
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun", "Egr1", "Aif1", "P2ry12", "Tmem119"), split.by = "Transcription_Method", plot_padding = TRUE)
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plot_split <- Clustered_DotPlot(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun", "Egr1", "Aif1", "P2ry12", "Tmem119"), split.by = "Transcription_Method", plot_padding = TRUE)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plot_split[[2]]
+```
+
+Or simply remove the bottom label text rotation
+```{r eval=FALSE}
+Clustered_DotPlot(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun", "Egr1", "Aif1", "P2ry12", "Tmem119"), split.by = "Transcription_Method", x_lab_rotate = 90)
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plot_split <- Clustered_DotPlot(seurat_object = marsh_mouse_micro, features = c("Fos", "Jun", "Egr1", "Aif1", "P2ry12", "Tmem119"), split.by = "Transcription_Method", x_lab_rotate = 90)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plot_split[[2]]
+```
+
+
 #### Clustered_DotPlot() k-means Clustering Optional Parameters  
   
 **Determining Optimal k Value**  

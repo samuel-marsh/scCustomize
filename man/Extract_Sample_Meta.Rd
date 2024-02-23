@@ -56,4 +56,4 @@ sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ide
 include_all = TRUE)
 
 }
-\concept{object_util}
+\concept{get_set_util}

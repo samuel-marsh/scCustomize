@@ -42,6 +42,7 @@
 #'
 #' @import ggplot2
 #' @importFrom patchwork wrap_plots
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -76,8 +77,19 @@ DimPlot_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
+
+  # Check dimreduc present
+  if (length(x = liger_object@tsne.coords) == 0) {
+    cli_abort(message = "No dimensionality reduction coordinates found.")
+  }
 
   # Set group_by defaults
   if (isFALSE(x = combination) && is.null(x = group_by)) {
@@ -96,10 +108,10 @@ DimPlot_LIGER <- function(
 
   # Check group_by parameter
   if (!group_by == "cluster")
-    group_by_var <- Meta_Present_LIGER(liger_object = liger_object, meta_col_names = group_by, print_msg = FALSE)
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
   if (!is.null(x = split_by)) {
-    group_by_var <- Meta_Present_LIGER(liger_object = liger_object, meta_col_names = split_by, print_msg = FALSE)
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # Add one time dim label warning
@@ -257,6 +269,8 @@ DimPlot_LIGER <- function(
 #' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
 #' technique and therefore needs to be set manually.  Default is "UMAP".
+#' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
+#' Helpful if number of datasets is large to avoid crowding the plot with legend.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -282,6 +296,7 @@ DimPlot_LIGER <- function(
 #' @importFrom grDevices dev.off pdf
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
+#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -305,6 +320,7 @@ plotFactors_scCustom <- function(
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
   reduction_label = "UMAP",
+  plot_legend = TRUE,
   raster = TRUE,
   raster.dpi = c(512, 512),
   order = FALSE,
@@ -318,6 +334,12 @@ plotFactors_scCustom <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
@@ -431,6 +453,10 @@ plotFactors_scCustom <- function(
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
+      if (isFALSE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
         labs(x = 'Cell', y = 'H_norm Score') +
@@ -439,6 +465,9 @@ plotFactors_scCustom <- function(
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
 
+      if (isFALSE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
 
     } else {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
@@ -448,6 +477,10 @@ plotFactors_scCustom <- function(
         theme(legend.position = 'none') +
         scale_color_manual(values = colors_use_factors)
 
+      if (isFALSE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
         labs(x = 'Cell', y = 'H_norm Score') +
@@ -455,6 +488,10 @@ plotFactors_scCustom <- function(
               legend.title = element_blank()) +
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
 
     }
 

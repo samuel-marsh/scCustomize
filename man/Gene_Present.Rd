@@ -2,7 +2,7 @@
 % Please edit documentation in R/Utilities.R
 \name{Gene_Present}
 \alias{Gene_Present}
-\title{Check if genes/features are present}
+\title{Check if genes/features are present  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}}
 \usage{
 Gene_Present(
   data,
@@ -36,7 +36,7 @@ Default is TRUE.}
 features are found.  Default is FALSE.}
 
 \item{seurat_assay}{Name of assay to pull feature names from if \code{data} is Seurat Object.
-Defaults to  \code{DefaultAssay(OBJ)} if NULL.}
+Default is NULL which will check against features from all assays present.}
 }
 \value{
 A list of length 3 containing 1) found features, 2) not found features, 3) features found if
@@ -53,4 +53,4 @@ found_features <- features[[1]]
 }
 
 }
-\concept{helper_util}
+\concept{check_util}

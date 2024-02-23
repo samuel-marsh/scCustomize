@@ -77,7 +77,7 @@ Custom VlnPlot for initial QC checks including lines for thresholding
 }
 \examples{
 library(Seurat)
-pbmc_small <- Add_Cell_Complexity_Seurat(pbmc_small)
+pbmc_small <- Add_Cell_Complexity(pbmc_small)
 
 QC_Plots_Complexity(seurat_object = pbmc_small)
 

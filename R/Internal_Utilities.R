@@ -252,12 +252,12 @@ glue_collapse_scCustom <- function(
 
 #' Perform Feature and Meta Checks before plotting
 #'
-#' Wraps the `Gene_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
+#' Wraps the `Feature_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
 #' single function to perform feature checks before plotting.
 #'
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
-#' @param assay Assay to use (default is the current object default assay).
+#' @param assay Assay to use (default all assays present).
 #'
 #' @return vector of features and/or meta data that were found in object.
 #'
@@ -272,12 +272,12 @@ Feature_PreCheck <- function(
     assay = NULL
 ) {
   # set assay (if null set to active assay)
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% Assays(object = object)
 
   # Check features and meta to determine which features present
-  features_list <- Gene_Present(data = object, gene_list = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
+  features_list <- Feature_Present(data = object, features = features, omit_warn = FALSE, print_msg = FALSE, case_check_msg = FALSE, return_none = TRUE, seurat_assay = assay)
 
-  meta_list <- Meta_Present(seurat_object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+  meta_list <- Meta_Present(object = object, meta_col_names = features_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
   reduction_list <- Reduction_Loading_Present(seurat_object = object, reduction_names = meta_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
@@ -307,6 +307,33 @@ Feature_PreCheck <- function(
 
   # return all found features
   return(all_found_features)
+}
+
+
+#' Ask yes/no question to proceed
+#'
+#' Asks the user to answer yes/no question and returns logical value depending on
+#' the answer.
+#'
+#' @return logical
+#'
+#' @references function modified from function in devtools R package (License: MIT) \url{https://github.com/r-lib/devtools}.
+#' @details \url{https://github.com/r-lib/devtools/blob/9f27cc3e6335e74d6f51ed331509ebda56747901/R/release.R#L147-L156}.
+#'
+#' @import cli
+#'
+#' @noRd
+#'
+
+yesno <- function(msg, .envir = parent.frame()) {
+  yeses <- c("Yes")
+  nos <- c("No")
+
+  cli_inform(message = msg, .envir = .envir)
+  qs <- c("Yes", "No")
+  rand <- sample(length(qs))
+
+  utils::menu(qs[rand]) != which(rand == 1)
 }
 
 
@@ -523,20 +550,20 @@ Retrieve_Ensembl_Ribo <- function(
  }
 
 
- #' Retrieve IEG Gene Lists
- #'
- #' Retrieves species specific IEG gene lists
- #'
- #' @param species species to retrieve IDs.
- #'
- #' @return list of 2 sets of gene_symbols
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Retrieve IEG Gene Lists
+#'
+#' Retrieves species specific IEG gene lists
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 2 sets of gene_symbols
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
  Retrieve_IEG_Lists <- function(
     species
@@ -585,33 +612,33 @@ Retrieve_Ensembl_Ribo <- function(
  }
 
 
- #' Add MSigDB Gene Lists Percentages
- #'
- #' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
- #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
- #'
- #' @param seurat_object object name.
- #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
- #' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
- #' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
- #' phosphorylation counts. Default is "percent_oxphos".
- #' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
- #' Default is "percent_apop".
- #' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
- #' Default is "percent_oxphos".
- #' @param assay Assay to use (default is the current object default assay).
- #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
- #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
- #' `mito_ribo_name` is present in meta.data slot.
- #'
- #' @return Seurat object
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Add MSigDB Gene Lists Percentages
+#'
+#' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+#' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
+#' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
+#' phosphorylation counts. Default is "percent_oxphos".
+#' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
+#' Default is "percent_apop".
+#' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
+#' Default is "percent_oxphos".
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
+#' `mito_ribo_name` is present in meta.data slot.
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
 
  Add_MSigDB_Seurat <- function(
@@ -679,31 +706,34 @@ Retrieve_Ensembl_Ribo <- function(
      seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
    }
 
+   # Log Command
+   seurat_object <- LogSeuratCommand(object = seurat_object)
+
    # return final object
    return(seurat_object)
  }
 
 
 
- #' Add IEG Gene List Percentages
- #'
- #' Adds percentage of counts from IEG genes from mouse and human.
- #'
- #' @param seurat_object object name.
- #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
- #' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
- #' @param assay Assay to use (default is the current object default assay).
- #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
- #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
- #'
- #' @return Seurat object
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Add IEG Gene List Percentages
+#'
+#' Adds percentage of counts from IEG genes from mouse and human.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
 
  Add_IEG_Seurat <- function(
@@ -756,27 +786,30 @@ Retrieve_Ensembl_Ribo <- function(
      seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
    }
 
+   # Log Command
+   seurat_object <- LogSeuratCommand(object = seurat_object)
+
    # return final object
    return(seurat_object)
  }
 
 
- #' Return default QC features
- #'
- #' Returns default QC features full names when provided with shortcut name.
- #'
- #' @param seurat_object object name.
- #' @param features vector of features to check against defaults.
- #' @param print_defaults return the potential accepted default values.
- #'
- #' @return list of found and not found features
- #'
- #' @import cli
- #'
- #' @keywords internal
- #'
- #' @noRd
- #'
+#' Return default QC features
+#'
+#' Returns default QC features full names when provided with shortcut name.
+#'
+#' @param seurat_object object name.
+#' @param features vector of features to check against defaults.
+#' @param print_defaults return the potential accepted default values.
+#'
+#' @return list of found and not found features
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
 
  Return_QC_Defaults <- function(
     seurat_object,
@@ -980,6 +1013,109 @@ symdiff <- function(
   y
 ) {
   setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
+}
+
+
+#' Whole number check
+#'
+#' Checks whether a number is whole
+#'
+#' @param x number to check
+#'
+#' @return NULL or error message if number is not whole
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+check_whole_num <- function(
+    x
+) {
+  round_x <- round(x = x)
+
+  res <-  identical(x = x, y = round_x)
+
+  return(res)
+}
+
+
+#' Remove single value columns of data.frame
+#'
+#' Checks all columns within data.frame and returns data.frame minus columns that have the same value in all rows.
+#'
+#' @param df data.frame to filter
+#'
+#' @references Code used in function has been slightly modified from `sceasy:::.regularise_df` function of
+#' sceasy package \url{https://github.com/cellgeni/sceasy} (License: GPL-3).
+#' Code modified to match scCustomize & tidyverse style, add error checks, and
+#' add cli formatted messages.
+#'
+#' @import cli
+#' @importFrom dplyr select all_of
+#' @importFrom magrittr "%>%"
+#'
+#' @return data.frame
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+drop_single_value_cols <- function(
+    df
+) {
+  if (!inherits(what = "data.frame", x = df)) {
+    cli_abort(message = "{.code df} must of be of class data.frame.")
+  }
+
+  single_val_columns <- sapply(df, function(x) {
+    length(x = unique(x = x)) == 1
+    })
+
+  col_names_single <- df %>%
+    select(which(single_val_columns)) %>%
+    colnames()
+
+  if (length(x = col_names_single) > 0) {
+    cli_inform(message = c("The following columns were removed as they contain identical values for all rows:",
+                           "i" = "{.field {col_names_single}}"))
+  }
+
+  # filter df
+  df_filtered <- df %>%
+    select(-(all_of(col_names_single)))
+
+  # return df
+  return(df_filtered)
+}
+
+
+#' Check valid color
+#'
+#' Checks if input values are valid colors representations in R.
+#'
+#' @param colors vector of color(s) to check
+#'
+#' @references Code for function \url{https://stackoverflow.com/a/13290832/15568251}.
+#' Renamed by Samuel Marsh.
+#'
+#' @importFrom grDevices col2rgb
+#'
+#' @return logical named vector
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Is_Color <- function(
+    colors
+) {
+  sapply(colors, function(X) {
+    tryCatch(is.matrix(x = col2rgb(col = X)),
+             error = function(e) FALSE)
+  })
 }
 
 
@@ -1289,3 +1425,120 @@ Metrics_Multi_VDJT <- function(
   return(full_data)
 }
 
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### GENE NAME/FILE CACHE HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#' BiocFileCache Interface
+#'
+#' Internal function to manage/call BiocFileCache.
+#'
+#' @return cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cache-to-manage-package-data}
+#'
+#' @noRd
+#'
+
+.get_bioc_cache <- function(
+) {
+    cache <- tools::R_user_dir(package = "scCustomize", which="cache")
+    BiocFileCache::BiocFileCache(cache)
+  }
+
+
+#' Download HGNC Dataset
+#'
+#' Internal function to download and cache the latest version of HGNC dataset for use with renaming genes.
+#'
+#' @param update logical, whether to manually override update parameters and download new data.
+#'
+#' @import cli
+#'
+#' @return path to data cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
+#'
+#' @noRd
+#'
+
+
+download_hgnc_data <- function(
+    update = NULL
+) {
+  # Get cache
+  bfc <- .get_bioc_cache()
+
+  # URL from https://www.genenames.org/download/statistics-and-files/
+  hgnc_ftp_url <- "https://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/hgnc_complete_set.txt"
+
+  # bfc <- BiocFileCache::BiocFileCache(hgnc_ftp_url)
+
+  rid <- BiocFileCache::bfcquery(bfc, hgnc_ftp_url, "fpath")$rid
+  if (!length(rid)) {               # not in cache, add but do not download
+    rid <- names(BiocFileCache::bfcadd(bfc, hgnc_ftp_url, download = FALSE))
+  }
+
+  if (isTRUE(x = update)) {
+    update <- update
+  } else {
+    update <- BiocFileCache::bfcneedsupdate(bfc, rid)  # TRUE if newly added or stale
+  }
+
+  # download & process
+  if (!isFALSE(x = update)) {
+    cli_inform(message = "Downloading HGNC data from: {.field {hgnc_ftp_url}}")
+    BiocFileCache::bfcdownload(bfc, rid, ask = FALSE, FUN = process_hgnc_data)
+  }
+
+  rpath <- BiocFileCache::bfcrpath(bfc, rids=rid)    # path to processed result
+
+  return(rpath)
+}
+
+
+#' Process HGNC Dataset
+#'
+#' Internal function process/filter and save HGNC dataset during cache process
+#'
+#' @param from input (cache location).
+#' @param to output (cached data).
+#'
+#' @importFrom dplyr mutate select filter any_of contains
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr separate_wider_delim pivot_longer
+#'
+#' @return path to data cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
+#'
+#' @noRd
+#'
+
+process_hgnc_data <- function(
+    from,
+    to
+) {
+  # read in data
+  hgnc_full_data <- data.table::fread(file = from, data.table = F)
+
+  # filter data: Approved Genes > select relevant categories
+  hgnc_filtered_data <- hgnc_full_data %>%
+    filter(.data[["status"]] == "Approved") %>%
+    select(any_of(c("hgnc_id", "symbol", "status", "alias_symbol", "prev_symbol", "date_symbol_changed", "entrez_id", "ensembl_gene_id")))
+
+  # Select needed for renaming > split prev symbol column by number of additional columns needed > pivot wider without NAs > mutate
+  hgnc_long_data <- hgnc_filtered_data %>%
+    select(any_of(c("symbol", "prev_symbol"))) %>%
+    separate_wider_delim(cols = "prev_symbol", delim = "|", names_sep = "_", names = NULL, too_few = "align_start") %>%
+    pivot_longer(cols = contains("_symbol"),
+                 names_to = "column",
+                 values_to = "prev_symbol",
+                 values_drop_na = TRUE) %>%
+    mutate("prev_symbol" = ifelse(.data[["prev_symbol"]] %in% "", .data[["symbol"]], .data[["prev_symbol"]]))
+
+  # save processed data
+  saveRDS(hgnc_long_data, file = to)
+  TRUE
+}

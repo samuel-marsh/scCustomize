@@ -39,4 +39,4 @@ found_features <- features[[1]]
 }
 
 }
-\concept{helper_util}
+\concept{check_util}

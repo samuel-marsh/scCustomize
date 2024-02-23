@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.0</span>
       </span>
     </div>
 
@@ -78,10 +78,16 @@
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
     </li>
     <li>
+      <a href="../articles/Object_Conversion.html">Object/Assay Format Conversion</a>
+    </li>
+    <li>
       <a href="../articles/Markers_and_Cluster_Annotation.html">Marker Identification &amp; Cluster Annotation Helpers</a>
     </li>
     <li>
       <a href="../articles/Statistics.html">Statistics Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Update_Gene_Symbols.html">Updating Gene Symbols</a>
     </li>
     <li>
       <a href="../articles/Misc_Functions.html">Misc Functions</a>
@@ -130,8 +136,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cell Bender Functionality &amp; Plotting</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 20,
-2023</h4>
+            <h4 data-toc-skip class="date">Compiled: February 16,
+2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Cell_Bender_Functions.Rmd" class="external-link"><code>vignettes/articles/Cell_Bender_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Cell_Bender_Functions.Rmd</code></div>
@@ -287,7 +293,7 @@ with single function.</p>
 <p>Creating a Seurat object from merged CellBender matrices then is
 identical to creating any other Seurat object.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cell_bender_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">cell_bender_merged</span>, names.field <span class="op">=</span> <span class="fl">1</span>, names.delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cell_bender_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">cell_bender_merged</span>, names.field <span class="op">=</span> <span class="fl">1</span>, names.delim <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-dual-assay-objects">Creating Dual Assay Objects<a class="anchor" aria-label="anchor" href="#creating-dual-assay-objects"></a>
@@ -324,7 +330,7 @@ default this is named “RAW”).</p>
 <h4 id="optional-parameters">Optional Parameters<a class="anchor" aria-label="anchor" href="#optional-parameters"></a>
 </h4>
 <p>Users can specify any additional parameters normally passed to
-<code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">Seurat::CreateSeuratObject()</a></code> when using this function.</p>
+<code><a href="https://rdrr.io/pkg/SeuratObject/man/CreateSeuratObject.html" class="external-link">Seurat::CreateSeuratObject()</a></code> when using this function.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dual_seurat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Create_CellBender_Merged_Seurat.html">Create_CellBender_Merged_Seurat</a></span><span class="op">(</span>raw_cell_bender_matrix <span class="op">=</span> <span class="va">cell_bender_merged</span>, raw_counts_matrix <span class="op">=</span> <span class="va">cell_ranger_merged</span>,</span>
 <span>    raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, min_features <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>

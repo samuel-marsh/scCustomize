@@ -7,21 +7,23 @@
 Clustered_DotPlot(
   seurat_object,
   features,
+  split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
   exp_color_middle = NULL,
   exp_color_max = 2,
+  exp_value_type = "scaled",
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   x_lab_rotate = TRUE,
+  plot_padding = NULL,
   flip = FALSE,
   k = 1,
   feature_km_repeats = 1000,
   ident_km_repeats = 1000,
-  row_km_repeats = deprecated(),
-  column_km_repeats = deprecated(),
   row_label_size = 8,
   row_label_fontface = "plain",
+  grid_color = NULL,
   cluster_feature = TRUE,
   cluster_ident = TRUE,
   column_label_size = 8,
@@ -44,6 +46,8 @@ Clustered_DotPlot(
 
 \item{features}{Features to plot.}
 
+\item{split.by}{Variable in \verb{@meta.data} to split the identities plotted by.}
+
 \item{colors_use_exp}{Color palette to use for plotting expression scale.  Default is \code{viridis::plasma(n = 20, direction = -1)}.}
 
 \item{exp_color_min}{Minimum scaled average expression threshold (everything smaller will be set to this).
@@ -55,6 +59,9 @@ By default will be set to value in middle of \code{exp_color_min} and \code{exp_
 \item{exp_color_max}{Minimum scaled average expression threshold (everything smaller will be set to this).
 Default is 2.}
 
+\item{exp_value_type}{Whether to plot average normalized expression or
+scaled average normalized expression.  Only valid when \code{split.by} is provided.}
+
 \item{print_exp_quantiles}{Whether to print the quantiles of expression data in addition to plots.
 Default is FALSE.  NOTE: These values will be altered by choices of \code{exp_color_min} and \code{exp_color_min}
 if there are values below or above those cutoffs, respectively.}
@@ -65,6 +72,12 @@ will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomi
 
 \item{x_lab_rotate}{How to rotate column labels.  By default set to \code{TRUE} which rotates labels 45 degrees.
 If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.}
+
+\item{plot_padding}{if plot needs extra white space padding so no plot or labels are cutoff.
+The parameter accepts TRUE or numeric vector of length 4.  If TRUE padding will be set to
+c(2, 10, 0 0) (bottom, left, top, right).  Can also be customized further with numeric
+vector of length 4 specifying the amount of padding in millimeters.
+Default is NULL, no padding.}
 
 \item{flip}{logical, whether to flip the axes of final plot.  Default is FALSE; rows = features and
 columns = idents.}
@@ -81,13 +94,11 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{ident_km_repeats}{Number of k-means runs to get a consensus k-means clustering. Similar to
 \code{feature_km_repeats}.  Default is 1000.}
 
-\item{row_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{feature_km_repeats}}
-
-\item{column_km_repeats}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{ident_km_repeats}}
-
 \item{row_label_size}{Size of the feature labels.  Provided to \code{row_names_gp} in Heatmap call.}
 
 \item{row_label_fontface}{Fontface to use for row labels.  Provided to \code{row_names_gp} in Heatmap call.}
+
+\item{grid_color}{color to use for heatmap grid.  Default is NULL which "removes" grid by using NA color.}
 
 \item{cluster_feature}{logical, whether to cluster and reorder feature axis.  Default is TRUE.}
 

@@ -37,10 +37,14 @@ navbar:
           href: articles/Helpers_and_Utilities.html
         - text: "Read & Write Data Functions"
           href: articles/Read_and_Write_Functions.html
+        - text: "Object/Assay Format Conversion"
+          href: articles/Object_Conversion.html
         - text: "Marker Identification & Cluster Annotation Helpers"
           href: articles/Markers_and_Cluster_Annotation.html
         - text: "Statistics Functions"
           href: articles/Statistics.html
+        - text: "Updating Gene Symbols"
+          href: articles/Update_Gene_Symbols.html
         - text: "Misc Functions"
           href: articles/Misc_Functions.html
         - text: -------
@@ -61,6 +65,14 @@ reference:
   desc: "Functions for reading and writing single cell sequencing data from raw data files."
 - contents:
   - has_concept("read_&_write")
+- subtitle: "Merge Data Utilities"
+  desc: "Utilities to merge raw data."
+- contents:
+  - has_concept("read_merge_util")
+- subtitle: "Edit Barcode Utilities"
+  desc: "Utilities to edit cell barcodes"
+- contents:
+  - has_concept("barcode_util")
 
 - title: "Sequencing Metrics QC Plots"
   desc: "Functions plotting various QC metrics provides by 10X Genomics Cell Ranger Outputs"
@@ -102,14 +114,32 @@ reference:
 
 - title: "Helper Utilities (Seurat)"
   desc: "Functions to provide ease of use for frequently used code from Seurat Objects."
+- subtitle: "QC Utilities"
+  desc: "Functions to add common QC variables to meta.data."
 - contents:
-  - has_concept("helper_util")
-  - has_concept("object_util")
+  - has_concept("qc_util")
+- subtitle: "Getters/Setters"
+  desc: "Functions to extract data from or add additional data to Seurat objects"
+- contents:
+  - has_concept("get_set_util")
+- subtitle: "Check Utilities"
+  desc: "Functions to check validity of different aspects of object or object contents."
+- contents:
+  - has_concept("check_util")
+- subtitle: "Misc Utilities"
+  desc: "Miscellaneous Utilities"
+- contents:
+  - has_concept("misc_util")
 
 - title: "Helper Utilities (LIGER)"
   desc: "Functions to provide ease of use for frequently used code from LIGER Objects."
 - contents:
   - has_concept("liger_object_util")
+
+- title: "Object Conversion Functions"
+  desc: "Functions to convert between different single cell object formats (R & Python)."
+- contents:
+  - has_concept("object_conversion")
 
 - title: "Cluster/Marker Annotation Utilities"
   desc: "Functions to provide ease of use or add functionality to DEG and cluster annotation."

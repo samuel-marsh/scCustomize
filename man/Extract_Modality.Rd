@@ -23,4 +23,4 @@ new_multi_mat <- Extract_Modality(matrix_list = multi_mat)
 }
 
 }
-\concept{helper_util}
+\concept{read_merge_util}

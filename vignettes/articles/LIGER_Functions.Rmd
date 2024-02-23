@@ -258,25 +258,26 @@ head(top20_factor6, 5)
 
 
 ## Convert LIGER to Seurat  
-The liger/rliger package already contains a function `seuratToLiger()` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
+The liger/rliger package already contains a function `ligerToSeurat()` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
   
 * All meta data except the "dataset" column from liger_object\@cell.data is lost.
 * Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
 * Seurat assay name not specified
 
-scCustomize contains modified version of this function named `Liger_to_Seurat()` that solves these issues with 3 extra parameters:  
+scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](https://github.com/samuel-marsh/scCustomize/blob/develop/docs/reference/as.Seurat.html) that solves these issues with some extra parameters:  
   
 * `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
 * `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
 * `seurat_assay` Name of assay to use for data in Seurat object.  Default is "RNA".
+* `assay_type` Specify whether to create V3/4 vs V5 Seurat assays.  
 
 ```{r eval=FALSE}
-seurat_obj <- Liger_to_Seurat(liger_object = liger_object, reduction_label = "UMAP")
+seurat_obj <- as.Seurat(x = liger_object, reduction_label = "UMAP")
 ```
 
 
 ## Add Mitochondrial & Ribosomal Percentages  
-For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo_LIGER` which is analogous to `Add_Mito_Ribo_Seurat`.
+For more information on adding mitochondrial and ribosomal count percentages to LIGER objects see [General Utilities and Helpers Vignette](https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html) for information on `Add_Mito_Ribo`.
 
 
 ## Variable Gene Selection  
