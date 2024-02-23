@@ -6,6 +6,8 @@
 #' Create liger object from one Seurat Object
 #'
 #' @param group.by Variable in meta data which contains variable to split data by, (default is "orig.ident").
+#' To use split layers in Assay5 set `group.by = "layers"`.
+#' @param layers_name name of meta.data column used to split layers if setting `group.by = "layers"`.
 #' @param assay Assay containing raw data to use, (default is "RNA").
 #' @param remove_missing logical, whether to remove missing genes with no counts when converting to
 #' LIGER object (default is FALSE).
@@ -45,6 +47,7 @@
 as.LIGER.Seurat <- function(
     x,
     group.by = "orig.ident",
+    layers_name = NULL,
     assay = "RNA",
     remove_missing = FALSE,
     renormalize = TRUE,
@@ -84,22 +87,33 @@ as.LIGER.Seurat <- function(
   # Check Assay5 for multiple layers
   count_layers <- Layers(object = x, search = "counts", assay = assay)
 
+  # check split_name
+  if (group.by == "layers" && is.null(x = layers_name)) {
+    cli_abort(message = "When {.code group.by = 'layers'} please suppy name of meta.data column used to split layers to {.code layers_name}.")
+  }
+
+  if (!layers_name %in% colnames(x@meta.data)) {
+    cli_abort(message = "The value provided to {.code layers_name} ({.field {layers_name}}) was not found in object meta.data.")
+  }
+
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
-    if (length(x = count_layers) > 1 && group.by != "orig.ident") {
-      cli_abort(message = c("Multiple layers containing raw counts present ({.field {count_layers[1]}}, {.field {count_layers[2]}}, {.field ...}) and a non-default value was provided to {.code group.by}.",
-                            "i" = "To group LIGER object by assay layers do not change value of {.code group.by}",
-                            "i" = "If {.code group.by} variable is different than the split layers please run {.code JoinLayers} first."))
+    if (length(x = count_layers) > 1 && group.by != "layers") {
+      cli_abort(message = c("Multiple layers containing raw counts present ({.field {count_layers[1]}}, {.field {count_layers[2]}}, {.field ...}) and value provided to {.code group.by} is not {.val layers}.",
+                            "i" = "To group LIGER object by assay layers please set {.code group.by = 'layers'}."
+                            ))
     }
   }
 
   # Check meta data
-  group.by <- Meta_Present(object = x, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+  if (group.by != "layers") {
+    group.by <- Meta_Present(object = x, meta_col_names = group.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
 
-  # stop if none found
-  if (length(x = group.by) == 0) {
-    cli_abort(message = c("{.code group.by} was not found.",
-                          "i" = "No column found in object meta.data named: {.val {group.by}}.")
-    )
+    # stop if none found
+    if (length(x = group.by) == 0) {
+      cli_abort(message = c("{.code group.by} was not found.",
+                            "i" = "No column found in object meta.data named: {.val {group.by}}.")
+      )
+    }
   }
 
   if (isTRUE(x = verbose)) {
