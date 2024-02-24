@@ -87,13 +87,20 @@ as.LIGER.Seurat <- function(
   # Check Assay5 for multiple layers
   count_layers <- Layers(object = x, search = "counts", assay = assay)
 
-  # check split_name
+  # check layers_name
   if (group.by == "layers" && is.null(x = layers_name)) {
     cli_abort(message = "When {.code group.by = 'layers'} please suppy name of meta.data column used to split layers to {.code layers_name}.")
   }
 
-  if (!layers_name %in% colnames(x@meta.data)) {
-    cli_abort(message = "The value provided to {.code layers_name} ({.field {layers_name}}) was not found in object meta.data.")
+  if (group.by == "layers") {
+    layers_name <- Meta_Present(object = x, meta_col_names = layers_name, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+
+    # stop if none found
+    if (length(x = layers_name) == 0) {
+      cli_abort(message = c("{.code layers_name} was not found.",
+                            "i" = "No column found in object meta.data named: {.val {layers_name}}.")
+      )
+    }
   }
 
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
