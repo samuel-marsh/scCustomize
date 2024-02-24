@@ -1,10 +1,7 @@
-## Major Version Update 
-This is major version update to v2.1.0.  See News.md for full changelog.  
+## Hotfix Update 
+This is hotfix version update to v2.1.1.  See News.md for full changelog.  
 
-- Number of new functions, changes, and bug fixes.
-- A few breaking changes owing to function/parameter deprecation (all are documented (see new Deprecated.R file) and have warnings/error messages using lifecycle package).  
-
-This is attempted re-submission after a check error in second v2.1.0 submission. I was able to diagnose error as related to upcoming ggplot2 v3.5.0 update which caused error in another package scCustomize depends on.  I have updated affected functions with a fix until other package is updated.   
+- Single function had breaking bug which prevented it from running and is now resolved.  
 
 
 
@@ -28,9 +25,9 @@ This is attempted re-submission after a check error in second v2.1.0 submission.
     to ensure package functionality.  
 
 ## Other Notes
-1. GitHub Actions check returning strange errors only on macos (release) and only sometimes (This is NOT the error that caused the v2.1.0 CRAN check failure on first submission).  
+1. GitHub Actions check returning strange errors only on macos (release) and only sometimes).  
     - The errors are from failures running package examples.  This includes functions that have been part of prior CRAN releases.
     NO errors are found when checking locally on macos platform using R 4.3.2 and none are found in GitHub Actions check on linux
     or windows platforms.  I believe to be error in GitHub Actions workflow and I have therefore refrained from adding `dontrun`
-    to examples that run fine on other platforms.  This was also the case with v2.0.0 and v2.0.1 which passed macos checks on CRAN,
+    to examples that run fine on other platforms.  This was also the case with v2.0.0, v2.0.1, 2.1.0 which passed macos checks on CRAN,
     furthering it is likely a GitHub Actions issue.
