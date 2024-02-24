@@ -1,3 +1,19 @@
+# scCustomize 2.1.1 (2024-02-23)  
+## Added  
+- None.  
+
+
+  
+## Changed  
+- None.   
+   
+
+## Fixes  
+- Fixed breaking bug in `as.liger` that prevented function from running properly.  
+
+
+
+
 # scCustomize 2.1.0 (2024-02-21)  
 ## Added  
 - Added `title_prefix` parameter to `Iterate_DimPlot_bySample` to unify with `Meta_Highlight_Plot`.  
