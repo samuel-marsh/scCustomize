@@ -33,7 +33,7 @@
 #' @concept other_seurat_plotting
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(Seurat)
 #' Plot_Density_Custom(seurat_object = pbmc_small, features = "CD3E")
 #' }
@@ -62,6 +62,11 @@ Plot_Density_Custom <- function(
       "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
       "----------------------------------------"
     ))
+  }
+
+  # temp ggplot2 version check
+  if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
+    cli_abort(message = c("Due to error in Nebulosa package and ggplot2 v3.5.0 {.field Plot_Density_Custom} functionality is currently restricted to ggplot v3.4.4 or lower."))
   }
 
   # Check Seurat
@@ -141,7 +146,7 @@ Plot_Density_Custom <- function(
 #' @concept other_seurat_plotting
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(Seurat)
 #' Plot_Density_Joint_Only(seurat_object = pbmc_small, features = c("CD8A", "CD3E"))
 #' }
@@ -168,6 +173,11 @@ Plot_Density_Joint_Only <- function(
       "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
       "----------------------------------------"
     ))
+  }
+
+  # temp ggplot2 version check
+  if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
+    cli_abort(message = c("Due to error in Nebulosa package and ggplot2 v3.5.0 {.field Plot_Density_Joint_Only} functionality is currently restricted to ggplot v3.4.4 or lower."))
   }
 
   # Check Seurat
