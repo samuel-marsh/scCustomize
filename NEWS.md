@@ -1,3 +1,17 @@
+# scCustomize 2.1.2 (2024-02-27)  
+## Added  
+- None.  
+
+
+  
+## Changed  
+- None.   
+   
+
+## Fixes  
+- Fixed breaking bug (and CRAN check errors) in `Plot_Density_Custom` and `Plot_Density_Joint_Only` due to error in Nebulosa following ggplot2 v3.5.0 update.  Functionality will be restored when Nebulosa package is updated.   
+
+
 # scCustomize 2.1.1 (2024-02-23)  
 ## Added  
 - None.  
