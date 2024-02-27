@@ -41,7 +41,7 @@ A ggplot object
 Return only the joint density plot from Nebulosa plot_density function.  Requires Nebulosa package from Bioconductor.
 }
 \examples{
-\donttest{
+\dontrun{
 library(Seurat)
 Plot_Density_Joint_Only(seurat_object = pbmc_small, features = c("CD8A", "CD3E"))
 }
