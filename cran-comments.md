@@ -1,7 +1,7 @@
 ## Hotfix Update 
-This is hotfix version update to v2.1.1.  See News.md for full changelog.  
+This is hotfix version update to v2.1.2.  See News.md for full changelog.  
 
-- Single function had breaking bug which prevented it from running and is now resolved.  
+- This function adds temporary fix to resolve CRAN errors.  Error was due to Nebulosa package breaking with ggplot2 v3.5.0.  Functionality of affected functions limited to earlier ggplot2 versions and warns those with 3.5.0 or above.  
 
 
 
