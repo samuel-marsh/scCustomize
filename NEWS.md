@@ -1,3 +1,18 @@
+# scCustomize 2.X.X (2024-XX-XX)  
+## Added  
+- None.  
+
+
+  
+## Changed  
+- None.   
+   
+
+## Fixes  
+- None.  
+
+
+
 # scCustomize 2.1.2 (2024-02-27)  
 ## Added  
 - None.  
