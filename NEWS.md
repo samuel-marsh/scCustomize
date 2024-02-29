@@ -9,7 +9,7 @@
    
 
 ## Fixes  
-- None.  
+- Allow for Nebulosa plotting with ggplot2 v3.5.0 when using GitHub version of Nebulosa.   
 
 
 
