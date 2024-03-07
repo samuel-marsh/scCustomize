@@ -441,7 +441,7 @@ Figure_Plot <- function(
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
-#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -941,7 +941,7 @@ Clustered_DotPlot_Single_Group <- function(
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
-#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
