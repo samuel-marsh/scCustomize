@@ -855,7 +855,7 @@ Stacked_VlnPlot <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
-#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' @param group.by Name of metadata variable (column) to group cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param colors_use specify color palette to used.  Default is viridis_plasma_dark_high.
 #' @param remove_axis_titles logical. Whether to remove the x and y axis titles.  Default = TRUE.
