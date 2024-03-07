@@ -22,7 +22,7 @@ DotPlot_scCustom(
 
 \item{features}{Features to plot.}
 
-\item{group.by}{Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+\item{group.by}{Name of metadata variable (column) to group cells by (for example, orig.ident);
 default is the current active.ident of the object.}
 
 \item{colors_use}{specify color palette to used.  Default is viridis_plasma_dark_high.}
