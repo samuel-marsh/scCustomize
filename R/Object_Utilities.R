@@ -256,13 +256,13 @@ Add_Cell_QC_Metrics <- function(
 
       # Overwrite check
       if ("S.Score" %in% colnames(x = seurat_object@meta.data) || "G2M.Score" %in% colnames(x = seurat_object@meta.data) || "Phase" %in% colnames(x = seurat_object@meta.data)) {
-        if (!overwrite) {
+        if (isFALSE(x = overwrite)) {
           cli_abort(message = c("Columns with {.val S.Score}, {.val G2M.Score} and/or {.val Phase} already present in meta.data slot.",
                                 "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE}*")
           )
         }
         cli_inform(message = c("Columns with {.val S.Score}, {.val G2M.Score} and/or {.val Phase} already present in meta.data slot.",
-                               "i" = "Overwriting those columns as .code {overwrite = TRUE.}")
+                               "i" = "Overwriting those columns as {.code overwrite = TRUE.}")
         )
       }
 
