@@ -10,6 +10,7 @@
 
 ## Fixes  
 - Allow for Nebulosa plotting with ggplot2 v3.5.0 when using GitHub version of Nebulosa.   
+- Fixed bug causing error in `Add_Cell_QC_Metrics` when `overwrite = TRUE` ([#165](https://github.com/samuel-marsh/scCustomize/issues/165)).
 
 
 
