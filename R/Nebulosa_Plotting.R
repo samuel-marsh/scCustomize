@@ -51,18 +51,6 @@ Plot_Density_Custom <- function(
   combine = TRUE,
   ...
 ) {
-  # Temp Nebulosa warning until Bioconductor 3.19 release
-  if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
-    cli_warn(message = c("Due to error in Nebulosa package and ggplot2 v3.5.0 {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} functionality are currently restricted GitHub version of Nebulosa.",
-                         "i" = "This can be installed with the following commands: ",
-                         "----------------------------------------",
-                         "{.field `devtools::install_github({symbol$dquote_left}powellgenomicslab/Nebulosa{symbol$dquote_right})`}",
-                         "----------------------------------------"),
-             .frequency = "once",
-             .frequency_id = "nebulosa_warn")
-  }
-
-
   # Check Nebulosa installed
   Nebulosa_check <- is_installed(pkg = "Nebulosa")
   if (isFALSE(x = Nebulosa_check)) {
@@ -74,6 +62,17 @@ Plot_Density_Custom <- function(
       "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
       "----------------------------------------"
     ))
+  }
+
+  # Check version of Nebulosa and ggplot2
+  if (packageVersion(pkg = 'ggplot2') >= "3.5.0" && packageVersion(pkg = 'Nebulosa') < "1.12.1") {
+    cli_abort(message = c("In order to use {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} with ggplot2 v3.5.0 please update to latest version of Nebulosa package (v1.12.1).",
+                         "i" = "This can be installed with the following commands: ",
+                         "----------------------------------------",
+                         "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
+                         "----------------------------------------"),
+             .frequency = "once",
+             .frequency_id = "nebulosa_warn")
   }
 
   # Check Seurat
@@ -169,17 +168,6 @@ Plot_Density_Joint_Only <- function(
   reduction = NULL,
   ...
 ) {
-  # Temp Nebulosa warning until Bioconductor 3.19 release
-  if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
-    cli_warn(message = c("Due to error in Nebulosa package and ggplot2 v3.5.0 {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} functionality are currently restricted GitHub version of Nebulosa.",
-                         "i" = "This can be installed with the following commands: ",
-                         "----------------------------------------",
-                         "{.field `devtools::install_github({symbol$dquote_left}powellgenomicslab/Nebulosa{symbol$dquote_right})`}",
-                         "----------------------------------------"),
-             .frequency = "once",
-             .frequency_id = "nebulosa_warn")
-  }
-
   # Check Nebulosa installed
   Nebulosa_check <- is_installed(pkg = "Nebulosa")
   if (isFALSE(x = Nebulosa_check)) {
@@ -191,6 +179,17 @@ Plot_Density_Joint_Only <- function(
       "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
       "----------------------------------------"
     ))
+  }
+
+  # Check version of Nebulosa and ggplot2
+  if (packageVersion(pkg = 'ggplot2') >= "3.5.0" && packageVersion(pkg = 'Nebulosa') < "1.12.1") {
+    cli_abort(message = c("In order to use {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} with ggplot2 v3.5.0 please update to latest version of Nebulosa package (v1.12.1).",
+                          "i" = "This can be installed with the following commands: ",
+                          "----------------------------------------",
+                          "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
+                          "----------------------------------------"),
+              .frequency = "once",
+              .frequency_id = "nebulosa_warn")
   }
 
   # Check Seurat
