@@ -1377,7 +1377,7 @@ Store_Palette_Seurat <- function(
 
 #' Add Alternative Feature IDs
 #'
-#' Add alternative feature ids to the assay level meta.data slot in Assay5 compatible object (Seurat V5.0.0 or greater)
+#' Add alternative feature ids data.frame to the misc slot of Seurat object.
 #'
 #' @param seurat_object object name.
 #' @param features_tsv_file output file from Cell Ranger used for creation of Seurat object.
@@ -1386,11 +1386,14 @@ Store_Palette_Seurat <- function(
 #' (Either provide this of `features_tsv_file`)
 #' @param assay name of assay(s) to add the alternative features to.  Can specify "all"
 #' to add to all assays.
+#' @param data_name name to use for data.frame when stored in `@misc` slot.
+#' @param overwrite logical, whether to overwrite item with the same `data_name` in the
+#' `@misc` slot of object (default is FALSE).
 #'
 #' @import cli
 #' @importFrom dplyr filter
 #'
-#' @return Seurat Object with new entries in the `obj@assays$ASSAY@meta.data` slot.
+#' @return Seurat Object with new entries in the `obj@misc` slot.
 #'
 #' @export
 #'
@@ -1415,7 +1418,9 @@ Add_Alt_Feature_ID <- function(
     seurat_object,
     features_tsv_file = NULL,
     hdf5_file = NULL,
-    assay = NULL
+    assay = NULL,
+    data_name = "feature_id_mapping_table",
+    overwrite = FALSE
 ) {
   if (packageVersion(pkg = 'Seurat') < "5") {
     cli_abort(message = "Seurat version must be v5.0.0 or greater to add alternative features.")
@@ -1441,15 +1446,6 @@ Add_Alt_Feature_ID <- function(
     assays_use <- Assays(object = seurat_object)
   } else {
     assays_use <- assay
-  }
-
-  # check they are Assay5
-  current_assay_classes <- sapply(assays_use, function(x) {
-    class(x = seurat_object[[x]])
-  })
-
-  if (isFALSE(x = all(current_assay_classes == "Assay5"))) {
-    cli_abort(message = "All assays to features must be {.field Assay5}.")
   }
 
   # get features
@@ -1481,10 +1477,7 @@ Add_Alt_Feature_ID <- function(
   }
 
   # Add to object
-  for (i in assays_use) {
-    seurat_object[[i]]@meta.data$Ensembl_ID <- features_present$Ensembl_ID
-    seurat_object[[i]]@meta.data$Symbol <- features_present$Symbol
-  }
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = features_present, data_name = data_name, overwrite = overwrite)
 
   # return object
   return(seurat_object)
