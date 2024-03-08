@@ -1823,7 +1823,7 @@ seq_zeros <- function(
 
   # make sequence if single number
   if (length(x = seq_length) == 1) {
-    seq_length <- seq_len(1:seq_length)
+    seq_length <- seq_len(seq_length)
   }
 
   # make sequence
