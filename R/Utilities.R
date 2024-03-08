@@ -1779,6 +1779,54 @@ Split_Vector <- function(
 }
 
 
+#' Create sequence with zeros
+#'
+#' Create sequences of numbers like `seq()` but with 0 prefixed to keep numerical order
+#'
+#' @param seq_length a seqeunce or numbers of numbers to create sequence.
+#' Users can provide sequence (1:XX) or number of values to add in sequence (will
+#' be used as second number in `seq_len`; 1:XX).
+#' @param num_zeros number of zeros to prefix sequence, default is 1 (e.g, 01, 02, 03, ...)
+#'
+#' @return vector of numbers in sequence
+#'
+#' @import cli
+#' @importFrom stringr str_pad
+#'
+#' @export
+#'
+#' @references Base code from stackoverflow post:
+#' \url{https://stackoverflow.com/a/38825614}
+#'
+#' @concept misc_util
+#'
+#' @examples
+#' # Using sequence
+#' new_seq <- seq_zeros(seq_length = 1:15, num_zeros = 1)
+#' new_seq
+#'
+#' # Using number
+#' new_seq <- seq_zeros(seq_length = 15, num_zeros = 1)
+#' new_seq
+#'
+#' # Sequence with 2 zeros
+#' new_seq <- seq_zeros(seq_length = 1:15, num_zeros = 2)
+#' new_seq
+#'
+
+seq_zeros <- function(
+    seq_length,
+    num_zeros = 1
+) {
+  # add pad value
+  padding <- 1 + num_zeros
+
+  # make sequence
+  new_seq <- str_pad(string = seq, pad = 0, width = padding, side = "left")
+
+  return(new_seq)
+}
+
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### PROJECT ORGANIZATION ####################
