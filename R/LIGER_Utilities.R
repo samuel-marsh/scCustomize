@@ -1,3 +1,139 @@
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### DATA ACCESS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#' @rdname Fetch_Meta
+#' @importFrom methods slot
+#' @export
+#' @concept liger_object_util
+#' @method Fetch_Meta liger
+
+Fetch_Meta.liger <- function(
+    object,
+    ...
+) {
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
+  # Pull meta data
+  object_meta <- object_meta <- slot(object = object, name = "cell.data")
+
+  return(object_meta)
+}
+
+
+#' Extract Features from LIGER Object
+#'
+#' Extract all unique features from LIGER object
+#'
+#' @param liger_object LIGER object name.
+#' @param by_dataset logical, whether to return list with vector of features for each dataset in
+#' LIGER object or to return single vector of unique features across all datasets in object
+#' (default is FALSE; return vector of unique features)
+#'
+#' @return vector or list depending on `by_dataset` parameter
+#'
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return single vector of all unique features
+#' all_features <- LIGER_Features(liger_object = object, by_dataset = FALSE)
+#'
+#' # return list of vectors containing features from each individual dataset in object
+#' dataset_features <- LIGER_Features(liger_object = object, by_dataset = TRUE)
+#' }
+#'
+
+LIGER_Features <- function(
+    liger_object,
+    by_dataset = FALSE
+) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
+  Is_LIGER(liger_object = liger_object)
+
+  # Extract features
+  features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
+    rownames(x = liger_object@raw.data[[x]])
+  })
+
+  if (isFALSE(x = by_dataset)) {
+    features <- unique(x = unlist(x = features_by_dataset))
+    return(features)
+  } else {
+    return(features_by_dataset)
+  }
+}
+
+
+#' Extract top loading genes for LIGER factor
+#'
+#' Extract vector to the top loading genes for specified LIGER iNMF factor
+#'
+#' @param liger_object LIGER object name.
+#' @param liger_factor LIGER factor number to pull genes from.
+#' @param num_genes number of top loading genes to return as vector.
+#'
+#' @return A LIGER Object
+#'
+#' @import cli
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' top_genes_factor10 <- Top_Genes_Factor(liger_object = object, num_genes = 10)
+#' }
+#'
+
+Top_Genes_Factor <- function(
+    liger_object,
+    liger_factor,
+    num_genes = 10
+) {
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
+  }
+
+  # LIGER object check
+  Is_LIGER(liger_object = liger_object)
+
+  # check number of factors present
+  if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
+    cli_abort(message = c("{.code liger_factor} provided: {.field {liger_factor}} not found",
+                          "i" = "{.code liger_object} only contains {.field {dim(x = liger_object@W)[[1]]}} factors.")
+    )
+  }
+
+  # Extract genes
+  W <- t(liger_object@W)
+  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
+  top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
+  return(top_genes)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### QC UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Add Mito and Ribo percentages
 #'
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
@@ -292,109 +428,9 @@ Add_Cell_Complexity.liger <- function(
 }
 
 
-#' Extract Features from LIGER Object
-#'
-#' Extract all unique features from LIGER object
-#'
-#' @param liger_object LIGER object name.
-#' @param by_dataset logical, whether to return list with vector of features for each dataset in
-#' LIGER object or to return single vector of unique features across all datasets in object
-#' (default is FALSE; return vector of unique features)
-#'
-#' @return vector or list depending on `by_dataset` parameter
-#'
-#' @importFrom utils packageVersion
-#'
-#' @export
-#'
-#' @concept liger_object_util
-#'
-#' @examples
-#' \dontrun{
-#' # return single vector of all unique features
-#' all_features <- LIGER_Features(liger_object = object, by_dataset = FALSE)
-#'
-#' # return list of vectors containing features from each individual dataset in object
-#' dataset_features <- LIGER_Features(liger_object = object, by_dataset = TRUE)
-#' }
-#'
-
-LIGER_Features <- function(
-    liger_object,
-    by_dataset = FALSE
-) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
-  Is_LIGER(liger_object = liger_object)
-
-  # Extract features
-  features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
-    rownames(x = liger_object@raw.data[[x]])
-  })
-
-  if (isFALSE(x = by_dataset)) {
-    features <- unique(x = unlist(x = features_by_dataset))
-    return(features)
-  } else {
-    return(features_by_dataset)
-  }
-}
-
-
-#' Extract top loading genes for LIGER factor
-#'
-#' Extract vector to the top loading genes for specified LIGER iNMF factor
-#'
-#' @param liger_object LIGER object name.
-#' @param liger_factor LIGER factor number to pull genes from.
-#' @param num_genes number of top loading genes to return as vector.
-#'
-#' @return A LIGER Object
-#'
-#' @import cli
-#' @importFrom utils packageVersion
-#'
-#' @export
-#'
-#' @concept liger_object_util
-#'
-#' @examples
-#' \dontrun{
-#' top_genes_factor10 <- Top_Genes_Factor(liger_object = object, num_genes = 10)
-#' }
-#'
-
-Top_Genes_Factor <- function(
-  liger_object,
-  liger_factor,
-  num_genes = 10
-) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
-  # LIGER object check
-  Is_LIGER(liger_object = liger_object)
-
-  # check number of factors present
-  if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
-    cli_abort(message = c("{.code liger_factor} provided: {.field {liger_factor}} not found",
-                          "i" = "{.code liger_object} only contains {.field {dim(x = liger_object@W)[[1]]}} factors.")
-    )
-  }
-
-  # Extract genes
-  W <- t(liger_object@W)
-  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
-  top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
-  return(top_genes)
-}
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### PLOTTING UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' DimPlot LIGER Version
@@ -929,6 +965,11 @@ Plot_By_Meta_LIGER <- function(
     return(p1)
   }
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### ANALYSIS UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Perform variable gene selection over whole dataset

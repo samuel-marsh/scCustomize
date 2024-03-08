@@ -1156,11 +1156,6 @@ Extract_Sample_Meta <- function(
 }
 
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### DATA ACCESS ####################
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 #' @rdname Fetch_Meta
 #' @importFrom methods slot
 #' @export
@@ -1173,23 +1168,6 @@ Fetch_Meta.Seurat <- function(
 ) {
   # Pull meta data
   object_meta <- slot(object = object, name = "meta.data")
-
-  return(object_meta)
-}
-
-
-#' @rdname Fetch_Meta
-#' @importFrom methods slot
-#' @export
-#' @concept liger_object_util
-#' @method Fetch_Meta liger
-
-Fetch_Meta.liger <- function(
-    object,
-    ...
-) {
-  # Pull meta data
-  object_meta <- object_meta <- slot(object = object, name = "cell.data")
 
   return(object_meta)
 }
