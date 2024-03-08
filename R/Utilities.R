@@ -1821,6 +1821,11 @@ seq_zeros <- function(
   # add pad value
   padding <- 1 + num_zeros
 
+  # make sequence if single number
+  if (length(x = seq_length) == 1) {
+    seq_length <- seq_len(1:seq_length)
+  }
+
   # make sequence
   new_seq <- str_pad(string = seq_length, pad = 0, width = padding, side = "left")
 
