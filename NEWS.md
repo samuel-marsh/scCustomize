@@ -9,7 +9,7 @@
    
 
 ## Fixes  
-- Allow for Nebulosa plotting with ggplot2 v3.5.0 when using GitHub version of Nebulosa.   
+- Nebulosa plotting functions `Plot_Density_Custom` and `Plot_Density_Joint_Only` have been re-enabled for users with ggplot2 v3.5.0 following Nebulosa v1.12.1 update patch.     
 - Fixed bug causing error in `Add_Cell_QC_Metrics` when `overwrite = TRUE` ([#165](https://github.com/samuel-marsh/scCustomize/issues/165)).  
 - Fixed wrong description of parameter in manual entry for `DotPlot_scCustom` ([#158](https://github.com/samuel-marsh/scCustomize/issues/158)).  
 
