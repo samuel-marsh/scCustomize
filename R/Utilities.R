@@ -1781,7 +1781,8 @@ Split_Vector <- function(
 
 #' Create sequence with zeros
 #'
-#' Create sequences of numbers like `seq()` but with 0 prefixed to keep numerical order
+#' Create sequences of numbers like `seq()` or `seq_len()` but with zeros prefixed to
+#' keep numerical order
 #'
 #' @param seq_length a seqeunce or numbers of numbers to create sequence.
 #' Users can provide sequence (1:XX) or number of values to add in sequence (will
