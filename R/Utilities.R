@@ -1822,7 +1822,7 @@ seq_zeros <- function(
   padding <- 1 + num_zeros
 
   # make sequence
-  new_seq <- str_pad(string = seq, pad = 0, width = padding, side = "left")
+  new_seq <- str_pad(string = seq_length, pad = 0, width = padding, side = "left")
 
   return(new_seq)
 }
