@@ -73,3 +73,29 @@ Add_Mito_Ribo <- function(object, ...) {
 Add_Cell_Complexity <- function(object, ...) {
   UseMethod(generic = 'Add_Cell_Complexity', object = object)
 }
+
+
+#' Get meta data from object
+#'
+#' Quick function to properly pull meta.data from objects.
+#'
+#' @param object Object of class Seurat or liger.
+#' @param ... Arguments passed to other methods
+#'
+#' @return A data.frame containing cell-level meta data
+#'
+#' @export
+#'
+#' @concept get_set_util
+#'
+#' @rdname Fetch_Meta
+#'
+#' @examples
+#' library(Seurat)
+#' meta_data <- Fetch_Meta(object = pbmc_small)
+#' head(meta_data, 5)
+#'
+
+Fetch_Meta <- function(object, ...) {
+  UseMethod(generic = 'Fetch_Meta', object = object)
+}
