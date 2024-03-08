@@ -17,7 +17,8 @@ be used as second number in \code{seq_len}; 1:XX).}
 vector of numbers in sequence
 }
 \description{
-Create sequences of numbers like \code{seq()} but with 0 prefixed to keep numerical order
+Create sequences of numbers like \code{seq()} or \code{seq_len()} but with zeros prefixed to
+keep numerical order
 }
 \examples{
 # Using sequence
