@@ -1,11 +1,11 @@
 # scCustomize 2.X.X (2024-XX-XX)  
 ## Added  
-- None.  
+- Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
 
 
   
 ## Changed  
-- None.   
+- Changed storage location for `Add_Alt_Feature_ID` to `@misc` slot of object for safer storage across object filtering.  
    
 
 ## Fixes  
