@@ -2,6 +2,8 @@
 ## Added  
 - Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
 - Added new function `seq_zeros` to create sequences with preceding zeros.  
+- Added new functions to interact with upcoming liger object format change:  
+    - `LIGER_DimReduc` to extract dimensionality reduction coordinates.  
 
 
   
