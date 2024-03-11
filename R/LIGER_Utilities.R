@@ -1069,7 +1069,7 @@ Plot_By_Meta_LIGER <- function(
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #'
-#' @export
+#' @noRd
 #'
 #' @concept liger_plotting
 #'
@@ -1384,7 +1384,7 @@ plotFactors_liger2_scCustom <- function(
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #'
-#' @export
+#' @noRd
 #'
 #' @concept liger_plotting
 #'
