@@ -141,7 +141,7 @@ Top_Genes_Factor <- function(
 #' @return dimensionality reduction coordinates in 2 column format
 #'
 #' @import cli
-#' @importFrom merthods slotNames
+#' @importFrom methods slotNames
 #'
 #' @export
 #'
