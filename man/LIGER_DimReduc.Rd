@@ -4,13 +4,15 @@
 \alias{LIGER_DimReduc}
 \title{Extract dimensionality reduction coordinates from Liger object}
 \usage{
-LIGER_DimReduc(liger_object, reduction = NULL)
+LIGER_DimReduc(liger_object, reduction = NULL, check_only = FALSE)
 }
 \arguments{
 \item{liger_object}{LIGER object name.}
 
 \item{reduction}{name of dimensionality reduction stored in cellMeta slot.  Default is
 "UMAP")}
+
+\item{check_only}{logical, return \code{TRUE} if valid reduction is present.}
 }
 \value{
 dimensionality reduction coordinates in 2 column format
