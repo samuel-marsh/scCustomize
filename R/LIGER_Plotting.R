@@ -371,7 +371,6 @@ plotFactors_scCustom <- function(
                                 colors_use_dimreduc = colors_use_dimreduc,
                                 pt.size_factors = pt.size_factors,
                                 pt.size_dimreduc = pt.size_dimreduc,
-                                reduction = reduction,
                                 reduction_label = reduction_label,
                                 plot_legend = plot_legend,
                                 raster = raster,
