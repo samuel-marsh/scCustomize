@@ -129,6 +129,60 @@ Top_Genes_Factor <- function(
 }
 
 
+#' Extract dimensionality reduction coordinates from Liger object
+#'
+#' Extract data.frame containing dimensionality reduction coordinates from new format of
+#' Liger objects
+#'
+#' @param liger_object LIGER object name.
+#' @param reduction name of dimensionality reduction stored in cellMeta slot.  Default is
+#' "UMAP")
+#'
+#' @return dimensionality reduction coordinates in 2 column format
+#'
+#' @import cli
+#' @importFrom merthods slotNames
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' umap_coords <- LIGER_DimReduc(liger_object = object)
+#' }
+#'
+
+LIGER_DimReduc <- function(
+    liger_object,
+    reduction = NULL
+) {
+  # Check new liger object
+  if (!"cellMeta" %in% slotNames(liger_object)) {
+    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  }
+
+  # check reduction in cellMeta
+  if (reduction %in% names(x = liger_object@cellMeta)) {
+    # check the right dims
+    if (length(dim(liger_object@cellMeta[[reduction]])) != 2) {
+      cli_abort(message = "The cellMeta entry {.field {reduction}} is not 2-dimensional entry.")
+    } else {
+      # get coords
+      reduc_coords <- liger_object@cellMeta[[reduction]]
+
+      # add colnames
+      colnames(reduc_coords) <- paste0(reduction, "_", 1:2)
+    }
+  } else {
+    cli_abort("The reduction {.field {reduction}} is not present in cellMeta slot.")
+  }
+
+  # return coords
+  return(reduc_coords)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### QC UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
