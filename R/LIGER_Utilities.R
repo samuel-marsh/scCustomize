@@ -137,6 +137,7 @@ Top_Genes_Factor <- function(
 #' @param liger_object LIGER object name.
 #' @param reduction name of dimensionality reduction stored in cellMeta slot.  Default is
 #' "UMAP")
+#' @param check_only logical, return `TRUE` if valid reduction is present.
 #'
 #' @return dimensionality reduction coordinates in 2 column format
 #'
@@ -155,7 +156,8 @@ Top_Genes_Factor <- function(
 
 LIGER_DimReduc <- function(
     liger_object,
-    reduction = NULL
+    reduction = NULL,
+    check_only = FALSE
 ) {
   # Check new liger object
   if (!"cellMeta" %in% slotNames(liger_object)) {
@@ -168,6 +170,9 @@ LIGER_DimReduc <- function(
     if (length(dim(liger_object@cellMeta[[reduction]])) != 2) {
       cli_abort(message = "The cellMeta entry {.field {reduction}} is not 2-dimensional entry.")
     } else {
+      if (isTRUE(x = check_only)) {
+        return(TRUE)
+      }
       # get coords
       reduc_coords <- liger_object@cellMeta[[reduction]]
 
@@ -1019,6 +1024,649 @@ Plot_By_Meta_LIGER <- function(
     return(p1)
   }
 }
+
+
+#' Customized version of plotFactors
+#'
+#' Modified and optimized version of `plotFactors` function from LIGER package.
+#'
+#' @param liger_object \code{liger} liger_object.  Need to perform clustering and factorization before calling this function
+#' @param num_genes Number of genes to display for each factor (Default 8).
+#' @param colors_use_factors colors to use for plotting factor loadings  By default datasets will be
+#' plotted using "varibow" with shuffle = TRUE from both from \code{\link{DiscretePalette_scCustomize}}.
+#' @param colors_use_dimreduc colors to use for plotting factor loadings on dimensionality reduction
+#' coordinates (tSNE/UMAP).  Default is c('lemonchiffon', 'red'),
+#' @param pt.size_factors Adjust point size for plotting in the factor plots.
+#' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
+#' @param reduction Name of dimensionality reduction to use for plotting.
+#' @param reduction_label `r lifecycle::badge("deprecated")` deprecated for newer style liger
+#' objects.  Use `reduction` instead.
+#' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
+#' Helpful if number of datasets is large to avoid crowding the plot with legend.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
+#' @param order logical. Whether to plot higher loading cells on top of cells with lower loading values in the
+#' dimensionality reduction plots (Default = FALSE).
+#' @param plot_dimreduc logical.  Whether to plot factor loadings on dimensionality reduction coordinates.  Default is TRUE.
+#' @param save_plots logical.  Whether to save plots.  Default is TRUE
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_name name suffix to append after sample name.
+#' @param return_plots logical. Whether or not to return plots to the environment.  (Default is FALSE)
+#' @param cells.highlight Names of specific cells to highlight in plot (black) (default NULL).
+#' @param reorder_datasets `r lifecycle::badge("deprecated")` deprecated for newer style liger objects
+#' @param ggplot_default_colors logical.  If `colors_use_factors = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "varibow" palette.
+#' @param color_seed random seed for the palette shuffle if `colors_use_factors = NULL`.  Default = 123.
+#'
+#' @return A list of ggplot/patchwork objects and/or PDF file.
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom grDevices dev.off pdf
+#' @importFrom lifecycle deprecated
+#' @importFrom patchwork wrap_plots
+#' @importFrom scattermore geom_scattermore
+#'
+#' @export
+#'
+#' @concept liger_plotting
+#'
+#' @author Velina Kozareva (Original code for modified function), Sam Marsh (Added/modified functionality)
+#' @references Based on `plotFactors` functionality from original LIGER package.
+#'
+#' @examples
+#' \dontrun{
+#' plotFactors_scCustom(liger_object = liger_obj, return_plots = FALSE, plot_dimreduc = TRUE,
+#' raster = FALSE, save_plots = TRUE)
+#' }
+#'
+
+plotFactors_liger2_scCustom <- function(
+    liger_object,
+    num_genes = 8,
+    colors_use_factors = NULL,
+    colors_use_dimreduc = c('lemonchiffon', 'red'),
+    pt.size_factors = 1,
+    pt.size_dimreduc = 1,
+    reduction = "UMAP",
+    reduction_label = deprecated(),
+    plot_legend = TRUE,
+    raster = TRUE,
+    raster.dpi = c(512, 512),
+    order = FALSE,
+    plot_dimreduc = TRUE,
+    save_plots = TRUE,
+    file_path = NULL,
+    file_name = NULL,
+    return_plots = FALSE,
+    cells.highlight = NULL,
+    reorder_datasets = deprecated(),
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Check is slot is supplied
+  if (lifecycle::is_present(reorder_datasets)) {
+    lifecycle::deprecate_warn(when = "2.2.0",
+                              what = "plotFactors_scCustom(reorder_datasets)",
+                              details = c("i" = "The {.code reorder_datasets} parameter is deprecated for newer style Liger objects.",)
+    )
+  }
+
+  # Check is slot is supplied
+  if (lifecycle::is_present(reduction_label)) {
+    lifecycle::deprecate_warn(when = "2.2.0",
+                              what = "plotFactors_scCustom(reduction_label)",
+                              details = c("v" = "The {.code reduction_label} parameter is deprecated for newer style Liger objects.",
+                                          "i" = "Use {.code reduction} parameter instead")
+    )
+  }
+
+  # if returning and saving
+  if (isTRUE(x = save_plots)) {
+    # Check file path is valid
+    if (!is.null(x = file_path) && file_path != "") {
+      if (!dir.exists(paths = file_path)) {
+        cli_abort(message = "Provided {.code file_path}: {.val {file_path}} does not exist.")
+      }
+    }
+
+    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+    if (is.null(x = file_path)) {
+      file_path <- ""
+    }
+
+    # Check if file name provided
+    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
+    if (length(x = file_ext) == 0) {
+      file_name <- file_name
+    } else {
+      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
+    }
+
+    if (is.null(x = file_name)) {
+      cli_abort(message = c("No file name provided.",
+                            "i" = "Please provide a file name using {.code file_name}.")
+      )
+    }
+  }
+
+  # Extract dataset number
+  num_datasets <- length(x = liger_object@datasets)
+
+  # Default Colors for Factor Plots
+  if (is.null(x = colors_use_factors)) {
+    if (isTRUE(x = ggplot_default_colors)) {
+      colors_use_factors <- Hue_Pal(num_colors = num_datasets)
+    } else {
+      colors_use_factors <- DiscretePalette_scCustomize(num_colors = num_datasets, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
+    }
+  }
+
+  # Check valid number of colors for tsne/UMAP
+  if (length(x = colors_use_dimreduc) < 2) {
+    cli_abort(message = c("Less than two values provided to {.code colors_use_dimreduc}.",
+                          "i" = "Must provided either two colors to use for creating a gradient or a larger color gradient.")
+    )
+  }
+
+  # Get Data and Plot Factors
+  cli_inform(message = "{.field Generating plots}")
+  k <- ncol(x = liger_object@H.norm)
+  pb <- txtProgressBar(min = 0, max = k, style = 3)
+  W <- liger_object@W
+  rownames(x = W) <- rownames(x = liger_object@datasets[[1]]@scaleData)
+  Hs_norm <- liger_object@H.norm
+  dataset_names <- names(liger_object@datasets)
+  H_raw_list <- lapply(1:num_datasets, function(x){
+    H_raw <- t(liger_object@datasets[[x]]@H)
+  })
+  H_raw = do.call(rbind, H_raw_list)
+  # Create accurate axis labels
+  reduc_check <- LIGER_DimReduc(liger_object = liger_object, reduction = reduction, check_only = TRUE)
+  x_axis_label <- paste0(reduction, "_1")
+  y_axis_label <- paste0(reduction, "_2")
+  plot_list = list()
+  tsne_list = list()
+  for (i in 1:k) {
+    top_genes.W <- rownames(x = W)[order(W[, i], decreasing = T)[1:num_genes]]
+    top_genes.W.string <- paste0(top_genes.W, collapse = ", ")
+    factor_textstring <- paste0("Factor", i)
+    plot_title1 <- paste(factor_textstring, "\n", top_genes.W.string, "\n")
+    h_df = data.frame(x = 1:nrow(Hs_norm), h_norm = Hs_norm[, i],
+                      h_raw = H_raw[, i], dataset = liger_object@cellMeta$dataset,
+                      highlight = FALSE)
+    if (isTRUE(x = raster)) {
+      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
+        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
+        labs(x = 'Cell', y = 'Raw H Score') +
+        ggtitle(plot_title1) +
+        theme(legend.position = 'none') +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
+      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
+        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
+        labs(x = 'Cell', y = 'H_norm Score') +
+        theme(legend.position = 'top',
+              legend.title = element_blank()) +
+        guides(colour = guide_legend(override.aes = list(size = 2))) +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
+
+    } else {
+      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
+        geom_point(size = pt.size_factors) +
+        labs(x = 'Cell', y = 'Raw H Score') +
+        ggtitle(plot_title1) +
+        theme(legend.position = 'none') +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
+      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
+        geom_point(size = pt.size_factors) +
+        labs(x = 'Cell', y = 'H_norm Score') +
+        theme(legend.position = 'top',
+              legend.title = element_blank()) +
+        guides(colour = guide_legend(override.aes = list(size = 2))) +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
+
+    }
+
+    if (!is.null(cells.highlight)) {
+      h_df[cells.highlight, 'highlight'] = TRUE
+      if (isTRUE(x = raster)) {
+        top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                      aes(.data[["x"]], .data[["h_raw"]]),
+                                      col = "black",
+                                      pointsize = pt.size_factors,
+                                      pixels = raster.dpi)
+        bottom <- bottom + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                            aes(.data[["x"]], .data[["h_norm"]]),
+                                            col = "black",
+                                            pointsize = pt.size_factors,
+                                            pixels = raster.dpi)
+      } else {
+        top <- top + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                aes(.data[["x"]], .data[["h_raw"]]),
+                                col = "black",
+                                size = pt.size_factors)
+        bottom <- bottom + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                      aes(.data[["x"]], .data[["h_norm"]]),
+                                      col = "black",
+                                      size = pt.size_factors)
+      }
+    }
+    full <- wrap_plots(top, bottom, ncol = 1)
+    plot_list[[i]] = full
+
+    # plot tSNE/UMAP
+    if (isTRUE(x = plot_dimreduc)) {
+      tsne_df <- data.frame(Hs_norm[, i], LIGER_DimReduc(liger_object = liger_object, reduction = reduction))
+      factorlab <- paste0("Factor", i)
+      colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
+
+      if (isTRUE(x = order)) {
+        tsne_df <- tsne_df[order(tsne_df[,1], decreasing = FALSE),]
+      }
+
+      if (isTRUE(x = raster)) {
+        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
+          geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
+          ggtitle(label = paste('Factor', i)) +
+          theme(legend.position = 'none') +
+          xlab(x_axis_label) +
+          ylab(y_axis_label) +
+          if (length(x = colors_use_dimreduc) == 2) {
+            scale_color_gradient(low = colors_use_dimreduc[1], high = colors_use_dimreduc[2])
+          } else {
+            scale_color_gradientn(colours = colors_use_dimreduc)
+          }
+      } else {
+        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
+          geom_point(size = pt.size_dimreduc) +
+          ggtitle(label = paste('Factor', i)) +
+          theme(legend.position = 'none') +
+          xlab(x_axis_label) +
+          ylab(y_axis_label) +
+          if (length(x = colors_use_dimreduc) == 2) {
+            scale_color_gradient(low = colors_use_dimreduc[1], high = colors_use_dimreduc[2])
+          } else {
+            scale_color_gradientn(colours = colors_use_dimreduc)
+          }
+      }
+
+      tsne_list[[i]] = p1
+    }
+    setTxtProgressBar(pb, i)
+  }
+
+  # save plots
+  if (isTRUE(x = save_plots)) {
+    cli_inform(message = "{.field Saving plots to file}")
+    pdf(paste(file_path, file_name, ".pdf", sep=""))
+    pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
+    for (i in 1:k) {
+      if (isTRUE(x = plot_dimreduc)) {
+        print(plot_list[[i]])
+        print(tsne_list[[i]])
+        setTxtProgressBar(pb = pb, value = i)
+      } else {
+        print(plot_list[[i]])
+        setTxtProgressBar(pb = pb, value = i)
+      }
+    }
+    close(con = pb)
+    dev.off()
+  }
+
+  # return plots
+  if (isTRUE(x = return_plots)) {
+    return(list(factor_plots = plot_list,
+                dimreduc_plots = tsne_list))
+  }
+}
+
+
+#' Customized version of plotFactors
+#'
+#' Modified and optimized version of `plotFactors` function from LIGER package.
+#'
+#' @param liger_object \code{liger} liger_object.  Need to perform clustering and factorization before calling this function
+#' @param num_genes Number of genes to display for each factor (Default 8).
+#' @param colors_use_factors colors to use for plotting factor loadings  By default datasets will be
+#' plotted using "varibow" with shuffle = TRUE from both from \code{\link{DiscretePalette_scCustomize}}.
+#' @param colors_use_dimreduc colors to use for plotting factor loadings on dimensionality reduction
+#' coordinates (tSNE/UMAP).  Default is c('lemonchiffon', 'red'),
+#' @param pt.size_factors Adjust point size for plotting in the factor plots.
+#' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
+#' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
+#' technique and therefore needs to be set manually.  Default is "UMAP".
+#' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
+#' Helpful if number of datasets is large to avoid crowding the plot with legend.
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
+#' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
+#' Default is c(512, 512).
+#' @param order logical. Whether to plot higher loading cells on top of cells with lower loading values in the
+#' dimensionality reduction plots (Default = FALSE).
+#' @param plot_dimreduc logical.  Whether to plot factor loadings on dimensionality reduction coordinates.  Default is TRUE.
+#' @param save_plots logical.  Whether to save plots.  Default is TRUE
+#' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
+#' @param file_name name suffix to append after sample name.
+#' @param return_plots logical. Whether or not to return plots to the environment.  (Default is FALSE)
+#' @param cells.highlight Names of specific cells to highlight in plot (black) (default NULL).
+#' @param reorder_datasets New order to plot datasets in for the factor plots if different from current
+#' factor level order in cell.data slot.
+#' @param ggplot_default_colors logical.  If `colors_use_factors = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "varibow" palette.
+#' @param color_seed random seed for the palette shuffle if `colors_use_factors = NULL`.  Default = 123.
+#'
+#' @return A list of ggplot/patchwork objects and/or PDF file.
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom grDevices dev.off pdf
+#' @importFrom patchwork wrap_plots
+#' @importFrom scattermore geom_scattermore
+#'
+#' @export
+#'
+#' @concept liger_plotting
+#'
+#' @author Velina Kozareva (Original code for modified function), Sam Marsh (Added/modified functionality)
+#' @references Based on `plotFactors` functionality from original LIGER package.
+#'
+#' @examples
+#' \dontrun{
+#' plotFactors_scCustom(liger_object = liger_obj, return_plots = FALSE, plot_dimreduc = TRUE,
+#' raster = FALSE, save_plots = TRUE)
+#' }
+#'
+
+plotFactors_liger_scCustom <- function(
+    liger_object,
+    num_genes = 8,
+    colors_use_factors = NULL,
+    colors_use_dimreduc = c('lemonchiffon', 'red'),
+    pt.size_factors = 1,
+    pt.size_dimreduc = 1,
+    reduction_label = "UMAP",
+    plot_legend = TRUE,
+    raster = TRUE,
+    raster.dpi = c(512, 512),
+    order = FALSE,
+    plot_dimreduc = TRUE,
+    save_plots = TRUE,
+    file_path = NULL,
+    file_name = NULL,
+    return_plots = FALSE,
+    cells.highlight = NULL,
+    reorder_datasets = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # if returning and saving
+  if (isTRUE(x = save_plots)) {
+
+    # Check file path is valid
+    if (!is.null(x = file_path) && file_path != "") {
+      if (!dir.exists(paths = file_path)) {
+        cli_abort(message = "Provided {.code file_path}: {.val {file_path}} does not exist.")
+      }
+    }
+
+    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+    if (is.null(x = file_path)) {
+      file_path <- ""
+    }
+
+    # Check if file name provided
+    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
+    if (length(x = file_ext) == 0) {
+      file_name <- file_name
+    } else {
+      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
+    }
+
+    if (is.null(x = file_name)) {
+      cli_abort(message = c("No file name provided.",
+                            "i" = "Please provide a file name using {.code file_name}.")
+      )
+    }
+  }
+
+  if (!is.null(x = reorder_datasets)) {
+    # Check new order contains same dataset names and number of datasets
+    if (length(x = levels(x = liger_object@cell.data$dataset)) != length(x = reorder_datasets)) {
+      cli_abort(message = c("Error reordering datasets (number mismatch).",
+                            "i" = "The number of datasets provided to {.code reorder_datasets} ({.field {length(x = reorder_datasets)}}) does not match number of datasets in LIGER object ({.field {length(x = levels(x = levels(liger_object@cell.data$dataset)))}}).")
+      )
+    } else {
+      if (!all(levels(x = liger_object@cell.data$dataset) %in% reorder_datasets)) {
+        cli_abort(message = c("Error reordering datasets (name mismatch).",
+                              "*" = "Dataset names provided to {.code reorder_datasets} do not match names of datasets in LIGER object.",
+                              "i" = "Please check spelling.")
+        )
+      } else {
+        liger_object@cell.data$dataset <- factor(x = liger_object@cell.data$dataset, levels = reorder_datasets)
+      }
+    }
+  }
+
+  # Create accurate axis labels
+  x_axis_label <- paste0(reduction_label, "_1")
+  y_axis_label <- paste0(reduction_label, "_2")
+
+  # Extract dataset number
+  num_datasets <- length(x = liger_object@scale.data)
+
+  # Default Colors for Factor Plots
+  if (is.null(x = colors_use_factors)) {
+    if (isTRUE(x = ggplot_default_colors)) {
+      colors_use_factors <- Hue_Pal(num_colors = num_datasets)
+    } else {
+      colors_use_factors <- DiscretePalette_scCustomize(num_colors = num_datasets, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
+    }
+  }
+
+  # Check valid number of colors for tsne/UMAP
+  if (length(x = colors_use_dimreduc) < 2) {
+    cli_abort(message = c("Less than two values provided to {.code colors_use_dimreduc}.",
+                          "i" = "Must provided either two colors to use for creating a gradient or a larger color gradient.")
+    )
+  }
+
+  # Add one time dim label warning
+  if (getOption(x = 'scCustomize_warn_LIGER_dim_labels_plotFactors', default = TRUE)) {
+    cli_inform(message = c("",
+                           "NOTE: {.field plotFactors_scCustom} uses the {.code reduction_label} parameter to set axis labels",
+                           "on the dimensionality reduction plots.",
+                           "By default this is set to {.val UMAP}.",
+                           "Please take note of this parameter as LIGER objects do not store the name",
+                           "of reduction technique used and therefore this needs to be set manually.",
+                           "",
+                           "-----This message will be shown once per session.-----"))
+    options(scCustomize_warn_LIGER_dim_labels_plotFactors = FALSE)
+  }
+
+  # Get Data and Plot Factors
+  cli_inform(message = "{.field Generating plots}")
+  k <- ncol(x = liger_object@H.norm)
+  pb <- txtProgressBar(min = 0, max = k, style = 3)
+  W <- t(x = liger_object@W)
+  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
+  Hs_norm <- liger_object@H.norm
+  H_raw = do.call(rbind, liger_object@H)
+  plot_list = list()
+  tsne_list = list()
+  for (i in 1:k) {
+    top_genes.W <- rownames(x = W)[order(W[, i], decreasing = T)[1:num_genes]]
+    top_genes.W.string <- paste0(top_genes.W, collapse = ", ")
+    factor_textstring <- paste0("Factor", i)
+    plot_title1 <- paste(factor_textstring, "\n", top_genes.W.string, "\n")
+    h_df = data.frame(x = 1:nrow(Hs_norm), h_norm = Hs_norm[, i],
+                      h_raw = H_raw[, i], dataset = liger_object@cell.data$dataset,
+                      highlight = FALSE)
+    if (isTRUE(x = raster)) {
+      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
+        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
+        labs(x = 'Cell', y = 'Raw H Score') +
+        ggtitle(plot_title1) +
+        theme(legend.position = 'none') +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
+      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
+        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
+        labs(x = 'Cell', y = 'H_norm Score') +
+        theme(legend.position = 'top',
+              legend.title = element_blank()) +
+        guides(colour = guide_legend(override.aes = list(size = 2))) +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
+
+    } else {
+      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
+        geom_point(size = pt.size_factors) +
+        labs(x = 'Cell', y = 'Raw H Score') +
+        ggtitle(plot_title1) +
+        theme(legend.position = 'none') +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        top <- top + NoLegend()
+      }
+
+      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
+        geom_point(size = pt.size_factors) +
+        labs(x = 'Cell', y = 'H_norm Score') +
+        theme(legend.position = 'top',
+              legend.title = element_blank()) +
+        guides(colour = guide_legend(override.aes = list(size = 2))) +
+        scale_color_manual(values = colors_use_factors)
+
+      if (isFALSE(x = plot_legend)) {
+        bottom <- bottom + NoLegend()
+      }
+
+    }
+
+    if (!is.null(cells.highlight)) {
+      h_df[cells.highlight, 'highlight'] = TRUE
+      if (isTRUE(x = raster)) {
+        top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                      aes(.data[["x"]], .data[["h_raw"]]),
+                                      col = "black",
+                                      pointsize = pt.size_factors,
+                                      pixels = raster.dpi)
+        bottom <- bottom + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                            aes(.data[["x"]], .data[["h_norm"]]),
+                                            col = "black",
+                                            pointsize = pt.size_factors,
+                                            pixels = raster.dpi)
+      } else {
+        top <- top + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                aes(.data[["x"]], .data[["h_raw"]]),
+                                col = "black",
+                                size = pt.size_factors)
+        bottom <- bottom + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
+                                      aes(.data[["x"]], .data[["h_norm"]]),
+                                      col = "black",
+                                      size = pt.size_factors)
+      }
+    }
+    full <- wrap_plots(top, bottom, ncol = 1)
+    plot_list[[i]] = full
+
+    # plot tSNE/UMAP
+    if (isTRUE(x = plot_dimreduc)) {
+      tsne_df <- data.frame(Hs_norm[, i], liger_object@tsne.coords)
+      factorlab <- paste0("Factor", i)
+      colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
+
+      if (isTRUE(x = order)) {
+        tsne_df <- tsne_df[order(tsne_df[,1], decreasing = FALSE),]
+      }
+
+      if (isTRUE(x = raster)) {
+        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
+          geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
+          ggtitle(label = paste('Factor', i)) +
+          theme(legend.position = 'none') +
+          xlab(x_axis_label) +
+          ylab(y_axis_label) +
+          if (length(x = colors_use_dimreduc) == 2) {
+            scale_color_gradient(low = colors_use_dimreduc[1], high = colors_use_dimreduc[2])
+          } else {
+            scale_color_gradientn(colours = colors_use_dimreduc)
+          }
+      } else {
+        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
+          geom_point(size = pt.size_dimreduc) +
+          ggtitle(label = paste('Factor', i)) +
+          theme(legend.position = 'none') +
+          xlab(x_axis_label) +
+          ylab(y_axis_label) +
+          if (length(x = colors_use_dimreduc) == 2) {
+            scale_color_gradient(low = colors_use_dimreduc[1], high = colors_use_dimreduc[2])
+          } else {
+            scale_color_gradientn(colours = colors_use_dimreduc)
+          }
+      }
+
+      tsne_list[[i]] = p1
+    }
+    setTxtProgressBar(pb, i)
+  }
+
+  # save plots
+  if (isTRUE(x = save_plots)) {
+    cli_inform(message = "{.field Saving plots to file}")
+    pdf(paste(file_path, file_name, ".pdf", sep=""))
+    pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
+    for (i in 1:k) {
+      if (isTRUE(x = plot_dimreduc)) {
+        print(plot_list[[i]])
+        print(tsne_list[[i]])
+        setTxtProgressBar(pb = pb, value = i)
+      } else {
+        print(plot_list[[i]])
+        setTxtProgressBar(pb = pb, value = i)
+      }
+    }
+    close(con = pb)
+    dev.off()
+  }
+
+  # return plots
+  if (isTRUE(x = return_plots)) {
+    return(list(factor_plots = plot_list,
+                dimreduc_plots = tsne_list))
+  }
+}
+
+
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
