@@ -388,9 +388,4 @@ plotFactors_scCustom <- function(
                                 color_seed = color_seed
     )
   }
-
-
-
-
-
 }
