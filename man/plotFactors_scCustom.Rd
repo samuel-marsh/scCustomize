@@ -11,6 +11,7 @@ plotFactors_scCustom(
   colors_use_dimreduc = c("lemonchiffon", "red"),
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
+  reduction = "UMAP",
   reduction_label = "UMAP",
   plot_legend = TRUE,
   raster = TRUE,
@@ -41,6 +42,9 @@ coordinates (tSNE/UMAP).  Default is c('lemonchiffon', 'red'),}
 \item{pt.size_factors}{Adjust point size for plotting in the factor plots.}
 
 \item{pt.size_dimreduc}{Adjust point size for plotting in dimensionality reduction plots.}
+
+\item{reduction}{Name of dimensionality reduction to use for plotting.  Default is "UMAP".
+Only for newer style liger objects.}
 
 \item{reduction_label}{What to label the x and y axes of resulting plots.  LIGER does not store name of
 technique and therefore needs to be set manually.  Default is "UMAP".
@@ -77,9 +81,6 @@ factor level order in cell.data slot. Only for older style liger objects.}
 default ggplot2 "hue" palette instead of default "varibow" palette.}
 
 \item{color_seed}{random seed for the palette shuffle if \code{colors_use_factors = NULL}.  Default = 123.}
-
-\item{reduction}{Name of dimensionality reduction to use for plotting.  Default is "UMAP".
-Only for newer style liger objects.}
 }
 \value{
 A list of ggplot/patchwork objects and/or PDF file.
