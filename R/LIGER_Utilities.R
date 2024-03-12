@@ -13,13 +13,12 @@ Fetch_Meta.liger <- function(
     ...
 ) {
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    object_meta <- rliger2::cellMeta(x = object, as.data.frame = TRUE)
+  } else {
+    object_meta <- object_meta <- slot(object = object, name = "cell.data")
   }
 
-  # Pull meta data
-  object_meta <- object_meta <- slot(object = object, name = "cell.data")
-
+  # return meta
   return(object_meta)
 }
 
@@ -55,19 +54,24 @@ LIGER_Features <- function(
     liger_object,
     by_dataset = FALSE
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
+  # check liger
   Is_LIGER(liger_object = liger_object)
 
-  # Extract features
-  features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
-    rownames(x = liger_object@raw.data[[x]])
-  })
+  # liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    # Extract features
+    features_by_dataset <- lapply(1:length(x = liger_object@datasets), function(x) {
+      rownames(x = liger_object@datasets[[x]]@featureMeta)
+    })
 
+  } else {
+    # Extract features
+    features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
+      rownames(x = liger_object@raw.data[[x]])
+    })
+  }
+
+  # Return features
   if (isFALSE(x = by_dataset)) {
     features <- unique(x = unlist(x = features_by_dataset))
     return(features)
