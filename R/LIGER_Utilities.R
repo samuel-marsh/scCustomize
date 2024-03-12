@@ -12,7 +12,7 @@ Fetch_Meta.liger <- function(
     object,
     ...
 ) {
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = 'rliger2') > "1.0.1") {
     object_meta <- rliger2::cellMeta(x = object, as.data.frame = TRUE)
   } else {
     object_meta <- object_meta <- slot(object = object, name = "cell.data")
@@ -58,7 +58,7 @@ LIGER_Features <- function(
   Is_LIGER(liger_object = liger_object)
 
   # liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = 'rliger2') > "1.0.1") {
     # Extract features
     features_by_dataset <- lapply(1:length(x = liger_object@datasets), function(x) {
       rownames(x = liger_object@datasets[[x]]@featureMeta)

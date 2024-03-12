@@ -341,7 +341,7 @@ plotFactors_scCustom <- function(
   Is_LIGER(liger_object = liger_object)
 
   # rliger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = 'rliger2') > "1.0.1") {
     plotFactors_liger2_scCustom(liger_object = liger_object,
                                 num_genes = num_genes,
                                 colors_use_factors = colors_use_factors,
