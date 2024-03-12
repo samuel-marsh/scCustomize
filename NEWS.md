@@ -5,7 +5,7 @@
 - Added new functions to interact with upcoming liger object format change:  
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
 - Updated functions to interact with both old and new style liger objects:
-    - `plotFactors_scCustom()`.  
+    - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, .  
 
 
   
