@@ -109,12 +109,6 @@ Top_Genes_Factor <- function(
     liger_factor,
     num_genes = 10
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   # LIGER object check
   Is_LIGER(liger_object = liger_object)
 
@@ -125,11 +119,19 @@ Top_Genes_Factor <- function(
     )
   }
 
-  # Extract genes
-  W <- t(liger_object@W)
-  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
-  top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
-  return(top_genes)
+  # temp liger version check
+  if (packageVersion(pkg = 'rliger2') > "1.0.1") {
+    W <- liger_object@W
+    rownames(x = W) <- rownames(x = csf_liger@datasets[[1]]@scaleData)
+    top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
+    return(top_genes)
+  } else {
+    # Extract genes
+    W <- t(liger_object@W)
+    rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
+    top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
+    return(top_genes)
+  }
 }
 
 
