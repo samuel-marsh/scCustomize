@@ -322,6 +322,7 @@ plotFactors_scCustom <- function(
   colors_use_dimreduc = c('lemonchiffon', 'red'),
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
+  reduction = "UMAP",
   reduction_label = "UMAP",
   plot_legend = TRUE,
   raster = TRUE,
