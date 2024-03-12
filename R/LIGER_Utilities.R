@@ -1114,7 +1114,7 @@ plotFactors_liger2_scCustom <- function(
   if (lifecycle::is_present(reorder_datasets)) {
     lifecycle::deprecate_warn(when = "2.2.0",
                               what = "plotFactors_scCustom(reorder_datasets)",
-                              details = c("i" = "The {.code reorder_datasets} parameter is deprecated for newer style Liger objects.",)
+                              details = c("i" = "The {.code reorder_datasets} parameter is deprecated for newer style Liger objects.")
     )
   }
 
