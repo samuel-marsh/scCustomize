@@ -1472,6 +1472,44 @@ Test_Integer <- function(
 }
 
 
+#' Modify correlation matrix
+#'
+#' Modify correlation matrix to keep bottom diagonal values.
+#'
+#' @param cor_mat correlation matrix created with `cor`.
+#'
+#' @return modified correlation matrix
+#'
+#' @noRd
+#'
+
+lower_diag_cor_mat <- function(
+    cor_mat
+) {
+  new_cormat[upper.tri(x = cor_mat)] <- NA
+  return(new_cormat)
+}
+
+
+#' Modify correlation matrix
+#'
+#' Modify correlation matrix to keep top diagonal values.
+#'
+#' @param cor_mat correlation matrix created with `cor`.
+#'
+#' @return modified correlation matrix
+#'
+#' @noRd
+#'
+
+upper_diag_cor_mat <- function(
+    cormat
+) {
+  cor_mat[lower.tri(x = cor_mat)]<- NA
+  return(cor_mat)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### GGPLOT2/THEMES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
