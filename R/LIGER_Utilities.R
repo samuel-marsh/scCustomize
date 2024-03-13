@@ -194,6 +194,44 @@ LIGER_DimReduc <- function(
 }
 
 
+#' Find Factor Correlations
+#'
+#' Calculate correlations between gene loadings for all factors in liger object.
+#'
+#' @param liger_object LIGER object name.
+#'
+#' @return correlation matrix
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' factor_correlations <- Find_Factor_Cor(liger_object = object)
+#' }
+#'
+
+Find_Factor_Cor <- function(
+    liger_object
+) {
+  Is_LIGER(liger_object = liger_object)
+
+  # Get loadings
+  factor_loadings <- data.frame(rliger2::getMatrix(x = liger_object, slot = "W"))
+
+  # Rename is zero padding
+  colnames(x = factor_loadings) <- paste0("Factor_", seq_zeros(seq_length = ncol(x = factor_loadings), num_zeros = 1))
+
+  # Correlation
+  cor_mat <- cor(x = factor_loadings)
+
+  return(cor_mat)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### QC UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
