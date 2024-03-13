@@ -7,7 +7,7 @@
 - Updated functions to interact with both old and new style liger objects:
     - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`.  
 - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
-
+- Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
 
   
 ## Changed  
