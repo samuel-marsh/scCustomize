@@ -219,7 +219,7 @@ Find_Factor_Cor <- function(
   Is_LIGER(liger_object = liger_object)
 
   # Get loadings
-  factor_loadings <- data.frame(rliger2::getMatrix(x = liger_object, slot = "W"))
+  factor_loadings <- data.frame(rliger::getMatrix(x = liger_object, slot = "W"))
 
   # Rename is zero padding
   colnames(x = factor_loadings) <- paste0("Factor_", seq_zeros(seq_length = ncol(x = factor_loadings), num_zeros = 1))
