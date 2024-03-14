@@ -51,7 +51,7 @@ An object of the same class as \code{object} with columns added to object meta d
 }
 \description{
 Add hemoglobin percentages to meta.data slot of Seurat Object or
-cell.data slot of Liger object
+cell.data/cellMeta slot of Liger object
 }
 \examples{
 \dontrun{
