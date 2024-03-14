@@ -60,7 +60,7 @@ Add_Mito_Ribo <- function(object, ...) {
 #' Add Hemoglobin percentages
 #'
 #' Add hemoglobin percentages to meta.data slot of Seurat Object or
-#' cell.data slot of Liger object
+#' cell.data/cellMeta slot of Liger object
 #'
 #' @param object Seurat or LIGER object
 #' @param ... Arguments passed to other methods
