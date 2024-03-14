@@ -1503,7 +1503,7 @@ lower_diag_cor_mat <- function(
 #'
 
 upper_diag_cor_mat <- function(
-    cormat
+    cor_mat
 ) {
   cor_mat[lower.tri(x = cor_mat)]<- NA
   return(cor_mat)
