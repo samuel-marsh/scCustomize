@@ -11,6 +11,7 @@ Add_Cell_QC_Metrics(
   add_top_pct = TRUE,
   add_MSigDB = TRUE,
   add_IEG = TRUE,
+  add_hemo = TRUE,
   add_cell_cycle = TRUE,
   species,
   mito_name = "percent_mito",
@@ -22,10 +23,13 @@ Add_Cell_QC_Metrics(
   apop_name = "percent_apop",
   dna_repair_name = "percent_dna_repair",
   ieg_name = "percent_ieg",
+  hemo_name = "percent_hemo",
   mito_pattern = NULL,
   ribo_pattern = NULL,
+  hemo_pattern = NULL,
   mito_features = NULL,
   ribo_features = NULL,
+  hemo_features = NULL,
   ensembl_ids = FALSE,
   num_top_genes = 50,
   assay = NULL,
@@ -47,6 +51,8 @@ gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HAL
 object (Default is TRUE).}
 
 \item{add_IEG}{logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).}
+
+\item{add_hemo}{logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).}
 
 \item{add_cell_cycle}{logical, whether to addcell cycle scores and phase based on
 \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
@@ -81,16 +87,25 @@ counts.  Default is "percent_dna_repair"..}
 
 \item{ieg_name}{name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".}
 
+\item{hemo_name}{name to use for the new meta.data column containing percent hemoglobin counts.
+Default is "percent_mito".}
+
 \item{mito_pattern}{A regex pattern to match features against for mitochondrial genes (will set automatically if
 species is mouse or human; marmoset features list saved separately).}
 
 \item{ribo_pattern}{A regex pattern to match features against for ribosomal genes
-(will set automatically if species is mouse, human, or marmoset).}
+(will set automatically if species is in default list).}
+
+\item{hemo_pattern}{A regex pattern to match features against for hemoglobin genes
+(will set automatically if species is in default list).}
 
 \item{mito_features}{A list of mitochondrial gene names to be used instead of using regex pattern.
 Will override regex pattern if both are present (including default saved regex patterns).}
 
 \item{ribo_features}{A list of ribosomal gene names to be used instead of using regex pattern.
+Will override regex pattern if both are present (including default saved regex patterns).}
+
+\item{hemo_features}{A list of hemoglobin gene names to be used instead of using regex pattern.
 Will override regex pattern if both are present (including default saved regex patterns).}
 
 \item{ensembl_ids}{logical, whether feature names in the object are gene names or

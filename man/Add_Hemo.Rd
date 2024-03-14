@@ -10,7 +10,7 @@ Add_Hemo(object, ...)
 \method{Add_Hemo}{Seurat}(
   object,
   species,
-  hemo_name = "percent_mito",
+  hemo_name = "percent_hemo",
   hemo_pattern = NULL,
   hemo_features = NULL,
   assay = NULL,
