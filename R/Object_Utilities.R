@@ -511,6 +511,164 @@ Add_Mito_Ribo.Seurat <- function(
 }
 
 
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' generate hemo_pattern values.
+#' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
+#' Default is "percent_hemo".
+#' @param hemo_pattern A regex pattern to match features against for hemoglobin genes (will set automatically if
+#' species is mouse or human; marmoset features list saved separately).
+#' @param hemo_features A list of hemoglobin gene names to be used instead of using regex pattern.
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with any one of the names provided to `hemo_name` is
+#' present in meta.data slot.
+#' @param list_species_names returns list of all accepted values to use for default species names which
+#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
+#' rhesus macaque).  Default is FALSE.
+#'
+#' @import cli
+#' @importFrom dplyr mutate select intersect all_of
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang ":="
+#' @importFrom Seurat PercentageFeatureSet AddMetaData
+#' @importFrom tibble rownames_to_column column_to_rownames
+#'
+#' @method Add_Hemo Seurat
+#'
+#' @export
+#' @rdname Add_Hemo
+#'
+#' @concept qc_util
+#'
+#' @examples
+#' \dontrun{
+#' # Seurat
+#' seurat_object <- Add_Hemo(object = seurat_object, species = "human")
+#'}
+#'
+
+Add_Hemo.Seurat <- function(
+    object,
+    species,
+    hemo_name = "percent_mito",
+    hemo_pattern = NULL,
+    hemo_features = NULL,
+    assay = NULL,
+    overwrite = FALSE,
+    list_species_names = FALSE,
+    ...
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Return list of accepted default species name options
+  if (isTRUE(x = list_species_names)) {
+    return(accepted_names)
+    stop_quietly()
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = object)
+
+  # Overwrite check
+  if (hemo_name %in% colnames(x = object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Columns with {.val {hemo_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change {.code hemo_name}*")
+      )
+    }
+    cli_inform(message = c("Columns with {.val {hemo_name}} already present in meta.data slot.",
+                           "i" = "Overwriting column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Checks species
+  if (is.null(x = species)) {
+    cli_abort(message = c("No species name or abbreivation was provided to {.code species} parameter.",
+                          "i" = "If not using default species please set {.code species = other}.")
+    )
+  }
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  # Assign mito/ribo pattern to stored species
+  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options) && any(!is.null(x = hemo_pattern))) {
+    cli_warn(message = c("Pattern expressions for included species are set by default.",
+                         "*" = "Supplied {.code hemo_pattern} and {.code hemo_pattern} will be disregarded.",
+                         "i" = "To override defaults please supply a feature list for hemo genes.")
+    )
+  }
+
+  if (species %in% mouse_options) {
+    hemo_pattern <- "^Hb[^(P)]"
+  }
+  if (species %in% human_options) {
+    hemo_pattern <- "^HB[^(P)]"
+  }
+  if (species %in% c(marmoset_options, macaque_options)) {
+    hemo_pattern <- "^^HB[^(P)]"
+  }
+  if (species %in% zebrafish_options) {
+    hemo_pattern <- "^hb[^(P)]"
+  }
+  if (species %in% rat_options) {
+    hemo_pattern <- "^Hb[^(P)]"
+  }
+  if (species %in% drosophila_options) {
+    hemo_pattern <- "^glob"
+  }
+
+  # Check that values are provided for mito and ribo
+  if (is.null(x = hemo_pattern) && is.null(x = hemo_features)) {
+    cli_abort(message = c("No features or patterns provided for hemo genes.",
+                          "i" = "Please provide a default species name or pattern/features."))
+  }
+
+  hemo_features <- hemo_features %||% grep(pattern = hemo_pattern, x = rownames(x = object[[assay]]), value = TRUE)
+
+  # Check features are present in object
+  length_hemo_features <- length(x = intersect(x = hemo_features, y = rownames(x = object[[assay]])))
+
+  # Check length of hemo features found in object
+  if (length_hemo_features < 1) {
+    cli_warn(message = c("No Hemo features found in object using pattern/feature list provided.",
+                         "i" = "No column will be added to meta.data.")
+    )
+  }
+
+  # Add hemo columns
+  if (length_hemo_features > 0) {
+    good_hemo <- hemo_features[hemo_features %in% rownames(x = object)]
+    object[[hemo_name]] <- PercentageFeatureSet(object = object, features = good_hemo, assay = assay)
+  }
+
+  # Log Command
+  object <- LogSeuratCommand(object = object)
+
+  # return final object
+  return(object)
+}
+
+
 #' Add Cell Complexity Value
 #'
 #' @param meta_col_name name to use for new meta data column.  Default is "log10GenesPerUMI".

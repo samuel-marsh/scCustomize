@@ -57,6 +57,25 @@ Add_Mito_Ribo <- function(object, ...) {
 }
 
 
+#' Add Hemoglobin percentages
+#'
+#' Add hemoglobin percentages to meta.data slot of Seurat Object or
+#' cell.data slot of Liger object
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @return An object of the same class as `object` with columns added to object meta data.
+#'
+#' @rdname Add_Hemo
+#' @export Add_Hemo
+#'
+
+Add_Hemo <- function(object, ...) {
+  UseMethod(generic = 'Add_Hemo', object = object)
+}
+
+
 #' Add Cell Complexity
 #'
 #' Add measure of cell complexity/novelty (log10GenesPerUMI) for data QC.
