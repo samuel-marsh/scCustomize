@@ -98,6 +98,7 @@ Merge_Seurat_List <- function(
 #' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
 #' object (Default is TRUE).
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
 #' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
 #' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
@@ -120,13 +121,19 @@ Merge_Seurat_List <- function(
 #' @param dna_repair_name name to use for new meta data column for percentage of MSigDB DNA repair
 #' counts.  Default is "percent_dna_repair"..
 #' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
+#' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
+#' Default is "percent_mito".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
-#' (will set automatically if species is mouse, human, or marmoset).
+#' (will set automatically if species is in default list).
+#' @param hemo_pattern A regex pattern to match features against for hemoglobin genes
+#' (will set automatically if species is in default list).
 #' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
+#' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param hemo_features A list of hemoglobin gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ensembl_ids logical, whether feature names in the object are gene names or
 #' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
@@ -159,6 +166,7 @@ Add_Cell_QC_Metrics <- function(
     add_top_pct = TRUE,
     add_MSigDB = TRUE,
     add_IEG = TRUE,
+    add_hemo = TRUE,
     add_cell_cycle = TRUE,
     species,
     mito_name = "percent_mito",
@@ -170,10 +178,13 @@ Add_Cell_QC_Metrics <- function(
     apop_name = "percent_apop",
     dna_repair_name = "percent_dna_repair",
     ieg_name = "percent_ieg",
+    hemo_name = "percent_hemo",
     mito_pattern = NULL,
     ribo_pattern = NULL,
+    hemo_pattern = NULL,
     mito_features = NULL,
     ribo_features = NULL,
+    hemo_features = NULL,
     ensembl_ids = FALSE,
     num_top_genes = 50,
     assay = NULL,
@@ -242,6 +253,13 @@ Add_Cell_QC_Metrics <- function(
     }
   }
 
+  # Add hemo
+  if (isTRUE(x = add_hemo)) {
+    cli_inform(message = "Adding {.field Hemo Percentages} to meta.data.")
+    seurat_object <- Add_Hemo(object = seurat_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
+  }
+
+  # Add cell cycle
   if (isTRUE(x = add_cell_cycle)) {
     if (!species %in% human_options) {
       cli_abort(message = c("Cell Cycle Scoring is only supported for human in this function.",
@@ -551,7 +569,7 @@ Add_Mito_Ribo.Seurat <- function(
 Add_Hemo.Seurat <- function(
     object,
     species,
-    hemo_name = "percent_mito",
+    hemo_name = "percent_hemo",
     hemo_pattern = NULL,
     hemo_features = NULL,
     assay = NULL,
