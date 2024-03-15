@@ -8,7 +8,8 @@
     - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`.  
 - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
 - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
-- Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  
+- Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque).  
+
 
   
 ## Changed  
