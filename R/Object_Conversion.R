@@ -948,7 +948,7 @@ Liger_to_Seurat <- function(
 #'
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name file name.
-#' @param assay Assay containing data to use, (default is "RNA").
+#' @param assay Assay containing data to use, (default is object default assay).
 #' @param main_layer the layer of data to become default layer in anndata object (default is "data").
 #' @param other_layers other data layers to transfer to anndata object (default is "counts").
 #' @param transer_dimreduc logical, whether to transfer dimensionality reduction coordinates from
@@ -979,7 +979,7 @@ as.anndata.Seurat <- function(
     x,
     file_path,
     file_name,
-    assay = "RNA",
+    assay = NULL,
     main_layer = "data",
     other_layers = "counts",
     transer_dimreduc = TRUE,
@@ -1047,6 +1047,12 @@ as.anndata.Seurat <- function(
   # Run update to ensure functionality
   x <- suppressMessages(UpdateSeuratObject(object = x))
 
+  # Set assay
+  assay <- assay %||% DefaultAssay(object = x)
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Extracting Data from {.field {assay}} assay."))
+  }
+
   # Check Assay5 for multiple layers
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
     layers_check <- Layers(object = x, search = main_layer)
@@ -1077,12 +1083,18 @@ as.anndata.Seurat <- function(
 
   meta_data <- drop_single_value_cols(df = meta_data)
 
-  if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
-    seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
+  # Variable Features
+  if (length(x = VariableFeatures(object = x, assay = assay)) == 0) {
+    seurat_var_info <- NULL
   } else {
-    seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+    if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
+      seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
+    } else {
+      seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+    }
   }
 
+  # DimReducs
   if (isTRUE(x = transer_dimreduc)) {
     dim_reducs_present <- Reductions(object = x)
     if (length(x = dim_reducs_present) > 0) {
@@ -1097,13 +1109,14 @@ as.anndata.Seurat <- function(
     dim_reducs_present <- NULL
   }
 
+  # Other layers
   if (length(x = other_layers) > 0) {
     other_layers_list <- lapply(other_layers, function(i) {
       Matrix::t(LayerData(object = x, layer = i, assay = assay))
     })
-    names(x = other_layers_list) <- other_layers
-  } else {
-    other_layers_list <- list()
+    names(x = other_layers_list) <- paste0(other_layers, assay)
+    } else {
+      other_layers_list <- list()
   }
 
   # convert
