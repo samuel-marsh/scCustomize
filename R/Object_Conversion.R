@@ -998,6 +998,14 @@ as.anndata.Seurat <- function(
     ))
   }
 
+  # Check anndata available
+  anndata_check <- reticulate::py_module_available(module = "anndata")
+  if (isFALSE(x = anndata_check)) {
+    cli_abort(message = c("Necessary python package {.field anndata} not found.",
+                          "i" = "Please install anndata and ensure reticulate is linked to correct python environment.",
+                          "i" = "After installation run {.code reticulate::py_module_available(module = 'anndata')} to confirm successful installation."))
+  }
+
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
@@ -1187,6 +1195,14 @@ as.anndata.liger <- function(
       "{.field `install.packages({symbol$dquote_left}reticulate{symbol$dquote_right})`}",
       "----------------------------------------"
     ))
+  }
+
+  # Check anndata available
+  anndata_check <- reticulate::py_module_available(module = "anndata")
+  if (isFALSE(x = anndata_check)) {
+    cli_abort(message = c("Necessary python package {.field anndata} not found.",
+                          "i" = "Please install anndata and ensure reticulate is linked to correct python environment.",
+                          "i" = "After installation run {.code reticulate::py_module_available(module = 'anndata')} to confirm successful installation."))
   }
 
   # Check all barcodes are unique to begin with
