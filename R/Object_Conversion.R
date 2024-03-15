@@ -1103,10 +1103,10 @@ as.anndata.Seurat <- function(
       })
       names(x = dim_reducs_list) <- paste0("X_", str_to_lower(string = dim_reducs_present))
     } else {
-      dim_reducs_present <- NULL
+      dim_reducs_list <- NULL
     }
   } else {
-    dim_reducs_present <- NULL
+    dim_reducs_list <- NULL
   }
 
   # Other layers
