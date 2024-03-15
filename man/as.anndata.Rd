@@ -12,7 +12,7 @@ as.anndata(x, ...)
   x,
   file_path,
   file_name,
-  assay = "RNA",
+  assay = NULL,
   main_layer = "data",
   other_layers = "counts",
   transer_dimreduc = TRUE,
@@ -42,7 +42,7 @@ as.anndata(x, ...)
 
 \item{file_name}{file name.}
 
-\item{assay}{Assay containing data to use, (default is "RNA").}
+\item{assay}{Assay containing data to use, (default is object default assay).}
 
 \item{main_layer}{the layer of data to become default layer in anndata object (default is "data").}
 
