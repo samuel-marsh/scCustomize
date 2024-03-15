@@ -640,21 +640,27 @@ Add_Hemo.Seurat <- function(
   }
 
   if (species %in% mouse_options) {
+    species_use <- "Mouse"
     hemo_pattern <- "^Hb[^(P)]"
   }
   if (species %in% human_options) {
+    species_use <- "Human"
     hemo_pattern <- "^HB[^(P)]"
   }
   if (species %in% c(marmoset_options, macaque_options)) {
+    species_use <- "Marmoset/Macaque"
     hemo_pattern <- "^^HB[^(P)]"
   }
   if (species %in% zebrafish_options) {
+    species_use <- "Zebrafish"
     hemo_pattern <- "^hb[^(P)]"
   }
   if (species %in% rat_options) {
+    species_use <- "Rat"
     hemo_pattern <- "^Hb[^(P)]"
   }
   if (species %in% drosophila_options) {
+    species_use <- "Drosophila"
     hemo_pattern <- "^glob"
   }
 
@@ -677,6 +683,7 @@ Add_Hemo.Seurat <- function(
   }
 
   # Add hemo columns
+  cli_inform(message = "Adding Percent Hemoglobin for {.field {species_use}} using gene symbol pattern: {.field {hemo_pattern}}.")
   if (length_hemo_features > 0) {
     good_hemo <- hemo_features[hemo_features %in% rownames(x = object)]
     object[[hemo_name]] <- PercentageFeatureSet(object = object, features = good_hemo, assay = assay)
