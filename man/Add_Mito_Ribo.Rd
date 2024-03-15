@@ -61,10 +61,12 @@ Default is "percent_ribo".}
 mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".}
 
 \item{mito_pattern}{A regex pattern to match features against for mitochondrial genes (will set automatically if
-species is mouse or human; marmoset features list saved separately).}
+species is mouse, human, zebrafish, rat, drosophila, or rhesus macaque;
+marmoset features list saved separately).}
 
 \item{ribo_pattern}{A regex pattern to match features against for ribosomal genes
-(will set automatically if species is mouse, human, or marmoset).}
+(will set automatically if species is mouse, human, marmoset, zebrafish, rat,
+drosophila, or rhesus macaque).}
 
 \item{mito_features}{A list of mitochondrial gene names to be used instead of using regex pattern.
 Will override regex pattern if both are present (including default saved regex patterns).}
