@@ -309,9 +309,11 @@ Add_Cell_QC_Metrics <- function(
 #' @param mito_ribo_name name to use for the new meta.data column containing percent
 #' mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
-#' species is mouse or human; marmoset features list saved separately).
+#' species is mouse, human, zebrafish, rat, drosophila, or rhesus macaque;
+#' marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
-#' (will set automatically if species is mouse, human, or marmoset).
+#' (will set automatically if species is mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque).
 #' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
