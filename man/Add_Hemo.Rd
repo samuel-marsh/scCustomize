@@ -5,7 +5,7 @@
 \alias{Add_Hemo.Seurat}
 \title{Add Hemoglobin percentages}
 \usage{
-Add_Hemo(object, species, ...)
+Add_Hemo(object, ...)
 
 \method{Add_Hemo}{Seurat}(
   object,
@@ -22,11 +22,11 @@ Add_Hemo(object, species, ...)
 \arguments{
 \item{object}{Seurat or LIGER object}
 
+\item{...}{Arguments passed to other methods}
+
 \item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 generate hemo_pattern values.}
-
-\item{...}{Arguments passed to other methods}
 
 \item{hemo_name}{name to use for the new meta.data column containing percent hemoglobin counts.
 Default is "percent_hemo".}
