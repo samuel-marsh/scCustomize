@@ -255,7 +255,7 @@ Add_Cell_QC_Metrics <- function(
 
   # Add hemo
   if (isTRUE(x = add_hemo)) {
-    cli_inform(message = "Adding {.field Hemo Percentages} to meta.data.")
+    cli_inform(message = "Adding {.field Hemoglobin Percentages} to meta.data.")
     seurat_object <- Add_Hemo(object = seurat_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
   }
 
