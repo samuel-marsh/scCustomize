@@ -215,19 +215,19 @@ Add_Cell_QC_Metrics <- function(
 
   # Add mito/ribo
   if (isTRUE(x = add_mito_ribo)) {
-    cli_inform(message = "Adding {.field Mito/Ribo Percentages} to meta.data.")
+    cli_inform(message = c("*" = "Adding {.field Mito/Ribo Percentages} to meta.data."))
     seurat_object <- Add_Mito_Ribo(object = seurat_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
   }
 
   # Add complexity
   if (isTRUE(x = add_complexity)) {
-    cli_inform(message = "Adding {.field Cell Complexity #1 (log10GenesPerUMI)} to meta.data.")
+    cli_inform(message = c("*" = "Adding {.field Cell Complexity #1 (log10GenesPerUMI)} to meta.data."))
     seurat_object <- Add_Cell_Complexity(object = seurat_object, meta_col_name = complexity_name, assay = assay, overwrite = overwrite)
   }
 
   # Add top gene expression percent
   if (isTRUE(x = add_top_pct)) {
-    cli_inform(message = "Adding {.field Cell Complexity #2 (Top {num_top_genes} Percentages)} to meta.data.")
+    cli_inform(message = c("*" = "Adding {.field Cell Complexity #2 (Top {num_top_genes} Percentages)} to meta.data."))
     seurat_object <- Add_Top_Gene_Pct_Seurat(seurat_object = seurat_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
   }
 
@@ -237,7 +237,7 @@ Add_Cell_QC_Metrics <- function(
       cli_warn(message = c("{.val Marmoset} is not currently a part of MSigDB gene list database.",
                            "i" = "No columns will be added to object meta.data"))
     } else {
-      cli_inform(message = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data.")
+      cli_inform(message = c("*" = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data."))
       seurat_object <- Add_MSigDB_Seurat(seurat_object = seurat_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite)
     }
   }
@@ -248,14 +248,14 @@ Add_Cell_QC_Metrics <- function(
       cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, and Drosophila} are not currently supported.",
                            "i" = "No column will be added to object meta.data"))
     } else {
-      cli_inform(message = "Adding {.field IEG Percentages} to meta.data.")
+      cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
       seurat_object <- Add_IEG_Seurat(seurat_object = seurat_object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
     }
   }
 
   # Add hemo
   if (isTRUE(x = add_hemo)) {
-    cli_inform(message = "Adding {.field Hemoglobin Percentages} to meta.data.")
+    cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
     seurat_object <- Add_Hemo(object = seurat_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
   }
 
@@ -266,6 +266,7 @@ Add_Cell_QC_Metrics <- function(
                             "i" = "To add score for other species supply cell cycle gene list of `CellCycleScoring` function."
       ))
     } else {
+      cli_inform(message = c("*" = "Adding {.field Cell Cycle Scoring} to meta.data."))
       if (length(grep(x = Layers(object = seurat_object), pattern = "data", value = T)) == 0) {
         cli_inform(message = c("Layer with normalized data not present.",
                                "i" = "Normalizing Data."))
@@ -285,7 +286,7 @@ Add_Cell_QC_Metrics <- function(
       }
 
       # Add Cell Cycle Scoring
-      cli_inform(message = "Adding {.field Cell Cycle Scoring} to meta.data.")
+      cli_inform(message = "Calculating {.field Cell Cycle Scores}.")
       seurat_object <- CellCycleScoring(object = seurat_object, s.features = Seurat::cc.genes.updated.2019$s.genes, g2m.features = Seurat::cc.genes.updated.2019$g2m.genes)
     }
   }
