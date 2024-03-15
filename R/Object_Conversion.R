@@ -1038,7 +1038,7 @@ as.anndata.Seurat <- function(
 
   # Run update to ensure functionality
   if (isTRUE(x = verbose)) {
-    cli_inform(message = c("*" = "Checking Seurat object validity & Extracting Data"))
+    cli_inform(message = c("*" = "Checking Seurat object validity"))
   }
 
   # Check Seurat
@@ -1050,7 +1050,7 @@ as.anndata.Seurat <- function(
   # Set assay
   assay <- assay %||% DefaultAssay(object = x)
   if (isTRUE(x = verbose)) {
-    cli_inform(message = c("*" = "Extracting Data from {.field {assay}} assay."))
+    cli_inform(message = c("*" = "Extracting Data from {.field {assay}} assay to transfer to anndata."))
   }
 
   # Check Assay5 for multiple layers
