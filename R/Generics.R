@@ -71,8 +71,8 @@ Add_Mito_Ribo <- function(object, ...) {
 #' @export Add_Hemo
 #'
 
-Add_Hemo <- function(object, species, ...) {
-  UseMethod(generic = 'Add_Hemo', object = object, species = species)
+Add_Hemo <- function(object, ...) {
+  UseMethod(generic = 'Add_Hemo', object = object)
 }
 
 
