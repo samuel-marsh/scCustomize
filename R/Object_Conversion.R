@@ -1090,7 +1090,11 @@ as.anndata.Seurat <- function(
     if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
       seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
     } else {
-      seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+      if (dim(x = x[[assay]]@meta.features)[2] == 0) {
+        seurat_var_info <- NULL
+      } else {
+        seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+      }
     }
   }
 
