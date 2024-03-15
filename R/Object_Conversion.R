@@ -1114,7 +1114,7 @@ as.anndata.Seurat <- function(
     other_layers_list <- lapply(other_layers, function(i) {
       Matrix::t(LayerData(object = x, layer = i, assay = assay))
     })
-    names(x = other_layers_list) <- paste0(other_layers, assay)
+    names(x = other_layers_list) <- paste0(other_layers, "_", assay)
     } else {
       other_layers_list <- list()
   }
