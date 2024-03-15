@@ -683,7 +683,7 @@ Add_Hemo.Seurat <- function(
   }
 
   # Add hemo columns
-  cli_inform(message = "Adding Percent Hemoglobin for {.field {species_use}} using gene symbol pattern: {.field {hemo_pattern}}.")
+  cli_inform(message = "Adding Percent Hemoglobin for {.field {species_use}} using gene symbol pattern: {.val {hemo_pattern}}.")
   if (length_hemo_features > 0) {
     good_hemo <- hemo_features[hemo_features %in% rownames(x = object)]
     object[[hemo_name]] <- PercentageFeatureSet(object = object, features = good_hemo, assay = assay)
