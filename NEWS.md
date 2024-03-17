@@ -22,6 +22,7 @@
 - Fixed bug causing error in `Add_Cell_QC_Metrics` when `overwrite = TRUE` ([#165](https://github.com/samuel-marsh/scCustomize/issues/165)).  
 - Fixed wrong description of parameter in manual entry for `DotPlot_scCustom` ([#158](https://github.com/samuel-marsh/scCustomize/issues/158)).  
 - Fixed several potential errors in `as.anndata` from Seurat conversion that previously caused failures ([#168](https://github.com/samuel-marsh/scCustomize/issues/168)).  
+- Fixed errors in `Create_Cluster_Annotation_File` if for file path and csv name errors.  
 
 
 
