@@ -1507,7 +1507,11 @@ Create_Cluster_Annotation_File <- function(
   if (is.null(x = file_path)) {
     dir_path <- getwd()
   } else {
-    dir_path <- file_path
+    if (file_path == "") {
+      dir_path <- getwd()
+    } else {
+      dir_path <- file_path
+    }
   }
   # Check directory path is exists
   if (!dir.exists(paths = dir_path)) {
@@ -1515,8 +1519,17 @@ Create_Cluster_Annotation_File <- function(
                           "i" = "Please create directory or fix {.code file_path} and re-run function.")
     )
   }
+
+  # Check extension
+  file_ext <- grep(x = file_name, pattern = ".csv$")
+
+  if (length(x = file_ext) == 0) {
+    file_name <- paste0(file_name, ".csv")
+  }
+
+
   # Confirm no files with same name in the same directory path.
-  full_path <- file.path(dir_path, paste0(file_name, ".csv"))
+  full_path <- file.path(dir_path, file_name)
   if (file.exists(full_path)) {
     cli_abort(message = c("File with name {.val {file_name}} already exists in directory directory.",
                           "i" = "Please supply a different {.code file_name}.")
