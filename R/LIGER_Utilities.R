@@ -170,20 +170,12 @@ LIGER_DimReduc <- function(
   }
 
   # check reduction in cellMeta
-  if (reduction %in% names(x = liger_object@cellMeta)) {
-    # check the right dims
-    if (length(dim(liger_object@cellMeta[[reduction]])) != 2) {
-      cli_abort(message = "The cellMeta entry {.field {reduction}} is not 2-dimensional entry.")
-    } else {
+  if (reduction %in% names(x = dimReds(x = liger_object))) {
       if (isTRUE(x = check_only)) {
         return(TRUE)
       }
       # get coords
-      reduc_coords <- liger_object@cellMeta[[reduction]]
-
-      # add colnames
-      colnames(reduc_coords) <- paste0(reduction, "_", 1:2)
-    }
+      reduc_coords <- dimReds(x = liger_object)[[reduction]]
   } else {
     cli_abort("The reduction {.field {reduction}} is not present in cellMeta slot.")
   }
@@ -1228,6 +1220,7 @@ plotFactors_liger2_scCustom <- function(
   H_raw = do.call(rbind, H_raw_list)
   # Create accurate axis labels
   reduc_check <- LIGER_DimReduc(liger_object = liger_object, reduction = reduction, check_only = TRUE)
+
   x_axis_label <- paste0(reduction, "_1")
   y_axis_label <- paste0(reduction, "_2")
   plot_list = list()
