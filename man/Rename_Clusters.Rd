@@ -4,7 +4,15 @@
 \alias{Rename_Clusters}
 \title{Rename Cluster Seurat}
 \usage{
-Rename_Clusters(seurat_object, new_idents, meta_col_name = NULL, ...)
+Rename_Clusters(
+  seurat_object,
+  new_idents,
+  old_ident_name = NULL,
+  new_ident_name = NULL,
+  meta_col_name = deprecated(),
+  overwrite = FALSE,
+  ...
+)
 }
 \arguments{
 \item{seurat_object}{object name.}
@@ -26,7 +34,7 @@ Wrapper function to rename active identities in Seurat Object with new idents.
 \examples{
 \dontrun{
 obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
-meta_col_name = "Round01_Res0.6_Idents")
+old_ident_name = "Seurat_Idents_Round01", new_ident_name = "Round01_Res0.6_Idents")
 }
 
 }
