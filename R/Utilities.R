@@ -1693,6 +1693,7 @@ Pull_Cluster_Annotation <- function(
 #' @return Seurat Object with new identities placed in active.ident slot.
 #'
 #' @import cli
+#' @importFrom lifecycle deprecated
 #'
 #' @export
 #'
@@ -1701,18 +1702,56 @@ Pull_Cluster_Annotation <- function(
 #' @examples
 #' \dontrun{
 #' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
-#' meta_col_name = "Round01_Res0.6_Idents")
+#' old_ident_name = "Seurat_Idents_Round01", new_ident_name = "Round01_Res0.6_Idents")
 #' }
 #'
 
 Rename_Clusters <- function(
   seurat_object,
   new_idents,
-  meta_col_name = NULL,
+  old_ident_name = NULL,
+  new_ident_name = NULL,
+  meta_col_name = deprecated(),
+  overwrite = FALSE,
   ...
 ) {
+  # Deprecation warning
+  if (lifecycle::is_present(meta_col_name)) {
+    lifecycle::deprecate_stop(when = "2.2.0",
+                              what = "Rename_Clusters(meta_col_name)",
+                              with = "Rename_Clusters(old_ident_name)",
+                              details = c("i" = "To store old idents please provide name to `old_ident_name`",
+                                          "i" = "To store new idents please provide name to `new_ident_name`")
+    )
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check old ident name
+  if (!is.null(x = old_ident_name)) {
+    if (old_ident_name %in% colnames(x = seurat_object@meta.data)) {
+      if (isFALSE(x = overwrite)) {
+        cli_abort(message = c("The {.code old_ident_name}: {.field {old_ident_name}} is already a column in meta.data",
+                              "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
+      } else {
+        cli_inform(message = "Overwriting old meta.data column: {.field {old_ident_name}} as {.code overwrite = TRUE}")
+
+      }
+    } else {
+      seurat_object[[old_ident_name]] <- Idents(object = seurat_object)
+    }
+  }
+
+  # check new ident name
+  if (new_ident_name %in% colnames(x = seurat_object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("The {.code new_ident_name}: {.field {new_ident_name}} is already a column in meta.data",
+                            "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
+    } else {
+      cli_inform(message = "Overwriting new meta.data column: {.field {new_ident_name}} as {.code overwrite = TRUE}")
+    }
+  }
 
   # Check equivalent lengths
   if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
@@ -1725,6 +1764,7 @@ Rename_Clusters <- function(
   if (is.null(x = names(x = new_idents))) {
     names(x = new_idents) <- levels(x = seurat_object)
   }
+
   # If named check that names are right length
   if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
     cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
@@ -1732,13 +1772,15 @@ Rename_Clusters <- function(
     )
   }
 
-  # Rename meta column for old ident information if desired
-  if (!is.null(x = meta_col_name)) {
-    seurat_object[[meta_col_name]] <- Idents(object = seurat_object)
+  # Add new idents
+  seurat_object <- RenameIdents(object = seurat_object, new_idents)
+
+  # Add new ident to meta.data information if desired
+  if (!is.null(x = new_ident_name)) {
+    seurat_object[[new_ident_name]] <- Idents(object = seurat_object)
   }
 
-  # Add new idents & return object
-  seurat_object <- RenameIdents(object = seurat_object, new_idents)
+  # return object
   return(seurat_object)
 }
 
