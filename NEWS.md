@@ -15,6 +15,7 @@
 ## Changed  
 - Changed storage location for `Add_Alt_Feature_ID` to `@misc` slot of object for safer storage across object filtering.  
 - Added error check in `as.anndata` to explicitly check for installation of anndata before starting conversion ([#162](https://github.com/samuel-marsh/scCustomize/issues/162)).  
+- Update `RenameClusters` to enable storgae of both old idents and new idents in meta.data within the function.
    
 
 ## Fixes  
