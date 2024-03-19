@@ -654,7 +654,7 @@ VlnPlot_scCustom <- function(
 
   # Add add median plot
   if (isTRUE(x = plot_median) && is.null(x = split.by)) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
+    plot <- plot & stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   if (isTRUE(x = plot_median) && !is.null(x = split.by)) {
