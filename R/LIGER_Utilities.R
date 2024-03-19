@@ -1207,8 +1207,12 @@ plotFactors_liger2_scCustom <- function(
   }
 
   # Get Data and Plot Factors
-  cli_inform(message = "{.field Generating plots}")
   k <- ncol(x = liger_object@H.norm)
+  if (is.null(x = k)) {
+    cli_abort(message = "{.code quantileNorm} must be run before plotting factors.")
+  }
+
+  cli_inform(message = "{.field Generating plots}")
   pb <- txtProgressBar(min = 0, max = k, style = 3)
   W <- liger_object@W
   rownames(x = W) <- rownames(x = liger_object@datasets[[1]]@scaleData)
