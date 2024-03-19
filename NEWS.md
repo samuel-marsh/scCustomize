@@ -24,7 +24,8 @@
 - Fixed wrong description of parameter in manual entry for `DotPlot_scCustom` ([#158](https://github.com/samuel-marsh/scCustomize/issues/158)).  
 - Fixed several potential errors in `as.anndata` from Seurat conversion that previously caused failures ([#168](https://github.com/samuel-marsh/scCustomize/issues/168)).  
 - Fixed errors in `Create_Cluster_Annotation_File` if for file path and csv name errors.  
-- Spelling and style fixes.  Thanks @kew24.
+- Fixed error when using `plot_median` and more than one feature in `VlnPlot_scCustom` ([#169](https://github.com/samuel-marsh/scCustomize/issues/169)).  
+- Spelling and style fixes.  Thanks @kew24.  
 
 
 
