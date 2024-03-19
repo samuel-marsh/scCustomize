@@ -1744,7 +1744,7 @@ Rename_Clusters <- function(
   }
 
   # check new ident name
-  if (new_ident_name %in% colnames(x = seurat_object@meta.data)) {
+  if (!is.null(x = new_ident_name) && new_ident_name %in% colnames(x = seurat_object@meta.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("The {.code new_ident_name}: {.field {new_ident_name}} is already a column in meta.data",
                             "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
