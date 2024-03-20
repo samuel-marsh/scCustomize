@@ -126,10 +126,44 @@ Top_Genes_Factor <- function(
     return(top_genes)
   } else {
     # Extract genes
-    W <- t(liger_object@W)
+    W <- t(x = liger_object@W)
     rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
     top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
     return(top_genes)
+  }
+}
+
+
+#' Extract default dimensionality reduction
+#'
+#' Extract name of the default dimensionlity reduction for liger object.
+#'
+#' @param liger_object LIGER object name.
+#'
+#' @return name of default dimensionality reduction
+#'
+#' @import cli
+#'
+#' @noRd
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return dimensionality reduction name
+#' dim_reduc_name <- Default_DimReduc_LIGER(liger_object = obj)
+#' }
+#'
+
+Default_DimReduc_LIGER <- function(
+  liger_object
+) {
+  if (length(x = liger_object@dimReds) > 0) {
+    default_reduc <- liger_object@uns$defaultDimRed
+
+    return(default_reduc)
+  } else {
+    cli_abort(message = "No dimensionality reduction present.")
   }
 }
 
@@ -155,6 +189,7 @@ Top_Genes_Factor <- function(
 #'
 #' @examples
 #' \dontrun{
+#' # return dimensionality reduction coordinates
 #' umap_coords <- LIGER_DimReduc(liger_object = object)
 #' }
 #'
@@ -168,6 +203,8 @@ LIGER_DimReduc <- function(
   if (!"cellMeta" %in% slotNames(liger_object)) {
     cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
   }
+
+  reduction_use <-
 
   # check reduction in cellMeta
   if (reduction %in% names(x = dimReds(x = liger_object))) {
