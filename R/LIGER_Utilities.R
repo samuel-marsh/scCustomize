@@ -175,7 +175,7 @@ Default_DimReduc_LIGER <- function(
 #'
 #' @param liger_object LIGER object name.
 #' @param reduction name of dimensionality reduction stored in cellMeta slot.  Default is
-#' "UMAP")
+#' NULL, which will use liger object's default reduction.
 #' @param check_only logical, return `TRUE` if valid reduction is present.
 #'
 #' @return dimensionality reduction coordinates in 2 column format
