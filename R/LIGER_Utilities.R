@@ -487,7 +487,7 @@ Add_Mito_Ribo.liger <- function(
     good_mito <- mito_features[mito_features %in% all_features]
 
     if (packageVersion(pkg = 'rliger') > "1.0.1") {
-      object <- runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(mito_name = good_mito), verbose = FALSE)
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(mito_name = good_mito), verbose = FALSE)
     } else {
       percent_mito <- unlist(lapply(object@raw.data, function(x) {
         (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
@@ -499,7 +499,7 @@ Add_Mito_Ribo.liger <- function(
     good_ribo <- ribo_features[ribo_features %in% all_features]
 
     if (packageVersion(pkg = 'rliger') > "1.0.1") {
-      object <- runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(ribo_name = good_ribo), verbose = FALSE)
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(ribo_name = good_ribo), verbose = FALSE)
     } else {
       percent_ribo <- unlist(lapply(object@raw.data, function(x) {
         (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
