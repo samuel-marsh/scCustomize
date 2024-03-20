@@ -252,6 +252,11 @@ Find_Factor_Cor <- function(
 ) {
   Is_LIGER(liger_object = liger_object)
 
+  # Check new liger object
+  if (!"cellMeta" %in% slotNames(liger_object)) {
+    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  }
+
   # Get loadings
   factor_loadings <- data.frame(rliger::getMatrix(x = liger_object, slot = "W"))
 
@@ -478,27 +483,42 @@ Add_Mito_Ribo.liger <- function(
   # Add mito and ribo percent
   if (length_mito_features > 0) {
     good_mito <- mito_features[mito_features %in% all_features]
-    percent_mito <- unlist(lapply(object@raw.data, function(x) {
-      (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
-    object@cell.data[ , mito_name] <- percent_mito
+
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object <- runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(mito_name = good_mito), verbose = FALSE)
+    } else {
+      percent_mito <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[good_mito, ])/Matrix::colSums(x))*100}))
+      object@cell.data[ , mito_name] <- percent_mito
+    }
   }
 
   if (length_ribo_features > 0){
     good_ribo <- ribo_features[ribo_features %in% all_features]
-    percent_ribo <- unlist(lapply(object@raw.data, function(x) {
-      (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
-    object@cell.data[ , ribo_name] <- percent_ribo
+
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object <- runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(ribo_name = good_ribo), verbose = FALSE)
+    } else {
+      percent_ribo <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[good_ribo, ])/Matrix::colSums(x))*100}))
+      object@cell.data[ , ribo_name] <- percent_ribo
+    }
   }
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
-    object_meta <- Fetch_Meta(object = object) %>%
-      rownames_to_column("barcodes")
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object@cellMeta[[mito_ribo_name]] <- csf_liger@cellMeta[[mito_name]] + csf_liger@cellMeta[[ribo_name]]
+    } else {
+      object_meta <- Fetch_Meta(object = object) %>%
+        rownames_to_column("barcodes")
 
-    object_meta <- object_meta %>%
-      mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
+      object_meta <- object_meta %>%
+        mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
 
-    object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
+
+      object@cell.data[ , mito_ribo_name] <- object_meta[[mito_ribo_name]]
+    }
   }
 
   # return object

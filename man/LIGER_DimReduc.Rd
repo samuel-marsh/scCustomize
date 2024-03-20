@@ -25,6 +25,10 @@ Liger objects
 \dontrun{
 # return dimensionality reduction coordinates
 umap_coords <- LIGER_DimReduc(liger_object = object)
+
+# return logical to see if reduction is present
+reduc_present <- LIGER_DimReduc(liger_object = object, reduction = "umap",
+check_only = TRUE)
 }
 
 }
