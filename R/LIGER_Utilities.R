@@ -208,17 +208,18 @@ LIGER_DimReduc <- function(
     cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
   }
 
-  reduction_use <-
+  # reduction to use
+  reduction_use <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
   # check reduction in cellMeta
-  if (reduction %in% names(x = dimReds(x = liger_object))) {
+  if (reduction_use %in% names(x = dimReds(x = liger_object))) {
       if (isTRUE(x = check_only)) {
         return(TRUE)
       }
       # get coords
-      reduc_coords <- dimReds(x = liger_object)[[reduction]]
+      reduc_coords <- dimReds(x = liger_object)[[reduction_use]]
   } else {
-    cli_abort("The reduction {.field {reduction}} is not present in cellMeta slot.")
+    cli_abort("The reduction {.field {reduction_use}} is not present in cellMeta slot.")
   }
 
   # return coords
