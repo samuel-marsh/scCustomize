@@ -371,13 +371,15 @@ Add_Mito_Ribo.liger <- function(
   }
 
   # Overwrite check
-  if (mito_name %in% colnames(x = object@cell.data) || ribo_name %in% colnames(x = object@cell.data) || mito_ribo_name %in% colnames(x = object@cell.data)) {
+  meta_names <- colnames(x = Fetch_Meta(object = object))
+
+  if (mito_name %in% meta_names || ribo_name %in% meta_names || mito_ribo_name %in% meta_names) {
     if (isFALSE(x = overwrite)) {
-      cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
+      cli_abort(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in meta data.",
                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code mito_name}, {.code ribo_name}, and/or {.code mito_ribo_name}.*")
       )
     }
-    cli_inform(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in cell.data slot.",
+    cli_inform(message = c("Columns with {.val {mito_name}} and/or {.val {ribo_name}} already present in meta data.",
                            "i" = "Overwriting those columns as {.code overwrite = TRUE}.")
     )
   }
@@ -565,19 +567,25 @@ Add_Cell_Complexity.liger <- function(
   Is_LIGER(liger_object = object)
 
   # Check columns for overwrite
-  if (meta_col_name %in% colnames(x = object@cell.data)) {
+  meta_names <- colnames(x = Fetch_Meta(object = object))
+
+  if (meta_col_name %in% meta_names) {
     if (isFALSE(x = overwrite)) {
-      cli_abort(message = c("Column {.val {meta_col_name}} already present in cell.data slot.",
+      cli_abort(message = c("Column {.val {meta_col_name}} already present in meta data.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
       )
     }
-    cli_inform(message = c("Column {.val {meta_col_name}} already present in cell.data slot",
+    cli_inform(message = c("Column {.val {meta_col_name}} already present in meta data slot",
                            "i" = "Overwriting those columns as `overwrite = TRUE`.")
     )
   }
 
   # Add score
-  object@cell.data[ , meta_col_name] <- log10(object@cell.data$nGene) / log10(object@cell.data$nUMI)
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    object@cellMeta[[mito_ribo_name]] <- log10(object@cellMeta$nGene) / log10(object@cellMeta$nUMI)
+  } else {
+    object@cell.data[ , meta_col_name] <- log10(object@cell.data$nGene) / log10(object@cell.data$nUMI)
+  }
 
   #return object
   return(object)
