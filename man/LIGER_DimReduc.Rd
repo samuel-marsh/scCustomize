@@ -23,6 +23,7 @@ Liger objects
 }
 \examples{
 \dontrun{
+# return dimensionality reduction coordinates
 umap_coords <- LIGER_DimReduc(liger_object = object)
 }
 
