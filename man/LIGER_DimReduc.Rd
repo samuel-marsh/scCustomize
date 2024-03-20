@@ -10,7 +10,7 @@ LIGER_DimReduc(liger_object, reduction = NULL, check_only = FALSE)
 \item{liger_object}{LIGER object name.}
 
 \item{reduction}{name of dimensionality reduction stored in cellMeta slot.  Default is
-"UMAP")}
+NULL, which will use liger object's default reduction.}
 
 \item{check_only}{logical, return \code{TRUE} if valid reduction is present.}
 }
