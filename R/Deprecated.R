@@ -75,3 +75,15 @@ Add_Cell_Complexity_LIGER <- function(...) {
 Meta_Present_LIGER <- function(...) {
   lifecycle::deprecate_stop(when = "2.1.0", what = "Meta_Present_LIGER()", with = "Meta_Present()")
 }
+
+
+#' @description
+#' Use [Add_Top_Gene_Pct()] instead of `Add_Top_Gene_Pct_Seurat()`.
+#'
+#' @export
+#' @keywords internal
+#' @rdname deprecated
+
+Add_Top_Gene_Pct_Seurat <- function(...) {
+  lifecycle::deprecate_stop(when = "2.2.0", what = "Add_Top_Gene_Pct_Seurat()", with = "Add_Top_Gene_Pct()")
+}
