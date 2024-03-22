@@ -715,7 +715,7 @@ Add_Hemo.liger <- function(
     } else {
       percent_hemo <- unlist(lapply(object@raw.data, function(x) {
         (Matrix::colSums(x[good_hemo, ])/Matrix::colSums(x))*100}))
-      object@cell.data[ , hemo] <- percent_hemo
+      object@cell.data[ , hemo_name] <- percent_hemo
     }
   }
 
