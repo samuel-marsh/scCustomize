@@ -38,7 +38,7 @@ Default_DimReduc_LIGER <- function(
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### INTERNAL LIGER PLOTTING UTILITIES ####################
+#################### LIGER PLOTTING UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -1219,4 +1219,127 @@ plotFactors_liger_scCustom <- function(
     return(list(factor_plots = plot_list,
                 dimreduc_plots = tsne_list))
   }
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### QC UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Add MSigDB Gene Lists Percentages
+#'
+#' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @param liger_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+#' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
+#' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
+#' phosphorylation counts. Default is "percent_oxphos".
+#' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.
+#' Default is "percent_apop".
+#' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
+#' Default is "percent_oxphos".
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
+#' `mito_ribo_name` is present in meta.data slot.
+#'
+#' @return liger object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Add_MSigDB_LIGER <- function(
+    liger_object,
+    species,
+    oxphos_name = "percent_oxphos",
+    apop_name = "percent_apop",
+    dna_repair_name = "percent_dna_repair",
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  # Check Seurat
+  Is_LIGER(liger_object = liger_object)
+
+  # Check name collision
+  if (any(duplicated(x = c(oxphos_name, apop_name, dna_repair_name)))) {
+    cli_abort(message = "One or more of values provided to {.code oxphos_name}, {.code apop_name}, {.code dna_repair_name} are identical.")
+  }
+
+  # Overwrite check
+  meta_names <- colnames(x = Fetch_Meta(object = liger_object))
+
+  if (oxphos_name %in% meta_names || apop_name %in% meta_names || dna_repair_name %in% meta_names) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta data.",
+                            "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code oxphos_name}, {.code apop_name}, and/or {.code dna_repair_name}*")
+      )
+    }
+    cli_inform(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta data.",
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Retrieve gene lists
+  msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
+
+  # Check features are present in object
+  all_features <- LIGER_Features(liger_object = liger_object, by_dataset = FALSE)
+
+  oxphos_found <- intersect(x = msigdb_gene_list[["oxphos"]], y = all_features)
+  apop_found <- intersect(x = msigdb_gene_list[["apop"]], y = all_features)
+  dna_repair_found <- intersect(x = msigdb_gene_list[["dna_repair"]], y = all_features)
+
+  # Add meta data columns
+  if (oxphos_found > 0) {
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(oxphos_name = oxphos_found), verbose = FALSE)
+    } else {
+      percent_oxphos <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[oxphos_found, ])/Matrix::colSums(x))*100}))
+      object@cell.data[ , oxphos_name] <- percent_oxphos
+    }
+  }
+
+  if (apop_found > 0) {
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(apop_name = apop_found), verbose = FALSE)
+    } else {
+      percent_apop <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[apop_found, ])/Matrix::colSums(x))*100}))
+      object@cell.data[ , apop_name] <- percent_apop
+    }
+  }
+
+  if (dna_repair_found > 0) {
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(dna_repair_name = dna_repair_found), verbose = FALSE)
+    } else {
+      percent_dna_repair <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[dna_repair_found, ])/Matrix::colSums(x))*100}))
+      object@cell.data[ , dna_repair_name] <- percent_dna_repair
+    }
+  }
+
+  # return final object
+  return(liger_object)
 }
