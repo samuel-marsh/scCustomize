@@ -16,7 +16,8 @@
 - **BREAKING CHANGES** `Add_Top_Gene_Pct_Seurat` is now S3 generic that works with both Seurat and liger objects and has been renamed `Add_Top_Gene_Pct`.  
 - Changed storage location for `Add_Alt_Feature_ID` to `@misc` slot of object for safer storage across object filtering.  
 - Added error check in `as.anndata` to explicitly check for installation of anndata before starting conversion ([#162](https://github.com/samuel-marsh/scCustomize/issues/162)).  
-- Update `RenameClusters` to enable storgae of both old idents and new idents in meta.data within the function.
+- Update `RenameClusters` to enable storgae of both old idents and new idents in meta.data within the function.  
+- Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
    
 
 ## Fixes  
