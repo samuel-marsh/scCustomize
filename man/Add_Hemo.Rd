@@ -68,7 +68,7 @@ cell.data/cellMeta slot of Liger object
 }
 \examples{
 \dontrun{
-# Seurat
+# Liger
 liger_object <- Add_Hemo(object = liger_object, species = "human")
 }
 

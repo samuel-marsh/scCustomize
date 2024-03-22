@@ -9,7 +9,7 @@
 \usage{
 Add_Top_Gene_Pct(object, ...)
 
-\method{Add_Top_Gene_Pct}{Seurat}(
+\method{Add_Top_Gene_Pct}{liger}(
   object,
   num_top_genes = 50,
   meta_col_name = NULL,
@@ -53,13 +53,12 @@ Add the percentage of counts occupied by the top XX most highly expressed genes 
 }
 \examples{
 \dontrun{
-library(Seurat)
-pbmc_small <- Add_Top_Gene_Pct_Seurat(object = pbmc_small, num_top_genes = 50)
+liger_object <- Add_Top_Gene_Pct(object = liger_object, num_top_genes = 50)
 }
 
 \dontrun{
 library(Seurat)
-pbmc_small <- Add_Top_Gene_Pct_Seurat(seurat_object = pbmc_small, num_top_genes = 50)
+pbmc_small <- Add_Top_Gene_Pct(seurat_object = pbmc_small, num_top_genes = 50)
 }
 
 }
