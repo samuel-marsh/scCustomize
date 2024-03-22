@@ -563,7 +563,6 @@ Add_Cell_Complexity.liger <- function(
 #' @param hemo_pattern A regex pattern to match features against for hemoglobin genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param hemo_features A list of hemoglobin gene names to be used instead of using regex pattern.
-#' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with any one of the names provided to `hemo_name` is
 #' present in meta.data slot.
@@ -594,7 +593,6 @@ Add_Hemo.liger <- function(
     hemo_name = "percent_hemo",
     hemo_pattern = NULL,
     hemo_features = NULL,
-    assay = NULL,
     overwrite = FALSE,
     list_species_names = FALSE,
     ...
