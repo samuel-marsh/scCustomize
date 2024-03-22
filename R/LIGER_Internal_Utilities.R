@@ -72,7 +72,6 @@ Default_DimReduc_LIGER <- function(
 #'
 
 Generate_Plotting_df_LIGER <- function(object,
-                                       reduction = NULL,
                                        clusters = NULL,
                                        shuffle = TRUE,
                                        shuffle_seed = 1,
@@ -83,27 +82,21 @@ Generate_Plotting_df_LIGER <- function(object,
 ) {
   # temp liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
-
-    reduc_df <- LIGER_DimReduc(liger_object = liger_object, reduction = reduction)
-
-    c_names <- Fetch_Meta(object = liger_object)[["leiden_cluster"]]
-  } else {
-    reduc_df <- data.frame(object@tsne.coords)
-    colnames(x = reduc_df) <- c("tsne1", "tsne2")
-    c_names <- names(x = object@clusters)
+    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
+                          "i" = "Functionality with rliger v2+ is currently in development."))
   }
 
-  reduc_df[[group_by]] <- Fetch_Meta(object = liger_object)[[group_by]]
-
+  tsne_df <- data.frame(object@tsne.coords)
+  colnames(x = tsne_df) <- c("tsne1", "tsne2")
+  tsne_df[[group_by]] <- object@cell.data[[group_by]]
   if (!is.null(x = split_by)) {
-    reduc_df[[split_by]] <- Fetch_Meta(object = liger_object)[[split_by]]
+    tsne_df[[split_by]] <- object@cell.data[[split_by]]
   }
 
   if (isTRUE(x = reorder.idents)) {
-    reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
+    tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
   }
-
+  c_names <- names(x = object@clusters)
   if (is.null(x = clusters)) {
     # if clusters have not been set yet
     if (length(x = object@clusters) == 0) {
@@ -114,14 +107,14 @@ Generate_Plotting_df_LIGER <- function(object,
       c_names <- names(x = object@clusters)
     }
   }
-  reduc_df[['Cluster']] <- clusters[c_names]
+  tsne_df[['Cluster']] <- clusters[c_names]
 
   if (isTRUE(x = shuffle)) {
     set.seed(shuffle_seed)
-    idx <- sample(x = 1:nrow(x = reduc_df))
-    reduc_df <- reduc_df[idx, ]
+    idx <- sample(x = 1:nrow(tsne_df))
+    tsne_df <- tsne_df[idx, ]
   }
-  return(reduc_df)
+  return(tsne_df)
 }
 
 
