@@ -695,7 +695,7 @@ Retrieve_Ensembl_Ribo <- function(
    apop_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["apop"]])
    dna_repair_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["dna_repair"]])
 
-   # Add mito and ribo columns
+   # Add meta data columns
    if (length(x = oxphos_found) > 0) {
      seurat_object[[oxphos_name]] <- PercentageFeatureSet(object = seurat_object, features = oxphos_found, assay = assay)
    }
@@ -712,7 +712,6 @@ Retrieve_Ensembl_Ribo <- function(
    # return final object
    return(seurat_object)
  }
-
 
 
 #' Add IEG Gene List Percentages
