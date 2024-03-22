@@ -1233,7 +1233,7 @@ plotFactors_liger_scCustom <- function(
 #' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
 #'
 #' @param liger_object object name.
-#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+#' @param species Species of origin for given Object.  Only accepted species are: mouse, human,
 #' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
 #' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
 #' phosphorylation counts. Default is "percent_oxphos".
@@ -1277,7 +1277,7 @@ Add_MSigDB_LIGER <- function(
     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
   }
 
-  # Check Seurat
+  # Check liger
   Is_LIGER(liger_object = liger_object)
 
   # Check name collision

@@ -246,7 +246,7 @@ Find_Factor_Cor <- function(
 
 #' Add Mito and Ribo percentages
 #'
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' @param species Species of origin for given Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
@@ -526,7 +526,7 @@ Add_Cell_Complexity.liger <- function(
                           "i" = "Functionality with rliger v2+ is currently in development."))
   }
 
-  # Check Seurat
+  # Check liger
   Is_LIGER(liger_object = object)
 
   # Check columns for overwrite
@@ -555,7 +555,7 @@ Add_Cell_Complexity.liger <- function(
 }
 
 
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' @param species Species of origin for given Object.  If mouse, human, marmoset, zebrafish, rat,
 #' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
 #' generate hemo_pattern values.
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
@@ -582,7 +582,7 @@ Add_Cell_Complexity.liger <- function(
 #'
 #' @examples
 #' \dontrun{
-#' # Seurat
+#' # Liger
 #' liger_object <- Add_Hemo(object = liger_object, species = "human")
 #'}
 #'
@@ -614,8 +614,8 @@ Add_Hemo.liger <- function(
     stop_quietly()
   }
 
-  # Check Seurat
-  Is_LIGER(seurat_object = object)
+  # Check liger
+  Is_LIGER(liger_object = object)
 
   # Overwrite check
   # Overwrite check
@@ -737,7 +737,7 @@ Add_Hemo.liger <- function(
 #'
 #' @return A liger Object
 #'
-#' @method Add_Top_Gene_Pct Seurat
+#' @method Add_Top_Gene_Pct liger
 #'
 #' @export
 #' @rdname Add_Top_Gene_Pct
@@ -746,8 +746,7 @@ Add_Hemo.liger <- function(
 #'
 #' @examples
 #' \dontrun{
-#' library(Seurat)
-#' pbmc_small <- Add_Top_Gene_Pct_Seurat(object = pbmc_small, num_top_genes = 50)
+#' liger_object <- Add_Top_Gene_Pct(object = liger_object, num_top_genes = 50)
 #' }
 #'
 
@@ -771,7 +770,7 @@ Add_Top_Gene_Pct.liger <- function(
     ))
   }
 
-  # Check Seurat
+  # Check Liger
   Is_LIGER(liger_object = object)
 
   # Set colnames

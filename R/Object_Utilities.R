@@ -800,7 +800,7 @@ Add_Cell_Complexity.Seurat <- function(
 #' @examples
 #' \dontrun{
 #' library(Seurat)
-#' pbmc_small <- Add_Top_Gene_Pct_Seurat(seurat_object = pbmc_small, num_top_genes = 50)
+#' pbmc_small <- Add_Top_Gene_Pct(seurat_object = pbmc_small, num_top_genes = 50)
 #' }
 #'
 
