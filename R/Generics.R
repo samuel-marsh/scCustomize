@@ -94,6 +94,21 @@ Add_Cell_Complexity <- function(object, ...) {
 }
 
 
+#' Add Percent of High Abundance Genes
+#'
+#' Add the percentage of counts occupied by the top XX most highly expressed genes in each cell.
+#'
+#' @param object Seurat or liger object name.
+#'
+#' @rdname Add_Top_Gene_Pct
+#' @export Add_Top_Gene_Pct
+#'
+
+Add_Top_Gene_Pct <- function(object, ...) {
+  UseMethod(generic = 'Add_Top_Gene_Pct', object = object)
+}
+
+
 #' Get meta data from object
 #'
 #' Quick function to properly pull meta.data from objects.
