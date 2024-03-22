@@ -228,7 +228,7 @@ Add_Cell_QC_Metrics <- function(
   # Add top gene expression percent
   if (isTRUE(x = add_top_pct)) {
     cli_inform(message = c("*" = "Adding {.field Cell Complexity #2 (Top {num_top_genes} Percentages)} to meta.data."))
-    seurat_object <- Add_Top_Gene_Pct_Seurat(seurat_object = seurat_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
+    seurat_object <- Add_Top_Gene_Pct(object = seurat_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
   }
 
   # Add MSigDB
