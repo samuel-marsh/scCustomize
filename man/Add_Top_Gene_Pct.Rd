@@ -14,7 +14,8 @@ Add_Top_Gene_Pct(object, ...)
   num_top_genes = 50,
   meta_col_name = NULL,
   overwrite = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 
 \method{Add_Top_Gene_Pct}{Seurat}(
@@ -23,11 +24,14 @@ Add_Top_Gene_Pct(object, ...)
   meta_col_name = NULL,
   assay = "RNA",
   overwrite = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 )
 }
 \arguments{
-\item{object}{Seurat or liger object name.}
+\item{object}{Seurat or LIGER object.}
+
+\item{...}{Arguments passed to other methods}
 
 \item{num_top_genes}{An integer vector specifying the size(s) of the top set of high-abundance genes.
 Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.}
