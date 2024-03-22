@@ -8,6 +8,7 @@
 \alias{Add_Cell_Complexity_Seurat}
 \alias{Add_Cell_Complexity_LIGER}
 \alias{Meta_Present_LIGER}
+\alias{Add_Top_Gene_Pct_Seurat}
 \title{Deprecated functions \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 Split_FeatureScatter(...)
@@ -21,6 +22,8 @@ Add_Cell_Complexity_Seurat(...)
 Add_Cell_Complexity_LIGER(...)
 
 Meta_Present_LIGER(...)
+
+Add_Top_Gene_Pct_Seurat(...)
 }
 \description{
 Use \code{\link[=FeatureScatter_scCustom]{FeatureScatter_scCustom()}} instead of \code{Split_FeatureScatter()}.
@@ -34,5 +37,7 @@ Use \code{\link[=Add_Cell_Complexity]{Add_Cell_Complexity()}} instead of \code{A
 Use \code{\link[=Add_Cell_Complexity]{Add_Cell_Complexity()}} instead of \code{Add_Cell_Complexity_LIGER()}.
 
 Use \code{\link[=Meta_Present]{Meta_Present()}} instead of \code{Meta_Present_LIGER()}.
+
+Use \code{\link[=Add_Top_Gene_Pct]{Add_Top_Gene_Pct()}} instead of \code{Add_Top_Gene_Pct_Seurat()}.
 }
 \keyword{internal}
