@@ -1560,10 +1560,6 @@ Add_Alt_Feature_ID <- function(
     data_name = "feature_id_mapping_table",
     overwrite = FALSE
 ) {
-  if (packageVersion(pkg = 'Seurat') < "5") {
-    cli_abort(message = "Seurat version must be v5.0.0 or greater to add alternative features.")
-  }
-
   # check file
   if (is.null(x = features_tsv_file) && is.null(x = hdf5_file)) {
     cli_abort(message = "Either {.code features_tsv_file} or {.code hdf5_file} must be provided.")
