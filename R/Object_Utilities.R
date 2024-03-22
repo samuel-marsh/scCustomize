@@ -153,7 +153,7 @@ Merge_Seurat_List <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Add_Cell_QC_Metrics(seurat_object = obj, species = "Human")
+#' obj <- Add_Cell_QC_Metrics(object = obj, species = "Human")
 #'}
 #'
 
@@ -190,7 +190,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     ...
 ) {
   # Set assay
-  assay <- assay %||% DefaultAssay(object = seurat_object)
+  assay <- assay %||% DefaultAssay(object = object)
 
   # Accepted species names
   accepted_names <- data.frame(
