@@ -6,6 +6,8 @@
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
 - Updated functions to interact with both old and new style liger objects:
     - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`, `Add_Mito_Ribo`, `Add_Cell_Complexity`.  
+- Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:
+    - `as.LIGER`, `as.Seurat`.  
 - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
 - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
