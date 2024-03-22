@@ -764,11 +764,6 @@ Add_Cell_Complexity.Seurat <- function(
 }
 
 
-#' Add Percent of High Abundance Genes
-#'
-#' Add the percentage of counts occupied by the top XX most highly expressed genes in each cell.
-#'
-#' @param seurat_object object name.
 #' @param num_top_genes An integer vector specifying the size(s) of the top set of high-abundance genes.
 #' Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.
 #' @param meta_col_name name to use for new meta data column.  Default is "percent_topXX", where XX is
@@ -787,7 +782,10 @@ Add_Cell_Complexity.Seurat <- function(
 #'
 #' @return A Seurat Object
 #'
+#' @method Add_Top_Gene_Pct Seurat
+#'
 #' @export
+#' @rdname Add_Top_Gene_Pct
 #'
 #' @concept qc_util
 #'
@@ -806,8 +804,8 @@ Add_Cell_Complexity.Seurat <- function(
 #' }
 #'
 
-Add_Top_Gene_Pct_Seurat <- function(
-    seurat_object,
+Add_Top_Gene_Pct.Seurat <- function(
+    object,
     num_top_genes = 50,
     meta_col_name = NULL,
     assay = "RNA",
@@ -828,7 +826,7 @@ Add_Top_Gene_Pct_Seurat <- function(
   }
 
   # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
+  Is_Seurat(seurat_object = object)
 
   # Add assay warning message
   if (assay != "RNA") {
@@ -844,7 +842,7 @@ Add_Top_Gene_Pct_Seurat <- function(
   }
 
   # Check columns for overwrite
-  if (meta_col_name %in% colnames(x = seurat_object@meta.data)) {
+  if (meta_col_name %in% colnames(x = object@meta.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column {.val {meta_col_name}} already present in meta.data slot.",
                             "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
@@ -855,7 +853,7 @@ Add_Top_Gene_Pct_Seurat <- function(
     )
   }
 
-  count_layers_present <- Layers(object = seurat_object, search = "counts")
+  count_layers_present <- Layers(object = object, search = "counts")
 
   # Extract matrix
   if (length(x = count_layers_present) == 1) {
@@ -863,7 +861,7 @@ Add_Top_Gene_Pct_Seurat <- function(
       cli_inform(message = "Calculating percent expressing top {num_top_genes} for layer: {.field {count_layers_present}}")
     }
 
-    count_mat <- LayerData(object = seurat_object, assay = assay, layer = "counts")
+    count_mat <- LayerData(object = object, assay = assay, layer = "counts")
 
     # calculate
     res <- as.data.frame(scuttle::perCellQCMetrics(x = count_mat, percent.top = num_top_genes))
@@ -881,7 +879,7 @@ Add_Top_Gene_Pct_Seurat <- function(
       }
 
       # Get layer data
-      layer_count <- LayerData(object = seurat_object, assay = assay, layer = count_layers_present[x])
+      layer_count <- LayerData(object = object, assay = assay, layer = count_layers_present[x])
 
       # run scuttle
       layer_res <- as.data.frame(scuttle::perCellQCMetrics(x = layer_count, percent.top = num_top_genes))
@@ -898,12 +896,12 @@ Add_Top_Gene_Pct_Seurat <- function(
   }
 
   # Add to object and return
-  seurat_object <- AddMetaData(object = seurat_object, metadata = res, col.name = meta_col_name)
+  object <- AddMetaData(object = object, metadata = res, col.name = meta_col_name)
 
   # Log Command
-  seurat_object <- LogSeuratCommand(object = seurat_object)
+  object <- LogSeuratCommand(object = object)
 
-  return(seurat_object)
+  return(object)
 }
 
 

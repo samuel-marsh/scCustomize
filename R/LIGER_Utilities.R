@@ -721,6 +721,124 @@ Add_Hemo.liger <- function(
   return(object)
 }
 
+
+#' @param num_top_genes An integer vector specifying the size(s) of the top set of high-abundance genes.
+#' Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.
+#' @param meta_col_name name to use for new meta data column.  Default is "percent_topXX", where XX is
+#' equal to the value provided to `num_top_genes`.
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#' @param verbose logical, whether to print messages with status updates, default is TRUE.
+#'
+#' @import cli
+#' @importFrom dplyr select all_of bind_rows
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang is_installed
+#'
+#' @return A liger Object
+#'
+#' @method Add_Top_Gene_Pct Seurat
+#'
+#' @export
+#' @rdname Add_Top_Gene_Pct
+#'
+#' @concept qc_util
+#'
+#' @examples
+#' \dontrun{
+#' library(Seurat)
+#' pbmc_small <- Add_Top_Gene_Pct_Seurat(object = pbmc_small, num_top_genes = 50)
+#' }
+#'
+
+Add_Top_Gene_Pct.liger <- function(
+    object,
+    num_top_genes = 50,
+    meta_col_name = NULL,
+    overwrite = FALSE,
+    verbose = TRUE
+){
+  # Check for scuttle first
+  scuttle_check <- is_installed(pkg = "scuttle")
+  if (isFALSE(x = scuttle_check)) {
+    cli_abort(message = c(
+      "Please install the {.val scuttle} package to calculate/add top {num_top_genes} genes percentage.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}scuttle{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Check Seurat
+  Is_LIGER(liger_object = object)
+
+  # Set colnames
+  scuttle_colname <- paste0("percent.top_", num_top_genes)
+  if (is.null(x = meta_col_name)) {
+    meta_col_name <- paste0("percent_top", num_top_genes)
+  }
+
+  # Check columns for overwrite
+  meta_names <- colnames(x = Fetch_Meta(object = object))
+
+  if (meta_col_name %in% meta_names) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column {.val {meta_col_name}} already present in meta data.",
+                            "i" = "*To run function and overwrite column, set parameter {.code overwrite = TRUE} or change respective {.code meta_col_name}*.")
+      )
+    }
+    cli_inform(message = c("Column {.val {meta_col_name}} already present in meta data.",
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE}.")
+    )
+  }
+
+  # Get number of datasets
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    num_datasets <- length(x = object@datasets)
+  } else {
+    num_datasets <- length(x = object@raw.data)
+  }
+
+  # Extract matrix
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = "Calculating percent expressing top {num_top_genes} across all datasets.")
+  }
+
+  # apply over all datasets
+  res_list <- lapply(1:num_datasets, function(x) {
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      dataset_mat <- rliger::getMatrix(x = object, slot = "rawData")[[x]]
+    } else {
+      dataset_mat <- object@raw.data[[x]]
+    }
+
+    # run scuttle
+    dataset_res <- as.data.frame(scuttle::perCellQCMetrics(x = dataset_mat, percent.top = num_top_genes))
+    # select results column
+    dataset_res <- dataset_res %>%
+      select(all_of(scuttle_colname))
+  })
+
+  # combine results
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = "Combining data from all datasets.")
+  }
+  res <- bind_rows(res_list)
+
+  # Add to object and return
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    object@cellMeta[[meta_col_name]] <- res
+  } else {
+    object@cell.data[ , meta_col_name] <- res
+  }
+
+  # return object
+  return(object)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### ANALYSIS UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
