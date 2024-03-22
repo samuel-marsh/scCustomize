@@ -51,6 +51,14 @@ Plot_Median_Genes <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # add to meta if grouping by ident
+  if (group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
+
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
@@ -188,6 +196,14 @@ Plot_Median_UMIs <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # add to meta if grouping by ident
+  if (group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
 
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
@@ -327,6 +343,14 @@ Plot_Median_Mito <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # add to meta if grouping by ident
+  if (group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
 
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
@@ -482,6 +506,14 @@ Plot_Median_Other <- function(
     y_axis_label <- paste0("Median ", median_var)
   }
 
+  # add to meta if grouping by ident
+  if (group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
+
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
@@ -621,6 +653,14 @@ Plot_Cells_per_Sample <- function(
   # Check grouping variable is present
   if (is.null(x = group_by)) {
     cli_abort(message = "Must provide meta data variable to {.code group_by} in order to plot data.")
+  }
+
+  # add to meta if grouping by ident
+  if (group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
   }
 
   # Check group by is valid
