@@ -666,7 +666,7 @@ Add_Hemo.Seurat <- function(
 
   # Check that values are provided for mito and ribo
   if (is.null(x = hemo_pattern) && is.null(x = hemo_features)) {
-    cli_abort(message = c("No features or patterns provided for hemo genes.",
+    cli_abort(message = c("No features or patterns provided for hemoglobin genes.",
                           "i" = "Please provide a default species name or pattern/features."))
   }
 
@@ -677,7 +677,7 @@ Add_Hemo.Seurat <- function(
 
   # Check length of hemo features found in object
   if (length_hemo_features < 1) {
-    cli_warn(message = c("No Hemo features found in object using pattern/feature list provided.",
+    cli_warn(message = c("No hemoglobin features found in object using pattern/feature list provided.",
                          "i" = "No column will be added to meta.data.")
     )
   }
