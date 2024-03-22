@@ -85,11 +85,9 @@ Merge_Seurat_List <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-#' Add Multiple Cell Quality Control Values with Single Function
-#'
-#' Add Mito/Ribo %, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single function call
-#'
-#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' generate patterns and features.
 #' @param add_mito_ribo logical, whether to add percentage of counts belonging to mitochondrial/ribosomal
 #' genes to object (Default is TRUE).
 #' @param add_complexity logical, whether to add Cell Complexity to object (Default is TRUE).
@@ -101,18 +99,15 @@ Merge_Seurat_List <- function(
 #' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
 #' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
 #' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
-#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
-#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
-#' generate mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
 #' Default is "percent_ribo".
 #' @param mito_ribo_name name to use for the new meta.data column containing percent
 #' mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".
-#' @param complexity_name name to use for new meta data column for `Add_Cell_Complexity_Seurat`.
+#' @param complexity_name name to use for new meta data column for `Add_Cell_Complexity`.
 #' Default is "log10GenesPerUMI".
-#' @param top_pct_name name to use for new meta data column for `Add_Top_Gene_Pct_Seurat`.
+#' @param top_pct_name name to use for new meta data column for `Add_Top_Gene_Pct`.
 #' Default is "percent_topXX", where XX is equal to the value provided to `num_top_genes`.
 #' @param oxphos_name name to use for new meta data column for percentage of MSigDB oxidative phosphorylation
 #' counts.  Default is "percent_oxphos".
@@ -149,7 +144,10 @@ Merge_Seurat_List <- function(
 #'
 #' @return A Seurat Object
 #'
+#' @method Add_Cell_QC_Metrics Seurat
+#'
 #' @export
+#' @rdname Add_Cell_QC_Metrics
 #'
 #' @concept qc_util
 #'
@@ -159,8 +157,9 @@ Merge_Seurat_List <- function(
 #'}
 #'
 
-Add_Cell_QC_Metrics <- function(
-    seurat_object,
+Add_Cell_QC_Metrics.Seurat <- function(
+    object,
+    species,
     add_mito_ribo = TRUE,
     add_complexity = TRUE,
     add_top_pct = TRUE,
@@ -168,7 +167,6 @@ Add_Cell_QC_Metrics <- function(
     add_IEG = TRUE,
     add_hemo = TRUE,
     add_cell_cycle = TRUE,
-    species,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
     mito_ribo_name = "percent_mito_ribo",
@@ -188,7 +186,8 @@ Add_Cell_QC_Metrics <- function(
     ensembl_ids = FALSE,
     num_top_genes = 50,
     assay = NULL,
-    overwrite = FALSE
+    overwrite = FALSE,
+    ...
 ) {
   # Set assay
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -216,19 +215,19 @@ Add_Cell_QC_Metrics <- function(
   # Add mito/ribo
   if (isTRUE(x = add_mito_ribo)) {
     cli_inform(message = c("*" = "Adding {.field Mito/Ribo Percentages} to meta.data."))
-    seurat_object <- Add_Mito_Ribo(object = seurat_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
+    object <- Add_Mito_Ribo(object = object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, assay = assay, overwrite = overwrite)
   }
 
   # Add complexity
   if (isTRUE(x = add_complexity)) {
     cli_inform(message = c("*" = "Adding {.field Cell Complexity #1 (log10GenesPerUMI)} to meta.data."))
-    seurat_object <- Add_Cell_Complexity(object = seurat_object, meta_col_name = complexity_name, assay = assay, overwrite = overwrite)
+    object <- Add_Cell_Complexity(object = object, meta_col_name = complexity_name, assay = assay, overwrite = overwrite)
   }
 
   # Add top gene expression percent
   if (isTRUE(x = add_top_pct)) {
     cli_inform(message = c("*" = "Adding {.field Cell Complexity #2 (Top {num_top_genes} Percentages)} to meta.data."))
-    seurat_object <- Add_Top_Gene_Pct(object = seurat_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
+    object <- Add_Top_Gene_Pct(object = object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, assay = assay, overwrite = overwrite)
   }
 
   # Add MSigDB
@@ -238,7 +237,7 @@ Add_Cell_QC_Metrics <- function(
                            "i" = "No columns will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data."))
-      seurat_object <- Add_MSigDB_Seurat(seurat_object = seurat_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite)
+      object <- Add_MSigDB_Seurat(seurat_object = object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite)
     }
   }
 
@@ -249,14 +248,14 @@ Add_Cell_QC_Metrics <- function(
                            "i" = "No column will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
-      seurat_object <- Add_IEG_Seurat(seurat_object = seurat_object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
+      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
     }
   }
 
   # Add hemo
   if (isTRUE(x = add_hemo)) {
     cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
-    seurat_object <- Add_Hemo(object = seurat_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
+    object <- Add_Hemo(object = object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
   }
 
   # Add cell cycle
@@ -267,14 +266,14 @@ Add_Cell_QC_Metrics <- function(
       ))
     } else {
       cli_inform(message = c("*" = "Adding {.field Cell Cycle Scoring} to meta.data."))
-      if (length(grep(x = Layers(object = seurat_object), pattern = "data", value = T)) == 0) {
+      if (length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0) {
         cli_inform(message = c("Layer with normalized data not present.",
                                "i" = "Normalizing Data."))
-        seurat_object <- NormalizeData(object = seurat_object)
+        object <- NormalizeData(object = object)
       }
 
       # Overwrite check
-      if ("S.Score" %in% colnames(x = seurat_object@meta.data) || "G2M.Score" %in% colnames(x = seurat_object@meta.data) || "Phase" %in% colnames(x = seurat_object@meta.data)) {
+      if ("S.Score" %in% colnames(x = object@meta.data) || "G2M.Score" %in% colnames(x = object@meta.data) || "Phase" %in% colnames(x = object@meta.data)) {
         if (isFALSE(x = overwrite)) {
           cli_abort(message = c("Columns with {.val S.Score}, {.val G2M.Score} and/or {.val Phase} already present in meta.data slot.",
                                 "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE}*")
@@ -287,15 +286,15 @@ Add_Cell_QC_Metrics <- function(
 
       # Add Cell Cycle Scoring
       cli_inform(message = "Calculating {.field Cell Cycle Scores}.")
-      seurat_object <- CellCycleScoring(object = seurat_object, s.features = Seurat::cc.genes.updated.2019$s.genes, g2m.features = Seurat::cc.genes.updated.2019$g2m.genes)
+      object <- CellCycleScoring(object = object, s.features = Seurat::cc.genes.updated.2019$s.genes, g2m.features = Seurat::cc.genes.updated.2019$g2m.genes)
     }
   }
 
   # Log Command
-  seurat_object <- LogSeuratCommand(object = seurat_object)
+  object <- LogSeuratCommand(object = object)
 
   # return object
-  return(seurat_object)
+  return(object)
 }
 
 
@@ -810,7 +809,8 @@ Add_Top_Gene_Pct.Seurat <- function(
     meta_col_name = NULL,
     assay = "RNA",
     overwrite = FALSE,
-    verbose = TRUE
+    verbose = TRUE,
+    ...
 ){
   # Check for scuttle first
   scuttle_check <- is_installed(pkg = "scuttle")

@@ -1343,3 +1343,83 @@ Add_MSigDB_LIGER <- function(
   # return final object
   return(liger_object)
 }
+
+
+#' Add IEG Gene List Percentages
+#'
+#' Adds percentage of counts from IEG genes from mouse and human.
+#'
+#' @param liger_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+#' @param overwrite Logical.  Whether to overwrite existing meta data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `ieg_name` is present in meta data slot.
+#'
+#' @return liger object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Add_IEG_LIGER <- function(
+    liger_object,
+    species,
+    ieg_name = "percent_ieg",
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  # Check Seurat
+  Is_LIGER(liger_object = liger_object)
+
+  # Overwrite check
+  meta_names <- colnames(x = Fetch_Meta(object = liger_object))
+
+  if (ieg_name %in% meta_names) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {ieg_name}} already present in meta data.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {ieg_name}} already present in meta data.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Retrieve gene lists
+  ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+
+  all_features <- LIGER_Features(liger_object = liger_object, by_dataset = FALSE)
+
+  ieg_found <- intersect(x = ieg_gene_list[["ieg"]], y = all_features)
+
+  # Add ieg column
+  if (length(x = ieg_found) > 0) {
+    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(ieg_name = ieg_found), verbose = FALSE)
+    } else {
+      percent_ieg <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[ieg_found, ])/Matrix::colSums(x))*100}))
+      object@cell.data[ , ieg_name] <- percent_ieg
+    }
+  }
+
+  # return final object
+  return(liger_object)
+}

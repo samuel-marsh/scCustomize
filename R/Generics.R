@@ -98,7 +98,8 @@ Add_Cell_Complexity <- function(object, ...) {
 #'
 #' Add the percentage of counts occupied by the top XX most highly expressed genes in each cell.
 #'
-#' @param object Seurat or liger object name.
+#' @param object Seurat or LIGER object.
+#' @param ... Arguments passed to other methods
 #'
 #' @rdname Add_Top_Gene_Pct
 #' @export Add_Top_Gene_Pct
@@ -106,6 +107,23 @@ Add_Cell_Complexity <- function(object, ...) {
 
 Add_Top_Gene_Pct <- function(object, ...) {
   UseMethod(generic = 'Add_Top_Gene_Pct', object = object)
+}
+
+
+#' Add Multiple Cell Quality Control Values with Single Function
+#'
+#' Add Mito/Ribo %, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single
+#' function call to Seurat or liger objects.
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname Add_Cell_QC_Metrics
+#' @export Add_Cell_QC_Metrics
+#'
+
+Add_Cell_QC_Metrics <- function(object, ...) {
+  UseMethod(generic = 'Add_Cell_QC_Metrics', object = object)
 }
 
 

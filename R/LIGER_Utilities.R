@@ -244,6 +244,177 @@ Find_Factor_Cor <- function(
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+#' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
+#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' generate patterns and features.
+#' @param add_mito_ribo logical, whether to add percentage of counts belonging to mitochondrial/ribosomal
+#' genes to object (Default is TRUE).
+#' @param add_complexity logical, whether to add Cell Complexity to object (Default is TRUE).
+#' @param add_top_pct logical, whether to add Top Gene Percentages to object (Default is TRUE).
+#' @param add_MSigDB logical, whether to add percentages of counts belonging to genes from of mSigDB hallmark
+#' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
+#' object (Default is TRUE).
+#' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
+#' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
+#' Default is "percent_mito".
+#' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
+#' Default is "percent_ribo".
+#' @param mito_ribo_name name to use for the new meta.data column containing percent
+#' mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".
+#' @param complexity_name name to use for new meta data column for `Add_Cell_Complexity`.
+#' Default is "log10GenesPerUMI".
+#' @param top_pct_name name to use for new meta data column for `Add_Top_Gene_Pct`.
+#' Default is "percent_topXX", where XX is equal to the value provided to `num_top_genes`.
+#' @param oxphos_name name to use for new meta data column for percentage of MSigDB oxidative phosphorylation
+#' counts.  Default is "percent_oxphos".
+#' @param apop_name name to use for new meta data column for percentage of MSigDB apoptosis counts.
+#' Default is "percent_apop".
+#' @param dna_repair_name name to use for new meta data column for percentage of MSigDB DNA repair
+#' counts.  Default is "percent_dna_repair"..
+#' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
+#' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
+#' Default is "percent_mito".
+#' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
+#' species is mouse or human; marmoset features list saved separately).
+#' @param ribo_pattern A regex pattern to match features against for ribosomal genes
+#' (will set automatically if species is in default list).
+#' @param hemo_pattern A regex pattern to match features against for hemoglobin genes
+#' (will set automatically if species is in default list).
+#' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
+#' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
+#' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param hemo_features A list of hemoglobin gene names to be used instead of using regex pattern.
+#' Will override regex pattern if both are present (including default saved regex patterns).
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param num_top_genes An integer vector specifying the size(s) of the top set of high-abundance genes.
+#' Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.
+#' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
+#' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
+#'
+#' @import cli
+#'
+#' @return A liger Object
+#'
+#' @method Add_Cell_QC_Metrics liger
+#'
+#' @export
+#' @rdname Add_Cell_QC_Metrics
+#'
+#'
+#' @concept qc_util
+#'
+#' @examples
+#' \dontrun{
+#' obj <- Add_Cell_QC_Metrics(object = obj, species = "Human")
+#'}
+#'
+
+Add_Cell_QC_Metrics.liger <- function(
+    object,
+    add_mito_ribo = TRUE,
+    add_complexity = TRUE,
+    add_top_pct = TRUE,
+    add_MSigDB = TRUE,
+    add_IEG = TRUE,
+    add_hemo = TRUE,
+    add_cell_cycle = TRUE,
+    species,
+    mito_name = "percent_mito",
+    ribo_name = "percent_ribo",
+    mito_ribo_name = "percent_mito_ribo",
+    complexity_name = "log10GenesPerUMI",
+    top_pct_name = NULL,
+    oxphos_name = "percent_oxphos",
+    apop_name = "percent_apop",
+    dna_repair_name = "percent_dna_repair",
+    ieg_name = "percent_ieg",
+    hemo_name = "percent_hemo",
+    mito_pattern = NULL,
+    ribo_pattern = NULL,
+    hemo_pattern = NULL,
+    mito_features = NULL,
+    ribo_features = NULL,
+    hemo_features = NULL,
+    ensembl_ids = FALSE,
+    num_top_genes = 50,
+    assay = NULL,
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+
+  # Add mito/ribo
+  if (isTRUE(x = add_mito_ribo)) {
+    cli_inform(message = c("*" = "Adding {.field Mito/Ribo Percentages} to meta.data."))
+    liger_object <- Add_Mito_Ribo(object = liger_object, species = species, mito_name = mito_name, ribo_name = ribo_name, mito_ribo_name = mito_ribo_name, mito_pattern = mito_pattern, ribo_pattern = ribo_pattern, mito_features = mito_features, ribo_features = ribo_features, ensembl_ids = ensembl_ids, overwrite = overwrite)
+  }
+
+  # Add complexity
+  if (isTRUE(x = add_complexity)) {
+    cli_inform(message = c("*" = "Adding {.field Cell Complexity #1 (log10GenesPerUMI)} to meta.data."))
+    liger_object <- Add_Cell_Complexity(object = liger_object, meta_col_name = complexity_name, overwrite = overwrite)
+  }
+
+  # Add top gene expression percent
+  if (isTRUE(x = add_top_pct)) {
+    cli_inform(message = c("*" = "Adding {.field Cell Complexity #2 (Top {num_top_genes} Percentages)} to meta.data."))
+    liger_object <- Add_Top_Gene_Pct(object = liger_object, num_top_genes = num_top_genes, meta_col_name = top_pct_name, overwrite = overwrite)
+  }
+
+  # Add MSigDB
+  if (isTRUE(x = add_MSigDB)) {
+    if (species %in% marmoset_options) {
+      cli_warn(message = c("{.val Marmoset} is not currently a part of MSigDB gene list database.",
+                           "i" = "No columns will be added to object meta.data"))
+    } else {
+      cli_inform(message = c("*" = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data."))
+      liger_object <- Add_MSigDB_LIGER(liger_object = liger_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, overwrite = overwrite)
+    }
+  }
+
+  # Add IEG
+  if (isTRUE(x = add_IEG)) {
+    if (species %in% c(marmoset_options, rat_options, zebrafish_options, macaque_options, drosophila_options)) {
+      cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, and Drosophila} are not currently supported.",
+                           "i" = "No column will be added to object meta.data"))
+    } else {
+      cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
+      liger_object <- Add_IEG_LIGER(liger_object = liger_object, species = species, ieg_name = ieg_name, overwrite = overwrite)
+    }
+  }
+
+  # Add hemo
+  if (isTRUE(x = add_hemo)) {
+    cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
+    liger_object <- Add_Hemo(object = liger_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, overwrite = overwrite)
+  }
+
+  # return object
+  return(liger_object)
+}
+
+
+
 #' Add Mito and Ribo percentages
 #'
 #' @param species Species of origin for given Object.  If mouse, human, marmoset, zebrafish, rat,
@@ -755,7 +926,8 @@ Add_Top_Gene_Pct.liger <- function(
     num_top_genes = 50,
     meta_col_name = NULL,
     overwrite = FALSE,
-    verbose = TRUE
+    verbose = TRUE,
+    ...
 ){
   # Check for scuttle first
   scuttle_check <- is_installed(pkg = "scuttle")
