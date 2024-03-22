@@ -175,7 +175,7 @@ obj <- Add_Cell_QC_Metrics(object = obj, species = "Human")
 }
 
 \dontrun{
-obj <- Add_Cell_QC_Metrics(seurat_object = obj, species = "Human")
+obj <- Add_Cell_QC_Metrics(object = obj, species = "Human")
 }
 
 }
