@@ -58,10 +58,10 @@ as.LIGER.Seurat <- function(
     verbose = TRUE,
     ...
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("{.code scCustomize::as.Liger} is for rliger < v2.0.0.",
+                          "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::as.liger}."))
   }
 
   # Check Seurat
@@ -278,10 +278,10 @@ as.LIGER.list <- function(
     verbose = TRUE,
     ...
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("{.code scCustomize::as.Liger} is for rliger < v2.0.0.",
+                          "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::as.liger}."))
   }
 
   # Check Seurat
@@ -527,10 +527,10 @@ as.Seurat.liger <- function(
     barcode_cell_id_delimiter = "_",
     ...
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("{.code scCustomize::as.Seurat} is for rliger < v2.0.0.",
+                          "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::ligerToSeurat}."))
   }
 
   if (is.null(x = reduction_label)) {
