@@ -631,7 +631,7 @@ Add_Hemo.Seurat <- function(
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
 
-  # Assign mito/ribo pattern to stored species
+  # Assign hemo pattern to stored species
   if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options) && any(!is.null(x = hemo_pattern))) {
     cli_warn(message = c("Pattern expressions for included species are set by default.",
                          "*" = "Supplied {.code hemo_pattern} and {.code hemo_pattern} will be disregarded.",
