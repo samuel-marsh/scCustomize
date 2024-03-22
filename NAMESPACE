@@ -2,6 +2,8 @@
 
 S3method(Add_Cell_Complexity,Seurat)
 S3method(Add_Cell_Complexity,liger)
+S3method(Add_Cell_QC_Metrics,Seurat)
+S3method(Add_Cell_QC_Metrics,liger)
 S3method(Add_Hemo,Seurat)
 S3method(Add_Hemo,liger)
 S3method(Add_Mito_Ribo,Seurat)
