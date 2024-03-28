@@ -30,6 +30,7 @@
 - Fixed several potential errors in `as.anndata` from Seurat conversion that previously caused failures ([#168](https://github.com/samuel-marsh/scCustomize/issues/168)).  
 - Fixed errors in `Create_Cluster_Annotation_File` if for file path and csv name errors.  
 - Fixed error when using `plot_median` and more than one feature in `VlnPlot_scCustom` ([#169](https://github.com/samuel-marsh/scCustomize/issues/169)).  
+- Fixed bug while collecting legends for `DimPlot_scCustom` due to changes in guides updated with ggplot2 v3.5.0 ([#171](https://github.com/samuel-marsh/scCustomize/issues/171))
 - Spelling and style fixes.  Thanks @kew24.  
 
 
