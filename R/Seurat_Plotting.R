@@ -1920,6 +1920,11 @@ DimPlot_scCustom <- function(
           xlim(x_axis) +
           ylim(y_axis)
 
+        # temp? fix for ggplot2 3.5.0 while evaluating other changes
+        if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
+          plot$layers[[1]]$show.legend <- TRUE
+        }
+
         # Normalize the colors across all plots
         plot <- suppressMessages(plot + scale_color_manual(values = colors_overall, drop = FALSE))
 
