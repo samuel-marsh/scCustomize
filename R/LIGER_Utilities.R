@@ -188,7 +188,7 @@ LIGER_DimReduc <- function(
       # get coords
       reduc_coords <- dimReds(x = liger_object)[[reduction_use]]
   } else {
-    cli_abort("The reduction {.field {reduction_use}} is not present in cellMeta slot.")
+    cli_abort("The reduction {.field {reduction_use}} is not present in dimReds slot.")
   }
 
   # return coords
