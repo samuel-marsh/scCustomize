@@ -440,6 +440,218 @@ Plot_By_Cluster_LIGER <- function(
   }
 }
 
+
+Plot_By_Cluster_LIGER2 <- function(
+    liger_object,
+    colors_use = NULL,
+    group_by = "dataset",
+    split_by = NULL,
+    title = NULL,
+    pt_size = NULL,
+    reduction = NULL,
+    num_columns = NULL,
+    shuffle = TRUE,
+    shuffle_seed = 1,
+    legend.size = 5,
+    label = TRUE,
+    label_size = NA,
+    label_repel = FALSE,
+    label_box = FALSE,
+    label_color = "black",
+    reorder.idents = FALSE,
+    new.order = NULL,
+    raster = NULL,
+    raster.dpi = c(512, 512),
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Set reduction
+  reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
+
+  # Create plotting data.frame
+  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
+
+  if (!is.null(x = split_by)) {
+    list_of_splits <- unique(x = reduc_df[[split_by]])
+  }
+
+  # Get length of meta data feature
+  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+    split.by_length <- length(x = list_of_splits)
+
+    # Calculate number of rows for selected number of columns
+    num_rows <- ceiling(x = split.by_length/num_columns)
+
+    # Check column and row compatibility
+    if (num_columns > split.by_length) {
+      cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
+      )
+    }
+  }
+
+  # Create accurate axis labels
+  x_axis_label <- names(x = reduc_df)[1]
+  y_axis_label <- names(x = reduc_df)[2]
+
+  centers <<- reduc_df %>%
+    group_by(.data[['Cluster']]) %>%
+    summarize(dr1 = median(x = .data[[x_axis_label]]),
+              dr2 = median(x = .data[[y_axis_label]])
+    )
+
+  colnames(x = centers) <- c("Cluster", x_axis_label, y_axis_label)
+
+  cluster_length <- length(x = unique(x = liger_object@cellMeta$leiden_cluster))
+
+  if (is.null(x = colors_use)) {
+    colors_use <- scCustomize_Palette(num_groups = cluster_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # plot
+  if (isTRUE(x = raster)) {
+    if (!is.null(x = split_by)) {
+      p2 <- lapply(1:length(x = list_of_splits), function(x){
+        p2 <- ggplot(data = subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+          theme_cowplot() +
+          geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
+          guides(color = guide_legend(override.aes = list(size = legend.size))) +
+          ggtitle(list_of_splits[x]) +
+          scale_color_manual(values = colors_use) +
+          theme(legend.position = "right",
+                axis.text = element_text(size = rel(0.95)),
+                plot.title = element_text(hjust = 0.5)) +
+          guides(col = guide_legend(title = "", override.aes = list(size = 4))) +
+          xlab(x_axis_label) +
+          ylab(y_axis_label)
+
+        if (isTRUE(x = label_box)) {
+          geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
+          p2 <- p2 + geom.use(
+            data = centers,
+            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+            show.legend = FALSE, color = label_color
+          ) + scale_fill_manual(values = colors_use)
+        } else if (isTRUE(x = label)) {
+          geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
+          p2 <- p2 + geom.use(
+            data = centers,
+            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+            show.legend = FALSE
+          )
+        } else {
+          p2 <- p2
+        }
+      })
+    } else {
+      p2 <- ggplot(data = reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+        theme_cowplot() +
+        geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
+        guides(color = guide_legend(override.aes = list(size = legend.size))) +
+        scale_color_manual(values = colors_use) +
+        theme(legend.position = "right",
+              axis.text = element_text(size = rel(0.95)),
+              plot.title = element_text(hjust = 0.5)) +
+        guides(col = guide_legend(title = "", override.aes = list(size = 4))) +
+        xlab(x_axis_label) +
+        ylab(y_axis_label)
+
+      if (isTRUE(x = label_box)) {
+        geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
+        p2 <- p2 + geom.use(
+          data = centers,
+          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+          show.legend = FALSE, color = label_color
+        ) + scale_fill_manual(values = colors_use)
+      } else if (isTRUE(x = label)) {
+        geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
+        p2 <- p2 + geom.use(
+          data = centers,
+          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+          show.legend = FALSE
+        )
+      } else {
+        p2 <- p2
+      }
+    }
+  } else {
+    if (!is.null(x = split_by)) {
+      p2 <- lapply(1:length(x = list_of_splits), function(x){
+        p2 <- ggplot(data = subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+          theme_cowplot() +
+          geom_point(size = pt_size) +
+          guides(color = guide_legend(override.aes = list(size = legend.size))) +
+          ggtitle(list_of_splits[x]) +
+          scale_color_manual(values = colors_use) +
+          theme(legend.position = "right",
+                axis.text = element_text(size = rel(0.95)),
+                plot.title = element_text(hjust = 0.5)) +
+          guides(col = guide_legend(title = "", override.aes = list(size = 4))) +
+          xlab(x_axis_label) +
+          ylab(y_axis_label)
+
+        if (isTRUE(x = label_box)) {
+          geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
+          p2 <- p2 + geom.use(
+            data = centers,
+            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+            show.legend = FALSE, color = label_color
+          ) + scale_fill_manual(values = colors_use)
+        } else if (isTRUE(x = label)) {
+          geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
+          p2 <- p2 + geom.use(
+            data = centers,
+            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+            show.legend = FALSE
+          )
+        } else {
+          p2 <- p2
+        }
+      })
+    } else {
+      p2 <- ggplot(data = reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+        theme_cowplot() +
+        geom_point(size = pt_size) +
+        guides(color = guide_legend(override.aes = list(size = legend.size))) +
+        scale_color_manual(values = colors_use) +
+        theme(legend.position = "right",
+              axis.text = element_text(size = rel(0.95)),
+              plot.title = element_text(hjust = 0.5)) +
+        guides(col = guide_legend(title = "", override.aes = list(size = 4)))
+
+      if (isTRUE(x = label_box)) {
+        geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
+        p2 <- p2 + geom.use(
+          data = centers,
+          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+          show.legend = FALSE, color = label_color
+        ) + scale_fill_manual(values = colors_use)
+      } else if (isTRUE(x = label)) {
+        geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
+        p2 <- p2 + geom.use(
+          data = centers,
+          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+          show.legend = FALSE
+        )
+      } else {
+        p2 <- p2
+      }
+    }
+  }
+  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+    p2 <- wrap_plots(p2) + plot_layout(nrow = num_rows, ncol = num_columns, guides = 'collect')
+    return(p2)
+  }
+  if (!is.null(x = split_by) && is.null(x = num_columns)) {
+    p2 <- wrap_plots(p2) + plot_layout(guides = 'collect')
+    return(p2)
+  } else {
+    return(p2)
+  }
+}
+
+
 #' LIGER plot by meta variables.
 #'
 #' Modified version of LIGER's plotByDatasetAndCluster just for plotting meta variables.
@@ -608,6 +820,130 @@ Plot_By_Meta_LIGER <- function(
         guides(col = guide_legend(title = "", override.aes = list(size = 4))) +
         xlab(x_axis_label) +
         ylab(y_axis_label)
+    }
+  }
+  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+    p1 <- wrap_plots(p1) + plot_layout(nrow = num_rows, ncol = num_columns)
+    return(p1)
+  }
+  if (!is.null(x = split_by) && is.null(x = num_columns)) {
+    p1 <- wrap_plots(p1)
+    return(p1)
+  } else {
+    return(p1)
+  }
+}
+
+
+Plot_By_Meta_LIGER2 <- function(
+    liger_object,
+    colors_use = NULL,
+    group_by = "dataset",
+    split_by = NULL,
+    title = NULL,
+    pt_size = NULL,
+    reduction = NULL,
+    num_columns = NULL,
+    shuffle = TRUE,
+    shuffle_seed = 1,
+    legend.size = 3,
+    reorder.idents = FALSE,
+    new.order = NULL,
+    raster = NULL,
+    raster.dpi = c(512, 512),
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Set reduction
+  reduction <- reduction %||% scCustomize:::Default_DimReduc_LIGER(liger_object = liger_object)
+
+  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
+
+  if (!is.null(x = split_by)) {
+    list_of_splits <- unique(x = reduc_df[[split_by]])
+  }
+
+  # Get length of meta data feature
+  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+    split.by_length <- length(x = list_of_splits)
+
+    # Calculate number of rows for selected number of columns
+    num_rows <- ceiling(x = split.by_length/num_columns)
+
+    # Check column and row compatibility
+    if (num_columns > split.by_length) {
+      cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
+                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
+      )
+    }
+  }
+
+  meta_length <- length(x = unique(x = liger_object@cellMeta[[group_by]]))
+
+  if (is.null(x = colors_use)) {
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = meta_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+  }
+
+  # Create accurate axis labels
+  x_axis_label <- names(x = reduc_df)[1]
+  y_axis_label <- names(x = reduc_df)[2]
+
+  group_by <- sym(x = group_by)
+
+  if (isTRUE(x = raster)) {
+    if (!is.null(x = split_by)) {
+      p1 <- lapply(1:length(x = list_of_splits), function(x){
+        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+          theme_cowplot() +
+          geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
+          guides(color = guide_legend(override.aes = list(size = legend.size))) +
+          ggtitle(list_of_splits[x]) +
+          scale_color_manual(values = colors_use) +
+          theme(legend.position = "right",
+                axis.text = element_text(size = rel(0.95)),
+                plot.title = element_text(hjust = 0.5)) +
+          guides(col = guide_legend(title = "", override.aes = list(size = 4)))
+      })
+    } else {
+      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+        theme_cowplot() +
+        geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
+        guides(color = guide_legend(override.aes = list(size = legend.size))) +
+        scale_color_manual(values = colors_use) +
+        theme(legend.position = "right",
+              axis.text = element_text(size = rel(0.95)),
+              plot.title = element_text(hjust = 0.5)) +
+        guides(col = guide_legend(title = "", override.aes = list(size = 4)))
+
+    }
+  } else {
+    if (!is.null(x = split_by)) {
+      p1 <- lapply(1:length(x = list_of_splits), function(x){
+        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+          theme_cowplot() +
+          geom_point(size = pt_size) +
+          guides(color = guide_legend(override.aes = list(size = legend.size))) +
+          ggtitle(list_of_splits[x]) +
+          scale_color_manual(values = colors_use) +
+          theme(legend.position = "right",
+                axis.text = element_text(size = rel(0.95)),
+                plot.title = element_text(hjust = 0.5)) +
+          guides(col = guide_legend(title = "", override.aes = list(size = 4)))
+      })
+    } else {
+      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+        theme_cowplot() +
+        geom_point(size = pt_size) +
+        guides(color = guide_legend(override.aes = list(size = legend.size))) +
+        scale_color_manual(values = colors_use) +
+        theme(legend.position = "right",
+              axis.text = element_text(size = rel(0.95)),
+              plot.title = element_text(hjust = 0.5)) +
+        guides(col = guide_legend(title = "", override.aes = list(size = 4)))
     }
   }
   if (!is.null(x = split_by) && !is.null(x = num_columns)) {
