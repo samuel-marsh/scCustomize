@@ -86,11 +86,6 @@ DimPlot_LIGER <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Check dimreduc present
-  if (length(x = liger_object@tsne.coords) == 0) {
-    cli_abort(message = "No dimensionality reduction coordinates found.")
-  }
-
   # Set group_by defaults
   if (isFALSE(x = combination) && is.null(x = group_by)) {
     group_by <- "cluster"
