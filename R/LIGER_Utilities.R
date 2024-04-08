@@ -80,6 +80,64 @@ LIGER_Features <- function(
 }
 
 
+#' Extract Cells from LIGER Object
+#'
+#' Extract all cell barcodes from LIGER object
+#'
+#' @param liger_object LIGER object name.
+#' @param by_dataset logical, whether to return list with vector of cell barcodes for each
+#' dataset in LIGER object or to return single vector of cell barcodes across all
+#' datasets in object (default is FALSE; return vector of cells)
+#'
+#' @return vector or list depending on `by_dataset` parameter
+#'
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return single vector of all cells
+#' all_features <- LIGER_Cells(liger_object = object, by_dataset = FALSE)
+#'
+#' # return list of vectors containing cells from each individual dataset in object
+#' dataset_features <- LIGER_Cells(liger_object = object, by_dataset = TRUE)
+#' }
+#'
+
+LIGER_Cells <- function(
+    liger_object,
+    by_dataset = FALSE
+) {
+  # check liger
+  Is_LIGER(liger_object = liger_object)
+
+  # liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    # Extract features
+    cells_by_dataset <- lapply(1:length(x = liger_object@datasets), function(x) {
+      colnames(x = liger_object@datasets[[x]])
+    })
+    names(cells_by_dataset) <- names(liger_object@datasets)
+  } else {
+    # Extract features
+    cells_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
+      colnames(x = liger_object@raw.data[[x]])
+    })
+  }
+
+  # Return features
+  if (isFALSE(x = by_dataset)) {
+    cells <- x = unlist(x = cells_by_dataset)
+    return(cells)
+  } else {
+    return(cells_by_dataset)
+  }
+}
+
+
 #' Extract top loading genes for LIGER factor
 #'
 #' Extract vector to the top loading genes for specified LIGER iNMF factor
