@@ -4,6 +4,7 @@
 - Added new function `seq_zeros()` to create sequences with preceding zeros.  
 - Added new functions to interact with upcoming liger object format change:  
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
+    - `LIGER_Cells` to extract vector of all cells or list vectors of cells by dataset.  
 - Updated functions to interact with both old and new style liger objects:
     - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`, `Add_Mito_Ribo`, `Add_Cell_Complexity`.  
 - Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:
