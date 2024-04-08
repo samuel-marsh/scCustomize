@@ -118,6 +118,55 @@ Generate_Plotting_df_LIGER <- function(object,
 }
 
 
+Generate_Plotting_df_LIGER2 <- function(object,
+                                        reduction = NULL,
+                                        clusters = NULL,
+                                        shuffle = TRUE,
+                                        shuffle_seed = 1,
+                                        reorder.idents = FALSE,
+                                        new.order = NULL,
+                                        group_by = "dataset",
+                                        split_by = NULL
+) {
+  # Set reduction if null
+  if (!is.null(x = reduction)) {
+    LIGER_DimReduc(liger_object = object, reduction = reduction, check_only = TRUE)
+  } else {
+    reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
+  }
+
+  reduc_df <- data.frame(LIGER_DimReduc(liger_object = object, reduction = reduction))
+  reduc_df[[group_by]] <- object@cellMeta[[group_by]]
+  if (!is.null(x = split_by)) {
+    reduc_df[[split_by]] <- object@cellMeta[[split_by]]
+  }
+
+  if (isTRUE(x = reorder.idents)) {
+    reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
+  }
+  c_names <- names(x = object@cellMeta$leiden_cluster)
+  if (is.null(x = clusters)) {
+    # if clusters have not been set yet
+    if (length(x = object@cellMeta$leiden_cluster) == 0) {
+      clusters <- rep(1, nrow(x = reduc_df))
+      names(x = clusters) <- c_names <- rownames(x = reduc_df)
+    } else {
+      clusters <- object@cellMeta$leiden_cluster
+      c_names <- names(x = object@cellMeta$leiden_cluster)
+    }
+  }
+  reduc_df[['Cluster']] <- clusters[c_names]
+
+  if (isTRUE(x = shuffle)) {
+    set.seed(shuffle_seed)
+    idx <- sample(x = 1:nrow(reduc_df))
+    reduc_df <- reduc_df[idx, ]
+  }
+  return(reduc_df)
+}
+
+
+
 #' LIGER plot by cluster.
 #'
 #' Modified version of LIGER's plotByDatasetAndCluster just for plotting clusters.
