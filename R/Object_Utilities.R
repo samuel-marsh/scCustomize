@@ -1116,7 +1116,7 @@ Add_Sample_Meta <- function(
   }
 
   # Check NA in meta data
-  if (anyNA(x = meta_data)) {
+  if (anyNA(x = meta_data) && isFALSE(x = na_ok)) {
     cli_abort(message = c("{.code meta_data} contains NA values.",
                           "i" = "If you would like NA values added to Seurat meta data please set {.code na_ok = TRUE}.")
     )
