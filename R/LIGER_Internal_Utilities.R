@@ -200,10 +200,9 @@ Plot_By_Cluster_LIGER <- function(
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+  # Check dimreduc present
+  if (length(x = liger_object@tsne.coords) == 0) {
+    cli_abort(message = "No dimensionality reduction coordinates found.")
   }
 
   # Create plotting data.frame
@@ -460,10 +459,9 @@ Plot_By_Meta_LIGER <- function(
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+  # Check dimreduc present
+  if (length(x = liger_object@tsne.coords) == 0) {
+    cli_abort(message = "No dimensionality reduction coordinates found.")
   }
 
   tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
