@@ -17,7 +17,10 @@
 #' if points of interest are being buried. (Default is TRUE).
 #' @param shuffle_seed Sets the seed if randomly shuffling the order of points.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
-#' technique and therefore needs to be set manually.  Default is "UMAP".
+#' technique and therefore needs to be set manually.  Default is "UMAP". (only valid for
+#' rliger < 2.0.0).
+#' @param reduction specify reduction to use when plotting.  Default is current object
+#' default reduction (only valid for rliger v2.0.0 or greater).
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
@@ -64,6 +67,7 @@ DimPlot_LIGER <- function(
   shuffle = TRUE,
   shuffle_seed = 1,
   reduction_label = "UMAP",
+  reduction = NULL,
   aspect_ratio = NULL,
   label = TRUE,
   label_size = NA,
@@ -77,12 +81,6 @@ DimPlot_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
@@ -109,23 +107,28 @@ DimPlot_LIGER <- function(
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
-  # Add one time dim label warning
-  if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
-    cli_inform(message = c("",
-                           "NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
-                           "on the plot.",
-                           "By default this is set to {.val UMAP}.",
-                           "Please take note of this parameter as LIGER objects do not store the name",
-                           "of reduction technique used and therefore this needs to be set manually.",
-                           "",
-                           "-----This message will be shown once per session.-----"))
-    options(scCustomize_warn_LIGER_dim_labels = FALSE)
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    # Add one time dim label warning
+    if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
+      cli_inform(message = c("",
+                             "NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
+                             "on the plot.",
+                             "By default this is set to {.val UMAP}.",
+                             "Please take note of this parameter as LIGER objects do not store the name",
+                             "of reduction technique used and therefore this needs to be set manually.",
+                             "",
+                             "-----This message will be shown once per session.-----"))
+      options(scCustomize_warn_LIGER_dim_labels = FALSE)
+    }
   }
 
-  # Add raster check for scCustomize
-  raster <- raster %||% (nrow(x = liger_object@cell.data) > 2e5)
+  # cells in object
+  cells_total <- LIGER_Cells(liger_object = liger_object)
 
-  if (isTRUE(x = raster) && (nrow(x = liger_object@cell.data) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
+  # Add raster check for scCustomize
+  raster <- raster %||% (length(x = cells_total) > 2e5)
+
+  if (isTRUE(x = raster) && (length(x = cells_total) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
     cli_inform(message = c("",
                            "Rasterizing points since number of points exceeds 200,000.",
                            "To disable this behavior set {.code raster = FALSE}",
@@ -136,117 +139,58 @@ DimPlot_LIGER <- function(
 
   # Add point size
   if (is.null(x = pt_size)) {
-    cells_total <- nrow(x = liger_object@cell.data)
     # modified version of the AutoPointSize() function from Seurat
     pt_size <- AutoPointSize_scCustom(data = cells_total, raster = raster)
   }
 
-  # Create accurate axis labels
-  x_axis_label <- paste0(reduction_label, "_1")
-  y_axis_label <- paste0(reduction_label, "_2")
-
-  # plot combination plot
-  if (isTRUE(x = combination)) {
-    p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
-                                colors_use = colors_use_cluster,
-                                split_by = split_by,
-                                pt_size = pt_size,
-                                reduction_label = reduction_label,
-                                shuffle = shuffle,
-                                raster = raster,
-                                raster.dpi = raster.dpi,
-                                ggplot_default_colors = ggplot_default_colors,
-                                num_columns = num_columns,
-                                shuffle_seed = shuffle_seed,
-                                label_size = label_size,
-                                label_repel = label_repel,
-                                label_box = label_box,
-                                label_color = label_color,
-                                label = label,
-                                color_seed = color_seed)
-
-    p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
-                             colors_use = colors_use_meta,
-                             group_by = group_by,
-                             pt_size = pt_size,
-                             reduction_label = reduction_label,
-                             num_columns = num_columns,
-                             shuffle = shuffle,
-                             raster = raster,
-                             raster.dpi = raster.dpi,
-                             ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
-                             color_seed = color_seed,
-                             shuffle_seed = shuffle_seed)
-
-    p3 <- wrap_plots(p1 + p2)
-
-    # Aspect ratio changes
-    if (!is.null(x = aspect_ratio)) {
-      if (!is.numeric(x = aspect_ratio)) {
-        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-      }
-      p3 <- p3 & theme(aspect.ratio = aspect_ratio)
-    }
-
-    return(p3)
+  # liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    plots <-LIGER2_DimPlot(liger_object = liger_object,
+                           group_by = group_by,
+                           split_by = split_by,
+                           colors_use_cluster = colors_use_cluster,
+                           colors_use_meta = colors_use_meta,
+                           pt_size = pt_size,
+                           shuffle = shuffle,
+                           shuffle_seed = shuffle_seed,
+                           reduction = reduction,
+                           aspect_ratio = aspect_ratio,
+                           label = label,
+                           label_size = label_size,
+                           label_repel = label_repel,
+                           label_box = label_box,
+                           label_color = label_color,
+                           combination = combination,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           num_columns = num_columns,
+                           ggplot_default_colors = ggplot_default_colors,
+                           color_seed = color_seed)
+  } else {
+    plots <-LIGER_DimPlot(liger_object = liger_object,
+                           group_by = group_by,
+                           split_by = split_by,
+                           colors_use_cluster = colors_use_cluster,
+                           colors_use_meta = colors_use_meta,
+                           pt_size = pt_size,
+                           shuffle = shuffle,
+                           shuffle_seed = shuffle_seed,
+                           reduction_label = reduction_label,
+                           aspect_ratio = aspect_ratio,
+                           label = label,
+                           label_size = label_size,
+                           label_repel = label_repel,
+                           label_box = label_box,
+                           label_color = label_color,
+                           combination = combination,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           num_columns = num_columns,
+                           ggplot_default_colors = ggplot_default_colors,
+                           color_seed = color_seed)
   }
-
-  # Plot by cluster
-  if (group_by == "cluster") {
-    p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
-                                colors_use = colors_use_cluster,
-                                split_by = split_by,
-                                pt_size = pt_size,
-                                reduction_label = reduction_label,
-                                shuffle = shuffle,
-                                raster = raster,
-                                raster.dpi = raster.dpi,
-                                ggplot_default_colors = ggplot_default_colors,
-                                num_columns = num_columns,
-                                shuffle_seed = shuffle_seed,
-                                label_size = label_size,
-                                label_repel = label_repel,
-                                label_box = label_box,
-                                label_color = label_color,
-                                label = label,
-                                color_seed = color_seed)
-    # Aspect ratio changes
-    if (!is.null(x = aspect_ratio)) {
-      if (!is.numeric(x = aspect_ratio)) {
-        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-      }
-      p1 <- p1 & theme(aspect.ratio = aspect_ratio)
-    }
-
-    return(p1)
-  }
-
-  # Plot by Meta
-  if (group_by != "cluster") {
-    p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
-                             colors_use = colors_use_meta,
-                             group_by = group_by,
-                             pt_size = pt_size,
-                             reduction_label = reduction_label,
-                             num_columns = num_columns,
-                             shuffle = shuffle,
-                             raster = raster,
-                             raster.dpi = raster.dpi,
-                             ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
-                             shuffle_seed = shuffle_seed,
-                             color_seed = color_seed)
-    # Aspect ratio changes
-    if (!is.null(x = aspect_ratio)) {
-      if (!is.numeric(x = aspect_ratio)) {
-        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-      }
-      p2 <- p2 & theme(aspect.ratio = aspect_ratio)
-    }
-
-    return(p2)
-  }
+  # return plots
+  return(plots)
 }
 
 
