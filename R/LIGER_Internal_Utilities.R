@@ -1923,6 +1923,7 @@ LIGER2_DimPlot <- function(
     pt_size = NULL,
     shuffle = TRUE,
     shuffle_seed = 1,
+    reduction = reduction,
     aspect_ratio = NULL,
     label = TRUE,
     label_size = NA,
