@@ -130,7 +130,7 @@ LIGER_Cells <- function(
 
   # Return features
   if (isFALSE(x = by_dataset)) {
-    cells <- x = unlist(x = cells_by_dataset)
+    cells <- unlist(x = cells_by_dataset)
     return(cells)
   } else {
     return(cells_by_dataset)
