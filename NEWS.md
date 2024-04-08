@@ -6,7 +6,7 @@
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
     - `LIGER_Cells` to extract vector of all cells or list vectors of cells by dataset.  
 - Updated functions to interact with both old and new style liger objects:
-    - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`, `Add_Mito_Ribo`, `Add_Cell_Complexity`.  
+    - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`, `Add_Mito_Ribo`, `Add_Cell_Complexity`, `DimPlot_LIGER`.  
 - Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:
     - `as.LIGER`, `as.Seurat`.  
 - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
