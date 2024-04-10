@@ -12,6 +12,7 @@
 - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
 - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
+- Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
 
 
   
