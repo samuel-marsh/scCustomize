@@ -1647,6 +1647,94 @@ Read_Metrics_10X <- function(
 }
 
 
+#' Read Overall Statistics from CellBender
+#'
+#' Get data.frame with all metrics from the CellBender `remove-background` analysis.
+#'
+#' @param base_path path to the parent directory which contains all of the sub-directories of interest.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample metrics from CellBender.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr bind_rows
+#' @importFrom magrittr "%>%"
+#' @importFrom utils read.csv
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' CB_metrics <- Read_Metrics_CellBender(base_path = "/path/to/directories")
+#' }
+#'
+
+Read_Metrics_CellBender <- function(
+    base_path,
+    lib_list = NULL,
+    lib_names = NULL
+) {
+  # Confirm directory exists
+  if (dir.exists(paths = base_path) == FALSE) {
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
+  }
+  # Detect libraries if lib_list is NULL
+  if (is.null(x = lib_list)) {
+    lib_list <- list.dirs(path = base_path, full.names = F, recursive = F)
+  }
+
+  # Check if full directory path exists
+  for (i in 1:length(x = lib_list)) {
+    full_directory_path <- file.path(base_path, lib_list[i])
+    if (dir.exists(paths = full_directory_path) == FALSE) {
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
+    }
+  }
+
+  cli_inform(message = "Reading {.field CellBender} Metrics")
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    # get directory path
+    file_path <- file.path(base_path, lib_list[x])
+
+    # full path with file name
+    full_path <- file.path(file_path, paste0(lib_list[x], "_out_metrics.csv"))
+
+    # read in metrics file
+    raw_data <- read.csv(file = full_path, stringsAsFactors = FALSE, header = FALSE)
+
+    # Move statistic names to rownames and transpose
+    raw_data <- raw_data %>%
+      column_to_rownames("V1") %>%
+      t() %>%
+      data.frame()
+
+    # return the new raw_data data.frame
+    raw_data
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # replace nonsense with sample_id as well
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### READ Utilities ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
