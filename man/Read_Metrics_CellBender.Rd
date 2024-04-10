@@ -7,7 +7,8 @@
 Read_Metrics_CellBender(base_path, lib_list = NULL, lib_names = NULL)
 }
 \arguments{
-\item{base_path}{path to the parent directory which contains all of the sub-directories of interest.}
+\item{base_path}{path to the parent directory which contains all of the sub-directories of interest or
+path to single metrics csv file.}
 
 \item{lib_list}{a list of sample names (matching directory names) to import.  If \code{NULL} will read
 in all samples in parent directory.}
