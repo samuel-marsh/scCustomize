@@ -1651,7 +1651,8 @@ Read_Metrics_10X <- function(
 #'
 #' Get data.frame with all metrics from the CellBender `remove-background` analysis.
 #'
-#' @param base_path path to the parent directory which contains all of the sub-directories of interest.
+#' @param base_path path to the parent directory which contains all of the sub-directories of interest or
+#' path to single metrics csv file.
 #' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
 #' in all samples in parent directory.
 #' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
@@ -1680,6 +1681,33 @@ Read_Metrics_CellBender <- function(
     lib_list = NULL,
     lib_names = NULL
 ) {
+  # single file vs. multi-sample
+  if (length(x = grep(pattern = "\\.csv", x = base_path, value = TRUE)) > 0) {
+    if (file.exists(base_path) == FALSE) {
+      cli_abort(message = "Metrics file: {.val {base_path}} specified by {.code base_path} does not exist.")
+    } else {
+      # read in metrics file
+      raw_data_single <- read.csv(file = base_path, stringsAsFactors = FALSE, header = FALSE)
+
+      # Move statistic names to rownames and transpose
+      raw_data_single <- raw_data_single %>%
+        column_to_rownames("V1") %>%
+        t() %>%
+        data.frame()
+
+      # Add sample name
+      file_name <- basename(path = base_path)
+      sample_name <- gsub(pattern = "_out_metrics.csv", replacement = "", x = file_name)
+
+      rownames(raw_data_single) <- sample_name
+
+      raw_data_single <- cbind(sample_id = sample_name, raw_data_single)
+
+      # return the new raw_data data.frame
+      return(raw_data_single)
+    }
+  }
+
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
     cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
@@ -1697,7 +1725,7 @@ Read_Metrics_CellBender <- function(
     }
   }
 
-  cli_inform(message = "Reading {.field CellBender} Metrics")
+  cli_inform(message = "Reading {.field CellBender} Metrics for {.field {length(lib_list)} samples}.")
   raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
     # get directory path
     file_path <- file.path(base_path, lib_list[x])
