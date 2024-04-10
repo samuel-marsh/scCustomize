@@ -1167,7 +1167,7 @@ Metrics_Count_GEX <- function(
       file_path <- file.path(base_path, lib_list[x], secondary_path)
     }
 
-    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data[1, ])
     raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
@@ -1250,7 +1250,7 @@ Metrics_Multi_GEX <- function(
       file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
     }
 
-    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
 
     # Change format to column based and select relevant metrics
     GEX_metrics <- raw_data %>%
@@ -1370,7 +1370,7 @@ Metrics_Multi_VDJT <- function(
       file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
     }
 
-    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = F)
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
 
     VDJ_T_Metrics <- raw_data %>%
       filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
@@ -1520,7 +1520,7 @@ process_hgnc_data <- function(
     to
 ) {
   # read in data
-  hgnc_full_data <- data.table::fread(file = from, data.table = F)
+  hgnc_full_data <- data.table::fread(file = from, data.table = FALSE)
 
   # filter data: Approved Genes > select relevant categories
   hgnc_filtered_data <- hgnc_full_data %>%
