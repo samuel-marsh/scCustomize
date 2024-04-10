@@ -1199,7 +1199,6 @@ Metrics_Count_GEX <- function(
   rownames(x = full_data) <- full_data$sample_id
 
   return(full_data)
-
 }
 
 
