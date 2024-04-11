@@ -2,7 +2,7 @@
 ## Added  
 - Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
 - Added new function `seq_zeros()` to create sequences with preceding zeros.  
-- Added new functions to interact with upcoming liger object format change:  
+- Added new functions to interact with liger v2.0.0+ object format change:  
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
     - `LIGER_Cells` to extract vector of all cells or list vectors of cells by dataset.  
 - Updated functions to interact with both old and new style liger objects:
