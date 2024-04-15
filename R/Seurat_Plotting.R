@@ -2309,9 +2309,11 @@ FeatureScatter_scCustom <- function(
         max_cells <- max(cells_by_split$Freq)
         # modified version of the autopointsize function from Seurat
         pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+      } else {
+        pt.size <- AutoPointSize_scCustom(data = seurat_object)
       }
     } else {
-      pt.size <- AutoPointSize_scCustom(data = seurat_object)
+      pt.size <- AutoPointSize_scCustom(data = length(x = cells))
     }
   }
 
