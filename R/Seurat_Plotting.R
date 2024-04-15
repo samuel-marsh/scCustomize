@@ -2182,6 +2182,7 @@ VariableFeaturePlot_scCustom <- function(
 #' @param seurat_object Seurat object name.
 #' @param feature1 First feature to plot.
 #' @param feature2 Second feature to plot.
+#' @param cells Cells to include on the scatter plot.
 #' @param colors_use color for the points on plot.
 #' @param pt.size Adjust point size for plotting.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
@@ -2232,6 +2233,7 @@ FeatureScatter_scCustom <- function(
     seurat_object,
     feature1 = NULL,
     feature2 = NULL,
+    cells = NULL,
     colors_use = NULL,
     pt.size = NULL,
     group.by = NULL,
@@ -2298,21 +2300,24 @@ FeatureScatter_scCustom <- function(
   }
 
   # Set uniform point size is pt.size = NULL (based on plot with most cells)
-  if (is.null(x = pt.size) && !is.null(split.by)) {
-    # cells per meta data
-    cells_by_split <- data.frame(table(seurat_object@meta.data[, split.by]))
-    # Identity with greatest number of cells
-    max_cells <- max(cells_by_split$Freq)
-    # modified version of the autopointsize function from Seurat
-    pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+  if (is.null(x = pt.size)) {
+    if (is.null(x = cells)) {
+      if (!is.null(x = split.by)) {
+        # cells per meta data
+        cells_by_split <- data.frame(table(seurat_object@meta.data[, split.by]))
+        # Identity with greatest number of cells
+        max_cells <- max(cells_by_split$Freq)
+        # modified version of the autopointsize function from Seurat
+        pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+      }
+    } else {
+      pt.size <- AutoPointSize_scCustom(data = seurat_object)
+    }
   }
-
-  # set size otherwise
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cells = cells, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
 
     # Change title
     plot <- plot +
