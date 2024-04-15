@@ -52,7 +52,7 @@ Plot_Median_Genes <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # add to meta if grouping by ident
-  if (group_by == "ident") {
+  if (!is.null(x = group_by) && group_by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
@@ -198,7 +198,7 @@ Plot_Median_UMIs <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # add to meta if grouping by ident
-  if (group_by == "ident") {
+  if (!is.null(x = group_by) && group_by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
@@ -345,7 +345,7 @@ Plot_Median_Mito <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # add to meta if grouping by ident
-  if (group_by == "ident") {
+  if (!is.null(x = group_by) && group_by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
@@ -507,7 +507,7 @@ Plot_Median_Other <- function(
   }
 
   # add to meta if grouping by ident
-  if (group_by == "ident") {
+  if (!is.null(x = group_by) && group_by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
@@ -656,7 +656,7 @@ Plot_Cells_per_Sample <- function(
   }
 
   # add to meta if grouping by ident
-  if (group_by == "ident") {
+  if (!is.null(x = group_by) && group_by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
