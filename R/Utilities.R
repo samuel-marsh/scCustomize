@@ -435,13 +435,14 @@ Meta_Present <- function(
   }
 
   # Set possible variables based on object type
-  if (inherits(x = object, what = "Seurat")) {
-    possible_features <- colnames(x = object@meta.data)
-  }
-
-  if (inherits(x = object, what = "liger")) {
-    possible_features <- colnames(x = object@cell.data)
-  }
+  possible_features <- colnames(x = Fetch_Meta(object = object))
+  # if (inherits(x = object, what = "Seurat")) {
+  #   possible_features <- colnames(x = object@meta.data)
+  # }
+  #
+  # if (inherits(x = object, what = "liger")) {
+  #   possible_features <- colnames(x = object@cell.data)
+  # }
 
   # If any features not found
   if (any(!meta_col_names %in% possible_features)) {
