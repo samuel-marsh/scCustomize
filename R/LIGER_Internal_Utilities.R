@@ -2138,7 +2138,8 @@ Add_MSigDB_LIGER <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   if (!species %in% unlist(x = accepted_names)) {
@@ -2246,7 +2247,8 @@ Add_IEG_LIGER <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   if (!species %in% unlist(x = accepted_names)) {

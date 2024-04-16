@@ -10,7 +10,7 @@
 #'   \item{Rattus_norvegicus_mito_ensembl}{Ensembl IDs for rat mitochondrial genes}
 #'   \item{Drosophila_melanogaster_mito_ensembl}{Ensembl IDs for fly mitochondrial genes}
 #'   \item{Macaca_mulatta_mito_ensembl}{Ensembl IDs for macaque mitochondrial genes}
-#'
+#'   \item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken mitochondrial genes}
 #' }
 #' @concept data
 #'
@@ -21,7 +21,7 @@
 #'
 #' A list of ensembl ids for ribosomal genes (Ensembl version 105)
 #'
-#' @format A list of seven vectors
+#' @format A list of eight vectors
 #' \describe{
 #'   \item{Mus_musculus_ribo_ensembl}{Ensembl IDs for mouse ribosomal genes}
 #'   \item{Homo_sapiens_ribo_ensembl}{Ensembl IDs for human ribosomal genes}
@@ -30,7 +30,7 @@
 #'   \item{Rattus_norvegicus_ribo_ensembl}{Ensembl IDs for rat ribosomal genes}
 #'   \item{Drosophila_melanogaster_ribo_ensembl}{Ensembl IDs for fly ribosomal genes}
 #'   \item{Macaca_mulatta_ribo_ensembl}{Ensembl IDs for macaque ribosomal genes}
-#'
+#'   \item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken ribosomal genes}
 #' }
 #' @concept data
 #'
@@ -62,7 +62,9 @@
 #'   \item{Macaca_mulatta_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for macaque}
 #'   \item{Macaca_mulatta_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for macaque}
 #'   \item{Macaca_mulatta_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for macaque}
-#'
+#'   \item{Gallus_gallus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for chicken}
+#'   \item{Gallus_gallus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for chicken}
+#'   \item{Gallus_gallus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for chicken}
 #' }
 #' @concept data
 #'

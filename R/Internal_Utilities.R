@@ -380,6 +380,7 @@ Retrieve_Ensembl_Mito <- function(
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
   if (species %in% marmoset_options) {
     cli_abort(message = "Marmoset mitochondrial genome is not part of current Ensembl build.")
@@ -402,6 +403,9 @@ Retrieve_Ensembl_Mito <- function(
   }
   if (species %in% macaque_options) {
     mito_ensembl <- ensembl_mito_id$Macaca_mulatta_mito_ensembl
+  }
+  if (species %in% chicken_options) {
+    mito_ensembl <- ensembl_mito_id$Gallus_gallus_mito_ensembl
   }
 
   return(mito_ensembl)
@@ -446,6 +450,7 @@ Retrieve_Ensembl_Ribo <- function(
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
   if (species %in% mouse_options) {
     ribo_ensembl <- ensembl_ribo_id$Mus_musculus_ribo_ensembl
@@ -467,6 +472,9 @@ Retrieve_Ensembl_Ribo <- function(
   }
   if (species %in% macaque_options) {
     ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
+  }
+  if (species %in% chicken) {
+    ribo_ensembl <- ensembl_ribo_id$Gallus_gallus_ribo_ensembl
   }
 
   return(ribo_ensembl)
@@ -512,6 +520,7 @@ Retrieve_Ensembl_Ribo <- function(
    rat_options <- accepted_names$Rat_Options
    drosophila_options <- accepted_names$Drosophila_Options
    macaque_options <- accepted_names$Macaque_Options
+   chicken_options <- accepted_names$Chicken_Options
 
    if (species %in% marmoset_options) {
      cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
@@ -591,6 +600,7 @@ Retrieve_Ensembl_Ribo <- function(
    rat_options <- accepted_names$Rat_Options
    drosophila_options <- accepted_names$Drosophila_Options
    macaque_options <- accepted_names$Macaque_Options
+   chicken_options <- accepted_names$Chicken_Options
 
    if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options)) {
      cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
@@ -623,7 +633,7 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 #' @param seurat_object object name.
 #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
-#' zebrafish, rat, drosophila, or rhesus macaque (name or abbreviation)
+#' zebrafish, rat, drosophila, rhesus macaque, or chicken (name or abbreviation)
 #' @param oxphos_name name to use for the new meta.data column containing percent MSigDB Hallmark oxidative
 #' phosphorylation counts. Default is "percent_oxphos".
 #' @param apop_name name to use for the new meta.data column containing percent MSigDB Hallmark apoptosis counts.

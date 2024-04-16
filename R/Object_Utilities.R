@@ -86,7 +86,7 @@ Merge_Seurat_List <- function(
 
 
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
-#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' drosophila, rhesus macaque, or chicken (name or abbreviation) are provided the function will automatically
 #' generate patterns and features.
 #' @param add_mito_ribo logical, whether to add percentage of counts belonging to mitochondrial/ribosomal
 #' genes to object (Default is TRUE).
@@ -200,7 +200,8 @@ Add_Cell_QC_Metrics.Seurat <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   # Species Spelling Options
@@ -211,6 +212,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
   # Add mito/ribo
   if (isTRUE(x = add_mito_ribo)) {
@@ -243,8 +245,8 @@ Add_Cell_QC_Metrics.Seurat <- function(
 
   # Add IEG
   if (isTRUE(x = add_IEG)) {
-    if (species %in% c(marmoset_options, rat_options, zebrafish_options, macaque_options, drosophila_options)) {
-      cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, and Drosophila} are not currently supported.",
+    if (species %in% c(marmoset_options, rat_options, zebrafish_options, macaque_options, drosophila_options, chicken_options)) {
+      cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, Drosophila, Chicken} are not currently supported.",
                            "i" = "No column will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
@@ -299,7 +301,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
 
 
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
-#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' drosophila, rhesus macaque, or chicken (name or abbreviation) are provided the function will automatically
 #' generate mito_pattern and ribo_pattern values.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
@@ -308,11 +310,11 @@ Add_Cell_QC_Metrics.Seurat <- function(
 #' @param mito_ribo_name name to use for the new meta.data column containing percent
 #' mitochondrial+ribosomal counts.  Default is "percent_mito_ribo".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
-#' species is mouse, human, zebrafish, rat, drosophila, or rhesus macaque;
+#' species is mouse, human, zebrafish, rat, drosophila, rhesus macaque, or chicken;
 #' marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
 #' (will set automatically if species is mouse, human, marmoset, zebrafish, rat,
-#' drosophila, or rhesus macaque).
+#' drosophila, rhesus macaque, or chicken).
 #' @param mito_features A list of mitochondrial gene names to be used instead of using regex pattern.
 #' Will override regex pattern if both are present (including default saved regex patterns).
 #' @param ribo_features A list of ribosomal gene names to be used instead of using regex pattern.
@@ -372,7 +374,8 @@ Add_Mito_Ribo.Seurat <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   # Return list of accepted default species name options
@@ -419,16 +422,17 @@ Add_Mito_Ribo.Seurat <- function(
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
   # Check ensembl vs patterns
-  if (isTRUE(x = ensembl_ids) && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
+  if (isTRUE(x = ensembl_ids) && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, chicken_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
     cli_warn(message = c("When using a default species and setting {.code ensembl_ids = TRUE} provided patterns or features are ignored.",
                          "*" = "Supplied {.code mito_pattern}, {.code ribo_pattern}, {.code mito_features}, {.code ribo_features} will be disregarded.")
     )
   }
 
   # Assign mito/ribo pattern to stored species
-  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
+  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, chicken_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
     cli_warn(message = c("Pattern expressions for included species are set by default.",
                          "*" = "Supplied {.code mito_pattern} and {.code ribo_pattern} will be disregarded.",
                          "i" = "To override defaults please supply a feature list for mito and/or ribo genes.")
@@ -443,7 +447,7 @@ Add_Mito_Ribo.Seurat <- function(
     mito_pattern <- "^MT-"
     ribo_pattern <- "^RP[SL]"
   }
-  if (species %in% c(marmoset_options, macaque_options)) {
+  if (species %in% c(marmoset_options, macaque_options, chicken_options)) {
     mito_features <- c("ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND4L", "ND5", "ND6")
     ribo_pattern <- "^RP[SL]"
   }
@@ -532,7 +536,7 @@ Add_Mito_Ribo.Seurat <- function(
 
 
 #' @param species Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
-#' drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+#' drosophila, rhesus macaque, or chicken (name or abbreviation) are provided the function will automatically
 #' generate hemo_pattern values.
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
 #' Default is "percent_hemo".
@@ -587,7 +591,8 @@ Add_Hemo.Seurat <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   # Return list of accepted default species name options
@@ -629,9 +634,10 @@ Add_Hemo.Seurat <- function(
   rat_options <- accepted_names$Rat_Options
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
   # Assign hemo pattern to stored species
-  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options) && any(!is.null(x = hemo_pattern))) {
+  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && any(!is.null(x = hemo_pattern))) {
     cli_warn(message = c("Pattern expressions for included species are set by default.",
                          "*" = "Supplied {.code hemo_pattern} and {.code hemo_pattern} will be disregarded.",
                          "i" = "To override defaults please supply a feature list for hemo genes.")
@@ -661,6 +667,10 @@ Add_Hemo.Seurat <- function(
   if (species %in% drosophila_options) {
     species_use <- "Drosophila"
     hemo_pattern <- "^glob"
+  }
+  if (species %in% drosophila_options) {
+    species_use <- "Chicken"
+    hemo_pattern <- "^HB[^(P)]"
   }
 
   # Check that values are provided for mito and ribo
