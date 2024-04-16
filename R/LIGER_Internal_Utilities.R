@@ -495,7 +495,7 @@ Plot_By_Cluster_LIGER2 <- function(
   x_axis_label <- names(x = reduc_df)[1]
   y_axis_label <- names(x = reduc_df)[2]
 
-  centers <<- reduc_df %>%
+  centers <- reduc_df %>%
     group_by(.data[['Cluster']]) %>%
     summarize(dr1 = median(x = .data[[x_axis_label]]),
               dr2 = median(x = .data[[y_axis_label]])
