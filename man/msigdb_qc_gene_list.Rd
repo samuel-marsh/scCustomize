@@ -25,7 +25,9 @@ A list of 18 vectors
 \item{Macaca_mulatta_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for macaque}
 \item{Macaca_mulatta_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for macaque}
 \item{Macaca_mulatta_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for macaque}
-
+\item{Gallus_gallus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for chicken}
+\item{Gallus_gallus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for chicken}
+\item{Gallus_gallus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for chicken}
 }
 }
 \source{

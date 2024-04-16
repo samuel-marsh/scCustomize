@@ -38,7 +38,7 @@ Add_Hemo(object, ...)
 \item{...}{Arguments passed to other methods}
 
 \item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
-drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+drosophila, rhesus macaque, or chicken (name or abbreviation) are provided the function will automatically
 generate hemo_pattern values.}
 
 \item{hemo_name}{name to use for the new meta.data column containing percent hemoglobin counts.

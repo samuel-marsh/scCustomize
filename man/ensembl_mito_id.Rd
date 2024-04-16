@@ -13,7 +13,7 @@ A list of six vectors
 \item{Rattus_norvegicus_mito_ensembl}{Ensembl IDs for rat mitochondrial genes}
 \item{Drosophila_melanogaster_mito_ensembl}{Ensembl IDs for fly mitochondrial genes}
 \item{Macaca_mulatta_mito_ensembl}{Ensembl IDs for macaque mitochondrial genes}
-
+\item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken mitochondrial genes}
 }
 }
 \usage{

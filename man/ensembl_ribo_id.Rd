@@ -5,7 +5,7 @@
 \alias{ensembl_ribo_id}
 \title{Ensembl Ribo IDs}
 \format{
-A list of seven vectors
+A list of eight vectors
 \describe{
 \item{Mus_musculus_ribo_ensembl}{Ensembl IDs for mouse ribosomal genes}
 \item{Homo_sapiens_ribo_ensembl}{Ensembl IDs for human ribosomal genes}
@@ -14,7 +14,7 @@ A list of seven vectors
 \item{Rattus_norvegicus_ribo_ensembl}{Ensembl IDs for rat ribosomal genes}
 \item{Drosophila_melanogaster_ribo_ensembl}{Ensembl IDs for fly ribosomal genes}
 \item{Macaca_mulatta_ribo_ensembl}{Ensembl IDs for macaque ribosomal genes}
-
+\item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken ribosomal genes}
 }
 }
 \usage{

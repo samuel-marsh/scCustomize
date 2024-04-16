@@ -98,7 +98,7 @@ object (Default is TRUE).}
 \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
 
 \item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
-drosophila, or rhesus macaque (name or abbreviation) are provided the function will automatically
+drosophila, rhesus macaque, or chicken (name or abbreviation) are provided the function will automatically
 generate patterns and features.}
 
 \item{mito_name}{name to use for the new meta.data column containing percent mitochondrial counts.
