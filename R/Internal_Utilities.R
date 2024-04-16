@@ -341,6 +341,48 @@ yesno <- function(msg, .envir = parent.frame()) {
 #################### QC HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#' Default Species List
+#'
+#' Creates list containing accepted default species
+#'
+#' @param list logical, whether to return species names in list or data.frame format.
+#'
+#' @return list or data.frame of accepted species names
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+accepted_species_scCustom <- function(
+    list = TRUE
+) {
+  if (isTRUE(x = list)) {
+    accepted_names <- list(
+      Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+      Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+      Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+      Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+      Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+      Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+      Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+      Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    )
+  } else {
+    accepted_names <- data.frame(
+      Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+      Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+      Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+      Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+      Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+      Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+      Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+      Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    )
+  }
+  return(accepted_names)
+}
+
 
 #' Ensembl Mito IDs
 #'
@@ -368,7 +410,8 @@ Retrieve_Ensembl_Mito <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   # Species Spelling Options
@@ -433,7 +476,8 @@ Retrieve_Ensembl_Ribo <- function(
     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
   )
 
   # Species Spelling Options
@@ -498,7 +542,8 @@ Retrieve_Ensembl_Ribo <- function(
      Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
      Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
      Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
    )
 
    # Species Spelling Options
@@ -576,7 +621,8 @@ Retrieve_Ensembl_Ribo <- function(
      Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
      Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
      Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
    )
 
    # Species Spelling Options
@@ -658,7 +704,8 @@ Retrieve_Ensembl_Ribo <- function(
      Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
      Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
      Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
    )
 
    if (!species %in% unlist(x = accepted_names)) {
@@ -750,7 +797,8 @@ Retrieve_Ensembl_Ribo <- function(
      Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
      Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
      Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
+     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
    )
 
    if (!species %in% unlist(x = accepted_names)) {
