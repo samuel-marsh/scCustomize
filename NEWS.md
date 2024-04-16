@@ -35,6 +35,8 @@
 - Fixed error when using `plot_median` and more than one feature in `VlnPlot_scCustom` ([#169](https://github.com/samuel-marsh/scCustomize/issues/169)).  
 - Fixed bug while collecting legends for `DimPlot_scCustom` due to changes in guides updated with ggplot2 v3.5.0 ([#171](https://github.com/samuel-marsh/scCustomize/issues/171)).  
 - Fixed error in `Add_Sample_Meta` that still errored when setting `na_ok = TRUE`.  
+- Fixed errors in `Plot_Median_*` family that caused issues when `group_by` parameter was NULL.  
+- Fixed errors in `FeaturePlot_scCustom` when setting `combine = FALSE`.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
