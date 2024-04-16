@@ -850,7 +850,6 @@ Add_Hemo.liger <- function(
   Is_LIGER(liger_object = object)
 
   # Overwrite check
-  # Overwrite check
   meta_names <- colnames(x = Fetch_Meta(object = object))
 
   if (hemo_name %in% meta_names) {
@@ -916,6 +915,7 @@ Add_Hemo.liger <- function(
   if (species %in% chicken_options) {
     species_use <- "Chicken"
     hemo_pattern <- "^HB[^(P)]"
+  }
 
   # Check that values are provided for mito and ribo
   if (is.null(x = hemo_pattern) && is.null(x = hemo_features)) {
