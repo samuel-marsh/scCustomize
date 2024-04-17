@@ -201,7 +201,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
   # Species Spelling Options
@@ -375,7 +375,7 @@ Add_Mito_Ribo.Seurat <- function(
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
   # Return list of accepted default species name options
@@ -592,7 +592,7 @@ Add_Hemo.Seurat <- function(
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
   # Return list of accepted default species name options

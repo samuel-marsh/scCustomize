@@ -546,7 +546,7 @@ Add_Mito_Ribo.liger <- function(
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
   # Return list of accepted default species name options
@@ -837,7 +837,7 @@ Add_Hemo.liger <- function(
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
   # Return list of accepted default species name options
