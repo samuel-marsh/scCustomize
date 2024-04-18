@@ -1763,7 +1763,7 @@ DimPlot_scCustom <- function(
   }
 
   # set size otherwise
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object, raster = raster)
 
   # Plot
   if (is.null(x = split.by)) {
