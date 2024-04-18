@@ -38,6 +38,7 @@
 - Fixed error in `Add_Sample_Meta` that still errored when setting `na_ok = TRUE`.  
 - Fixed errors in `Plot_Median_*` family that caused issues when `group_by` parameter was NULL.  
 - Fixed errors in `FeaturePlot_scCustom` when setting `combine = FALSE`.  
+- Fixed bug in `DimPlot_scCustom` that could cause blank plot when rasterizing points.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
