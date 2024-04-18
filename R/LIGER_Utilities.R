@@ -138,6 +138,134 @@ LIGER_Cells <- function(
 }
 
 
+#' Subset LIGER object
+#'
+#' Subset LIGER object by cluster or other meta data variable.
+#'
+#' @param liger_object LIGER object name.
+#' @param cluster Name(s) of cluster to subset from object.
+#' @param cluster_col name of `@cellMeta` column containing cluster names, default is "leiden_cluster".
+#' @param ident variable within `ident_col` to use in sub-setting object.
+#' @param ident_col column in `@cellMeta` that contains values provided to `ident`.
+#' @param invert logical, whether to subset the inverse of the clusters or idents provided, default is FALSE.
+#'
+#' @return liger object
+#'
+#' @import cli
+#' @importFrom dplyr pull filter
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # subset clusters 3 and 5
+#' sub_liger <- subset_liger(liger_object = liger_object, cluster = c(3, 5))
+#'
+#' # subset control samples from column "Treatment"
+#' sub_liger <- subset_liger(liger_object = liger_object, ident = "control",
+#' ident_col = "Treatment")
+#'
+#' # subset control samples from column "Treatment" in clusters 3 and 5
+#' sub_liger <- subset_liger(liger_object = liger_object, ident = "control",
+#' ident_col = "Treatment", cluster = c(3, 5))
+#'
+#' # Remove cluster 9
+#' sub_liger <- subset_liger(liger_object = liger_object, cluster = 9, invert = TRUE)
+#' }
+#'
+
+Subset_LIGER <- function(
+    liger_object,
+    cluster = NULL,
+    cluster_col = "leiden_cluster",
+    ident = NULL,
+    ident_col = NULL,
+    invert = FALSE
+) {
+  # Check new liger object
+  if (!"cellMeta" %in% slotNames(liger_object)) {
+    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  }
+
+  # Check value provided
+  if (is.null(x = cluster) && is.null(x = ident)) {
+    cli_abort(message = "No values provided to subset object")
+  }
+
+  # Check meta present
+  if (!is.null(x = ident_col)) {
+    ident_col <- Meta_Present(object = liger_object, meta_col_names = ident_col, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # Check meta present
+  if (!is.null(x = cluster_col)) {
+    cluster_col <- Meta_Present(object = liger_object, meta_col_names = cluster_col, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  # pull meta data
+  meta <- Fetch_Meta(object = liger_object)
+
+  # check subset value ok
+  if (!is.null(x = ident)) {
+    ident_values <- meta %>%
+      pull(.data[[ident_col]]) %>%
+      unique()
+
+    if (!all(ident %in% ident_values)) {
+      cli_abort(message = "One or more of provided ident values ({.field {ident}}) were not found in provided ident_col ({.field {ident_col}})")
+    }
+  }
+
+  # check sub set value ok
+  if (!is.null(x = cluster)) {
+    cluster_values <- meta %>%
+      pull(.data[[cluster_col]]) %>%
+      unique()
+
+    if (!all(cluster %in% cluster_values)) {
+      cli_abort(message = "One or more of provided cluster values ({.field {cluster}}) were not found in provided cluster_col ({.field {cluster_col}})")
+    }
+  }
+
+  # filter just by cluster
+  if (!is.null(x = cluster) && is.null(x = ident)) {
+    cells_filter <- meta %>%
+      filter(.data[[cluster_col]] %in% cluster) %>%
+      rownames()
+  }
+
+  # filter just by ident
+  if (!is.null(x = ident) && is.null(cluster)) {
+    cells_filter <- meta %>%
+      filter(.data[[ident_col]] %in% ident) %>%
+      rownames()
+  }
+
+  # Filter by ident and cluster
+  if (!is.null(x = ident) && !is.null(cluster)) {
+    cells_filter <- meta %>%
+      filter(.data[[ident_col]] %in% ident & .data[[cluster_col]] %in% cluster) %>%
+      rownames()
+  }
+
+  # invert filtering
+  if (isTRUE(x = invert)) {
+    # get vector of call cells
+    all_cells <- LIGER_cells(liger_object = liger_object)
+
+    # setdiff to get inverse
+    cells_filter <- setdiff(x = all_cells, y = cells_filter)
+  }
+
+  sub_obj <- rliger::subsetLiger(object = liger_object, cellIdx = cells_filter)
+
+  return(sub_obj)
+}
+
+
 #' Extract top loading genes for LIGER factor
 #'
 #' Extract vector to the top loading genes for specified LIGER iNMF factor
