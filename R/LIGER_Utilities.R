@@ -153,6 +153,7 @@ LIGER_Cells <- function(
 #'
 #' @import cli
 #' @importFrom dplyr pull filter
+#' @importFrom magrittr "%>%"
 #' @importFrom utils packageVersion
 #'
 #' @export
@@ -238,14 +239,14 @@ Subset_LIGER <- function(
   }
 
   # filter just by ident
-  if (!is.null(x = ident) && is.null(cluster)) {
+  if (!is.null(x = ident) && is.null(x = cluster)) {
     cells_filter <- meta %>%
       filter(.data[[ident_col]] %in% ident) %>%
       rownames()
   }
 
   # Filter by ident and cluster
-  if (!is.null(x = ident) && !is.null(cluster)) {
+  if (!is.null(x = ident) && !is.null(x = cluster)) {
     cells_filter <- meta %>%
       filter(.data[[ident_col]] %in% ident & .data[[cluster_col]] %in% cluster) %>%
       rownames()
