@@ -9,6 +9,7 @@ QC_Histogram(
   features,
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   split.by = NULL,
   bins = 250,
   colors_use = "dodgerblue",
@@ -26,6 +27,8 @@ QC_Histogram(
 \item{low_cutoff}{Plot line a potential low threshold for filtering.}
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
+
+\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
 

@@ -13,6 +13,7 @@ QC_Plots_Mito(
   y_axis_label = "\% Mitochondrial Gene Counts",
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -30,7 +31,7 @@ QC_Plots_Mito(
 \item{seurat_object}{Seurat object name.}
 
 \item{mito_name}{The column name containing percent mitochondrial counts information.  Default value is
-"percent_mito" which is default value created when using \code{Add_Mito_Ribo_Seurat()}.}
+"percent_mito" which is default value created when using \code{Add_Mito_Ribo()}.}
 
 \item{plot_title}{Plot Title.}
 
@@ -44,6 +45,8 @@ default is the current active.ident of the object.}
 \item{low_cutoff}{Plot line a potential low threshold for filtering.}
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
+
+\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
 
 \item{pt.size}{Point size for plotting.}
 
