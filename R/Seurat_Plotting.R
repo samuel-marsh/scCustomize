@@ -2424,7 +2424,6 @@ FeatureScatter_scCustom <- function(
 #'}
 #'
 
-
 SpatialDimPlot_scCustom <- function(
     seurat_object,
     group.by = NULL,
