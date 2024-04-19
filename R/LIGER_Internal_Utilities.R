@@ -855,7 +855,7 @@ Plot_By_Meta_LIGER2 <- function(
     color_seed = 123
 ) {
   # Set reduction
-  reduction <- reduction %||% scCustomize:::Default_DimReduc_LIGER(liger_object = liger_object)
+  reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
   reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
 

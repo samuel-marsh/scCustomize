@@ -255,7 +255,7 @@ Subset_LIGER <- function(
   # invert filtering
   if (isTRUE(x = invert)) {
     # get vector of call cells
-    all_cells <- LIGER_cells(liger_object = liger_object)
+    all_cells <- LIGER_Cells(liger_object = liger_object)
 
     # setdiff to get inverse
     cells_filter <- setdiff(x = all_cells, y = cells_filter)
@@ -308,7 +308,7 @@ Top_Genes_Factor <- function(
   # temp liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     W <- liger_object@W
-    rownames(x = W) <- rownames(x = csf_liger@datasets[[1]]@scaleData)
+    rownames(x = W) <- rownames(x = liger_object@datasets[[1]]@scaleData)
     top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
     return(top_genes)
   } else {
@@ -833,7 +833,7 @@ Add_Mito_Ribo.liger <- function(
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
     if (packageVersion(pkg = 'rliger') > "1.0.1") {
-      object@cellMeta[[mito_ribo_name]] <- csf_liger@cellMeta[[mito_name]] + csf_liger@cellMeta[[ribo_name]]
+      object@cellMeta[[mito_ribo_name]] <- object@cellMeta[[mito_name]] + object@cellMeta[[ribo_name]]
     } else {
       object_meta <- Fetch_Meta(object = object) %>%
         rownames_to_column("barcodes")

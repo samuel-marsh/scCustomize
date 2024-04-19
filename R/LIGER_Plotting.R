@@ -335,7 +335,7 @@ plotFactors_scCustom <- function(
 #' Plot positive correlations between gene loadings across `W` factor matrix in liger object.
 #' Any negative correlations are set to NA and NA values set to bottom color of color gradient.
 #'
-#' @param cor_mat correlation matrix
+#' @param liger_object liger object.
 #' @param colors_use Color palette to use for correlation values.  Default is `viridis`.
 #' Users can also supply vector of 3 colors (low, mid, high).
 #' @param label logical, whether to add correlation values to plot result.

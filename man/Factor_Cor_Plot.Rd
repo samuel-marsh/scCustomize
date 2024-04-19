@@ -16,6 +16,8 @@ Factor_Cor_Plot(
 )
 }
 \arguments{
+\item{liger_object}{liger object.}
+
 \item{colors_use}{Color palette to use for correlation values.  Default is \code{viridis}.
 Users can also supply vector of 3 colors (low, mid, high).}
 
@@ -32,8 +34,6 @@ is 0.5.}
 Accepted values are: "full" (default), "upper", or "lower".}
 
 \item{x_lab_rotate}{logical, whether to rotate the axes labels on the x-axis.  Default is TRUE}
-
-\item{cor_mat}{correlation matrix}
 }
 \value{
 A ggplot object
