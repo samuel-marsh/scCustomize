@@ -16,6 +16,7 @@
 - Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
 - Added `cells` parameter explictly to `FeatureScatter_scCustom`.  
 - Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
+- Added new plotting function `SpatialDimPlot_scCustom`, ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
 
 
   
