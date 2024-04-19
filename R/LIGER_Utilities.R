@@ -368,12 +368,12 @@ LIGER_DimReduc <- function(
   reduction_use <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
   # check reduction in cellMeta
-  if (reduction_use %in% names(x = dimReds(x = liger_object))) {
+  if (reduction_use %in% names(x = rliger::dimReds(x = liger_object))) {
       if (isTRUE(x = check_only)) {
         return(TRUE)
       }
       # get coords
-      reduc_coords <- dimReds(x = liger_object)[[reduction_use]]
+      reduc_coords <- rliger::dimReds(x = liger_object)[[reduction_use]]
   } else {
     cli_abort("The reduction {.field {reduction_use}} is not present in dimReds slot.")
   }
@@ -528,7 +528,8 @@ Add_Cell_QC_Metrics.liger <- function(
     ensembl_ids = FALSE,
     num_top_genes = 50,
     assay = NULL,
-    overwrite = FALSE
+    overwrite = FALSE,
+    ...
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -905,7 +906,7 @@ Add_Cell_Complexity.liger <- function(
 
   # Add score
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    object@cellMeta[[mito_ribo_name]] <- log10(object@cellMeta$nGene) / log10(object@cellMeta$nUMI)
+    object@cellMeta[[meta_col_name]] <- log10(object@cellMeta$nGene) / log10(object@cellMeta$nUMI)
   } else {
     object@cell.data[ , meta_col_name] <- log10(object@cell.data$nGene) / log10(object@cell.data$nUMI)
   }

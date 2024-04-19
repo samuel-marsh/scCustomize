@@ -38,7 +38,8 @@ Add_Cell_QC_Metrics(object, ...)
   ensembl_ids = FALSE,
   num_top_genes = 50,
   assay = NULL,
-  overwrite = FALSE
+  overwrite = FALSE,
+  ...
 )
 
 \method{Add_Cell_QC_Metrics}{Seurat}(

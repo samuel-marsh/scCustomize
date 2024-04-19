@@ -473,7 +473,7 @@ Retrieve_Ensembl_Ribo <- function(
   if (species %in% macaque_options) {
     ribo_ensembl <- ensembl_ribo_id$Macaca_mulatta_ribo_ensembl
   }
-  if (species %in% chicken) {
+  if (species %in% chicken_options) {
     ribo_ensembl <- ensembl_ribo_id$Gallus_gallus_ribo_ensembl
   }
 

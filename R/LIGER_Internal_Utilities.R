@@ -2139,7 +2139,7 @@ Add_MSigDB_LIGER <- function(
     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
   if (!species %in% unlist(x = accepted_names)) {

@@ -21,7 +21,6 @@ SpatialDimPlot_scCustom(
   image.alpha = 1,
   stroke = 0.25,
   interactive = FALSE,
-  information = NULL,
   combine = TRUE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
@@ -73,17 +72,13 @@ session, see \code{\link{ISpatialDimPlot}} or
 \item{combine}{Combine plots into a single gg object; note that if TRUE;
 themeing will not work when plotting multiple features/groupings}
 
-\item{cells.highlight}{A list of character or numeric vectors of cells to
-highlight. If only one group of cells desired, can simply pass a vector
-instead of a list. If set, colors selected cells to the color(s) in
-cols.highlight}
+\item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
+default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
 
-\item{cols.highlight}{A vector of colors to highlight the cells as; ordered
-the same as the groups in cells.highlight; last color corresponds to
-unselected cells.}
+\item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
+groups plotted is greater than 36.  Default = 123.}
 
-\item{facet.highlight}{When highlighting certain groups of cells, split each
-group into its own plot}
+\item{...}{Extra parameters passed to \code{\link[Seurat]{DimPlot}}.}
 }
 \value{
 A ggplot object

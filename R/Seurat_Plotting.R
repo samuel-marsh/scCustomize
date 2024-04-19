@@ -2380,15 +2380,6 @@ FeatureScatter_scCustom <- function(
 #' remove.
 #' @param crop Crop the plot in to focus on points plotted. Set to \code{FALSE} to show
 #' entire background image.
-#' @param cells.highlight A list of character or numeric vectors of cells to
-#' highlight. If only one group of cells desired, can simply pass a vector
-#' instead of a list. If set, colors selected cells to the color(s) in
-#' cols.highlight
-#' @param cols.highlight A vector of colors to highlight the cells as; ordered
-#' the same as the groups in cells.highlight; last color corresponds to
-#' unselected cells.
-#' @param facet.highlight When highlighting certain groups of cells, split each
-#' group into its own plot
 #' @param label Whether to label the clusters
 #' @param label.size Sets the size of the labels
 #' @param label.color Sets the color of the label text
@@ -2406,6 +2397,12 @@ FeatureScatter_scCustom <- function(
 #' @param interactive Launch an interactive SpatialDimPlot or SpatialFeaturePlot
 #' session, see \code{\link{ISpatialDimPlot}} or
 #' \code{\link{ISpatialFeaturePlot}} for more details
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
+#'
 #' @return A ggplot object
 #'
 #' @import cli
@@ -2441,7 +2438,6 @@ SpatialDimPlot_scCustom <- function(
     image.alpha = 1,
     stroke = 0.25,
     interactive = FALSE,
-    information = NULL,
     combine = TRUE,
     ggplot_default_colors = FALSE,
     color_seed = 123,
@@ -2502,7 +2498,7 @@ SpatialDimPlot_scCustom <- function(
   }
 
   if (isFALSE(x = interactive)) {
-    plot <- SpatialDimPlot(object = seurat_object, group.by = group.by, images = images, cols = colors_use, crop = crop, label = label, label.size = label.size, label.color = label.color, label.box = label.box, repel = repel, ncol = ncol, combine = combine, alpha = alpha, pt.size.factor = pt.size.factor, image.alpha = image.alpha, stroke = stroke, interactive = interactive, information = information, ...)
+    plot <- SpatialDimPlot(object = seurat_object, group.by = group.by, images = images, cols = colors_use, crop = crop, label = label, label.size = label.size, label.color = label.color, label.box = label.box, repel = repel, ncol = ncol, combine = combine, alpha = alpha, pt.size.factor = pt.size.factor, image.alpha = image.alpha, stroke = stroke, interactive = interactive, ...)
 
     return(plot)
   } else {

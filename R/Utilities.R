@@ -1687,8 +1687,11 @@ Pull_Cluster_Annotation <- function(
 #' @param seurat_object object name.
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current active.ident
 #' in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name (Optional).  Whether or not to create new named column in `Object@meta.data`
-#' to store the old identities.
+#' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
+#' @param old_ident_name optional, name to use for storing current object idents in `Object@meta.data`.
+#' @param new_ident_name optional, name to use for storing new object idents in `@meta.data`.
+#' @param overwrite logical, whether to overwrite columns in `@meta.data` if they have same
+#' names as `old_ident_name` and/or `new_ident_name`.
 #' @param ... Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.
 #'
 #' @return Seurat Object with new identities placed in active.ident slot.

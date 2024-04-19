@@ -20,8 +20,14 @@ Rename_Clusters(
 \item{new_idents}{vector of new cluster names.  Must be equal to the length of current active.ident
 in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.}
 
-\item{meta_col_name}{(Optional).  Whether or not to create new named column in \code{Object@meta.data}
-to store the old identities.}
+\item{old_ident_name}{optional, name to use for storing current object idents in \code{Object@meta.data}.}
+
+\item{new_ident_name}{optional, name to use for storing new object idents in \verb{@meta.data}.}
+
+\item{meta_col_name}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{old_ident_name}.}
+
+\item{overwrite}{logical, whether to overwrite columns in \verb{@meta.data} if they have same
+names as \code{old_ident_name} and/or \code{new_ident_name}.}
 
 \item{...}{Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.}
 }
