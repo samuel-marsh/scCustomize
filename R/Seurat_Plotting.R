@@ -2359,3 +2359,160 @@ FeatureScatter_scCustom <- function(
     }
   }
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### SPATIAL PLOTTING ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' SpatialDimPlot with modified default settings
+#'
+#' Creates SpatialDimPlot with some of the settings modified from their Seurat defaults (colors_use).
+#'
+#' @param seurat_object Seurat object name.
+#' @param colors_use color palette to use for plotting.  By default if number of levels plotted is less than
+#' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
+#' both from `DiscretePalette_scCustomize`.
+#' @param group.by Name of meta.data column to group the data by
+#' @param images Name of the images to use in the plot(s)
+#' @param image.alpha Adjust the opacity of the background images. Set to 0 to
+#' remove.
+#' @param crop Crop the plot in to focus on points plotted. Set to \code{FALSE} to show
+#' entire background image.
+#' }
+#' @param cells.highlight A list of character or numeric vectors of cells to
+#' highlight. If only one group of cells desired, can simply pass a vector
+#' instead of a list. If set, colors selected cells to the color(s) in
+#' cols.highlight
+#' @param cols.highlight A vector of colors to highlight the cells as; ordered
+#' the same as the groups in cells.highlight; last color corresponds to
+#' unselected cells.
+#' @param facet.highlight When highlighting certain groups of cells, split each
+#' group into its own plot
+#' @param label Whether to label the clusters
+#' @param label.size Sets the size of the labels
+#' @param label.color Sets the color of the label text
+#' @param label.box Whether to put a box around the label text (geom_text vs
+#' geom_label)
+#' @param repel Repels the labels to prevent overlap
+#' @param ncol Number of columns if plotting multiple plots
+#' @param combine Combine plots into a single gg object; note that if TRUE;
+#' themeing will not work when plotting multiple features/groupings
+#' @param pt.size.factor Scale the size of the spots.
+#' @param alpha Controls opacity of spots. Provide as a vector specifying the
+#' min and max for SpatialFeaturePlot. For SpatialDimPlot, provide a single
+#' alpha value for each plot.
+#' @param stroke Control the width of the border around the spots
+#' @param interactive Launch an interactive SpatialDimPlot or SpatialFeaturePlot
+#' session, see \code{\link{ISpatialDimPlot}} or
+#' \code{\link{ISpatialFeaturePlot}} for more details
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#'
+#' @export
+#'
+#' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
+#' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
+#'
+#' @concept seurat_plotting
+#'
+#' @examples
+#' \dontrun{
+#' SpatialDimPlot_scCustom(seurat_object = seurat_object)
+#'}
+#'
+
+
+SpatialDimPlot_scCustom <- function(
+    seurat_object,
+    group.by = NULL,
+    images = NULL,
+    colors_use = NULL,
+    crop = TRUE,
+    label = FALSE,
+    label.size = 7,
+    label.color = "white",
+    label.box = TRUE,
+    repel = FALSE,
+    ncol = NULL,
+    pt.size.factor = 1.6,
+    alpha = c(1, 1),
+    image.alpha = 1,
+    stroke = 0.25,
+    interactive = FALSE,
+    information = NULL,
+    combine = TRUE,
+    ggplot_default_colors = FALSE,
+    color_seed = 123,
+    ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Change label if label.box
+  if (isTRUE(x = label.box) && is.null(x = label)) {
+    label <- TRUE
+  }
+
+  # Add check for group.by before getting to colors
+  if (length(x = group.by) > 1) {
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  } else {
+    if (!is.null(x = group.by) && group.by != "ident") {
+      Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    }
+  }
+
+  label <- label %||% (is.null(x = group.by))
+
+  # Set default color palette based on number of levels being plotted
+  if (length(x = group.by) > 1) {
+    all_length <- lapply(group.by, function(x) {
+      num_var <- length(x = unique(x = seurat_object@meta.data[[x]]))
+    })
+    group_by_length <- max(unlist(x = all_length))
+  } else {
+    if (is.null(x = group.by)) {
+      group_by_length <- length(x = unique(x = seurat_object@active.ident))
+    } else {
+      group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    }
+  }
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # name color palette so that it works
+  if (is.null(x = group.by)) {
+    names(colors_use) <- levels(Idents(object = seurat_object))
+  } else {
+    if (isTRUE(x = inherits(x = seurat_object[[group.by]], what = "factor"))) {
+      names(colors_use) <- levels(seurat_object[[group.by]])
+    } else {
+      names(colors_use) <- unique(seurat_object[[group.by]])
+    }
+  }
+
+  if (isFALSE(x = interactive)) {
+    plot <- SpatialDimPlot(object = seurat_object, group.by = group.by, images = images, cols = colors_use, crop = crop, label = label, label.size = label.size, label.color = label.color, label.box = label.box, repel = repel, ncol = ncol, combine = combine, alpha = alpha, pt.size.factor = pt.size.factor, image.alpha = image.alpha, stroke = stroke, interactive = interactive, information = information, ...)
+
+    return(plot)
+  } else {
+    return(ISpatialDimPlot(
+      object = seurat_object,
+      image = images[1],
+      group.by = group.by,
+      alpha = alpha
+    ))
+  }
+}
