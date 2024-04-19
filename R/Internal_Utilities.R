@@ -1439,6 +1439,153 @@ Metrics_Multi_VDJT <- function(
 }
 
 
+#' Read single Summary Statistics csv from 10X Cell Ranger Count or Multi
+#'
+#' Get data.frame with all metrics from the Cell Ranger `count` analysis or list of data.frames if using Cell Ranger `multi`.
+#'
+#' @param base_path path to the metrics file
+#' @param cellranger_multi logical, whether or not metrics come from Cell Ranger `count` or from Cell Ranger `multi`.  Default is FALSE.
+#'
+#' @return A data frame or list of data.frames with sample metrics from cell ranger.
+#'
+#' @import cli
+#' @importFrom dplyr all_of bind_rows filter rename select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' count_metrics <- Metrics_Single_File(base_path = base_path)
+#' }
+#'
+
+Metrics_Single_File <- function(
+    base_path,
+    cellranger_multi = FALSE
+) {
+  # Read GEX count metrics
+  if (isFALSE(x = cellranger_multi)) {
+    raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+    # Change format of numeric columns to due commas in data csv output.
+    column_numbers <- grep(pattern = ",", x = raw_data[1, ])
+    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data[1, ])
+    all_columns <- 1:ncol(x = raw_data)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data[,c(column_numbers_numeric)] <- lapply(raw_data[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    # Change column names to use "_" separator instead of "." for readability
+    colnames(x = raw_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data))
+
+    # return data
+    return(raw_data)
+  } else {
+    # GEX metrics
+    raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+
+    # Change format to column based and select relevant metrics
+    GEX_metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]] == "Physical library ID" & .data[["Library.Type"]] == "Gene Expression") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    GEX_metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_gex <- cbind(GEX_metrics, GEX_metrics2)
+
+    # Change format of numeric columns to due commas in data csv output.
+    column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
+    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+    # Rename multi columns to match names from count
+    names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                          Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                          Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                          Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                          Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                          Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                          Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                          Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                          Estimated.Number.of.Cells = "Estimated.number.of.cells",
+                          Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                          Median.Genes.per.Cell = "Median.genes.per.cell",
+                          Number.of.Reads = "Number.of.reads",
+                          Valid.Barcodes = "Valid.barcodes",
+                          Sequencing.Saturation = "Sequencing.saturation",
+                          Total.Genes.Detected = "Total.genes.detected",
+                          Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+
+    raw_data_gex <- raw_data_gex %>%
+      rename(all_of(names_to_replace))
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_gex[1, ])
+    all_columns <- 1:ncol(x = raw_data_gex)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    # Change column nams to use "_" separator instead of "." for readability
+    colnames(x = raw_data_gex) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data_gex))
+
+    # Get VDJT metrics
+    raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+
+    VDJ_T_Metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    VDJ_T_Metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
+    raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
+    all_columns <- 1:ncol(x = raw_data_vdjt)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_vdjt[,c(column_numbers_numeric)] <- lapply(raw_data_vdjt[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    # combine outputs into a list
+    data_list <- list(
+      multi_gex_metrics = raw_data_gex,
+      multi_vdjt_metrics = raw_data_vdjt
+    )
+
+    # return data list
+    return(data_list)
+  }
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### GENE NAME/FILE CACHE HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

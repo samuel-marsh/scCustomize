@@ -1547,7 +1547,8 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' Get data.frame with all metrics from the Cell Ranger count analysis (present in web_summary.html)
 #'
-#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest or
+#' alternatively can provide single csv file to read and format identically to reading multiple files.
 #' @param secondary_path path from the parent directory to count "outs/" folder which contains the
 #' "metrics_summary.csv" file.
 #' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
@@ -1557,7 +1558,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
 #' directory name of each sample.
 #'
-#' @return A data frame with sample metrics from cell ranger.
+#' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
 #' @import cli
 #' @import pbapply
@@ -1583,6 +1584,13 @@ Read_Metrics_10X <- function(
   lib_list = NULL,
   lib_names = NULL
 ) {
+  # Check if single file
+  file_ending <- grep(pattern = ".csv$", x = base_path, value = TRUE)
+  if (length(x = file_ending) == 1) {
+    metrics_data <- Metrics_Single_File(base_path = base_path, cellranger_multi = cellranger_multi)
+    return(metrics_data)
+  }
+
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
     cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
