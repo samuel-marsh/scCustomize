@@ -18,6 +18,7 @@
 - Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
 - Added new plotting function `SpatialDimPlot_scCustom`, ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
 - Added ability of `Read_Metrics_10X` to read a single metrics csv file and return data formatted the same way as when reading multiple files.  
+- Added parameter `cutoff_line_width` to the `QC_Plot_*` family of plots to control line thickness of cutoff lines.  
 
 
   
