@@ -14,7 +14,7 @@
 - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
 - Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
-- Added `cells` parameter explictly to `FeatureScatter_scCustom`.  
+- Added `cells` parameter explicitly to `FeatureScatter_scCustom`.  
 - Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
 - Added new plotting function `SpatialDimPlot_scCustom`, ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
 - Added ability of `Read_Metrics_10X` to read a single metrics csv file and return data formatted the same way as when reading multiple files.  
