@@ -265,7 +265,7 @@ WhichCells.liger <- function(
     ...
 ) {
   # Check new liger object
-  if (packageVersion(pkg = 'rliger') >= "2.0.0") {
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
     cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
   }
 
