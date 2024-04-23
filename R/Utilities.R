@@ -436,13 +436,6 @@ Meta_Present <- function(
 
   # Set possible variables based on object type
   possible_features <- colnames(x = Fetch_Meta(object = object))
-  # if (inherits(x = object, what = "Seurat")) {
-  #   possible_features <- colnames(x = object@meta.data)
-  # }
-  #
-  # if (inherits(x = object, what = "liger")) {
-  #   possible_features <- colnames(x = object@cell.data)
-  # }
 
   # If any features not found
   if (any(!meta_col_names %in% possible_features)) {
@@ -452,14 +445,14 @@ Meta_Present <- function(
     if (isFALSE(return_none)) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
-                              "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
+                              "i" = "The following meta data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
         )
       }
     }
 
     # Return message of features not found
     if (length(x = bad_meta) > 0 && isTRUE(x = omit_warn)) {
-      cli_warn(message = c("The following @meta.data columns were omitted as they were not found:",
+      cli_warn(message = c("The following meta data columns were omitted as they were not found:",
                             "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
       )
     }
@@ -475,7 +468,7 @@ Meta_Present <- function(
 
   # Print all found message if TRUE
   if (isTRUE(x = print_msg)) {
-    cli_inform(message = "All @meta.data columns present.")
+    cli_inform(message = "All meta data columns present.")
   }
 
   # Return full input gene list.
