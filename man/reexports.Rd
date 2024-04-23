@@ -4,9 +4,12 @@
 \name{reexports}
 \alias{reexports}
 \alias{as.Seurat}
+\alias{WhichCells}
 \title{Objects exported from other packages}
 \note{
 See \code{\link{as.Seurat.liger}} for scCustomize extension of this generic to converting Liger objects.
+
+See \code{\link{WhichCells.liger}} for scCustomize extension of this generic to extract cell barcodes.
 }
 \keyword{internal}
 \description{
@@ -14,6 +17,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{SeuratObject}{\code{\link[SeuratObject]{as.Seurat}}}
+  \item{SeuratObject}{\code{\link[SeuratObject]{as.Seurat}}, \code{\link[SeuratObject]{WhichCells}}}
 }}
 
