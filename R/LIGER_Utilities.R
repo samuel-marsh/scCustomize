@@ -138,6 +138,98 @@ LIGER_Cells <- function(
 }
 
 
+#' Extract Cells by identity
+#'
+#' Extract all cell barcodes by identity from LIGER object
+#'
+#' @param liger_object LIGER object name.
+#' @param group.by name of meta data column to use, default is current default clustering.
+#' @param by_dataset logical, whether to return list with entries for cell barcodes for each
+#' identity in `group.by`
+#' or to return list of lists (1 entry per dataset and each ident within the dataset)
+#' (default is FALSE; return list)
+#'
+#' @return list or list of lists depending on `by_dataset` parameter
+#'
+#' @import cli
+#' @importFrom dplyr filter select all_of
+#' @importFrom magrittr "%>%"
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return single vector of all cells
+#' cells_by_idents <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = FALSE)
+#'
+#' # return list of vectors containing cells from each individual dataset in object
+#' cells_by_idents_by_dataset <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = TRUE)
+#' }
+#'
+
+LIGER_Cells_by_Identities <- function(
+    liger_object,
+    group.by = NULL,
+    by_dataset = FALSE
+) {
+  # Check new liger object
+  if (!"cellMeta" %in% slotNames(liger_object)) {
+    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  }
+
+  # check group.by is valid
+  if (!is.null(x = group.by)) {
+    Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE)
+  }
+
+  # set group.by if not set
+  group.by <- group.by %||% LIGER_Default_Cluster(liger_object = liger_object)
+
+  # Check cluster df
+  cell_df <- Fetch_Meta(object = liger_object) %>%
+    select(all_of(c(group.by, "dataset")))
+
+  if (inherits(x = cell_df[[group.by]], what = "factor")) {
+    ident_levels <- levels(x = cell_df[[group.by]])
+  } else {
+    ident_levels <- unique(x = cell_df[[group.by]])
+  }
+
+  # Get cells for object overall
+  if (isFALSE(x = by_dataset)) {
+    cells_list <- lapply(ident_levels, function(x) {
+      cells <- cell_df %>%
+        filter(.data[[group.by]] == x) %>%
+        rownames()
+    })
+
+    names(cells_list) <- ident_levels
+  } else {
+    # Get cells by cluster by dataset
+    dataset_names <- names(x = rliger::datasets(x = liger_object))
+    cells_list <- lapply(1:length(x = dataset_names), function(x) {
+      sample_cells_df <- cell_df %>%
+        filter(.data[["dataset"]] == dataset_names[x])
+
+      sample_cells <- lapply(ident_levels, function(y) {
+        sample_cells_df %>%
+          filter(.data[[group.by]] == y) %>%
+          rownames()
+      })
+      names(sample_cells) <- ident_levels
+
+      return(sample_cells)
+    })
+    names(cells_list) <- dataset_names
+  }
+
+  return(cells_list)
+}
+
+
 #' Subset LIGER object
 #'
 #' Subset LIGER object by cluster or other meta data variable.
