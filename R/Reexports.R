@@ -4,3 +4,10 @@
 #'
 #'
 SeuratObject::as.Seurat
+
+#' @importFrom SeuratObject WhichCells
+#' @export
+#' @note See \code{\link{WhichCells.liger}} for scCustomize extension of this generic to extract cell barcodes.
+#'
+#'
+SeuratObject::WhichCells
