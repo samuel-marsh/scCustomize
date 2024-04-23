@@ -37,6 +37,40 @@ Default_DimReduc_LIGER <- function(
 }
 
 
+#' Extract default clustering
+#'
+#' Extract name of the default clustering
+#'
+#' @param liger_object LIGER object name.
+#'
+#' @return name of default clustering
+#'
+#' @import cli
+#'
+#' @noRd
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return dimensionality reduction name
+#' dim_reduc_name <- LIGER_Default_Cluster(liger_object = obj)
+#' }
+#'
+
+LIGER_Default_Cluster <- function(
+    liger_object
+) {
+  if (length(x = liger_object@uns$defaultCluster) > 0) {
+    default_cluster_name <- liger_object@uns$defaultCluster
+
+    return(default_cluster_name)
+  } else {
+    cli_abort(message = "No default cluster present.")
+  }
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### LIGER PLOTTING UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
