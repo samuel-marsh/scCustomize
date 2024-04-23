@@ -176,7 +176,7 @@ LIGER_Cells_by_Identities <- function(
     by_dataset = FALSE
 ) {
   # Check new liger object
-  if (!"cellMeta" %in% slotNames(liger_object)) {
+  if (packageVersion(pkg = 'rliger') >= "2.0.0") {
     cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
   }
 
@@ -228,6 +228,92 @@ LIGER_Cells_by_Identities <- function(
 
   return(cells_list)
 }
+
+
+#' Extract Cells for particular identity
+#'
+#' Extract all cell barcodes for a specific identity
+#'
+#' @param liger_object LIGER object name.
+#' @param idents identities to extract cell barcodes
+#' @param by_dataset logical, whether to return vector with cell barcodes for all `idents` in or
+#' to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector)
+#'
+#' @method WhichCells liger
+#' @return vector or list depending on `by_dataset` parameter
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @import Seurat
+#' @importFrom dplyr all_of select filter
+#' @importFrom magrittr "%>%"
+#'
+#' @export
+#' @rdname WhichCells
+#'
+#' @examples
+#' \dontrun{
+#' ident1_cells <- WhichCells(object = liger_object, idents = 1)
+#' }
+#'
+
+WhichCells.liger <- function(
+    object,
+    idents = NULL,
+    by_dataset = FALSE,
+    ...
+) {
+  # Check new liger object
+  if (packageVersion(pkg = 'rliger') >= "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
+  }
+
+  # Get cells data.frame
+  default_cluster <- LIGER_Default_Cluster(liger_object = object)
+
+  cell_df <- Fetch_Meta(object = object) %>%
+    select(all_of(c(default_cluster, "dataset")))
+
+  # possible idents
+  if (inherits(x = cell_df[[idents]], what = "factor")) {
+    ident_levels <- levels(x = cell_df[[default_cluster]])
+  } else {
+    ident_levels <- unique(x = cell_df[[default_cluster]])
+  }
+
+  # check idents valid
+  valid_idents <- intersect(x = idents, y = ident_levels)
+  if (length(x = valid_idents) == 0) {
+    cli_abort(message = "None of the provided {.code idents} were found in object.")
+  }
+  if (length(x = valid_idents) != idents) {
+    missing_idents <- setdiff(x = idents, y = valid_idents)
+    cli_warn(message = c("The following {.code idents} were not found and therefore ignored:",
+                         "i" = "{.field {missing_idents}}"))
+  }
+
+  # get cells
+  if (isFALSE(x = by_dataset)) {
+    cells <- cell_df %>%
+      filter(.data[[default_cluster]] %in% valid_idents) %>%
+      rownames()
+  } else {
+    dataset_names <- names(x = rliger::datasets(x = object))
+    cells <- lapply(dataset_names, function(x) {
+      sample_cells <- cell_df %>%
+        filter(.data[["dataset"]] == x & .data[[default_cluster]] %in% valid_idents) %>%
+        rownames()
+    })
+
+    names(x = cells) <- dataset_names
+  }
+
+  # return cells
+  return(cells)
+}
+
+
 
 
 #' Subset LIGER object
