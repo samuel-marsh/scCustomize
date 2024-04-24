@@ -151,7 +151,8 @@ Cells.liger <- function(
 #' @param liger_object LIGER object name.
 #' @param idents identities to extract cell barcodes
 #' @param by_dataset logical, whether to return vector with cell barcodes for all `idents` in or
-#' to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector)
+#' to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector).
+#' @param invert logical, invert the selection of cells (default is FALSE).
 #'
 #' @method WhichCells liger
 #' @return vector or list depending on `by_dataset` parameter
@@ -176,6 +177,7 @@ WhichCells.liger <- function(
     object,
     idents = NULL,
     by_dataset = FALSE,
+    invert = FALSE,
     ...
 ) {
   # Check new liger object
@@ -212,6 +214,9 @@ WhichCells.liger <- function(
     cells <- cell_df %>%
       filter(.data[[default_cluster]] %in% valid_idents) %>%
       rownames()
+    if (isTRUE(x = invert)) {
+      cells <- setdiff(x = Cells(x = object, by_dataset = FALSE), y = cells)
+    }
   } else {
     dataset_names <- names(x = rliger::datasets(x = object))
     cells <- lapply(dataset_names, function(x) {
@@ -219,6 +224,12 @@ WhichCells.liger <- function(
         filter(.data[["dataset"]] == x & .data[[default_cluster]] %in% valid_idents) %>%
         rownames()
     })
+    if (isTRUE(x = invert)) {
+      all_cells <- Cells(x = object, by_dataset = TRUE)
+      cells <- lapply(1:length(x = cells), function(x) {
+        cells_inverted <- setdiff(x = all_cells[[x]], y = cells[[x]])
+      })
+    }
 
     names(x = cells) <- dataset_names
   }
@@ -391,7 +402,7 @@ Subset_LIGER <- function(
   # pull meta data
   meta <- Fetch_Meta(object = liger_object)
 
-  # check subset value ok
+  # check subset value ok idents
   if (!is.null(x = ident)) {
     ident_values <- meta %>%
       pull(.data[[ident_col]]) %>%
@@ -402,7 +413,7 @@ Subset_LIGER <- function(
     }
   }
 
-  # check sub set value ok
+  # check subset value ok idents
   if (!is.null(x = cluster)) {
     cluster_values <- meta %>%
       pull(.data[[cluster_col]]) %>%
@@ -443,6 +454,7 @@ Subset_LIGER <- function(
     cells_filter <- setdiff(x = all_cells, y = cells_filter)
   }
 
+  # subset object
   sub_obj <- rliger::subsetLiger(object = liger_object, cellIdx = cells_filter)
 
   return(sub_obj)
