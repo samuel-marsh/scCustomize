@@ -6,7 +6,7 @@
 \usage{
 \method{WhichCells}{liger}(
   object,
-  ident = NULL,
+  idents = NULL,
   ident_col = NULL,
   by_dataset = FALSE,
   invert = FALSE,
@@ -16,6 +16,8 @@
 \arguments{
 \item{object}{LIGER object name.}
 
+\item{idents}{identities to extract cell barcodes.}
+
 \item{ident_col}{name of meta data column to use when subsetting cells by identity values.
 Default is NULL, which will use the objects default clustering as the \code{ident_col}.}
 
@@ -24,7 +26,7 @@ to return list (1 entry per dataset with vector of cells) (default is FALSE; ret
 
 \item{invert}{logical, invert the selection of cells (default is FALSE).}
 
-\item{idents}{identities to extract cell barcodes.}
+\item{...}{Arguments passed to other methods}
 }
 \value{
 vector or list depending on \code{by_dataset} parameter

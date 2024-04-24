@@ -12,6 +12,8 @@
 \item{by_dataset}{logical, whether to return list with vector of features for each dataset in
 LIGER object or to return single vector of unique features across all datasets in object
 (default is FALSE; return vector of unique features)}
+
+\item{...}{Arguments passed to other methods}
 }
 \value{
 vector or list depending on \code{by_dataset} parameter

@@ -11,7 +11,9 @@
 
 \item{by_dataset}{logical, whether to return list with vector of cell barcodes for each
 dataset in LIGER object or to return single vector of cell barcodes across all
-datasets in object (default is FALSE; return vector of cells)}
+datasets in object (default is FALSE; return vector of cells).}
+
+\item{...}{Arguments passed to other methods}
 }
 \value{
 vector or list depending on \code{by_dataset} parameter

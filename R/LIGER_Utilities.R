@@ -31,6 +31,7 @@ Fetch_Meta.liger <- function(
 #' @param by_dataset logical, whether to return list with vector of features for each dataset in
 #' LIGER object or to return single vector of unique features across all datasets in object
 #' (default is FALSE; return vector of unique features)
+#' @param ... Arguments passed to other methods
 #'
 #' @method Features liger
 #' @return vector or list depending on `by_dataset` parameter
@@ -90,7 +91,8 @@ Features.liger <- function(
 #' @param x LIGER object name.
 #' @param by_dataset logical, whether to return list with vector of cell barcodes for each
 #' dataset in LIGER object or to return single vector of cell barcodes across all
-#' datasets in object (default is FALSE; return vector of cells)
+#' datasets in object (default is FALSE; return vector of cells).
+#' @param ... Arguments passed to other methods
 #'
 #' @method Cells liger
 #' @return vector or list depending on `by_dataset` parameter
@@ -155,6 +157,7 @@ Cells.liger <- function(
 #' @param by_dataset logical, whether to return vector with cell barcodes for all `idents` in or
 #' to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector).
 #' @param invert logical, invert the selection of cells (default is FALSE).
+#' @param ... Arguments passed to other methods
 #'
 #' @method WhichCells liger
 #' @return vector or list depending on `by_dataset` parameter
