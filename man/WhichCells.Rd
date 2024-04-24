@@ -4,13 +4,15 @@
 \alias{WhichCells.liger}
 \title{Extract Cells for particular identity}
 \usage{
-\method{WhichCells}{liger}(object, idents = NULL, by_dataset = FALSE, ...)
+\method{WhichCells}{liger}(object, idents = NULL, by_dataset = FALSE, invert = FALSE, ...)
 }
 \arguments{
 \item{idents}{identities to extract cell barcodes}
 
 \item{by_dataset}{logical, whether to return vector with cell barcodes for all \code{idents} in or
-to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector)}
+to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector).}
+
+\item{invert}{logical, invert the selection of cells (default is FALSE).}
 
 \item{liger_object}{LIGER object name.}
 }
