@@ -1673,25 +1673,20 @@ Pull_Cluster_Annotation <- function(
 }
 
 
-#' Rename Cluster Seurat
-#'
-#' Wrapper function to rename active identities in Seurat Object with new idents.
-#'
-#' @param seurat_object object name.
-#' @param new_idents vector of new cluster names.  Must be equal to the length of current active.ident
-#' in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
+#' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
+#' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
 #' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
-#' @param old_ident_name optional, name to use for storing current object idents in `Object@meta.data`.
-#' @param new_ident_name optional, name to use for storing new object idents in `@meta.data`.
-#' @param overwrite logical, whether to overwrite columns in `@meta.data` if they have same
+#' @param old_ident_name optional, name to use for storing current object idents in object meta data slot.
+#' @param new_ident_name optional, name to use for storing new object idents in object meta data slot.
+#' @param overwrite logical, whether to overwrite columns in object meta data slot. if they have same
 #' names as `old_ident_name` and/or `new_ident_name`.
-#' @param ... Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.
 #'
-#' @return Seurat Object with new identities placed in active.ident slot.
+#' @method Rename_Clusters Seurat
 #'
 #' @import cli
 #' @importFrom lifecycle deprecated
 #'
+#' @rdname Rename_Clusters
 #' @export
 #'
 #' @concept marker_annotation_util
@@ -1703,8 +1698,8 @@ Pull_Cluster_Annotation <- function(
 #' }
 #'
 
-Rename_Clusters <- function(
-  seurat_object,
+Rename_Clusters.Seurat <- function(
+  object,
   new_idents,
   old_ident_name = NULL,
   new_ident_name = NULL,

@@ -151,3 +151,24 @@ Add_Cell_QC_Metrics <- function(object, ...) {
 Fetch_Meta <- function(object, ...) {
   UseMethod(generic = 'Fetch_Meta', object = object)
 }
+
+
+#' Rename Clusters
+#'
+#' Wrapper function to rename active cluster identity in Seurat or Liger Object with new idents.
+#'
+#' @param object Object of class Seurat or liger.
+#' @param ... Arguments passed to other methods
+#'
+#' @return An object of the same class as `object` with updated default identities.
+#'
+#' @export
+#'
+#' @concept get_set_util
+#'
+#' @rdname Rename_Clusters
+#'
+
+Rename_Clusters <- function(object, ...) {
+  UseMethod(generic = 'Rename_Clusters', object = object)
+}

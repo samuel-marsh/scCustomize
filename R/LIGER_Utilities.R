@@ -342,6 +342,114 @@ LIGER_Cells_by_Identities <- function(
 }
 
 
+#' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
+#' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
+#' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
+#' @param old_ident_name optional, name to use for storing current object idents in object meta data slot.
+#' @param new_ident_name optional, name to use for storing new object idents in object meta data slot.
+#' @param overwrite logical, whether to overwrite columns in object meta data slot. if they have same
+#' names as `old_ident_name` and/or `new_ident_name`.
+#'
+#' @method Rename_Clusters liger
+#'
+#' @import cli
+#' @importFrom dplyr right_join
+#' @importFrom tibble rownames_to_column column_to_rownames
+#'
+#' @rdname Rename_Clusters
+#' @export
+#'
+#' @concept marker_annotation_util
+#'
+#' @examples
+#' \dontrun{
+#' # Liger version
+#' obj <- Rename_Clusters(object = obj_name, new_idents = new_idents_vec,
+#' old_ident_name = "LIGER_Idents_Round01", new_ident_name = "LIGER_Idents_Round02")
+#' }
+#'
+
+Rename_Clusters.liger <- function(
+    object,
+    new_idents,
+    old_ident_name = NULL,
+    new_ident_name = NULL,
+    overwrite = FALSE,
+    ...
+) {
+  # Check Seurat
+  Is_LIGER(liger_object = object)
+
+  # check old ident name
+  if (!is.null(x = old_ident_name)) {
+    if (old_ident_name %in% colnames(x = object@cellMeta)) {
+      if (isFALSE(x = overwrite)) {
+        cli_abort(message = c("The {.code old_ident_name}: {.field {old_ident_name}} is already a column in meta data",
+                              "i" = "To overwrite current meta data column set {.code overwrite = TRUE}."))
+      } else {
+        cli_inform(message = "Overwriting old meta data column: {.field {old_ident_name}} as {.code overwrite = TRUE}")
+
+      }
+    } else {
+      object@cellMeta[[old_ident_name]] <- rliger::defaultCluster(x = object)
+    }
+  }
+
+  # check new ident name
+  if (!is.null(x = new_ident_name) && new_ident_name %in% colnames(x = object@cellMeta)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("The {.code new_ident_name}: {.field {new_ident_name}} is already a column in meta data",
+                            "i" = "To overwrite current meta data column set {.code overwrite = TRUE}."))
+    } else {
+      cli_inform(message = "Overwriting new meta data column: {.field {new_ident_name}} as {.code overwrite = TRUE}")
+    }
+  }
+
+  # Check equivalent lengths
+  if (length(x = new_idents) != length(x = levels(x = rliger::defaultCluster(x = object)))) {
+    cli_abort(message = c("Length of {.code new_idents} must be equal to the number of clusters in Liger Object.",
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} object 'defaultCluster' length: {.field {length(x = levels(x = rliger::defaultCluster(x = object)))}}.")
+    )
+  }
+
+  # Name the new idents vector
+  if (is.null(x = names(x = new_idents))) {
+    names(x = new_idents) <- levels(x = rliger::defaultCluster(x = object))
+  }
+
+  # If named check that names are right length
+  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = rliger::defaultCluster(x = object)))) {
+    cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of clusters.",
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} object 'defaultCluster' length: {length(x = levels(x = defaultCluster(x = object)))}}.")
+    )
+  }
+
+  # Add new idents
+  ident_df <- data.frame(rliger::defaultCluster(x = object))
+  colnames(x = ident_df) <- "current_idents"
+  ident_df <- ident_df %>%
+    rownames_to_column("barcodes")
+
+  new_idents_df <- data.frame("current_idents" = names(x = new_idents),
+                              "new_idents" = new_idents)
+
+  new_idents_meta <- suppressMessages(right_join(x = ident_df, y = new_idents_df)) %>%
+    column_to_rownames("barcodes")
+
+  suppressMessages(rliger::defaultCluster(x = object) <- new_idents_meta$new_idents)
+  cli_inform(message = c("v" = "{.code defaultCluster} updated and stored as: {.val defaultCluster} in object cellMeta slot."))
+
+  # Add new ident to meta.data information if desired
+  if (!is.null(x = new_ident_name)) {
+    object@cellMeta[[new_ident_name]] <- rliger::defaultCluster(x = object)
+    cli_inform(message = c("i" = "{.code new_idents} also stored as: {.val new_ident_name} in object cellMeta slot."))
+  }
+
+  # return object
+  return(object)
+}
+
+
 #' Subset LIGER object
 #'
 #' Subset LIGER object by cluster or other meta data variable.
