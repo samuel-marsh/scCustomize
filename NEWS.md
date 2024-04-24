@@ -9,6 +9,7 @@
     - `Cells` to extract vector of all cells or list vectors of cells by dataset.  
     - `Features` to extract vector of all features or list vectors of features by dataset.  
     - `WhichCells` to extract vector or list of cells matching identity criteria.  
+    - `Embeddings` to extract matrix containing dimensionality reduction embeddings or iNMF h.norm matrix.  
 - *Updated functions to interact with both old and new style liger objects:*  
     - `plotFactors_scCustom()`  
     - `Fetch_Meta`  
