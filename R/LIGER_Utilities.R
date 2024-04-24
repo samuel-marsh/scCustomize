@@ -27,46 +27,49 @@ Fetch_Meta.liger <- function(
 #'
 #' Extract all unique features from LIGER object
 #'
-#' @param liger_object LIGER object name.
+#' @param x LIGER object name.
 #' @param by_dataset logical, whether to return list with vector of features for each dataset in
 #' LIGER object or to return single vector of unique features across all datasets in object
 #' (default is FALSE; return vector of unique features)
 #'
+#' @method Features liger
 #' @return vector or list depending on `by_dataset` parameter
 #'
 #' @importFrom utils packageVersion
 #'
 #' @export
+#' @rdname Features
 #'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
 #' # return single vector of all unique features
-#' all_features <- LIGER_Features(liger_object = object, by_dataset = FALSE)
+#' all_features <- Features(x = object, by_dataset = FALSE)
 #'
 #' # return list of vectors containing features from each individual dataset in object
-#' dataset_features <- LIGER_Features(liger_object = object, by_dataset = TRUE)
+#' dataset_features <- Features(x = object, by_dataset = TRUE)
 #' }
 #'
 
-LIGER_Features <- function(
-    liger_object,
-    by_dataset = FALSE
+Features.liger <- function(
+    x,
+    by_dataset = FALSE,
+    ...
 ) {
   # check liger
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = x)
 
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     # Extract features
-    features_by_dataset <- lapply(1:length(x = liger_object@datasets), function(x) {
-      rownames(x = liger_object@datasets[[x]]@featureMeta)
+    features_by_dataset <- lapply(1:length(x = x@datasets), function(j) {
+      rownames(x = x@datasets[[j]]@featureMeta)
     })
   } else {
     # Extract features
-    features_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
-      rownames(x = liger_object@raw.data[[x]])
+    features_by_dataset <- lapply(1:length(x = x@raw.data), function(j) {
+      rownames(x = x@raw.data[[j]])
     })
   }
 
@@ -84,47 +87,50 @@ LIGER_Features <- function(
 #'
 #' Extract all cell barcodes from LIGER object
 #'
-#' @param liger_object LIGER object name.
+#' @param x LIGER object name.
 #' @param by_dataset logical, whether to return list with vector of cell barcodes for each
 #' dataset in LIGER object or to return single vector of cell barcodes across all
 #' datasets in object (default is FALSE; return vector of cells)
 #'
+#' @method Cells liger
 #' @return vector or list depending on `by_dataset` parameter
 #'
 #' @importFrom utils packageVersion
 #'
 #' @export
+#' @rdname Cells
 #'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
 #' # return single vector of all cells
-#' all_features <- LIGER_Cells(liger_object = object, by_dataset = FALSE)
+#' all_features <- Cells(x = object, by_dataset = FALSE)
 #'
 #' # return list of vectors containing cells from each individual dataset in object
-#' dataset_features <- LIGER_Cells(liger_object = object, by_dataset = TRUE)
+#' dataset_features <- Cells(x = object, by_dataset = TRUE)
 #' }
 #'
 
-LIGER_Cells <- function(
-    liger_object,
-    by_dataset = FALSE
+Cells.liger <- function(
+    x,
+    by_dataset = FALSE,
+    ...
 ) {
   # check liger
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = x)
 
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     # Extract features
-    cells_by_dataset <- lapply(1:length(x = liger_object@datasets), function(x) {
-      colnames(x = liger_object@datasets[[x]])
+    cells_by_dataset <- lapply(1:length(x = x@datasets), function(j) {
+      colnames(x = x@datasets[[j]])
     })
-    names(cells_by_dataset) <- names(liger_object@datasets)
+    names(cells_by_dataset) <- names(x@datasets)
   } else {
     # Extract features
-    cells_by_dataset <- lapply(1:length(x = liger_object@raw.data), function(x) {
-      colnames(x = liger_object@raw.data[[x]])
+    cells_by_dataset <- lapply(1:length(x = x@raw.data), function(j) {
+      colnames(x = x@raw.data[[j]])
     })
   }
 
@@ -135,98 +141,6 @@ LIGER_Cells <- function(
   } else {
     return(cells_by_dataset)
   }
-}
-
-
-#' Extract Cells by identity
-#'
-#' Extract all cell barcodes by identity from LIGER object
-#'
-#' @param liger_object LIGER object name.
-#' @param group.by name of meta data column to use, default is current default clustering.
-#' @param by_dataset logical, whether to return list with entries for cell barcodes for each
-#' identity in `group.by`
-#' or to return list of lists (1 entry per dataset and each ident within the dataset)
-#' (default is FALSE; return list)
-#'
-#' @return list or list of lists depending on `by_dataset` parameter
-#'
-#' @import cli
-#' @importFrom dplyr filter select all_of
-#' @importFrom magrittr "%>%"
-#' @importFrom utils packageVersion
-#'
-#' @export
-#'
-#' @concept liger_object_util
-#'
-#' @examples
-#' \dontrun{
-#' # return single vector of all cells
-#' cells_by_idents <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = FALSE)
-#'
-#' # return list of vectors containing cells from each individual dataset in object
-#' cells_by_idents_by_dataset <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = TRUE)
-#' }
-#'
-
-LIGER_Cells_by_Identities <- function(
-    liger_object,
-    group.by = NULL,
-    by_dataset = FALSE
-) {
-  # Check new liger object
-  if (packageVersion(pkg = 'rliger') >= "2.0.0") {
-    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
-  }
-
-  # check group.by is valid
-  if (!is.null(x = group.by)) {
-    Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE)
-  }
-
-  # set group.by if not set
-  group.by <- group.by %||% LIGER_Default_Cluster(liger_object = liger_object)
-
-  # Check cluster df
-  cell_df <- Fetch_Meta(object = liger_object) %>%
-    select(all_of(c(group.by, "dataset")))
-
-  if (inherits(x = cell_df[[group.by]], what = "factor")) {
-    ident_levels <- levels(x = cell_df[[group.by]])
-  } else {
-    ident_levels <- unique(x = cell_df[[group.by]])
-  }
-
-  # Get cells for object overall
-  if (isFALSE(x = by_dataset)) {
-    cells_list <- lapply(ident_levels, function(x) {
-      cells <- cell_df %>%
-        filter(.data[[group.by]] == x) %>%
-        rownames()
-    })
-
-    names(cells_list) <- ident_levels
-  } else {
-    # Get cells by cluster by dataset
-    dataset_names <- names(x = rliger::datasets(x = liger_object))
-    cells_list <- lapply(1:length(x = dataset_names), function(x) {
-      sample_cells_df <- cell_df %>%
-        filter(.data[["dataset"]] == dataset_names[x])
-
-      sample_cells <- lapply(ident_levels, function(y) {
-        sample_cells_df %>%
-          filter(.data[[group.by]] == y) %>%
-          rownames()
-      })
-      names(sample_cells) <- ident_levels
-
-      return(sample_cells)
-    })
-    names(cells_list) <- dataset_names
-  }
-
-  return(cells_list)
 }
 
 
@@ -314,6 +228,96 @@ WhichCells.liger <- function(
 }
 
 
+#' Extract Cells by identity
+#'
+#' Extract all cell barcodes by identity from LIGER object
+#'
+#' @param liger_object LIGER object name.
+#' @param group.by name of meta data column to use, default is current default clustering.
+#' @param by_dataset logical, whether to return list with entries for cell barcodes for each
+#' identity in `group.by`
+#' or to return list of lists (1 entry per dataset and each ident within the dataset)
+#' (default is FALSE; return list)
+#'
+#' @return list or list of lists depending on `by_dataset` parameter
+#'
+#' @import cli
+#' @importFrom dplyr filter select all_of
+#' @importFrom magrittr "%>%"
+#' @importFrom utils packageVersion
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # return single vector of all cells
+#' cells_by_idents <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = FALSE)
+#'
+#' # return list of vectors containing cells from each individual dataset in object
+#' cells_by_idents_by_dataset <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = TRUE)
+#' }
+#'
+
+LIGER_Cells_by_Identities <- function(
+    liger_object,
+    group.by = NULL,
+    by_dataset = FALSE
+) {
+  # Check new liger object
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  }
+
+  # check group.by is valid
+  if (!is.null(x = group.by)) {
+    Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE)
+  }
+
+  # set group.by if not set
+  group.by <- group.by %||% LIGER_Default_Cluster(liger_object = liger_object)
+
+  # Check cluster df
+  cell_df <- Fetch_Meta(object = liger_object) %>%
+    select(all_of(c(group.by, "dataset")))
+
+  if (inherits(x = cell_df[[group.by]], what = "factor")) {
+    ident_levels <- levels(x = cell_df[[group.by]])
+  } else {
+    ident_levels <- unique(x = cell_df[[group.by]])
+  }
+
+  # Get cells for object overall
+  if (isFALSE(x = by_dataset)) {
+    cells_list <- lapply(ident_levels, function(x) {
+      cells <- cell_df %>%
+        filter(.data[[group.by]] == x) %>%
+        rownames()
+    })
+
+    names(cells_list) <- ident_levels
+  } else {
+    # Get cells by cluster by dataset
+    dataset_names <- names(x = rliger::datasets(x = liger_object))
+    cells_list <- lapply(1:length(x = dataset_names), function(x) {
+      sample_cells_df <- cell_df %>%
+        filter(.data[["dataset"]] == dataset_names[x])
+
+      sample_cells <- lapply(ident_levels, function(y) {
+        sample_cells_df %>%
+          filter(.data[[group.by]] == y) %>%
+          rownames()
+      })
+      names(sample_cells) <- ident_levels
+
+      return(sample_cells)
+    })
+    names(cells_list) <- dataset_names
+  }
+
+  return(cells_list)
+}
 
 
 #' Subset LIGER object
@@ -433,7 +437,7 @@ Subset_LIGER <- function(
   # invert filtering
   if (isTRUE(x = invert)) {
     # get vector of call cells
-    all_cells <- LIGER_Cells(liger_object = liger_object)
+    all_cells <- Cells(x = liger_object)
 
     # setdiff to get inverse
     cells_filter <- setdiff(x = all_cells, y = cells_filter)
@@ -955,7 +959,7 @@ Add_Mito_Ribo.liger <- function(
     ribo_features <- Retrieve_Ensembl_Ribo(species = species)
   }
 
-  all_features <- LIGER_Features(liger_object = object)
+  all_features <- Features(x = object)
 
   # get features from patterns
   mito_features <- mito_features %||% grep(pattern = mito_pattern, x = all_features, value = TRUE)
@@ -1232,7 +1236,7 @@ Add_Hemo.liger <- function(
   }
 
   # get all features
-  all_features <- LIGER_Features(liger_object = object, by_dataset = FALSE)
+  all_features <- Features(x = object, by_dataset = FALSE)
 
   # get features from patterns
   hemo_features <- hemo_features %||% grep(pattern = hemo_pattern, x = all_features, value = TRUE)

@@ -11,3 +11,17 @@ SeuratObject::as.Seurat
 #'
 #'
 SeuratObject::WhichCells
+
+#' @importFrom SeuratObject Cells
+#' @export
+#' @note See \code{\link{Cells.liger}} for scCustomize extension of this generic to extract cell barcodes.
+#'
+#'
+SeuratObject::Cells
+
+#' @importFrom SeuratObject Features
+#' @export
+#' @note See \code{\link{Features.liger}} for scCustomize extension of this generic to extract dataset features.
+#'
+#'
+SeuratObject::Features
