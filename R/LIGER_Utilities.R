@@ -434,24 +434,20 @@ Subset_LIGER <- function(
 
   # filter just by cluster
   if (!is.null(x = cluster) && is.null(x = ident)) {
-    cells_filter <- WhichCells.liger()
-      meta %>%
-      filter(.data[[cluster_col]] %in% cluster) %>%
-      rownames()
+    cells_filter <- WhichCells(object = liger_object, ident = cluster, ident_col = cluster_col)
   }
 
   # filter just by ident
   if (!is.null(x = ident) && is.null(x = cluster)) {
-    cells_filter <- meta %>%
-      filter(.data[[ident_col]] %in% ident) %>%
-      rownames()
+    cells_filter <- WhichCells(object = liger_object, ident = ident, ident_col = ident_col)
   }
 
   # Filter by ident and cluster
   if (!is.null(x = ident) && !is.null(x = cluster)) {
-    cells_filter <- meta %>%
-      filter(.data[[ident_col]] %in% ident & .data[[cluster_col]] %in% cluster) %>%
-      rownames()
+    cells_filter_cluster <- WhichCells(object = liger_object, ident = cluster, ident_col = cluster_col)
+    cells_filter_ident <- WhichCells(object = liger_object, ident = ident, ident_col = ident_col)
+
+    cells_filter <- intersect(x = cells_filter_cluster, y = cells_filter_ident)
   }
 
   # invert filtering
