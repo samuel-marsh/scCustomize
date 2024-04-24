@@ -149,7 +149,9 @@ Cells.liger <- function(
 #' Extract all cell barcodes for a specific identity
 #'
 #' @param liger_object LIGER object name.
-#' @param idents identities to extract cell barcodes
+#' @param idents identities to extract cell barcodes.
+#' @param ident_col name of meta data column to use when subsetting cells by identity values.
+#' Default is NULL, which will use the objects default clustering as the `ident_col`.
 #' @param by_dataset logical, whether to return vector with cell barcodes for all `idents` in or
 #' to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector).
 #' @param invert logical, invert the selection of cells (default is FALSE).
@@ -169,13 +171,18 @@ Cells.liger <- function(
 #'
 #' @examples
 #' \dontrun{
+#' # Extract cells from ident =1 in current default clustering
 #' ident1_cells <- WhichCells(object = liger_object, idents = 1)
+#'
+#' # Extract all cells from "stim" treatment from object
+#' stim_cells <- WhichCells(object = liger_object, idents = "stim", ident_col = "Treatment")
 #' }
 #'
 
 WhichCells.liger <- function(
     object,
-    idents = NULL,
+    ident = NULL,
+    ident_col = NULL,
     by_dataset = FALSE,
     invert = FALSE,
     ...
@@ -186,20 +193,21 @@ WhichCells.liger <- function(
   }
 
   # Get cells data.frame
-  default_cluster <- LIGER_Default_Cluster(liger_object = object)
+  ident_col <- ident_col %||% LIGER_Default_Cluster(liger_object = object)
 
   cell_df <- Fetch_Meta(object = object) %>%
-    select(all_of(c(default_cluster, "dataset")))
+    select(all_of(c(ident_col, "dataset")))
 
   # possible idents
   if (inherits(x = cell_df[[idents]], what = "factor")) {
-    ident_levels <- levels(x = cell_df[[default_cluster]])
+    ident_levels <- levels(x = cell_df[[ident_col]])
   } else {
-    ident_levels <- unique(x = cell_df[[default_cluster]])
+    ident_levels <- unique(x = cell_df[[ident_col]])
   }
 
   # check idents valid
   valid_idents <- intersect(x = idents, y = ident_levels)
+
   if (length(x = valid_idents) == 0) {
     cli_abort(message = "None of the provided {.code idents} were found in object.")
   }
@@ -212,7 +220,7 @@ WhichCells.liger <- function(
   # get cells
   if (isFALSE(x = by_dataset)) {
     cells <- cell_df %>%
-      filter(.data[[default_cluster]] %in% valid_idents) %>%
+      filter(.data[[ident_col]] %in% valid_idents) %>%
       rownames()
     if (isTRUE(x = invert)) {
       cells <- setdiff(x = Cells(x = object, by_dataset = FALSE), y = cells)
@@ -221,7 +229,7 @@ WhichCells.liger <- function(
     dataset_names <- names(x = rliger::datasets(x = object))
     cells <- lapply(dataset_names, function(x) {
       sample_cells <- cell_df %>%
-        filter(.data[["dataset"]] == x & .data[[default_cluster]] %in% valid_idents) %>%
+        filter(.data[["dataset"]] == x & .data[[ident_col]] %in% valid_idents) %>%
         rownames()
     })
     if (isTRUE(x = invert)) {
@@ -426,7 +434,8 @@ Subset_LIGER <- function(
 
   # filter just by cluster
   if (!is.null(x = cluster) && is.null(x = ident)) {
-    cells_filter <- meta %>%
+    cells_filter <- WhichCells.liger()
+      meta %>%
       filter(.data[[cluster_col]] %in% cluster) %>%
       rownames()
   }
