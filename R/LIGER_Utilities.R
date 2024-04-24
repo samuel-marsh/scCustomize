@@ -148,7 +148,7 @@ Cells.liger <- function(
 #'
 #' Extract all cell barcodes for a specific identity
 #'
-#' @param liger_object LIGER object name.
+#' @param object LIGER object name.
 #' @param idents identities to extract cell barcodes.
 #' @param ident_col name of meta data column to use when subsetting cells by identity values.
 #' Default is NULL, which will use the objects default clustering as the `ident_col`.
@@ -181,7 +181,7 @@ Cells.liger <- function(
 
 WhichCells.liger <- function(
     object,
-    ident = NULL,
+    idents = NULL,
     ident_col = NULL,
     by_dataset = FALSE,
     invert = FALSE,
@@ -463,6 +463,62 @@ Subset_LIGER <- function(
   sub_obj <- rliger::subsetLiger(object = liger_object, cellIdx = cells_filter)
 
   return(sub_obj)
+}
+
+
+#' Extract matrix of embeddings
+#'
+#' Extract matrix containing iNMF or dimensionality reduction embeddings.
+#'
+#' @param reduction name of dimensionality reduction to pull
+#' @param iNMF logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.
+#'
+#' @method Embeddings liger
+#' @return matrix
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @import Seurat
+#'
+#' @export
+#' @rdname Embeddings
+#'
+#' @examples
+#' \dontrun{
+#' # Extract embedding matrix for current dimensionality reduction
+#' UMAP_coord <- Embeddings(object = liger_object)
+#'
+#' # Extract iNMF h.norm matrix
+#' iNMF_mat <- Embeddings(object = liger_object, reduction = "iNMF")
+#' }
+#'
+
+Embeddings.liger <- function(
+    object,
+    reduction = NULL,
+    iNMF = FALSE,
+    ...
+) {
+  # return iNMF h.norm
+  if (isTRUE(x = iNMF)) {
+    embeddings <- object@h.norm
+    return(embeddings)
+  }
+
+  # check options
+  if (!is.null(x = reduction)) {
+    if (!reduction %in% c(names(x = object@dimReds))) {
+      cli_abort(message = "The reduction {.field {reduction}} was not found in object.")
+    }
+  }
+
+  reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
+
+  embeddings <- object@dimReds[[reduction]]
+
+  # return embeddings
+  return(embeddings)
 }
 
 
