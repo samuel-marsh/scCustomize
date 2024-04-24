@@ -178,15 +178,19 @@ Generate_Plotting_df_LIGER2 <- function(object,
   if (isTRUE(x = reorder.idents)) {
     reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
   }
-  c_names <- names(x = object@cellMeta$leiden_cluster)
+
+  c_ident <- rliger::defaultCluster(x = object)
+  c_names <- names(x = object@cellMeta[["c_ident"]])
+
+
   if (is.null(x = clusters)) {
     # if clusters have not been set yet
-    if (length(x = object@cellMeta$leiden_cluster) == 0) {
+    if (length(x = object@cellMeta[["c_ident"]]) == 0) {
       clusters <- rep(1, nrow(x = reduc_df))
       names(x = clusters) <- c_names <- rownames(x = reduc_df)
     } else {
-      clusters <- object@cellMeta$leiden_cluster
-      c_names <- names(x = object@cellMeta$leiden_cluster)
+      clusters <- object@cellMeta[["c_ident"]]
+      c_names <- names(x = object@cellMeta[["c_ident"]])
     }
   }
   reduc_df[['Cluster']] <- clusters[c_names]
@@ -537,7 +541,7 @@ Plot_By_Cluster_LIGER2 <- function(
 
   colnames(x = centers) <- c("Cluster", x_axis_label, y_axis_label)
 
-  cluster_length <- length(x = unique(x = liger_object@cellMeta$leiden_cluster))
+  cluster_length <- length(x = unique(x = liger_object@cellMeta[["c_ident"]]))
 
   if (is.null(x = colors_use)) {
     colors_use <- scCustomize_Palette(num_groups = cluster_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
