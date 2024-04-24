@@ -4,10 +4,18 @@
 \alias{WhichCells.liger}
 \title{Extract Cells for particular identity}
 \usage{
-\method{WhichCells}{liger}(object, idents = NULL, by_dataset = FALSE, invert = FALSE, ...)
+\method{WhichCells}{liger}(
+  object,
+  ident = NULL,
+  ident_col = NULL,
+  by_dataset = FALSE,
+  invert = FALSE,
+  ...
+)
 }
 \arguments{
-\item{idents}{identities to extract cell barcodes}
+\item{ident_col}{name of meta data column to use when subsetting cells by identity values.
+Default is NULL, which will use the objects default clustering as the \code{ident_col}.}
 
 \item{by_dataset}{logical, whether to return vector with cell barcodes for all \code{idents} in or
 to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector).}
@@ -15,6 +23,8 @@ to return list (1 entry per dataset with vector of cells) (default is FALSE; ret
 \item{invert}{logical, invert the selection of cells (default is FALSE).}
 
 \item{liger_object}{LIGER object name.}
+
+\item{idents}{identities to extract cell barcodes.}
 }
 \value{
 vector or list depending on \code{by_dataset} parameter
@@ -24,7 +34,11 @@ Extract all cell barcodes for a specific identity
 }
 \examples{
 \dontrun{
+# Extract cells from ident =1 in current default clustering
 ident1_cells <- WhichCells(object = liger_object, idents = 1)
+
+# Extract all cells from "stim" treatment from object
+stim_cells <- WhichCells(object = liger_object, idents = "stim", ident_col = "Treatment")
 }
 
 }
