@@ -1,24 +1,38 @@
-# scCustomize 2.X.X (2024-XX-XX)  
+# scCustomize 2.2.0 (2024-XX-XX)  
 ## Added  
-- Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
-- Added new function `seq_zeros()` to create sequences with preceding zeros.  
-- Added new functions to interact with liger v2.0.0+ object format change:  
+- **Major Updates to Functionality with rliger package:**
+- *Added new utility functions to interact with liger v2.0.0+ object format change:*  
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
-    - `LIGER_Cells` to extract vector of all cells or list vectors of cells by dataset.  
     - `Subset_LIGER` to quickly subset by cluster or other meta data variable.  
     - `LIGER_Cells_by_Identities` to extract list of barcodes sorted by values within given meta data column.  
-    - Extended Seurat's `WhichCells` generic to work with liger objects.  
-- Updated functions to interact with both old and new style liger objects:
-    - `plotFactors_scCustom()`, `Fetch_Meta`, `LIGER_Features`, `Top_Genes_Factor`, `Add_Mito_Ribo`, `Add_Cell_Complexity`, `DimPlot_LIGER`.  
-- Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:
-    - `as.LIGER`, `as.Seurat`.  
-- Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
-- Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
+- *Extended the following Seurat/SeuratObject functions to work seamlessly with liger objects:*  
+    - `Cells` to extract vector of all cells or list vectors of cells by dataset.  
+    - `Features` to extract vector of all features or list vectors of features by dataset.  
+    - `WhichCells` to extract vector or list of cells matching identity criteria.  
+- *Updated functions to interact with both old and new style liger objects:*  
+    - `plotFactors_scCustom()`  
+    - `Fetch_Meta`  
+    - `Top_Genes_Factor`  
+    - `Add_Mito_Ribo`  
+    - `Add_Cell_Complexity`  
+    - `DimPlot_LIGER`  
+- *New functions compatible with old and new style liger objects:*  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
+- *New functions for rliger v2.0.0+ only:*
+    - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
+    - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
+- *Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:*
+    - `as.LIGER`
+    - `as.Seurat`  
+  
+- **General scCustomize Updates:**  
+- Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
+- Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
+- Added new function `seq_zeros()` to create sequences with preceding zeros.  
 - Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
 - Added `cells` parameter explicitly to `FeatureScatter_scCustom`.  
 - Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
-- Added new plotting function `SpatialDimPlot_scCustom`, ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
+- Added new plotting function `SpatialDimPlot_scCustom`.  Thanks for encouragement @puapinyoying @nina-hahn ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
 - Added ability of `Read_Metrics_10X` to read a single metrics csv file and return data formatted the same way as when reading multiple files.  
 - Added parameter `cutoff_line_width` to the `QC_Plot_*` family of plots to control line thickness of cutoff lines.  
 
