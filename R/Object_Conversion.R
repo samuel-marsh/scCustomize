@@ -1299,7 +1299,7 @@ as.anndata.liger <- function(
 
   # pull var genes
   liger_var_genes <- x@var.genes
-  total_features <- data.frame("all_genes" = LIGER_Features(liger_object = x))
+  total_features <- data.frame("all_genes" = Features(x = x))
 
   liger_var_df <- total_features %>%
     mutate("variable_genes" = ifelse(.data[["all_genes"]] %in% liger_var_genes, .data[["all_genes"]], NA)) %>%
