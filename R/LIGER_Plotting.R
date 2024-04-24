@@ -123,7 +123,7 @@ DimPlot_LIGER <- function(
   }
 
   # cells in object
-  cells_total <- LIGER_Cells(liger_object = liger_object)
+  cells_total <- Cells(x = liger_object)
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = cells_total) > 2e5)

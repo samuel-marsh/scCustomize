@@ -1766,7 +1766,7 @@ LIGER_DimPlot <- function(
   }
 
   # cells in object
-  cells_total <- LIGER_Cells(liger_object = liger_object)
+  cells_total <- Cells(x = liger_object)
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = cells_total) > 2e5)
@@ -1998,7 +1998,7 @@ LIGER2_DimPlot <- function(
   }
 
   # cells in object
-  cells_total <- LIGER_Cells(liger_object = liger_object)
+  cells_total <- Cells(x = liger_object)
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = cells_total) > 2e5)
@@ -2206,7 +2206,7 @@ Add_MSigDB_LIGER <- function(
   msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
 
   # Check features are present in object
-  all_features <- LIGER_Features(liger_object = liger_object, by_dataset = FALSE)
+  all_features <- Features(x = liger_object, by_dataset = FALSE)
 
   oxphos_found <- intersect(x = msigdb_gene_list[["oxphos"]], y = all_features)
   apop_found <- intersect(x = msigdb_gene_list[["apop"]], y = all_features)
@@ -2309,7 +2309,7 @@ Add_IEG_LIGER <- function(
   # Retrieve gene lists
   ieg_gene_list <- Retrieve_IEG_Lists(species = species)
 
-  all_features <- LIGER_Features(liger_object = liger_object, by_dataset = FALSE)
+  all_features <- Features(x = liger_object, by_dataset = FALSE)
 
   ieg_found <- intersect(x = ieg_gene_list[["ieg"]], y = all_features)
 
