@@ -14,6 +14,8 @@
 )
 }
 \arguments{
+\item{object}{LIGER object name.}
+
 \item{ident_col}{name of meta data column to use when subsetting cells by identity values.
 Default is NULL, which will use the objects default clustering as the \code{ident_col}.}
 
@@ -21,8 +23,6 @@ Default is NULL, which will use the objects default clustering as the \code{iden
 to return list (1 entry per dataset with vector of cells) (default is FALSE; return vector).}
 
 \item{invert}{logical, invert the selection of cells (default is FALSE).}
-
-\item{liger_object}{LIGER object name.}
 
 \item{idents}{identities to extract cell barcodes.}
 }
