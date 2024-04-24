@@ -25,3 +25,10 @@ SeuratObject::Cells
 #'
 #'
 SeuratObject::Features
+
+#' @importFrom SeuratObject Embeddings
+#' @export
+#' @note See \code{\link{Embeddings.liger}} for scCustomize extension of this generic to extract embeddings.
+#'
+#'
+SeuratObject::Embeddings
