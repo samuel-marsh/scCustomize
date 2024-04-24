@@ -7,9 +7,13 @@
 \method{Embeddings}{liger}(object, reduction = NULL, iNMF = FALSE, ...)
 }
 \arguments{
+\item{object}{LIGER object name.}
+
 \item{reduction}{name of dimensionality reduction to pull}
 
 \item{iNMF}{logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.}
+
+\item{...}{Arguments passed to other methods}
 }
 \value{
 matrix

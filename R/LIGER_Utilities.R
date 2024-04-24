@@ -473,8 +473,10 @@ Subset_LIGER <- function(
 #'
 #' Extract matrix containing iNMF or dimensionality reduction embeddings.
 #'
+#' @param object LIGER object name.
 #' @param reduction name of dimensionality reduction to pull
 #' @param iNMF logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.
+#' @param ... Arguments passed to other methods
 #'
 #' @method Embeddings liger
 #' @return matrix
