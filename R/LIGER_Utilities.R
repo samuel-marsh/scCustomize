@@ -1249,12 +1249,6 @@ Add_Cell_Complexity.liger <- function(
   overwrite = FALSE,
   ...
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   # Check liger
   Is_LIGER(liger_object = object)
 
