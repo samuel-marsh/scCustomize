@@ -114,12 +114,6 @@ Generate_Plotting_df_LIGER <- function(object,
                                        group_by = "dataset",
                                        split_by = NULL
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   tsne_df <- data.frame(object@tsne.coords)
   colnames(x = tsne_df) <- c("tsne1", "tsne2")
   tsne_df[[group_by]] <- object@cell.data[[group_by]]
@@ -1719,12 +1713,6 @@ LIGER_DimPlot <- function(
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 

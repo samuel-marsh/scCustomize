@@ -58,9 +58,6 @@ Features.liger <- function(
     by_dataset = FALSE,
     ...
 ) {
-  # check liger
-  Is_LIGER(liger_object = x)
-
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     # Extract features
@@ -119,9 +116,6 @@ Cells.liger <- function(
     by_dataset = FALSE,
     ...
 ) {
-  # check liger
-  Is_LIGER(liger_object = x)
-
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     # Extract features
@@ -287,6 +281,9 @@ LIGER_Cells_by_Identities <- function(
     group.by = NULL,
     by_dataset = FALSE
 ) {
+  # check liger
+  Is_LIGER(liger_object = liger_object)
+
   # Check new liger object
   if (packageVersion(pkg = 'rliger') < "2.0.0") {
     cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
@@ -377,8 +374,10 @@ Rename_Clusters.liger <- function(
     overwrite = FALSE,
     ...
 ) {
-  # Check Seurat
-  Is_LIGER(liger_object = object)
+  # Check new liger object
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
+  }
 
   # check old ident name
   if (!is.null(x = old_ident_name)) {
@@ -439,7 +438,7 @@ Rename_Clusters.liger <- function(
   suppressMessages(rliger::defaultCluster(x = object) <- new_idents_meta$new_idents)
   cli_inform(message = c("v" = "{.code defaultCluster} updated and stored as: {.val defaultCluster} in object cellMeta slot."))
 
-  # Add new ident to meta.data information if desired
+  # Add new ident to cellMeta information if desired
   if (!is.null(x = new_ident_name)) {
     object@cellMeta[[new_ident_name]] <- rliger::defaultCluster(x = object)
     cli_inform(message = c("i" = "{.code new_idents} also stored as: {.val new_ident_name} in object cellMeta slot."))
@@ -498,9 +497,12 @@ Subset_LIGER <- function(
     ident_col = NULL,
     invert = FALSE
 ) {
+  # check liger
+  Is_LIGER(liger_object = liger_object)
+
   # Check new liger object
-  if (!"cellMeta" %in% slotNames(liger_object)) {
-    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
   }
 
   # Check value provided
@@ -613,6 +615,11 @@ Embeddings.liger <- function(
     iNMF = FALSE,
     ...
 ) {
+  # Check new liger object
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
+  }
+
   # return iNMF h.norm
   if (isTRUE(x = iNMF)) {
     embeddings <- object@h.norm
@@ -673,7 +680,7 @@ Top_Genes_Factor <- function(
     )
   }
 
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     W <- liger_object@W
     rownames(x = W) <- rownames(x = liger_object@datasets[[1]]@scaleData)
@@ -727,9 +734,12 @@ LIGER_DimReduc <- function(
     reduction = NULL,
     check_only = FALSE
 ) {
+  # check liger
+  Is_LIGER(liger_object = liger_object)
+
   # Check new liger object
-  if (!"cellMeta" %in% slotNames(liger_object)) {
-    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
   }
 
   # reduction to use
@@ -774,11 +784,12 @@ LIGER_DimReduc <- function(
 Find_Factor_Cor <- function(
     liger_object
 ) {
+  # check liger
   Is_LIGER(liger_object = liger_object)
 
   # Check new liger object
-  if (!"cellMeta" %in% slotNames(liger_object)) {
-    cli_abort(message = "This function is only for objects created with rliger >= v2.0.0")
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
   }
 
   # Get loadings
@@ -1620,12 +1631,12 @@ Variable_Features_ALL_LIGER <- function(
   pt.size = 0.3,
   chunk=1000
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("Functionality is currently restricted to rliger v1.0.1 or lower."))
   }
 
+  # check liger
   Is_LIGER(liger_object = liger_object)
 
   raw_data <- liger_object@raw.data
