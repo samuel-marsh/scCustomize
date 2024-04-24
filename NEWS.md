@@ -5,7 +5,7 @@
     - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
     - `Subset_LIGER` to quickly subset by cluster or other meta data variable.  
     - `LIGER_Cells_by_Identities` to extract list of barcodes sorted by values within given meta data column.  
-- *Extended the following Seurat/SeuratObject functions to work seamlessly with liger objects:*  
+- *Extended the following Seurat/SeuratObject generic functions to work seamlessly with liger objects:*  
     - `Cells` to extract vector of all cells or list vectors of cells by dataset.  
     - `Features` to extract vector of all features or list vectors of features by dataset.  
     - `WhichCells` to extract vector or list of cells matching identity criteria.  
@@ -19,7 +19,7 @@
     - `DimPlot_LIGER`  
 - *Updated functions compatible with old and new style liger objects:*  
     - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
-- *New generics to function across both Seurat and Liger objects*  
+- *New scCustomize generics to function across both Seurat and Liger objects*  
     - `Add_Hemo` (see above).
     - `Rename_Clusters` now S3 generic for setting new active.ident (Seurat) or defaultCluster (Liger).  
 - *New functions for rliger v2.0.0+ only:*
