@@ -17,8 +17,11 @@
     - `Add_Mito_Ribo`  
     - `Add_Cell_Complexity`  
     - `DimPlot_LIGER`  
-- *New functions compatible with old and new style liger objects:*  
-- Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
+- *Updated functions compatible with old and new style liger objects:*  
+    - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
+- *New generics to function across both Seurat and Liger objects*  
+    - `Add_Hemo` (see above).
+    - `Rename_Clusters` now S3 generic for setting new active.ident (Seurat) or defaultCluster (Liger).  
 - *New functions for rliger v2.0.0+ only:*
     - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
     - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
