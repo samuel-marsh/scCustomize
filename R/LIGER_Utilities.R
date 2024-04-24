@@ -196,7 +196,7 @@ WhichCells.liger <- function(
     select(all_of(c(ident_col, "dataset")))
 
   # possible idents
-  if (inherits(x = cell_df[[idents]], what = "factor")) {
+  if (inherits(x = cell_df[[ident_col]], what = "factor")) {
     ident_levels <- levels(x = cell_df[[ident_col]])
   } else {
     ident_levels <- unique(x = cell_df[[ident_col]])
@@ -208,7 +208,7 @@ WhichCells.liger <- function(
   if (length(x = valid_idents) == 0) {
     cli_abort(message = "None of the provided {.code idents} were found in object.")
   }
-  if (length(x = valid_idents) != idents) {
+  if (length(x = valid_idents) != length(x = idents)) {
     missing_idents <- setdiff(x = idents, y = valid_idents)
     cli_warn(message = c("The following {.code idents} were not found and therefore ignored:",
                          "i" = "{.field {missing_idents}}"))
