@@ -4,7 +4,7 @@
 \alias{Embeddings.liger}
 \title{Extract matrix of embeddings}
 \usage{
-\method{Embeddings}{liger}(object, reduction = NULL, iNMF = FALSE, ...)
+\method{Embeddings}{liger}(object, reduction = NULL, iNMF = FALSE, check_only = FALSE, ...)
 }
 \arguments{
 \item{object}{LIGER object name.}
@@ -12,6 +12,8 @@
 \item{reduction}{name of dimensionality reduction to pull}
 
 \item{iNMF}{logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.}
+
+\item{check_only}{logical, return \code{TRUE} if valid reduction is present.}
 
 \item{...}{Arguments passed to other methods}
 }
@@ -31,4 +33,4 @@ iNMF_mat <- Embeddings(object = liger_object, reduction = "iNMF")
 }
 
 }
-\concept{object_conversion}
+\concept{liger_object_util}

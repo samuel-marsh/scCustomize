@@ -44,4 +44,4 @@ stim_cells <- WhichCells(object = liger_object, idents = "stim", ident_col = "Tr
 }
 
 }
-\concept{object_conversion}
+\concept{liger_object_util}
