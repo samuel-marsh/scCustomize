@@ -1718,11 +1718,11 @@ Rename_Clusters.Seurat <- function(
   }
 
   # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
+  Is_Seurat(seurat_object = object)
 
   # check old ident name
   if (!is.null(x = old_ident_name)) {
-    if (old_ident_name %in% colnames(x = seurat_object@meta.data)) {
+    if (old_ident_name %in% colnames(x = object@meta.data)) {
       if (isFALSE(x = overwrite)) {
         cli_abort(message = c("The {.code old_ident_name}: {.field {old_ident_name}} is already a column in meta.data",
                               "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
@@ -1731,12 +1731,12 @@ Rename_Clusters.Seurat <- function(
 
       }
     } else {
-      seurat_object[[old_ident_name]] <- Idents(object = seurat_object)
+      object[[old_ident_name]] <- Idents(object = object)
     }
   }
 
   # check new ident name
-  if (!is.null(x = new_ident_name) && new_ident_name %in% colnames(x = seurat_object@meta.data)) {
+  if (!is.null(x = new_ident_name) && new_ident_name %in% colnames(x = object@meta.data)) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("The {.code new_ident_name}: {.field {new_ident_name}} is already a column in meta.data",
                             "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
@@ -1746,34 +1746,34 @@ Rename_Clusters.Seurat <- function(
   }
 
   # Check equivalent lengths
-  if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
+  if (length(x = new_idents) != length(x = levels(x = object))) {
     cli_abort(message = c("Length of {.code new_idents} must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(x = levels(x = seurat_object))}}.")
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(x = levels(x = object))}}.")
     )
   }
 
   # Name the new idents vector
   if (is.null(x = names(x = new_idents))) {
-    names(x = new_idents) <- levels(x = seurat_object)
+    names(x = new_idents) <- levels(x = object)
   }
 
   # If named check that names are right length
-  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
+  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = object))) {
     cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(x = levels(x = seurat_object))}}.")
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(x = levels(x = object))}}.")
     )
   }
 
   # Add new idents
-  seurat_object <- RenameIdents(object = seurat_object, new_idents)
+  object <- RenameIdents(object = object, new_idents)
 
   # Add new ident to meta.data information if desired
   if (!is.null(x = new_ident_name)) {
-    seurat_object[[new_ident_name]] <- Idents(object = seurat_object)
+    object[[new_ident_name]] <- Idents(object = object)
   }
 
   # return object
-  return(seurat_object)
+  return(object)
 }
 
 
