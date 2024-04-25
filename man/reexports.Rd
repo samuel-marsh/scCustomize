@@ -8,6 +8,8 @@
 \alias{Cells}
 \alias{Features}
 \alias{Embeddings}
+\alias{Idents}
+\alias{Idents<-}
 \title{Objects exported from other packages}
 \note{
 See \code{\link{as.Seurat.liger}} for scCustomize extension of this generic to converting Liger objects.
@@ -19,6 +21,10 @@ See \code{\link{Cells.liger}} for scCustomize extension of this generic to extra
 See \code{\link{Features.liger}} for scCustomize extension of this generic to extract dataset features.
 
 See \code{\link{Embeddings.liger}} for scCustomize extension of this generic to extract embeddings.
+
+See \code{\link{Idents.liger}} for scCustomize extension of this generic to extract cell identities.
+
+See \code{\link{Idents.liger}} for scCustomize extension of this generic to set cell identities.
 }
 \keyword{internal}
 \description{
@@ -26,6 +32,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{SeuratObject}{\code{\link[SeuratObject]{as.Seurat}}, \code{\link[SeuratObject]{Cells}}, \code{\link[SeuratObject]{Embeddings}}, \code{\link[SeuratObject:Cells]{Features}}, \code{\link[SeuratObject]{WhichCells}}}
+  \item{SeuratObject}{\code{\link[SeuratObject]{as.Seurat}}, \code{\link[SeuratObject]{Cells}}, \code{\link[SeuratObject]{Embeddings}}, \code{\link[SeuratObject:Cells]{Features}}, \code{\link[SeuratObject]{Idents}}, \code{\link[SeuratObject:Idents]{Idents<-}}, \code{\link[SeuratObject]{WhichCells}}}
 }}
 
