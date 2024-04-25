@@ -61,7 +61,7 @@ Default_DimReduc_LIGER <- function(
 LIGER_Default_Cluster_Name <- function(
     liger_object
 ) {
-  if (is.null(x = rliger::defaultCluster(x = object))) {
+  if (is.null(x = rliger::defaultCluster(x = liger_object))) {
     cli_abort(message = "No default cell identity/cluster present in object.")
   } else {
     default_cluster_name <- liger_object@uns$defaultCluster
