@@ -54,19 +54,18 @@ Default_DimReduc_LIGER <- function(
 #' @examples
 #' \dontrun{
 #' # return dimensionality reduction name
-#' dim_reduc_name <- LIGER_Default_Cluster(liger_object = obj)
+#' dim_reduc_name <- LIGER_Default_Cluster_Name(liger_object = obj)
 #' }
 #'
 
-LIGER_Default_Cluster <- function(
+LIGER_Default_Cluster_Name <- function(
     liger_object
 ) {
-  if (length(x = liger_object@uns$defaultCluster) > 0) {
-    default_cluster_name <- liger_object@uns$defaultCluster
-
-    return(default_cluster_name)
+  if (is.null(x = rliger::defaultCluster(x = object))) {
+    cli_abort(message = "No default cell identity/cluster present in object.")
   } else {
-    cli_abort(message = "No default cluster present.")
+    default_cluster_name <- liger_object@uns$defaultCluster
+    return(default_cluster_name)
   }
 }
 
@@ -172,7 +171,7 @@ Generate_Plotting_df_LIGER2 <- function(object,
   if (isTRUE(x = reorder.idents)) {
     reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
   }
-  cluster_col <- LIGER_Default_Cluster(liger_object = object)
+  cluster_col <- LIGER_Default_Cluster_Name(liger_object = object)
   c_names <- names(x = object@cellMeta[[cluster_col]])
   if (is.null(x = clusters)) {
     # if clusters have not been set yet

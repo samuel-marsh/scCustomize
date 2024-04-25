@@ -32,3 +32,17 @@ SeuratObject::Features
 #'
 #'
 SeuratObject::Embeddings
+
+#' @importFrom SeuratObject Embeddings
+#' @export
+#' @note See \code{\link{Idents.liger}} for scCustomize extension of this generic to extract cell identities.
+#'
+#'
+SeuratObject::Idents
+
+#' @importFrom SeuratObject Idents
+#' @export
+#' @note See \code{\link{Idents.liger}} for scCustomize extension of this generic to extract cell identities.
+#'
+#'
+SeuratObject::`Idents<-`

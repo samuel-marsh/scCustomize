@@ -170,7 +170,7 @@ WhichCells.liger <- function(
   }
 
   # Get cells data.frame
-  ident_col <- ident_col %||% LIGER_Default_Cluster(liger_object = object)
+  ident_col <- ident_col %||% LIGER_Default_Cluster_Name(liger_object = object)
 
   cell_df <- Fetch_Meta(object = object) %>%
     select(all_of(c(ident_col, "dataset")))
@@ -292,6 +292,103 @@ Embeddings.liger <- function(
 }
 
 
+#' Extract or set default identities from object
+#'
+#' Extract default identities from object in factor form.
+#'
+#' @param object LIGER object name.
+#' @param reduction name of dimensionality reduction to pull
+#' @param ... Arguments passed to other methods
+#'
+#' @method Idents liger
+#' @return factor
+#'
+#' @concept liger_object_util
+#'
+#' @import cli
+#' @import Seurat
+#' @importFrom dplyr pull
+#' @importFrom magrittr "%>%"
+#'
+#' @export
+#' @rdname Idents
+#'
+#' @examples
+#' \dontrun{
+#' # Extract idents
+#' object_idents <- Idents(object = liger_object)
+#' }
+#'
+
+Idents.liger <- function(
+    object,
+    ...
+) {
+  # Check default cluster present
+  if (is.null(x = rliger::defaultCluster(x = object))) {
+    cli_abort(message = "No default cell identity/cluster present in object.")
+  }
+
+  # get current default ident name
+  identity_name <- LIGER_Default_Cluster_Name(liger_object = object)
+
+  # pull active ident column
+  active_idents <- Fetch_Meta(object = object) %>%
+    pull(.data[[identity_name]])
+
+  # return active idents
+  return(active_idents)
+}
+
+
+#' Set default identities of object
+#'
+#' @param object LIGER object name.
+#' @param value name of column in cellMeta slot to set as new default cluster/ident
+#' @param ... Arguments passed to other methods
+#'
+#' @method Idents<- liger
+#' @return object
+#'
+#' @note Use of Idents<- is only for setting new default ident/cluster from column already present in cellMeta.
+#' To add new column with new cluster values to cellMeta and set as default see \code{\link{Rename_Clusters}}.
+#'
+#' @concept liger_object_util
+#'
+#' @import cli
+#' @import Seurat
+#'
+#' @export
+#' @rdname Idents
+#'
+#' @examples
+#' \dontrun{
+#' # Set idents
+#' Idents(object = liger_object) <- "new_annotation"
+#' }
+#'
+
+"Idents<-.liger" <- function(
+    object,
+    value,
+    ...
+) {
+  # Check new ident value is present in cellMeta
+  new_ident_name <- Meta_Present(object = object, meta_col_names = value, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+  if (length(x = new_ident_name) == 0) {
+    cli_abort(message = c("The provided {.code value} ({.field {value}}) is not present in obect cellMeta slot.",
+                          "i" = "Provide different value or use {.field Rename_Clusters} to add vector of new idents to cellMeta."))
+  }
+
+  # change defaults
+  rliger::defaultCluster(x = object) <- new_ident_name
+
+  # return object
+  return(object)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### DATA ACCESS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -368,7 +465,7 @@ LIGER_Cells_by_Identities <- function(
   }
 
   # set group.by if not set
-  group.by <- group.by %||% LIGER_Default_Cluster(liger_object = liger_object)
+  group.by <- group.by %||% LIGER_Default_Cluster_Name(liger_object = liger_object)
 
   # Check cluster df
   cell_df <- Fetch_Meta(object = liger_object) %>%
