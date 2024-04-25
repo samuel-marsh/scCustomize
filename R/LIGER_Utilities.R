@@ -136,7 +136,7 @@ Cells.liger <- function(
 #' @method WhichCells liger
 #' @return vector or list depending on `by_dataset` parameter
 #'
-#' @concept object_conversion
+#' @concept liger_object_util
 #'
 #' @import cli
 #' @import Seurat
@@ -231,12 +231,13 @@ WhichCells.liger <- function(
 #' @param object LIGER object name.
 #' @param reduction name of dimensionality reduction to pull
 #' @param iNMF logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.
+#' @param check_only logical, return `TRUE` if valid reduction is present.
 #' @param ... Arguments passed to other methods
 #'
 #' @method Embeddings liger
 #' @return matrix
 #'
-#' @concept object_conversion
+#' @concept liger_object_util
 #'
 #' @import cli
 #' @import Seurat
@@ -258,6 +259,7 @@ Embeddings.liger <- function(
     object,
     reduction = NULL,
     iNMF = FALSE,
+    check_only = FALSE,
     ...
 ) {
   # Check new liger object
@@ -271,16 +273,19 @@ Embeddings.liger <- function(
     return(embeddings)
   }
 
-  # check options
-  if (!is.null(x = reduction)) {
-    if (!reduction %in% c(names(x = object@dimReds))) {
-      cli_abort(message = "The reduction {.field {reduction}} was not found in object.")
-    }
-  }
-
+  # set reduction if not supplied
   reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
 
-  embeddings <- object@dimReds[[reduction]]
+  # check reduction in cellMeta
+  if (reduction %in% names(x = rliger::dimReds(x = liger_object))) {
+    if (isTRUE(x = check_only)) {
+      return(TRUE)
+    }
+    # get coords
+    embeddings <- rliger::dimReds(x = liger_object)[[reduction]]
+  } else {
+    cli_abort("The reduction {.field {reduction}} is not present in dimReds slot.")
+  }
 
   # return embeddings
   return(embeddings)
@@ -698,71 +703,6 @@ Top_Genes_Factor <- function(
     top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
     return(top_genes)
   }
-}
-
-
-
-
-
-#' Extract dimensionality reduction coordinates from Liger object
-#'
-#' Extract data.frame containing dimensionality reduction coordinates from new format of
-#' Liger objects
-#'
-#' @param liger_object LIGER object name.
-#' @param reduction name of dimensionality reduction stored in cellMeta slot.  Default is
-#' NULL, which will use liger object's default reduction.
-#' @param check_only logical, return `TRUE` if valid reduction is present.
-#'
-#' @return dimensionality reduction coordinates in 2 column format
-#'
-#' @import cli
-#' @importFrom methods slotNames
-#'
-#' @export
-#'
-#' @concept liger_object_util
-#'
-#' @examples
-#' \dontrun{
-#' # return dimensionality reduction coordinates
-#' umap_coords <- LIGER_DimReduc(liger_object = object)
-#'
-#' # return logical to see if reduction is present
-#' reduc_present <- LIGER_DimReduc(liger_object = object, reduction = "umap",
-#' check_only = TRUE)
-#' }
-#'
-
-LIGER_DimReduc <- function(
-    liger_object,
-    reduction = NULL,
-    check_only = FALSE
-) {
-  # check liger
-  Is_LIGER(liger_object = liger_object)
-
-  # Check new liger object
-  if (packageVersion(pkg = 'rliger') < "2.0.0") {
-    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
-  }
-
-  # reduction to use
-  reduction_use <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
-
-  # check reduction in cellMeta
-  if (reduction_use %in% names(x = rliger::dimReds(x = liger_object))) {
-      if (isTRUE(x = check_only)) {
-        return(TRUE)
-      }
-      # get coords
-      reduc_coords <- rliger::dimReds(x = liger_object)[[reduction_use]]
-  } else {
-    cli_abort("The reduction {.field {reduction_use}} is not present in dimReds slot.")
-  }
-
-  # return coords
-  return(reduc_coords)
 }
 
 

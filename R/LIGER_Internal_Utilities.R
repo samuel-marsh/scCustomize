@@ -158,12 +158,12 @@ Generate_Plotting_df_LIGER2 <- function(object,
 ) {
   # Set reduction if null
   if (!is.null(x = reduction)) {
-    LIGER_DimReduc(liger_object = object, reduction = reduction, check_only = TRUE)
+    Embeddings(object = object, reduction = reduction, check_only = TRUE)
   } else {
     reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
   }
 
-  reduc_df <- data.frame(LIGER_DimReduc(liger_object = object, reduction = reduction))
+  reduc_df <- data.frame(Embeddings(object = object, reduction = reduction))
   reduc_df[[group_by]] <- object@cellMeta[[group_by]]
   if (!is.null(x = split_by)) {
     reduc_df[[split_by]] <- object@cellMeta[[split_by]]
@@ -1150,7 +1150,7 @@ plotFactors_liger2_scCustom <- function(
   })
   H_raw = do.call(rbind, H_raw_list)
   # Create accurate axis labels
-  reduc_check <- LIGER_DimReduc(liger_object = liger_object, reduction = reduction, check_only = TRUE)
+  reduc_check <- Embeddings(object = liger_object, reduction = reduction, check_only = TRUE)
 
   x_axis_label <- paste0(reduction, "_1")
   y_axis_label <- paste0(reduction, "_2")
@@ -1243,7 +1243,7 @@ plotFactors_liger2_scCustom <- function(
 
     # plot tSNE/UMAP
     if (isTRUE(x = plot_dimreduc)) {
-      tsne_df <- data.frame(Hs_norm[, i], LIGER_DimReduc(liger_object = liger_object, reduction = reduction))
+      tsne_df <- data.frame(Hs_norm[, i], Embeddings(object = liger_object, reduction = reduction))
       factorlab <- paste0("Factor", i)
       colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
 
