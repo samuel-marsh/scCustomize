@@ -9,6 +9,7 @@
     - `Features` to extract vector of all features or list vectors of features by dataset.  
     - `WhichCells` to extract vector or list of cells matching identity criteria.  
     - `Embeddings` to extract matrix containing dimensionality reduction embeddings or iNMF h.norm matrix.  
+    - `Idents` and `Idents<-` to extract and set default identities/clusters.  
 - *Updated functions to interact with both old and new style liger objects:*  
     - `plotFactors_scCustom()`  
     - `Fetch_Meta`  
