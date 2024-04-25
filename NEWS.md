@@ -49,6 +49,7 @@
 - Added error check in `as.anndata` to explicitly check for installation of anndata before starting conversion ([#162](https://github.com/samuel-marsh/scCustomize/issues/162)).  
 - Update `RenameClusters` to enable storgae of both old idents and new idents in meta.data within the function.  
 - Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
+- Updated `Store_Misc_Info_Seurat` to use Seurat accessor/setter function `Seurat::Misc()`.  
    
 
 ## Fixes  
