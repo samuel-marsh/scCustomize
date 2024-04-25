@@ -1441,7 +1441,8 @@ Store_Misc_Info_Seurat <- function(
       }
 
       # Add data
-      seurat_object@misc[[data_name]] <- data_to_store
+      Misc(object = seurat_object, slot = data_name) <- data_to_store
+      # seurat_object@misc[[data_name]] <- data_to_store
       cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
                              "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}}")
       )
@@ -1457,7 +1458,8 @@ Store_Misc_Info_Seurat <- function(
 
     # Add data
     for (i in 1:data_list_length) {
-      seurat_object@misc[[data_name[i]]] <- data_to_store[[i]]
+      Misc(object = seurat_object, slot = data_name[[i]]) <- data_to_store[[i]]
+      # seurat_object@misc[[data_name[i]]] <- data_to_store[[i]]
     }
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
                            "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}}")
@@ -1470,7 +1472,8 @@ Store_Misc_Info_Seurat <- function(
     }
 
     # Add data
-    seurat_object@misc[[data_name]] <- data_to_store
+    Misc(object = seurat_object, slot = data_name) <- data_to_store
+    # seurat_object@misc[[data_name]] <- data_to_store
     misc_names <- shQuote(string = names(x = seurat_object@misc))
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
                            "i" = "{.field {glue_collapse_scCustom(input_string = misc_names, and = TRUE)}}")
