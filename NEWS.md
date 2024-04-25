@@ -2,7 +2,6 @@
 ## Added  
 - **Major Updates to Functionality with rliger package:**
 - *Added new utility functions to interact with liger v2.0.0+ object format change:*  
-    - `LIGER_DimReduc()` to extract dimensionality reduction coordinates.  
     - `Subset_LIGER` to quickly subset by cluster or other meta data variable.  
     - `LIGER_Cells_by_Identities` to extract list of barcodes sorted by values within given meta data column.  
 - *Extended the following Seurat/SeuratObject generic functions to work seamlessly with liger objects:*  
