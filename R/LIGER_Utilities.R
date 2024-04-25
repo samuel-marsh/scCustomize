@@ -1,26 +1,6 @@
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### DATA ACCESS ####################
+#################### EXTENDED SEURAT GENERICS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-#' @rdname Fetch_Meta
-#' @importFrom methods slot
-#' @export
-#' @concept liger_object_util
-#' @method Fetch_Meta liger
-
-Fetch_Meta.liger <- function(
-    object,
-    ...
-) {
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE)
-  } else {
-    object_meta <- object_meta <- slot(object = object, name = "cell.data")
-  }
-
-  # return meta
-  return(object_meta)
-}
 
 
 #' Extract Features from LIGER Object
@@ -241,6 +221,94 @@ WhichCells.liger <- function(
 
   # return cells
   return(cells)
+}
+
+
+#' Extract matrix of embeddings
+#'
+#' Extract matrix containing iNMF or dimensionality reduction embeddings.
+#'
+#' @param object LIGER object name.
+#' @param reduction name of dimensionality reduction to pull
+#' @param iNMF logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.
+#' @param ... Arguments passed to other methods
+#'
+#' @method Embeddings liger
+#' @return matrix
+#'
+#' @concept object_conversion
+#'
+#' @import cli
+#' @import Seurat
+#'
+#' @export
+#' @rdname Embeddings
+#'
+#' @examples
+#' \dontrun{
+#' # Extract embedding matrix for current dimensionality reduction
+#' UMAP_coord <- Embeddings(object = liger_object)
+#'
+#' # Extract iNMF h.norm matrix
+#' iNMF_mat <- Embeddings(object = liger_object, reduction = "iNMF")
+#' }
+#'
+
+Embeddings.liger <- function(
+    object,
+    reduction = NULL,
+    iNMF = FALSE,
+    ...
+) {
+  # Check new liger object
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
+  }
+
+  # return iNMF h.norm
+  if (isTRUE(x = iNMF)) {
+    embeddings <- object@h.norm
+    return(embeddings)
+  }
+
+  # check options
+  if (!is.null(x = reduction)) {
+    if (!reduction %in% c(names(x = object@dimReds))) {
+      cli_abort(message = "The reduction {.field {reduction}} was not found in object.")
+    }
+  }
+
+  reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
+
+  embeddings <- object@dimReds[[reduction]]
+
+  # return embeddings
+  return(embeddings)
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### DATA ACCESS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#' @rdname Fetch_Meta
+#' @importFrom methods slot
+#' @export
+#' @concept liger_object_util
+#' @method Fetch_Meta liger
+
+Fetch_Meta.liger <- function(
+    object,
+    ...
+) {
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE)
+  } else {
+    object_meta <- object_meta <- slot(object = object, name = "cell.data")
+  }
+
+  # return meta
+  return(object_meta)
 }
 
 
@@ -576,69 +644,6 @@ Subset_LIGER <- function(
   sub_obj <- rliger::subsetLiger(object = liger_object, cellIdx = cells_filter)
 
   return(sub_obj)
-}
-
-
-#' Extract matrix of embeddings
-#'
-#' Extract matrix containing iNMF or dimensionality reduction embeddings.
-#'
-#' @param object LIGER object name.
-#' @param reduction name of dimensionality reduction to pull
-#' @param iNMF logical, whether to extract iNMF h.norm matrix instead of dimensionality reduction embeddings.
-#' @param ... Arguments passed to other methods
-#'
-#' @method Embeddings liger
-#' @return matrix
-#'
-#' @concept object_conversion
-#'
-#' @import cli
-#' @import Seurat
-#'
-#' @export
-#' @rdname Embeddings
-#'
-#' @examples
-#' \dontrun{
-#' # Extract embedding matrix for current dimensionality reduction
-#' UMAP_coord <- Embeddings(object = liger_object)
-#'
-#' # Extract iNMF h.norm matrix
-#' iNMF_mat <- Embeddings(object = liger_object, reduction = "iNMF")
-#' }
-#'
-
-Embeddings.liger <- function(
-    object,
-    reduction = NULL,
-    iNMF = FALSE,
-    ...
-) {
-  # Check new liger object
-  if (packageVersion(pkg = 'rliger') < "2.0.0") {
-    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
-  }
-
-  # return iNMF h.norm
-  if (isTRUE(x = iNMF)) {
-    embeddings <- object@h.norm
-    return(embeddings)
-  }
-
-  # check options
-  if (!is.null(x = reduction)) {
-    if (!reduction %in% c(names(x = object@dimReds))) {
-      cli_abort(message = "The reduction {.field {reduction}} was not found in object.")
-    }
-  }
-
-  reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
-
-  embeddings <- object@dimReds[[reduction]]
-
-  # return embeddings
-  return(embeddings)
 }
 
 
