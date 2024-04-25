@@ -79,7 +79,7 @@ LIGER_Default_Cluster_Name <- function(
 #'
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
-#' @param liger_object Name of LIGER object.  Need to perform clustering before calling this function.
+#' @param object Name of LIGER object.  Need to perform clustering before calling this function.
 #' @param clusters Another clustering to use for coloring second plot (must have same names as
 #' clusters slot) (default NULL).
 #' @param shuffle Randomly shuffle points so that points from same dataset are not plotted one after

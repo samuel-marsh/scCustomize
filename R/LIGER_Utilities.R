@@ -277,12 +277,12 @@ Embeddings.liger <- function(
   reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = object)
 
   # check reduction in cellMeta
-  if (reduction %in% names(x = rliger::dimReds(x = liger_object))) {
+  if (reduction %in% names(x = rliger::dimReds(x = object))) {
     if (isTRUE(x = check_only)) {
       return(TRUE)
     }
     # get coords
-    embeddings <- rliger::dimReds(x = liger_object)[[reduction]]
+    embeddings <- rliger::dimReds(x = object)[[reduction]]
   } else {
     cli_abort("The reduction {.field {reduction}} is not present in dimReds slot.")
   }
