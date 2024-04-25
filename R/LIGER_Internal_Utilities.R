@@ -172,18 +172,16 @@ Generate_Plotting_df_LIGER2 <- function(object,
     reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
   }
   cluster_col <- LIGER_Default_Cluster_Name(liger_object = object)
-  c_names <- names(x = object@cellMeta[[cluster_col]])
   if (is.null(x = clusters)) {
     # if clusters have not been set yet
     if (length(x = object@cellMeta[[cluster_col]]) == 0) {
       clusters <- rep(1, nrow(x = reduc_df))
-      names(x = clusters) <- c_names <- rownames(x = reduc_df)
+      names(x = clusters) <- rownames(x = reduc_df)
     } else {
       clusters <- object@cellMeta[[cluster_col]]
-      c_names <- names(x = object@cellMeta[[cluster_col]])
     }
   }
-  reduc_df[['Cluster']] <- clusters[c_names]
+  reduc_df[['Cluster']] <- clusters
 
   if (isTRUE(x = shuffle)) {
     set.seed(shuffle_seed)
