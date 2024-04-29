@@ -297,7 +297,6 @@ Embeddings.liger <- function(
 #' Extract default identities from object in factor form.
 #'
 #' @param object LIGER object name.
-#' @param reduction name of dimensionality reduction to pull
 #' @param ... Arguments passed to other methods
 #'
 #' @method Idents liger
@@ -370,8 +369,8 @@ Idents.liger <- function(
 
 "Idents<-.liger" <- function(
     object,
-    value,
-    ...
+    ...,
+    value
 ) {
   # Check new ident value is present in cellMeta
   new_ident_name <- Meta_Present(object = object, meta_col_names = value, print_msg = FALSE, omit_warn = FALSE)[[1]]

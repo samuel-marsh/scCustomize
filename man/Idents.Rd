@@ -15,8 +15,6 @@
 \item{...}{Arguments passed to other methods}
 
 \item{value}{name of column in cellMeta slot to set as new default cluster/ident}
-
-\item{reduction}{name of dimensionality reduction to pull}
 }
 \value{
 factor
