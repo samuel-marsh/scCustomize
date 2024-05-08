@@ -349,6 +349,12 @@ MAD_Stats <- function(
     default_var <- NULL
   }
 
+  # set to active ident if "ident" is provided
+  if (group_by_var == "ident") {
+    seurat_object[["active.ident"]] <- Idents(object = seurat_object)
+    group_by_var <- "active.ident"
+  }
+
   # Check group variable present
   group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
