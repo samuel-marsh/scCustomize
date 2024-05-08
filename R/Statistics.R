@@ -335,6 +335,11 @@ MAD_Stats <- function(
     mad_var = NULL,
     mad_num = 2
 ) {
+  # check mad_num
+  if (mad_num <= 0) {
+    cli_abort(message = "The {.code mad_num} parameter must be greater than 0.")
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
