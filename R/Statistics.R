@@ -366,11 +366,11 @@ MAD_Stats <- function(
 
   mad_by_group <- meta_data %>%
     group_by(.data[[group_by_var]]) %>%
-    summarise(across(all_of(all_variables), mad))
+    summarise(across(all_of(all_variables), mad)*mad_num)
 
   # Calculate overall medians
   mad_overall <- meta_data %>%
-    summarise(across(all_of(all_variables), mad))
+    summarise(across(all_of(all_variables), mad)*mad_num)
 
   # Create data.frame with group_by_var as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
