@@ -64,7 +64,8 @@
 - Fixed errors in `Plot_Median_*` family that caused issues when `group_by` parameter was NULL.  
 - Fixed errors in `FeaturePlot_scCustom` when setting `combine = FALSE`.  
 - Fixed bug in `DimPlot_scCustom` that could cause blank plot when rasterizing points.  
-- Fixed bug in `MAD_Stats` that didn't respect `mad_num` parameter ([#183](https://github.com/samuel-marsh/scCustomize/issues/183)).
+- Fixed bug in `MAD_Stats` that didn't respect `mad_num` parameter ([#183](https://github.com/samuel-marsh/scCustomize/issues/183)).  
+- Fixed bug in `MAD_Stats` that could cause issues if `mad_num` was less than or equal to 0.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
