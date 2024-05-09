@@ -345,6 +345,82 @@ scCustomze_Split_FeatureScatter <- function(
 }
 
 
+#' Plot identity proportions
+#'
+#' Horizontal bar plot of either the total number of cells per identity or the percent of cells per identity
+#'
+#' @param seurat_object seurat object
+#' @param group.by Identity to group by in plot
+#' @param percent logical, whether to x-axis represents total number of cells or percentage of
+#' total cells, default is FALSE; plot total number.
+#' @param colors_use named vector of colors or hex values.  Names must match levels of `group.by`.
+#' @param x_axis_log logical, whether to plot x-axis in log10 scale, default is FALSE.
+#'
+#' @return ggplot2 plot
+#'
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr select all_of
+#' @importFrom forcats fct_rev
+#' @importFrom magrittr "%>%"
+#'
+#' @references functionality inspired by `sc_dim_count` from ggsc package: \url{https://bioconductor.org/packages/ggsc/}.
+#'
+#' @noRd
+#'
+
+Overall_Prop_Plot <- function(
+    seurat_object,
+    group.by = NULL,
+    freq = FALSE,
+    colors_use,
+    x_axis_log = FALSE
+) {
+  # Set active ident
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Idents(object = seurat_object) <- group.by
+  }
+
+  # Get stats and filter
+  all_stats <- Cluster_Stats_All_Samples(seurat_object = seurat_object)
+
+  fil_stats <- all_stats %>%
+    select(all_of(c("Cluster", "Number", "Freq")))
+
+  num_clusters <- nrow(x = fil_stats) - 1
+
+  fil_stats <- fil_stats[1:num_clusters,]
+
+  # Create factor for prop plot based on that respects number of cells per cluster from Cluster_Stats_All_Samples
+  fil_stats$Cluster <- factor(fil_stats$Cluster, levels = fil_stats$Cluster)
+
+  if (isFALSE(x = percent)) {
+    plot <- ggplot(fil_stats, aes(x = .data[["Number"]], y = fct_rev(.data[["Cluster"]]), fill = .data[["Cluster"]])) +
+      geom_col() +
+      scale_fill_manual(values = colors_use) +
+      theme_ggprism_mod() +
+      xlab("Number of Cells") +
+      ylab(NULL) +
+      NoLegend()
+  } else {
+    plot <- ggplot(fil_stats, aes(x = .data[["Freq"]], y = fct_rev(.data[["Cluster"]]), fill = .data[["Cluster"]])) +
+      geom_col() +
+      scale_fill_manual(values = colors_use) +
+      theme_ggprism_mod() +
+      xlab("Percent of Cells") +
+      ylab(NULL) +
+      NoLegend()
+  }
+
+  # mod x axis if needed
+  if (isTRUE(x = x_axis_log)) {
+    plot <- plot + scale_x_log10()
+  }
+
+  return(plot)
+}
+
+
 #' Figure Plots
 #'
 #' Removes the axes from 2D DR plots and makes them into plot label.

@@ -1666,6 +1666,9 @@ DimPlot_scCustom <- function(
   split_seurat = FALSE,
   figure_plot = FALSE,
   aspect_ratio = NULL,
+  add_prop_plot = FALSE,
+  prop_plot_percent = FALSE,
+  prop_plot_x_log = FALSE,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -1765,6 +1768,23 @@ DimPlot_scCustom <- function(
   # set size otherwise
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object, raster = raster)
 
+  # prop plot colors
+  if (isTRUE(x = add_prop_plot)) {
+    if (is.null(x = group.by)) {
+      ident_levels <- levels(x = Idents(object = pbmc))
+    } else {
+      meta <- Fetch_Meta(pbmc)
+      if (is.factor(x = meta[,group.by])) {
+        ident_levels <- levels(x = meta[,group.by])
+      } else {
+        ident_levels <- sort(unique(x = meta[,group.by]))
+      }
+    }
+    # create new variable and name
+    prop_colors_use <- colors_use
+    names(prop_colors_use) <- ident_levels
+  }
+
   # Plot
   if (is.null(x = split.by)) {
     plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
@@ -1806,6 +1826,10 @@ DimPlot_scCustom <- function(
         plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
       }
 
+      if (isTRUE(x = add_prop_plot)) {
+        plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+      }
+
       return(plot_figure)
     } else {
       # Aspect ratio changes
@@ -1814,6 +1838,10 @@ DimPlot_scCustom <- function(
           cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
         }
         plot <- plot & theme(aspect.ratio = aspect_ratio)
+      }
+
+      if (isTRUE(x = add_prop_plot)) {
+        plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -1861,6 +1889,10 @@ DimPlot_scCustom <- function(
           plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
         }
 
+        if (isTRUE(x = add_prop_plot)) {
+          plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        }
+
         return(plot_figure)
       } else {
         # Aspect ratio changes
@@ -1869,6 +1901,10 @@ DimPlot_scCustom <- function(
             cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
           }
           plot <- plot & theme(aspect.ratio = aspect_ratio)
+        }
+
+        if (isTRUE(x = add_prop_plot)) {
+          plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
@@ -1944,6 +1980,10 @@ DimPlot_scCustom <- function(
           cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
         }
         plots <- plots & theme(aspect.ratio = aspect_ratio)
+      }
+
+      if (isTRUE(x = add_prop_plot)) {
+        plots <- plots + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plots)
