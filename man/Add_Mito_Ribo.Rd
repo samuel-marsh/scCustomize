@@ -39,6 +39,7 @@ Add_Mito_Ribo(object, ...)
   assay = NULL,
   overwrite = FALSE,
   list_species_names = FALSE,
+  species_prefix = NULL,
   ...
 )
 }
@@ -82,10 +83,13 @@ function will abort if columns with any one of the names provided to \code{mito_
 \code{mito_ribo_name} is present in meta.data slot.}
 
 \item{list_species_names}{returns list of all accepted values to use for default species names which
-contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
-rhesus macaque).  Default is FALSE.}
+contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and
+chicken).  Default is FALSE.}
 
 \item{assay}{Assay to use (default is the current object default assay).}
+
+\item{species_prefix}{the species prefix in front of gene symbols in object if providing two species for
+multi-species aligned dataset.}
 }
 \value{
 An object of the same class as \code{object} with columns added to object meta data.
