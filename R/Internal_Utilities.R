@@ -626,6 +626,189 @@ Retrieve_IEG_Lists <- function(
 }
 
 
+#' Retrieve dual species gene lists mitochondrial
+#'
+#' Returns vector of all mitochondrial genes across all species in dataset.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+#' zebrafish, rat, drosophila, rhesus macaque, or chicken (name or abbreviation).
+#' @param species_prefix the species prefix in front of gene symbols in object.
+#' @param assay Assay to use (default is the current object default assay).
+#'
+#' @return vector of gene ids
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Dual_Mito_Features <- function(
+    object,
+    species,
+    species_prefix,
+    assay
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+
+  mito_features_list <- lapply(1:length(x = species), function(x) {
+    if (species[x] %in% mouse_options) {
+      mito_pattern <- "mt-"
+    }
+    if (species[x] %in% human_options) {
+      mito_pattern <- "MT-"
+    }
+    if (species[x] %in% c(marmoset_options, macaque_options, chicken_options)) {
+      mito_features <- c("ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND4L", "ND5", "ND6")
+    }
+    if (species[x] %in% zebrafish_options) {
+      mito_pattern <- "mt-"
+    }
+    if (species[x] %in% rat_options) {
+      mito_pattern <- "Mt-"
+    }
+    if (species[x] %in% drosophila_options) {
+      mito_pattern <- "mt:"
+    }
+
+    mito_pattern <- paste0("^", species_prefix[x], mito_pattern)
+
+    mito_features <- grep(pattern = mito_pattern, x = rownames(x = object[[assay]]), value = TRUE)
+
+    # Check features are present in object
+    length_mito_features <- length(x = intersect(x = mito_features, y = rownames(x = object[[assay]])))
+
+    # Check length of mito and ribo features found in object
+    if (length_mito_features < 1) {
+      cli_warn(message = c("No Mito features found in object using pattern/feature list provided.",
+                           "i" = "No column will be added to meta.data.")
+      )
+    }
+    mito_features
+  })
+
+  # combine the lists
+  full_list <- unlist(x = mito_features_list)
+
+  return(full_list)
+}
+
+
+#' Retrieve dual species gene lists ribosomal
+#'
+#' Returns vector of all ribosomal genes across all species in dataset.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human,
+#' zebrafish, rat, drosophila, rhesus macaque, or chicken (name or abbreviation).
+#' @param species_prefix the species prefix in front of gene symbols in object.
+#' @param assay Assay to use (default is the current object default assay).
+#'
+#' @return vector of gene ids
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Dual_Ribo_Features <- function(
+    object,
+    species,
+    species_prefix,
+    assay = NULL
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+
+  ribo_features_list <- lapply(1:length(x = species), function(x) {
+    if (species[x] %in% mouse_options) {
+      ribo_pattern <- "Rp[sl]"
+    }
+    if (species[x] %in% human_options) {
+      ribo_pattern <- "RP[SL]"
+    }
+    if (species[x] %in% c(marmoset_options, macaque_options, chicken_options)) {
+      ribo_pattern <- "RP[SL]"
+    }
+    if (species[x] %in% zebrafish_options) {
+      ribo_pattern <- "rp[sl]"
+    }
+    if (species[x] %in% rat_options) {
+      ribo_pattern <- "Rp[sl]"
+    }
+    if (species[x] %in% drosophila_options) {
+      ribo_pattern <- "Rp[SL]"
+    }
+
+    ribo_pattern <- paste0("^", species_prefix[x], ribo_pattern)
+
+    ribo_features <- grep(pattern = ribo_pattern, x = rownames(x = object[[assay]]), value = TRUE)
+
+    # Check features are present in object
+    length_ribo_features <- length(x = intersect(x = ribo_features, y = rownames(x = object[[assay]])))
+
+    # Check length of mito and ribo features found in object
+    if (length_ribo_features < 1) {
+      cli_warn(message = c("No Ribo features found in object using pattern/feature list provided.",
+                           "i" = "No column will be added to meta.data.")
+      )
+    }
+
+    ribo_features
+  })
+
+  # combine the lists
+  full_list <- unlist(x = ribo_features_list)
+
+  return(full_list)
+}
+
+
 #' Add MSigDB Gene Lists Percentages
 #'
 #' Adds percentage of counts from 3 hallmark MSigDB hallmark gene sets: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",

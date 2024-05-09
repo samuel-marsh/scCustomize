@@ -326,8 +326,10 @@ Add_Cell_QC_Metrics.Seurat <- function(
 #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
 #' `mito_ribo_name` is present in meta.data slot.
 #' @param list_species_names returns list of all accepted values to use for default species names which
-#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
-#' rhesus macaque).  Default is FALSE.
+#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and
+#' chicken).  Default is FALSE.
+#' @param species_prefix the species prefix in front of gene symbols in object if providing two species for
+#' multi-species aligned dataset.
 #'
 #' @import cli
 #' @importFrom dplyr mutate select intersect all_of
@@ -364,6 +366,7 @@ Add_Mito_Ribo.Seurat <- function(
   assay = NULL,
   overwrite = FALSE,
   list_species_names = FALSE,
+  species_prefix = NULL,
   ...
 ) {
   # Accepted species names
@@ -411,6 +414,11 @@ Add_Mito_Ribo.Seurat <- function(
     )
   }
 
+  # Dual species checks
+  if (length(x = species) > 1 && length(x = species) != length(x = species_prefix)) {
+    cli_abort(message = "The length of {.code species} must be equal to length of {.code species_prefix}.")
+  }
+
   # Set default assay
   assay <- assay %||% DefaultAssay(object = object)
 
@@ -425,81 +433,93 @@ Add_Mito_Ribo.Seurat <- function(
   chicken_options <- accepted_names$Chicken_Options
 
   # Check ensembl vs patterns
-  if (isTRUE(x = ensembl_ids) && species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, chicken_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
+  if (isTRUE(x = ensembl_ids) && all(species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, chicken_options) && any(!is.null(x = mito_pattern)), !is.null(x = ribo_pattern), !is.null(x = mito_features), !is.null(x = ribo_features))) {
     cli_warn(message = c("When using a default species and setting {.code ensembl_ids = TRUE} provided patterns or features are ignored.",
                          "*" = "Supplied {.code mito_pattern}, {.code ribo_pattern}, {.code mito_features}, {.code ribo_features} will be disregarded.")
     )
   }
 
   # Assign mito/ribo pattern to stored species
-  if (species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, chicken_options) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
+  if (all(species %in% c(mouse_options, human_options, marmoset_options, zebrafish_options, rat_options, drosophila_options, chicken_options)) && any(!is.null(x = mito_pattern), !is.null(x = ribo_pattern))) {
     cli_warn(message = c("Pattern expressions for included species are set by default.",
                          "*" = "Supplied {.code mito_pattern} and {.code ribo_pattern} will be disregarded.",
                          "i" = "To override defaults please supply a feature list for mito and/or ribo genes.")
     )
   }
 
-  if (species %in% mouse_options) {
-    mito_pattern <- "^mt-"
-    ribo_pattern <- "^Rp[sl]"
-  }
-  if (species %in% human_options) {
-    mito_pattern <- "^MT-"
-    ribo_pattern <- "^RP[SL]"
-  }
-  if (species %in% c(marmoset_options, macaque_options, chicken_options)) {
-    mito_features <- c("ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND4L", "ND5", "ND6")
-    ribo_pattern <- "^RP[SL]"
-  }
-  if (species %in% zebrafish_options) {
-    mito_pattern <- "^mt-"
-    ribo_pattern <- "^rp[sl]"
-  }
-  if (species %in% rat_options) {
-    mito_pattern <- "^Mt-"
-    ribo_pattern <- "^Rp[sl]"
-  }
-  if (species %in% drosophila_options) {
-    mito_pattern <- "^mt:"
-    ribo_pattern <- "^Rp[SL]"
-  }
+  if (length(x = species) == 1) {
+    if (species %in% mouse_options) {
+      mito_pattern <- "^mt-"
+      ribo_pattern <- "^Rp[sl]"
+    }
+    if (species %in% human_options) {
+      mito_pattern <- "^MT-"
+      ribo_pattern <- "^RP[SL]"
+    }
+    if (species %in% c(marmoset_options, macaque_options, chicken_options)) {
+      mito_features <- c("ATP6", "ATP8", "COX1", "COX2", "COX3", "CYTB", "ND1", "ND2", "ND3", "ND4", "ND4L", "ND5", "ND6")
+      ribo_pattern <- "^RP[SL]"
+    }
+    if (species %in% zebrafish_options) {
+      mito_pattern <- "^mt-"
+      ribo_pattern <- "^rp[sl]"
+    }
+    if (species %in% rat_options) {
+      mito_pattern <- "^Mt-"
+      ribo_pattern <- "^Rp[sl]"
+    }
+    if (species %in% drosophila_options) {
+      mito_pattern <- "^mt:"
+      ribo_pattern <- "^Rp[SL]"
+    }
 
-  # Check that values are provided for mito and ribo
-  if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_features)) {
-    cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
-                          "i" = "Please provide a default species name or pattern/features."))
-  }
+    # Check that values are provided for mito and ribo
+    if (is.null(x = mito_pattern) && is.null(x = mito_features) && is.null(x = ribo_pattern) && is.null(x = ribo_features)) {
+      cli_abort(message = c("No features or patterns provided for mito/ribo genes.",
+                            "i" = "Please provide a default species name or pattern/features."))
+    }
 
-  # Retrieve ensembl ids if TRUE
-  if (isTRUE(x = ensembl_ids)) {
-    mito_features <- Retrieve_Ensembl_Mito(species = species)
-    ribo_features <- Retrieve_Ensembl_Ribo(species = species)
-  }
+    # Retrieve ensembl ids if TRUE
+    if (isTRUE(x = ensembl_ids)) {
+      mito_features <- Retrieve_Ensembl_Mito(species = species)
+      ribo_features <- Retrieve_Ensembl_Ribo(species = species)
+    }
 
-  mito_features <- mito_features %||% grep(pattern = mito_pattern, x = rownames(x = object[[assay]]), value = TRUE)
+    mito_features <- mito_features %||% grep(pattern = mito_pattern, x = rownames(x = object[[assay]]), value = TRUE)
 
-  ribo_features <- ribo_features %||% grep(pattern = ribo_pattern, x = rownames(x = object[[assay]]), value = TRUE)
+    ribo_features <- ribo_features %||% grep(pattern = ribo_pattern, x = rownames(x = object[[assay]]), value = TRUE)
 
-  # Check features are present in object
-  length_mito_features <- length(x = intersect(x = mito_features, y = rownames(x = object[[assay]])))
+    # Check features are present in object
+    length_mito_features <- length(x = intersect(x = mito_features, y = rownames(x = object[[assay]])))
 
-  length_ribo_features <- length(x = intersect(x = ribo_features, y = rownames(x = object[[assay]])))
+    length_ribo_features <- length(x = intersect(x = ribo_features, y = rownames(x = object[[assay]])))
 
-  # Check length of mito and ribo features found in object
-  if (length_mito_features < 1 && length_ribo_features < 1) {
-    cli_abort(message = c("No Mito or Ribo features found in object using patterns/feature list provided.",
-                          "i" = "Please check pattern/feature list and/or gene names in object.")
-    )
-  }
-  if (length_mito_features < 1) {
-    cli_warn(message = c("No Mito features found in object using pattern/feature list provided.",
-                         "i" = "No column will be added to meta.data.")
-    )
-  }
-  if (length_ribo_features < 1) {
-    cli_warn(message = c("No Ribo features found in object using pattern/feature list provided.",
-                         "i" = "No column will be added to meta.data.")
-    )
+    # Check length of mito and ribo features found in object
+    if (length_mito_features < 1 && length_ribo_features < 1) {
+      cli_abort(message = c("No Mito or Ribo features found in object using patterns/feature list provided.",
+                            "i" = "Please check pattern/feature list and/or gene names in object.")
+      )
+    }
+    if (length_mito_features < 1) {
+      cli_warn(message = c("No Mito features found in object using pattern/feature list provided.",
+                           "i" = "No column will be added to meta.data.")
+      )
+    }
+    if (length_ribo_features < 1) {
+      cli_warn(message = c("No Ribo features found in object using pattern/feature list provided.",
+                           "i" = "No column will be added to meta.data.")
+      )
+    }
+  } else {
+    # get dual species gene lists
+    mito_features <- Retrieve_Dual_Mito_Features(object = object, species = species, species_prefix = species_prefix, assay = assay)
+
+    ribo_features <- Retrieve_Dual_Ribo_Features(object = object, species = species, species_prefix = species_prefix, assay = assay)
+
+    # Check features are present in object
+    length_mito_features <- length(x = intersect(x = mito_features, y = rownames(x = object[[assay]])))
+
+    length_ribo_features <- length(x = intersect(x = ribo_features, y = rownames(x = object[[assay]])))
   }
 
   # Add mito and ribo columns
