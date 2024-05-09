@@ -497,9 +497,9 @@ Retrieve_Ensembl_Ribo <- function(
 #' @noRd
 #'
 
- Retrieve_MSigDB_Lists <- function(
+Retrieve_MSigDB_Lists <- function(
      species
- ) {
+) {
    # Accepted species names
    accepted_names <- data.frame(
      Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
@@ -559,7 +559,7 @@ Retrieve_Ensembl_Ribo <- function(
    )
 
    return(qc_gene_list)
- }
+}
 
 
 #' Retrieve IEG Gene Lists
@@ -577,9 +577,9 @@ Retrieve_Ensembl_Ribo <- function(
 #' @noRd
 #'
 
- Retrieve_IEG_Lists <- function(
+Retrieve_IEG_Lists <- function(
     species
- ) {
+) {
    # Accepted species names
    accepted_names <- data.frame(
      Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
@@ -623,7 +623,7 @@ Retrieve_Ensembl_Ribo <- function(
    )
 
    return(qc_gene_list)
- }
+}
 
 
 #' Add MSigDB Gene Lists Percentages
@@ -655,78 +655,78 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 
 
- Add_MSigDB_Seurat <- function(
-     seurat_object,
-     species,
-     oxphos_name = "percent_oxphos",
-     apop_name = "percent_apop",
-     dna_repair_name = "percent_dna_repair",
-     assay = NULL,
-     overwrite = FALSE
- ) {
-   # Accepted species names
-   accepted_names <- list(
-     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
-   )
+Add_MSigDB_Seurat <- function(
+    seurat_object,
+    species,
+    oxphos_name = "percent_oxphos",
+    apop_name = "percent_apop",
+    dna_repair_name = "percent_dna_repair",
+    assay = NULL,
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
 
-   if (!species %in% unlist(x = accepted_names)) {
-     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
-   }
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
 
-   # Check Seurat
-   Is_Seurat(seurat_object = seurat_object)
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
 
-   # Check name collision
-   if (any(duplicated(x = c(oxphos_name, apop_name, dna_repair_name)))) {
-     cli_abort(message = "One or more of values provided to {.code oxphos_name}, {.code apop_name}, {.code dna_repair_name} are identical.")
-   }
+  # Check name collision
+  if (any(duplicated(x = c(oxphos_name, apop_name, dna_repair_name)))) {
+    cli_abort(message = "One or more of values provided to {.code oxphos_name}, {.code apop_name}, {.code dna_repair_name} are identical.")
+  }
 
-   # Overwrite check
-   if (oxphos_name %in% colnames(x = seurat_object@meta.data) || apop_name %in% colnames(x = seurat_object@meta.data) || dna_repair_name %in% colnames(x = seurat_object@meta.data)) {
-     if (isFALSE(x = overwrite)) {
-       cli_abort(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
-                             "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code oxphos_name}, {.code apop_name}, and/or {.code dna_repair_name}*")
-       )
-     }
-     cli_inform(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
-                            "i" = "Overwriting those columns as {.code overwrite = TRUE.}")
-     )
-   }
+  # Overwrite check
+  if (oxphos_name %in% colnames(x = seurat_object@meta.data) || apop_name %in% colnames(x = seurat_object@meta.data) || dna_repair_name %in% colnames(x = seurat_object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite columns set parameter {.code overwrite = TRUE} or change respective {.code oxphos_name}, {.code apop_name}, and/or {.code dna_repair_name}*")
+      )
+    }
+    cli_inform(message = c("Columns with {.val {oxphos_name}} and/or {.val {apop_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those columns as {.code overwrite = TRUE.}")
+    )
+  }
 
-   # Set default assay
-   assay <- assay %||% DefaultAssay(object = seurat_object)
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
-   # Retrieve gene lists
-   msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
+  # Retrieve gene lists
+  msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
 
-   oxphos_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["oxphos"]])
-   apop_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["apop"]])
-   dna_repair_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["dna_repair"]])
+  oxphos_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["oxphos"]])
+  apop_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["apop"]])
+  dna_repair_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["dna_repair"]])
 
-   # Add meta data columns
-   if (length(x = oxphos_found) > 0) {
-     seurat_object[[oxphos_name]] <- PercentageFeatureSet(object = seurat_object, features = oxphos_found, assay = assay)
-   }
-   if (length(x = apop_found) > 0) {
-     seurat_object[[apop_name]] <- PercentageFeatureSet(object = seurat_object, features = apop_found, assay = assay)
-   }
-   if (length(x = dna_repair_found) > 0) {
-     seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
-   }
+  # Add meta data columns
+  if (length(x = oxphos_found) > 0) {
+    seurat_object[[oxphos_name]] <- PercentageFeatureSet(object = seurat_object, features = oxphos_found, assay = assay)
+  }
+  if (length(x = apop_found) > 0) {
+    seurat_object[[apop_name]] <- PercentageFeatureSet(object = seurat_object, features = apop_found, assay = assay)
+  }
+  if (length(x = dna_repair_found) > 0) {
+    seurat_object[[dna_repair_name]] <- PercentageFeatureSet(object = seurat_object, features = dna_repair_found, assay = assay)
+  }
 
-   # Log Command
-   seurat_object <- LogSeuratCommand(object = seurat_object)
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
 
-   # return final object
-   return(seurat_object)
- }
+  # return final object
+  return(seurat_object)
+}
 
 
 #' Add IEG Gene List Percentages
@@ -750,63 +750,63 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 
 
- Add_IEG_Seurat <- function(
+Add_IEG_Seurat <- function(
     seurat_object,
     species,
     ieg_name = "percent_ieg",
     assay = NULL,
     overwrite = FALSE
- ) {
-   # Accepted species names
-   accepted_names <- list(
-     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
-   )
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
 
-   if (!species %in% unlist(x = accepted_names)) {
-     cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
-   }
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
 
-   # Check Seurat
-   Is_Seurat(seurat_object = seurat_object)
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
 
-   # Overwrite check
-   if (ieg_name %in% colnames(x = seurat_object@meta.data)) {
-     if (isFALSE(x = overwrite)) {
-       cli_abort(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
-                             "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_name}*")
-       )
-     }
-     cli_inform(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
-                            "i" = "Overwriting those column as {.code overwrite = TRUE.}")
-     )
-   }
+  # Overwrite check
+  if (ieg_name %in% colnames(x = seurat_object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {ieg_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
 
-   # Set default assay
-   assay <- assay %||% DefaultAssay(object = seurat_object)
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
-   # Retrieve gene lists
-   ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+  # Retrieve gene lists
+  ieg_gene_list <- Retrieve_IEG_Lists(species = species)
 
-   ieg_found <- Feature_PreCheck(object = seurat_object, features = ieg_gene_list[["ieg"]])
+  ieg_found <- Feature_PreCheck(object = seurat_object, features = ieg_gene_list[["ieg"]])
 
-   # Add mito and ribo columns
-   if (length(x = ieg_found) > 0) {
-     seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
-   }
+  # Add mito and ribo columns
+  if (length(x = ieg_found) > 0) {
+    seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
+  }
 
-   # Log Command
-   seurat_object <- LogSeuratCommand(object = seurat_object)
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
 
-   # return final object
-   return(seurat_object)
- }
+  # return final object
+  return(seurat_object)
+}
 
 
 #' Return default QC features
@@ -826,105 +826,105 @@ Retrieve_Ensembl_Ribo <- function(
 #' @noRd
 #'
 
- Return_QC_Defaults <- function(
+Return_QC_Defaults <- function(
     seurat_object,
     features,
     print_defaults = FALSE
- ) {
-   # default values
-   feature_defaults <- list(
-     feature = c("features", "Features", "genes", "Genes"),
-     UMIs = c("counts", "Counts", "umis", "umi", "UMI", "UMIs", "UMIS"),
-     mito = c("mito", "Mito"),
-     ribo = c("ribo", "Ribo"),
-     mito_ribo = c("mito_ribo", "Mito_Ribo"),
-     complexity = c("complexity", "Complexity"),
-     top_pct = c("top_pct", "Top_Pct"),
-     IEG = c("ieg", "IEG"),
-     OXPHOS = c("oxphos", "OXPHOS"),
-     APOP = c("apop", "Apop"),
-     DNA_Repair = c("dna_repair", "DNA_Repair")
-   )
+) {
+  # default values
+  feature_defaults <- list(
+    feature = c("features", "Features", "genes", "Genes"),
+    UMIs = c("counts", "Counts", "umis", "umi", "UMI", "UMIs", "UMIS"),
+    mito = c("mito", "Mito"),
+    ribo = c("ribo", "Ribo"),
+    mito_ribo = c("mito_ribo", "Mito_Ribo"),
+    complexity = c("complexity", "Complexity"),
+    top_pct = c("top_pct", "Top_Pct"),
+    IEG = c("ieg", "IEG"),
+    OXPHOS = c("oxphos", "OXPHOS"),
+    APOP = c("apop", "Apop"),
+    DNA_Repair = c("dna_repair", "DNA_Repair")
+  )
 
-   # if print is TRUE
-   if (isTRUE(x = print_defaults)) {
-     cli_inform(message = c("Accepted default values are:",
-                            "{.field {glue_collapse_scCustom(input_string = unlist(feature_defaults), and = TRUE)}}"))
-     stop_quietly()
-   }
+  # if print is TRUE
+  if (isTRUE(x = print_defaults)) {
+    cli_inform(message = c("Accepted default values are:",
+                           "{.field {glue_collapse_scCustom(input_string = unlist(feature_defaults), and = TRUE)}}"))
+    stop_quietly()
+  }
 
-   # Assign values
-   if (any(features %in% feature_defaults[[1]])) {
-     default1 <- "nFeature_RNA"
-   } else {
-     default1 <- NULL
-   }
-   if (any(features %in% feature_defaults[[2]])) {
-     default2 <- "nCount_RNA"
-   } else {
-     default2 <- NULL
-   }
-   if (any(features %in% feature_defaults[[3]])) {
-     default3 <- "percent_mito"
-   } else {
-     default3 <- NULL
-   }
-   if (any(features %in% feature_defaults[[4]])) {
-     default4 <- "percent_ribo"
-   } else {
-     default4 <- NULL
-   }
-   if (any(features %in% feature_defaults[[5]])) {
-     default5 <- "percent_mito_ribo"
-   } else {
-     default5 <- NULL
-   }
-   if (any(features %in% feature_defaults[[6]])) {
-     default6 <- "log10GenesPerUMI"
-   } else {
-     default6 <- NULL
-   }
-   if (any(features %in% feature_defaults[[7]])) {
-     default7 <- grep(pattern = "percent_top", x = colnames(x = seurat_object@meta.data), value = TRUE)
-   } else {
-     default7 <- NULL
-   }
-   if (any(features %in% feature_defaults[[8]])) {
-     default8 <- "percent_ieg"
-   } else {
-     default8 <- NULL
-   }
-   if (any(features %in% feature_defaults[[9]])) {
-     default9 <- "percent_oxphos"
-   } else {
-     default9 <- NULL
-   }
-   if (any(features %in% feature_defaults[[10]])) {
-     default10 <- "percent_apop"
-   } else {
-     default10 <- NULL
-   }
-   if (any(features %in% feature_defaults[[11]])) {
-     default11 <- "percent_dna_repair"
-   } else {
-     default11 <- NULL
-   }
+  # Assign values
+  if (any(features %in% feature_defaults[[1]])) {
+    default1 <- "nFeature_RNA"
+  } else {
+    default1 <- NULL
+  }
+  if (any(features %in% feature_defaults[[2]])) {
+    default2 <- "nCount_RNA"
+  } else {
+    default2 <- NULL
+  }
+  if (any(features %in% feature_defaults[[3]])) {
+    default3 <- "percent_mito"
+  } else {
+    default3 <- NULL
+  }
+  if (any(features %in% feature_defaults[[4]])) {
+    default4 <- "percent_ribo"
+  } else {
+    default4 <- NULL
+  }
+  if (any(features %in% feature_defaults[[5]])) {
+    default5 <- "percent_mito_ribo"
+  } else {
+    default5 <- NULL
+  }
+  if (any(features %in% feature_defaults[[6]])) {
+    default6 <- "log10GenesPerUMI"
+  } else {
+    default6 <- NULL
+  }
+  if (any(features %in% feature_defaults[[7]])) {
+    default7 <- grep(pattern = "percent_top", x = colnames(x = seurat_object@meta.data), value = TRUE)
+  } else {
+    default7 <- NULL
+  }
+  if (any(features %in% feature_defaults[[8]])) {
+    default8 <- "percent_ieg"
+  } else {
+    default8 <- NULL
+  }
+  if (any(features %in% feature_defaults[[9]])) {
+    default9 <- "percent_oxphos"
+  } else {
+    default9 <- NULL
+  }
+  if (any(features %in% feature_defaults[[10]])) {
+    default10 <- "percent_apop"
+  } else {
+    default10 <- NULL
+  }
+  if (any(features %in% feature_defaults[[11]])) {
+    default11 <- "percent_dna_repair"
+  } else {
+    default11 <- NULL
+  }
 
-   # All found defaults
-   all_found_defaults <- c(default1, default2, default3, default4, default5, default6, default7, default8, default9, default10, default11)
+  # All found defaults
+  all_found_defaults <- c(default1, default2, default3, default4, default5, default6, default7, default8, default9, default10, default11)
 
-   # get not found features
-   not_found_defaults <- features[!features %in% unlist(feature_defaults)]
+  # get not found features
+  not_found_defaults <- features[!features %in% unlist(feature_defaults)]
 
-   # create return list
-   feat_list <- list(
-     found_defaults = all_found_defaults,
-     not_found_defaults = not_found_defaults
-   )
+  # create return list
+  feat_list <- list(
+    found_defaults = all_found_defaults,
+    not_found_defaults = not_found_defaults
+  )
 
-   # return feature list
-   return(feat_list)
- }
+  # return feature list
+  return(feat_list)
+}
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -996,8 +996,8 @@ ExtractField <- function(string, field = 1, delim = "_") {
 #'
 
 Middle_Number <- function(
-  min,
-  max
+    min,
+    max
 ) {
   min_max <- c(min, max)
   middle <- min_max[-length(min_max)] + diff(min_max) / 2
@@ -1023,8 +1023,8 @@ Middle_Number <- function(
 #'
 
 symdiff <- function(
-  x,
-  y
+    x,
+    y
 ) {
   setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
 }
@@ -1085,7 +1085,7 @@ drop_single_value_cols <- function(
 
   single_val_columns <- sapply(df, function(x) {
     length(x = unique(x = x)) == 1
-    })
+  })
 
   col_names_single <- df %>%
     select(which(single_val_columns)) %>%
@@ -1603,9 +1603,9 @@ Metrics_Single_File <- function(
 
 .get_bioc_cache <- function(
 ) {
-    cache <- tools::R_user_dir(package = "scCustomize", which="cache")
-    BiocFileCache::BiocFileCache(cache)
-  }
+  cache <- tools::R_user_dir(package = "scCustomize", which="cache")
+  BiocFileCache::BiocFileCache(cache)
+}
 
 
 #' Download HGNC Dataset
