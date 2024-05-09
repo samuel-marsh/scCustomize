@@ -39,6 +39,7 @@
 - Added new plotting function `SpatialDimPlot_scCustom`.  Thanks for encouragement @puapinyoying @nina-hahn ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
 - Added ability of `Read_Metrics_10X` to read a single metrics csv file and return data formatted the same way as when reading multiple files.  
 - Added parameter `cutoff_line_width` to the `QC_Plot_*` family of plots to control line thickness of cutoff lines.  
+- `Cluster_Stats_All_Samples` now returns data.frame with row order reflecting the frequency of cells.  
 
 
   
@@ -66,6 +67,7 @@
 - Fixed bug in `DimPlot_scCustom` that could cause blank plot when rasterizing points.  
 - Fixed bug in `MAD_Stats` that didn't respect `mad_num` parameter ([#183](https://github.com/samuel-marsh/scCustomize/issues/183)).  
 - Fixed bugs in `MAD_Stats` that could cause issues if `mad_num` was less than or equal to 0 and returned error if setting `group_by_var` to "ident".  
+- Replaced deprecated tidyr code .data[["var"]] with update `all_of`/`any_of` syntax.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
