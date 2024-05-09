@@ -41,6 +41,7 @@
 - Added parameter `cutoff_line_width` to the `QC_Plot_*` family of plots to control line thickness of cutoff lines.  
 - `Cluster_Stats_All_Samples` now returns data.frame with row order reflecting the frequency of cells.  
 - `Add_Mito_Ribo` now supports datasets aligned to multi-species reference genomes ([#184](https://github.com/samuel-marsh/scCustomize/issues/184)).  
+- Added parameter `add_prop_plot` to `DimPlot_scCustom` to return plot showing number or percent of cells per identity along with the DimPlot.  
 
 
   
