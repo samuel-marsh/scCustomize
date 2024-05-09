@@ -6,7 +6,7 @@
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
 #'
 #' @import cli
-#' @importFrom dplyr left_join rename all_of
+#' @importFrom dplyr left_join rename all_of arrange desc
 #' @importFrom janitor adorn_totals
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -58,7 +58,7 @@ Cluster_Stats_All_Samples <- function(
     rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = .data[["cell_number"]])
+    pivot_wider(names_from = group_by_var, values_from = all_of("cell_number"))
 
   # Merge cells per metadata column per cluster with cluster stats
   cluster_stats_2 <- suppressMessages(left_join(cluster_stats, cells_per_cluster_2))
@@ -68,7 +68,7 @@ Cluster_Stats_All_Samples <- function(
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
     rename(cluster = all_of("Var1"), group_by_var = all_of("Var2"), percent = all_of("Freq"))
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
+    pivot_wider(names_from = group_by_var, values_from = all_of("percent")) %>%
     column_to_rownames("cluster")
   colnames(x = percent_per_cluster_2) <- paste(colnames(x = percent_per_cluster_2), "%", sep = "_")
 
