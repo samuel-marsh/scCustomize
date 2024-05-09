@@ -40,12 +40,14 @@ Cluster_Stats_All_Samples <- function(
   # Extract total percents
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
-    rename(Cluster = all_of("Var1"))
+    rename(Cluster = all_of("Var1")) %>%
+    arrange(desc(.data[["Freq"]]))
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
-    rename(Cluster = all_of("Var1"), Number = all_of("Freq"))
+    rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
+    arrange(desc(.data[["Number"]]))
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
