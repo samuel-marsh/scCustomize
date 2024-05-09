@@ -1827,7 +1827,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot_figure)
@@ -1841,7 +1841,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -1890,7 +1890,7 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+          plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot_figure)
@@ -1904,7 +1904,7 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+          plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
@@ -1983,7 +1983,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plots <- plots + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, freq = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plots <- plots + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plots)

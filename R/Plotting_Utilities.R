@@ -372,7 +372,7 @@ scCustomze_Split_FeatureScatter <- function(
 Overall_Prop_Plot <- function(
     seurat_object,
     group.by = NULL,
-    freq = FALSE,
+    percent = FALSE,
     colors_use,
     x_axis_log = FALSE
 ) {
