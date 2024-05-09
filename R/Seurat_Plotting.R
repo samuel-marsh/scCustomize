@@ -1614,6 +1614,12 @@ Cell_Highlight_Plot <- function(
 #' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
+#' @param add_prop_plot logical, whether to add plot to returned layout with the number of cells per identity
+#' (or percent of cells per identity).  Default is FALSE.
+#' @param prop_plot_percent logical, if `add_prop_plot = TRUE` this parameter controls whether
+#' proportion plot shows raw cell number or percent of cells per identity.  Default is FALSE; plots raw cell number.
+#' @param prop_plot_x_log logical, if `add_prop_plot = TRUE` this parameter controls whether to change x axis
+#' to log10 scale (Default is FALSE).
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
@@ -1827,7 +1833,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot_figure <- plot_figure + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot_figure)
@@ -1841,7 +1847,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -1904,7 +1910,7 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot <- plot + Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
