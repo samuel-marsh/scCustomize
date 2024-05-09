@@ -1,6 +1,6 @@
 #' Calculate Cluster Stats
 #'
-#' Calculates both overall and per sample cell number and percentages per cluster based on orig.ident
+#' Calculates both overall and per sample cell number and percentages per cluster based on orig.ident.
 #'
 #' @param seurat_object Seurat object name.
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
@@ -12,7 +12,7 @@
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
 #'
-#' @return A data.frame
+#' @return A data.frame with rows in order of frequency
 #'
 #' @export
 #'
