@@ -58,6 +58,15 @@ axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
 \item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 Default is NULL.}
 
+\item{add_prop_plot}{logical, whether to add plot to returned layout with the number of cells per identity
+(or percent of cells per identity).  Default is FALSE.}
+
+\item{prop_plot_percent}{logical, if \code{add_prop_plot = TRUE} this parameter controls whether
+proportion plot shows raw cell number or percent of cells per identity.  Default is FALSE; plots raw cell number.}
+
+\item{prop_plot_x_log}{logical, if \code{add_prop_plot = TRUE} this parameter controls whether to change x axis
+to log10 scale (Default is FALSE).}
+
 \item{shuffle}{logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 plots if points of interest are being buried. (Default is TRUE).}
 
