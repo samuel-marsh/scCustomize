@@ -364,6 +364,7 @@ FeaturePlot_scCustom <- function(
 #' @param assay1 name of assay one.  Default is "RAW" as featured in \code{\link{Create_CellBender_Merged_Seurat}}
 #' @param assay2 name of assay two  Default is "RNA" as featured in \code{\link{Create_CellBender_Merged_Seurat}}
 #' @param colors_use list of colors or color palette to use.
+#' @param colors_use_assay2 optional, a second color palette to use for the second assay.
 #' @param na_color color to use for points below lower limit.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param pt.size Adjust point size for plotting.
@@ -410,6 +411,7 @@ FeaturePlot_DualAssay <- function(
   assay1 = "RAW",
   assay2 = "RNA",
   colors_use = viridis_plasma_dark_high,
+  colors_use_assay2 = NULL,
   na_color = "lightgray",
   order = TRUE,
   pt.size = NULL,
@@ -479,15 +481,20 @@ FeaturePlot_DualAssay <- function(
   # Change assay and plot raw
   DefaultAssay(object = seurat_object) <- assay1
 
-  plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
+  plot_assay1 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
 
   # Change to cell bender and plot
   DefaultAssay(object = seurat_object) <- assay2
 
-  plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  if (is.null(x = colors_use_assay2)) {
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  } else {
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use_assay2, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  }
+
 
   # Assemble plots & return plots
-  plots <- wrap_plots(plot_raw, plot_cell_bender, ncol = num_columns)
+  plots <- wrap_plots(plot_assay1, plot_assay2, ncol = num_columns)
 
   # Aspect ratio changes
   if (!is.null(x = aspect_ratio)) {
