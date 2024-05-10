@@ -17,6 +17,7 @@ DimPlot_scCustom(
   add_prop_plot = FALSE,
   prop_plot_percent = FALSE,
   prop_plot_x_log = FALSE,
+  prop_plot_label = FALSE,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -66,6 +67,8 @@ proportion plot shows raw cell number or percent of cells per identity.  Default
 
 \item{prop_plot_x_log}{logical, if \code{add_prop_plot = TRUE} this parameter controls whether to change x axis
 to log10 scale (Default is FALSE).}
+
+\item{prop_plot_label}{logical, if \code{add_prop_plot = TRUE} this parameter controls whether to label the bars with total number of cells or percentages; Default is FALSE.}
 
 \item{shuffle}{logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 plots if points of interest are being buried. (Default is TRUE).}
