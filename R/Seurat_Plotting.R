@@ -29,7 +29,6 @@
 #' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
 #' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param num_columns Number of columns in plot layout.
-#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
 #' @param layer Which layer to pull expression data from?  Default is "data".
 #' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
 #' value between 0-1.
@@ -90,17 +89,6 @@ FeaturePlot_scCustom <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "FeaturePlot_scCustom(slot)",
-                              with = "FeaturePlot_scCustom(layer)",
-                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    layer <- slot
-  }
 
   # Check meta
   if (!is.null(x = split.by)) {
@@ -376,7 +364,6 @@ FeaturePlot_scCustom <- function(
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
-#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
 #' @param layer Which layer to pull expression data from?  Default is "data".
 #' @param num_columns Number of columns in plot layout.  If number of features > 1 then `num_columns`
 #' dictates the number of columns in overall layout (`num_columns = 1` means stacked layout & `num_columns = 2`
@@ -420,7 +407,6 @@ FeaturePlot_DualAssay <- function(
   na_cutoff = 0.000000001,
   raster = NULL,
   raster.dpi = c(512, 512),
-  slot = deprecated(),
   layer = "data",
   num_columns = NULL,
   alpha_exp = NULL,
@@ -429,17 +415,6 @@ FeaturePlot_DualAssay <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "FeaturePlot_DualAssay(slot)",
-                              with = "FeaturePlot_DualAssay(layer)",
-                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    layer <- slot
-  }
 
   # Check assays present
   assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(assay1, assay2), print_msg = FALSE, omit_warn = TRUE)[[2]]
