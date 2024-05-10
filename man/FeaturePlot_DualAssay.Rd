@@ -10,6 +10,7 @@ FeaturePlot_DualAssay(
   assay1 = "RAW",
   assay2 = "RNA",
   colors_use = viridis_plasma_dark_high,
+  colors_use_assay2 = NULL,
   na_color = "lightgray",
   order = TRUE,
   pt.size = NULL,
@@ -36,6 +37,8 @@ FeaturePlot_DualAssay(
 \item{assay2}{name of assay two  Default is "RNA" as featured in \code{\link{Create_CellBender_Merged_Seurat}}}
 
 \item{colors_use}{list of colors or color palette to use.}
+
+\item{colors_use_assay2}{optional, a second color palette to use for the second assay.}
 
 \item{na_color}{color to use for points below lower limit.}
 
