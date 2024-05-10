@@ -68,8 +68,6 @@ axes labels.  (Default is FALSE).  Requires \code{split_seurat = TRUE}.}
 
 \item{num_columns}{Number of columns in plot layout.}
 
-\item{slot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{layer}}
-
 \item{layer}{Which layer to pull expression data from?  Default is "data".}
 
 \item{alpha_exp}{new alpha level to apply to expressing cell color palette (\code{colors_use}).  Must be

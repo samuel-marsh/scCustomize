@@ -19,7 +19,6 @@ FeaturePlot_DualAssay(
   na_cutoff = 1e-09,
   raster = NULL,
   raster.dpi = c(512, 512),
-  slot = deprecated(),
   layer = "data",
   num_columns = NULL,
   alpha_exp = NULL,
@@ -58,8 +57,6 @@ greater than 200,000 cells.}
 
 \item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(512, 512).}
-
-\item{slot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{layer}}
 
 \item{layer}{Which layer to pull expression data from?  Default is "data".}
 
