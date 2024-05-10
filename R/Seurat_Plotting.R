@@ -1602,6 +1602,7 @@ Cell_Highlight_Plot <- function(
 #' proportion plot shows raw cell number or percent of cells per identity.  Default is FALSE; plots raw cell number.
 #' @param prop_plot_x_log logical, if `add_prop_plot = TRUE` this parameter controls whether to change x axis
 #' to log10 scale (Default is FALSE).
+#' @param prop_plot_label logical, if `add_prop_plot = TRUE` this parameter controls whether to label the bars with total number of cells or percentages; Default is FALSE.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
@@ -1657,6 +1658,7 @@ DimPlot_scCustom <- function(
   add_prop_plot = FALSE,
   prop_plot_percent = FALSE,
   prop_plot_x_log = FALSE,
+  prop_plot_label = FALSE,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -1815,7 +1817,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot_figure)
@@ -1829,7 +1831,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -1878,7 +1880,7 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot_figure)
@@ -1892,7 +1894,7 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
@@ -1971,7 +1973,7 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log) + plot_layout(widths = c(1, 0.5))
+        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plots)

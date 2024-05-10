@@ -355,6 +355,7 @@ scCustomze_Split_FeatureScatter <- function(
 #' total cells, default is FALSE; plot total number.
 #' @param colors_use named vector of colors or hex values.  Names must match levels of `group.by`.
 #' @param x_axis_log logical, whether to plot x-axis in log10 scale, default is FALSE.
+#' @param prop_label logical, whether to add label to each bar with total number of cells, default is FALSE.
 #'
 #' @return ggplot2 plot
 #'
@@ -374,7 +375,8 @@ Overall_Prop_Plot <- function(
     group.by = NULL,
     percent = FALSE,
     colors_use,
-    x_axis_log = FALSE
+    x_axis_log = FALSE,
+    prop_label = FALSE
 ) {
   # Set active ident
   if (!is.null(x = group.by) && group.by != "ident") {
@@ -415,6 +417,14 @@ Overall_Prop_Plot <- function(
   # mod x axis if needed
   if (isTRUE(x = x_axis_log)) {
     plot <- plot + scale_x_log10()
+  }
+
+  if (isTRUE(x = prop_label)) {
+    if (isFALSE(x = percent)) {
+      plot <- plot + geom_text(data = fil_stats, aes(label = .data[["Number"]]), hjust = -0.5, fontface = "bold")
+    } else {
+      plot <- plot + geom_text(data = fil_stats, aes(label = paste0(format(.data[["Freq"]]), "%"), hjust = -0.5, fontface = "bold"))
+    }
   }
 
   return(plot)
