@@ -826,7 +826,6 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param seurat_object Seurat object name.
 #' @param features vector of features to plot.  If a named vector is provided then the names for each gene
 #'  will be incorporated into plot title if `single_pdf = TRUE` or into file name if `FALSE`.
-#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`.
 #' @param colors_use color scheme to use.
 #' @param na_color color for non-expressed cells.
 #' @param na_cutoff Value to use as minimum expression cutoff.  To set no cutoff set to `NA`.
@@ -879,7 +878,6 @@ Iterate_Meta_Highlight_Plot <- function(
 Iterate_FeaturePlot_scCustom <- function(
   seurat_object,
   features,
-  gene_list = deprecated(),
   colors_use = viridis_plasma_dark_high,
   na_color = "lightgray",
   na_cutoff = 0.000000001,
@@ -901,17 +899,6 @@ Iterate_FeaturePlot_scCustom <- function(
   alpha_na_exp = NULL,
   ...
 ) {
-  # Deprecation warning
-  if (lifecycle::is_present(gene_list)) {
-    lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "Iterate_FeaturePlot_scCustom(gene_list)",
-                              with = "Iterate_FeaturePlot_scCustom(features)",
-                              details = c("v" = "The parameter will remain functional until next major update.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    features <- gene_list
-  }
-
   # temp turn off message call from FeaturePlot_scCustomize
   op <- options(scCustomize_warn_na_cutoff = FALSE)
   on.exit(options(op))
@@ -1187,7 +1174,6 @@ Iterate_FeaturePlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features vector of features to plot.
-#' @param gene_list `r lifecycle::badge("deprecated")` soft-deprecated.  See `features`.
 #' @param colors_use color palette to use for plotting.  By default if number of levels plotted is less than
 #' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from `DiscretePalette_scCustomize`.
@@ -1247,18 +1233,6 @@ Iterate_VlnPlot_scCustom <- function(
   color_seed = 123,
   ...
 ) {
-  # Deprecation warning
-  if (lifecycle::is_present(gene_list)) {
-    lifecycle::deprecate_warn(when = "1.2.0",
-                              what = "Iterate_VlnPlot_scCustom(gene_list)",
-                              with = "Iterate_VlnPlot_scCustom(features)",
-                              details = c("v" = "The parameter will remain functional until next major update.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    features <- gene_list
-  }
-
-
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
