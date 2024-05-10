@@ -421,9 +421,9 @@ Overall_Prop_Plot <- function(
 
   if (isTRUE(x = prop_label)) {
     if (isFALSE(x = percent)) {
-      plot <- plot + geom_text(data = fil_stats, aes(label = .data[["Number"]]), hjust = -0.5, fontface = "bold") + scale_x_continuous(expand = c(0.1, 0))
+      plot <- plot + geom_text(data = fil_stats, aes(label = .data[["Number"]]), hjust = -0.5, fontface = "bold") + scale_x_continuous(expand = expansion(mult = c(0, .1)))
     } else {
-      plot <- plot + geom_text(data = fil_stats, aes(label = paste0(format(round(.data[["Freq"]], digits = 1)), "%"), hjust = -0.5, fontface = "bold")) + scale_x_continuous(expand = c(0.1, 0))
+      plot <- plot + geom_text(data = fil_stats, aes(label = paste0(format(round(.data[["Freq"]], digits = 1)), "%"), hjust = -0.5, fontface = "bold")) + scale_x_continuous(expand = expansion(mult = c(0, .1)))
     }
   }
 
