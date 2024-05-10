@@ -263,8 +263,8 @@ Add_Cell_QC_Metrics.Seurat <- function(
   # Add cell cycle
   if (isTRUE(x = add_cell_cycle)) {
     if (!species %in% human_options) {
-      cli_abort(message = c("Cell Cycle Scoring is only supported for human in this function.",
-                            "i" = "To add score for other species supply cell cycle gene list of `CellCycleScoring` function."
+      cli_warn(message = c("x" = "Cell Cycle Scoring is only supported for human in this function.",
+                            "i" = "To add score for other species, use {.code Seurat::CellCycleScoring} function separately with correct species cell cycle gene list."
       ))
     } else {
       cli_inform(message = c("*" = "Adding {.field Cell Cycle Scoring} to meta.data."))
