@@ -13,7 +13,7 @@
 #' @rdname deprecated
 
 Split_FeatureScatter <- function(...) {
-  lifecycle::deprecate_stop(when = "2.0.0", what = "Split_FeatureScatter()", with = "FeatureScatter_scCustom()")
+  lifecycle::deprecate_stop(when = "2.0.0", what = "Split_FeatureScatter()", with = "FeatureScatter_scCustom()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
 
 
@@ -25,7 +25,7 @@ Split_FeatureScatter <- function(...) {
 #' @name deprecated
 
 Add_Mito_Ribo_Seurat <- function(...) {
-  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Mito_Ribo_Seurat()", with = "Add_Mito_Ribo()")
+  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Mito_Ribo_Seurat()", with = "Add_Mito_Ribo()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
 
 
@@ -37,7 +37,7 @@ Add_Mito_Ribo_Seurat <- function(...) {
 #' @rdname deprecated
 
 Add_Mito_Ribo_LIGER <- function(...) {
-  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Mito_Ribo_LIGER()", with = "Add_Mito_Ribo()")
+  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Mito_Ribo_LIGER()", with = "Add_Mito_Ribo()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
 
 
@@ -49,7 +49,7 @@ Add_Mito_Ribo_LIGER <- function(...) {
 #' @rdname deprecated
 
 Add_Cell_Complexity_Seurat <- function(...) {
-  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Cell_Complexity_Seurat()", with = "Add_Cell_Complexity()")
+  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Cell_Complexity_Seurat()", with = "Add_Cell_Complexity()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
 
 
@@ -61,7 +61,7 @@ Add_Cell_Complexity_Seurat <- function(...) {
 #' @rdname deprecated
 
 Add_Cell_Complexity_LIGER <- function(...) {
-  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Cell_Complexity_LIGER()", with = "Add_Cell_Complexity()")
+  lifecycle::deprecate_stop(when = "2.1.0", what = "Add_Cell_Complexity_LIGER()", with = "Add_Cell_Complexity()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
 
 
@@ -73,7 +73,7 @@ Add_Cell_Complexity_LIGER <- function(...) {
 #' @rdname deprecated
 
 Meta_Present_LIGER <- function(...) {
-  lifecycle::deprecate_stop(when = "2.1.0", what = "Meta_Present_LIGER()", with = "Meta_Present()")
+  lifecycle::deprecate_stop(when = "2.1.0", what = "Meta_Present_LIGER()", with = "Meta_Present()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
 
 
@@ -85,5 +85,16 @@ Meta_Present_LIGER <- function(...) {
 #' @rdname deprecated
 
 Add_Top_Gene_Pct_Seurat <- function(...) {
-  lifecycle::deprecate_stop(when = "2.2.0", what = "Add_Top_Gene_Pct_Seurat()", with = "Add_Top_Gene_Pct()")
+  lifecycle::deprecate_stop(when = "2.2.0", what = "Add_Top_Gene_Pct_Seurat()", with = "Add_Top_Gene_Pct()", details = "Deprecation error when calling function will be removed in v2.4.0+")
+}
+
+#' @description
+#' Use [Feature_Present()] instead of `Gene_Present()`.
+#'
+#' @export
+#' @keywords internal
+#' @rdname deprecated
+
+Gene_Present <- function(...) {
+  lifecycle::deprecate_stop(when = "2.2.0", what = "Gene_Present()", with = "Feature_Present()", details = "Deprecation error when calling function will be removed in v2.3.0+")
 }
