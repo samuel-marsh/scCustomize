@@ -28,8 +28,6 @@ Iterate_VlnPlot_scCustom(
 
 \item{features}{vector of features to plot.}
 
-\item{gene_list}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated.  See \code{features}.}
-
 \item{colors_use}{color palette to use for plotting.  By default if number of levels plotted is less than
 or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 both from \code{DiscretePalette_scCustomize}.}
