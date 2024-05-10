@@ -745,8 +745,6 @@ Read10X_Multi_Directory <- function(
 #' then use full file name.  By default function uses Cell Ranger name: "filtered_feature_bc_matrix.h5".
 #' If h5 files have sample specific prefixes (i.e. from Cell Bender) then use only the shared part of file
 #' name (e.g., "_filtered_out.h5").
-#' @param cell_bender `r lifecycle::badge("deprecated")` CellBender read functions are now independent family of functions.
-#' See `Read_CellBender_*` functions.
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
@@ -788,7 +786,6 @@ Read10X_h5_Multi_Directory <- function(
   default_10X_path = TRUE,
   cellranger_multi = FALSE,
   h5_filename = "filtered_feature_bc_matrix.h5",
-  cell_bender = deprecated(),
   sample_list = NULL,
   sample_names = NULL,
   replace_suffix = FALSE,
@@ -798,16 +795,6 @@ Read10X_h5_Multi_Directory <- function(
   merge = FALSE,
   ...
 ) {
-  # Deprecated
-  if (lifecycle::is_present(cell_bender)) {
-    lifecycle::deprecate_stop(when = "1.1.2",
-                              what = "Read10X_h5_Multi_Directory(cell_bender)",
-                              with = "Read_CellBender_h5_Multi_Directory()",
-                              details = c("v" = "CellBender read capabilities are now indepdent functions. See `Read_CellBender_h5_Multi_Directory`",
-                                          "i" = "Parameter and warning will be fully removed in v1.2.0.")
-    )
-  }
-
   # Confirm num_cores specified
   if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
