@@ -414,17 +414,17 @@ Overall_Prop_Plot <- function(
       NoLegend()
   }
 
-  # mod x axis if needed
-  if (isTRUE(x = x_axis_log)) {
-    plot <- plot + scale_x_log10()
-  }
-
   if (isTRUE(x = prop_label)) {
     if (isFALSE(x = percent)) {
       plot <- plot + geom_text(data = fil_stats, aes(label = .data[["Number"]]), hjust = -0.1, fontface = "bold") + scale_x_continuous(expand = expansion(mult = c(0, .25)))
     } else {
       plot <- plot + geom_text(data = fil_stats, aes(label = paste0(format(round(.data[["Freq"]], digits = 1)), "%"), hjust = -0.1, fontface = "bold")) + scale_x_continuous(expand = expansion(mult = c(0, .25)))
     }
+  }
+
+  # mod x axis if needed
+  if (isTRUE(x = x_axis_log)) {
+    plot <- plot + scale_x_log10(expand = expansion(mult = c(0, .25)))
   }
 
   return(plot)
