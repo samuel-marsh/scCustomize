@@ -78,6 +78,8 @@ Cluster_Stats_All_Samples <- function(
   # Merge percent cells per metadata column per cluster with cluster stats and add Totals column
   cluster_stats <- suppressMessages(left_join(cluster_stats_2, percent_per_cluster_2)) %>%
     adorn_totals("row")
+
+  return(cluster_stats)
 }
 
 
