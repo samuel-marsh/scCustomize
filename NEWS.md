@@ -42,6 +42,7 @@
 - `Cluster_Stats_All_Samples` now returns data.frame with row order reflecting the frequency of cells.  
 - `Add_Mito_Ribo` now supports datasets aligned to multi-species reference genomes ([#184](https://github.com/samuel-marsh/scCustomize/issues/184)).  
 - Added parameter `add_prop_plot` to `DimPlot_scCustom` to return plot showing number or percent of cells per identity along with the DimPlot.  
+- Added optional parameter `colors_use_assay2` to `FeaturePlot_DualAssay` which allows for specification of different palettes for the two plots ([#182](https://github.com/samuel-marsh/scCustomize/issues/182)).  
 
 
   
@@ -69,7 +70,7 @@
 - Fixed bug in `DimPlot_scCustom` that could cause blank plot when rasterizing points.  
 - Fixed bug in `MAD_Stats` that didn't respect `mad_num` parameter ([#183](https://github.com/samuel-marsh/scCustomize/issues/183)).  
 - Fixed bugs in `MAD_Stats` that could cause issues if `mad_num` was less than or equal to 0 and returned error if setting `group_by_var` to "ident".  
-- Replaced deprecated tidyr code .data[["var"]] with update `all_of`/`any_of` syntax.  
+- Replaced lingering instances of deprecated tidyr code .data[["var"]] with update `all_of`/`any_of` syntax.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
