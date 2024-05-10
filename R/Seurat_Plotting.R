@@ -1759,9 +1759,9 @@ DimPlot_scCustom <- function(
   # prop plot colors
   if (isTRUE(x = add_prop_plot)) {
     if (is.null(x = group.by)) {
-      ident_levels <- levels(x = Idents(object = pbmc))
+      ident_levels <- levels(x = Idents(object = seurat_object))
     } else {
-      meta <- Fetch_Meta(pbmc)
+      meta <- Fetch_Meta(seurat_object)
       if (is.factor(x = meta[,group.by])) {
         ident_levels <- levels(x = meta[,group.by])
       } else {
