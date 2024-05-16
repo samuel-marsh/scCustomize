@@ -417,34 +417,34 @@ Reduction_Loading_Present <- function(
 
   # If any features not found
   if (any(!reduction_names %in% possible_reduction_names)) {
-    bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
-    found_features <- reduction_names[reduction_names %in% possible_reduction_names]
-    if (length(x = found_features) == 0) {
+    bad_reductions <- reduction_names[!reduction_names %in% possible_reduction_names]
+    found_reductions <- reduction_names[reduction_names %in% possible_reduction_names]
+    if (length(x = found_reductions) == 0) {
       if (isTRUE(x = return_none)) {
         # Combine into list and return
-        feature_list <- list(
-          found_features = NULL,
-          bad_features = bad_features
+        reduction_list <- list(
+          found_reductions = NULL,
+          bad_reductions = bad_reductions
         )
-        return(feature_list)
+        return(reduction_list)
       } else {
         cli_abort(message ="No requested features found.")
       }
     }
 
     # Return message of features not found
-    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
+    if (length(x = bad_reductions) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following features were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
     }
 
     # Combine into list and return
-    feature_list <- list(
-      found_features = found_features,
-      bad_features = bad_features
+    reduction_list <- list(
+      found_reductions = found_reductions,
+      bad_reductions = bad_reductions
     )
-    return(feature_list)
+    return(reduction_list)
   }
 
   # Print all found message if TRUE
@@ -454,11 +454,11 @@ Reduction_Loading_Present <- function(
 
   # Return full input gene list.
   # Combine into list and return
-  feature_list <- list(
-    found_features = reduction_names,
-    bad_features = NULL
+  reduction_list <- list(
+    found_reductions = reduction_names,
+    bad_reductions = NULL
   )
-  return(feature_list)
+  return(reduction_list)
 }
 
 
