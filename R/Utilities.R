@@ -384,7 +384,7 @@ Meta_Numeric <- function(
 #' @examples
 #' \dontrun{
 #' reductions <- Reduction_Loading_Present(seurat_object = obj_name, reduction_name = "PC_1")
-#' found_features <- features[[1]]
+#' found_reductions <- reductions[[1]]
 #' }
 #'
 
