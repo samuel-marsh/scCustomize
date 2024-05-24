@@ -2,8 +2,7 @@
 % Please edit documentation in R/Utilities.R
 \name{Case_Check}
 \alias{Case_Check}
-\title{Check for alternate case features
-Checks Seurat object for the presence of features with the same spelling but alternate case.}
+\title{Check for alternate case features}
 \usage{
 Case_Check(
   seurat_object,
@@ -30,7 +29,6 @@ If features found returns vector of found alternate case features and prints mes
 parameters specified.
 }
 \description{
-Check for alternate case features
 Checks Seurat object for the presence of features with the same spelling but alternate case.
 }
 \examples{
