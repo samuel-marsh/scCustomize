@@ -162,7 +162,7 @@ Feature_Present <- function(
 
 
 #' Check for alternate case features
-#
+#'
 #' Checks Seurat object for the presence of features with the same spelling but alternate case.
 #'
 #' @param seurat_object Seurat object name.
