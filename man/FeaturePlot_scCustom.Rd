@@ -20,7 +20,6 @@ FeaturePlot_scCustom(
   aspect_ratio = NULL,
   figure_plot = FALSE,
   num_columns = NULL,
-  slot = deprecated(),
   layer = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,

@@ -7,7 +7,6 @@
 Iterate_VlnPlot_scCustom(
   seurat_object,
   features,
-  gene_list = deprecated(),
   colors_use = NULL,
   pt.size = NULL,
   group.by = NULL,
