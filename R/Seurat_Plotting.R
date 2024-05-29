@@ -78,7 +78,6 @@ FeaturePlot_scCustom <- function(
   aspect_ratio = NULL,
   figure_plot = FALSE,
   num_columns = NULL,
-  slot = deprecated(),
   layer = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,

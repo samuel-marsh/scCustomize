@@ -1218,7 +1218,6 @@ Iterate_FeaturePlot_scCustom <- function(
 Iterate_VlnPlot_scCustom <- function(
   seurat_object,
   features,
-  gene_list = deprecated(),
   colors_use = NULL,
   pt.size = NULL,
   group.by = NULL,
