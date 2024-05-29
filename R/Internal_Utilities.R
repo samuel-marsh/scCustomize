@@ -904,6 +904,8 @@ Retrieve_Dual_Ribo_Features <- function(
 #' Default is "percent_apop".
 #' @param dna_repair_name name to use for the new meta.data column containing percent MSigDB Hallmark DNA repair counts.
 #' Default is "percent_oxphos".
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with any one of the names provided to `mito_name` `ribo_name` or
@@ -925,6 +927,7 @@ Add_MSigDB_Seurat <- function(
     oxphos_name = "percent_oxphos",
     apop_name = "percent_apop",
     dna_repair_name = "percent_dna_repair",
+    ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE
 ) {
@@ -968,7 +971,12 @@ Add_MSigDB_Seurat <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Retrieve gene lists
-  msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
+  if (isFALSE(x = ensembl_ids)) {
+    msigdb_gene_list <- Retrieve_MSigDB_Lists(species = species)
+  } else {
+    msigdb_gene_list <- Retrieve_MSigDB_Ensembl_Lists(species = species)
+  }
+
 
   oxphos_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["oxphos"]])
   apop_found <- Feature_PreCheck(object = seurat_object, features = msigdb_gene_list[["apop"]])

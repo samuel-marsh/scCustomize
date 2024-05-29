@@ -239,7 +239,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
                            "i" = "No columns will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data."))
-      object <- Add_MSigDB_Seurat(seurat_object = object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite)
+      object <- Add_MSigDB_Seurat(seurat_object = object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
     }
   }
 
