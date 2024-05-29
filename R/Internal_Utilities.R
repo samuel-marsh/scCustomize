@@ -770,6 +770,70 @@ Retrieve_IEG_Lists <- function(
 }
 
 
+#' Retrieve IEG Gene Lists (Ensembl)
+#'
+#' Retrieves species specific IEG gene lists with ensembl IDs
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 2 sets of ensembl IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_IEG_Ensembl_Lists <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options)) {
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
+  }
+
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
+
+  # set list names
+  ieg <- paste0(prefix, "IEG_ensembl")
+
+  # pull lists
+  qc_gene_list <- list(
+    ieg = ieg_gene_list[[ieg]]
+  )
+
+  return(qc_gene_list)
+}
+
+
 #' Retrieve dual species gene lists mitochondrial
 #'
 #' Returns vector of all mitochondrial genes across all species in dataset.
@@ -1071,6 +1135,8 @@ Add_MSigDB_Seurat <- function(
 #' @param seurat_object object name.
 #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
 #' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
@@ -1089,6 +1155,7 @@ Add_IEG_Seurat <- function(
     seurat_object,
     species,
     ieg_name = "percent_ieg",
+    ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE
 ) {
@@ -1127,7 +1194,11 @@ Add_IEG_Seurat <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Retrieve gene lists
-  ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+  if (isFALSE(x = ensembl_ids)) {
+    ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+  } else {
+    ieg_gene_list <- Retrieve_IEG_Ensembl_Lists(species = species)
+  }
 
   ieg_found <- Feature_PreCheck(object = seurat_object, features = ieg_gene_list[["ieg"]])
 

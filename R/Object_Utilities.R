@@ -250,7 +250,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
                            "i" = "No column will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
-      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite)
+      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
     }
   }
 
