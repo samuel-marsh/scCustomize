@@ -150,3 +150,22 @@
 #' homologs according to HGNC.  See data-raw directory for scripts used to create gene list.
 #'
 "ieg_gene_list"
+
+
+#' Immediate Early Gene (IEG) gene lists
+#'
+#' Ensembl IDs for immediate early genes
+#'
+#' @format A list of seven vectors
+#' \describe{
+#'   \item{Mus_musculus_IEGs}{Ensembl IDs for IEGs from source publication (see below)}
+#'   \item{Homo_sapiens_IEGs}{Ensembl IDs for homologous genes from mouse gene list}
+#'
+#' }
+#' @concept data
+#'
+#' @source Mouse gene list is from: SI Table 4 from \doi{10.1016/j.neuron.2017.09.026}.  Human
+#' gene list was compiled by first creating homologous gene list using biomaRt and then adding some manually curated
+#' homologs according to HGNC.  See data-raw directory for scripts used to create gene list.
+#'
+"ensembl_ieg_list"
