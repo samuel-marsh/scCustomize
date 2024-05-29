@@ -562,6 +562,87 @@ Retrieve_MSigDB_Lists <- function(
 }
 
 
+#' Retrieve MSigDB Ensembl Lists
+#'
+#' Retrieves species specific gene lists (ensembl IDs) for MSigDB QC Hallmark lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION",
+#' "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 3 sets of ensembl IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_MSigDB_Ensembl_Lists <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% marmoset_options) {
+    cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
+  }
+
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
+  if (species %in% zebrafish_options) {
+    prefix <- "Dario_rerio_"
+  }
+  if (species %in% rat_options) {
+    prefix <- "Rattus_norvegicus_"
+  }
+  if (species %in% drosophila_options) {
+    prefix <- "Drosophila_melanogaster_"
+  }
+  if (species %in% macaque_options) {
+    prefix <- "Macaca_mulatta_"
+  }
+
+  # set list names
+  oxphos <- paste0(prefix, "msigdb_oxphos")
+  apop <- paste0(prefix, "msigdb_apop")
+  dna_repair <- paste0(prefix, "msigdb_dna_repair")
+
+  # pull lists
+  qc_gene_list <- list(
+    oxphos = msigdb_qc_ensembl_list[[oxphos]],
+    apop = msigdb_qc_ensembl_list[[apop]],
+    dna_repair = msigdb_qc_ensembl_list[[dna_repair]]
+  )
+
+  return(qc_gene_list)
+}
+
+
 #' Retrieve IEG Gene Lists
 #'
 #' Retrieves species specific IEG gene lists
