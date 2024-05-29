@@ -26,6 +26,7 @@ Add_Hemo(object, ...)
   hemo_name = "percent_hemo",
   hemo_pattern = NULL,
   hemo_features = NULL,
+  ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE,
   list_species_names = FALSE,
@@ -56,6 +57,9 @@ present in meta.data slot.}
 \item{list_species_names}{returns list of all accepted values to use for default species names which
 contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 rhesus macaque).  Default is FALSE.}
+
+\item{ensembl_ids}{logical, whether feature names in the object are gene names or
+ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
 
 \item{assay}{Assay to use (default is the current object default assay).}
 }

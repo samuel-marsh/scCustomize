@@ -563,6 +563,8 @@ Add_Mito_Ribo.Seurat <- function(
 #' @param hemo_pattern A regex pattern to match features against for hemoglobin genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param hemo_features A list of hemoglobin gene names to be used instead of using regex pattern.
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with any one of the names provided to `hemo_name` is
@@ -598,6 +600,7 @@ Add_Hemo.Seurat <- function(
     hemo_name = "percent_hemo",
     hemo_pattern = NULL,
     hemo_features = NULL,
+    ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE,
     list_species_names = FALSE,
@@ -697,6 +700,11 @@ Add_Hemo.Seurat <- function(
   if (is.null(x = hemo_pattern) && is.null(x = hemo_features)) {
     cli_abort(message = c("No features or patterns provided for hemoglobin genes.",
                           "i" = "Please provide a default species name or pattern/features."))
+  }
+
+  # Retrieve ensembl ids if TRUE
+  if (isTRUE(x = ensembl_ids)) {
+    hemo_features <- Retrieve_Ensembl_Hemo(species = species)
   }
 
   hemo_features <- hemo_features %||% grep(pattern = hemo_pattern, x = rownames(x = object[[assay]]), value = TRUE)

@@ -459,9 +459,6 @@ Retrieve_Ensembl_Ribo <- function(
     ribo_ensembl <- ensembl_ribo_id$Homo_sapiens_ribo_ensembl
   }
   if (species %in% zebrafish_options) {
-    ribo_ensembl <- ensembl_ribo_id$Callithrix_jacchus_ribo_ensembl
-  }
-  if (species %in% zebrafish_options) {
     ribo_ensembl <- ensembl_ribo_id$Danio_rerio_ribo_ensembl
   }
   if (species %in% rat_options) {
@@ -478,6 +475,72 @@ Retrieve_Ensembl_Ribo <- function(
   }
 
   return(ribo_ensembl)
+}
+
+
+#' Ensembl Hemo IDs
+#'
+#' Retrieves Ensembl IDs for hemoglobin genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_Hemo <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% mouse_options) {
+    hemo_ensembl <- ensembl_hemo_id$Mus_musculus_hemo_ensembl
+  }
+  if (species %in% human_options) {
+    hemo_ensembl <- ensembl_hemo_id$Homo_sapiens_hemo_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    hemo_ensembl <- ensembl_hemo_id$Danio_rerio_hemo_ensembl
+  }
+  if (species %in% rat_options) {
+    hemo_ensembl <- ensembl_hemo_id$Rattus_norvegicus_hemo_ensembl
+  }
+  if (species %in% drosophila_options) {
+    hemo_ensembl <- ensembl_hemo_id$Drosophila_melanogaster_hemo_ensembl
+  }
+  if (species %in% macaque_options) {
+    hemo_ensembl <- ensembl_hemo_id$Macaca_mulatta_hemo_ensembl
+  }
+  if (species %in% chicken_options) {
+    hemo_ensembl <- ensembl_hemo_id$Gallus_gallus_hemo_ensembl
+  }
+
+  return(hemo_ensembl)
 }
 
 
