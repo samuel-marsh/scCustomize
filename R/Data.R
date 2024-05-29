@@ -40,6 +40,27 @@
 "ensembl_ribo_id"
 
 
+#' Ensembl Hemo IDs
+#'
+#' A list of ensembl ids for hemoglobin genes (Ensembl version 112)
+#'
+#' @format A list of six vectors
+#' \describe{
+#'   \item{Mus_musculus_hemo_ensembl}{Ensembl IDs for mouse hemoglobin genes}
+#'   \item{Homo_sapiens_hemo_ensembl}{Ensembl IDs for human hemoglobin genes}
+#'   \item{Danio_rerio_hemo_ensembl}{Ensembl IDs for zebrafish hemoglobin genes}
+#'   \item{Rattus_norvegicus_hemo_ensembl}{Ensembl IDs for rat hemoglobin genes}
+#'   \item{Drosophila_melanogaster_hemo_ensembl}{Ensembl IDs for fly hemoglobin genes}
+#'   \item{Macaca_mulatta_hemo_ensembl}{Ensembl IDs for macaque hemoglobin genes}
+#'   \item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken hemoglobin genes}
+#' }
+#' @concept data
+#' @source See data-raw directory for scripts used to create gene list.
+#'
+#'
+"ensembl_hemo_id"
+
+
 #' QC Gene Lists
 #'
 #' Gene symbols for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
