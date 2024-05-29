@@ -869,7 +869,7 @@ Iterate_Meta_Highlight_Plot <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_FeaturePlot_scCustom(seurat_object = object, gene_list = DEG_list,
+#' Iterate_FeaturePlot_scCustom(seurat_object = object, features = DEG_list,
 #' colors_use = viridis_plasma_dark_high, na_color = "lightgray", file_path = "plots/",
 #' file_name = "tsne", file_type = ".jpg", dpi = 600)
 #' }
@@ -1210,7 +1210,7 @@ Iterate_FeaturePlot_scCustom <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list,
+#' Iterate_VlnPlot_scCustom(seurat_object = object, features = DEG_list, colors = color_list,
 #' file_path = "plots/", file_name = "_vln", file_type = ".jpg", dpi = 600)
 #' }
 #'

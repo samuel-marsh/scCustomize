@@ -88,7 +88,7 @@ Create and Save plots for Gene list with Single Command
 }
 \examples{
 \dontrun{
-Iterate_FeaturePlot_scCustom(seurat_object = object, gene_list = DEG_list,
+Iterate_FeaturePlot_scCustom(seurat_object = object, features = DEG_list,
 colors_use = viridis_plasma_dark_high, na_color = "lightgray", file_path = "plots/",
 file_name = "tsne", file_type = ".jpg", dpi = 600)
 }

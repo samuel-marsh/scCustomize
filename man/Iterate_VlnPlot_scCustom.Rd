@@ -68,7 +68,7 @@ Create and Save plots for Gene list with Single Command
 }
 \examples{
 \dontrun{
-Iterate_VlnPlot_scCustom(seurat_object = object, gene_list = DEG_list, colors = color_list,
+Iterate_VlnPlot_scCustom(seurat_object = object, features = DEG_list, colors = color_list,
 file_path = "plots/", file_name = "_vln", file_type = ".jpg", dpi = 600)
 }
 

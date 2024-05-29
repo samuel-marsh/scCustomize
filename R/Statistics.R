@@ -122,7 +122,6 @@ Percent_Expressing <- function(
   group_by = NULL,
   split_by = NULL,
   entire_object = FALSE,
-  slot = deprecated(),
   layer = "data",
   assay = NULL
 ) {
