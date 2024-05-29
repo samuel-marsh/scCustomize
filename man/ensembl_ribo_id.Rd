@@ -17,6 +17,9 @@ A list of eight vectors
 \item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken ribosomal genes}
 }
 }
+\source{
+See data-raw directory for scripts used to create gene list.
+}
 \usage{
 ensembl_ribo_id
 }

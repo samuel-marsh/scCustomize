@@ -16,6 +16,9 @@ A list of six vectors
 \item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken mitochondrial genes}
 }
 }
+\source{
+See data-raw directory for scripts used to create gene list.
+}
 \usage{
 ensembl_mito_id
 }
