@@ -1015,7 +1015,7 @@ Add_Cell_QC_Metrics.liger <- function(
   # Add hemo
   if (isTRUE(x = add_hemo)) {
     cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
-    liger_object <- Add_Hemo(object = liger_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, overwrite = overwrite)
+    liger_object <- Add_Hemo(object = liger_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, overwrite = overwrite, ensembl_ids = ensembl_ids)
   }
 
   # return object
