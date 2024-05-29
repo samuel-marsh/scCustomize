@@ -674,7 +674,7 @@ Add_Hemo.Seurat <- function(
   }
   if (species %in% c(marmoset_options, macaque_options)) {
     species_use <- "Marmoset/Macaque"
-    hemo_pattern <- "^^HB[^(P)]"
+    hemo_pattern <- "^HB[^(P)]"
   }
   if (species %in% zebrafish_options) {
     species_use <- "Zebrafish"
