@@ -1701,7 +1701,7 @@ Variable_Features_ALL_LIGER <- function(
     temp_liger <- rliger::normalize(object = temp_liger)
     temp_liger <- rliger::selectGenes(object = temp_liger, thresh = var.thresh, alpha = alpha.thresh, chunk = chunk)
     if (isTRUE(x = do.plot)) {
-      plotVarFeatures(object = temp_liger, dotSize = pt.size)
+      print(plotVarFeatures(object = temp_liger, dotSize = pt.size))
     }
 
     var_genes <- rliger::varFeatures(x = temp_liger)
