@@ -1,6 +1,6 @@
 #' Ensembl Mito IDs
 #'
-#' A list of ensembl ids for mitochondrial genes (Ensembl version 105)
+#' A list of ensembl ids for mitochondrial genes (Ensembl version 112; 4/29/2024)
 #'
 #' @format A list of six vectors
 #' \describe{
@@ -21,7 +21,7 @@
 
 #' Ensembl Ribo IDs
 #'
-#' A list of ensembl ids for ribosomal genes (Ensembl version 105)
+#' A list of ensembl ids for ribosomal genes (Ensembl version 112; 4/29/2024)
 #'
 #' @format A list of eight vectors
 #' \describe{
@@ -42,7 +42,7 @@
 
 #' Ensembl Hemo IDs
 #'
-#' A list of ensembl ids for hemoglobin genes (Ensembl version 112)
+#' A list of ensembl ids for hemoglobin genes (Ensembl version 112; 4/29/2024)
 #'
 #' @format A list of six vectors
 #' \describe{
@@ -101,6 +101,7 @@
 #'
 #' Ensembl IDs for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
 #' "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+#' (Ensembl version 112; 4/29/2024)
 #'
 #' @format A list of 21 vectors
 #' \describe{
@@ -154,7 +155,7 @@
 
 #' Immediate Early Gene (IEG) gene lists
 #'
-#' Ensembl IDs for immediate early genes
+#' Ensembl IDs for immediate early genes (Ensembl version 112; 4/29/2024)
 #'
 #' @format A list of seven vectors
 #' \describe{
