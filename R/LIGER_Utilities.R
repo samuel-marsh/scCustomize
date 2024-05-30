@@ -1647,6 +1647,7 @@ Add_Top_Gene_Pct.liger <- function(
 #' @param alpha.thresh Alpha threshold. Controls upper bound for expected mean gene
 #' expression (lower threshold -> higher upper bound). (default 0.99)
 #' @param tol Tolerance to use for optimization if num.genes values passed in (default 0.0001).
+#' Only applicable for rliger < 2.0.0.
 #' @param do.plot Display log plot of gene variance vs. gene expression. Selected genes are
 #' plotted in green. (Default FALSE)
 #' @param pt.size Point size for plot.
@@ -1678,35 +1679,57 @@ Variable_Features_ALL_LIGER <- function(
   alpha.thresh = 0.99,
   tol = 0.0001,
   do.plot = FALSE,
-  pt.size = 0.3,
-  chunk=1000
+  pt.size = 1.5,
+  chunk = 1000
 ) {
-  # liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Functionality is currently restricted to rliger v1.0.1 or lower."))
-  }
-
   # check liger
   Is_LIGER(liger_object = liger_object)
 
-  raw_data <- liger_object@raw.data
+  # version check and split
+  if (packageVersion(pkg = 'rliger') >= "2.0.0") {
+    raw_data <- rliger::rawData(x = liger_object)
 
-  cli_inform(message = "Creating temporary object with combined data.")
+    cli_inform(message = "Creating temporary object with combined data.")
 
-  temp_liger <- rliger::createLiger(raw.data = list("dataset" = Merge_Sparse_Data_All(raw_data)), remove.missing = FALSE)
+    temp_liger <- rliger::createLiger(rawData = list("dataset" = Merge_Sparse_Data_All(matrix_list = raw_data)), removeMissing = FALSE)
 
-  rm(raw_data)
-  gc()
+    rm(raw_data)
+    gc()
 
-  cli_inform(message = "Normalizing and identifying variable features.")
+    cli_inform(message = "Normalizing and identifying variable features.")
 
-  temp_liger <- rliger::normalize(object = temp_liger)
-  temp_liger <- rliger::selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
-  var_genes <- temp_liger@var.genes
+    temp_liger <- rliger::normalize(object = temp_liger)
+    temp_liger <- rliger::selectGenes(object = temp_liger, thresh = var.thresh, alpha = alpha, chunk = chunk)
+    if (isTRUE(x = do.plot)) {
+      plotVarFeatures(object = temp_liger, dotSize = pt.size)
+    }
 
-  rm(temp_liger)
-  gc()
+    var_genes <- rliger::varFeatures(x = temp_liger)
 
-  liger_object@var.genes <- var_genes
+    rm(temp_liger)
+    gc()
+
+    rliger::varFeatures(x = liger_object) <- var_genes
+  } else {
+    raw_data <- liger_object@raw.data
+
+    cli_inform(message = "Creating temporary object with combined data.")
+
+    temp_liger <- rliger::createLiger(raw.data = list("dataset" = Merge_Sparse_Data_All(raw_data)), remove.missing = FALSE)
+
+    rm(raw_data)
+    gc()
+
+    cli_inform(message = "Normalizing and identifying variable features.")
+
+    temp_liger <- rliger::normalize(object = temp_liger)
+    temp_liger <- rliger::selectGenes(object = temp_liger, var.thresh = var.thresh, do.plot = do.plot, num.genes = num_genes, tol = tol, alpha.thresh = alpha.thresh, cex.use = pt.size, chunk = chunk)
+    var_genes <- temp_liger@var.genes
+
+    rm(temp_liger)
+    gc()
+
+    liger_object@var.genes <- var_genes
+  }
   return(liger_object)
 }
