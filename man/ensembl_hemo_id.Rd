@@ -23,7 +23,7 @@ See data-raw directory for scripts used to create gene list.
 ensembl_hemo_id
 }
 \description{
-A list of ensembl ids for hemoglobin genes (Ensembl version 112)
+A list of ensembl ids for hemoglobin genes (Ensembl version 112; 4/29/2024)
 }
 \concept{data}
 \keyword{datasets}

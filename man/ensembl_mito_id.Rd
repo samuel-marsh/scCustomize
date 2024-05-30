@@ -23,7 +23,7 @@ See data-raw directory for scripts used to create gene list.
 ensembl_mito_id
 }
 \description{
-A list of ensembl ids for mitochondrial genes (Ensembl version 105)
+A list of ensembl ids for mitochondrial genes (Ensembl version 112; 4/29/2024)
 }
 \concept{data}
 \keyword{datasets}

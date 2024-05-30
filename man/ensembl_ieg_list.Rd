@@ -21,7 +21,7 @@ homologs according to HGNC.  See data-raw directory for scripts used to create g
 ensembl_ieg_list
 }
 \description{
-Ensembl IDs for immediate early genes
+Ensembl IDs for immediate early genes (Ensembl version 112; 4/29/2024)
 }
 \concept{data}
 \keyword{datasets}

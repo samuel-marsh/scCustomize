@@ -24,7 +24,7 @@ See data-raw directory for scripts used to create gene list.
 ensembl_ribo_id
 }
 \description{
-A list of ensembl ids for ribosomal genes (Ensembl version 105)
+A list of ensembl ids for ribosomal genes (Ensembl version 112; 4/29/2024)
 }
 \concept{data}
 \keyword{datasets}

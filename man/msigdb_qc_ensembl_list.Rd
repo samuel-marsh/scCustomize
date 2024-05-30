@@ -39,6 +39,7 @@ msigdb_qc_ensembl_list
 \description{
 Ensembl IDs for qc percentages from MSigDB database.  The gene sets are from 3 MSigDB lists:
 "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR".
+(Ensembl version 112; 4/29/2024)
 }
 \concept{data}
 \keyword{datasets}
