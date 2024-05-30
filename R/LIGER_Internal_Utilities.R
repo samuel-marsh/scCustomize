@@ -2248,6 +2248,8 @@ Add_MSigDB_LIGER <- function(
 #' @param liger_object object name.
 #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
 #' @param ieg_name name to use for the new meta.data column containing percent IEG gene counts. Default is "percent_ieg".
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param overwrite Logical.  Whether to overwrite existing meta data columns.  Default is FALSE meaning that
 #' function will abort if columns with the name provided to `ieg_name` is present in meta data slot.
 #'
@@ -2264,6 +2266,7 @@ Add_IEG_LIGER <- function(
     liger_object,
     species,
     ieg_name = "percent_ieg",
+    ensembl_ids = FALSE,
     overwrite = FALSE
 ) {
   # Accepted species names
@@ -2300,7 +2303,11 @@ Add_IEG_LIGER <- function(
   }
 
   # Retrieve gene lists
-  ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+  if (isFALSE(x = ensembl_ids)) {
+    ieg_gene_list <- Retrieve_IEG_Lists(species = species)
+  } else {
+    ieg_gene_list <- Retrieve_IEG_Ensembl_Lists(species = species)
+  }
 
   all_features <- Features(x = liger_object, by_dataset = FALSE)
 

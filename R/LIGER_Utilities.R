@@ -997,7 +997,7 @@ Add_Cell_QC_Metrics.liger <- function(
                            "i" = "No columns will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair Percentages} to meta.data."))
-      liger_object <- Add_MSigDB_LIGER(liger_object = liger_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, overwrite = overwrite)
+      liger_object <- Add_MSigDB_LIGER(liger_object = liger_object, species = species, oxphos_name = oxphos_name, apop_name = apop_name, dna_repair_name = dna_repair_name, overwrite = overwrite, ensembl_ids = ensembl_ids)
     }
   }
 
@@ -1008,7 +1008,7 @@ Add_Cell_QC_Metrics.liger <- function(
                            "i" = "No column will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
-      liger_object <- Add_IEG_LIGER(liger_object = liger_object, species = species, ieg_name = ieg_name, overwrite = overwrite)
+      liger_object <- Add_IEG_LIGER(liger_object = liger_object, species = species, ieg_name = ieg_name, overwrite = overwrite, ensembl_ids = ensembl_ids)
     }
   }
 
