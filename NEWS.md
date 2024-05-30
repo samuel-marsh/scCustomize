@@ -43,6 +43,8 @@
 - `Add_Mito_Ribo` now supports datasets aligned to multi-species reference genomes ([#184](https://github.com/samuel-marsh/scCustomize/issues/184)).  
 - Added parameter `add_prop_plot` to `DimPlot_scCustom` to return plot showing number or percent of cells per identity along with the DimPlot.  
 - Added optional parameter `colors_use_assay2` to `FeaturePlot_DualAssay` which allows for specification of different palettes for the two plots ([#182](https://github.com/samuel-marsh/scCustomize/issues/182)).  
+- Added new folder and scripts (see "data-raw/" on GitHub) detailing the creation of gene lists used in `Add_Cell_QC_Metrics`.  
+- Added ensembl ID support for percent hemoglobin, msigdb, and IEG gene sets ([#186](https://github.com/samuel-marsh/scCustomize/issues/186)).  
 
 
   
