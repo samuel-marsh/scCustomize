@@ -17,6 +17,7 @@
     - `Add_Mito_Ribo`  
     - `Add_Cell_Complexity`  
     - `DimPlot_LIGER`  
+    - `Variable_Features_ALL_LIGER`  
 - *New functions compatible with old and new style liger objects:*  
     - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
 - *New scCustomize generics to function across both Seurat and Liger objects*  
