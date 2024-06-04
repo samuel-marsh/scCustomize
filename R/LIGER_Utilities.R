@@ -1229,6 +1229,7 @@ Add_Mito_Ribo.liger <- function(
 
   # Add mito and ribo percent
   if (length_mito_features > 0) {
+    cli_inform(message = "Adding Percent Mitochondrial genes for {.field {species_use}} using gene symbol pattern: {.val {mito_pattern}}.")
     good_mito <- mito_features[mito_features %in% all_features]
 
     if (packageVersion(pkg = 'rliger') > "1.0.1") {
@@ -1241,6 +1242,7 @@ Add_Mito_Ribo.liger <- function(
   }
 
   if (length_ribo_features > 0){
+    cli_inform(message = "Adding Percent Ribosomal genes for {.field {species_use}} using gene symbol pattern: {.val {ribo_pattern}}.")
     good_ribo <- ribo_features[ribo_features %in% all_features]
 
     if (packageVersion(pkg = 'rliger') > "1.0.1") {
@@ -1254,6 +1256,7 @@ Add_Mito_Ribo.liger <- function(
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
+    cli_inform(message = "Adding Percent Mito+Ribo by adding Mito & Ribo percentages.")
     if (packageVersion(pkg = 'rliger') > "1.0.1") {
       object@cellMeta[[mito_ribo_name]] <- object@cellMeta[[mito_name]] + object@cellMeta[[ribo_name]]
     } else {

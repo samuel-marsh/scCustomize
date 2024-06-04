@@ -523,17 +523,20 @@ Add_Mito_Ribo.Seurat <- function(
   }
 
   # Add mito and ribo columns
+  cli_inform(message = "Adding Percent Mitochondrial genes for {.field {species_use}} using gene symbol pattern: {.val {mito_pattern}}.")
   if (length_mito_features > 0) {
     good_mito <- mito_features[mito_features %in% rownames(x = object)]
     object[[mito_name]] <- PercentageFeatureSet(object = object, features = good_mito, assay = assay)
   }
   if (length_ribo_features > 0) {
+    cli_inform(message = "Adding Percent Ribosomal genes for {.field {species_use}} using gene symbol pattern: {.val {ribo_pattern}}.")
     good_ribo <- ribo_features[ribo_features %in% rownames(x = object)]
     object[[ribo_name]] <- PercentageFeatureSet(object = object, features = good_ribo, assay = assay)
   }
 
   # Create combined mito ribo column if both present
   if (length_mito_features > 0 && length_ribo_features > 0) {
+    cli_inform(message = "Adding Percent Mito+Ribo by adding Mito & Ribo percentages.")
     object_meta <- Fetch_Meta(object = object) %>%
       rownames_to_column("barcodes")
 
