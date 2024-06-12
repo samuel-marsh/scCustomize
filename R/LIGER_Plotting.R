@@ -336,7 +336,9 @@ plotFactors_scCustom <- function(
 #' Any negative correlations are set to NA and NA values set to bottom color of color gradient.
 #'
 #' @param liger_object liger object.
-#' @param colors_use Color palette to use for correlation values.  Default is `viridis`.
+#' @param colors_use Color palette to use for correlation values.
+#' Default is `RColorBrewer::RdBu` if `positive_only = FALSE`.
+#' If `positive_only = TRUE` the default is `viridis`.
 #' Users can also supply vector of 3 colors (low, mid, high).
 #' @param label logical, whether to add correlation values to plot result.
 #' @param label_threshold threshold for adding correlation values if `label = TRUE`.  Default
@@ -345,7 +347,15 @@ plotFactors_scCustom <- function(
 #' @param plot_title Plot title.
 #' @param plot_type Controls plotting full matrix, or just the upper or lower triangles.
 #' Accepted values are: "full" (default), "upper", or "lower".
-#' @param x_lab_rotate logical, whether to rotate the axes labels on the x-axis.  Default is TRUE
+#' @param positive_only logical, whether to limit the plotted values to only positive
+#' correlations (negative values set to 0); default is FALSE.
+#' @param x_lab_rotate logical, whether to rotate the axes labels on the x-axis.  Default is TRUE.
+#' @param cluster logical, whether to cluster the plot using `hclust` (default TRUE).  If FALSE
+#' factors are listed in numerical order.
+#' @param cluster_rect logical, whether to add rectangles around the clustered areas on plot,
+#' default is FALSE.
+#' @param cluster_rect_num number of rectangles to add to the plot, default NULL.
+#' @param cluster_rect_col color to use for rectangles, default MULL (will set color automatically).
 #'
 #' @return A ggplot object
 #'
