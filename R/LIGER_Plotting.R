@@ -429,6 +429,8 @@ Factor_Cor_Plot <- function(
   plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
     theme_cowplot() +
     geom_tile() +
+    scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
+    scale_x_discrete(expand = c(0, 0)) +
     scale_y_discrete(limits = factor_names) +
     scale_fill_gradientn(colours = colors_use, limits = c(0,1), na.value = colors_use[1]) +
     xlab("") +
