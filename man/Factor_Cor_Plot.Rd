@@ -6,7 +6,7 @@
 \usage{
 Factor_Cor_Plot(
   liger_object,
-  colors_use = viridis_light_high,
+  colors_use = NULL,
   label = FALSE,
   label_threshold = 0.5,
   label_size = 5,

@@ -369,7 +369,7 @@ plotFactors_scCustom <- function(
 
 Factor_Cor_Plot <- function(
     liger_object,
-    colors_use = viridis_light_high,
+    colors_use = NULL,
     label = FALSE,
     label_threshold = 0.5,
     label_size = 5,
@@ -430,7 +430,8 @@ Factor_Cor_Plot <- function(
   factor_names <- levels(plot_df$rowname)
 
   # plot
-  if (isFALSE(x = positive_only)) {
+  if (isTRUE(x = positive_only)) {
+    colors_use <- colors_use %||% viridis_light_high
     plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
       theme_cowplot() +
       geom_tile() +
@@ -441,6 +442,7 @@ Factor_Cor_Plot <- function(
       xlab("") +
       ylab("")
   } else {
+    colors_use <- colors_use %||% paletteer::paletteer_d("RColorBrewer::RdBu")
     plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
       theme_cowplot() +
       geom_tile() +
