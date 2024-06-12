@@ -413,6 +413,11 @@ Factor_Cor_Plot <- function(
 
   plot_df$rowname <- factor(plot_df$rowname, levels = rev(unique(plot_df$rowname)))
 
+  if (isTRUE(x = cluster)) {
+    plot_df$Var <- factor(plot_df$Var, levels = unique(plot_df$Var))
+  }
+
+
   if (isTRUE(x = label)) {
     plot_df$label <- ifelse(plot_df$corr >= label_threshold, round(plot_df$corr, 2), NA)
     plot_df$label <- ifelse(plot_df$label == 1, NA, round(plot_df$label, 2))
