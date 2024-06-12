@@ -1596,6 +1596,43 @@ upper_diag_cor_mat <- function(
 }
 
 
+#' Get hclust rectangles
+#'
+#' get data.frames to plot hclust rectangles
+#'
+#' @param cor_mat correlation matrix created with `cor`.
+#' @param num_rect number of rectangles to plot
+#' @param num_factors number of factors in plot
+#'
+#' @return list of dataframes to use for drawing rectangles
+#'
+#' @noRd
+#'
+
+create_factor_hclust_rect <- function(
+    cor_mat,
+    num_rect,
+    num_factors
+) {
+  n <- nrow(cor_mat)
+  method <- "complete"
+  tree <-  hclust(as.dist(1 - cor_mat), method = method)
+  hc_rect <-  cutree(tree, k = num_rect)
+  clustab <-  table(hc_rect)[unique(hc_rect[tree$order])]
+  cu <- c(0, cumsum(clustab))
+
+  rect_df <- data.frame(cbind(cu[-length(cu)], cu[-1]))
+  rownames(rect_df) <- 1:num_rect
+  rect_df <- rect_df + 0.5
+  rect_df2 <- length(num_factors) - rect_df + 1
+
+  rect_list <- list("x_axis" = rect_df,
+                    "y_axis" = rect_df2)
+
+  return(rect_list)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### GGPLOT2/THEMES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
