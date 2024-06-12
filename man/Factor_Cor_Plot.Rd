@@ -17,13 +17,15 @@ Factor_Cor_Plot(
   cluster = TRUE,
   cluster_rect = FALSE,
   cluster_rect_num = NULL,
-  cluster_rect_col = "white"
+  cluster_rect_col = NULL
 )
 }
 \arguments{
 \item{liger_object}{liger object.}
 
-\item{colors_use}{Color palette to use for correlation values.  Default is \code{viridis}.
+\item{colors_use}{Color palette to use for correlation values.
+Default is \code{RColorBrewer::RdBu} if \code{positive_only = FALSE}.
+If \code{positive_only = TRUE} the default is \code{viridis}.
 Users can also supply vector of 3 colors (low, mid, high).}
 
 \item{label}{logical, whether to add correlation values to plot result.}
@@ -38,7 +40,20 @@ is 0.5.}
 \item{plot_type}{Controls plotting full matrix, or just the upper or lower triangles.
 Accepted values are: "full" (default), "upper", or "lower".}
 
-\item{x_lab_rotate}{logical, whether to rotate the axes labels on the x-axis.  Default is TRUE}
+\item{positive_only}{logical, whether to limit the plotted values to only positive
+correlations (negative values set to 0); default is FALSE.}
+
+\item{x_lab_rotate}{logical, whether to rotate the axes labels on the x-axis.  Default is TRUE.}
+
+\item{cluster}{logical, whether to cluster the plot using \code{hclust} (default TRUE).  If FALSE
+factors are listed in numerical order.}
+
+\item{cluster_rect}{logical, whether to add rectangles around the clustered areas on plot,
+default is FALSE.}
+
+\item{cluster_rect_num}{number of rectangles to add to the plot, default NULL.}
+
+\item{cluster_rect_col}{color to use for rectangles, default MULL (will set color automatically).}
 }
 \value{
 A ggplot object
