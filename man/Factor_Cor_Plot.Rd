@@ -13,7 +13,10 @@ Factor_Cor_Plot(
   plot_title = NULL,
   plot_type = "full",
   x_lab_rotate = TRUE,
-  cluster = TRUE
+  cluster = TRUE,
+  cluster_rect = FALSE,
+  cluster_rect_num = NULL,
+  cluster_rect_col = "white"
 )
 }
 \arguments{

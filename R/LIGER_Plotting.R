@@ -376,7 +376,10 @@ Factor_Cor_Plot <- function(
     plot_title = NULL,
     plot_type = "full",
     x_lab_rotate = TRUE,
-    cluster = TRUE
+    cluster = TRUE,
+    cluster_rect = FALSE,
+    cluster_rect_num = NULL,
+    cluster_rect_col = "white"
 ) {
   # check plot type
   if (!plot_type %in% c("full", "lower", "upper")) {
@@ -447,6 +450,12 @@ Factor_Cor_Plot <- function(
 
   if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + RotatedAxis()
+  }
+
+  if (isTRUE(x = cluster_rect)) {
+    rect_list <- create_factor_hclust_rect(cor_mat = cor_mat, num_rect = cluster_rect_num, num_factors = length(x = factor_names))
+
+    plot <- plot + annotate(geom = "rect", xmin = rect_list[[1]][,1], xmax = rect_list[[1]][,2], ymin = rect_list[[2]][,1], ymax = rect_list[[2]][,2], fill = NA, color = cluster_rect_col)
   }
 
   # return plot
