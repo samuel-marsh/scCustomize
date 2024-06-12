@@ -12,6 +12,7 @@ Factor_Cor_Plot(
   label_size = 5,
   plot_title = NULL,
   plot_type = "full",
+  positive_only = FALSE,
   x_lab_rotate = TRUE,
   cluster = TRUE,
   cluster_rect = FALSE,

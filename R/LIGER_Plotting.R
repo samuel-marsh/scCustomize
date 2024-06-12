@@ -375,6 +375,7 @@ Factor_Cor_Plot <- function(
     label_size = 5,
     plot_title = NULL,
     plot_type = "full",
+    positive_only = FALSE,
     x_lab_rotate = TRUE,
     cluster = TRUE,
     cluster_rect = FALSE,
@@ -429,15 +430,27 @@ Factor_Cor_Plot <- function(
   factor_names <- levels(plot_df$rowname)
 
   # plot
-  plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
-    theme_cowplot() +
-    geom_tile() +
-    scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
-    scale_x_discrete(expand = c(0, 0)) +
-    scale_y_discrete(limits = factor_names) +
-    scale_fill_gradientn(colours = colors_use, limits = c(0,1), na.value = colors_use[1]) +
-    xlab("") +
-    ylab("")
+  if (isFALSE(x = positive_only)) {
+    plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
+      theme_cowplot() +
+      geom_tile() +
+      scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
+      scale_x_discrete(expand = c(0, 0)) +
+      scale_y_discrete(limits = factor_names) +
+      scale_fill_gradientn(colours = colors_use, limits = c(0,1), na.value = colors_use[1]) +
+      xlab("") +
+      ylab("")
+  } else {
+    plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
+      theme_cowplot() +
+      geom_tile() +
+      scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
+      scale_x_discrete(expand = c(0, 0)) +
+      scale_y_discrete(limits = factor_names) +
+      scale_fill_gradientn(colours = colors_use, limits = c(-1,1), na.value = colors_use[1]) +
+      xlab("") +
+      ylab("")
+  }
 
   # modify plot
   if (isTRUE(x = label)) {
