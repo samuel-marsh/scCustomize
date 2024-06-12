@@ -1624,7 +1624,7 @@ create_factor_hclust_rect <- function(
   rect_df <- data.frame(cbind(cu[-length(cu)], cu[-1]))
   rownames(rect_df) <- 1:num_rect
   rect_df <- rect_df + 0.5
-  rect_df2 <- length(num_factors) - rect_df + 1
+  rect_df2 <- num_factors - rect_df + 1
 
   rect_list <- list("x_axis" = rect_df,
                     "y_axis" = rect_df2)
