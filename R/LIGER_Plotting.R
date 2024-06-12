@@ -380,7 +380,7 @@ Factor_Cor_Plot <- function(
     cluster = TRUE,
     cluster_rect = FALSE,
     cluster_rect_num = NULL,
-    cluster_rect_col = "white"
+    cluster_rect_col = NULL
 ) {
   # check plot type
   if (!plot_type %in% c("full", "lower", "upper")) {
@@ -432,23 +432,25 @@ Factor_Cor_Plot <- function(
   # plot
   if (isTRUE(x = positive_only)) {
     colors_use <- colors_use %||% viridis_light_high
+    cluster_rect_col <- cluster_rect_col %||% "white"
+
     plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
       theme_cowplot() +
       geom_tile() +
       scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
       scale_x_discrete(expand = c(0, 0)) +
-      scale_y_discrete(limits = factor_names) +
       scale_fill_gradientn(colours = colors_use, limits = c(0,1), na.value = colors_use[1]) +
       xlab("") +
       ylab("")
   } else {
     colors_use <- colors_use %||% paletteer::paletteer_d("RColorBrewer::RdBu")
+    cluster_rect_col <- cluster_rect_col %||% "black"
+
     plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
       theme_cowplot() +
       geom_tile() +
       scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
       scale_x_discrete(expand = c(0, 0)) +
-      scale_y_discrete(limits = factor_names) +
       scale_fill_gradientn(colours = colors_use, limits = c(-1,1), na.value = colors_use[1]) +
       xlab("") +
       ylab("")
