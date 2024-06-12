@@ -375,7 +375,8 @@ Factor_Cor_Plot <- function(
     label_size = 5,
     plot_title = NULL,
     plot_type = "full",
-    x_lab_rotate = TRUE
+    x_lab_rotate = TRUE,
+    cluster = TRUE
 ) {
   # check plot type
   if (!plot_type %in% c("full", "lower", "upper")) {
@@ -395,6 +396,13 @@ Factor_Cor_Plot <- function(
 
   if (plot_type == "full") {
     plot_df <- cor_mat
+  }
+
+  if (isTRUE(x = cluster)) {
+    dist_mat <- stats::as.dist((1 - plot_df) / 2)
+    hclust_res <- stats::hclust(dd, method = "complete")
+
+    plot_df <- plot_df[hclust_res$order, hclust_res$order]
   }
 
   # Reshape for plotting
