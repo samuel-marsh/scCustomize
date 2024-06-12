@@ -375,11 +375,7 @@ Factor_Cor_Plot <- function(
     label_size = 5,
     plot_title = NULL,
     plot_type = "full",
-    x_lab_rotate = TRUE,
-    cluster = TRUE,
-    cluster_rect = FALSE,
-    cluster_rect_num = NULL,
-    cluster_rect_col = "white"
+    x_lab_rotate = TRUE
 ) {
   # check plot type
   if (!plot_type %in% c("full", "lower", "upper")) {
@@ -401,13 +397,6 @@ Factor_Cor_Plot <- function(
     plot_df <- cor_mat
   }
 
-  if (isTRUE(x = cluster)) {
-    dist_mat <- stats::as.dist((1 - cor_mat) / 2)
-    hclust_res <- stats::hclust(dd, method = "complete")
-
-    plot_df <- plot_df[hclust_res$order, hclust_res$order]
-  }
-
   # Reshape for plotting
   plot_df <- data.frame(plot_df) %>%
     rownames_to_column("rowname") %>%
@@ -415,10 +404,6 @@ Factor_Cor_Plot <- function(
     drop_na()
 
   plot_df$rowname <- factor(plot_df$rowname, levels = rev(unique(plot_df$rowname)))
-
-  if (isTRUE(x = cluster)) {
-    plot_df$Var <- factor(plot_df$Var, levels = unique(plot_df$Var))
-  }
 
   if (isTRUE(x = label)) {
     plot_df$label <- ifelse(plot_df$corr >= label_threshold, round(plot_df$corr, 2), NA)
@@ -430,8 +415,8 @@ Factor_Cor_Plot <- function(
   # plot
   plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
     theme_cowplot() +
-    scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
-    scale_x_discrete(expand = c(0, 0)) +
+    geom_tile() +
+    scale_y_discrete(limits = factor_names) +
     scale_fill_gradientn(colours = colors_use, limits = c(0,1), na.value = colors_use[1]) +
     xlab("") +
     ylab("")
@@ -447,12 +432,6 @@ Factor_Cor_Plot <- function(
 
   if (isTRUE(x = x_lab_rotate)) {
     plot <- plot + RotatedAxis()
-  }
-
-  if (isTRUE(x = cluster_rect)) {
-    rect_list <- create_factor_hclust_rect(cor_mat = cor_mat, num_rect = cluster_rect_num, num_factors = length(x = factor_names))
-
-    plot <- plot + annotate(geom = "rect", xmin = rect_list[[1]][,1], xmax = rect_list[[1]][,2], ymin = rect_list[[2]][,1], ymax = rect_list[[2]][,2], fill = NA, color = cluster_rect_col)
   }
 
   # return plot
