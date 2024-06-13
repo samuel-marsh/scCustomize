@@ -414,7 +414,7 @@ Factor_Cor_Plot <- function(
 
   if (isTRUE(x = cluster)) {
     dist_mat <- stats::as.dist((1 - plot_df) / 2)
-    hclust_res <- stats::hclust(dd, method = "complete")
+    hclust_res <- stats::hclust(dist_mat, method = "complete")
 
     plot_df <- plot_df[hclust_res$order, hclust_res$order]
   }
