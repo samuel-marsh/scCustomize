@@ -538,14 +538,14 @@ Add_Mito_Ribo.Seurat <- function(
   if (length_mito_features > 0 && length_ribo_features > 0) {
     cli_inform(message = "Adding Percent Mito+Ribo by adding Mito & Ribo percentages.")
     object_meta <- Fetch_Meta(object = object) %>%
-      rownames_to_column("barcodes")
+      rownames_to_column("temp_barcodes")
 
     object_meta <- object_meta %>%
       mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
 
     object_meta <- object_meta %>%
-      select(all_of(c("barcodes", mito_ribo_name))) %>%
-      column_to_rownames("barcodes")
+      select(all_of(c("temp_barcodes", mito_ribo_name))) %>%
+      column_to_rownames("temp_barcodes")
 
     object <- AddMetaData(object = object, metadata = object_meta)
   }
@@ -1190,7 +1190,7 @@ Add_Sample_Meta <- function(
 
   # Pull meta data
   meta_seurat <- seurat_object@meta.data %>%
-    rownames_to_column("barcodes")
+    rownames_to_column("temp_barcodes")
 
   # remove
   if (isTRUE(x = overwrite)) {
@@ -1206,10 +1206,10 @@ Add_Sample_Meta <- function(
   # Remove existing Seurat meta
   if (length(x = dup_columns) > 0 && isTRUE(x = overwrite)) {
     meta_merged <- meta_merged %>%
-      column_to_rownames("barcodes")
+      column_to_rownames("temp_barcodes")
   } else {
     meta_merged <- Meta_Remove_Seurat(meta_data = meta_merged, seurat_object = seurat_object) %>%
-      column_to_rownames("barcodes")
+      column_to_rownames("temp_barcodes")
   }
 
   # check NA

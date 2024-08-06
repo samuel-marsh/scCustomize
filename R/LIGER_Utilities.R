@@ -597,13 +597,13 @@ Rename_Clusters.liger <- function(
   ident_df <- data.frame(rliger::defaultCluster(x = object))
   colnames(x = ident_df) <- "current_idents"
   ident_df <- ident_df %>%
-    rownames_to_column("barcodes")
+    rownames_to_column("temp_barcodes")
 
   new_idents_df <- data.frame("current_idents" = names(x = new_idents),
                               "new_idents" = new_idents)
 
   new_idents_meta <- suppressMessages(right_join(x = ident_df, y = new_idents_df)) %>%
-    column_to_rownames("barcodes")
+    column_to_rownames("temp_barcodes")
 
   suppressMessages(rliger::defaultCluster(x = object) <- new_idents_meta$new_idents)
   cli_inform(message = c("v" = "{.code defaultCluster} updated and stored as: {.val defaultCluster} in object cellMeta slot."))
@@ -1261,7 +1261,7 @@ Add_Mito_Ribo.liger <- function(
       object@cellMeta[[mito_ribo_name]] <- object@cellMeta[[mito_name]] + object@cellMeta[[ribo_name]]
     } else {
       object_meta <- Fetch_Meta(object = object) %>%
-        rownames_to_column("barcodes")
+        rownames_to_column("temp_barcodes")
 
       object_meta <- object_meta %>%
         mutate({{mito_ribo_name}} := .data[[mito_name]] + .data[[ribo_name]])
