@@ -1146,6 +1146,7 @@ Clustered_DotPlot <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
@@ -1178,6 +1179,7 @@ Cluster_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 ) {
@@ -1186,6 +1188,9 @@ Cluster_Highlight_Plot <- function(
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
+  # Set reduction
+  reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Perform Idents check and report errors when when length(cluster_name) > 1
   if (length(x = cluster_name) > 1) {
@@ -1277,6 +1282,7 @@ Cluster_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
@@ -1314,6 +1320,7 @@ Meta_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 ) {
@@ -1362,6 +1369,9 @@ Meta_Highlight_Plot <- function(
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
+  # Set reduction
+  reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Change default ident and pull cells to highlight in plot
   Idents(object = seurat_object) <- good_meta_data_column
