@@ -17,6 +17,7 @@ Cluster_Highlight_Plot(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 )
@@ -51,6 +52,8 @@ Default is c(512, 512).}
 
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
+
+\item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
