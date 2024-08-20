@@ -1238,6 +1238,7 @@ Cluster_Highlight_Plot <- function(
           split.by = split.by,
           split_seurat = split_seurat,
           label = label,
+          reduction = reduction,
           ...)
 
   # Edit plot legend
@@ -1409,6 +1410,7 @@ Meta_Highlight_Plot <- function(
           split.by = split.by,
           split_seurat = split_seurat,
           label = label,
+          reduction = reduction,
           ...)
 
   # Update legend and return plot
