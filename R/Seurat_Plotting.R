@@ -1087,7 +1087,7 @@ Clustered_DotPlot <- function(
                                    ggplot_default_colors = ggplot_default_colors,
                                    color_seed = color_seed,
                                    show_row_names = show_row_names,
-                                   show_column_names - show_column_names,
+                                   show_column_names = show_column_names,
                                    seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
@@ -1121,7 +1121,7 @@ Clustered_DotPlot <- function(
                                   idents = idents,
                                   show_parent_dend_line = show_parent_dend_line,
                                   show_row_names = show_row_names,
-                                  show_column_names - show_column_names,
+                                  show_column_names = show_column_names,
                                   seed = seed)
   }
 }
