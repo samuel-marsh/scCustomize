@@ -1057,14 +1057,14 @@ Clustered_DotPlot <- function(
   color_seed = 123,
   seed = 123
 ) {
-  # Check allowed parameter options
-  if (!column_names_side %in% c("bottom", "top")) {
-    cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
-  }
-
-  if (!row_names_side %in% c("left", "right")) {
-    cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
-  }
+  # # Check allowed parameter options
+  # if (!column_names_side %in% c("bottom", "top")) {
+  #   cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
+  # }
+  #
+  # if (!row_names_side %in% c("left", "right")) {
+  #   cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
+  # }
 
   # check split
   if (is.null(x = split.by)) {
