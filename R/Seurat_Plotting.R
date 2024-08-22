@@ -968,6 +968,8 @@ DotPlot_scCustom <- function(
 #' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param show_row_names logical, whether to show row names on plot (default is TRUE).
 #' @param show_column_names logical, whether to show column names on plot (default is TRUE).
+#' @param row_names_side Should the row names be on the "left" or "right" of plot.  Default is "right".
+#' @param column_names_side Should the row names be on the "bottom" or "top" of plot.  Default is "bottom".
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1055,6 +1057,15 @@ Clustered_DotPlot <- function(
   color_seed = 123,
   seed = 123
 ) {
+  # Check allowed parameter options
+  if (!column_names_side %in% c("bottom", "top")) {
+    cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
+  }
+
+  if (!row_names_side %in% c("left", "right")) {
+    cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
+  }
+
   # check split
   if (is.null(x = split.by)) {
     Clustered_DotPlot_Single_Group(seurat_object = seurat_object,
