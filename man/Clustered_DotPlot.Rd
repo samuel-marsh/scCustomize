@@ -31,6 +31,8 @@ Clustered_DotPlot(
   legend_title_size = 10,
   show_row_names = TRUE,
   show_column_names = TRUE,
+  column_names_side = c("bottom", "top"),
+  row_names_side = c("right", "left"),
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -115,6 +117,10 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{show_row_names}{logical, whether to show row names on plot (default is TRUE).}
 
 \item{show_column_names}{logical, whether to show column names on plot (default is TRUE).}
+
+\item{column_names_side}{Should the row names be on the "bottom" or "top" of plot.  Default is "bottom".}
+
+\item{row_names_side}{Should the row names be on the "left" or "right" of plot.  Default is "right".}
 
 \item{raster}{Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.}
 
