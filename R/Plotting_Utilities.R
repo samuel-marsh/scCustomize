@@ -600,6 +600,8 @@ Clustered_DotPlot_Single_Group <- function(
     legend_title_size = 10,
     show_row_names = TRUE,
     show_column_names = TRUE,
+    column_names_side = c("bottom", "top"),
+    row_names_side = c("right", "left"),
     raster = FALSE,
     plot_km_elbow = TRUE,
     elbow_kmax = NULL,
@@ -909,7 +911,9 @@ Clustered_DotPlot_Single_Group <- function(
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -928,7 +932,9 @@ Clustered_DotPlot_Single_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -949,7 +955,9 @@ Clustered_DotPlot_Single_Group <- function(
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -968,7 +976,9 @@ Clustered_DotPlot_Single_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   }
 
@@ -1104,6 +1114,8 @@ Clustered_DotPlot_Multi_Group <- function(
     legend_title_size = 10,
     show_row_names = TRUE,
     show_column_names = TRUE,
+    column_names_side = c("bottom", "top"),
+    row_names_side = c("right", "left"),
     raster = FALSE,
     plot_km_elbow = TRUE,
     elbow_kmax = NULL,
@@ -1396,7 +1408,9 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1414,7 +1428,9 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -1434,7 +1450,9 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_ident,
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1452,7 +1470,9 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
-                                                  show_column_names = show_column_names)
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   }
 

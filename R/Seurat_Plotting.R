@@ -1042,6 +1042,8 @@ Clustered_DotPlot <- function(
   legend_title_size = 10,
   show_row_names = TRUE,
   show_column_names = TRUE,
+  column_names_side = c("bottom", "top"),
+  row_names_side = c("right", "left"),
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -1088,6 +1090,8 @@ Clustered_DotPlot <- function(
                                    color_seed = color_seed,
                                    show_row_names = show_row_names,
                                    show_column_names = show_column_names,
+                                   column_names_side = column_names_side,
+                                   row_names_side = row_names_side,
                                    seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
@@ -1122,6 +1126,8 @@ Clustered_DotPlot <- function(
                                   show_parent_dend_line = show_parent_dend_line,
                                   show_row_names = show_row_names,
                                   show_column_names = show_column_names,
+                                  column_names_side = column_names_side,
+                                  row_names_side = row_names_side,
                                   seed = seed)
   }
 }
