@@ -29,6 +29,8 @@ Clustered_DotPlot(
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
+  show_row_names = TRUE,
+  show_column_names = TRUE,
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -109,6 +111,10 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{legend_label_size}{Size of the legend text labels.  Provided to \code{labels_gp} in Heatmap legend call.}
 
 \item{legend_title_size}{Size of the legend title text labels.  Provided to \code{title_gp} in Heatmap legend call.}
+
+\item{show_row_names}{logical, whether to show row names on plot (default is TRUE).}
+
+\item{show_column_names}{logical, whether to show column names on plot (default is TRUE).}
 
 \item{raster}{Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.}
 
