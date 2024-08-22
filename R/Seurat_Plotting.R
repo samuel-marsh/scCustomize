@@ -966,6 +966,8 @@ DotPlot_scCustom <- function(
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
 #' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param show_row_names logical, whether to show row names on plot (default is TRUE).
+#' @param show_column_names logical, whether to show column names on plot (default is TRUE).
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1038,6 +1040,8 @@ Clustered_DotPlot <- function(
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
+  show_row_names = TRUE,
+  show_column_names = TRUE,
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -1082,6 +1086,8 @@ Clustered_DotPlot <- function(
                                    show_parent_dend_line = show_parent_dend_line,
                                    ggplot_default_colors = ggplot_default_colors,
                                    color_seed = color_seed,
+                                   show_row_names = show_row_names,
+                                   show_column_names - show_column_names,
                                    seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
@@ -1114,6 +1120,8 @@ Clustered_DotPlot <- function(
                                   group.by = group.by,
                                   idents = idents,
                                   show_parent_dend_line = show_parent_dend_line,
+                                  show_row_names = show_row_names,
+                                  show_column_names - show_column_names,
                                   seed = seed)
   }
 }
