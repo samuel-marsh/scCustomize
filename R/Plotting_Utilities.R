@@ -600,8 +600,8 @@ Clustered_DotPlot_Single_Group <- function(
     legend_title_size = 10,
     show_row_names = TRUE,
     show_column_names = TRUE,
-    column_names_side = c("bottom", "top"),
-    row_names_side = c("right", "left"),
+    column_names_side = "bottom",
+    row_names_side = "right",
     raster = FALSE,
     plot_km_elbow = TRUE,
     elbow_kmax = NULL,
@@ -784,7 +784,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                show_legend = FALSE
     )
   } else {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = ComplexHeatmap::anno_block(labels = Identity),
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
                                                    col =  identity_colors_list,
                                                    na_col = "grey",
                                                    name = "Identity",
@@ -1114,8 +1114,8 @@ Clustered_DotPlot_Multi_Group <- function(
     legend_title_size = 10,
     show_row_names = TRUE,
     show_column_names = TRUE,
-    column_names_side = c("bottom", "top"),
-    row_names_side = c("right", "left"),
+    column_names_side = "bottom",
+    row_names_side = "right",
     raster = FALSE,
     plot_km_elbow = TRUE,
     elbow_kmax = NULL,
