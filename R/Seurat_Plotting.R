@@ -1000,6 +1000,7 @@ DotPlot_scCustom <- function(
 #' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
+#' @importFrom stringr str_to_lower
 #' @importFrom tidyr pivot_wider
 #'
 #' @export
@@ -1058,11 +1059,11 @@ Clustered_DotPlot <- function(
   seed = 123
 ) {
   # Check allowed parameter options
-  if (!column_names_side %in% c("bottom", "top")) {
+  if (!str_to_lower(column_names_side) %in% c("bottom", "top")) {
     cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
   }
 
-  if (!row_names_side %in% c("left", "right")) {
+  if (!str_to_lower(row_names_side) %in% c("right", "left")) {
     cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
   }
 
