@@ -1611,7 +1611,10 @@ Rename_Clusters.Seurat <- function(
 #' Splits vector into chunks of x sizes
 #'
 #' @param x vector to split
-#' @param chunk_size size of chunks for vector to be split into, default is 100.
+#' @param chunk_size size of chunks for vector to be split into, default is NULL.  Only valid if
+#' `num_chunk` is NULL.
+#' @param num_chunk number of chunks to split the vector into, default is NULL.  Only valid if
+#' `chunk_size` is NULL.
 #' @param verbose logical, print details of vector and split, default is FALSE.
 #'
 #' @return list with vector of X length
@@ -1633,9 +1636,18 @@ Rename_Clusters.Seurat <- function(
 
 Split_Vector <- function(
     x,
-    chunk_size = 100,
+    chunk_size = NULL,
+    num_chunk = NULL,
     verbose = FALSE
 ) {
+  if (!is.null(x = chunk_size) && !is.null(x = num_chunk)) {
+    cli_abort(message = "Cannot specify both {.code chunk_size} and {.code num_chunk}, use one or the other.")
+  }
+
+  # set chunk size
+  chunk_size <- chunk_size %||% (length(x = x) / num_chunk)
+
+  # Split vector
   vector_list <- split(x, ceiling(x = seq_along(x)/chunk_size))
 
   # Report info
@@ -1646,7 +1658,6 @@ Split_Vector <- function(
 
   # return list
   return(vector_list)
-
 }
 
 
