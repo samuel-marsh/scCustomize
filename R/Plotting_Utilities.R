@@ -784,7 +784,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                show_legend = FALSE
     )
   } else {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
+    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = anno_block(labels = Identity),
                                                    col =  identity_colors_list,
                                                    na_col = "grey",
                                                    name = "Identity",

@@ -1044,8 +1044,8 @@ Clustered_DotPlot <- function(
   legend_title_size = 10,
   show_row_names = TRUE,
   show_column_names = TRUE,
-  column_names_side = c("bottom", "top"),
-  row_names_side = c("right", "left"),
+  column_names_side = "bottom",
+  row_names_side = "right",
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -1057,14 +1057,14 @@ Clustered_DotPlot <- function(
   color_seed = 123,
   seed = 123
 ) {
-  # # Check allowed parameter options
-  # if (!column_names_side %in% c("bottom", "top")) {
-  #   cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
-  # }
-  #
-  # if (!row_names_side %in% c("left", "right")) {
-  #   cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
-  # }
+  # Check allowed parameter options
+  if (!column_names_side %in% c("bottom", "top")) {
+    cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
+  }
+
+  if (!row_names_side %in% c("left", "right")) {
+    cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
+  }
 
   # check split
   if (is.null(x = split.by)) {
