@@ -1172,6 +1172,7 @@ Clustered_DotPlot <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param num_columns number of columns in final layout plot.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -1182,6 +1183,8 @@ Clustered_DotPlot <- function(
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
 #'
 #' @export
 #'
@@ -1205,6 +1208,7 @@ Cluster_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  num_columns = NULL,
   reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
@@ -1230,12 +1234,38 @@ Cluster_Highlight_Plot <- function(
     }
   }
 
+  # check split
+  if (!is.null(x = split.by)) {
+    if (length(x = cluster_name) > 1) {
+      cli::cli_abort(message = "Only one cluster/ident can be plotted when using {.code split.by}.")
+    } else {
+      split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+    }
+  }
+
   # pull cells to highlight in plot
-  cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
+  if (!is.null(x = split.by)) {
+    cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
+  } else {
+    split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+
+    cells_to_highlight_list <- lapply(1:length(x = split_by_list), function(x){
+      cells <- FetchData(object = seurat_object, vars = c("ident", split_by_list[x])) %>%
+        filter(.data[[ident]] == cluster_name & .data[[split.by]] == split_by_list[x]) %>%
+        rownames()
+    })
+
+    # Add ident names to the list
+    names(cells_to_highlight_list) <- split_by_list
+  }
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_to_highlight)), raster = raster)
+    if (is.null(x = split.by)) {
+      pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_to_highlight)), raster = raster)
+    } else {
+      pt.size <- AutoPointSize_scCustom(data = max(lengths(x = cells_to_highlight_list)), raster = raster)
+    }
   }
 
   # Set colors
@@ -1252,38 +1282,89 @@ Cluster_Highlight_Plot <- function(
   }
 
   # plot
-  plot <- DimPlot_scCustom(seurat_object = seurat_object,
-          cells.highlight = cells_to_highlight,
-          cols.highlight = highlight_color,
-          colors_use = background_color,
-          sizes.highlight = pt.size,
-          pt.size = pt.size,
-          order = TRUE,
-          raster = raster,
-          raster.dpi = raster.dpi,
-          split.by = split.by,
-          split_seurat = split_seurat,
-          label = label,
-          reduction = reduction,
-          ...)
+  if (is.null(x = split.by)) {
+    plot <- DimPlot_scCustom(seurat_object = seurat_object,
+                             cells.highlight = cells_to_highlight,
+                             cols.highlight = highlight_color,
+                             colors_use = background_color,
+                             sizes.highlight = pt.size,
+                             pt.size = pt.size,
+                             order = TRUE,
+                             raster = raster,
+                             raster.dpi = raster.dpi,
+                             split.by = split.by,
+                             split_seurat = split_seurat,
+                             label = label,
+                             reduction = reduction,
+                             ...)
 
-  # Edit plot legend
-  plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
+    # Edit plot legend
+    plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
-  # Aspect ratio changes
-  if (!is.null(x = aspect_ratio)) {
-    if (!is.numeric(x = aspect_ratio)) {
-      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      plot <- plot & theme(aspect.ratio = aspect_ratio)
     }
-    plot <- plot & theme(aspect.ratio = aspect_ratio)
-  }
 
-  # Figure plot
-  if (isTRUE(x = figure_plot)) {
-    plot <- Figure_Plot(plot = plot)
-  }
+    # Figure plot
+    if (isTRUE(x = figure_plot)) {
+      plot <- Figure_Plot(plot = plot)
+    }
 
-  return(plot)
+    return(plot)
+  } else {
+    reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
+    all_cells <- Cells(x = seurat_object)
+    reduc_coordinates <- Embeddings(object = seurat_object[[reduction]])[all_cells, dims]
+    reduc_coordinates <- as.data.frame(x = reduc_coordinates)
+    x_axis <- c(min(reduc_coordinates[, 1]),
+                max(reduc_coordinates[, 1]))
+    y_axis <- c(min(reduc_coordinates[, 2]),
+                max(reduc_coordinates[, 2]))
+
+
+    plots <- lapply(1:length(x = split_by_list), function(x) {
+      plot <- DimPlot_scCustom(seurat_object = seurat_object,
+                               cells.highlight = cells_to_highlight_list[[x]],
+                               cols.highlight = highlight_color,
+                               colors_use = background_color,
+                               sizes.highlight = pt.size,
+                               pt.size = pt.size,
+                               order = TRUE,
+                               raster = raster,
+                               raster.dpi = raster.dpi,
+                               label = label,
+                               reduction = reduction,
+                               ...) +
+        ggtitle(paste(split_by_list[[x]])) +
+        theme(plot.title = element_text(hjust = 0.5),
+              legend.position = "right") +
+        xlim(x_axis) +
+        ylim(y_axis)
+
+      plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
+
+      # Aspect ratio changes
+      if (!is.null(x = aspect_ratio)) {
+        if (!is.numeric(x = aspect_ratio)) {
+          cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+        }
+        plot <- plot & theme(aspect.ratio = aspect_ratio)
+      }
+
+      # Figure plot
+      if (isTRUE(x = figure_plot)) {
+        plot <- Figure_Plot(plot = plot)
+      }
+
+    })
+
+    # Wrap Plots into single output
+    plots <- wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+  }
 }
 
 
