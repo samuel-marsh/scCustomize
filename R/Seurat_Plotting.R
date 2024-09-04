@@ -1207,6 +1207,7 @@ Cluster_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  split_title_size = 15,
   reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
@@ -1342,7 +1343,9 @@ Cluster_Highlight_Plot <- function(
                                   raster.dpi = raster.dpi,
                                   label = label)
       # Add title from split conditions
-      plot <- plot + ggtitle(split_by_list[x])
+      plot <- plot +
+        ggtitle(split_by_list[x]) +
+        theme(plot.title = element_text(hjust = 0.5, size = split_title_size))
       plot
     })
 
