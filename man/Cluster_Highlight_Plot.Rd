@@ -17,7 +17,7 @@ Cluster_Highlight_Plot(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
-  num_columns = NULL,
+  split_title_size = 15,
   reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
@@ -53,8 +53,6 @@ Default is c(512, 512).}
 
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
-
-\item{num_columns}{number of columns in final layout plot.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
