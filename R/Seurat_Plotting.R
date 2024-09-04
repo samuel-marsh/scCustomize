@@ -1173,6 +1173,7 @@ Clustered_DotPlot <- function(
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
 #' @param split_title_size size for plot title labels when using `split.by`.
+#' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -1209,6 +1210,7 @@ Cluster_Highlight_Plot <- function(
   split.by = NULL,
   split_seurat = FALSE,
   split_title_size = 15,
+  num_columns = NULL,
   reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
