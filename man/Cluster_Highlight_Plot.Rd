@@ -54,6 +54,8 @@ Default is c(512, 512).}
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
 
+\item{split_title_size}{size for plot title labels when using \code{split.by}.}
+
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
