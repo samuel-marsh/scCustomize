@@ -78,6 +78,7 @@
 - Fixed bugs in `MAD_Stats` that could cause issues if `mad_num` was less than or equal to 0 and returned error if setting `group_by_var` to "ident".  
 - Replaced lingering instances of deprecated tidyr code .data[["var"]] with update `all_of`/`any_of` syntax.  
 - Fixed issue that could occur with some meta data modifying functions due to column name collisions in internals of function ([#193](https://github.com/samuel-marsh/scCustomize/issues/193)).  
+- Fixed issue that caused error when using `Cluster_Highlight_Plot` with `split.by` parameter ([#201](https://github.com/samuel-marsh/scCustomize/issues/201)).  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
