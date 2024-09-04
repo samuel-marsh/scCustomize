@@ -18,6 +18,7 @@ Cluster_Highlight_Plot(
   split.by = NULL,
   split_seurat = FALSE,
   split_title_size = 15,
+  num_columns = NULL,
   reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
@@ -55,6 +56,8 @@ Default is c(512, 512).}
 individual plots in layout.  Default is FALSE.}
 
 \item{split_title_size}{size for plot title labels when using \code{split.by}.}
+
+\item{num_columns}{Number of columns in plot layout.  Only valid if \code{split.by != NULL}.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
