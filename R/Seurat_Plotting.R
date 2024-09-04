@@ -1247,7 +1247,11 @@ Cluster_Highlight_Plot <- function(
   if (is.null(x = split.by)) {
     cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
   } else {
-    split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+    if (!inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+      split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+    } else {
+      split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+    }
 
     cells_to_highlight_list <- lapply(1:length(x = split_by_list), function(x){
       cells <- FetchData(object = seurat_object, vars = c("ident", split.by)) %>%
