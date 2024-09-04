@@ -1172,6 +1172,7 @@ Clustered_DotPlot <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param split_title_size size for plot title labels when using `split.by`.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -1551,6 +1552,7 @@ Meta_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `highlight_color = NULL`, Whether or not to return plot
 #' using default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
@@ -1592,11 +1594,15 @@ Cell_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Set reduction
+  reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   if (!inherits(x = cells_highlight, what = "list")) {
     cli_abort(message = "{.code cells_highlight} must be of class: {.val list()}.")
