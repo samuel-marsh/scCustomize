@@ -1247,7 +1247,7 @@ Cluster_Highlight_Plot <- function(
   if (is.null(x = split.by)) {
     cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
   } else {
-    if (!inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+    if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
       split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
     } else {
       split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
