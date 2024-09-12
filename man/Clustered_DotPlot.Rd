@@ -15,6 +15,7 @@ Clustered_DotPlot(
   exp_value_type = "scaled",
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
+  show_ident_colors = TRUE,
   x_lab_rotate = TRUE,
   plot_padding = NULL,
   flip = FALSE,
@@ -29,6 +30,9 @@ Clustered_DotPlot(
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
+  legend_position = "right",
+  legend_orientation = NULL,
+  show_ident_legend = TRUE,
   show_row_names = TRUE,
   show_column_names = TRUE,
   column_names_side = "bottom",
@@ -74,6 +78,9 @@ if there are values below or above those cutoffs, respectively.}
 number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
 will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomize}.}
 
+\item{show_ident_colors}{logical, whether to show colors for idents on the column/rows of the plot
+(default is TRUE).}
+
 \item{x_lab_rotate}{How to rotate column labels.  By default set to \code{TRUE} which rotates labels 45 degrees.
 If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.}
 
@@ -113,6 +120,12 @@ smaller than row_km, but this might mean the original row_km is not a good choic
 \item{legend_label_size}{Size of the legend text labels.  Provided to \code{labels_gp} in Heatmap legend call.}
 
 \item{legend_title_size}{Size of the legend title text labels.  Provided to \code{title_gp} in Heatmap legend call.}
+
+\item{legend_position}{Location of the plot legend (default is "right").}
+
+\item{legend_orientation}{Orientation of the legend (default is NULL).}
+
+\item{show_ident_legend}{logical, whether to show the color legend for idents in plot (default is TRUE).}
 
 \item{show_row_names}{logical, whether to show row names on plot (default is TRUE).}
 
