@@ -598,6 +598,7 @@ Clustered_DotPlot_Single_Group <- function(
     column_label_size = 8,
     legend_label_size = 10,
     legend_title_size = 10,
+    legend_position = "right",
     show_row_names = TRUE,
     show_column_names = TRUE,
     column_names_side = "bottom",
@@ -992,9 +993,9 @@ Clustered_DotPlot_Single_Group <- function(
 
   }
   if (!is.null(x = plot_padding)) {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding, merge_legend = TRUE, heatmap_legend_side = legend_position))
   } else {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, heatmap_legend_side = legend_position))
   }
 }
 
@@ -1112,6 +1113,7 @@ Clustered_DotPlot_Multi_Group <- function(
     column_label_size = 8,
     legend_label_size = 10,
     legend_title_size = 10,
+    legend_position = "right",
     show_row_names = TRUE,
     show_column_names = TRUE,
     column_names_side = "bottom",
@@ -1486,9 +1488,9 @@ Clustered_DotPlot_Multi_Group <- function(
 
   }
   if (!is.null(x = plot_padding)) {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding, heatmap_legend_side = legend_position))
   } else {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, heatmap_legend_side = legend_position))
   }
 }
 
