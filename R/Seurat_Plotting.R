@@ -940,7 +940,8 @@ DotPlot_scCustom <- function(
 #' @param colors_use_idents specify color palette to used for identity labels.  By default if
 #' number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
-#' @param show_ident_colors description
+#' @param show_ident_colors logical, whether to show colors for idents on the column/rows of the plot
+#' (default is TRUE).
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
 #' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
@@ -967,9 +968,9 @@ DotPlot_scCustom <- function(
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
 #' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
-#' @param legend_position
-#' @param legend_orientation
-#' @param show_ident_legend
+#' @param legend_position Location of the plot legend (default is "right").
+#' @param legend_orientation Orientation of the legend (default is NULL).
+#' @param show_ident_legend logical, whether to show the color legend for idents in plot (default is TRUE).
 #' @param show_row_names logical, whether to show row names on plot (default is TRUE).
 #' @param show_column_names logical, whether to show column names on plot (default is TRUE).
 #' @param row_names_side Should the row names be on the "left" or "right" of plot.  Default is "right".
