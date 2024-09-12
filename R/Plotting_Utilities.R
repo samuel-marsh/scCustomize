@@ -864,8 +864,12 @@ Clustered_DotPlot_Single_Group <- function(
   }
 
   # Create legend for point size
+  if (legend_orientation == "horizontal") {
+    num_row <- 1
+  }
+
   lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row),
     ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
                            graphics = list(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
@@ -879,7 +883,7 @@ Clustered_DotPlot_Single_Group <- function(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
                                                               gp = gpar(fill = "black"))),
                            labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
+                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
     )
   )
 
@@ -1365,6 +1369,10 @@ Clustered_DotPlot_Multi_Group <- function(
   }
 
   # Create legend for point size
+  if (legend_orientation == "horizontal") {
+    num_row <- 1
+  }
+
   lgd_list = list(
     ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
                            graphics = list(
@@ -1379,7 +1387,7 @@ Clustered_DotPlot_Multi_Group <- function(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
                                                               gp = gpar(fill = "black"))),
                            labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
+                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
     )
   )
 
