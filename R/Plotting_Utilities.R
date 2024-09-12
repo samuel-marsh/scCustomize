@@ -865,7 +865,7 @@ Clustered_DotPlot_Single_Group <- function(
   }
 
   # Create legend for point size
-  if (legend_orientation == "horizontal") {
+  if (!is.null(x = legend_orientation) && legend_orientation == "horizontal") {
     num_row <- 1
   }
 
@@ -1393,7 +1393,7 @@ Clustered_DotPlot_Multi_Group <- function(
   }
 
   # Create legend for point size
-  if (legend_orientation == "horizontal") {
+  if (!is.null(x = legend_orientation) && legend_orientation == "horizontal") {
     num_row <- 1
   }
 
