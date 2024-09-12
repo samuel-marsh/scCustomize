@@ -599,6 +599,7 @@ Clustered_DotPlot_Single_Group <- function(
     legend_label_size = 10,
     legend_title_size = 10,
     legend_position = "right",
+    legend_orientation = NULL,
     show_row_names = TRUE,
     show_column_names = TRUE,
     column_names_side = "bottom",
@@ -896,7 +897,7 @@ Clustered_DotPlot_Single_Group <- function(
   if (isTRUE(x = raster)) {
     if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
@@ -917,7 +918,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
@@ -940,7 +941,7 @@ Clustered_DotPlot_Single_Group <- function(
   } else {
     if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun_flip,
@@ -961,7 +962,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun,
@@ -1114,6 +1115,7 @@ Clustered_DotPlot_Multi_Group <- function(
     legend_label_size = 10,
     legend_title_size = 10,
     legend_position = "right",
+    legend_orientation = NULL,
     show_row_names = TRUE,
     show_column_names = TRUE,
     column_names_side = "bottom",
