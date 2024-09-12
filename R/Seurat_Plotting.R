@@ -940,6 +940,7 @@ DotPlot_scCustom <- function(
 #' @param colors_use_idents specify color palette to used for identity labels.  By default if
 #' number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
+#' @param show_ident_colors description
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
 #' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
@@ -966,6 +967,9 @@ DotPlot_scCustom <- function(
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
 #' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_position
+#' @param legend_orientation
+#' @param show_ident_legend
 #' @param show_row_names logical, whether to show row names on plot (default is TRUE).
 #' @param show_column_names logical, whether to show column names on plot (default is TRUE).
 #' @param row_names_side Should the row names be on the "left" or "right" of plot.  Default is "right".
@@ -1029,6 +1033,7 @@ Clustered_DotPlot <- function(
   exp_value_type = "scaled",
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
+  show_ident_colors = TRUE,
   x_lab_rotate = TRUE,
   plot_padding = NULL,
   flip = FALSE,
@@ -1080,6 +1085,7 @@ Clustered_DotPlot <- function(
                                    exp_color_max = exp_color_max,
                                    print_exp_quantiles = print_exp_quantiles,
                                    colors_use_idents = colors_use_idents,
+                                   show_ident_colors = show_ident_colors,
                                    x_lab_rotate = x_lab_rotate,
                                    plot_padding = plot_padding,
                                    flip = flip,

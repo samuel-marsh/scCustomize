@@ -779,21 +779,26 @@ Clustered_DotPlot_Single_Group <- function(
   }
 
   # Create identity annotation
-  if (isTRUE(x = flip)) {
-    column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
-                                               col =  identity_colors_list,
-                                               na_col = "grey",
-                                               name = "Identity",
-                                               show_legend = FALSE
-    )
+  if (isTRUE(x = show_ident_colors)) {
+    if (isTRUE(x = flip)) {
+      column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
+                                                 col =  identity_colors_list,
+                                                 na_col = "grey",
+                                                 name = "Identity",
+                                                 show_legend = FALSE
+      )
+    } else {
+      column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
+                                                     col =  identity_colors_list,
+                                                     na_col = "grey",
+                                                     name = "Identity",
+                                                     show_legend = FALSE
+      )
+    }
   } else {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
-                                                   col =  identity_colors_list,
-                                                   na_col = "grey",
-                                                   name = "Identity",
-                                                   show_legend = FALSE
-    )
+    column_ha <- NULL
   }
+
 
   # Set middle of color scale if not specified
   if (is.null(x = exp_color_middle)) {
