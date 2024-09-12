@@ -584,6 +584,7 @@ Clustered_DotPlot_Single_Group <- function(
     exp_color_max = 2,
     print_exp_quantiles = FALSE,
     colors_use_idents = NULL,
+    show_ident_colors = TRUE,
     x_lab_rotate = TRUE,
     plot_padding = NULL,
     flip = FALSE,
