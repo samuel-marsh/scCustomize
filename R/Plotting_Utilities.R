@@ -600,6 +600,7 @@ Clustered_DotPlot_Single_Group <- function(
     legend_title_size = 10,
     legend_position = "right",
     legend_orientation = NULL,
+    show_ident_legend = TRUE,
     show_row_names = TRUE,
     show_column_names = TRUE,
     column_names_side = "bottom",
@@ -868,24 +869,46 @@ Clustered_DotPlot_Single_Group <- function(
     num_row <- 1
   }
 
-  lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row),
-    ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
-                           graphics = list(
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                              gp = gpar(fill = "black"))),
-                           labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
+  if (isFALSE(x = show_ident_legend)) {
+    lgd_list = list(
+      ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
+                             graphics = list(
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
+                                                                gp = gpar(fill = "black"))),
+                             labels_gp = gpar(fontsize = legend_label_size),
+                             title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
+      )
     )
-  )
+  } else {
+    lgd_list = list(
+      ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row),
+      ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
+                             graphics = list(
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
+                                                                gp = gpar(fill = "black"))),
+                             labels_gp = gpar(fontsize = legend_label_size),
+                             title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
+      )
+    )
+  }
+
+
 
   # Set x label roration
   if (is.numeric(x = x_lab_rotate)) {
@@ -1120,6 +1143,7 @@ Clustered_DotPlot_Multi_Group <- function(
     legend_title_size = 10,
     legend_position = "right",
     legend_orientation = NULL,
+    show_ident_legend = TRUE,
     show_row_names = TRUE,
     show_column_names = TRUE,
     column_names_side = "bottom",
