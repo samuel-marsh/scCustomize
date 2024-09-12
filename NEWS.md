@@ -47,7 +47,7 @@
 - Added new folder and scripts (see "data-raw/" on GitHub) detailing the creation of gene lists used in `Add_Cell_QC_Metrics`.  
 - Added ensembl ID support for percent hemoglobin, msigdb, and IEG gene sets ([#186](https://github.com/samuel-marsh/scCustomize/issues/186)).  
 - Explicitly reveal the `reduction` parameter in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` ([#198](https://github.com/samuel-marsh/scCustomize/issues/198)).  
-- Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot` ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
+- Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
 - Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
 
 
