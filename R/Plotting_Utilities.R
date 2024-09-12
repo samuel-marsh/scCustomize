@@ -867,6 +867,8 @@ Clustered_DotPlot_Single_Group <- function(
   # Create legend for point size
   if (!is.null(x = legend_orientation) && legend_orientation == "horizontal") {
     num_row <- 1
+  } else {
+    num_row <- NULL
   }
 
   if (isFALSE(x = show_ident_legend)) {
@@ -1395,6 +1397,8 @@ Clustered_DotPlot_Multi_Group <- function(
   # Create legend for point size
   if (!is.null(x = legend_orientation) && legend_orientation == "horizontal") {
     num_row <- 1
+  } else {
+    num_row <- NULL
   }
 
   lgd_list = list(
