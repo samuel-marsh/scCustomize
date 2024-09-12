@@ -633,6 +633,11 @@ Clustered_DotPlot_Single_Group <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # set legend
+  if (isFALSE(x = show_ident_colors)) {
+    show_ident_legend <- FALSE
+  }
+
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
