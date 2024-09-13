@@ -2064,6 +2064,56 @@ download_hgnc_data <- function(
 }
 
 
+#' Download HGNC Dataset
+#'
+#' Internal function to download and cache the latest version of HGNC dataset for use with renaming genes.
+#'
+#' @param update logical, whether to manually override update parameters and download new data.
+#'
+#' @import cli
+#'
+#' @return path to data cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
+#'
+#' @noRd
+#'
+
+
+download_mgi_data <- function(
+    update = NULL
+) {
+  # Get cache
+  bfc <- .get_bioc_cache()
+
+  # URL from https://www.genenames.org/download/statistics-and-files/
+  hgnc_ftp_url <- "https://www.informatics.jax.org/downloads/reports/MGI_EntrezGene.rpt"
+
+  # bfc <- BiocFileCache::BiocFileCache(hgnc_ftp_url)
+
+  rid <- BiocFileCache::bfcquery(bfc, hgnc_ftp_url, "fpath")$rid
+  if (!length(rid)) {               # not in cache, add but do not download
+    rid <- names(BiocFileCache::bfcadd(bfc, hgnc_ftp_url, download = FALSE))
+  }
+
+  if (isTRUE(x = update)) {
+    update <- update
+  } else {
+    update <- BiocFileCache::bfcneedsupdate(bfc, rid)  # TRUE if newly added or stale
+  }
+
+  # download & process
+  if (!isFALSE(x = update)) {
+    cli_inform(message = "Downloading MGI data from: {.field {hgnc_ftp_url}}")
+    BiocFileCache::bfcdownload(bfc, rid, ask = FALSE, FUN = process_hgnc_data)
+  }
+
+  rpath <- BiocFileCache::bfcrpath(bfc, rids=rid)    # path to processed result
+
+  return(rpath)
+}
+
+
 #' Process HGNC Dataset
 #'
 #' Internal function process/filter and save HGNC dataset during cache process
@@ -2106,5 +2156,57 @@ process_hgnc_data <- function(
 
   # save processed data
   saveRDS(hgnc_long_data, file = to)
+  TRUE
+}
+
+
+#' Process MGI Dataset
+#'
+#' Internal function process/filter and save MGI dataset during cache process
+#'
+#' @param from input (cache location).
+#' @param to output (cached data).
+#'
+#' @importFrom dplyr mutate select filter any_of contains
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr separate_wider_delim pivot_longer
+#'
+#' @return path to data cache
+#'
+#' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
+#'
+#' @noRd
+#'
+
+process_mgi_data <- function(
+    from,
+    to
+) {
+  # read in data
+  mgi_full_data <- data.table::fread(file = from, data.table = FALSE)
+
+  # Rename columns
+  colnames(mgi_full_data) <- c("MGI Marker Accession ID", "Marker Symbol", "Status", "Marker Name", "cM Position", "Chromosome", "Type", "Secondary", "Entrez Gene ID", "Synonyms", "Feature Types", "Genome Coordinate Start", "Genome Coordinate End", "Strand", "BioTypes")
+
+  # set accepted gene types
+  accepted_biotypes <- c("protein coding gene", "lncRNA gene" , "lincRNA gene", "antisense lncRNA gene")
+
+  # filter data: Approved Genes > select relevant categories
+  mgi_filtered_data <- mgi_full_data %>%
+    filter(.data[["Status"]] == "O" & .data[["Type"]] == "Gene" & .data[["Chromosome"]] != "UN" & .data[["Feature Types"]] %in% accepted_biotypes) %>%
+    select(any_of(c("MGI Marker Accession ID", "Marker Symbol", "Status", "Synonyms", "Entrez Gene ID", "Type", "Feature Types")))
+
+
+  mgi_long_data <- mgi_filtered_data %>%
+    select(any_of(c("Marker Symbol", "Synonyms"))) %>%
+    separate_wider_delim(cols = "Synonyms", delim = "|", names_sep = "_", names = NULL, too_few = "align_start") %>%
+    pivot_longer(cols = contains("Synonyms"),
+                 names_to = "column",
+                 values_to = "Synonyms",
+                 values_drop_na = TRUE) %>%
+    mutate("Synonyms" = ifelse(.data[["Synonyms"]] %in% "", .data[["Marker Symbol"]], .data[["Synonyms"]]))
+
+  # save processed data
+  saveRDS(mgi_long_data, file = to)
   TRUE
 }
