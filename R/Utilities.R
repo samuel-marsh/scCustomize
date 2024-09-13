@@ -2031,3 +2031,133 @@ Updated_HGNC_Symbols <- function(
 }
 
 
+#' Update MGI Gene Symbols
+#'
+#' Update mouse gene symbols using data from MGI  This function will store cached data in package directory using (BiocFileCache).  Use of this function requires internet connection on first use (or if setting `update_symbol_data = TRUE`).  Subsequent use does not require connection and will pull from cached data.
+#'
+#' @param input_data Data source containing gene names.  Accepted formats are:
+#' \itemize{
+#'  \item \code{charcter vector}
+#'  \item \code{Seurat Objects}
+#'  \item \code{data.frame}: genes as rownames
+#'  \item \code{dgCMatrix/dgTMatrix}: genes as rownames
+#'  \item \code{tibble}: genes in first column
+#' }
+#' @param update_symbol_data logical, whether to update cached MGI data, default is NULL.
+#' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
+#' If `FALSE` the BiocFileCache stale check will be skipped and current cache will be used.
+#' If `TRUE` the BiocFileCache stale check will be skipped and MGI data will be downloaded.
+#' @param verbose logical, whether to print results detailing numbers of symbols, found, updated,
+#' and not found; default is TRUE.
+#'
+#' @return data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in MGI; output unchanged), Updated_Symbol (new symbol from MGI; output updated).
+#'
+#' @import cli
+#' @importFrom dplyr mutate filter select across left_join join_by
+#' @importFrom magrittr "%>%"
+#' @importFrom stats complete.cases
+#' @importFrom stringr str_to_upper str_replace_na str_c str_replace
+#' @importFrom tidyr drop_na everything
+#'
+#' @export
+#'
+#' @concept misc_util
+#'
+#' @examples
+#' \dontrun{
+#' new_names <- Updated_MGI_Symbols(input_data = Seurat_Object)
+#' }
+#'
+
+Updated_MGI_Symbols <- function(
+    input_data,
+    update_symbol_data = NULL,
+    verbose = TRUE
+) {
+  # Check BiocFileCache installed
+  BiocFileCache_check <- is_installed(pkg = "BiocFileCache")
+  if (isFALSE(x = BiocFileCache_check)) {
+    cli_abort(message = c(
+      "Please install the {.val BiocFileCache} package to use {.code Updated_HGNC_Symbols}",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}BiocFileCache{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Check input data type
+  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix")
+
+  if (inherits(x = input_data, what = "Seurat")) {
+    input_symbols <- Features(input_data)
+  }
+  if ((class(x = input_data) %in% accepted_types)) {
+    input_symbols <- rownames(x = input_data)
+  }
+  if (inherits(x = input_data, what = "tibble")) {
+    input_symbols <-   input_data[, 1]
+  }
+  if (inherits(x = input_data, what = "character")) {
+    input_symbols <- input_data
+  }
+
+  # Check for duplicates
+  num_duplicated <- length(x = unique(x = input_symbols[duplicated(x = input_symbols)]))
+
+  if (num_duplicated > 0) {
+    cli_abort(message = c("Input data contains duplicate gene symbols.",
+                          "i" = "Check input data and/or make unique."))
+  }
+
+  # Download and process HGNC dataset if not already cached
+  mgi_data_path <- download_mgi_data(update = update_symbol_data)
+
+  mgi_long_data <- readRDS(mgi_data_path)
+
+  input_features_df <- data.frame("input_features" = input_symbols)
+
+  symbols_not_approved <- input_symbols[!input_symbols %in% mgi_long_data$symbol]
+  symbols_approved <- input_symbols[input_symbols %in% mgi_long_data$symbol]
+
+  input_features_df_approved <- input_features_df %>%
+    mutate("Approved_Symbol" = ifelse(.data[["input_features"]] %in% symbols_approved, .data[["input_features"]], NA)) %>%
+    drop_na()
+
+
+  input_features_updated_df <- mgi_long_data %>%
+    filter(.data[["prev_symbol"]] %in% symbols_not_approved) %>%
+    mutate("Updated_Symbol" = symbol) %>%
+    select(any_of(c("prev_symbol", "Updated_Symbol"))) %>%
+    rename("input_features" = any_of("prev_symbol")) %>%
+    drop_na()
+
+  symbols_not_found <- data.frame("input_features" = symbols_not_approved[!symbols_not_approved %in% input_features_updated_df$input_features]) %>%
+    mutate("Not_Found_Symbol" = .data[["input_features"]])
+
+  merged_df <- left_join(input_features_df, y = input_features_df_approved, by = join_by("input_features")) %>%
+    left_join(symbols_not_found, by = join_by("input_features")) %>%
+    left_join(input_features_updated_df, by = join_by("input_features")) %>%
+    mutate(across(everything(), ~str_replace_na(string = .x, replacement = ""))) %>%
+    mutate(Output_Features = str_c(.data[["Approved_Symbol"]], .data[["Not_Found_Symbol"]], .data[["Updated_Symbol"]])) %>%
+    mutate(across(everything(), ~str_replace(string = .x, pattern = "^$", replacement = NA_character_))) %>%
+    filter(!(.data[["input_features"]] == "QARS" & .data[["Updated_Symbol"]] == "EPRS1"))
+
+  # Report the results
+  if (isTRUE(x = verbose)) {
+    num_features <- length(input_symbols)
+
+    num_updated <- sum(complete.cases(merged_df$Updated_Symbol))
+    num_not_found <- sum(complete.cases(merged_df$Not_Found_Symbol))
+    num_approved <- sum(complete.cases(merged_df$Approved_Symbol))
+
+    cli_inform(message = c("Input features contained {.field {format(x = num_features, big.mark = ',')}} gene symbols",
+                           "{col_green({symbol$tick})} {.field {format(x = num_approved, big.mark = ',')}} were already approved symbols.",
+                           "{col_blue({symbol$arrow_right})} {.field {format(x = num_updated, big.mark = ',')}} were updated to approved symbol.",
+                           "{col_red({symbol$cross})} {.field {format(x = num_not_found, big.mark = ',')}} were not found in MGI dataset and remain unchanged."))
+  }
+
+  # Return results
+  return(merged_df)
+}
