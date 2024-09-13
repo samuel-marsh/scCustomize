@@ -49,6 +49,7 @@
 - Explicitly reveal the `reduction` parameter in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` ([#198](https://github.com/samuel-marsh/scCustomize/issues/198)).  
 - Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
 - Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
+- Added `Updated_MGI_Symbols` to check for update gene names/symbols in mouse data ([#202](https://github.com/samuel-marsh/scCustomize/issues/202)).  
 
 
   
