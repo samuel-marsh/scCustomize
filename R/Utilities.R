@@ -2028,5 +2028,6 @@ Updated_HGNC_Symbols <- function(
 
   # Return results
   return(merged_df)
-
 }
+
+
