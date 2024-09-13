@@ -2206,6 +2206,7 @@ process_mgi_data <- function(
                  values_drop_na = TRUE) %>%
     mutate("Synonyms" = ifelse(.data[["Synonyms"]] %in% "", .data[["Marker Symbol"]], .data[["Synonyms"]]))
 
+  colnames(mgi_long_data) <- c("symbol", "column", "prev_symbol")
   # save processed data
   saveRDS(mgi_long_data, file = to)
   TRUE
