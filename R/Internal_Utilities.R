@@ -2087,13 +2087,13 @@ download_mgi_data <- function(
   bfc <- .get_bioc_cache()
 
   # URL from https://www.genenames.org/download/statistics-and-files/
-  hgnc_ftp_url <- "https://www.informatics.jax.org/downloads/reports/MGI_EntrezGene.rpt"
+  mgi_ftp_url <- "https://www.informatics.jax.org/downloads/reports/MGI_EntrezGene.rpt"
 
-  # bfc <- BiocFileCache::BiocFileCache(hgnc_ftp_url)
+  # bfc <- BiocFileCache::BiocFileCache(mgi_ftp_url)
 
-  rid <- BiocFileCache::bfcquery(bfc, hgnc_ftp_url, "fpath")$rid
+  rid <- BiocFileCache::bfcquery(bfc, mgi_ftp_url, "fpath")$rid
   if (!length(rid)) {               # not in cache, add but do not download
-    rid <- names(BiocFileCache::bfcadd(bfc, hgnc_ftp_url, download = FALSE))
+    rid <- names(BiocFileCache::bfcadd(bfc, mgi_ftp_url, download = FALSE))
   }
 
   if (isTRUE(x = update)) {
@@ -2104,8 +2104,8 @@ download_mgi_data <- function(
 
   # download & process
   if (!isFALSE(x = update)) {
-    cli_inform(message = "Downloading MGI data from: {.field {hgnc_ftp_url}}")
-    BiocFileCache::bfcdownload(bfc, rid, ask = FALSE, FUN = process_hgnc_data)
+    cli_inform(message = "Downloading MGI data from: {.field {mgi_ftp_url}}")
+    BiocFileCache::bfcdownload(bfc, rid, ask = FALSE, FUN = process_mgi_data)
   }
 
   rpath <- BiocFileCache::bfcrpath(bfc, rids=rid)    # path to processed result
