@@ -36,8 +36,8 @@ prefix = TRUE, cell_id_delimiter = "_")
 
 }
 \references{
-Original function is part of LIGER package as non-exported function
-\url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (License: GPL-3).
+Original function is part of LIGER package
+\url{https://github.com/welch-lab/liger/blob/master/R/mergeObject.R} (License: GPL-3).
 Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 }
 \concept{read_merge_util}
