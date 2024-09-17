@@ -1693,6 +1693,8 @@ upper_diag_cor_mat <- function(
 #'
 #' @return list of dataframes to use for drawing rectangles
 #'
+#' @importFrom stats hclust as.dist cutree
+#'
 #' @noRd
 #'
 
