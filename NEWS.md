@@ -1,4 +1,4 @@
-# scCustomize 2.2.0 (2024-XX-XX)  
+# scCustomize 3.0.0 (2024-XX-XX)  
 ## Added  
 - **Major Updates to Functionality with rliger package:**
 - *Added new utility functions to interact with liger v2.0.0+ object format change:*  
