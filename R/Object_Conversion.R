@@ -1454,6 +1454,13 @@ Convert_Assay <- function(
     convert_from <- "Assay5"
   }
 
+  if (convert_to == "Assay") {
+    if (length(x = LayerData(object = seurat_object, layer = "scale.data")) == 0) {
+      cli_abort(message = c("Object does not contain scale.data",
+                            "i" = "In order to convert Assay5 (V5) to Assay (V3/4) the object must have both normalized and scaled data."))
+    }
+  }
+
   if (is.null(x = assay)) {
     num_assays <- length(x = Assays(object = seurat_object))
     if (num_assays > 1) {
