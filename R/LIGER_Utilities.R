@@ -805,9 +805,10 @@ Top_Genes_Factor <- function(
 
 #' Find Factor Correlations
 #'
-#' Calculate correlations between gene loadings for all factors in liger object.
+#' Calculate correlations between gene loadings for all factors in liger or Seurat object.
 #'
-#' @param liger_object LIGER object name.
+#' @param object LIGER/Seurat object name.
+#' @param reduction reduction name to pull loadings for.  Only valid if supplying a Seurat object.
 #'
 #' @return correlation matrix
 #'
@@ -819,23 +820,28 @@ Top_Genes_Factor <- function(
 #'
 #' @examples
 #' \dontrun{
-#' factor_correlations <- Find_Factor_Cor(liger_object = object)
+#' factor_correlations <- Find_Factor_Cor(object = object)
 #' }
 #'
 
 Find_Factor_Cor <- function(
-    liger_object
+    object,
+    reduction
 ) {
-  # check liger
-  Is_LIGER(liger_object = liger_object)
-
-  # Check new liger object
-  if (packageVersion(pkg = 'rliger') < "2.0.0") {
-    cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
+  # Get data
+  if (inherits(x = data, what = "Seurat")) {
+    factor_loadings <- data.frame(Loadings(object = ifn_seurat, reduction = reduction))
   }
 
-  # Get loadings
-  factor_loadings <- data.frame(rliger::getMatrix(x = liger_object, slot = "W"))
+  if (inherits(x = data, what = "Seurat")) {
+    # Check new liger object
+    if (packageVersion(pkg = 'rliger') < "2.0.0") {
+      cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
+    }
+
+    # Get loadings
+    factor_loadings <- data.frame(rliger::getMatrix(x = liger_object, slot = "W"))
+  }
 
   # Rename is zero padding
   colnames(x = factor_loadings) <- paste0("Factor_", seq_zeros(seq_length = ncol(x = factor_loadings), num_zeros = 1))
