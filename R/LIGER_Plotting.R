@@ -374,7 +374,7 @@ plotFactors_scCustom <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Factor_Cor_Plot(liger_object = obj)
+#' Factor_Cor_Plot(object = obj)
 #'}
 #'
 
