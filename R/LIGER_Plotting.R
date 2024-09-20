@@ -332,10 +332,11 @@ plotFactors_scCustom <- function(
 
 #' Factor Correlation Plot
 #'
-#' Plot positive correlations between gene loadings across `W` factor matrix in liger object.
+#' Plot positive correlations between gene loadings across `W` factor matrix in liger or
+#' feature loadings in reduction slot of Seurat object.
 #' Any negative correlations are set to NA and NA values set to bottom color of color gradient.
 #'
-#' @param liger_object liger object.
+#' @param object liger or Seurat object.
 #' @param colors_use Color palette to use for correlation values.
 #' Default is `RColorBrewer::RdBu` if `positive_only = FALSE`.
 #' If `positive_only = TRUE` the default is `viridis`.
@@ -378,7 +379,7 @@ plotFactors_scCustom <- function(
 #'
 
 Factor_Cor_Plot <- function(
-    liger_object,
+    object,
     colors_use = NULL,
     label = FALSE,
     label_threshold = 0.5,
@@ -430,7 +431,6 @@ Factor_Cor_Plot <- function(
   if (isTRUE(x = cluster)) {
     plot_df$Var <- factor(plot_df$Var, levels = unique(plot_df$Var))
   }
-
 
   if (isTRUE(x = label)) {
     plot_df$label <- ifelse(plot_df$corr >= label_threshold, round(plot_df$corr, 2), NA)
