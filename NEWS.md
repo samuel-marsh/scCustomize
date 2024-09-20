@@ -24,8 +24,8 @@
     - `Add_Hemo` (see above).
     - `Rename_Clusters` now S3 generic for setting new active.ident (Seurat) or defaultCluster (Liger).  
 - *New functions for rliger v2.0.0+ only:*
-    - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger object.  
-    - Added new function `Factor_Cor_Plot` to plot positive correlations from liger object.  
+    - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger or Seurat object.  
+    - Added new function `Factor_Cor_Plot` to plot positive correlations from liger or Seurat object.  
 - *Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:*
     - `as.LIGER`
     - `as.Seurat`  
