@@ -5,7 +5,7 @@
 \title{Factor Correlation Plot}
 \usage{
 Factor_Cor_Plot(
-  liger_object,
+  object,
   colors_use = NULL,
   label = FALSE,
   label_threshold = 0.5,
@@ -21,7 +21,7 @@ Factor_Cor_Plot(
 )
 }
 \arguments{
-\item{liger_object}{liger object.}
+\item{object}{liger or Seurat object.}
 
 \item{colors_use}{Color palette to use for correlation values.
 Default is \code{RColorBrewer::RdBu} if \code{positive_only = FALSE}.
@@ -59,12 +59,13 @@ default is FALSE.}
 A ggplot object
 }
 \description{
-Plot positive correlations between gene loadings across \code{W} factor matrix in liger object.
+Plot positive correlations between gene loadings across \code{W} factor matrix in liger or
+feature loadings in reduction slot of Seurat object.
 Any negative correlations are set to NA and NA values set to bottom color of color gradient.
 }
 \examples{
 \dontrun{
-Factor_Cor_Plot(liger_object = obj)
+Factor_Cor_Plot(object = obj)
 }
 
 }

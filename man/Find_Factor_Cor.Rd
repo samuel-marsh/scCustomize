@@ -4,20 +4,22 @@
 \alias{Find_Factor_Cor}
 \title{Find Factor Correlations}
 \usage{
-Find_Factor_Cor(liger_object)
+Find_Factor_Cor(object, reduction)
 }
 \arguments{
-\item{liger_object}{LIGER object name.}
+\item{object}{LIGER/Seurat object name.}
+
+\item{reduction}{reduction name to pull loadings for.  Only valid if supplying a Seurat object.}
 }
 \value{
 correlation matrix
 }
 \description{
-Calculate correlations between gene loadings for all factors in liger object.
+Calculate correlations between gene loadings for all factors in liger or Seurat object.
 }
 \examples{
 \dontrun{
-factor_correlations <- Find_Factor_Cor(liger_object = object)
+factor_correlations <- Find_Factor_Cor(object = object)
 }
 
 }
