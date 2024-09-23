@@ -167,7 +167,7 @@ DimPlot_LIGER <- function(
                            ggplot_default_colors = ggplot_default_colors,
                            color_seed = color_seed)
   } else {
-    plots <-LIGER_DimPlot(liger_object = liger_object,
+    plots <- LIGER_DimPlot(liger_object = liger_object,
                            group_by = group_by,
                            split_by = split_by,
                            colors_use_cluster = colors_use_cluster,
