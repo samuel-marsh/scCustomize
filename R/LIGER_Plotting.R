@@ -398,7 +398,7 @@ Factor_Cor_Plot <- function(
     cli_abort(message = "{.code plot_type} must be one of {.field {glue_collapse_scCustom(input_string = c('full', 'lower,', 'upper'), and = FALSE)}}")
   }
 
-  cor_mat <- Find_Factor_Cor(liger_object = liger_object)
+  cor_mat <- Find_Factor_Cor(object = object)
 
   # filter matrix by plot type
   if (plot_type == "upper") {
