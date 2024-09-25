@@ -829,18 +829,18 @@ Find_Factor_Cor <- function(
     reduction
 ) {
   # Get data
-  if (inherits(x = data, what = "Seurat")) {
-    factor_loadings <- data.frame(Loadings(object = ifn_seurat, reduction = reduction))
+  if (inherits(x = object, what = "Seurat")) {
+    factor_loadings <- data.frame(Loadings(object = object, reduction = reduction))
   }
 
-  if (inherits(x = data, what = "Seurat")) {
+  if (inherits(x = object, what = "Seurat")) {
     # Check new liger object
     if (packageVersion(pkg = 'rliger') < "2.0.0") {
       cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
     }
 
     # Get loadings
-    factor_loadings <- data.frame(rliger::getMatrix(x = liger_object, slot = "W"))
+    factor_loadings <- data.frame(rliger::getMatrix(x = object, slot = "W"))
   }
 
   # Rename is zero padding
