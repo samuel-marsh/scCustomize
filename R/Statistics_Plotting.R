@@ -909,3 +909,120 @@ CellBender_Diff_Plot <- function(
   # return plot
   return(plot)
 }
+
+
+#' Cell Proportion Pie Chart
+#'
+#' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
+#' Can plot either the totals or split by a variable in `meta.data`.
+#'
+#' @param seurat_object Seurat object name.
+#' @param group_by_var meta data column to classify samples (default = "Total"; totals across all samples).
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @return ggplot2 or patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr rename all_of arrange desc
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tidyr pivot_wider
+#'
+#' @export
+#'
+#' @examples
+#' #' library(Seurat)
+#' Plot_Pie_Proportions(seurat_object = pbmc_small)
+#'
+
+Plot_Pie_Proportions <- function(
+    seurat_object,
+    group_by_var = "Total",
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check on meta data column
+  if (str_to_lower(group_by_var) != "total") {
+    possible_meta_col <- colnames(x = seurat_object@meta.data)
+    if (!group_by_var %in% possible_meta_col) {
+      cli_abort(message = "{.val {group_by_var}} was not found in meta.data slot of Seurat Object.")
+    }
+  }
+
+  if (str_to_lower(group_by_var) == "total") {
+    plot_df <- table(seurat_object@active.ident) %>%
+      data.frame() %>%
+      rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
+      arrange(desc(.data[["Number"]]))
+
+    # Check colors use vs. ggplot2 color scale
+    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+    }
+
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+
+    # make plots
+    plot <-  ggplot(plot_df, aes(x="", y=.data[["Number"]], fill=.data[["Cluster"]])) +
+      geom_bar(stat="identity", width=1, color="white") +
+      coord_polar("y", start=0) +
+      theme_ggprism_mod() +
+      scale_fill_manual(values = colors_use) +
+      ggtitle("Proportion of Cells") +
+      theme(plot.title = element_text(hjust = 0.5),
+            axis.line = element_blank(),
+            axis.text = element_blank(),
+            axis.title = element_blank(),
+            axis.ticks = element_blank())
+
+    return(plot)
+  } else {
+    plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
+    plot_df <- data.frame(plot_df) %>%
+      rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
+    plot_df <- plot_df %>%
+      pivot_wider(names_from = group_by_var, values_from = all_of("cell_number"))
+
+    samples <- colnames(plot_df)[-1]
+
+    # Check colors use vs. ggplot2 color scale
+    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+    }
+
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+
+    plots <- lapply(1:length(samples), function(x){
+      plot <- ggplot(plot_df, aes(x="", y=.data[[samples[x]]], fill=.data[["Cluster"]])) +
+        geom_bar(stat="identity", width=1, color="white") +
+        coord_polar("y", start=0) +
+        theme_ggprism_mod() +
+        scale_fill_manual(values = colors_use) +
+        ggtitle(samples[x]) +
+        theme(plot.title = element_text(hjust = 0.5),
+              axis.line = element_blank(),
+              axis.text = element_blank(),
+              axis.title = element_blank(),
+              axis.ticks = element_blank())
+    })
+
+    plots <- wrap_plots(plots, guides = "collect")
+    return(plots)
+  }
+}
