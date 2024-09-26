@@ -917,7 +917,9 @@ CellBender_Diff_Plot <- function(
 #' Can plot either the totals or split by a variable in `meta.data`.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var meta data column to classify samples (default = "Total"; totals across all samples).
+#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
+#' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
 #' @param colors_use color palette to use for plotting.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -943,7 +945,9 @@ CellBender_Diff_Plot <- function(
 
 Plot_Pie_Proportions <- function(
     seurat_object,
-    group_by_var = "Total",
+    group_by_var = "ident",
+    split.by = NULL,
+    num_columns = NULL,
     colors_use = NULL,
     ggplot_default_colors = FALSE,
     color_seed = 123
@@ -952,14 +956,19 @@ Plot_Pie_Proportions <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  if (str_to_lower(group_by_var) != "total") {
-    possible_meta_col <- colnames(x = seurat_object@meta.data)
-    if (!group_by_var %in% possible_meta_col) {
-      cli_abort(message = "{.val {group_by_var}} was not found in meta.data slot of Seurat Object.")
-    }
+  if (group_by_var != "ident") {
+      # Check meta
+    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+    Idents(seurat_object) <- group_by_var
   }
 
-  if (str_to_lower(group_by_var) == "total") {
+  # check split
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  if (is.null(x = split.by)) {
     plot_df <- table(seurat_object@active.ident) %>%
       data.frame() %>%
       rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
@@ -990,11 +999,11 @@ Plot_Pie_Proportions <- function(
 
     return(plot)
   } else {
-    plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
+    plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, split.by])
     plot_df <- data.frame(plot_df) %>%
-      rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
+      rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), cell_number = all_of("Freq"))
     plot_df <- plot_df %>%
-      pivot_wider(names_from = group_by_var, values_from = all_of("cell_number"))
+      pivot_wider(names_from = split.by, values_from = all_of("cell_number"))
 
     samples <- colnames(plot_df)[-1]
 
@@ -1022,7 +1031,8 @@ Plot_Pie_Proportions <- function(
               axis.ticks = element_blank())
     })
 
-    plots <- wrap_plots(plots, guides = "collect")
+    plots <- wrap_plots(plots, guides = "collect", ncol = num_columns)
     return(plots)
   }
 }
+??wrap_plots
