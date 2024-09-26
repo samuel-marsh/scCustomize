@@ -6,7 +6,9 @@
 \usage{
 Plot_Pie_Proportions(
   seurat_object,
-  group_by_var = "Total",
+  group_by_var = "ident",
+  split.by = NULL,
+  num_columns = NULL,
   colors_use = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123
@@ -15,7 +17,11 @@ Plot_Pie_Proportions(
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{group_by_var}{meta data column to classify samples (default = "Total"; totals across all samples).}
+\item{group_by_var}{meta data column to classify samples (default = "ident" and will use \code{active.ident}.}
+
+\item{split.by}{meta data variable to use to split plots.  Default is NULL which will plot across entire object.}
+
+\item{num_columns}{number of columns in plot.  Only valid if \code{split.by} is not NULL.}
 
 \item{colors_use}{color palette to use for plotting.}
 
