@@ -1084,19 +1084,24 @@ as.anndata.Seurat <- function(
   meta_data <- drop_single_value_cols(df = meta_data)
 
   # Variable Features
-  if (length(x = VariableFeatures(object = x, assay = assay)) == 0) {
-    seurat_var_info <- NULL
-  } else {
-    if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
-      seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
-    } else {
-      if (dim(x = x[[assay]]@meta.features)[2] == 0) {
-        seurat_var_info <- NULL
-      } else {
-        seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
-      }
-    }
-  }
+  # if (length(x = VariableFeatures(object = x, assay = assay)) == 0) {
+  #   seurat_var_info <- NULL
+  # } else {
+  #   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
+  #     seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
+  #   } else {
+  #     if (dim(x = x[[assay]]@meta.features)[2] == 0) {
+  #       seurat_var_info <- NULL
+  #     } else {
+  #       seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+  #     }
+  #   }
+  # }
+
+  # Add feature names
+  seurat_var_info <- data.frame("features" = Features(x = x))
+
+
 
   # DimReducs
   if (isTRUE(x = transer_dimreduc)) {
