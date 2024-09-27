@@ -1099,7 +1099,8 @@ as.anndata.Seurat <- function(
   # }
 
   # Add feature names
-  seurat_var_info <- data.frame("features" = Features(x = x))
+  seurat_var_info <- data.frame("names" = Features(x = x))
+  rownames(seurat_var_info) <- Features(x = x)
 
 
 
