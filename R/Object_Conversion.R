@@ -1083,6 +1083,7 @@ as.anndata.Seurat <- function(
 
   meta_data <- drop_single_value_cols(df = meta_data)
 
+  # REMOVE FOR NOW AND RE-ADD LATER
   # Variable Features
   # if (length(x = VariableFeatures(object = x, assay = assay)) == 0) {
   #   seurat_var_info <- NULL
