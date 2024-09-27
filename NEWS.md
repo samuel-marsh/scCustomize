@@ -82,6 +82,7 @@
 - Fixed issue that could occur with some meta data modifying functions due to column name collisions in internals of function ([#193](https://github.com/samuel-marsh/scCustomize/issues/193)).  
 - Fixed issue that caused error when using `Cluster_Highlight_Plot` with `split.by` parameter ([#201](https://github.com/samuel-marsh/scCustomize/issues/201)).  
 - Added check and informative error message to `Convert_Assay` ([#205](https://github.com/samuel-marsh/scCustomize/issues/205)).  
+- Fixed issue with anndata conversion and Seurat V5 objects ([#195](https://github.com/samuel-marsh/scCustomize/issues/195)).  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
