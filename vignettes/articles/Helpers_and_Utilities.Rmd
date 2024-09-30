@@ -69,7 +69,7 @@ pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
 
 ### `Add_Mito_Ribo()`
-scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, drosophila, or rhesus macaque data all you need to do is specify the `species` parameter.
+scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, drosophila, rhesus macaque, or chicken data all you need to do is specify the `species` parameter.
 ```{r eval=FALSE}
 # These defaults can be run just by providing accepted species name
 pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
@@ -282,7 +282,7 @@ features_tsv = "sample01/outs/filtered_feature_bc_matrix/features.tsv.gz", assay
 
 # Using hdf5 file
 obj <- Add_Alt_Feature_ID(seurat_object = obj,
-hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5"", assay = "RNA")
+hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5", assay = "RNA")
 ```
 
 *NOTE:* If using features.tsv.gz file the file from either filtered or raw outputs can be used as they are identical.  
@@ -293,21 +293,21 @@ hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5"", assay = "RNA")
 ## Check for Features/Genes
 scCustomize also makes forward-facing a number of utilities that are used internally in functions but may also have utility on their own.
 
-### `Gene_Present()` to check for features.
-`Gene_Present` is fairly basic function to check if feature exists in data.  It can be used with Seurat or LIGER objects as well as generic data formats (Matrix, data.frame, tibble).
+### `Feature_Present()` to check for features.
+`Feature_Present` is fairly basic function to check if feature exists in data.  It can be used with Seurat or LIGER objects as well as generic data formats (Matrix, data.frame, tibble).
 
-In addition to some warning messages `Gene_Present` returns a list with 3 entries when run:  
+In addition to some warning messages `Feature_Present` returns a list with 3 entries when run:  
 
 * found_features: features found in the data.  
 * bad_features: features not found in the data.  
 * wrong_case_found_features: features found but in different case than present in input gene list.  
-  - *If `bad_features` > 0 then `Gene_Present` will convert `the gene list `bad_features` to all upper case and to sentence case and check against all possible features to see if wrong case was provided.*  
+  - *If `bad_features` > 0 then `Feature_Present` will convert `the gene list `bad_features` to all upper case and to sentence case and check against all possible features to see if wrong case was provided.*  
 
 ```{r message=TRUE, warning=TRUE}
 # Example gene list with all examples (found genes, wrong case (lower) and misspelled (CD8A forgetting to un-shift when typing 8))
 gene_input_list <- c("CD14", "CD3E", "Cd4", "CD*A")
 
-genes_present <- Gene_Present(data = pbmc, gene_list = gene_input_list)
+genes_present <- Feature_Present(data = pbmc, features = gene_input_list)
 ```
 
 Now let's look at the output:
@@ -316,19 +316,19 @@ genes_present
 ```
 
 ### Turn warnings/messages off.
-By default `Gene_Present` has 3 sets of warnings/messages it prints to console when it finds issues.  If using the function yourself on its own or wrapped inside your own function and you prefer no messages each of these can be toggled using optional parameters.  
+By default `Feature_Present` has 3 sets of warnings/messages it prints to console when it finds issues.  If using the function yourself on its own or wrapped inside your own function and you prefer no messages each of these can be toggled using optional parameters.  
 
 * `case_check_msg` prints and list of features if alternate case features are found in data.  
 * `omit_warn` prints warning and list of all features not found in data.  
 * `print_msg` prints message if all features in `gene_list` are found in data.  
 
 ### Check for updated gene symbols
-In order to keep run times down and support offer greater support for offline use `Gene_Present` does not include a check for updated gene symbols.  If you're dataset is from human cells/donors you can simply supply the not found features from `Gene_Present` to Seurat's `UpdateSymbolList` function.
+In order to keep run times down and support offer greater support for offline use `Feature_Present` does not include a check for updated gene symbols.  If you're dataset is from human cells/donors you can simply supply the not found features from `Feature_Present` to Seurat's `UpdateSymbolList` function.
 
 ```{r message=TRUE, warning=TRUE}
 gene_input_list <- c("CD14", "CD3E", "Cd4", "CD*A", "SEPT1")
 
-genes_present <- Gene_Present(data = pbmc, gene_list = gene_input_list)
+genes_present <- Feature_Present(data = pbmc, features = gene_input_list)
 
 check_symbols <- UpdateSymbolList(symbols = genes_present[[2]], verbose = TRUE)
 ```
