@@ -1777,11 +1777,11 @@ Plot_Bar_Proportions <- function(
     scale_y_continuous(expand = c(0, 0)) +
     xlab("")
 
-  if (scale == "percent") {
+  if (plot_scale == "percent") {
     plot <- plot + ylab("Percent")
   }
 
-  if (scale == "count") {
+  if (plot_scale == "count") {
     plot <- plot + ylab("Counts")
   }
 
