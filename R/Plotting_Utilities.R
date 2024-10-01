@@ -1665,7 +1665,7 @@ Plot_Pie_Proportions <- function(
     })
 
     plots <- wrap_plots(plots, guides = "collect", ncol = num_columns)
-    plots <- plots + plot_annotation(title = "Proportion of Cells", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14)))
+    plots <- plots + plot_annotation(title = "Proportion of Cells", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18)))
 
     return(plots)
   }
