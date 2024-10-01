@@ -911,12 +911,16 @@ CellBender_Diff_Plot <- function(
 }
 
 
-#' Cell Proportion Pie Chart
+#' Cell Proportion Plot
 #'
 #' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
 #' Can plot either the totals or split by a variable in `meta.data`.
 #'
 #' @param seurat_object Seurat object name.
+#' @param plot_type whether to plot a pie chart or bar chart; value must be one of `"bar"` or `"pie"`. Default
+#' is `"bar"`
+#' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of `"percent"` or
+#' `"count"`. Default is `"percent"`.
 #' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
@@ -940,11 +944,13 @@ CellBender_Diff_Plot <- function(
 #'
 #' @examples
 #' #' library(Seurat)
-#' Plot_Pie_Proportions(seurat_object = pbmc_small)
+#' Proportion_Plot(seurat_object = pbmc_small)
 #'
 
-Plot_Pie_Proportions <- function(
+Proportion_Plot <- function(
     seurat_object,
+    plot_type = "bar",
+    plot_scale = "percent",
     group_by_var = "ident",
     split.by = NULL,
     num_columns = NULL,
@@ -952,86 +958,23 @@ Plot_Pie_Proportions <- function(
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  # Check on meta data column
-  if (group_by_var != "ident") {
-      # Check meta
-    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
-
-    Idents(seurat_object) <- group_by_var
+  if (!plot_type %in% c("bar", "pie")) {
+    cli::cli_abort(message = "{.code plot_type} must be one of {.val bar} or {.val pie}")
   }
 
-  # check split
-  if (!is.null(x = split.by)) {
-    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  if (plot_type == "pie" && plot_scale == "count") {
+    cli_warn(message = c("When using {.code plot_type = 'pie'} the {.code plot_scale} parameter is ignored",
+                         "i" = "To plot using {.code plot_scale = 'percent'}, set {.code plot_type = 'bar'}."))
   }
 
-  if (is.null(x = split.by)) {
-    plot_df <- table(seurat_object@active.ident) %>%
-      data.frame() %>%
-      rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
-      arrange(desc(.data[["Number"]]))
-
-    # Check colors use vs. ggplot2 color scale
-    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
-      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
-    }
-
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
-
-    # make plots
-    plot <-  ggplot(plot_df, aes(x="", y=.data[["Number"]], fill=.data[["Cluster"]])) +
-      geom_bar(stat="identity", width=1, color="white") +
-      coord_polar("y", start=0) +
-      theme_ggprism_mod() +
-      scale_fill_manual(values = colors_use) +
-      ggtitle("Proportion of Cells") +
-      theme(plot.title = element_text(hjust = 0.5),
-            axis.line = element_blank(),
-            axis.text = element_blank(),
-            axis.title = element_blank(),
-            axis.ticks = element_blank())
-
-    return(plot)
-  } else {
-    plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, split.by])
-    plot_df <- data.frame(plot_df) %>%
-      rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), cell_number = all_of("Freq"))
-    plot_df <- plot_df %>%
-      pivot_wider(names_from = split.by, values_from = all_of("cell_number"))
-
-    samples <- colnames(plot_df)[-1]
-
-    # Check colors use vs. ggplot2 color scale
-    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
-      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
-    }
-
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
-
-    plots <- lapply(1:length(samples), function(x){
-      plot <- ggplot(plot_df, aes(x="", y=.data[[samples[x]]], fill=.data[["Cluster"]])) +
-        geom_bar(stat="identity", width=1, color="white") +
-        coord_polar("y", start=0) +
-        theme_ggprism_mod() +
-        scale_fill_manual(values = colors_use) +
-        ggtitle(samples[x]) +
-        theme(plot.title = element_text(hjust = 0.5),
-              axis.line = element_blank(),
-              axis.text = element_blank(),
-              axis.title = element_blank(),
-              axis.ticks = element_blank())
-    })
-
-    plots <- wrap_plots(plots, guides = "collect", ncol = num_columns)
-    return(plots)
+  if (plot_type == "pie") {
+    plot <- Plot_Pie_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, num_columns = num_columns, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
+
+  if (plot_type == "bar") {
+    plot <- Plot_Bar_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, plot_scale = plot_scale, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # Return plot
+  return(plot)
 }

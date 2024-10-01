@@ -1544,6 +1544,254 @@ Clustered_DotPlot_Multi_Group <- function(
 }
 
 
+#' Cell Proportion Pie Chart
+#'
+#' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
+#' Can plot either the totals or split by a variable in `meta.data`.
+#'
+#' @param seurat_object Seurat object name.
+#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
+#' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @return ggplot2 or patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr rename all_of arrange desc
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tidyr pivot_wider
+#'
+#' @noRd
+#'
+#' @examples
+#' #' library(Seurat)
+#' Plot_Pie_Proportions(seurat_object = pbmc_small)
+#'
+
+Plot_Pie_Proportions <- function(
+    seurat_object,
+    group_by_var = "ident",
+    split.by = NULL,
+    num_columns = NULL,
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check on meta data column
+  if (group_by_var != "ident") {
+    # Check meta
+    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+    Idents(seurat_object) <- group_by_var
+  }
+
+  # check split
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  if (is.null(x = split.by)) {
+    plot_df <- table(seurat_object@active.ident) %>%
+      data.frame() %>%
+      rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
+      arrange(desc(.data[["Number"]]))
+
+    # Check colors use vs. ggplot2 color scale
+    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+    }
+
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+
+    # make plots
+    plot <-  ggplot(plot_df, aes(x="", y=.data[["Number"]], fill=.data[["Cluster"]])) +
+      geom_bar(stat="identity", width=1, color="white") +
+      coord_polar("y", start=0) +
+      theme_ggprism_mod() +
+      scale_fill_manual(values = colors_use) +
+      ggtitle("Proportion of Cells") +
+      theme(plot.title = element_text(hjust = 0.5),
+            axis.line = element_blank(),
+            axis.text = element_blank(),
+            axis.title = element_blank(),
+            axis.ticks = element_blank())
+
+    return(plot)
+  } else {
+    plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, split.by])
+    plot_df <- data.frame(plot_df) %>%
+      rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), cell_number = all_of("Freq"))
+    plot_df <- plot_df %>%
+      pivot_wider(names_from = split.by, values_from = all_of("cell_number"))
+
+    samples <- colnames(plot_df)[-1]
+
+    # Check colors use vs. ggplot2 color scale
+    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+    }
+
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+
+    plots <- lapply(1:length(samples), function(x){
+      plot <- ggplot(plot_df, aes(x="", y=.data[[samples[x]]], fill=.data[["Cluster"]])) +
+        geom_bar(stat="identity", width=1, color="white") +
+        coord_polar("y", start=0) +
+        theme_ggprism_mod() +
+        scale_fill_manual(values = colors_use) +
+        ggtitle(samples[x]) +
+        theme(plot.title = element_text(hjust = 0.5),
+              axis.line = element_blank(),
+              axis.text = element_blank(),
+              axis.title = element_blank(),
+              axis.ticks = element_blank())
+    })
+
+    plots <- wrap_plots(plots, guides = "collect", ncol = num_columns)
+    return(plots)
+  }
+}
+
+
+#' Cell Proportion Pie Chart
+#'
+#' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
+#' Can plot either the totals or split by a variable in `meta.data`.
+#'
+#' @param seurat_object Seurat object name.
+#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
+#' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of "percent" or
+#' "count". Default is "percent".
+#' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @return ggplot2 or patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr rename all_of arrange desc
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tidyr pivot_wider
+#'
+#' @noRd
+#'
+#' @examples
+#' #' library(Seurat)
+#' Plot_Bar_Proportions(seurat_object = pbmc_small)
+#'
+
+Plot_Bar_Proportions <- function(
+    seurat_object,
+    group_by_var = "ident",
+    split.by = NULL,
+    plot_scale = "count",
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check on meta data column
+  if (group_by_var != "ident") {
+    # Check meta
+    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+    Idents(object = seurat_object) <- group_by_var
+  }
+
+  group_by_length <- length(x = unique(x = seurat_object@active.ident))
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # check split
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  if (plot_scale == "count") {
+    if (!is.null(x = split.by)) {
+      plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, split.by])
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), value = all_of("Freq"))
+    } else {
+      plot_df <- table(seurat_object@active.ident)
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), value = all_of("Freq"))
+      plot_df$split.by <- "Total"
+    }
+  }
+
+  if (plot_scale == "percent") {
+    if (!is.null(x = split.by)) {
+      plot_df <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, split.by]), margin = 2) * 100
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), value = all_of("Freq"))
+    } else {
+      plot_df <- prop.table(x = table(seurat_object@active.ident)) * 100
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), value = all_of("Freq"))
+      plot_df$split.by <- "Total"
+    }
+  }
+
+  # make plots
+  plot <-  ggplot(plot_df, aes(x=.data[["split.by"]], y=.data[["value"]], fill=.data[["Cluster"]])) +
+    geom_bar(stat="identity", width=0.9, color="white",) +
+    scale_fill_manual(values = colors_use) +
+    theme_ggprism_mod() +
+    ggtitle("Proportion of Cells") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    xlab("")
+
+  if (scale == "percent") {
+    plot <- plot + ylab("Percent")
+  }
+
+  if (scale == "count") {
+    plot <- plot + ylab("Counts")
+  }
+
+  # return plot
+  return(plot)
+}
+
+
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### TEST/HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
