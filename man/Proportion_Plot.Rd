@@ -11,6 +11,7 @@ Proportion_Plot(
   group_by_var = "ident",
   split.by = NULL,
   num_columns = NULL,
+  x_lab_rotate = FALSE,
   colors_use = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123
@@ -30,6 +31,8 @@ is \code{"bar"}}
 \item{split.by}{meta data variable to use to split plots.  Default is NULL which will plot across entire object.}
 
 \item{num_columns}{number of columns in plot.  Only valid if \code{split.by} is not NULL.}
+
+\item{x_lab_rotate}{Rotate x-axis labels 45 degrees (Default is FALSE). Only valid if \code{plot_type = "bar"}.}
 
 \item{colors_use}{color palette to use for plotting.}
 
