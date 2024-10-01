@@ -964,7 +964,7 @@ Proportion_Plot <- function(
 
   if (plot_type == "pie" && plot_scale == "count") {
     cli_warn(message = c("When setting {.code plot_type} to {.val pie} the {.code plot_scale} parameter is ignored",
-                         "i" = "Set {.plot_type} to {.val bar} in order to plot raw cell counts.."))
+                         "i" = "Set {.code plot_type} to {.val bar} in order to plot raw cell counts.."))
   }
 
   if (plot_type == "pie") {
