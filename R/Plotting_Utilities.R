@@ -1784,7 +1784,7 @@ Plot_Bar_Proportions <- function(
   }
 
   if (plot_scale == "count") {
-    plot <- plot + ylab("Counts")
+    plot <- plot + ylab("Number of Cells")
   }
 
   # return plot
