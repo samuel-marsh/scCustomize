@@ -924,6 +924,7 @@ CellBender_Diff_Plot <- function(
 #' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE). Only valid if `plot_type = "bar"`.
 #' @param colors_use color palette to use for plotting.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
@@ -954,6 +955,7 @@ Proportion_Plot <- function(
     group_by_var = "ident",
     split.by = NULL,
     num_columns = NULL,
+    x_lab_rotate = FALSE,
     colors_use = NULL,
     ggplot_default_colors = FALSE,
     color_seed = 123
@@ -973,6 +975,10 @@ Proportion_Plot <- function(
 
   if (plot_type == "bar") {
     plot <- Plot_Bar_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, plot_scale = plot_scale, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+
+    if (isTRUE(x = x_lab_rotate)) {
+      plot <- plot + RotatedAxis()
+    }
   }
 
   # Return plot
