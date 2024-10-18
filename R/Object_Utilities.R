@@ -1398,6 +1398,112 @@ Fetch_Meta.Seurat <- function(
 }
 
 
+#' Randomly downsample by identity
+#'
+#' Get a randomly downsampled set of cell barcodes with even numbers of cells for each identity class.
+#' Can return either as a list (1 entry per identity class) or vector of barcodes.
+#'
+#' @param seurat_object Seurat object
+#' @param num_cells number of cells per ident to use in down-sampling.  This value must be less than or
+#' equal to the size of ident with fewest cells.  Alternatively, can set to "min" which will
+#' use the maximum number of barcodes based on size of smallest group.
+#' @param group.by The ident to use to group cells.  Default is "ident" which use current active.ident.  .
+#' @param return_list logical, whether or not to return the results as list instead of vector, default is
+#' FALSE.
+#' @param seed random seed to use for downsampling.  Default is 123.
+#'
+#' @import cli
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble rownames_to_column column_to_rownames
+#'
+#' @return either a vector or list of cell barcodes
+#'
+#' @export
+#'
+#' @concept get_set_util
+#'
+#' @examples
+#' library(Seurat)
+#'
+#' # return vector of barcodes
+#' random_cells <- Random_Cells_Downsample(seurat_object = pbmc_small, num_cells = 10)
+#' head(random_cells)
+#'
+#' # return list
+#' random_cells_list <- Random_Cells_Downsample(seurat_object = pbmc_small, return_list = TRUE, num_cells = 10)
+#' head(random_cells_list)
+#'
+#'
+#'
+
+Random_Cells_Downsample <- function(
+    seurat_object,
+    num_cells,
+    group.by = "ident",
+    return_list = FALSE,
+    seed = 123
+) {
+  # Check seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # set ident in case of NULL
+  group.by <- "ident" %||% group.by
+
+  # Check and set idents if not "ident"
+  if (group.by != "ident") {
+    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+    Idents(object = seurat_object) <- group.by
+  }
+
+  # get barcodes
+  cluster_barcodes <- FetchData(object = seurat_object, vars = "ident") %>%
+    rownames_to_column("barcodes")
+
+  # get unique ident vector
+  idents_all <- as.character(levels(x = Idents(object = seurat_object)))
+
+  # Find minimum length ident and warn if num_cells not equal or lower
+  min_cells <- CellsByIdentities(object = seurat_object)
+  min_cells <- min(lengths(x = min_cells))
+
+  # set num_cells if value is "min"
+  if (num_cells == "min") {
+    cli
+    num_cells <- min_cells
+  }
+
+  # check size of num_cells
+  if (min_cells < num_cells) {
+    cli_abort(message = "The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity ({.field {min_cells}}).")
+  }
+
+  # set seed and select random cells per ident
+  set.seed(seed = seed)
+
+  random_cells <- lapply(idents_all, function(x) {
+    clus_barcodes <- cluster_barcodes %>%
+      filter(ident == x) %>%
+      column_to_rownames("barcodes") %>%
+      rownames() %>%
+      sample(size = num_cells)
+  })
+
+  # return downsampled cells
+  if (isTRUE(x = return_list)) {
+    # return list
+    return(random_cells)
+  } else {
+    # unlist to vector
+    random_cells_unlist <- unlist(x = random_cells)
+
+    # return vector
+    return(random_cells_unlist)
+  }
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### MISC OBJECT UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
