@@ -1470,7 +1470,8 @@ Random_Cells_Downsample <- function(
 
   # set num_cells if value is "min"
   if (num_cells == "min") {
-    cli_inform(message = "The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class).  Total of {.field {min_cells * length(x = idents_all)}} cells across whole object.")
+    cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class).",
+                           "Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
     num_cells <- min_cells
   }
 
