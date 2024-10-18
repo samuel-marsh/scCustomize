@@ -32,9 +32,12 @@
   
 - **General scCustomize Updates:**  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
-- Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
 - Added new function `seq_zeros()` to create sequences with preceding zeros.  
 - Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
+- Added `Updated_MGI_Symbols` to check for update gene names/symbols in mouse data ([#202](https://github.com/samuel-marsh/scCustomize/issues/202)).  
+- Added plotting function `Proportion_Plot` to plot pie chart or bar chart of proportion (or total counts) of cells in each identity class.  
+- Added new function `Random_Cells_Downsample` to return either a vector or list with randomly downsampled cells for each identity class.
+- Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
 - Added `cells` parameter explicitly to `FeatureScatter_scCustom`.  
 - Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
 - Added new plotting function `SpatialDimPlot_scCustom`.  Thanks for encouragement @puapinyoying @nina-hahn ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
@@ -49,9 +52,6 @@
 - Explicitly reveal the `reduction` parameter in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` ([#198](https://github.com/samuel-marsh/scCustomize/issues/198)).  
 - Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
 - Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
-- Added `Updated_MGI_Symbols` to check for update gene names/symbols in mouse data ([#202](https://github.com/samuel-marsh/scCustomize/issues/202)).  
-- Added plotting function `Proportion_Plot` to plot pie chart or bar chart of proportion (or total counts) of cells in each identity class.  
-
 
   
 ## Changed  
