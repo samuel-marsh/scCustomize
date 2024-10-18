@@ -1466,11 +1466,13 @@ Random_Cells_Downsample <- function(
 
   # Find minimum length ident and warn if num_cells not equal or lower
   min_cells <- CellsByIdentities(object = seurat_object)
-  min_cells <- min(lengths(x = min_cells))
+  ident_lengths <- lengths(x = min_cells)
+  min_cells <- min(ident_lengths)
+  min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
 
   # set num_cells if value is "min"
   if (num_cells == "min") {
-    cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class).",
+    cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class {.val {min_cell_ident}}).",
                            "Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
     num_cells <- min_cells
   }
