@@ -10,7 +10,6 @@ Read10X_h5_Multi_Directory(
   default_10X_path = TRUE,
   cellranger_multi = FALSE,
   h5_filename = "filtered_feature_bc_matrix.h5",
-  cell_bender = deprecated(),
   sample_list = NULL,
   sample_names = NULL,
   replace_suffix = FALSE,
@@ -35,9 +34,6 @@ directory structure.}
 then use full file name.  By default function uses Cell Ranger name: "filtered_feature_bc_matrix.h5".
 If h5 files have sample specific prefixes (i.e. from Cell Bender) then use only the shared part of file
 name (e.g., "_filtered_out.h5").}
-
-\item{cell_bender}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} CellBender read functions are now independent family of functions.
-See \verb{Read_CellBender_*} functions.}
 
 \item{sample_list}{a vector of sample directory names if only specific samples are desired.  If \code{NULL} will
 read in subdirectories in parent directory.}

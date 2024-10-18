@@ -4,12 +4,16 @@
 \alias{Split_Vector}
 \title{Split vector into list}
 \usage{
-Split_Vector(x, chunk_size = 100, verbose = FALSE)
+Split_Vector(x, chunk_size = NULL, num_chunk = NULL, verbose = FALSE)
 }
 \arguments{
 \item{x}{vector to split}
 
-\item{chunk_size}{size of chunks for vector to be split into, default is 100.}
+\item{chunk_size}{size of chunks for vector to be split into, default is NULL.  Only valid if
+\code{num_chunk} is NULL.}
+
+\item{num_chunk}{number of chunks to split the vector into, default is NULL.  Only valid if
+\code{chunk_size} is NULL.}
 
 \item{verbose}{logical, print details of vector and split, default is FALSE.}
 }

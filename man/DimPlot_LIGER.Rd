@@ -14,6 +14,7 @@ DimPlot_LIGER(
   shuffle = TRUE,
   shuffle_seed = 1,
   reduction_label = "UMAP",
+  reduction = NULL,
   aspect_ratio = NULL,
   label = TRUE,
   label_size = NA,
@@ -52,7 +53,11 @@ if points of interest are being buried. (Default is TRUE).}
 \item{shuffle_seed}{Sets the seed if randomly shuffling the order of points.}
 
 \item{reduction_label}{What to label the x and y axes of resulting plots.  LIGER does not store name of
-technique and therefore needs to be set manually.  Default is "UMAP".}
+technique and therefore needs to be set manually.  Default is "UMAP". (only valid for
+rliger < 2.0.0).}
+
+\item{reduction}{specify reduction to use when plotting.  Default is current object
+default reduction (only valid for rliger v2.0.0 or greater).}
 
 \item{aspect_ratio}{Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 Default is NULL.}

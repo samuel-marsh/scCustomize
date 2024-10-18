@@ -15,7 +15,7 @@ A list of seven vectors
 \source{
 Mouse gene list is from: SI Table 4 from \doi{10.1016/j.neuron.2017.09.026}.  Human
 gene list was compiled by first creating homologous gene list using biomaRt and then adding some manually curated
-homologs according to HGNC.
+homologs according to HGNC.  See data-raw directory for scripts used to create gene list.
 }
 \usage{
 ieg_gene_list

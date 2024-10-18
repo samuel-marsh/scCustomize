@@ -64,9 +64,15 @@ Plot_Density_Custom <- function(
     ))
   }
 
-  # temp ggplot2 version check
-  if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
-    cli_abort(message = c("Due to error in Nebulosa package and ggplot2 v3.5.0 {.field Plot_Density_Custom} functionality is currently restricted to ggplot v3.4.4 or lower."))
+  # Check version of Nebulosa and ggplot2
+  if (packageVersion(pkg = 'ggplot2') >= "3.5.0" && packageVersion(pkg = 'Nebulosa') < "1.12.1") {
+    cli_abort(message = c("In order to use {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} with ggplot2 v3.5.0 please update to latest version of Nebulosa package (v1.12.1).",
+                         "i" = "This can be installed with the following commands: ",
+                         "----------------------------------------",
+                         "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
+                         "----------------------------------------"),
+             .frequency = "once",
+             .frequency_id = "nebulosa_warn")
   }
 
   # Check Seurat
@@ -175,9 +181,15 @@ Plot_Density_Joint_Only <- function(
     ))
   }
 
-  # temp ggplot2 version check
-  if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
-    cli_abort(message = c("Due to error in Nebulosa package and ggplot2 v3.5.0 {.field Plot_Density_Joint_Only} functionality is currently restricted to ggplot v3.4.4 or lower."))
+  # Check version of Nebulosa and ggplot2
+  if (packageVersion(pkg = 'ggplot2') >= "3.5.0" && packageVersion(pkg = 'Nebulosa') < "1.12.1") {
+    cli_abort(message = c("In order to use {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} with ggplot2 v3.5.0 please update to latest version of Nebulosa package (v1.12.1).",
+                          "i" = "This can be installed with the following commands: ",
+                          "----------------------------------------",
+                          "{.field `BiocManager::install({symbol$dquote_left}Nebulosa{symbol$dquote_right})`}",
+                          "----------------------------------------"),
+              .frequency = "once",
+              .frequency_id = "nebulosa_warn")
   }
 
   # Check Seurat

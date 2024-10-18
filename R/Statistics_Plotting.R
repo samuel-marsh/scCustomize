@@ -51,6 +51,14 @@ Plot_Median_Genes <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # add to meta if grouping by ident
+  if (!is.null(x = group_by) && group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
+
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
@@ -188,6 +196,14 @@ Plot_Median_UMIs <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # add to meta if grouping by ident
+  if (!is.null(x = group_by) && group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
 
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
@@ -327,6 +343,14 @@ Plot_Median_Mito <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # add to meta if grouping by ident
+  if (!is.null(x = group_by) && group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
 
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
@@ -482,6 +506,14 @@ Plot_Median_Other <- function(
     y_axis_label <- paste0("Median ", median_var)
   }
 
+  # add to meta if grouping by ident
+  if (!is.null(x = group_by) && group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
+
   # Check group by is valid
   group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
 
@@ -621,6 +653,14 @@ Plot_Cells_per_Sample <- function(
   # Check grouping variable is present
   if (is.null(x = group_by)) {
     cli_abort(message = "Must provide meta data variable to {.code group_by} in order to plot data.")
+  }
+
+  # add to meta if grouping by ident
+  if (!is.null(x = group_by) && group_by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
   }
 
   # Check group by is valid
@@ -867,5 +907,80 @@ CellBender_Diff_Plot <- function(
   }
 
   # return plot
+  return(plot)
+}
+
+
+#' Cell Proportion Plot
+#'
+#' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
+#' Can plot either the totals or split by a variable in `meta.data`.
+#'
+#' @param seurat_object Seurat object name.
+#' @param plot_type whether to plot a pie chart or bar chart; value must be one of `"bar"` or `"pie"`. Default
+#' is `"bar"`
+#' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of `"percent"` or
+#' `"count"`. Default is `"percent"`.
+#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
+#' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE). Only valid if `plot_type = "bar"`.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @return ggplot2 or patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr rename all_of arrange desc
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tidyr pivot_wider
+#'
+#' @export
+#'
+#' @examples
+#' #' library(Seurat)
+#' Proportion_Plot(seurat_object = pbmc_small)
+#'
+
+Proportion_Plot <- function(
+    seurat_object,
+    plot_type = "bar",
+    plot_scale = "percent",
+    group_by_var = "ident",
+    split.by = NULL,
+    num_columns = NULL,
+    x_lab_rotate = FALSE,
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  if (!plot_type %in% c("bar", "pie")) {
+    cli::cli_abort(message = "{.code plot_type} must be one of {.val bar} or {.val pie}")
+  }
+
+  if (plot_type == "pie" && plot_scale == "count") {
+    cli_warn(message = c("When setting {.code plot_type} to {.val pie} the {.code plot_scale} parameter is ignored",
+                         "i" = "Set {.code plot_type} to {.val bar} in order to plot raw cell counts.."))
+  }
+
+  if (plot_type == "pie") {
+    plot <- Plot_Pie_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, num_columns = num_columns, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  if (plot_type == "bar") {
+    plot <- Plot_Bar_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, plot_scale = plot_scale, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+
+    if (isTRUE(x = x_lab_rotate)) {
+      plot <- plot + RotatedAxis()
+    }
+  }
+
+  # Return plot
   return(plot)
 }

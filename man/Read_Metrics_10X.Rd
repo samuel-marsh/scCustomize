@@ -14,7 +14,8 @@ Read_Metrics_10X(
 )
 }
 \arguments{
-\item{base_path}{path to the parent directory which contains all of the subdirectories of interest.}
+\item{base_path}{path to the parent directory which contains all of the subdirectories of interest or
+alternatively can provide single csv file to read and format identically to reading multiple files.}
 
 \item{secondary_path}{path from the parent directory to count "outs/" folder which contains the
 "metrics_summary.csv" file.}
@@ -30,7 +31,7 @@ in all samples in parent directory.}
 directory name of each sample.}
 }
 \value{
-A data frame with sample metrics from cell ranger.
+A data frame or list of data.frames with sample metrics from cell ranger.
 }
 \description{
 Get data.frame with all metrics from the Cell Ranger count analysis (present in web_summary.html)

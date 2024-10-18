@@ -58,10 +58,10 @@ as.LIGER.Seurat <- function(
     verbose = TRUE,
     ...
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("{.code scCustomize::as.Liger} is for rliger < v2.0.0.",
+                          "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::as.liger}."))
   }
 
   # Check Seurat
@@ -278,10 +278,10 @@ as.LIGER.list <- function(
     verbose = TRUE,
     ...
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("{.code scCustomize::as.Liger} is for rliger < v2.0.0.",
+                          "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::as.liger}."))
   }
 
   # Check Seurat
@@ -527,10 +527,10 @@ as.Seurat.liger <- function(
     barcode_cell_id_delimiter = "_",
     ...
 ) {
-  # temp liger version check
+  # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
+    cli_abort(message = c("{.code scCustomize::as.Seurat} is for rliger < v2.0.0.",
+                          "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::ligerToSeurat}."))
   }
 
   if (is.null(x = reduction_label)) {
@@ -948,7 +948,7 @@ Liger_to_Seurat <- function(
 #'
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name file name.
-#' @param assay Assay containing data to use, (default is "RNA").
+#' @param assay Assay containing data to use, (default is object default assay).
 #' @param main_layer the layer of data to become default layer in anndata object (default is "data").
 #' @param other_layers other data layers to transfer to anndata object (default is "counts").
 #' @param transer_dimreduc logical, whether to transfer dimensionality reduction coordinates from
@@ -979,7 +979,7 @@ as.anndata.Seurat <- function(
     x,
     file_path,
     file_name,
-    assay = "RNA",
+    assay = NULL,
     main_layer = "data",
     other_layers = "counts",
     transer_dimreduc = TRUE,
@@ -996,6 +996,14 @@ as.anndata.Seurat <- function(
       "{.field `install.packages({symbol$dquote_left}reticulate{symbol$dquote_right})`}",
       "----------------------------------------"
     ))
+  }
+
+  # Check anndata available
+  anndata_check <- reticulate::py_module_available(module = "anndata")
+  if (isFALSE(x = anndata_check)) {
+    cli_abort(message = c("Necessary python package {.field anndata} not found.",
+                          "i" = "Please install anndata and ensure reticulate is linked to correct python environment.",
+                          "i" = "After installation run {.code reticulate::py_module_available(module = 'anndata')} to confirm successful installation."))
   }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
@@ -1030,7 +1038,7 @@ as.anndata.Seurat <- function(
 
   # Run update to ensure functionality
   if (isTRUE(x = verbose)) {
-    cli_inform(message = c("*" = "Checking Seurat object validity & Extracting Data"))
+    cli_inform(message = c("*" = "Checking Seurat object validity"))
   }
 
   # Check Seurat
@@ -1038,6 +1046,12 @@ as.anndata.Seurat <- function(
 
   # Run update to ensure functionality
   x <- suppressMessages(UpdateSeuratObject(object = x))
+
+  # Set assay
+  assay <- assay %||% DefaultAssay(object = x)
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Extracting Data from {.field {assay}} assay to transfer to anndata."))
+  }
 
   # Check Assay5 for multiple layers
   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
@@ -1069,12 +1083,29 @@ as.anndata.Seurat <- function(
 
   meta_data <- drop_single_value_cols(df = meta_data)
 
-  if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
-    seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
-  } else {
-    seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
-  }
+  # REMOVE FOR NOW AND RE-ADD LATER
+  # Variable Features
+  # if (length(x = VariableFeatures(object = x, assay = assay)) == 0) {
+  #   seurat_var_info <- NULL
+  # } else {
+  #   if (isTRUE(x = Assay5_Check(seurat_object = x, assay = assay))) {
+  #     seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.data)
+  #   } else {
+  #     if (dim(x = x[[assay]]@meta.features)[2] == 0) {
+  #       seurat_var_info <- NULL
+  #     } else {
+  #       seurat_var_info <- drop_single_value_cols(df = x[[assay]]@meta.features)
+  #     }
+  #   }
+  # }
 
+  # Add feature names
+  seurat_var_info <- data.frame("names" = Features(x = x))
+  rownames(seurat_var_info) <- Features(x = x)
+
+
+
+  # DimReducs
   if (isTRUE(x = transer_dimreduc)) {
     dim_reducs_present <- Reductions(object = x)
     if (length(x = dim_reducs_present) > 0) {
@@ -1083,19 +1114,20 @@ as.anndata.Seurat <- function(
       })
       names(x = dim_reducs_list) <- paste0("X_", str_to_lower(string = dim_reducs_present))
     } else {
-      dim_reducs_present <- NULL
+      dim_reducs_list <- NULL
     }
   } else {
-    dim_reducs_present <- NULL
+    dim_reducs_list <- NULL
   }
 
+  # Other layers
   if (length(x = other_layers) > 0) {
     other_layers_list <- lapply(other_layers, function(i) {
       Matrix::t(LayerData(object = x, layer = i, assay = assay))
     })
-    names(x = other_layers_list) <- other_layers
-  } else {
-    other_layers_list <- list()
+    names(x = other_layers_list) <- paste0(other_layers, "_", assay)
+    } else {
+      other_layers_list <- list()
   }
 
   # convert
@@ -1189,6 +1221,14 @@ as.anndata.liger <- function(
     ))
   }
 
+  # Check anndata available
+  anndata_check <- reticulate::py_module_available(module = "anndata")
+  if (isFALSE(x = anndata_check)) {
+    cli_abort(message = c("Necessary python package {.field anndata} not found.",
+                          "i" = "Please install anndata and ensure reticulate is linked to correct python environment.",
+                          "i" = "After installation run {.code reticulate::py_module_available(module = 'anndata')} to confirm successful installation."))
+  }
+
   # Check all barcodes are unique to begin with
   duplicated_barcodes <- x@raw.data %>%
     lapply(colnames) %>%
@@ -1266,7 +1306,7 @@ as.anndata.liger <- function(
 
   # pull var genes
   liger_var_genes <- x@var.genes
-  total_features <- data.frame("all_genes" = LIGER_Features(liger_object = x))
+  total_features <- data.frame("all_genes" = Features(x = x))
 
   liger_var_df <- total_features %>%
     mutate("variable_genes" = ifelse(.data[["all_genes"]] %in% liger_var_genes, .data[["all_genes"]], NA)) %>%
@@ -1419,6 +1459,13 @@ Convert_Assay <- function(
   if (convert_to %in% accepted_V3) {
     convert_to <- "Assay"
     convert_from <- "Assay5"
+  }
+
+  if (convert_to == "Assay") {
+    if (length(x = LayerData(object = seurat_object, layer = "scale.data")) == 0) {
+      cli_abort(message = c("Object does not contain scale.data",
+                            "i" = "In order to convert Assay5 (V5) to Assay (V3/4) the object must have both normalized and scaled data."))
+    }
   }
 
   if (is.null(x = assay)) {
