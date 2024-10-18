@@ -44,7 +44,8 @@ head(random_cells)
 random_cells_list <- Random_Cells_Downsample(seurat_object = pbmc_small, return_list = TRUE, num_cells = 10)
 head(random_cells_list)
 
-
+# return max total number of cells (setting `num_cells = "min`)
+random_cells_max <- Random_Cells_Downsample(seurat_object = pbmc_small, num_cells = "min")
 
 }
 \concept{get_set_util}
