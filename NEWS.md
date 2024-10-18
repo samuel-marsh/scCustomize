@@ -1,16 +1,18 @@
 # scCustomize 3.0.0 (2024-XX-XX)  
 ## Added  
-- **Major Updates to Functionality with rliger package:**
-- *Added new utility functions to interact with liger v2.0.0+ object format change:*  
+**Major Updates to Functionality with rliger Package:**  
+*Added new utility functions to interact with liger v2.0.0+ object format change:*  
     - `Subset_LIGER` to quickly subset by cluster or other meta data variable.  
     - `LIGER_Cells_by_Identities` to extract list of barcodes sorted by values within given meta data column.  
-- *Extended the following Seurat/SeuratObject generic functions to work seamlessly with liger objects:*  
+    
+*Extended the following Seurat/SeuratObject generic functions to work seamlessly with liger objects:*  
     - `Cells` to extract vector of all cells or list vectors of cells by dataset.  
     - `Features` to extract vector of all features or list vectors of features by dataset.  
     - `WhichCells` to extract vector or list of cells matching identity criteria.  
     - `Embeddings` to extract matrix containing dimensionality reduction embeddings or iNMF h.norm matrix.  
     - `Idents` and `Idents<-` to extract and set default identities/clusters.  
-- *Updated functions to interact with both old and new style liger objects:*  
+    
+*Updated functions to interact with both old and new style liger objects:*  
     - `plotFactors_scCustom()`  
     - `Fetch_Meta`  
     - `Top_Genes_Factor`  
@@ -18,19 +20,24 @@
     - `Add_Cell_Complexity`  
     - `DimPlot_LIGER`  
     - `Variable_Features_ALL_LIGER`  
-- *New functions compatible with old and new style liger objects:*  
+    
+*New functions compatible with old and new style liger objects:*  
     - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
-- *New scCustomize generics to function across both Seurat and Liger objects*  
+    
+*New scCustomize generics to function across both Seurat and Liger objects*  
     - `Add_Hemo` (see above).
     - `Rename_Clusters` now S3 generic for setting new active.ident (Seurat) or defaultCluster (Liger).  
-- *New functions for Seurat and rliger v2.0.0+ only:*
+    
+*New functions for Seurat and rliger v2.0.0+ only:*
     - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger or Seurat object.  
     - Added new function `Factor_Cor_Plot` to plot positive correlations from liger or Seurat object.  
-- *Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:*
-    - `as.LIGER`
+    
+*Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:*  
+    - `as.LIGER`  
     - `as.Seurat`  
+
   
-- **General scCustomize Updates:**  
+**General scCustomize Updates:**  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
 - Added new function `seq_zeros()` to create sequences with preceding zeros.  
 - Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
