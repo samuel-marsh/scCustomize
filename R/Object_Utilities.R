@@ -1437,7 +1437,6 @@ Fetch_Meta.Seurat <- function(
 #' # return max total number of cells (setting `num_cells = "min`)
 #' random_cells_max <- Random_Cells_Downsample(seurat_object = pbmc_small, num_cells = "min")
 #'
-#'
 
 Random_Cells_Downsample <- function(
     seurat_object,
