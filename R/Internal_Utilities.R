@@ -2037,7 +2037,7 @@ download_hgnc_data <- function(
   bfc <- .get_bioc_cache()
 
   # URL from https://www.genenames.org/download/statistics-and-files/
-  hgnc_ftp_url <- "storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt"
+  hgnc_ftp_url <- "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt"
 
   # bfc <- BiocFileCache::BiocFileCache(hgnc_ftp_url)
 
