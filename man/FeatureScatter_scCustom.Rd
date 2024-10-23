@@ -8,6 +8,7 @@ FeatureScatter_scCustom(
   seurat_object,
   feature1 = NULL,
   feature2 = NULL,
+  cells = NULL,
   colors_use = NULL,
   pt.size = NULL,
   group.by = NULL,
@@ -31,6 +32,8 @@ FeatureScatter_scCustom(
 \item{feature1}{First feature to plot.}
 
 \item{feature2}{Second feature to plot.}
+
+\item{cells}{Cells to include on the scatter plot.}
 
 \item{colors_use}{color for the points on plot.}
 

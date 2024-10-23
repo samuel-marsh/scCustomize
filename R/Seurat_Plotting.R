@@ -29,7 +29,6 @@
 #' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
 #' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param num_columns Number of columns in plot layout.
-#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
 #' @param layer Which layer to pull expression data from?  Default is "data".
 #' @param alpha_exp new alpha level to apply to expressing cell color palette (`colors_use`).  Must be
 #' value between 0-1.
@@ -79,7 +78,6 @@ FeaturePlot_scCustom <- function(
   aspect_ratio = NULL,
   figure_plot = FALSE,
   num_columns = NULL,
-  slot = deprecated(),
   layer = "data",
   alpha_exp = NULL,
   alpha_na_exp = NULL,
@@ -90,17 +88,6 @@ FeaturePlot_scCustom <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "FeaturePlot_scCustom(slot)",
-                              with = "FeaturePlot_scCustom(layer)",
-                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    layer <- slot
-  }
 
   # Check meta
   if (!is.null(x = split.by)) {
@@ -228,13 +215,13 @@ FeaturePlot_scCustom <- function(
       plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
-        p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+        plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
       })
     } else {
       plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
-        p[[i]] <- suppressMessages(p[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+        plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
       })
     }
   }
@@ -364,6 +351,7 @@ FeaturePlot_scCustom <- function(
 #' @param assay1 name of assay one.  Default is "RAW" as featured in \code{\link{Create_CellBender_Merged_Seurat}}
 #' @param assay2 name of assay two  Default is "RNA" as featured in \code{\link{Create_CellBender_Merged_Seurat}}
 #' @param colors_use list of colors or color palette to use.
+#' @param colors_use_assay2 optional, a second color palette to use for the second assay.
 #' @param na_color color to use for points below lower limit.
 #' @param order whether to move positive cells to the top (default = TRUE).
 #' @param pt.size Adjust point size for plotting.
@@ -375,7 +363,6 @@ FeaturePlot_scCustom <- function(
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
-#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
 #' @param layer Which layer to pull expression data from?  Default is "data".
 #' @param num_columns Number of columns in plot layout.  If number of features > 1 then `num_columns`
 #' dictates the number of columns in overall layout (`num_columns = 1` means stacked layout & `num_columns = 2`
@@ -410,6 +397,7 @@ FeaturePlot_DualAssay <- function(
   assay1 = "RAW",
   assay2 = "RNA",
   colors_use = viridis_plasma_dark_high,
+  colors_use_assay2 = NULL,
   na_color = "lightgray",
   order = TRUE,
   pt.size = NULL,
@@ -418,7 +406,6 @@ FeaturePlot_DualAssay <- function(
   na_cutoff = 0.000000001,
   raster = NULL,
   raster.dpi = c(512, 512),
-  slot = deprecated(),
   layer = "data",
   num_columns = NULL,
   alpha_exp = NULL,
@@ -427,17 +414,6 @@ FeaturePlot_DualAssay <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "FeaturePlot_DualAssay(slot)",
-                              with = "FeaturePlot_DualAssay(layer)",
-                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    layer <- slot
-  }
 
   # Check assays present
   assays_not_found <- Assay_Present(seurat_object = seurat_object, assay_list = c(assay1, assay2), print_msg = FALSE, omit_warn = TRUE)[[2]]
@@ -479,15 +455,20 @@ FeaturePlot_DualAssay <- function(
   # Change assay and plot raw
   DefaultAssay(object = seurat_object) <- assay1
 
-  plot_raw <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
+  plot_assay1 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
 
   # Change to cell bender and plot
   DefaultAssay(object = seurat_object) <- assay2
 
-  plot_cell_bender <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  if (is.null(x = colors_use_assay2)) {
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  } else {
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use_assay2, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+  }
+
 
   # Assemble plots & return plots
-  plots <- wrap_plots(plot_raw, plot_cell_bender, ncol = num_columns)
+  plots <- wrap_plots(plot_assay1, plot_assay2, ncol = num_columns)
 
   # Aspect ratio changes
   if (!is.null(x = aspect_ratio)) {
@@ -654,7 +635,7 @@ VlnPlot_scCustom <- function(
 
   # Add add median plot
   if (isTRUE(x = plot_median) && is.null(x = split.by)) {
-    plot <- plot + stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
+    plot <- plot & stat_summary(fun = median, geom='point', size = median_size, colour = "white", shape = 95)
   }
 
   if (isTRUE(x = plot_median) && !is.null(x = split.by)) {
@@ -855,7 +836,7 @@ Stacked_VlnPlot <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
-#' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
+#' @param group.by Name of metadata variable (column) to group cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param colors_use specify color palette to used.  Default is viridis_plasma_dark_high.
 #' @param remove_axis_titles logical. Whether to remove the x and y axis titles.  Default = TRUE.
@@ -959,6 +940,8 @@ DotPlot_scCustom <- function(
 #' @param colors_use_idents specify color palette to used for identity labels.  By default if
 #' number of levels plotted is less than or equal to 36 it will use "polychrome" and if greater than 36
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
+#' @param show_ident_colors logical, whether to show colors for idents on the column/rows of the plot
+#' (default is TRUE).
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
 #' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
@@ -984,7 +967,14 @@ DotPlot_scCustom <- function(
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
-#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_position Location of the plot legend (default is "right").
+#' @param legend_orientation Orientation of the legend (default is NULL).
+#' @param show_ident_legend logical, whether to show the color legend for idents in plot (default is TRUE).
+#' @param show_row_names logical, whether to show row names on plot (default is TRUE).
+#' @param show_column_names logical, whether to show column names on plot (default is TRUE).
+#' @param row_names_side Should the row names be on the "left" or "right" of plot.  Default is "right".
+#' @param column_names_side Should the row names be on the "bottom" or "top" of plot.  Default is "bottom".
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1015,6 +1005,7 @@ DotPlot_scCustom <- function(
 #' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
+#' @importFrom stringr str_to_lower
 #' @importFrom tidyr pivot_wider
 #'
 #' @export
@@ -1043,6 +1034,7 @@ Clustered_DotPlot <- function(
   exp_value_type = "scaled",
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
+  show_ident_colors = TRUE,
   x_lab_rotate = TRUE,
   plot_padding = NULL,
   flip = FALSE,
@@ -1057,6 +1049,13 @@ Clustered_DotPlot <- function(
   column_label_size = 8,
   legend_label_size = 10,
   legend_title_size = 10,
+  legend_position = "right",
+  legend_orientation = NULL,
+  show_ident_legend = TRUE,
+  show_row_names = TRUE,
+  show_column_names = TRUE,
+  column_names_side = "bottom",
+  row_names_side = "right",
   raster = FALSE,
   plot_km_elbow = TRUE,
   elbow_kmax = NULL,
@@ -1068,6 +1067,15 @@ Clustered_DotPlot <- function(
   color_seed = 123,
   seed = 123
 ) {
+  # Check allowed parameter options
+  if (!str_to_lower(column_names_side) %in% c("bottom", "top")) {
+    cli_abort(message = "{.code column_names_side} must be one of {.field 'bottom'} or {.field 'top'}.")
+  }
+
+  if (!str_to_lower(row_names_side) %in% c("right", "left")) {
+    cli_abort(message = "{.code row_names_side} must be one of {.field 'right'} or {.field 'left'}.")
+  }
+
   # check split
   if (is.null(x = split.by)) {
     Clustered_DotPlot_Single_Group(seurat_object = seurat_object,
@@ -1078,6 +1086,7 @@ Clustered_DotPlot <- function(
                                    exp_color_max = exp_color_max,
                                    print_exp_quantiles = print_exp_quantiles,
                                    colors_use_idents = colors_use_idents,
+                                   show_ident_colors = show_ident_colors,
                                    x_lab_rotate = x_lab_rotate,
                                    plot_padding = plot_padding,
                                    flip = flip,
@@ -1092,6 +1101,9 @@ Clustered_DotPlot <- function(
                                    column_label_size = column_label_size,
                                    legend_label_size = legend_label_size,
                                    legend_title_size = legend_title_size,
+                                   legend_position = legend_position,
+                                   legend_orientation = legend_orientation,
+                                   show_ident_legend = show_ident_legend,
                                    raster = raster,
                                    plot_km_elbow = plot_km_elbow,
                                    elbow_kmax = elbow_kmax,
@@ -1101,6 +1113,10 @@ Clustered_DotPlot <- function(
                                    show_parent_dend_line = show_parent_dend_line,
                                    ggplot_default_colors = ggplot_default_colors,
                                    color_seed = color_seed,
+                                   show_row_names = show_row_names,
+                                   show_column_names = show_column_names,
+                                   column_names_side = column_names_side,
+                                   row_names_side = row_names_side,
                                    seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
@@ -1126,6 +1142,9 @@ Clustered_DotPlot <- function(
                                   column_label_size = column_label_size,
                                   legend_label_size = legend_label_size,
                                   legend_title_size = legend_title_size,
+                                  legend_position = legend_position,
+                                  legend_orientation = legend_orientation,
+                                  show_ident_legend = show_ident_legend,
                                   raster = raster,
                                   plot_km_elbow = plot_km_elbow,
                                   elbow_kmax = elbow_kmax,
@@ -1133,6 +1152,10 @@ Clustered_DotPlot <- function(
                                   group.by = group.by,
                                   idents = idents,
                                   show_parent_dend_line = show_parent_dend_line,
+                                  show_row_names = show_row_names,
+                                  show_column_names = show_column_names,
+                                  column_names_side = column_names_side,
+                                  row_names_side = row_names_side,
                                   seed = seed)
   }
 }
@@ -1165,6 +1188,9 @@ Clustered_DotPlot <- function(
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param split_title_size size for plot title labels when using `split.by`.
+#' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
+#' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
@@ -1174,6 +1200,8 @@ Clustered_DotPlot <- function(
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom dplyr filter
+#' @importFrom magrittr "%>%"
 #'
 #' @export
 #'
@@ -1197,6 +1225,9 @@ Cluster_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  split_title_size = 15,
+  num_columns = NULL,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 ) {
@@ -1205,6 +1236,9 @@ Cluster_Highlight_Plot <- function(
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
+  # Set reduction
+  reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   # Perform Idents check and report errors when when length(cluster_name) > 1
   if (length(x = cluster_name) > 1) {
@@ -1218,12 +1252,42 @@ Cluster_Highlight_Plot <- function(
     }
   }
 
+  # check split
+  if (!is.null(x = split.by)) {
+    if (length(x = cluster_name) > 1) {
+      cli_abort(message = "Only one cluster/ident can be plotted when using {.code split.by}.")
+    } else {
+      split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)[[1]]
+    }
+  }
+
   # pull cells to highlight in plot
-  cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
+  if (is.null(x = split.by)) {
+    cells_to_highlight <- CellsByIdentities(seurat_object, idents = cluster_name)
+  } else {
+    if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+      split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+    } else {
+      split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+    }
+
+    cells_to_highlight_list <- lapply(1:length(x = split_by_list), function(x){
+      cells <- FetchData(object = seurat_object, vars = c("ident", split.by)) %>%
+        filter(.data[["ident"]] == cluster_name &.data[[split.by]] == split_by_list[x]) %>%
+        rownames()
+    })
+
+    # Add ident names to the list
+    names(cells_to_highlight_list) <- rep(x = cluster_name, length(x = cells_to_highlight_list))
+  }
 
   # set point size
   if (is.null(x = pt.size)) {
-    pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_to_highlight)), raster = raster)
+    if (is.null(x = split.by)) {
+      pt.size <- AutoPointSize_scCustom(data = sum(lengths(x = cells_to_highlight)), raster = raster)
+    } else {
+      pt.size <- AutoPointSize_scCustom(data = max(lengths(x = cells_to_highlight_list)), raster = raster)
+    }
   }
 
   # Set colors
@@ -1234,43 +1298,86 @@ Cluster_Highlight_Plot <- function(
                            "i" = "Using the same color ({.val {highlight_color[1]}}) for all clusters."))
   }
 
+  # Adjust colors in split situation
+  if (!is.null(x = split.by)) {
+    if (length(x = highlight_color) == 1) {
+      cli_inform(message = c("NOTE: Only one color provided to but {.field {length(x = split_by_list)}} idents present in {.field {split_by}}.",
+                             "i" = "Using the same color ({.val {highlight_color[1]}}) for all idents"))
+    }
+    if (length(x = highlight_color) > 1) {
+      if (length(x = highlight_color) != length(x = split_by_list)) {
+        cli_abort(message = "The number of colors provided to {.code highlight_color} ({.field {length(x = highlight_color)}}) does not equal number of idents ({.field {length(x = split_by_list)}}) present in {.field {split_by}}")
+      }
+    }
+  }
+
   # If NULL set using scCustomize_Palette
   if (is.null(x = highlight_color)) {
-    highlight_color <- scCustomize_Palette(num_groups = length(x = cells_to_highlight), ggplot_default_colors = ggplot_default_colors)
+    if (is.null(x = split.by)) {
+      highlight_color <- scCustomize_Palette(num_groups = length(x = cells_to_highlight), ggplot_default_colors = ggplot_default_colors)
+    } else {
+      highlight_color <- scCustomize_Palette(num_groups = 1, ggplot_default_colors = ggplot_default_colors)
+    }
   }
 
   # plot
-  plot <- DimPlot_scCustom(seurat_object = seurat_object,
-          cells.highlight = cells_to_highlight,
-          cols.highlight = highlight_color,
-          colors_use = background_color,
-          sizes.highlight = pt.size,
-          pt.size = pt.size,
-          order = TRUE,
-          raster = raster,
-          raster.dpi = raster.dpi,
-          split.by = split.by,
-          split_seurat = split_seurat,
-          label = label,
-          ...)
+  if (is.null(x = split.by)) {
+    plot <- DimPlot_scCustom(seurat_object = seurat_object,
+                             cells.highlight = cells_to_highlight,
+                             cols.highlight = highlight_color,
+                             colors_use = background_color,
+                             sizes.highlight = pt.size,
+                             pt.size = pt.size,
+                             order = TRUE,
+                             raster = raster,
+                             raster.dpi = raster.dpi,
+                             label = label,
+                             reduction = reduction,
+                             ...)
 
-  # Edit plot legend
-  plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
+    # Edit plot legend
+    plot <- suppressMessages(plot & scale_color_manual(breaks = names(x = cells_to_highlight), values = c(highlight_color, background_color), na.value = background_color))
 
-  # Aspect ratio changes
-  if (!is.null(x = aspect_ratio)) {
-    if (!is.numeric(x = aspect_ratio)) {
-      cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+    # Aspect ratio changes
+    if (!is.null(x = aspect_ratio)) {
+      if (!is.numeric(x = aspect_ratio)) {
+        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
+      }
+      plot <- plot & theme(aspect.ratio = aspect_ratio)
     }
-    plot <- plot & theme(aspect.ratio = aspect_ratio)
-  }
 
-  # Figure plot
-  if (isTRUE(x = figure_plot)) {
-    plot <- Figure_Plot(plot = plot)
-  }
+    # Figure plot
+    if (isTRUE(x = figure_plot)) {
+      plot <- Figure_Plot(plot = plot)
+    }
 
-  return(plot)
+    # return plots
+    return(plot)
+  } else {
+    plots <- lapply(1:length(x = cells_to_highlight_list), function(x) {
+      plot <- Cell_Highlight_Plot(seurat_object = seurat_object,
+                                  cells_highlight = cells_to_highlight_list[x],
+                                  highlight_color = highlight_color,
+                                  background_color = background_color,
+                                  pt.size = pt.size,
+                                  aspect_ratio = aspect_ratio,
+                                  figure_plot = figure_plot,
+                                  raster = raster,
+                                  raster.dpi = raster.dpi,
+                                  label = label)
+      # Add title from split conditions
+      plot <- plot +
+        ggtitle(split_by_list[x]) +
+        theme(plot.title = element_text(hjust = 0.5, size = split_title_size))
+      plot
+    })
+
+    # Wrap Plots into single output
+    plots <- wrap_plots(plots, ncol = num_columns) + plot_layout(guides = 'collect')
+
+    # return plots
+    return(plots)
+  }
 }
 
 
@@ -1296,6 +1403,7 @@ Cluster_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
@@ -1333,6 +1441,7 @@ Meta_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 ) {
@@ -1382,6 +1491,9 @@ Meta_Highlight_Plot <- function(
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
 
+  # Set reduction
+  reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
+
   # Change default ident and pull cells to highlight in plot
   Idents(object = seurat_object) <- good_meta_data_column
 
@@ -1418,6 +1530,7 @@ Meta_Highlight_Plot <- function(
           split.by = split.by,
           split_seurat = split_seurat,
           label = label,
+          reduction = reduction,
           ...)
 
   # Update legend and return plot
@@ -1461,6 +1574,7 @@ Meta_Highlight_Plot <- function(
 #' @param split.by Variable in `@meta.data` to split the plot by.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
+#' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param ggplot_default_colors logical.  If `highlight_color = NULL`, Whether or not to return plot
 #' using default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param ... Extra parameters passed to\code{\link[Seurat]{DimPlot}}.
@@ -1502,11 +1616,15 @@ Cell_Highlight_Plot <- function(
   label = FALSE,
   split.by = NULL,
   split_seurat = FALSE,
+  reduction = NULL,
   ggplot_default_colors = FALSE,
   ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Set reduction
+  reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
   if (!inherits(x = cells_highlight, what = "list")) {
     cli_abort(message = "{.code cells_highlight} must be of class: {.val list()}.")
@@ -1614,6 +1732,13 @@ Cell_Highlight_Plot <- function(
 #' axes labels.  (Default is FALSE).  Requires `split_seurat = TRUE`.
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
+#' @param add_prop_plot logical, whether to add plot to returned layout with the number of cells per identity
+#' (or percent of cells per identity).  Default is FALSE.
+#' @param prop_plot_percent logical, if `add_prop_plot = TRUE` this parameter controls whether
+#' proportion plot shows raw cell number or percent of cells per identity.  Default is FALSE; plots raw cell number.
+#' @param prop_plot_x_log logical, if `add_prop_plot = TRUE` this parameter controls whether to change x axis
+#' to log10 scale (Default is FALSE).
+#' @param prop_plot_label logical, if `add_prop_plot = TRUE` this parameter controls whether to label the bars with total number of cells or percentages; Default is FALSE.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for crowded
 #' plots if points of interest are being buried. (Default is TRUE).
 #' @param seed Sets the seed if randomly shuffling the order of points.
@@ -1666,6 +1791,10 @@ DimPlot_scCustom <- function(
   split_seurat = FALSE,
   figure_plot = FALSE,
   aspect_ratio = NULL,
+  add_prop_plot = FALSE,
+  prop_plot_percent = FALSE,
+  prop_plot_x_log = FALSE,
+  prop_plot_label = FALSE,
   shuffle = TRUE,
   seed = 1,
   label = NULL,
@@ -1763,7 +1892,24 @@ DimPlot_scCustom <- function(
   }
 
   # set size otherwise
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
+  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object, raster = raster)
+
+  # prop plot colors
+  if (isTRUE(x = add_prop_plot)) {
+    if (is.null(x = group.by)) {
+      ident_levels <- levels(x = Idents(object = seurat_object))
+    } else {
+      meta <- Fetch_Meta(seurat_object)
+      if (is.factor(x = meta[,group.by])) {
+        ident_levels <- levels(x = meta[,group.by])
+      } else {
+        ident_levels <- sort(unique(x = meta[,group.by]))
+      }
+    }
+    # create new variable and name
+    prop_colors_use <- colors_use
+    names(prop_colors_use) <- ident_levels
+  }
 
   # Plot
   if (is.null(x = split.by)) {
@@ -1806,6 +1952,10 @@ DimPlot_scCustom <- function(
         plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
       }
 
+      if (isTRUE(x = add_prop_plot)) {
+        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+      }
+
       return(plot_figure)
     } else {
       # Aspect ratio changes
@@ -1814,6 +1964,10 @@ DimPlot_scCustom <- function(
           cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
         }
         plot <- plot & theme(aspect.ratio = aspect_ratio)
+      }
+
+      if (isTRUE(x = add_prop_plot)) {
+        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -1861,6 +2015,10 @@ DimPlot_scCustom <- function(
           plot_figure <- plot_figure & theme(aspect.ratio = aspect_ratio)
         }
 
+        if (isTRUE(x = add_prop_plot)) {
+          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        }
+
         return(plot_figure)
       } else {
         # Aspect ratio changes
@@ -1869,6 +2027,10 @@ DimPlot_scCustom <- function(
             cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
           }
           plot <- plot & theme(aspect.ratio = aspect_ratio)
+        }
+
+        if (isTRUE(x = add_prop_plot)) {
+          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
@@ -1920,6 +2082,11 @@ DimPlot_scCustom <- function(
           xlim(x_axis) +
           ylim(y_axis)
 
+        # temp? fix for ggplot2 3.5.0 while evaluating other changes
+        if (packageVersion(pkg = 'ggplot2') >= "3.5.0") {
+          plot$layers[[1]]$show.legend <- TRUE
+        }
+
         # Normalize the colors across all plots
         plot <- suppressMessages(plot + scale_color_manual(values = colors_overall, drop = FALSE))
 
@@ -1939,6 +2106,10 @@ DimPlot_scCustom <- function(
           cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
         }
         plots <- plots & theme(aspect.ratio = aspect_ratio)
+      }
+
+      if (isTRUE(x = add_prop_plot)) {
+        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
       }
 
       return(plots)
@@ -2177,6 +2348,7 @@ VariableFeaturePlot_scCustom <- function(
 #' @param seurat_object Seurat object name.
 #' @param feature1 First feature to plot.
 #' @param feature2 Second feature to plot.
+#' @param cells Cells to include on the scatter plot.
 #' @param colors_use color for the points on plot.
 #' @param pt.size Adjust point size for plotting.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
@@ -2227,6 +2399,7 @@ FeatureScatter_scCustom <- function(
     seurat_object,
     feature1 = NULL,
     feature2 = NULL,
+    cells = NULL,
     colors_use = NULL,
     pt.size = NULL,
     group.by = NULL,
@@ -2293,21 +2466,26 @@ FeatureScatter_scCustom <- function(
   }
 
   # Set uniform point size is pt.size = NULL (based on plot with most cells)
-  if (is.null(x = pt.size) && !is.null(split.by)) {
-    # cells per meta data
-    cells_by_split <- data.frame(table(seurat_object@meta.data[, split.by]))
-    # Identity with greatest number of cells
-    max_cells <- max(cells_by_split$Freq)
-    # modified version of the autopointsize function from Seurat
-    pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+  if (is.null(x = pt.size)) {
+    if (is.null(x = cells)) {
+      if (!is.null(x = split.by)) {
+        # cells per meta data
+        cells_by_split <- data.frame(table(seurat_object@meta.data[, split.by]))
+        # Identity with greatest number of cells
+        max_cells <- max(cells_by_split$Freq)
+        # modified version of the autopointsize function from Seurat
+        pt.size <- AutoPointSize_scCustom(data = max_cells, raster = raster)
+      } else {
+        pt.size <- AutoPointSize_scCustom(data = seurat_object)
+      }
+    } else {
+      pt.size <- AutoPointSize_scCustom(data = length(x = cells))
+    }
   }
-
-  # set size otherwise
-  pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cells = cells, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
 
     # Change title
     plot <- plot +
@@ -2345,5 +2523,156 @@ FeatureScatter_scCustom <- function(
 
       return(plot)
     }
+  }
+}
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### SPATIAL PLOTTING ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' SpatialDimPlot with modified default settings
+#'
+#' Creates SpatialDimPlot with some of the settings modified from their Seurat defaults (colors_use).
+#'
+#' @param seurat_object Seurat object name.
+#' @param colors_use color palette to use for plotting.  By default if number of levels plotted is less than
+#' or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
+#' both from `DiscretePalette_scCustomize`.
+#' @param group.by Name of meta.data column to group the data by
+#' @param images Name of the images to use in the plot(s)
+#' @param image.alpha Adjust the opacity of the background images. Set to 0 to
+#' remove.
+#' @param crop Crop the plot in to focus on points plotted. Set to \code{FALSE} to show
+#' entire background image.
+#' @param label Whether to label the clusters
+#' @param label.size Sets the size of the labels
+#' @param label.color Sets the color of the label text
+#' @param label.box Whether to put a box around the label text (geom_text vs
+#' geom_label)
+#' @param repel Repels the labels to prevent overlap
+#' @param ncol Number of columns if plotting multiple plots
+#' @param combine Combine plots into a single gg object; note that if TRUE;
+#' themeing will not work when plotting multiple features/groupings
+#' @param pt.size.factor Scale the size of the spots.
+#' @param alpha Controls opacity of spots. Provide as a vector specifying the
+#' min and max for SpatialFeaturePlot. For SpatialDimPlot, provide a single
+#' alpha value for each plot.
+#' @param stroke Control the width of the border around the spots
+#' @param interactive Launch an interactive SpatialDimPlot or SpatialFeaturePlot
+#' session, see \code{\link{ISpatialDimPlot}} or
+#' \code{\link{ISpatialFeaturePlot}} for more details
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#'
+#' @export
+#'
+#' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
+#' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
+#'
+#' @concept seurat_plotting
+#'
+#' @examples
+#' \dontrun{
+#' SpatialDimPlot_scCustom(seurat_object = seurat_object)
+#'}
+#'
+
+SpatialDimPlot_scCustom <- function(
+    seurat_object,
+    group.by = NULL,
+    images = NULL,
+    colors_use = NULL,
+    crop = TRUE,
+    label = FALSE,
+    label.size = 7,
+    label.color = "white",
+    label.box = TRUE,
+    repel = FALSE,
+    ncol = NULL,
+    pt.size.factor = 1.6,
+    alpha = c(1, 1),
+    image.alpha = 1,
+    stroke = 0.25,
+    interactive = FALSE,
+    combine = TRUE,
+    ggplot_default_colors = FALSE,
+    color_seed = 123,
+    ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Change label if label.box
+  if (isTRUE(x = label.box) && is.null(x = label)) {
+    label <- TRUE
+  }
+
+  # Add check for group.by before getting to colors
+  if (length(x = group.by) > 1) {
+    Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+  } else {
+    if (!is.null(x = group.by) && group.by != "ident") {
+      Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)
+    }
+  }
+
+  label <- label %||% (is.null(x = group.by))
+
+  # Set default color palette based on number of levels being plotted
+  if (length(x = group.by) > 1) {
+    all_length <- lapply(group.by, function(x) {
+      num_var <- length(x = unique(x = seurat_object@meta.data[[x]]))
+    })
+    group_by_length <- max(unlist(x = all_length))
+  } else {
+    if (is.null(x = group.by)) {
+      group_by_length <- length(x = unique(x = seurat_object@active.ident))
+    } else {
+      group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
+    }
+  }
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # name color palette so that it works
+  if (is.null(x = group.by)) {
+    names(colors_use) <- levels(Idents(object = seurat_object))
+  } else {
+    if (isTRUE(x = inherits(x = seurat_object[[group.by]], what = "factor"))) {
+      names(colors_use) <- levels(seurat_object[[group.by]])
+    } else {
+      names(colors_use) <- unique(seurat_object[[group.by]])
+    }
+  }
+
+  if (isFALSE(x = interactive)) {
+    plot <- SpatialDimPlot(object = seurat_object, group.by = group.by, images = images, cols = colors_use, crop = crop, label = label, label.size = label.size, label.color = label.color, label.box = label.box, repel = repel, ncol = ncol, combine = combine, alpha = alpha, pt.size.factor = pt.size.factor, image.alpha = image.alpha, stroke = stroke, interactive = interactive, ...)
+
+    return(plot)
+  } else {
+    return(ISpatialDimPlot(
+      object = seurat_object,
+      image = images[1],
+      group.by = group.by,
+      alpha = alpha
+    ))
   }
 }

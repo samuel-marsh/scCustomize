@@ -13,6 +13,7 @@ QC_Plot_UMIvsFeature(
   high_cutoff_UMI = NULL,
   low_cutoff_feature = NULL,
   high_cutoff_feature = NULL,
+  cutoff_line_width = NULL,
   colors_use = NULL,
   pt.size = 1,
   group.by = NULL,
@@ -40,6 +41,8 @@ QC_Plot_UMIvsFeature(
 \item{low_cutoff_feature}{Plot line a potential low threshold for filtering feature1 per cell.}
 
 \item{high_cutoff_feature}{Plot line a potential high threshold for filtering feature1 per cell.}
+
+\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
 
 \item{colors_use}{vector of colors to use for plotting by identity.}
 

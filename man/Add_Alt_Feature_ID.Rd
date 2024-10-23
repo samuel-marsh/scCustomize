@@ -8,7 +8,9 @@ Add_Alt_Feature_ID(
   seurat_object,
   features_tsv_file = NULL,
   hdf5_file = NULL,
-  assay = NULL
+  assay = NULL,
+  data_name = "feature_id_mapping_table",
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -22,12 +24,17 @@ Add_Alt_Feature_ID(
 
 \item{assay}{name of assay(s) to add the alternative features to.  Can specify "all"
 to add to all assays.}
+
+\item{data_name}{name to use for data.frame when stored in \verb{@misc} slot.}
+
+\item{overwrite}{logical, whether to overwrite item with the same \code{data_name} in the
+\verb{@misc} slot of object (default is FALSE).}
 }
 \value{
-Seurat Object with new entries in the \code{obj@assays$ASSAY@meta.data} slot.
+Seurat Object with new entries in the \code{obj@misc} slot.
 }
 \description{
-Add alternative feature ids to the assay level meta.data slot in Assay5 compatible object (Seurat V5.0.0 or greater)
+Add alternative feature ids data.frame to the misc slot of Seurat object.
 }
 \examples{
 \dontrun{

@@ -14,6 +14,7 @@
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -52,6 +53,7 @@ QC_Plots_Genes <- function(
   y_axis_label = "Features",
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   plot_boxplot = FALSE,
@@ -68,7 +70,7 @@ QC_Plots_Genes <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -100,6 +102,7 @@ QC_Plots_Genes <- function(
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -138,6 +141,7 @@ QC_Plots_UMIs <- function(
   y_axis_label = "UMIs",
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -154,7 +158,7 @@ QC_Plots_UMIs <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -180,7 +184,7 @@ QC_Plots_UMIs <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
-#' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
+#' "percent_mito" which is default value created when using `Add_Mito_Ribo()`.
 #' @param plot_title Plot Title.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
@@ -188,6 +192,7 @@ QC_Plots_UMIs <- function(
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -227,6 +232,7 @@ QC_Plots_Mito <- function(
   y_axis_label = "% Mitochondrial Gene Counts",
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -243,7 +249,7 @@ QC_Plots_Mito <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -276,6 +282,7 @@ QC_Plots_Mito <- function(
 #' @param plot_title Plot Title.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -317,6 +324,7 @@ QC_Plots_Feature <- function(
   plot_title = NULL,
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -336,7 +344,7 @@ QC_Plots_Feature <- function(
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -369,6 +377,7 @@ QC_Plots_Feature <- function(
 #' @param plot_title Plot Title.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -409,6 +418,7 @@ QC_Plots_Complexity <- function(
   plot_title = "Cell Complexity",
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   plot_boxplot = FALSE,
@@ -421,7 +431,7 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
-  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
+  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
 
   return(plot)
 }
@@ -438,7 +448,8 @@ QC_Plots_Complexity <- function(
 #' @param UMI_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
 #' @param mito_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
-#' "percent_mito" which is default value created when using `Add_Mito_Ribo_Seurat()`.
+#' "percent_mito" which is default value created when using `Add_Mito_Ribo()`.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -478,6 +489,7 @@ QC_Plots_Combined_Vln <- function(
   UMI_cutoffs = NULL,
   mito_cutoffs = NULL,
   mito_name = "percent_mito",
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -511,11 +523,11 @@ QC_Plots_Combined_Vln <- function(
   }
 
   # Create Individual Plots
-  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
 
-  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
 
-  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, ...)
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
 
   # wrap plots
   plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
@@ -537,6 +549,7 @@ QC_Plots_Combined_Vln <- function(
 #' @param features Feature from meta.data, assay features, or feature name shortcut to plot.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param bins number of bins to plot default is 250.
 #' @param colors_use color to fill histogram bars, default is "dodgerblue".
@@ -571,6 +584,7 @@ QC_Histogram <- function(
     features,
     low_cutoff = NULL,
     high_cutoff = NULL,
+    cutoff_line_width = NULL,
     split.by = NULL,
     bins = 250,
     colors_use = "dodgerblue",
@@ -633,7 +647,7 @@ QC_Histogram <- function(
       plot <- ggplot(data = seurat_object@meta.data, aes(x = .data[[all_found_features[x]]])) +
         geom_histogram(color = "black", fill = colors_use, bins = bins) +
         theme_cowplot() +
-        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
         ggtitle(plot_titles[x])
     })
 
@@ -699,6 +713,7 @@ QC_Histogram <- function(
 #' @param high_cutoff_gene Plot line a potential high threshold for filtering genes per cell.
 #' @param low_cutoff_UMI Plot line a potential low threshold for filtering UMIs per cell.
 #' @param high_cutoff_UMI Plot line a potential high threshold for filtering UMIs per cell.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param colors_use vector of colors to use for plotting by identity.
 #' @param meta_gradient_name Name of continuous meta data variable to color points in plot by.
 #' (MUST be continuous variable i.e. "percent_mito").
@@ -755,6 +770,7 @@ QC_Plot_UMIvsGene <- function(
   high_cutoff_gene = Inf,
   low_cutoff_UMI = -Inf,
   high_cutoff_UMI = Inf,
+  cutoff_line_width = NULL,
   colors_use = NULL,
   meta_gradient_name = NULL,
   meta_gradient_color = viridis_plasma_dark_high,
@@ -869,8 +885,8 @@ QC_Plot_UMIvsGene <- function(
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
         theme(plot.title = element_text(hjust = 0.5)) +
-        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
-        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
+        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
         xlab(x_axis_label) +
         ylab(y_axis_label) +
         ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".  ", "\nThe low cutoff for plotting ", meta_gradient_name, " is: ", meta_cutoff_reported)))
@@ -881,8 +897,8 @@ QC_Plot_UMIvsGene <- function(
       scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
       theme_cowplot() +
       theme(plot.title = element_text(hjust = 0.5)) +
-      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
-      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
+      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
       xlab(x_axis_label) +
       ylab(y_axis_label) +
       ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".  ", "\nThe low cutoff for plotting ", meta_gradient_name, " is: ", meta_cutoff_reported)))
@@ -891,8 +907,8 @@ QC_Plot_UMIvsGene <- function(
   # Plot by identity
   if (is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
     p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
-      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
+      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
       xlab(x_axis_label) +
       ylab(y_axis_label) +
       ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".")))
@@ -902,8 +918,8 @@ QC_Plot_UMIvsGene <- function(
   if (isTRUE(x = combination)) {
     # Plot by identity
     p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
-      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
+      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
       xlab(x_axis_label) +
       ylab(y_axis_label) + ggtitle("")
 
@@ -918,8 +934,8 @@ QC_Plot_UMIvsGene <- function(
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
         theme(plot.title = element_text(hjust = 0.5)) +
-        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
-        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
+        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
         xlab(x_axis_label) +
         ylab(y_axis_label)
     } else {
@@ -928,8 +944,8 @@ QC_Plot_UMIvsGene <- function(
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
         theme(plot.title = element_text(hjust = 0.5)) +
-        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red") +
-        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue") +
+        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
         xlab(x_axis_label) +
         ylab(y_axis_label)
     }
@@ -953,6 +969,7 @@ QC_Plot_UMIvsGene <- function(
 #' @param high_cutoff_gene Plot line a potential high threshold for filtering genes per cell.
 #' @param low_cutoff_feature Plot line a potential low threshold for filtering feature1 per cell.
 #' @param high_cutoff_feature Plot line a potential high threshold for filtering feature1 per cell.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param colors_use vector of colors to use for plotting by identity.
 #' @param pt.size Adjust point size for plotting.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
@@ -992,6 +1009,7 @@ QC_Plot_GenevsFeature <- function(
   high_cutoff_gene = NULL,
   low_cutoff_feature = NULL,
   high_cutoff_feature = NULL,
+  cutoff_line_width = NULL,
   colors_use = NULL,
   pt.size = 1,
   group.by = NULL,
@@ -1037,8 +1055,8 @@ QC_Plot_GenevsFeature <- function(
 
   # Plot
   FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nFeature_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-    geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red") +
-    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue") +
+    geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
+    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label)
 }
@@ -1056,6 +1074,7 @@ QC_Plot_GenevsFeature <- function(
 #' @param high_cutoff_UMI Plot line a potential high threshold for filtering UMI per cell.
 #' @param low_cutoff_feature Plot line a potential low threshold for filtering feature1 per cell.
 #' @param high_cutoff_feature Plot line a potential high threshold for filtering feature1 per cell.
+#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
 #' @param colors_use vector of colors to use for plotting by identity.
 #' @param pt.size Adjust point size for plotting.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
@@ -1095,6 +1114,7 @@ QC_Plot_UMIvsFeature <- function(
   high_cutoff_UMI = NULL,
   low_cutoff_feature = NULL,
   high_cutoff_feature = NULL,
+  cutoff_line_width = NULL,
   colors_use = NULL,
   pt.size = 1,
   group.by = NULL,
@@ -1140,8 +1160,8 @@ QC_Plot_UMIvsFeature <- function(
 
   # Plot
   FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nCount_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-    geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red") +
-    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue") +
+    geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
+    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label)
 }

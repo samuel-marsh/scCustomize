@@ -12,6 +12,7 @@ QC_Plots_UMIs(
   y_axis_label = "UMIs",
   low_cutoff = NULL,
   high_cutoff = NULL,
+  cutoff_line_width = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -40,6 +41,8 @@ default is the current active.ident of the object.}
 \item{low_cutoff}{Plot line a potential low threshold for filtering.}
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
+
+\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
 
 \item{pt.size}{Point size for plotting.}
 

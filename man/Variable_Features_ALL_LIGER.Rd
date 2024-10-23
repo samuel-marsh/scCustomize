@@ -11,7 +11,7 @@ Variable_Features_ALL_LIGER(
   alpha.thresh = 0.99,
   tol = 1e-04,
   do.plot = FALSE,
-  pt.size = 0.3,
+  pt.size = 1.5,
   chunk = 1000
 )
 }
@@ -28,7 +28,8 @@ Genes with expression variance greater than threshold (relative to mean) are sel
 \item{alpha.thresh}{Alpha threshold. Controls upper bound for expected mean gene
 expression (lower threshold -> higher upper bound). (default 0.99)}
 
-\item{tol}{Tolerance to use for optimization if num.genes values passed in (default 0.0001).}
+\item{tol}{Tolerance to use for optimization if num.genes values passed in (default 0.0001).
+Only applicable for rliger < 2.0.0.}
 
 \item{do.plot}{Display log plot of gene variance vs. gene expression. Selected genes are
 plotted in green. (Default FALSE)}
