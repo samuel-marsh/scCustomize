@@ -1443,6 +1443,7 @@ Random_Cells_Downsample <- function(
     num_cells,
     group.by = "ident",
     return_list = FALSE,
+    force_max_cells = FALSE,
     seed = 123
 ) {
   # Check seurat
@@ -1471,28 +1472,42 @@ Random_Cells_Downsample <- function(
   min_cells <- min(ident_lengths)
   min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
 
-  # set num_cells if value is "min"
-  if (num_cells == "min") {
-    cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
-                           "{col_green({symbol$tick})} Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
-    num_cells <- min_cells
+  if (isFALSE(x = force_max_cells)) {
+    # set num_cells if value is "min"
+    if (num_cells == "min") {
+      cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
+                             "{col_green({symbol$tick})} Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
+      num_cells <- min_cells
+    }
+
+    # check size of num_cells
+    if (min_cells < num_cells) {
+      cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity.",
+                            "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
+    }
   }
 
-  # check size of num_cells
-  if (min_cells < num_cells) {
-    cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity.",
-                          "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
+  # set values if force
+  if (isTRUE(x = force_max_cells)) {
+    num_cells <- unlist(x = lapply(1:length(x = ident_lengths), function(x){
+      val <- ident_lengths[x]
+      val <- replace(val, val < 1400, val)
+      val <- replace(val, val > 1400, 1400)
+      val
+    }))
+  } else {
+    num_cells <- rep(num_cells, length(x = idents_all))
   }
 
   # set seed and select random cells per ident
   set.seed(seed = seed)
 
-  random_cells <- lapply(idents_all, function(x) {
+  random_cells <- lapply(1:length(idents_all), function(x) {
     clus_barcodes <- cluster_barcodes %>%
-      filter(ident == x) %>%
+      filter(ident == idents_all[x]) %>%
       column_to_rownames("barcodes") %>%
       rownames() %>%
-      sample(size = num_cells)
+      sample(size = num_cells[x])
   })
 
   # return downsampled cells
