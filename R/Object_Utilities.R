@@ -1508,7 +1508,7 @@ Random_Cells_Downsample <- function(
 
   random_cells <- lapply(1:length(idents_all), function(x) {
     clus_barcodes <- cluster_barcodes %>%
-      filter(ident == idents_all[x]) %>%
+      filter(.data[["ident"]] == idents_all[x]) %>%
       column_to_rownames("barcodes") %>%
       rownames() %>%
       sample(size = num_cells[x])
