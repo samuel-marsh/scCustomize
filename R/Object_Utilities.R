@@ -1605,7 +1605,7 @@ Store_Misc_Info_Seurat <- function(
       Misc(object = seurat_object, slot = data_name) <- data_to_store
       # seurat_object@misc[[data_name]] <- data_to_store
       cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                             "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}}")
+                             "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=', ')}}")
       )
       return(seurat_object)
     }
@@ -1623,7 +1623,7 @@ Store_Misc_Info_Seurat <- function(
       # seurat_object@misc[[data_name[i]]] <- data_to_store[[i]]
     }
     cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=", ")}}")
+                           "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=', ')}}")
     )
     return(seurat_object)
   } else {
