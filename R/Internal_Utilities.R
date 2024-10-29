@@ -1403,7 +1403,7 @@ Percent_Expressing_Meta <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Check features exist in object
-  features_list <- Feature_Present(data = seurat_object, features = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
+  features_list <- Feature_PreCheck(object = seurat_object, features = features, assay = assay)
 
   # Check group_by is in object
   if (!is.null(x = group_by) && group_by == "ident") {
