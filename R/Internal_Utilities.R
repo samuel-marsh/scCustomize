@@ -1360,6 +1360,120 @@ PercentAbove_Seurat <- function(x, threshold) {
 }
 
 
+#' Calculate percent of expressing cells from meta data category
+#'
+#' For internal use in calculating module score significance
+#'
+#' @param seurat_object Seurat object name.
+#' @param features Feature(s) to plot.
+#' @param threshold Expression threshold to use for calculation of percent expressing (default is 0).
+#' @param group_by Factor to group the cells by.
+#' @param split_by Factor to split the groups by.
+#' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
+#' across the entire object as opposed to by cluster or by `group_by` variable.
+#' @param assay Assay to pull feature data from.  Default is active assay.
+#' @param layer Which layer to pull expression data from?  Default is "data".
+#'
+#' @return A data.frame
+#'
+#' @references Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
+#' to generate values to use for plotting.  Source code can be found here:
+#' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+
+Percent_Expressing_Meta <- function(
+    seurat_object,
+    features,
+    threshold = 0,
+    group_by = NULL,
+    split_by = NULL,
+    entire_object = FALSE,
+    layer = "data",
+    assay = NULL
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Check features exist in object
+  features_list <- Feature_Present(data = seurat_object, features = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
+
+  # Check group_by is in object
+  if (!is.null(x = group_by) && group_by == "ident") {
+    group_by <- NULL
+  }
+
+  if (!is.null(x = group_by)) {
+    possible_groups <- colnames(x = seurat_object@meta.data)
+    if (!group_by %in% possible_groups) {
+      cli_abort("Grouping variable {.val {group_by}} was not found in Seurat Object.")
+    }
+  }
+
+  # Check split_by is in object
+  if (!is.null(x = split_by)) {
+    possible_groups <- colnames(x = seurat_object@meta.data)
+    if (!split_by %in% possible_groups) {
+      cli_abort("Splitting variable {.val {split_by}} was not found in Seurat Object.")
+    }
+  }
+
+  # Pull Expression Info
+  cells <- unlist(x = CellsByIdentities(object = seurat_object, idents = NULL))
+  expression_info <- FetchData(object = seurat_object, vars = features_list, cells = cells, layer = layer)
+
+  # Add grouping variable
+  if (isTRUE(x = entire_object)) {
+    expression_info$id <- "All_Cells"
+  } else {
+    expression_info$id <- if (is.null(x = group_by)) {
+      Idents(object = seurat_object)[cells, drop = TRUE]
+    } else {
+      seurat_object[[group_by, drop = TRUE]][cells, drop = TRUE]
+    }
+  }
+  if (!is.factor(x = expression_info$id)) {
+    expression_info$id <- factor(x = expression_info$id)
+  }
+  id.levels <- levels(x = expression_info$id)
+  expression_info$id <- as.vector(x = expression_info$id)
+
+  # Split data if split.by is true
+  if (!is.null(x = split_by)) {
+    splits <- seurat_object[[split_by, drop = TRUE]][cells, drop = TRUE]
+    expression_info$id <- paste(expression_info$id, splits, sep = '_')
+    unique.splits <- unique(x = splits)
+    id.levels <- paste0(rep(x = id.levels, each = length(x = unique.splits)), "_", rep(x = unique(x = splits), times = length(x = id.levels)))
+  }
+
+  # Calculate percent expressing
+  percent_expressing <- lapply(
+    X = unique(x = expression_info$id),
+    FUN = function(ident) {
+      data.use <- expression_info[expression_info$id == ident, 1:(ncol(x = expression_info) - 1), drop = FALSE]
+      pct.exp <- apply(X = data.use, MARGIN = 2, FUN = PercentAbove_Seurat, threshold = threshold)
+      return(list(pct.exp = pct.exp))
+    }
+  )
+  names(x = percent_expressing) <- unique(x = expression_info$id)
+
+  # Convert & return data.frame
+  row_dim_names <- features_list
+  col_dim_names <- names(x = percent_expressing)
+  mat_dims <- list(row_dim_names, col_dim_names)
+  final_df <- data.frame(matrix(unlist(percent_expressing), nrow = length(features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
+  return(final_df)
+}
+
+
+
 #' Extract delimiter information from a string.
 #'
 #' Parses a string (usually a cell name) and extracts fields based on a delimiter
