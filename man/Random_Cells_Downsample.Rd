@@ -9,6 +9,7 @@ Random_Cells_Downsample(
   num_cells,
   group.by = "ident",
   return_list = FALSE,
+  allow_lower = FALSE,
   seed = 123
 )
 }
@@ -23,6 +24,11 @@ use the maximum number of barcodes based on size of smallest group.}
 
 \item{return_list}{logical, whether or not to return the results as list instead of vector, default is
 FALSE.}
+
+\item{allow_lower}{logical, if number of cells in identity is lower than \code{num_cells} keep the
+maximum number of cells, default is FALSE.  If FALSE will report error message if \code{num_cells} is
+too high, if TRUE will subset cells with more than \code{num_cells} to that value and those with less
+than \code{num_cells} will not be downsampled.}
 
 \item{seed}{random seed to use for downsampling.  Default is 123.}
 }

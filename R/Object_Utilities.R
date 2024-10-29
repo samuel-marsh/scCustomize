@@ -1410,6 +1410,10 @@ Fetch_Meta.Seurat <- function(
 #' @param group.by The ident to use to group cells.  Default is "ident" which use current active.ident.  .
 #' @param return_list logical, whether or not to return the results as list instead of vector, default is
 #' FALSE.
+#' @param allow_lower logical, if number of cells in identity is lower than `num_cells` keep the
+#' maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
+#' too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
+#' than `num_cells` will not be downsampled.
 #' @param seed random seed to use for downsampling.  Default is 123.
 #'
 #' @import cli
@@ -1443,7 +1447,7 @@ Random_Cells_Downsample <- function(
     num_cells,
     group.by = "ident",
     return_list = FALSE,
-    force_max_cells = FALSE,
+    allow_lower = FALSE,
     seed = 123
 ) {
   # Check seurat
@@ -1472,7 +1476,7 @@ Random_Cells_Downsample <- function(
   min_cells <- min(ident_lengths)
   min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
 
-  if (isFALSE(x = force_max_cells)) {
+  if (isFALSE(x = allow_lower)) {
     # set num_cells if value is "min"
     if (num_cells == "min") {
       cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
@@ -1488,11 +1492,11 @@ Random_Cells_Downsample <- function(
   }
 
   # set values if force
-  if (isTRUE(x = force_max_cells)) {
+  if (isTRUE(x = allow_lower)) {
     num_cells <- unlist(x = lapply(1:length(x = ident_lengths), function(x){
       val <- ident_lengths[x]
-      val <- replace(val, val < 1400, val)
-      val <- replace(val, val > 1400, 1400)
+      val <- replace(val, val < num_cells, val)
+      val <- replace(val, val > num_cells, num_cells)
       val
     }))
   } else {
