@@ -636,7 +636,7 @@ Run_Module_Sig <- function(
   all_features <- Features(x = seurat_object)
   random_gene_sets <- lapply(1:10, function(x){
     lapply(vector("list", 1000), function(x) {
-      sample(all_features, num_features)
+      sample(x = all_features, size = num_features)
     })
   })
 
@@ -654,7 +654,7 @@ Run_Module_Sig <- function(
   # split list into 10 to enable progress bar
   cli_progress_bar(total = 10)
   for (i in 1:10) {
-    pbmc <- AddModuleScore(sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
+    pbmc <- AddModuleScore(object = sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
     cli_progress_update()
   }
   cli_process_done()
@@ -673,11 +673,11 @@ Run_Module_Sig <- function(
   gc(verbose = FALSE)
 
   # Calculate median, mad, and med+3*mad
-  random_medians <- sapply(Filter(is.numeric, randomscores), median)
-  random_mads <- sapply(Filter(is.numeric, randomscores), mad)
-  random_score_stats <- data.frame(median=random_medians, mad=random_mads)
+  random_medians <- sapply(Filter(f = is.numeric, x = randomscores), median)
+  random_mads <- sapply(Filter(f = is.numeric, x = randomscores), mad)
+  random_score_stats <- data.frame("median"=random_medians, "mad"=random_mads)
   random_score_stats <- random_score_stats %>%
-    mutate(mad3=median+mad*3)
+    mutate("mad3" = median+mad*3)
 
   # plot median + 3xMAD and quantiles
   plot_mad <- ggplot(random_score_stats, aes(x = .data[["mad3"]], y = "", fill = factor(after_stat(quantile)))) +
@@ -691,7 +691,7 @@ Run_Module_Sig <- function(
       labels = c("(0, 0.025)", "(0.01, 0.975)", "(0.975, 1)")
     ) +
     ylab("") +
-    xlab("Median Random Module Score + 3xMAD") +
+    xlab(label = "Median Random Module Score + 3xMAD") +
     theme_ggprism_mod()
 
   # print plot
