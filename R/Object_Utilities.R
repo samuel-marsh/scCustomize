@@ -1546,6 +1546,7 @@ Random_Cells_Downsample <- function(
 #' as list (TRUE) or whether to store each entry in the list separately (FALSE).  Default is FALSE.
 #' @param overwrite Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
 #' that function will abort if item with `data_name` is present in misc slot.
+#' @param verbose logical, whether to print messages when running function, default is TRUE.
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
 #'
@@ -1568,7 +1569,8 @@ Store_Misc_Info_Seurat <- function(
   data_to_store,
   data_name,
   list_as_list = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  verbose = TRUE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -1604,9 +1606,11 @@ Store_Misc_Info_Seurat <- function(
       # Add data
       Misc(object = seurat_object, slot = data_name) <- data_to_store
       # seurat_object@misc[[data_name]] <- data_to_store
-      cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                             "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=', ')}}")
-      )
+      if (isTRUE(x = verbose)) {
+        cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
+                               "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=', ')}}")
+        )
+      }
       return(seurat_object)
     }
 
@@ -1622,9 +1626,12 @@ Store_Misc_Info_Seurat <- function(
       Misc(object = seurat_object, slot = data_name[[i]]) <- data_to_store[[i]]
       # seurat_object@misc[[data_name[i]]] <- data_to_store[[i]]
     }
-    cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=', ')}}")
-    )
+    if (isTRUE(x = verbose)) {
+      cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
+                             "i" = "{.field {paste(shQuote(names(x = seurat_object@misc)), collapse=', ')}}")
+      )
+    }
+
     return(seurat_object)
   } else {
     # Check length of name
@@ -1636,9 +1643,12 @@ Store_Misc_Info_Seurat <- function(
     Misc(object = seurat_object, slot = data_name) <- data_to_store
     # seurat_object@misc[[data_name]] <- data_to_store
     misc_names <- shQuote(string = names(x = seurat_object@misc))
-    cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
-                           "i" = "{.field {glue_collapse_scCustom(input_string = misc_names, and = TRUE)}}")
-    )
+    if (isTRUE(x = verbose)) {
+      cli_inform(message = c("Seurat Object now contains the following items in @misc slot: ",
+                             "i" = "{.field {glue_collapse_scCustom(input_string = misc_names, and = TRUE)}}")
+      )
+    }
+
     return(seurat_object)
   }
 }
@@ -1657,6 +1667,7 @@ Store_Misc_Info_Seurat <- function(
 #' as list (TRUE) or whether to store each entry in the list separately (FALSE).  Default is FALSE.
 #' @param overwrite Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
 #' that function will abort if item with `data_name` is present in misc slot.
+#' @param verbose logical, whether to print messages when running function, default is TRUE.
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
 #'
@@ -1677,12 +1688,13 @@ Store_Palette_Seurat <- function(
   palette,
   palette_name,
   list_as_list = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  verbose = TRUE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite)
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite, verbose = verbose)
   return(seurat_object)
 }
 
