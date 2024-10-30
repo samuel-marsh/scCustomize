@@ -551,21 +551,25 @@ CellBender_Feature_Diff <- function(
 #' Also returns plots for cutoff determination and cell enrichment.
 #' See details below for more information on usage and how the enrichment cutoff is calculated.
 #'
-#' @param seurat_object
-#' @param score_name
-#' @param num_features
-#' @param downsample_cell_num
-#' @param allow_lower
-#' @param plot_mad_cutoffs
-#' @param plot_enrichment
-#' @param colors_use_enrichment
-#' @param ggplot_default_colors
-#' @param color_seed
-#' @param return_plots
-#' @param seed
+#' @param seurat_object seurat object.
+#' @param score_name name of column in object meta.data containing the score to test against.
+#' @param num_features number of features in list used to create `score_name`.
+#' @param downsample_cell_num number of cells to downsample each identity to.  Must be less than
+#' number of cells in smallest identity unless `allow_lower = TRUE`.
+#' @param allow_lower logical, allow identities with less cells than `downsample_cell_num` to be remain
+#' unsampled.
+#' @param plot_mad_cutoffs logical, whether to print mad_cutoff plots, default is TRUE.
+#' @param plot_enrichment logical, whether to print enrichment percentage plots, default is TRUE.
+#' @param colors_use_enrichment colors to use for each identity plotted in enrichment percentage plot.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#' @param return_plots logical, whether to save plots to `@misc` slot of object.
+#' @param seed random seed to use for both object downsampling and module scoring.
 #'
-#' @return seurat object with cutoff threshold in `@misc` slot. If `return_plots = TRUE` also returns
-#' plots in the `@misc` slot.
+#' @return seurat object with cutoff threshold value and percent enriched data.frame in `@misc` slot.
+#' If `return_plots = TRUE` also returns plots in the `@misc` slot.
 #'
 #' @import cli
 #' @import ggplot2
@@ -619,7 +623,8 @@ Run_Module_Sig <- function(
     ggplot_default_colors = FALSE,
     color_seed = 123,
     return_plots = FALSE,
-    seed = 123
+    seed = 123,
+    verbose = TRUE
 ) {
   # Check score name
   score_name <- Feature_PreCheck(object = seurat_object, features = score_name)
@@ -637,12 +642,16 @@ Run_Module_Sig <- function(
   sub_obj <- subset(x = seurat_object, cells = cells)
 
   # Score object
-  cli_inform(message = c("i" = "Creating 1,000 random module scores."))
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("i" = "Creating 1,000 random module scores."))
+  }
+
   sub_obj <- AddModuleScore(object = sub_obj, features = random_gene_sets, name = "RandomRun", search = FALSE, seed = seed)
 
   # Inform complete and pause briefly
-  cli_inform("{col_green({symbol$tick})} Complete")
-  # Sys.sleep(time = 2)
+  if (isTRUE(x = verbose)) {
+    cli_inform("{col_green({symbol$tick})} Complete")
+  }
 
   # Get scores
   score_columns <- grep("RandomRun", colnames(sub_obj@meta.data))
@@ -659,20 +668,23 @@ Run_Module_Sig <- function(
   random_score_stats <- random_score_stats %>%
     mutate(mad3=median+mad*3)
 
+  # plot median + 3xMAD and quantiles
+  plot_mad <- ggplot(random_score_stats, aes(x = .data[["mad3"]], y = "", fill = factor(after_stat(quantile)))) +
+    stat_density_ridges(
+      geom = "density_ridges_gradient",
+      calc_ecdf = TRUE,
+      quantiles = c(0.025, 0.975)
+    ) +
+    scale_fill_manual(
+      name = "Probability", values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
+      labels = c("(0, 0.025)", "(0.01, 0.975)", "(0.975, 1)")
+    ) +
+    ylab("") +
+    xlab("Median Random Module Score + 3xMAD") +
+    theme_ggprism_mod()
+
+  # print plot
   if (isTRUE(x = plot_mad_cutoffs)) {
-    plot_mad <- ggplot(random_score_stats, aes(x = .data[["mad3"]], y = "", fill = factor(after_stat(quantile)))) +
-      stat_density_ridges(
-        geom = "density_ridges_gradient",
-        calc_ecdf = TRUE,
-        quantiles = c(0.025, 0.975)
-      ) +
-      scale_fill_manual(
-        name = "Probability", values = c("#FF0000A0", "#A0A0A0A0", "#0000FFA0"),
-        labels = c("(0, 0.025)", "(0.01, 0.975)", "(0.975, 1)")
-      ) +
-      ylab("") +
-      xlab("Median Random Module Score + 3xMAD") +
-      theme_ggprism_mod()
     suppressMessages(print(x = plot_mad))
   }
 
@@ -680,65 +692,68 @@ Run_Module_Sig <- function(
   stats_quantile <- quantile(x = random_score_stats$mad3, probs = 97.5/100)
 
   # print the value
-  cli_inform(message = c("The enrichment cutoff value is 97.5 quantile of random module score medians + 3xMAD",
-                         "i" = "For random scores of {.field {num_features}} features in this dataset the cutoff is: {.field {stats_quantile}} \n"))
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("The enrichment cutoff value is 97.5 quantile of random module score medians + 3xMAD",
+                           "i" = "For random scores of {.field {num_features}} features in this dataset the cutoff is: {.field {stats_quantile}} \n"))
+  }
 
   # store cutoff
-  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = stats_quantile, data_name = paste0("Enrichment Cutoff for: ", score_name))
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = stats_quantile, data_name = paste0("Enrichment Cutoff for: ", score_name), verbose = verbose)
 
+  # get ident length
+  num_idents <- length(x = levels(x = Idents(object = seurat_object)))
+
+  # pull meta data for plotting
+  plot_data <- Fetch_Meta(object = seurat_object) %>%
+    select(any_of(score_name))
+
+  plot_data$Identity <- Idents(object = seurat_object)
+
+  # Check colors use and set accordingly
+  if (!is.null(x = colors_use_enrichment) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use_enrichment} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  if (!is.null(x = colors_use_enrichment)) {
+    if (length(x = colors_use_enrichment) != num_idents) {
+      cli_abort(message = c("Not enough colors provided.",
+                            "i" = "Length of {.code colors_use_enrichment} ({.field {length(x = colors_use_enrichment)}}) does not equal number of plots ({.field {num_plots}})."))
+    }
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use_enrichment)) {
+    colors_use_enrichment <- scCustomize_Palette(num_groups = num_idents, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # Get percent enriched for each ident
+  percent_enriched <- Percent_Expressing_Meta(seurat_object = seurat_object, features = score_name, threshold = stats_quantile)
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = percent_enriched, data_name = paste0("Percent of Cells Enriched for: ", score_name), verbose = verbose)
+
+  # plot
+  plot_enrichment <- ggplot(plot_data, mapping = aes(y = .data[["Identity"]], x = .data[[score_name]], color = .data[["Identity"]])) +
+    geom_point(position = "jitter") +
+    theme_ggprism_mod() +
+    geom_vline(xintercept = stats_quantile) +
+    annotate(geom = "label",
+             y = c(seq(1:num_idents)),
+             x = Inf,
+             label = paste0(round(percent_enriched, 2), "%"),
+             hjust = 1,
+             fontface = "bold") +
+    scale_color_manual(values = colors_use_enrichment) +
+    ggtitle(paste0("Percent of Cells Enriched for module score: ", score_name)) +
+    ylab("") +
+    guides(color = guide_legend(override.aes = list(size = 3, alpha = 1))) +
+    theme(legend.text = element_text(vjust = 0.6))
+
+  # print plot
   if (isTRUE(x = plot_enrichment)) {
-    # get ident length
-    num_idents <- length(x = levels(x = Idents(object = seurat_object)))
-
-    # pull meta data for plotting
-    plot_data <- Fetch_Meta(object = seurat_object) %>%
-      select(any_of(score_name))
-
-    plot_data$Identity <- Idents(object = seurat_object)
-
-    # Check colors use and set accordingly
-    if (!is.null(x = colors_use_enrichment) && isTRUE(x = ggplot_default_colors)) {
-      cli_abort(message = "Cannot provide both custom palette to {.code colors_use_enrichment} and specify {.code ggplot_default_colors = TRUE}.")
-    }
-
-    if (!is.null(x = colors_use_enrichment)) {
-      if (length(x = colors_use_enrichment) != num_idents) {
-        cli_abort(message = c("Not enough colors provided.",
-                              "i" = "Length of {.code colors_use_enrichment} ({.field {length(x = colors_use_enrichment)}}) does not equal number of plots ({.field {num_plots}})."))
-      }
-    }
-
-    # set default plot colors
-    if (is.null(x = colors_use_enrichment)) {
-      colors_use_enrichment <- scCustomize_Palette(num_groups = num_idents, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
-
-    # Get percent enriched for each ident
-    percent_enriched <- Percent_Expressing_Meta(seurat_object = seurat_object, features = score_name, threshold = stats_quantile)
-    seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = percent_enriched, data_name = paste0("Percent of Cells Enriched for: ", score_name))
-
-    # plot
-    plot_enrichment <- ggplot(plot_data, mapping = aes(y = .data[["Identity"]], x = .data[[score_name]], color = .data[["Identity"]])) +
-      geom_point(position = "jitter") +
-      theme_ggprism_mod() +
-      geom_vline(xintercept = stats_quantile) +
-      annotate(geom = "label",
-               y = c(seq(1:num_idents)),
-               x = Inf,
-               label = paste0(round(percent_enriched, 2), "%"),
-               hjust = 1,
-               fontface = "bold") +
-      scale_color_manual(values = colors_use_enrichment) +
-      ggtitle(paste0("Percent of Cells Enriched for module score: ", score_name)) +
-      ylab("") +
-      guides(color = guide_legend(override.aes = list(size = 3, alpha = 1))) +
-      theme(legend.text = element_text(vjust = 0.6))
-
     print(plot_enrichment)
   }
 
   if (isTRUE(x = return_plots)) {
-    seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = list(plot_mad, plot_enrichment), data_name = paste0("Enrichment Cutoff Plots for: ", score_name), list_as_list = TRUE)
+    seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = list(plot_mad, plot_enrichment), data_name = paste0("Enrichment Cutoff Plots for: ", score_name), list_as_list = TRUE, verbose = verbose)
   }
 
   # return object
