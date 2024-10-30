@@ -588,16 +588,16 @@ CellBender_Feature_Diff <- function(
 #' User also supplies `downsample_cell_num` to downsample the original object.  Speeds up function and
 #' ensures that all identities are equally represented.
 #' Function will then:
-#' \emnumerate{
+#' \itemize{
 #'       \item Create 1000 random gene lists of size `num_features` using all features present in object.
 #'       \item Run `AddModuleScore` for all of those feature lists.
 #'       \item Extract the median and calculate median + 3xMAD for each of the 1000 scores.
-#'       \item Plot median + 3xMAD distribution
-#'       \item Extract 97.5% quantile value and save in `@misc` slot.
+#'       \item Plot median + 3xMAD distribution.
+#'       \item Extract 97.5% quantile value and save in misc slot.
 #'       \item Calculate and store data.frame with the percent of cells with `score_name` above
 #'       calculated threshold.
 #'       \item Plot `score_name` by identity with line indicating threshold and labels indicating the
-#'       percent enriched in each identity.  Will store plots in `@misc` if `return_plots = TRUE`.
+#'       percent enriched in each identity.  Will store plots in misc if `return_plots = TRUE`.
 #'       }
 #'
 #' @references Marsh et al., (2022). Dissection of artifactual and confounding glial signatures by
@@ -610,7 +610,8 @@ CellBender_Feature_Diff <- function(
 #'
 #' @examples
 #' \dontrun{
-#' obj <- Run_Module_Sig(seurat_object = obj, score_name = "module_score", num_features = 25, downsample_cell_num = 2000, return_plots = TRUE)
+#' obj <- Run_Module_Sig(seurat_object = obj, score_name = "module_score", num_features = 25,
+#' downsample_cell_num = 2000, return_plots = TRUE)
 #' }
 #'
 
