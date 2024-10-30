@@ -9,7 +9,8 @@ Store_Palette_Seurat(
   palette,
   palette_name,
   list_as_list = FALSE,
-  overwrite = FALSE
+  overwrite = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ as list (TRUE) or whether to store each entry in the list separately (FALSE).  D
 
 \item{overwrite}{Logical.  Whether to overwrite existing items with the same name.  Default is FALSE, meaning
 that function will abort if item with \code{data_name} is present in misc slot.}
+
+\item{verbose}{logical, whether to print messages when running function, default is TRUE.}
 }
 \value{
 Seurat Object with new entries in the \verb{@misc} slot.
