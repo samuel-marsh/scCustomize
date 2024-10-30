@@ -24,7 +24,7 @@
 *New functions compatible with old and new style liger objects:*  
     - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
     
-*New scCustomize generics to function across both Seurat and Liger objects*  
+*New scCustomize generics to function across both Seurat and Liger objects:*  
     - `Add_Hemo` (see above).  
     - `Rename_Clusters` now S3 generic for setting new active.ident (Seurat) or defaultCluster (Liger).  
     
@@ -38,12 +38,15 @@
 
   
 **General scCustomize Updates:**  
+*New functions:*  
 - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
 - Added new function `seq_zeros()` to create sequences with preceding zeros.  
 - Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
 - Added `Updated_MGI_Symbols` to check for update gene names/symbols in mouse data ([#202](https://github.com/samuel-marsh/scCustomize/issues/202)).  
 - Added plotting function `Proportion_Plot` to plot pie chart or bar chart of proportion (or total counts) of cells in each identity class.  
-- Added new function `Random_Cells_Downsample` to return either a vector or list with randomly downsampled cells for each identity class.
+- Added new function `Random_Cells_Downsample` to return either a vector or list with randomly downsampled cells for each identity class.  
+  
+*Updated functions:*  
 - Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
 - Added `cells` parameter explicitly to `FeatureScatter_scCustom`.  
 - Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
@@ -56,9 +59,11 @@
 - Added optional parameter `colors_use_assay2` to `FeaturePlot_DualAssay` which allows for specification of different palettes for the two plots ([#182](https://github.com/samuel-marsh/scCustomize/issues/182)).  
 - Added new folder and scripts (see "data-raw/" on GitHub) detailing the creation of gene lists used in `Add_Cell_QC_Metrics`.  
 - Added ensembl ID support for percent hemoglobin, msigdb, and IEG gene sets ([#186](https://github.com/samuel-marsh/scCustomize/issues/186)).  
+- Add verbosity parameter to `Store_Misc_Info_Seurat` and `Store_Palette_Seurat`.  
 - Explicitly reveal the `reduction` parameter in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` ([#198](https://github.com/samuel-marsh/scCustomize/issues/198)).  
 - Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
 - Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
+- Update `RenameClusters` with additional parameters to enable storage of both old idents and new idents in meta.data within the function.  
 
   
 ## Changed  
@@ -66,7 +71,6 @@
 - `Add_Cell_QC_Metrics` is now S3 generic and works with both Seurat and liger objects.  
 - Changed storage location for `Add_Alt_Feature_ID` to `@misc` slot of object for safer storage across object filtering.  
 - Added error check in `as.anndata` to explicitly check for installation of anndata before starting conversion ([#162](https://github.com/samuel-marsh/scCustomize/issues/162)).  
-- Update `RenameClusters` to enable storgae of both old idents and new idents in meta.data within the function.  
 - Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
 - Updated `Store_Misc_Info_Seurat` to use Seurat accessor/setter function `Seurat::Misc()`.  
    
