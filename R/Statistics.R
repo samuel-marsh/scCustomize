@@ -606,6 +606,8 @@ CellBender_Feature_Diff <- function(
 #'
 #' @export
 #'
+#' @concept stats
+#'
 #' @examples
 #' \dontrun{
 #' obj <- Run_Module_Sig(seurat_object = obj, score_name = "module_score", num_features = 25, downsample_cell_num = 2000, return_plots = TRUE)
@@ -663,7 +665,7 @@ Run_Module_Sig <- function(
   }
 
   # Get scores
-  score_columns <- grep("RandomRun", colnames(sub_obj@meta.data))
+  score_columns <- grep(pattern = "RandomRun", x = colnames(x = sub_obj@meta.data))
   randomscores <- sub_obj@meta.data[, c(1, score_columns)]
 
   # clear mem
