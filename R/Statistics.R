@@ -567,6 +567,7 @@ CellBender_Feature_Diff <- function(
 #' groups plotted is greater than 36.  Default = 123.
 #' @param return_plots logical, whether to save plots to `@misc` slot of object.
 #' @param seed random seed to use for both object downsampling and module scoring.
+#' @param verbose logical, whether or not to print messages while running function.
 #'
 #' @return seurat object with cutoff threshold value and percent enriched data.frame in `@misc` slot.
 #' If `return_plots = TRUE` also returns plots in the `@misc` slot.
@@ -631,8 +632,10 @@ Run_Module_Sig <- function(
 
   # Create random feature lists
   all_features <- Features(x = seurat_object)
-  random_gene_sets <- lapply(vector("list", 1000), function(x) {
-    sample(all_features, num_features)
+  random_gene_sets <- lapply(1:10, function(x){
+    lapply(vector("list", 1000), function(x) {
+      sample(all_features, num_features)
+    })
   })
 
   # Get downsampleed cells
@@ -643,10 +646,16 @@ Run_Module_Sig <- function(
 
   # Score object
   if (isTRUE(x = verbose)) {
-    cli_inform(message = c("i" = "Creating 1,000 random module scores."))
+    cli_inform(message = c("*" = "Creating 1,000 random module scores."))
   }
 
-  sub_obj <- AddModuleScore(object = sub_obj, features = random_gene_sets, name = "RandomRun", search = FALSE, seed = seed)
+  # split list into 10 to enable progress bar
+  cli_progress_bar(total = 10)
+  for (i in 1:10) {
+    pbmc <- AddModuleScore(sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
+    cli_progress_update()
+  }
+  cli_process_done()
 
   # Inform complete and pause briefly
   if (isTRUE(x = verbose)) {
