@@ -70,7 +70,7 @@ to test against.
 User also supplies \code{downsample_cell_num} to downsample the original object.  Speeds up function and
 ensures that all identities are equally represented.
 Function will then:
-\itemize{
+\enumerate{
 \item Create 1000 random gene lists of size \code{num_features} using all features present in object.
 \item Run \code{AddModuleScore} for all of those feature lists.
 \item Extract the median and calculate median + 3xMAD for each of the 1000 scores.
