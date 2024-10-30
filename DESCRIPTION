@@ -26,6 +26,7 @@ Imports:
     ggprism,
     ggrastr,
     ggrepel,
+    ggridges,
     glue,
     grDevices,
     grid,
