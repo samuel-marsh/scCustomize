@@ -2108,6 +2108,10 @@ DimPlot_scCustom <- function(
         plots <- plots & theme(aspect.ratio = aspect_ratio)
       }
 
+      if (isTRUE(x = label.box)) {
+        plots <- plots & NoLegend()
+      }
+
       if (isTRUE(x = add_prop_plot)) {
         plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
       }
