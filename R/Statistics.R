@@ -655,7 +655,7 @@ Run_Module_Sig <- function(
   # split list into 10 to enable progress bar
   cli_progress_bar(total = 10)
   for (i in 1:10) {
-    pbmc <- AddModuleScore(object = sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
+    sub_obj <- AddModuleScore(object = sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
     cli_progress_update()
   }
   cli_process_done()
