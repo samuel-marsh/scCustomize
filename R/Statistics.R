@@ -635,11 +635,16 @@ Run_Module_Sig <- function(
 
   # Create random feature lists
   all_features <- Features(x = seurat_object)
-  random_gene_sets <- lapply(1:10, function(x){
-    lapply(vector("list", 1000), function(x) {
+  random_gene_sets <- lapply(vector("list", 1000), function(x) {
       sample(x = all_features, size = num_features)
-    })
   })
+
+  # FIX LATER FOR PROGRESS BAR
+  # random_gene_sets <- lapply(1:10, function(x){
+  #   lapply(vector("list", 1000), function(x) {
+  #     sample(x = all_features, size = num_features)
+  #   })
+  # })
 
   # Get downsampleed cells
   cells <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = downsample_cell_num, group.by = "ident", return_list = FALSE, allow_lower = allow_lower, seed = seed)
@@ -652,13 +657,16 @@ Run_Module_Sig <- function(
     cli_inform(message = c("*" = "Creating 1,000 random module scores."))
   }
 
+  sub_obj <- AddModuleScore(object = sub_obj, features = random_gene_sets, name = "RandomRun", search = FALSE, seed = seed)
+
+  # FIX ISSUES WITH MASSIVE SLOWDOWN/NOT PROCRESSING
   # split list into 10 to enable progress bar
-  cli_progress_bar(total = 10)
-  for (i in 1:10) {
-    sub_obj <- AddModuleScore(object = sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
-    cli_progress_update()
-  }
-  cli_process_done()
+  # cli_progress_bar(total = 10)
+  # for (i in 1:10) {
+  #   sub_obj <- AddModuleScore(object = sub_obj, features = random_gene_sets[[i]], name = paste0("RandomRun", i), search = FALSE, seed = seed)
+  #   cli_progress_update()
+  # }
+  # cli_process_done()
 
   # Inform complete and pause briefly
   if (isTRUE(x = verbose)) {
