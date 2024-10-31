@@ -622,7 +622,7 @@ Run_Module_Sig <- function(
     downsample_cell_num = 2000,
     allow_lower = FALSE,
     plot_mad_cutoffs = TRUE,
-    plot_enrichment = TRUE,
+    plot_enrichment_pct = TRUE,
     colors_use_enrichment = NULL,
     ggplot_default_colors = FALSE,
     color_seed = 123,
@@ -768,7 +768,7 @@ Run_Module_Sig <- function(
     theme(legend.text = element_text(vjust = 0.6))
 
   # print plot
-  if (isTRUE(x = plot_enrichment)) {
+  if (isTRUE(x = plot_enrichment_pct)) {
     print(plot_enrichment)
   }
 
