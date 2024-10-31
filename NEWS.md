@@ -95,6 +95,7 @@
 - Added check and informative error message to `Convert_Assay` ([#205](https://github.com/samuel-marsh/scCustomize/issues/205)).  
 - Fixed issue with anndata conversion and Seurat V5 objects ([#195](https://github.com/samuel-marsh/scCustomize/issues/195)).  
 - Fixed issue with `Updated_HGNC_Symbols` due to change in URL path for gene names ([#209](https://github.com/samuel-marsh/scCustomize/issues/209)).  
+- Fixed bug in `DimPlot_scCustom` when `split.by` and `label.box = TRUE`.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
