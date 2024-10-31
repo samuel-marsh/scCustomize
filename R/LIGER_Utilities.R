@@ -439,14 +439,14 @@ Fetch_Meta.liger <- function(
 #' @examples
 #' \dontrun{
 #' # return single vector of all cells
-#' cells_by_idents <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = FALSE)
+#' cells_by_idents <- Cells_by_Identities_LIGER(liger_object = object, by_dataset = FALSE)
 #'
 #' # return list of vectors containing cells from each individual dataset in object
-#' cells_by_idents_by_dataset <- LIGER_Cells_by_Identities(liger_object = object, by_dataset = TRUE)
+#' cells_by_idents_by_dataset <- Cells_by_Identities_LIGER(liger_object = object, by_dataset = TRUE)
 #' }
 #'
 
-LIGER_Cells_by_Identities <- function(
+Cells_by_Identities_LIGER <- function(
     liger_object,
     group.by = NULL,
     by_dataset = FALSE
