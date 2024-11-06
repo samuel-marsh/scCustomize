@@ -510,6 +510,9 @@ scCustomize_Palette <- function(
   if (isTRUE(x = ggplot_default_colors)) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
+    if (num_groups < 36 && color_seed != 123) {
+      cli_inform(message = "{.code color_seed} only applies if number of groups plotted is greater than 36.")
+    }
     if (num_groups == 1) {
       colors_use <- "dodgerblue"
     }
