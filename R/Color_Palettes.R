@@ -420,10 +420,18 @@ DiscretePalette_scCustomize <- function(
   shuffle_pal = FALSE,
   seed = 123
 ) {
+  palette_options <- c("alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow")
+
   if (is.null(x = palette)) {
     cli_abort(message = c("Must specify a palette to return colors.",
                           "i" = "{.code palette} options are: {.field {names(palette_list)}}")
     )
+  }
+
+  # check palette valid
+  if (!palette %in% palette_options) {
+    cli_abort(message = c("The specified palette: {.field {palette}} is not valid.",
+                          "i" = "Valid palettes are: {.val {palette_options}}"))
   }
 
   # dittoseq check
