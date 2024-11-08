@@ -83,6 +83,66 @@ Cluster_Stats_All_Samples <- function(
 }
 
 
+#' Cells per Sample
+#'
+#' Get data.frame containing the number of cells per sample.
+#'
+#' @param seurat_object Seurat object
+#' @param sample_col column name in meta.data that contains sample ID information.  Default is NULL and
+#' will use "orig.ident column
+#'
+#' @import cli
+#' @importFrom dplyr rename
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble rownames_to_column
+#'
+#' @return A data.frame
+#'
+#' @export
+#'
+#' @concept stats
+#'
+#' @examples
+#' library(Seurat)
+#' num_cells <- Cells_per_Sample(seurat_object = pbmc_small, sample_col = "orig.ident")
+#'
+
+Cells_per_Sample <- function(
+    seurat_object,
+    sample_col = NULL
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # check sample_column
+  if (!is.null(x = sample_col)) {
+    if (sample_col != "ident") {
+      Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)
+    }
+  } else {
+    cli_inform(message = "No value provided to {.code sample_col}, defaulting to {.val orig.ident}")
+    sample_col <- "orig.ident"
+  }
+
+  # Get data
+  if (sample_col == "ident") {
+    cells_per_sample <- data.frame(lengths(x = CellsByIdentities(object = seurat_object))) %>%
+      rename("Number of Cells" = 1) %>%
+      rownames_to_column(var = "Sample_ID")
+  } else {
+    Idents(object = seurat_object) <- sample_col
+    cells_per_sample <- data.frame(lengths(x = CellsByIdentities(object = seurat_object))) %>%
+      rename("Number of Cells" = 1) %>%
+      rownames_to_column(var = "Sample_ID")
+  }
+
+  # return data.frame
+  return(cells_per_sample)
+}
+
+
+
+
 #' Calculate percent of expressing cells
 #'
 #' Calculates the percent of cells that express a given set of features by various grouping factors
