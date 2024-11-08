@@ -826,14 +826,14 @@ Top_Genes_Factor <- function(
 
 Find_Factor_Cor <- function(
     object,
-    reduction
+    reduction = NULL
 ) {
   # Get data
   if (inherits(x = object, what = "Seurat")) {
     factor_loadings <- data.frame(Loadings(object = object, reduction = reduction))
   }
 
-  if (inherits(x = object, what = "rliger")) {
+  if (inherits(x = object, what = "liger")) {
     # Check new liger object
     if (packageVersion(pkg = 'rliger') < "2.0.0") {
       cli_abort(message = "This function is only for objects with rliger >= v2.0.0")
