@@ -45,6 +45,7 @@
 - Added `Updated_MGI_Symbols` to check for update gene names/symbols in mouse data ([#202](https://github.com/samuel-marsh/scCustomize/issues/202)).  
 - Added plotting function `Proportion_Plot` to plot pie chart or bar chart of proportion (or total counts) of cells in each identity class.  
 - Added new function `Random_Cells_Downsample` to return either a vector or list with randomly downsampled cells for each identity class.  
+- Added new function `Cells_per_Sample` to quickly return data.frame with just number of cells per sample.  
   
 *Updated functions:*  
 - Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
