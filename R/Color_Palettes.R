@@ -424,7 +424,7 @@ DiscretePalette_scCustomize <- function(
 
   if (is.null(x = palette)) {
     cli_abort(message = c("Must specify a palette to return colors.",
-                          "i" = "{.code palette} options are: {.field {names(palette_list)}}")
+                          "i" = "{.code palette} options are: {.field {names(palette_options)}}")
     )
   }
 
