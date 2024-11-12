@@ -4,7 +4,7 @@
 \alias{Find_Factor_Cor}
 \title{Find Factor Correlations}
 \usage{
-Find_Factor_Cor(object, reduction)
+Find_Factor_Cor(object, reduction = NULL)
 }
 \arguments{
 \item{object}{LIGER/Seurat object name.}

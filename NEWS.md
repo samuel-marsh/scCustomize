@@ -74,6 +74,7 @@
 - Added error check in `as.anndata` to explicitly check for installation of anndata before starting conversion ([#162](https://github.com/samuel-marsh/scCustomize/issues/162)).  
 - Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
 - Updated `Store_Misc_Info_Seurat` to use Seurat accessor/setter function `Seurat::Misc()`.  
+- Updated documentation for `sample_names` in `Read_CellBender_h5_Multi_File` to clarify parameter behavior (related to ([#208](https://github.com/samuel-marsh/scCustomize/issues/208))).  
    
 
 ## Fixes  

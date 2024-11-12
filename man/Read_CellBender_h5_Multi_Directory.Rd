@@ -35,7 +35,8 @@ of file name that is shared across all samples.  Must included the ".h5" extensi
 read in subdirectories in parent directory.}
 
 \item{sample_names}{a set of sample names to use for each sample entry in returned list.  If \code{NULL} will
-set names to the subdirectory name of each sample.}
+set names to the subdirectory name of each sample.  NOTE: unless \code{sample_list} is specified this will
+rename files in the order they are read which will be alphabetical.}
 
 \item{h5_group_name}{Name of the group within H5 file that contains count data.  This is only
 required if H5 file contains multiple subgroups and non-default names.  Default is \code{NULL}.}
