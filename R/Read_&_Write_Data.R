@@ -1247,7 +1247,8 @@ Read_CellBender_h5_Mat <- function(
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
-#' set names to the subdirectory name of each sample.
+#' set names to the subdirectory name of each sample.  NOTE: unless `sample_list` is specified this will
+#' rename files in the order they are read which will be alphabetical.
 #' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
 #' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
 #' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
