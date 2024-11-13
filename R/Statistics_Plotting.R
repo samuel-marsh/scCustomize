@@ -961,12 +961,12 @@ Proportion_Plot <- function(
     color_seed = 123
 ) {
   if (!plot_type %in% c("bar", "pie")) {
-    cli::cli_abort(message = "{.code plot_type} must be one of {.val bar} or {.val pie}")
+    cli_abort(message = "{.code plot_type} must be one of {.val bar} or {.val pie}")
   }
 
   if (plot_type == "pie" && plot_scale == "count") {
     cli_warn(message = c("When setting {.code plot_type} to {.val pie} the {.code plot_scale} parameter is ignored",
-                         "i" = "Set {.code plot_type} to {.val bar} in order to plot raw cell counts.."))
+                         "i" = "Set {.code plot_type} to {.val bar} in order to plot raw cell counts."))
   }
 
   if (plot_type == "pie") {
