@@ -1669,7 +1669,7 @@ Split_Vector <- function(
 #' @param seq_length a seqeunce or numbers of numbers to create sequence.
 #' Users can provide sequence (1:XX) or number of values to add in sequence (will
 #' be used as second number in `seq_len`; 1:XX).
-#' @param num_zeros number of zeros to prefix sequence, default is 1 (e.g, 01, 02, 03, ...)
+#' @param num_zeros number of zeros to prefix sequence, default is  (e.g, 01, 02, 03, ...)
 #'
 #' @return vector of numbers in sequence
 #'
@@ -1699,10 +1699,18 @@ Split_Vector <- function(
 
 seq_zeros <- function(
     seq_length,
-    num_zeros = 1
+    num_zeros = NULL
 ) {
   # add pad value
-  padding <- 1 + num_zeros
+  if (!is.null(x = num_zeros)) {
+    padding <- 1 + num_zeros
+  } else {
+    if (nchar(x = seq_length) == 1) {
+      padding <- 1 + num_zeros
+    } else {
+      padding <- nchar(x = seq_length) - 1
+    }
+  }
 
   # make sequence if single number
   if (length(x = seq_length) == 1) {
