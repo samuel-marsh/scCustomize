@@ -1701,17 +1701,25 @@ seq_zeros <- function(
     seq_length,
     num_zeros = NULL
 ) {
-  # add pad value
-  if (!is.null(x = num_zeros)) {
-    padding <- 1 + num_zeros
-  } else {
-    if (nchar(x = seq_length) == 1) {
-      num_zeros <- 1
+  # Check seq_length
+  if (is.null(x = num_zeros)) {
+    if (length(x = seq_length) == 1) {
+      if (nchar(x = seq_length) == 1) {
+        num_zeros <- 1
+      } else {
+        num_zeros <- nchar(x = seq_length) - 1
+      }
     } else {
-      num_zeros <- nchar(x = seq_length) - 1
+      if (nchar(x = tail(x = seq_length, n = 1)) == 1) {
+        num_zeros <- 1
+      } else {
+        num_zeros <- nchar(x = tail(x = seq_length, n = 1)) - 1
+      }
     }
-    padding <- 1 + num_zeros
   }
+
+  # set padding
+  padding <- 1 + num_zeros
 
   # make sequence if single number
   if (length(x = seq_length) == 1) {
