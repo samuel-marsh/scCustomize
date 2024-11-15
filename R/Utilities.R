@@ -1706,10 +1706,11 @@ seq_zeros <- function(
     padding <- 1 + num_zeros
   } else {
     if (nchar(x = seq_length) == 1) {
-      padding <- 1 + num_zeros
+      num_zeros <- 1
     } else {
-      padding <- nchar(x = seq_length) - 1
+      num_zeros <- nchar(x = seq_length) - 1
     }
+    padding <- 1 + num_zeros
   }
 
   # make sequence if single number
