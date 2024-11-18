@@ -524,6 +524,21 @@ plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8)
 plots[[2]]
 ```
 
+
+You can also change the location and orientation of the plot legends.  For instance here we move the legend to the bottom of the plot and reorient the legend to display horizontally.  We also remove the identity legend as redundant information (and it takes up a lot of room when horizontal).  
+```{r eval=FALSE}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, plot_km_elbow = FALSE, legend_position = "bottom", legend_orientation = "horizontal", show_ident_legend = FALSE)
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, plot_km_elbow = FALSE, legend_position = "bottom", legend_orientation = "horizontal", show_ident_legend = FALSE)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots
+```
+
+
 #### Clustered_DotPlot() split by additional grouping variable  
 `Clustered_DotPlot` can now plot with additional grouping variable provided to `split.by` parameter.
 
@@ -572,7 +587,19 @@ plot_split[[2]]
   
 **Determining Optimal k Value**  
 There are many methods that can be used to aid in determining an optimal value for k in k-means clustering.  One of the simplest is to the look at the elbow in sum of squares error plot.  By default `Clustered_DotPlot` will return this plot when using the function.  However, it can be turned off by setting `plot_km_elbow = FALSE`.
-```{r echo=FALSE, fig.align='center', fig.height=5, fig.width=5}
+
+```{r eval=FALSE}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, plot_km_elbow = TRUE, legend_position = "bottom", legend_orientation = "horizontal", show_ident_legend = FALSE)
+
+plots[[1]]
+```
+
+```{r include=FALSE}
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers, k = 8, plot_km_elbow = TRUE, legend_position = "bottom", legend_orientation = "horizontal", show_ident_legend = FALSE)
+```
+
+
+```{r  fig.align='center', fig.height=5, fig.width=5}
 plots[[1]]
 ```
 
@@ -615,9 +642,13 @@ plots[[2]]
 #### Clustered_DotPlot() Other Optional Parameters
   
 - `colors_use_idents` Colors to use for the identities (columns) plotted.  
+- `show_ident_colors` and `show_ident_legend` to show or hide the identity colors on plot and/or identity legend.  Default is TRUE.  
 - `x_lab_rotate` Logical or Integer.  Default is TRUE (45 degree column label rotation).  FALSE (0 degree rotation).  Integer for custom text rotation value.  
 - `row_label_size` Change size of row text (gene symbols).  
+- `show_row_names` and `show_column_names` to show or hide the column and row names.  Default is TRUE.
+- `column_names_side` and `row_names_side` to change the location of column and row labels. Default is `column_names_side = "bottom"` and `row_names_side = "right"`.  
 - `raster` Whether to rasterize the plot (faster and smaller file size). Default is FALSE.  
+
 
 ### FeatureScater Plots
 The scCustomize function `FeatureScatter_scCustom()` is a slightly modified version of `Seurat::FeatureScatter()` with some different default settings and parameter options.
@@ -638,6 +669,81 @@ scCustomize previously contained function `Split_FeatureScatter` as Seurat's plo
 # Create Plots
 FeatureScatter_scCustom(seurat_object = marsh_mouse_micro, feature1 = "exAM_Score1", feature2 = "Microglia_Score1", colors_use = mouse_colors, split.by = "Transcription_Method", group.by = "ident", num_columns = 2, pt.size = 1)
 ```
+
+### Heatmaps  
+While scCustomize does not have a custom heatmap plot itself (yet...) it does have functions that can make cell-level heatmaps easier to view/interpret.  By default the heatmap in Seurat will size the groups on the heatmap based om their size in the dataset.  This can make it very hard to view the results (especially for small clusters).  
+
+```{r eval=FALSE}
+# Selection fo cluster marker genes
+micro_markers <-  c("P2ry12", "Cx3cr1",
+           "Fos", "Hspa1a",
+           "Ms4a7", "Ccr2",
+           "Isg15", "Ifit3",
+           "Lpl", "Plaur",
+           "Mki67", "Top2a")
+
+DoHeatmap(object = marsh_mouse_micro, features = micro_markers)
+```
+
+
+```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Very hard to view the results for anything but the Homeostatic and activated clusters*"}
+
+# Selection fo cluster marker genes
+micro_markers <-  c("P2ry12", "Cx3cr1",
+           "Fos", "Hspa1a",
+           "Ms4a7", "Ccr2",
+           "Isg15", "Ifit3",
+           "Lpl", "Plaur",
+           "Mki67", "Top2a")
+
+
+marsh_mouse_micro2 <- ScaleData(marsh_mouse_micro, features = micro_markers)
+
+
+DoHeatmap(object = marsh_mouse_micro2, features = micro_markers)
+```
+
+
+While this can be helpful in someways to gauge cluster size other visualizations are usually better for that and heatmaps are usually aimed at informing relative (scaled) gene expression across clusters, groups, etc.  
+
+We can solve this issue by downsampling which cells are used in the plot so that number of cells is equal across all groups.  
+
+First we need to get idea of how many cells are in each identity.  scCustomize provides the `Cluster_Stats_All_Samples` function to make this easy.  
+
+```{r eval=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = marsh_mouse_micro)
+
+cluster_stats
+```
+
+```{r echo=FALSE}
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = marsh_mouse_micro)
+
+cluster_stats %>%
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+Now we can use the function `Random_Cells_Downsample` to return a downsampled selection of cells from each identity.  We can either set the `num_cells` parameter manually to the smallest group or simply provide `"min"`.
+
+In this case that would 27 cells per group. which is a bit small to get representative sample when other groups are much larger.  So alternatively, we can set a larger value (150 cells) and change the optional parameter `allow_lower` to `TRUE`.  This means that all groups larger than 150 cells will get downsampled but any smaller will simply return all cells in that ident.
+
+
+```{r eval=FALSE}
+# random cells can either be return to environment 
+random_cells_150 <- Random_Cells_Downsample(seurat_object = marsh_mouse_micro, num_cells = 150, allow_lower = T)
+
+DoHeatmap(object = marsh_mouse_micro, features = micro_markers, cells = random_cells_150)
+
+# Or called within the `DoHeatmap` function.
+DoHeatmap(object = marsh_mouse_micro, features = micro_markers, cells = Random_Cells_Downsample(seurat_object = marsh_mouse_micro, num_cells = 150, allow_lower = T))
+```
+
+```{r, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Much easier now to see expression across all clusters.*"}
+
+DoHeatmap(object = marsh_mouse_micro, features = micro_markers, cells = Random_Cells_Downsample(seurat_object = marsh_mouse_micro, num_cells = 150, allow_lower = T))
+```
+
 
 ## DimPlots: Plot Meta Data in 2D Space (PCA/tSNE/UMAP)
 scCustomize has a few functions that improve on the default plotting options available in Seurat
