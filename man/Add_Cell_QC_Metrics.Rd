@@ -38,6 +38,7 @@ Add_Cell_QC_Metrics(object, ...)
   ensembl_ids = FALSE,
   num_top_genes = 50,
   assay = NULL,
+  list_species_names = FALSE,
   overwrite = FALSE,
   ...
 )
@@ -158,6 +159,10 @@ Used to compute the percentage of library size occupied by the most highly expre
 
 \item{assay}{assay to use in calculation.  Default is "RNA".  \emph{Note} This should only be changed if
 storing corrected and uncorrected assays in same object (e.g. outputs of both Cell Ranger and Cell Bender).}
+
+\item{list_species_names}{returns list of all accepted values to use for default species names which
+contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and
+chicken).  Default is FALSE.}
 
 \item{overwrite}{Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 function will abort if column with name provided to \code{meta_col_name} is present in meta.data slot.}
