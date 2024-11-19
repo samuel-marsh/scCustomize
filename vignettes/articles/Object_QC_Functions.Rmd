@@ -1,0 +1,241 @@
+---
+title: "Object QC Functions"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Object QC Functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+# Quality control of scRNA-seq objects
+scCustomize has several helper functions to simplify/streamline what is nearly always the first and most critical choices when starting an analysis: performing quality control and filtering.  
+
+Let's load packages and raw data object for this tutorial.
+```{r init}
+# Load Packages
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(patchwork)
+library(Seurat)
+library(scCustomize)
+
+pbmc <- pbmc3k.SeuratData::pbmc3k
+```
+
+
+```{r include=FALSE}
+pbmc <- UpdateSeuratObject(pbmc)
+pbmc <- NormalizeData(pbmc)
+```
+
+We'll add some random meta data variables to pbmc data form use in this vignette
+```{r}
+pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
+pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+```
+
+
+## Cross-compatibility of QC Functions  
+
+### Support for Seurat and LIGER Objects  
+All of scCustomize's functions to add quality control metrics are 100% cross compatible across Seurat and LIGER objects using the same function calls.  For more details on QC specific plotting functions see [QC Plotting & Analysis Vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html).  
+
+### Support for gene symbols and Ensembl IDs  
+Additionally, all of the QC functions support objects that use either gene symbols or Ensembl IDs.  Ensembl IDs for default species (see below) are from Ensembl version 112 (updated in scCustomize on 4/29/2024).  
+
+If your object using ensembl IDs as features names then simply add `ensembl_ids` parameter that is present in all QC functions.  
+```{r eval=FALSE}
+# Using gene name patterns
+obj <- Add_Mito_Ribo(object = obj, species = "Human", ensembl_ids = TRUE)
+```
+
+
+## Default Species Support  
+Many of the QC functions commonly performed depend on genes within a particular family that have similar naming patterns (e.g., Mitochondrial genes) or are species specific (see msigdb dependent parts of `Add_Cell_QC_Metrics()`).  
+
+To simplify the process of needing to remember species-specific patterns (or find Ensembl ID gene lists)
+
+If you are using mouse, human, marmoset, zebrafish, rat, drosophila, rhesus macaque, or chicken data all you need to do is specify the `species` parameter in the functions described below using one of the following accepted names.  
+
+```{r echo=FALSE}
+accepted_names <- Add_Cell_QC_Metrics(object = pbmc, list_species_names = TRUE)
+
+accepted_names %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+#### Non-default species
+However custom prefixes can be used for species with different annotations. Simply specify `species = other` and supply feature lists or regex patterns for your species of interest. 
+*NOTE: If desired please submit issue on GitHub for additional default species.  Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.*
+
+<details>
+  <summary>**What is example of how this works?**</summary>
+
+```{r eval=FALSE}
+# Using gene name patterns
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "regexp_pattern_mito", ribo_pattern = "regexp_pattern_ribo")
+
+# Using feature name lists
+mito_gene_list <- c("gene1", "gene2", "etc")
+ribo_gene_list <- c("gene1", "gene2", "etc")
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
+
+# Using combination of gene lists and gene name patterns
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern_ribo")
+```
+
+</details>
+\  
+
+
+## Add All Cell QC Metrics with Single Function
+To simplify the process of adding cell QC metrics scCustomize contains a wrapper function which can be customized to add all or some of the available QC metrics.  This vignette will describe each of these in more detail below but using the default parameters of the function `Add_Cell_QC_Metrics()` will add:  
+
+* Mitochondrial and Ribosomal Percentages (default and custom species).
+* Hemoglobin percentages (default and custom species).  
+* Cell Complexity (log10(nFeature) / log10(nCount).
+* Top XX Gene Percentage.
+* Percentage of counts for IEG (human and mouse only).
+* OXPHOS, APOP, and DNA Repair pathways (supported species only).
+* Cell Cycle Scoring (Human only).
+
+```{r message=TRUE}
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "human")
+```
+
+## Add QC Metrics Individually  
+If you only want to add some but not all metrics you can either customize `Add_Cell_QC_Metrics` or use the individual functions.  
+
+
+### Add Mitochondrial & Ribosomal Percentages
+If you just want to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus you can use `Add_Mito_Ribo`.
+
+#### `Add_Mito_Ribo()`
+scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, drosophila, rhesus macaque, or chicken data all you need to do is specify the `species` parameter.
+```{r eval=FALSE}
+# These defaults can be run just by providing accepted species name
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
+```
+
+#### Analysis with two species  
+Some analyses are performed with cells aligned to a genome that contains multiple species (see Cell Ranger/10X documentation for more info).  scCustomize now supports adding mitochondrial and ribosomal percentages for these datasets using optional parameters.  Here we will use example data provided by 10X Genomics [here](https://www.10xgenomics.com/datasets/10k-hgmm-3p-gemx).  
+
+```{r include=FALSE}
+pbmc_dual_species <- qs::qread("assets/pbmc_dual_species.qs")
+```
+
+
+```{r eval=FALSE}
+pbmc_dual_species <- Read10X_h5(filename = "~/Downloads/10k_hgmm_3p_gemx_Multiplex_count_raw_feature_bc_matrix.h5")
+
+pbmc_dual_species <- CreateSeuratObject(counts = pbmc_dual_species, min.cells = 5, min.features = 500)
+```
+
+For dual species analyses the only other information you need to provide is what the prefixes are used in front of gene IDs.  In this case the prefixes are "GRCh38-" and "GRCm39-".  
+```{r}
+pbmc_dual_species <- Add_Mito_Ribo(object = pbmc_dual_species, species = c("human", "mouse"), species_prefix = c("GRCh38-", "GRCm39-"))
+```
+
+
+
+#### Warning Messages
+The added benefit of `Add_Mito_Ribo` is that it will return informative warnings if no Mitochondrial or Ribosomal features are found using the current species, features, or pattern specification.
+```{r message=TRUE, warning=TRUE, error=TRUE}
+# For demonstration purposes we can set `species = mouse` for this object of human cells
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "mouse")
+```
+
+```{r include=FALSE}
+pbmc <- pbmc3k.SeuratData::pbmc3k
+pbmc <- UpdateSeuratObject(object = pbmc)
+```
+
+
+```{r message=TRUE, warning=TRUE, error=TRUE}
+# Or if providing custom patterns/lists and features not found
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "^MT-", ribo_pattern = "BAD_PATTERN")
+```
+
+`Add_Mito_Ribo` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
+```{r include=FALSE}
+pbmc <- pbmc3k.SeuratData::pbmc3k
+pbmc <- UpdateSeuratObject(object = pbmc)
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
+```
+
+```{r message=TRUE, warning=TRUE, error=TRUE}
+pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
+```
+
+
+
+## Add Cell Complexity/Novelty QC Metrics  
+In addition to metrics like number of features and UMIs it can often be helpful to analyze the complexity of expression within a single cell.  scCustomize provides functions to add two of these metrics to meta data.  
+
+### Cell Complexity (log10(nFeature) / log10(nCount))
+scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
+```{r eval = FALSE}
+# These defaults can be run just by providing accepted species name
+pbmc <- Add_Cell_Complexity(object = pbmc)
+```
+
+
+### Add Top Percent Expression QC Metric  
+Additionally, (or alternatively), scCustomize contains another metric of complexity which is the top percent expression.  The user supplies an integer value for `num_top_genes` (default is 50) which species the number of genes and the function returns percentage of counts occupied by top XX genes in each cell.
+```{r eval = FALSE}
+# These defaults can be run just by providing accepted species name
+pbmc <- Add_Top_Gene_Pct(object = pbmc, num_top_genes = 50)
+```
+
+
+## Add Hemoglobin Percentage  
+scCustomize also contains function to add percentage of counts for hemoglobin genes.  Use of this metric is much more situational.  If your experiment has the potential for red blood cell contamination but you want to avoid that then this can be helpful.  A high percentage of hemoglobin counts may indicate that your sample has high amount of ambient RNA present or RBCs in the cells captured.
+
+```{r}
+pbmc <- Add_Hemo(object = pbmc, species = "human")
+```
+
+## Add QC Metrics from Pathway Gene Lists  
+In addition to those standard QC metrics it can be helpful when using networ- based QC analysis to add the percent of expression of genes related to common pathways.  This function and the network-based analysis is further extension of the analysis/QC from our recent publication: Gazestani & Kamath et al., 2023 ([*Cell*](https://doi.org/10.1016/j.cell.2023.08.005)).
+
+In scCustomize the percent of gene expression from the following gene lists can be added as part of the `Add_Cell_QC_Metrics`:  
+
+* Immediate Early Genes (for human and mouse only)  
+  - Can be used in part to examine potential impact of dissociation or post-mortem signatures ([*Marsh et al., 2022*](https://doi.org/10.1038/s41593-022-01022-8)) or to identify acutely perturbed populations (gene list from [*Wu et al., 2017*](https://doi.org/10.1016/j.neuron.2017.09.026))  
+  
+* Oxidative Phosphorylation, Apoptosis, & DNA Repair (all default species except Marmoset)  
+    - Species specific gene lists from [MSigDB Hallmark Gene Sets](https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H) 
