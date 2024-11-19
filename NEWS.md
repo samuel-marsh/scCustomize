@@ -65,7 +65,9 @@
 - Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
 - Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
 - Update `RenameClusters` with additional parameters to enable storage of both old idents and new idents in meta.data within the function.  
-- Update `Add_Cell_QC_Metrics.Seurat` to explictly reveal `list_species_names` parameter.  
+- Update `Add_Cell_QC_Metrics.Seurat` to explicitly reveal `list_species_names` parameter.  
+- Added new vignette for spatial plotting.  
+- Added new and expanded vignette on use of object QC functions for better clarity on these functions and their uses (previously was part of QC Plotting & Helpers/Utilities Vignettes).  Plotting elements of QC Plotting vignette are unchanged.  
 
   
 ## Changed  
@@ -76,6 +78,7 @@
 - Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
 - Updated `Store_Misc_Info_Seurat` to use Seurat accessor/setter function `Seurat::Misc()`.  
 - Updated documentation for `sample_names` in `Read_CellBender_h5_Multi_File` to clarify parameter behavior (related to ([#208](https://github.com/samuel-marsh/scCustomize/issues/208))).  
+- Some reorganization of R/ directory/scripts.  
    
 
 ## Fixes  
