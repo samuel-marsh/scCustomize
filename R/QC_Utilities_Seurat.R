@@ -108,12 +108,6 @@ Add_Cell_QC_Metrics.Seurat <- function(
     overwrite = FALSE,
     ...
 ) {
-  # Return list of accepted default species name options
-  if (isTRUE(x = list_species_names)) {
-    return(accepted_names)
-    stop_quietly()
-  }
-
   # Set assay
   assay <- assay %||% DefaultAssay(object = object)
 
@@ -128,6 +122,12 @@ Add_Cell_QC_Metrics.Seurat <- function(
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
+
+  # Return list of accepted default species name options
+  if (isTRUE(x = list_species_names)) {
+    return(accepted_names)
+    stop_quietly()
+  }
 
   # Species Spelling Options
   mouse_options <- accepted_names$Mouse_Options
@@ -305,6 +305,7 @@ Add_Mito_Ribo.Seurat <- function(
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
+
   # Return list of accepted default species name options
   if (isTRUE(x = list_species_names)) {
     return(accepted_names)
