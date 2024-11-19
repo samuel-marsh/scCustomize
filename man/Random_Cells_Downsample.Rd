@@ -47,7 +47,8 @@ random_cells <- Random_Cells_Downsample(seurat_object = pbmc_small, num_cells = 
 head(random_cells)
 
 # return list
-random_cells_list <- Random_Cells_Downsample(seurat_object = pbmc_small, return_list = TRUE, num_cells = 10)
+random_cells_list <- Random_Cells_Downsample(seurat_object = pbmc_small, return_list = TRUE,
+num_cells = 10)
 head(random_cells_list)
 
 # return max total number of cells (setting `num_cells = "min`)
