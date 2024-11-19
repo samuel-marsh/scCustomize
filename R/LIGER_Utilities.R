@@ -905,6 +905,9 @@ Find_Factor_Cor <- function(
 #' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param num_top_genes An integer vector specifying the size(s) of the top set of high-abundance genes.
 #' Used to compute the percentage of library size occupied by the most highly expressed genes in each cell.
+#' @param list_species_names returns list of all accepted values to use for default species names which
+#' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and
+#' chicken).  Default is FALSE.
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
@@ -955,6 +958,7 @@ Add_Cell_QC_Metrics.liger <- function(
     ensembl_ids = FALSE,
     num_top_genes = 50,
     assay = NULL,
+    list_species_names = FALSE,
     overwrite = FALSE,
     ...
 ) {
@@ -968,6 +972,12 @@ Add_Cell_QC_Metrics.liger <- function(
     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA)
   )
+
+  # Return list of accepted default species name options
+  if (isTRUE(x = list_species_names)) {
+    return(accepted_names)
+    stop_quietly()
+  }
 
   # Species Spelling Options
   mouse_options <- accepted_names$Mouse_Options
