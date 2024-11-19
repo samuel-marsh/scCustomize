@@ -4,14 +4,14 @@
 \alias{seq_zeros}
 \title{Create sequence with zeros}
 \usage{
-seq_zeros(seq_length, num_zeros = 1)
+seq_zeros(seq_length, num_zeros = NULL)
 }
 \arguments{
 \item{seq_length}{a seqeunce or numbers of numbers to create sequence.
 Users can provide sequence (1:XX) or number of values to add in sequence (will
 be used as second number in \code{seq_len}; 1:XX).}
 
-\item{num_zeros}{number of zeros to prefix sequence, default is 1 (e.g, 01, 02, 03, ...)}
+\item{num_zeros}{number of zeros to prefix sequence, default is  (e.g, 01, 02, 03, ...)}
 }
 \value{
 vector of numbers in sequence
