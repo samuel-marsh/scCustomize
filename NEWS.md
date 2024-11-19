@@ -65,6 +65,7 @@
 - Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
 - Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
 - Update `RenameClusters` with additional parameters to enable storage of both old idents and new idents in meta.data within the function.  
+- Update `Add_Cell_QC_Metrics.Seurat` to explictly reveal `list_species_names` parameter.  
 
   
 ## Changed  
