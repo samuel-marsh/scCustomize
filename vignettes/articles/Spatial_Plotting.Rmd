@@ -88,6 +88,8 @@ mouse_ctx <- FindClusters(mouse_ctx, verbose = FALSE)
 mouse_ctx <- RunUMAP(mouse_ctx, reduction = "pca", dims = 1:30)
 
 # Slide-seq
+# NOT SURE WHY I HAVE TO SET FUTURE FOR NON-PARALLEL USE???
+options(future.globals.maxSize = 1000 * 1024^2)
 slide.seq <- SCTransform(slide.seq, assay = "Spatial", ncells = 3000, verbose = FALSE)
 slide.seq <- RunPCA(slide.seq)
 slide.seq <- RunUMAP(slide.seq, dims = 1:30)
@@ -97,10 +99,10 @@ slide.seq <- FindClusters(slide.seq, resolution = 0.3, verbose = FALSE)
 
 
 ## Spatial DimPlots  
-Currently, spatial support in scCustomize is limited to one plotting function `SpatialDimPlot`.  scCustomize now provides a matching function `SpatialDimPlot_scCustom` to align these plots with scCustomize style and colors.  
+Currently, spatial support in scCustomize is limited to one plotting function `SpatialDimPlot`.  scCustomize provides a matching scCustomize version of the function: `SpatialDimPlot_scCustom` to align these plots with scCustomize style and colors.  
 *NOTE: If you are interested in further spatial functionality within scCustomize please post issue to GitHub or directly submit PR, as future implementations will be based on user demand.*
 
-The issue with the default `SpatialDimPlot` are similar to those affecting the regular `DimPlot`.  Namely that the default color scheme can make it very difficult to tell spot colors from each other.  `SpatialDimPlot_scCustom()` solves these isses.
+The issue with the default `SpatialDimPlot` are similar to those affecting the regular `DimPlot`.  Namely that the default color scheme can make it very difficult to tell spot colors from each other.  `SpatialDimPlot_scCustom()` solves these issues.
 
 
 ```{r echo=FALSE, fig.height=4, fig.width=13, fig.align='center', fig.cap="***A.** Default plotting results in colors that are very similar between clusters making it hard to differentiate between them on the image.  **B.** Default plot using scCustomize `SpatialDimPlot_scCustom` solves this issues matching color scheme to scCustomize package defaults.*"}
@@ -109,4 +111,8 @@ p2 <- SpatialDimPlot_scCustom(seurat_object = mouse_ctx)
 wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
-
+```{r echo=FALSE, fig.height=4, fig.width=13, fig.align='center'}
+p1 <- SpatialDimPlot(object = slide.seq, stroke = 0)
+p2 <- SpatialDimPlot_scCustom(seurat_object = slide.seq, stroke = 0)
+wrap_plots(p1, p2, ncol = 2) + plot_annotation(tag_levels = "A")
+```
