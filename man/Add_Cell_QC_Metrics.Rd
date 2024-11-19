@@ -71,6 +71,7 @@ Add_Cell_QC_Metrics(object, ...)
   ensembl_ids = FALSE,
   num_top_genes = 50,
   assay = NULL,
+  list_species_names = FALSE,
   overwrite = FALSE,
   ...
 )
