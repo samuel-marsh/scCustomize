@@ -310,11 +310,9 @@ Plot_By_Cluster_LIGER <- function(
 
   cluster_length <- length(x = unique(x = liger_object@clusters))
 
+  # set default plot colors
   if (is.null(x = colors_use)) {
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = cluster_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
+    colors_use <- scCustomize_Palette(num_groups = cluster_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
 
   # Create accurate axis labels
@@ -775,11 +773,9 @@ Plot_By_Meta_LIGER <- function(
 
   meta_length <- length(x = unique(x = liger_object@cell.data[[group_by]]))
 
+  # set default plot colors
   if (is.null(x = colors_use)) {
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = meta_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
+    colors_use <- scCustomize_Palette(num_groups = meta_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
 
   # Create accurate axis labels
@@ -907,11 +903,9 @@ Plot_By_Meta_LIGER2 <- function(
 
   meta_length <- length(x = unique(x = liger_object@cellMeta[[group_by]]))
 
+  # set default plot colors
   if (is.null(x = colors_use)) {
-    # set default plot colors
-    if (is.null(x = colors_use)) {
-      colors_use <- scCustomize_Palette(num_groups = meta_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
-    }
+    colors_use <- scCustomize_Palette(num_groups = meta_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
 
   # Create accurate axis labels
