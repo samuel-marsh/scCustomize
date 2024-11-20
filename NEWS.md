@@ -103,6 +103,7 @@
 - Fixed issue with `Updated_HGNC_Symbols` due to change in URL path for gene names ([#209](https://github.com/samuel-marsh/scCustomize/issues/209)).  
 - Fixed bug in `DimPlot_scCustom` when `split.by` and `label.box = TRUE`.  
 - Fixed bug in `DiscretePalette_scCustom` that didn't error when supplying invalid palette names.  
+- Fixed bug in `DimPlot_LIGER` that provided uniformative error message when changing the default cluster ident.  
 - Spelling and style fixes.  Thanks @kew24.  
 
 
