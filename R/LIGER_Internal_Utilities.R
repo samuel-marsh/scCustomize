@@ -527,7 +527,7 @@ Plot_By_Cluster_LIGER2 <- function(
 
   colnames(x = centers) <- c("Cluster", x_axis_label, y_axis_label)
 
-  cluster_length <- length(x = unique(x = liger_object@cellMeta$leiden_cluster))
+  cluster_length <- length(x = unique(x = defaultCluster(x = liger_object)))
 
   if (is.null(x = colors_use)) {
     colors_use <- scCustomize_Palette(num_groups = cluster_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
