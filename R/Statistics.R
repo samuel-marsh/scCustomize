@@ -306,6 +306,10 @@ Median_Stats <- function(
   }
 
   # Check group variable present
+  if (group_by_var == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+  }
+
   group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
   # Check stats variables present
