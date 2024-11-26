@@ -141,8 +141,6 @@ Cells_per_Sample <- function(
 }
 
 
-
-
 #' Calculate percent of expressing cells
 #'
 #' Calculates the percent of cells that express a given set of features by various grouping factors
