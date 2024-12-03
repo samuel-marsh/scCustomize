@@ -1575,7 +1575,12 @@ Read_Metrics_10X <- function(
   # Check if single file
   file_ending <- grep(pattern = ".csv$", x = base_path, value = TRUE)
   if (length(x = file_ending) == 1) {
-    metrics_data <- Metrics_Single_File(base_path = base_path, cellranger_multi = cellranger_multi)
+    temp_csv <- read.csv(file = base_path)
+    if (ncol(x = temp_csv) > nrow(x = temp_csv)) {
+      metrics_data <- Metrics_Single_File(base_path = base_path, cellranger_multi = cellranger_multi)
+    } else {
+      metrics_data <- Metrics_Single_File_v9plus(base_path = base_path, cellranger_multi = cellranger_multi)
+    }
     return(metrics_data)
   }
 
