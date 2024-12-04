@@ -78,6 +78,7 @@
 - Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
 - Updated `Store_Misc_Info_Seurat` to use Seurat accessor/setter function `Seurat::Misc()`.  
 - Updated documentation for `sample_names` in `Read_CellBender_h5_Multi_File` to clarify parameter behavior (related to ([#208](https://github.com/samuel-marsh/scCustomize/issues/208))).  
+- Updated `Read_Metrics_10X` to support adjusts to metrics summary format and metric names in output from Cell Ranger v9+.  
 - Some reorganization of R/ directory/scripts.  
    
 
