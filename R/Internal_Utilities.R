@@ -2299,6 +2299,7 @@ Metrics_Single_File_v9plus <- function(
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
     raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
 
+    # check how cells metric is named and adjust renaming
     if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
       # Rename multi columns to match names from count
       names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
