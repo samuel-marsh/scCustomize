@@ -1641,8 +1641,12 @@ Read_Metrics_10X <- function(
 
     return(data_list)
   } else {
-    count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
-
+    temp_csv <- read.csv(file = file.path(base_path, lib_list[x], secondary_path))
+    if (ncol(x = temp_csv) > nrow(x = temp_csv)) {
+      count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    } else {
+      count_gex_metrics <- Metrics_Count_GEX_v9plus(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
     return(count_gex_metrics)
   }
 }
