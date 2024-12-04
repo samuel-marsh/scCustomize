@@ -2207,7 +2207,7 @@ Metrics_Single_File_v9plus <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x = x)})
 
     # Change column nams to use "_" separator instead of "." for readability
     colnames(x = raw_data_gex) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data_gex))
