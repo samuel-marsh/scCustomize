@@ -2271,10 +2271,10 @@ Metrics_Single_File <- function(
 
 Metrics_Single_File_v9plus <- function(
     base_path,
-    cellranger_mutli = FALSE
+    cellranger_multi = FALSE
 ){
   # read count metrics
-  if (isFALSE(x = cellranger_mutli)) {
+  if (isFALSE(x = cellranger_multi)) {
     cli_inform(message = "Reading {.field Gene Expression} Metrics")
     raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
