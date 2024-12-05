@@ -6,20 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIGER Plotting &amp; Functionality • scCustomize</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="LIGER Plotting &amp; Functionality">
-<meta property="og:description" content="scCustomize">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
       </span>
     </div>
 
@@ -48,7 +47,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -57,13 +56,16 @@
       <a href="../articles/Gene_Expression_Plotting.html">Plotting #1: General Analysis Plots</a>
     </li>
     <li>
-      <a href="../articles/QC_Plots.html">Plotting #2: QC Plots</a>
+      <a href="../articles/QC_Plots.html">Plotting #2: QC Plots &amp; Analysis</a>
     </li>
     <li>
       <a href="../articles/Sequencing_QC_Plots.html">Plotting #3: Sequencing QC Plots/Analysis</a>
     </li>
     <li>
       <a href="../articles/Iterative_Plotting.html">Plotting #4: Iterative Plotting Functions</a>
+    </li>
+    <li>
+      <a href="../articles/Spatial_Plotting.html">Plotting #5: Spatial Plotting Functions</a>
     </li>
     <li>
       <a href="../articles/Color_Palettes.html">Customized Color Palettes &amp; Themes</a>
@@ -73,6 +75,9 @@
 <li class="dropdown-header">Helpers &amp; Utilities</li>
     <li>
       <a href="../articles/Helpers_and_Utilities.html">General Helpers &amp; Utilities</a>
+    </li>
+    <li>
+      <a href="../articles/Object_QC_Functions.html">Object QC Functions</a>
     </li>
     <li>
       <a href="../articles/Read_and_Write_Functions.html">Read &amp; Write Data Functions</a>
@@ -117,7 +122,7 @@
 <li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -128,14 +133,14 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>LIGER Plotting &amp; Functionality</h1>
             
-            <h4 data-toc-skip class="date">Compiled: February 28,
+            <h4 data-toc-skip class="date">Compiled: December 05,
 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/LIGER_Functions.Rmd" class="external-link"><code>vignettes/articles/LIGER_Functions.Rmd</code></a></small>
@@ -154,9 +159,11 @@ p.caption {
 <div class="section level2">
 <h2 id="interactivity-with-liger-objects">Interactivity with LIGER Objects<a class="anchor" aria-label="anchor" href="#interactivity-with-liger-objects"></a>
 </h2>
+<p>THIS VIGNETTE IS UNDER ACTIVE REVISION AND IS BEING UPDAATED WITH
+scCustomize V3.0.0 FUNCTIONS, BUT IS NOT YET COMPLETE.</p>
 <p>While the majority of scCustomize’s current functionality is with
-Seurat Objects there are a few functions for working with LIGER objects
-too.</p>
+Seurat Objects there are a number of functions for working with LIGER
+objects too.</p>
 <p>For this tutorial, I will be utilizing microglia data from Marsh et
 al., 2022 (<a href="https://doi.org/10.1038/s41593-022-01022-8" class="external-link"><em>Nature
 Neuroscience</em></a>) which I have converted to LIGER object.</p>
@@ -167,22 +174,26 @@ Neuroscience</em></a>) which I have converted to LIGER object.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/welch-lab/liger" class="external-link">rliger</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://welch-lab.github.io/liger/" class="external-link">rliger</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/traversc/qs" class="external-link">qs</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># read object</span></span>
 <span><span class="va">marsh_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert to liger</span></span>
-<span><span class="va">marsh_liger</span> <span class="op">&lt;-</span> <span class="fu">rliger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rliger/man/seuratToLiger.html" class="external-link">seuratToLiger</a></span><span class="op">(</span>objects <span class="op">=</span> <span class="va">marsh_micro</span>, combined.seurat <span class="op">=</span> <span class="cn">TRUE</span>, use.idents <span class="op">=</span> <span class="cn">T</span>,</span>
-<span>    use.tsne <span class="op">=</span> <span class="cn">T</span>, meta.var <span class="op">=</span> <span class="st">"orig.ident"</span>, remove.missing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Add meta data to LIGER \@cell.data slot</span></span>
-<span><span class="va">marsh_liger</span><span class="op">@</span><span class="va">cell.data</span><span class="op">$</span><span class="va">Transcription</span> <span class="op">&lt;-</span> <span class="va">marsh_micro</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">Transcription</span></span>
-<span><span class="va">marsh_liger</span><span class="op">@</span><span class="va">cell.data</span><span class="op">$</span><span class="va">Method</span> <span class="op">&lt;-</span> <span class="va">marsh_micro</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">Method</span></span>
-<span><span class="va">marsh_liger</span><span class="op">@</span><span class="va">cell.data</span><span class="op">$</span><span class="va">Batch</span> <span class="op">&lt;-</span> <span class="va">marsh_micro</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">Batch</span></span>
-<span><span class="va">marsh_liger</span><span class="op">@</span><span class="va">cell.data</span><span class="op">$</span><span class="va">Transcription_Method</span> <span class="op">&lt;-</span> <span class="va">marsh_micro</span><span class="op">@</span><span class="va">meta.data</span><span class="op">$</span><span class="va">Transcription_Method</span></span></code></pre></div>
+<span><span class="va">marsh_liger</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://welch-lab.github.io/liger/reference/as.liger.html" class="external-link">as.liger</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_micro</span>, datasetVar <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="liger-object-version">LIGER object version<a class="anchor" aria-label="anchor" href="#liger-object-version"></a>
+</h3>
+<p>The Welch lab has recently released a major update to rliger package
+(v2.0.0+) which has substantial changes to object structure and major
+performance improvements over prior versions. The majority of liger
+functions in scCustomize v2.1.0 have been updated to work with old and
+new liger objects. However, a number of newer functions will be
+exclusive to rliger 2.0.0+.</p>
+<p>This vignette will be using rliger 2.0.0.</p>
+</div>
 <div class="section level3">
 <h3 id="dimensionality-reduction-plotting">Dimensionality Reduction Plotting<a class="anchor" aria-label="anchor" href="#dimensionality-reduction-plotting"></a>
 </h3>
@@ -193,26 +204,9 @@ for those more familiar with Seurat’s <code><a href="https://satijalab.org/seu
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span><span class="op">)</span></span></code></pre></div>
 <p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>As you can see we get plot that looks very similar to thought
-generated by <code><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom()</a></code> or
+<p>As you can see we get plot that looks very similar to those generated
+by <code><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom()</a></code> or
 <code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">Seurat::DimPlot()</a></code>.</p>
-<div class="section level5">
-<h5 id="important-axes-labels">/* IMPORTANT: AXES LABELS /*<a class="anchor" aria-label="anchor" href="#important-axes-labels"></a>
-</h5>
-<p>Unfortunately, the liger/rliger package does not properly store the
-name of the dimensionality reduction technique used and labels all plots
-with tSNE1/tSNE2 or dr1/dr2.</p>
-<p><code><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER()</a></code> solves this by providing extra parameter
-in the function that can be used to set labels. The first time you use
-<code>DimPlot_LIGER</code> in R session it will print a one-time message
-alerting you to the fact that this parameter exists and is set to “UMAP”
-by default (as it seems to be most commonly used method currently).</p>
-<p>However, this analysis object used tSNE so let’s change that
-parameter.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;"></p>
-</div>
 <div class="section level4">
 <h4 id="optional-functionalityparameters">Optional functionality/Parameters<a class="anchor" aria-label="anchor" href="#optional-functionalityparameters"></a>
 </h4>
@@ -223,31 +217,29 @@ in-line with Seurat for ease of use.</p>
 <div class="section level4">
 <h4 id="plot-combination">Plot combination<a class="anchor" aria-label="anchor" href="#plot-combination"></a>
 </h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, combination <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-5-1.png" width="1248" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, combination <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-4-1.png" width="1248" style="display: block; margin: auto;"></p>
 <p>User can specify different color palettes for each plot</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clu_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ColorBlind_Pal.html">ColorBlind_Pal</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">sample_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DiscretePalette_scCustomize.html">DiscretePalette_scCustomize</a></span><span class="op">(</span>num_colors <span class="op">=</span> <span class="fl">12</span>, palette <span class="op">=</span> <span class="st">"alphabet"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, combination <span class="op">=</span> <span class="cn">T</span>, colors_use_cluster <span class="op">=</span> <span class="va">clu_color</span>,</span>
-<span>    colors_use_meta <span class="op">=</span> <span class="va">sample_color</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-6-1.png" width="1248" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, combination <span class="op">=</span> <span class="cn">T</span>, colors_use_cluster <span class="op">=</span> <span class="va">clu_color</span>, colors_use_meta <span class="op">=</span> <span class="va">sample_color</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-5-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="grouping-and-splitting-plots">Grouping and Splitting Plots<a class="anchor" aria-label="anchor" href="#grouping-and-splitting-plots"></a>
 </h4>
 <p><code>DimPlot_LIGER</code> supports grouping and splitting plots by
 meta data variables or cluster and will return patchwork layout</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, group_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>, colors_use_meta <span class="op">=</span> <span class="fu"><a href="../reference/JCO_Four.html">JCO_Four</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-6-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, group_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
-<span>    colors_use_meta <span class="op">=</span> <span class="fu"><a href="../reference/JCO_Four.html">JCO_Four</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, group_by <span class="op">=</span> <span class="st">"Cluster"</span>, split_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, group_by <span class="op">=</span> <span class="st">"Cluster"</span>, split_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
 <span>    label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;"></p>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="cluster-label-modification">Cluster Label Modification<a class="anchor" aria-label="anchor" href="#cluster-label-modification"></a>
@@ -268,13 +260,12 @@ label.</li>
 <li>
 <code>label_color</code> change label text color.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, label_repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, label_repel <span class="op">=</span> <span class="cn">TRUE</span>, label_box <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    label_size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-10-1.png" width="1152" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, label_repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, label_repel <span class="op">=</span> <span class="cn">TRUE</span>, label_box <span class="op">=</span> <span class="cn">TRUE</span>, label_size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="raster-points">Raster Points<a class="anchor" aria-label="anchor" href="#raster-points"></a>
@@ -283,10 +274,10 @@ label.</li>
 utilizing <a href="https://cran.rstudio.com/web/packages/scattermore/index.html" class="external-link">scattermore
 package</a>. Axes, labels, and legends will remain in vector
 form.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, raster <span class="op">=</span> <span class="cn">FALSE</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, raster <span class="op">=</span> <span class="cn">TRUE</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-12-1.png" width="1152" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, raster <span class="op">=</span> <span class="cn">FALSE</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, raster <span class="op">=</span> <span class="cn">TRUE</span>, label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-11-1.png" width="1152" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="restore-ggplot2-default-color-scheme">Restore ggplot2 default color scheme<a class="anchor" aria-label="anchor" href="#restore-ggplot2-default-color-scheme"></a>
@@ -294,9 +285,9 @@ form.</p>
 <p>If you would like to restore ggplot2 default color scheme but
 maintain the rest of the aesthetics of <code>DimPlot_LIGER</code> simply
 set parameter <code>ggplot_default_colors = TRUE</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, reduction_label <span class="op">=</span> <span class="st">"tSNE"</span>, ggplot_default_colors <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, ggplot_default_colors <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -308,7 +299,7 @@ LIGER analyzed object it has no factors. So I ran a basic LIGER pipeline
 <code>Top_Genes_Factor</code>)</em></p>
 <p>scCustomize contains function <code><a href="../reference/plotFactors_scCustom.html">plotFactors_scCustom()</a></code>
 which expands the functionality and customizes the visualizes of LIGER’s
-<code><a href="https://rdrr.io/pkg/rliger/man/plotFactors.html" class="external-link">plotFactors()</a></code> function.</p>
+<code>plotFactors()</code> function.</p>
 <div class="section level4">
 <h4 id="plots-created">Plots Created<a class="anchor" aria-label="anchor" href="#plots-created"></a>
 </h4>
@@ -316,12 +307,12 @@ which expands the functionality and customizes the visualizes of LIGER’s
 each iNMF factor. First, is plot of the factor loadings for each cell,
 grouped by dataset. The second is visualization of the factor loading on
 the dimensionality reduction coordinates.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">returned_plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">returned_plots</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-16-1.png" width="1152" style="display: block; margin: auto;"></p>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-15-1.png" width="1152" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="additional-plot-savereturn-functionality">Additional Plot Save/Return Functionality<a class="anchor" aria-label="anchor" href="#additional-plot-savereturn-functionality"></a>
@@ -360,14 +351,7 @@ palette.<br>
 <code>ggplot_default_colors</code> parameter can be specified if you
 would like to return this plot to using the ggplot2/hue palette.</li>
 </ul>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-18-1.png" width="1152" style="display: block; margin: auto;"></p>
-<ul>
-<li>
-<code>reorder_datasets</code> new order to plot datasets in. By
-default plots in factor level order from the <span class="citation">@cell.data</span> slot but this can be reordered just
-for plotting without changing the underlying object.</li>
-</ul>
-<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-20-1.png" width="1152" style="display: block; margin: auto;"></p>
+<p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-17-1.png" width="1152" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="added-dimensionality-reduction-functionality">Added Dimensionality Reduction Functionality<a class="anchor" aria-label="anchor" href="#added-dimensionality-reduction-functionality"></a>
@@ -383,7 +367,7 @@ higher loading points are plotted on top of lower loading cells (avoids
 cell hiding). Default is FALSE.</li>
 </ul>
 <div class="section level5">
-<h5 id="important-axes-labels-1">/* IMPORTANT: AXES LABELS /*<a class="anchor" aria-label="anchor" href="#important-axes-labels-1"></a>
+<h5 id="important-axes-labels">/* IMPORTANT: AXES LABELS /*<a class="anchor" aria-label="anchor" href="#important-axes-labels"></a>
 </h5>
 <p>Unfortunately, the liger/rliger package does not properly store the
 name of the dimensionality reduction technique used and labels all plots
@@ -406,59 +390,24 @@ factor. <code>Top_Genes_Factor</code> provides quick function to extract
 the list of genes that loads highly on particular iNMF factor.<br><em>NOTE: This function simply extracts top loading genes in order from
 given factor. It does not assess whether that number of genes is
 significant, etc.</em></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">top20_factor6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Top_Genes_Factor.html">Top_Genes_Factor</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, liger_factor <span class="op">=</span> <span class="fl">6</span>, num_genes <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">top20_factor6</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "Ifit3"  "Ifit2"  "Ifit3b" "Ifit1"  "Irf7"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Junb" "Jun"  "Klf2" "Klf6" "Btg2"</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="convert-liger-to-seurat">Convert LIGER to Seurat<a class="anchor" aria-label="anchor" href="#convert-liger-to-seurat"></a>
+<h3 id="add-cell-qc-metrics">Add Cell QC Metrics<a class="anchor" aria-label="anchor" href="#add-cell-qc-metrics"></a>
 </h3>
-<p>The liger/rliger package already contains a function
-<code><a href="https://rdrr.io/pkg/rliger/man/ligerToSeurat.html" class="external-link">ligerToSeurat()</a></code> to convert LIGER objects to Seurat Objects.
-However, during this transfer a few things have issues crop up:</p>
-<ul>
-<li>All meta data except the “dataset” column from
-liger_object@cell.data is lost.</li>
-<li>Seurat dimensionality reduction is set to tSNE regardless of method
-used in LIGER analysis</li>
-<li>Seurat assay name not specified</li>
-</ul>
-<p>scCustomize contains modified version of this function which extends
-the Seurat function <a href="https://github.com/samuel-marsh/scCustomize/blob/develop/docs/reference/as.Seurat.html" class="external-link"><code>as.Seurat()</code></a>
-that solves these issues with some extra parameters:</p>
-<ul>
-<li>
-<code>keep_meta</code> logical. Whether to keep meta data from the
-@cell.data slot in LIGER object. Default is TRUE.</li>
-<li>
-<code>reduction_label</code> Name of dimensionality reduction
-technique used (e.g., tSNE, UMAP, etc). Ensures dim names are set
-correctly in Seurat object.</li>
-<li>
-<code>seurat_assay</code> Name of assay to use for data in Seurat
-object. Default is “RNA”.</li>
-<li>
-<code>assay_type</code> Specify whether to create V3/4 vs V5 Seurat
-assays.</li>
-</ul>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seurat_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SeuratObject/man/as.Seurat.html" class="external-link">as.Seurat</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liger_object</span>, reduction_label <span class="op">=</span> <span class="st">"UMAP"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="add-mitochondrial-ribosomal-percentages">Add Mitochondrial &amp; Ribosomal Percentages<a class="anchor" aria-label="anchor" href="#add-mitochondrial-ribosomal-percentages"></a>
-</h3>
-<p>For more information on adding mitochondrial and ribosomal count
-percentages to LIGER objects see <a href="https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html">General
-Utilities and Helpers Vignette</a> for information on
-<code>Add_Mito_Ribo</code>.</p>
+<p>For more information on adding cell QC metricss to LIGER objects see
+<a href="https://samuel-marsh.github.io/scCustomize/articles/Object_QC_Functions.html">Object
+QC Vignette</a> for information.</p>
 </div>
 <div class="section level3">
 <h3 id="variable-gene-selection">Variable Gene Selection<a class="anchor" aria-label="anchor" href="#variable-gene-selection"></a>
 </h3>
 <p>By default when selecting highly variable genes in LIGER using
-<code><a href="https://rdrr.io/pkg/rliger/man/selectGenes.html" class="external-link">rliger::selectGenes()</a></code> LIGER performs gene selection across
+<code><a href="https://welch-lab.github.io/liger/reference/selectGenes.html" class="external-link">rliger::selectGenes()</a></code> LIGER performs gene selection across
 all datasets in the object and then can either take the union or
 intersection of those lists (default is union). However, sometimes for
 analysis you may want to select highly variable genes from all data
@@ -471,7 +420,7 @@ of the matrices present in original object and then running variable
 gene selection. Therefore, while running the function it will use
 significant memory resources (equivalent to size of original
 object).</em></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Select highly variable genes based on threshold</span></span>
 <span><span class="va">marsh_liger</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Variable_Features_ALL_LIGER.html">Variable_Features_ALL_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, var.thresh <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
 <span></span>
@@ -482,29 +431,27 @@ object).</em></p>
 <h3 id="gene-utilities">Gene Utilities<a class="anchor" aria-label="anchor" href="#gene-utilities"></a>
 </h3>
 <p>As discussed in <a href="https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html">helpers
-vignette</a>, the <code><a href="../reference/Gene_Present.html">Gene_Present()</a></code> function can be used to
+vignette</a>, the <code><a href="../reference/deprecated.html">Gene_Present()</a></code> function can be used to
 check if list of genes are present in a LIGER object.</p>
 <p>By default this will query all datasets in the object to create
 unified gene list and check input gene list against that list.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gene_input_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Aif1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">genes_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Gene_Present.html">Gene_Present</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">marsh_liger</span>, gene_list <span class="op">=</span> <span class="va">gene_input_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">genes_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Feature_Present.html">Feature_Present</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">marsh_liger</span>, features <span class="op">=</span> <span class="va">gene_input_list</span><span class="op">)</span></span></code></pre></div>
 <p>However you can check individual datasets within object by supplying
 those matrices to the <code>data</code> parameter.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gene_input_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P2ry12"</span>, <span class="st">"Fcrls"</span>, <span class="st">"Aif1"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">genes_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Gene_Present.html">Gene_Present</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">marsh_liger</span><span class="op">@</span><span class="va">raw.data</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, gene_list <span class="op">=</span> <span class="va">gene_input_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">genes_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Feature_Present.html">Feature_Present</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">marsh_liger</span><span class="op">@</span><span class="va">datasets</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, features <span class="op">=</span> <span class="va">gene_input_list</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -517,16 +464,16 @@ those matrices to the <code>data</code> parameter.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
