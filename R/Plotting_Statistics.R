@@ -943,6 +943,8 @@ CellBender_Diff_Plot <- function(
 #'
 #' @export
 #'
+#' @concept stats_plotting
+#'
 #' @examples
 #' #' library(Seurat)
 #' Proportion_Plot(seurat_object = pbmc_small)
