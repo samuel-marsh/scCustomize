@@ -55,7 +55,7 @@ Feature_Present <- function(
 ) {
   # Check object type
   # Seurat
-  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
+  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble", "ligerDataset")
   if (inherits(x = data, what = "Seurat")) {
     # set assay (if null set to active assay)
     assays_present <- seurat_assay %||% Assays(object = data)
@@ -66,15 +66,7 @@ Feature_Present <- function(
 
     possible_features <- unlist(possible_features)
   } else if ((class(x = data)[[1]] == "liger")) {
-    # get complete gene list
-    length_liger <- length(x = data@raw.data)
-
-    list_genes <- lapply(1:length_liger, function(x){
-      rownames(x = data@raw.data[[x]])
-    })
-
-    possible_features <- reduce(list_genes, function(x, y) {
-      union(x = x, y = y)})
+      possible_features <- Features(x = data, by_dataset = FALSE)
   } else if ((class(x = data) %in% accepted_types)) {
     possible_features <- rownames(x = data)
   } else {
