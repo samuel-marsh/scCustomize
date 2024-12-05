@@ -54,3 +54,4 @@ Can plot either the totals or split by a variable in \code{meta.data}.
 Proportion_Plot(seurat_object = pbmc_small)
 
 }
+\concept{stats_plotting}
