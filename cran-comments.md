@@ -1,4 +1,4 @@
-## Hotfix Update 
+## Major Update 
 This is major update to version 3.0.0.  See News.md for full changelog.  
 
 
