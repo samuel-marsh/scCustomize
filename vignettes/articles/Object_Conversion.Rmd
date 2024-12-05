@@ -59,7 +59,7 @@ Load Seurat Object & Add QC Data
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
 pbmc <- UpdateSeuratObject(pbmc)
 
-pbmc <- Add_Cell_QC_Metrics(seurat_object = pbmc, species = "human")
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "human")
 ```
 
 We'll also add some random meta data variables to pbmc data form use in this vignette

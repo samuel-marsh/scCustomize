@@ -261,14 +261,14 @@ By default this will query all datasets in the object to create unified gene lis
 ```{r}
 gene_input_list <- c("P2ry12", "Fcrls", "Aif1")
 
-genes_present <- Feature_Present(data = marsh_liger, gene_list = gene_input_list)
+genes_present <- Feature_Present(data = marsh_liger, features = gene_input_list)
 ```
 
 However you can check individual datasets within object by supplying those matrices to the `data` parameter.
 ```{r}
 gene_input_list <- c("P2ry12", "Fcrls", "Aif1")
 
-genes_present <- Feature_Present(data = marsh_liger@raw.data[[1]], gene_list = gene_input_list)
+genes_present <- Feature_Present(data = marsh_liger@datasets[[1]], features = gene_input_list)
 ```
 
 
