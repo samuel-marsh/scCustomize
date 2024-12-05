@@ -2565,8 +2565,8 @@ FeatureScatter_scCustom <- function(
 #' alpha value for each plot.
 #' @param stroke Control the width of the border around the spots
 #' @param interactive Launch an interactive SpatialDimPlot or SpatialFeaturePlot
-#' session, see \code{\link{ISpatialDimPlot}} or
-#' \code{\link{ISpatialFeaturePlot}} for more details
+#' session, see \code{\link[Seurat]{ISpatialDimPlot}} or
+#' \code{\link[Seurat]{ISpatialFeaturePlot}} for more details
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
