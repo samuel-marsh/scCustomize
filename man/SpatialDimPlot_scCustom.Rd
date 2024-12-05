@@ -66,8 +66,8 @@ remove.}
 \item{stroke}{Control the width of the border around the spots}
 
 \item{interactive}{Launch an interactive SpatialDimPlot or SpatialFeaturePlot
-session, see \code{\link{ISpatialDimPlot}} or
-\code{\link{ISpatialFeaturePlot}} for more details}
+session, see \code{\link[Seurat]{ISpatialDimPlot}} or
+\code{\link[Seurat]{ISpatialFeaturePlot}} for more details}
 
 \item{combine}{Combine plots into a single gg object; note that if TRUE;
 themeing will not work when plotting multiple features/groupings}
