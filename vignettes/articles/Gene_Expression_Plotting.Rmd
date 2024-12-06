@@ -739,7 +739,7 @@ DoHeatmap(object = marsh_mouse_micro, features = micro_markers, cells = random_c
 DoHeatmap(object = marsh_mouse_micro, features = micro_markers, cells = Random_Cells_Downsample(seurat_object = marsh_mouse_micro, num_cells = 150, allow_lower = T))
 ```
 
-```{r echo=FALSE, fig.align='center', fig.cap="*Much, fig.height=10, fig.width=13}
+```{r, echo=FALSE, fig.height=10, fig.width=13, fig.align='center', fig.cap="*Much easier now to see expression across all clusters.*"}
 
 DoHeatmap(object = marsh_mouse_micro, features = micro_markers, cells = Random_Cells_Downsample(seurat_object = marsh_mouse_micro, num_cells = 150, allow_lower = T))
 ```
