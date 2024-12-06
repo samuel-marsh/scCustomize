@@ -1,3 +1,115 @@
+# scCustomize 3.0.0 (2024-12-05)  
+## Added  
+**Major Updates to Functionality with rliger Package:**  
+*Added new utility functions to interact with liger v2.0.0+ object format change:*  
+    - `Subset_LIGER` to quickly subset by cluster or other meta data variable.  
+    - `Cells_by_Identities_LIGER` to extract list of barcodes sorted by values within given meta data column.  
+    
+*Extended the following Seurat/SeuratObject generic functions to work seamlessly with liger objects:*  
+    - `Cells` to extract vector of all cells or list vectors of cells by dataset.  
+    - `Features` to extract vector of all features or list vectors of features by dataset.  
+    - `WhichCells` to extract vector or list of cells matching identity criteria.  
+    - `Embeddings` to extract matrix containing dimensionality reduction embeddings or iNMF h.norm matrix.  
+    - `Idents` and `Idents<-` to extract and set default identities/clusters.  
+    
+*Updated functions to interact with both old and new style liger objects:*  
+    - `plotFactors_scCustom()`  
+    - `Fetch_Meta`  
+    - `Top_Genes_Factor`  
+    - `Add_Mito_Ribo`  
+    - `Add_Cell_Complexity`  
+    - `DimPlot_LIGER`  
+    - `Variable_Features_ALL_LIGER`  
+    - `Feature_Present`  
+    
+*New functions compatible with old and new style liger objects:*  
+    - Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, rhesus macaque, and chicken) and works with both Seurat and liger objects.  
+    
+*New scCustomize generics to function across both Seurat and Liger objects:*  
+    - `Add_Hemo` (see above).  
+    - `Rename_Clusters` now S3 generic for setting new active.ident (Seurat) or defaultCluster (Liger).  
+    
+*New functions for Seurat and rliger v2.0.0+ only:*
+    - Added new function `Find_Factor_Cor` to return correlation matrix between factor gene loadings from liger or Seurat object.  
+    - Added new function `Factor_Cor_Plot` to plot positive correlations from liger or Seurat object.  
+    
+*Updated functions to recommend new rliger equivalents for users with rliger v2.0.0+:*  
+    - `as.LIGER`  
+    - `as.Seurat`  
+
+  
+**General scCustomize Updates:**  
+*New functions:*  
+- Added new function `Add_Hemo` to add hemoglobin gene percentage for QC.  Also added as parameter to `Add_Cell_QC_Metrics`.  `Add_Hemo` supports all default species: (human, mouse, marmoset, zebrafish, rat, drosophila, and rhesus macaque) and works with both Seurat and liger objects.  
+- Added new function `seq_zeros()` to create sequences with preceding zeros.  
+- Added new function `Read_Metrics_CellBender` to read in the summary metrics csv file produced by CellBender.  Can either read all metrics files from parent directory of output folders or a single metrics file.  
+- Added `Updated_MGI_Symbols` to check for update gene names/symbols in mouse data ([#202](https://github.com/samuel-marsh/scCustomize/issues/202)).  
+- Added plotting function `Proportion_Plot` to plot pie chart or bar chart of proportion (or total counts) of cells in each identity class.  
+- Added new function `Random_Cells_Downsample` to return either a vector or list with randomly downsampled cells for each identity class.  
+- Added new function `Cells_per_Sample` to quickly return data.frame with just number of cells per sample.  
+  
+*Updated functions:*  
+- Added new parameters `data_name` and `overwrite` to `Add_Alt_Feature_ID` to support new storage location.  
+- Added `cells` parameter explicitly to `FeatureScatter_scCustom`.  
+- Added Chicken (Gallus gallus) to default species for QC functions.  Thanks @dpearton; ([#176](https://github.com/samuel-marsh/scCustomize/issues/176)).  
+- Added new plotting function `SpatialDimPlot_scCustom`.  Thanks for encouragement @puapinyoying @nina-hahn ([#160](https://github.com/samuel-marsh/scCustomize/issues/160)).  
+- Added ability of `Read_Metrics_10X` to read a single metrics csv file and return data formatted the same way as when reading multiple files.  
+- Added parameter `cutoff_line_width` to the `QC_Plot_*` family of plots to control line thickness of cutoff lines.  
+- `Cluster_Stats_All_Samples` now returns data.frame with row order reflecting the frequency of cells.  
+- `Add_Mito_Ribo` now supports datasets aligned to multi-species reference genomes ([#184](https://github.com/samuel-marsh/scCustomize/issues/184)).  
+- Added parameter `add_prop_plot` to `DimPlot_scCustom` to return plot showing number or percent of cells per identity along with the DimPlot.  
+- Added optional parameter `colors_use_assay2` to `FeaturePlot_DualAssay` which allows for specification of different palettes for the two plots ([#182](https://github.com/samuel-marsh/scCustomize/issues/182)).  
+- Added new folder and scripts (see "data-raw/" on GitHub) detailing the creation of gene lists used in `Add_Cell_QC_Metrics`.  
+- Added ensembl ID support for percent hemoglobin, msigdb, and IEG gene sets ([#186](https://github.com/samuel-marsh/scCustomize/issues/186)).  
+- Add verbosity parameter to `Store_Misc_Info_Seurat` and `Store_Palette_Seurat`.  
+- Explicitly reveal the `reduction` parameter in `Cluster_Highlight_Plot` and `Meta_Highlight_Plot` ([#198](https://github.com/samuel-marsh/scCustomize/issues/198)).  
+- Added `show_row_names` `show_column_names`, `column_names_side`, `row_names_side`, `legend_position`, `legend_orientation`, `show_ident_legend`, and `show_ident_colors` parameters to `Clustered_DotPlot`.  Thanks for idea and code @johnminglu ([#199](https://github.com/samuel-marsh/scCustomize/issues/199)).  
+- Updated `Split_Vector` to allow user to specify number of chunks or size of chunks for splitting vector.  
+- Update `RenameClusters` with additional parameters to enable storage of both old idents and new idents in meta.data within the function.  
+- Update `Add_Cell_QC_Metrics.Seurat` to explicitly reveal `list_species_names` parameter.  
+- Added new vignette for spatial plotting.  
+- Added new and expanded vignette on use of object QC functions for better clarity on these functions and their uses (previously was part of QC Plotting & Helpers/Utilities Vignettes).  Plotting elements of QC Plotting vignette are unchanged.  
+
+  
+## Changed  
+- **BREAKING CHANGES** `Add_Top_Gene_Pct_Seurat` is now S3 generic that works with both Seurat and liger objects and has been renamed `Add_Top_Gene_Pct`.  
+- `Add_Cell_QC_Metrics` is now S3 generic and works with both Seurat and liger objects.  
+- Changed storage location for `Add_Alt_Feature_ID` to `@misc` slot of object for safer storage across object filtering.  
+- Added error check in `as.anndata` to explicitly check for installation of anndata before starting conversion ([#162](https://github.com/samuel-marsh/scCustomize/issues/162)).  
+- Updated `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample` to understand "ident" as grouping variable.  
+- Updated `Store_Misc_Info_Seurat` to use Seurat accessor/setter function `Seurat::Misc()`.  
+- Updated documentation for `sample_names` in `Read_CellBender_h5_Multi_File` to clarify parameter behavior (related to ([#208](https://github.com/samuel-marsh/scCustomize/issues/208))).  
+- Updated `Read_Metrics_10X` to support adjusts to metrics summary format and metric names in output from Cell Ranger v9+.  
+- Some reorganization of R/ directory/scripts.  
+   
+
+## Fixes  
+- Nebulosa plotting functions `Plot_Density_Custom` and `Plot_Density_Joint_Only` have been re-enabled for users with ggplot2 v3.5.0 following Nebulosa v1.12.1 update patch.     
+- Fixed bug causing error in `Add_Cell_QC_Metrics` when `overwrite = TRUE` ([#165](https://github.com/samuel-marsh/scCustomize/issues/165)).  
+- Fixed wrong description of parameter in manual entry for `DotPlot_scCustom` ([#158](https://github.com/samuel-marsh/scCustomize/issues/158)).  
+- Fixed several potential errors in `as.anndata` from Seurat conversion that previously caused failures ([#168](https://github.com/samuel-marsh/scCustomize/issues/168)).  
+- Fixed errors in `Create_Cluster_Annotation_File` if for file path and csv name errors.  
+- Fixed error when using `plot_median` and more than one feature in `VlnPlot_scCustom` ([#169](https://github.com/samuel-marsh/scCustomize/issues/169)).  
+- Fixed bug while collecting legends for `DimPlot_scCustom` due to changes in guides updated with ggplot2 v3.5.0 ([#171](https://github.com/samuel-marsh/scCustomize/issues/171)).  
+- Fixed error in `Add_Sample_Meta` that still errored when setting `na_ok = TRUE`.  
+- Fixed errors in `Plot_Median_*` family that caused issues when `group_by` parameter was NULL.  
+- Fixed errors in `FeaturePlot_scCustom` when setting `combine = FALSE`.  
+- Fixed bug in `DimPlot_scCustom` that could cause blank plot when rasterizing points.  
+- Fixed bug in `MAD_Stats` that didn't respect `mad_num` parameter ([#183](https://github.com/samuel-marsh/scCustomize/issues/183)).  
+- Fixed bugs in `MAD_Stats` that could cause issues if `mad_num` was less than or equal to 0 and returned error if setting `group_by_var` to "ident".  
+- Replaced lingering instances of deprecated tidyr code .data[["var"]] with update `all_of`/`any_of` syntax.  
+- Fixed issue that could occur with some meta data modifying functions due to column name collisions in internals of function ([#193](https://github.com/samuel-marsh/scCustomize/issues/193)).  
+- Fixed issue that caused error when using `Cluster_Highlight_Plot` with `split.by` parameter ([#201](https://github.com/samuel-marsh/scCustomize/issues/201)).  
+- Added check and informative error message to `Convert_Assay` ([#205](https://github.com/samuel-marsh/scCustomize/issues/205)).  
+- Fixed issue with anndata conversion and Seurat V5 objects ([#195](https://github.com/samuel-marsh/scCustomize/issues/195)).  
+- Fixed issue with `Updated_HGNC_Symbols` due to change in URL path for gene names ([#209](https://github.com/samuel-marsh/scCustomize/issues/209)).  
+- Fixed bug in `DimPlot_scCustom` when `split.by` and `label.box = TRUE`.  
+- Fixed bug in `DiscretePalette_scCustom` that didn't error when supplying invalid palette names.  
+- Fixed bug in `DimPlot_LIGER` that provided uniformative error message when changing the default cluster ident.  
+- Spelling and style fixes.  Thanks @kew24.  
+
+
+
 # scCustomize 2.1.2 (2024-02-27)  
 ## Added  
 - None.  

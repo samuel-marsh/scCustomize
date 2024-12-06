@@ -23,18 +23,22 @@ navbar:
         - text: Plotting Vignettes
         - text: "Plotting #1: General Analysis Plots"
           href: articles/Gene_Expression_Plotting.html
-        - text: "Plotting #2: QC Plots"
+        - text: "Plotting #2: QC Plots & Analysis"
           href: articles/QC_Plots.html
         - text: "Plotting #3: Sequencing QC Plots/Analysis"
           href: articles/Sequencing_QC_Plots.html
         - text: "Plotting #4: Iterative Plotting Functions"
           href: articles/Iterative_Plotting.html
+        - text: "Plotting #5: Spatial Plotting Functions"
+          href: articles/Spatial_Plotting.html
         - text: "Customized Color Palettes & Themes"
           href: articles/Color_Palettes.html
         - text: -------
         - text: Helpers & Utilities
         - text: "General Helpers & Utilities"
           href: articles/Helpers_and_Utilities.html
+        - text: "Object QC Functions"
+          href: articles/Object_QC_Functions.html
         - text: "Read & Write Data Functions"
           href: articles/Read_and_Write_Functions.html
         - text: "Object/Assay Format Conversion"

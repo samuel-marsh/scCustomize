@@ -65,109 +65,15 @@ pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5"
 pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 ```
 
-## Add Mitochondrial & Ribosomal Percentages
-As discussed in [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html) one the first steps after creating object if often to calculate and add mitochondrial and ribosomal count percentages per cell/nucleus.
+## Add All Cell QC Metrics with Single Function  
+One the first steps after creating object if often to calculate and add a number of different QC metrics at the cell level.  
 
-### `Add_Mito_Ribo()`
-scCustomize contains easy wrapper function to automatically add both Mitochondrial and Ribosomal percentages to meta.data slot.  If you are using mouse, human, marmoset, zebrafish, rat, drosophila, or rhesus macaque data all you need to do is specify the `species` parameter.
-```{r eval=FALSE}
-# These defaults can be run just by providing accepted species name
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
-```
+To simplify the process of adding cell-level QC metrics scCustomize contains a wrapper function which can be customized to add all or some of the available QC metrics.  The functions have built-in support for large number of default species and support for both gene symbols or Ensembl IDs.  
 
-To view list of accepted values for default species names simply set `list_species_names = TRUE`.
-
-```{r eval=FALSE}
-Add_Mito_Ribo(list_species_names = TRUE)
-```
-
-
-```{r echo=FALSE}
-accepted_names <- Add_Mito_Ribo(object = pbmc, list_species_names = TRUE)
-
-accepted_names %>%
-  kableExtra::kbl(row.names = TRUE) %>%
-  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
-```
-
-#### Non-default species
-However custom prefixes can be used for non-human/mouse/marmoset/rat/zebrafish/drosophila/macaque species with different annotations. Simply specify `species = other` and supply feature lists or regex patterns for your species of interest. 
-*NOTE: If desired please submit issue on GitHub for additional default species.  Please include regex pattern or list of genes for both mitochondrial and ribosomal genes and I will add additional built-in defaults to the function.*
-```{r eval=FALSE}
-# Using gene name patterns
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "regexp_pattern", ribo_pattern = "regexp_pattern")
-
-# Using feature name lists
-mito_gene_list <- c("gene1", "gene2", "etc")
-ribo_gene_list <- c("gene1", "gene2", "etc")
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
-
-# Using combination of gene lists and gene name patterns
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern")
-```
-
-### Warning Messages
-The added benefit of `Add_Mito_Ribo` is that it will return informative warnings if no Mitochondrial or Ribosomal features are found using the current species, features, or pattern specification.
-```{r message=TRUE, warning=TRUE, error=TRUE}
-# For demonstration purposes we can set `species = mouse` for this object of human cells
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "mouse")
-```
-
-```{r include=FALSE}
-pbmc <- pbmc3k.SeuratData::pbmc3k
-pbmc <- UpdateSeuratObject(object = pbmc)
-```
-
-
-```{r message=TRUE, warning=TRUE, error=TRUE}
-# Or if providing custom patterns/lists and features not found
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "^MT-", ribo_pattern = "BAD_PATTERN")
-```
-
-`Add_Mito_Ribo` will also return warnings if columns are already present in `@meta.data` slot and prompt you to provide override if you want to run the function.
-```{r include=FALSE}
-pbmc <- pbmc3k.SeuratData::pbmc3k
-pbmc <- UpdateSeuratObject(object = pbmc)
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
-```
-
-```{r message=TRUE, warning=TRUE, error=TRUE}
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
-```
-
-
-
-### LIGER Objects: `Add_Mito_Ribo()`
-scCustomize `Add_Mito_Ribo` also works seemlessly with LIGER objects.  
-```{r eval=FALSE}
-liger_obj <- Add_Mito_Ribo(object = liger_obj, species = "human")
-```
-
-
-## Add Cell Complexity/Novelty QC Metrics  
-In addition to metrics like number of features and UMIs it can often be helpful to analyze the complexity of expression within a single cell.  scCustomize provides functions to add two of these metrics to meta data.  
-
-### Cell Complexity (log10(nFeature) / log10(nCount))
-scCustomize contains easy shortcut function to add a measure of cell complexity/novelty that can sometimes be useful to filter low quality cells.  The metric is calculated by calculating the result of log10(nFeature) / log10(nCount).  
-```{r eval = FALSE}
-# These defaults can be run just by providing accepted species name
-pbmc <- Add_Cell_Complexity(object = pbmc)
-```
-*NOTE: The function also works seemlessly with LIGER objects.*
-
-
-### Add Top Percent Expression QC Metric  
-Additionally, (or alternatively), scCustomize contains another metric of complexity which is the top percent expression.  The user supplies an integer value for `num_top_genes` (default is 50) which species the number of genes and the function returns percentage of counts occupied by top XX genes in each cell.
-```{r eval = FALSE}
-# These defaults can be run just by providing accepted species name
-pbmc <- Add_Top_Gene_Pct_Seurat(seurat_object = pbmc, num_top_genes = 50)
-```
-
-
-## Add All Cell QC Metrics with Single Function
-To simplify the process of adding cell QC metrics scCustomize contains a wrapper function which can be customized to add all or some of the available QC metrics.  The default parameters of the function `Add_Cell_QC_Metrics` will add:  
+The default parameters of the function `Add_Cell_QC_Metrics` will add:  
 
 * Mitochondrial and Ribosomal Percentages (default and custom species).
+* Hemoglobin Percentages (default and custom species).
 * Cell Complexity (log10(nFeature) / log10(nCount).
 * Top XX Gene Percentage.
 * Percentage of counts for IEG (human and mouse only).
@@ -177,6 +83,9 @@ To simplify the process of adding cell QC metrics scCustomize contains a wrapper
 ```{r eval=FALSE}
 pbmc <- Add_Cell_QC_Metrics(seurat_object = pbmc, species = "human")
 ```
+
+### More details on cell QC metrics and scCustomize functions.  
+For more details on cell QC metrics and the functions available in scCustomize please see [Object QC Vignette](https://samuel-marsh.github.io/scCustomize/articles/Object_QC_Functions.html).  For details on plotting functions associated with QC metrics see [QC Plotting vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html).  
 
 
 
@@ -282,7 +191,7 @@ features_tsv = "sample01/outs/filtered_feature_bc_matrix/features.tsv.gz", assay
 
 # Using hdf5 file
 obj <- Add_Alt_Feature_ID(seurat_object = obj,
-hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5"", assay = "RNA")
+hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5", assay = "RNA")
 ```
 
 *NOTE:* If using features.tsv.gz file the file from either filtered or raw outputs can be used as they are identical.  
@@ -293,21 +202,21 @@ hdf5_file = "sample01/outs/outs/filtered_feature_bc_matrix.h5"", assay = "RNA")
 ## Check for Features/Genes
 scCustomize also makes forward-facing a number of utilities that are used internally in functions but may also have utility on their own.
 
-### `Gene_Present()` to check for features.
-`Gene_Present` is fairly basic function to check if feature exists in data.  It can be used with Seurat or LIGER objects as well as generic data formats (Matrix, data.frame, tibble).
+### `Feature_Present()` to check for features.
+`Feature_Present` is fairly basic function to check if feature exists in data.  It can be used with Seurat or LIGER objects as well as generic data formats (Matrix, data.frame, tibble).
 
-In addition to some warning messages `Gene_Present` returns a list with 3 entries when run:  
+In addition to some warning messages `Feature_Present` returns a list with 3 entries when run:  
 
 * found_features: features found in the data.  
 * bad_features: features not found in the data.  
 * wrong_case_found_features: features found but in different case than present in input gene list.  
-  - *If `bad_features` > 0 then `Gene_Present` will convert `the gene list `bad_features` to all upper case and to sentence case and check against all possible features to see if wrong case was provided.*  
+  - *If `bad_features` > 0 then `Feature_Present` will convert `the gene list `bad_features` to all upper case and to sentence case and check against all possible features to see if wrong case was provided.*  
 
 ```{r message=TRUE, warning=TRUE}
 # Example gene list with all examples (found genes, wrong case (lower) and misspelled (CD8A forgetting to un-shift when typing 8))
 gene_input_list <- c("CD14", "CD3E", "Cd4", "CD*A")
 
-genes_present <- Gene_Present(data = pbmc, gene_list = gene_input_list)
+genes_present <- Feature_Present(data = pbmc, features = gene_input_list)
 ```
 
 Now let's look at the output:
@@ -316,19 +225,19 @@ genes_present
 ```
 
 ### Turn warnings/messages off.
-By default `Gene_Present` has 3 sets of warnings/messages it prints to console when it finds issues.  If using the function yourself on its own or wrapped inside your own function and you prefer no messages each of these can be toggled using optional parameters.  
+By default `Feature_Present` has 3 sets of warnings/messages it prints to console when it finds issues.  If using the function yourself on its own or wrapped inside your own function and you prefer no messages each of these can be toggled using optional parameters.  
 
 * `case_check_msg` prints and list of features if alternate case features are found in data.  
 * `omit_warn` prints warning and list of all features not found in data.  
 * `print_msg` prints message if all features in `gene_list` are found in data.  
 
 ### Check for updated gene symbols
-In order to keep run times down and support offer greater support for offline use `Gene_Present` does not include a check for updated gene symbols.  If you're dataset is from human cells/donors you can simply supply the not found features from `Gene_Present` to Seurat's `UpdateSymbolList` function.
+In order to keep run times down and support offer greater support for offline use `Feature_Present` does not include a check for updated gene symbols.  If you're dataset is from human cells/donors you can simply supply the not found features from `Feature_Present` to Seurat's `UpdateSymbolList` function.
 
 ```{r message=TRUE, warning=TRUE}
 gene_input_list <- c("CD14", "CD3E", "Cd4", "CD*A", "SEPT1")
 
-genes_present <- Gene_Present(data = pbmc, gene_list = gene_input_list)
+genes_present <- Feature_Present(data = pbmc, features = gene_input_list)
 
 check_symbols <- UpdateSymbolList(symbols = genes_present[[2]], verbose = TRUE)
 ```
@@ -355,6 +264,8 @@ GEO_10X_Seurat <- Seurat::CreateSeuratObject(counts = GEO_10X_merged, names.fiel
 
 ### Merging List of Seurat Objects
 Sometimes it can be advantageous to create a list of multiple Seurat Objects in order to run similar pipeline on all objects in loop.  
+
+*NOTE: This function will likely be deprecated in near future given the updates to Seurat object structure and support for assays containing different sets of features and layers within assays.*
 
 To facilitate ease in merging such lists into single object scCustomize contains simple wrapper `Merge_Seurat_List` that uses `purrr::reduce()` to merge all objects in list into single combined object
 ```{r eval=FALSE}
@@ -471,4 +382,63 @@ data_mod <- Change_Delim_Suffix(data = raw_data, current_delim = ".", new_delim 
 
 data_mod <- Change_Delim_All(data = raw_data, current_delim = ".", new_delim = "_")
 ```
+
+
+## General (non-scRNA-seq specific)  
+scCustomize also contains number of helper functions that may be generally helpful in other R analyses and are not limited to scRNA-seq.  
+
+### Color Palettes  
+See vignette on [Color Palettes](https://samuel-marsh.github.io/scCustomize/articles/Color_Palettes.html) for full details on stored palettes and palette plotting functions.  
+
+### Splitting vectors  
+Sometimes it can be helpful to split a vector into chunks of predetermined size or into X number of equally sized chunks.  For this we can use `Split_Vector()` and for random example lets use the variable features from pbmc object.
+
+```{r include=FALSE}
+pbmc <- FindVariableFeatures(pbmc)
+```
+
+
+```{r}
+all_var_features <- VariableFeatures(object = pbmc)
+
+# Now we can split into vectors of 100 genes per vector
+split_100_genes <- Split_Vector(x = all_var_features, chunk_size = 100)
+lengths(split_100_genes)
+
+# Or we can split into 7 equally sized vectors
+split_7_chunks <- Split_Vector(x = all_var_features, num_chunk = 7)
+lengths(split_7_chunks)
+```
+
+### Seq_zeros  
+The base R `seq` family of functions has a ton of uses.  However, due to the way numbers are ordered in R it can sometimes be helpful to have preceding zeros in your number sequence in order to keep things in numerical order (e.g., 01, 02, 03, instead of 1, 2, 3) especially when naming files.
+
+The scCustomize function `seq_zeros()` allows you to do just that.  
+```{r}
+# provide total sequence length
+seq_zeros(seq_length = 15)
+
+# provide sequence
+seq_zeros(seq_length = 1:15)
+```
+
+By default the function will add 1 or more zeros depending on the size of `seq_length`
+```{r}
+seq5 <- seq_zeros(seq_length = 5)
+head(seq5)
+
+seq15 <- seq_zeros(seq_length = 15)
+head(seq15)
+
+seq150 <- seq_zeros(seq_length = 150)
+head(seq150)
+
+seq1500 <- seq_zeros(seq_length = 1500)
+head(seq1500)
+```
+Users can also manually set the number of preceding zeros using the `num_zeros` parameter.
+```{r}
+seq_zeros(seq_length = 5, num_zeros = 3)
+```
+
 

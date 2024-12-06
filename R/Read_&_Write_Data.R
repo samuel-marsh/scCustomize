@@ -745,8 +745,6 @@ Read10X_Multi_Directory <- function(
 #' then use full file name.  By default function uses Cell Ranger name: "filtered_feature_bc_matrix.h5".
 #' If h5 files have sample specific prefixes (i.e. from Cell Bender) then use only the shared part of file
 #' name (e.g., "_filtered_out.h5").
-#' @param cell_bender `r lifecycle::badge("deprecated")` CellBender read functions are now independent family of functions.
-#' See `Read_CellBender_*` functions.
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
@@ -788,7 +786,6 @@ Read10X_h5_Multi_Directory <- function(
   default_10X_path = TRUE,
   cellranger_multi = FALSE,
   h5_filename = "filtered_feature_bc_matrix.h5",
-  cell_bender = deprecated(),
   sample_list = NULL,
   sample_names = NULL,
   replace_suffix = FALSE,
@@ -798,16 +795,6 @@ Read10X_h5_Multi_Directory <- function(
   merge = FALSE,
   ...
 ) {
-  # Deprecated
-  if (lifecycle::is_present(cell_bender)) {
-    lifecycle::deprecate_stop(when = "1.1.2",
-                              what = "Read10X_h5_Multi_Directory(cell_bender)",
-                              with = "Read_CellBender_h5_Multi_Directory()",
-                              details = c("v" = "CellBender read capabilities are now indepdent functions. See `Read_CellBender_h5_Multi_Directory`",
-                                          "i" = "Parameter and warning will be fully removed in v1.2.0.")
-    )
-  }
-
   # Confirm num_cores specified
   if (isTRUE(x = parallel) && is.null(x = num_cores)) {
     cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
@@ -1260,7 +1247,8 @@ Read_CellBender_h5_Mat <- function(
 #' @param sample_list a vector of sample directory names if only specific samples are desired.  If `NULL` will
 #' read in subdirectories in parent directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
-#' set names to the subdirectory name of each sample.
+#' set names to the subdirectory name of each sample.  NOTE: unless `sample_list` is specified this will
+#' rename files in the order they are read which will be alphabetical.
 #' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
 #' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
 #' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
@@ -1547,7 +1535,8 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' Get data.frame with all metrics from the Cell Ranger count analysis (present in web_summary.html)
 #'
-#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest or
+#' alternatively can provide single csv file to read and format identically to reading multiple files.
 #' @param secondary_path path from the parent directory to count "outs/" folder which contains the
 #' "metrics_summary.csv" file.
 #' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
@@ -1557,7 +1546,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
 #' directory name of each sample.
 #'
-#' @return A data frame with sample metrics from cell ranger.
+#' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
 #' @import cli
 #' @import pbapply
@@ -1583,6 +1572,18 @@ Read_Metrics_10X <- function(
   lib_list = NULL,
   lib_names = NULL
 ) {
+  # Check if single file
+  file_ending <- grep(pattern = ".csv$", x = base_path, value = TRUE)
+  if (length(x = file_ending) == 1) {
+    temp_csv <- read.csv(file = base_path)
+    if (ncol(x = temp_csv) > nrow(x = temp_csv)) {
+      metrics_data <- Metrics_Single_File(base_path = base_path, cellranger_multi = cellranger_multi)
+    } else {
+      metrics_data <- Metrics_Single_File_v9plus(base_path = base_path, cellranger_multi = cellranger_multi)
+    }
+    return(metrics_data)
+  }
+
   # Confirm directory exists
   if (dir.exists(paths = base_path) == FALSE) {
     cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
@@ -1640,10 +1641,130 @@ Read_Metrics_10X <- function(
 
     return(data_list)
   } else {
-    count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
-
+    temp_csv <- read.csv(file = file.path(base_path, lib_list[1], secondary_path))
+    if (ncol(x = temp_csv) > nrow(x = temp_csv)) {
+      count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    } else {
+      count_gex_metrics <- Metrics_Count_GEX_v9plus(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
     return(count_gex_metrics)
   }
+}
+
+
+#' Read Overall Statistics from CellBender
+#'
+#' Get data.frame with all metrics from the CellBender `remove-background` analysis.
+#'
+#' @param base_path path to the parent directory which contains all of the sub-directories of interest or
+#' path to single metrics csv file.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample metrics from CellBender.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr bind_rows
+#' @importFrom magrittr "%>%"
+#' @importFrom utils read.csv
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' CB_metrics <- Read_Metrics_CellBender(base_path = "/path/to/directories")
+#' }
+#'
+
+Read_Metrics_CellBender <- function(
+    base_path,
+    lib_list = NULL,
+    lib_names = NULL
+) {
+  # single file vs. multi-sample
+  if (length(x = grep(pattern = "\\.csv", x = base_path, value = TRUE)) > 0) {
+    if (file.exists(base_path) == FALSE) {
+      cli_abort(message = "Metrics file: {.val {base_path}} specified by {.code base_path} does not exist.")
+    } else {
+      # read in metrics file
+      raw_data_single <- read.csv(file = base_path, stringsAsFactors = FALSE, header = FALSE)
+
+      # Move statistic names to rownames and transpose
+      raw_data_single <- raw_data_single %>%
+        column_to_rownames("V1") %>%
+        t() %>%
+        data.frame()
+
+      # Add sample name
+      file_name <- basename(path = base_path)
+      sample_name <- gsub(pattern = "_out_metrics.csv", replacement = "", x = file_name)
+
+      rownames(raw_data_single) <- sample_name
+
+      raw_data_single <- cbind(sample_id = sample_name, raw_data_single)
+
+      # return the new raw_data data.frame
+      return(raw_data_single)
+    }
+  }
+
+  # Confirm directory exists
+  if (dir.exists(paths = base_path) == FALSE) {
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
+  }
+  # Detect libraries if lib_list is NULL
+  if (is.null(x = lib_list)) {
+    lib_list <- list.dirs(path = base_path, full.names = F, recursive = F)
+  }
+
+  # Check if full directory path exists
+  for (i in 1:length(x = lib_list)) {
+    full_directory_path <- file.path(base_path, lib_list[i])
+    if (dir.exists(paths = full_directory_path) == FALSE) {
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
+    }
+  }
+
+  cli_inform(message = "Reading {.field CellBender} Metrics for {.field {length(lib_list)} samples}.")
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    # get directory path
+    file_path <- file.path(base_path, lib_list[x])
+
+    # full path with file name
+    full_path <- file.path(file_path, paste0(lib_list[x], "_out_metrics.csv"))
+
+    # read in metrics file
+    raw_data <- read.csv(file = full_path, stringsAsFactors = FALSE, header = FALSE)
+
+    # Move statistic names to rownames and transpose
+    raw_data <- raw_data %>%
+      column_to_rownames("V1") %>%
+      t() %>%
+      data.frame()
+
+    # return the new raw_data data.frame
+    raw_data
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # replace nonsense with sample_id as well
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
 }
 
 

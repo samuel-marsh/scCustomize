@@ -55,7 +55,7 @@ Feature_Present <- function(
 ) {
   # Check object type
   # Seurat
-  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
+  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble", "ligerDataset")
   if (inherits(x = data, what = "Seurat")) {
     # set assay (if null set to active assay)
     assays_present <- seurat_assay %||% Assays(object = data)
@@ -66,15 +66,7 @@ Feature_Present <- function(
 
     possible_features <- unlist(possible_features)
   } else if ((class(x = data)[[1]] == "liger")) {
-    # get complete gene list
-    length_liger <- length(x = data@raw.data)
-
-    list_genes <- lapply(1:length_liger, function(x){
-      rownames(x = data@raw.data[[x]])
-    })
-
-    possible_features <- reduce(list_genes, function(x, y) {
-      union(x = x, y = y)})
+      possible_features <- Features(x = data, by_dataset = FALSE)
   } else if ((class(x = data) %in% accepted_types)) {
     possible_features <- rownames(x = data)
   } else {
@@ -161,172 +153,8 @@ Feature_Present <- function(
 }
 
 
-
-#' Check if genes/features are present  `r lifecycle::badge("soft-deprecated")`
-#'
-#' Check if genes are present in object and return vector of found genes.  Return warning messages for
-#' genes not found.
-#'
-#' @param data Name of input data.  Currently only data of classes: Seurat, liger, data.frame,
-#' dgCMatrix, dgTMatrix, tibble are accepted.  Gene_IDs must be present in rownames of the data.
-#' @param gene_list vector of genes to check.
-#' @param case_check logical. Whether or not to check if features are found if the case is changed from the
-#' input list (Sentence case to Upper and vice versa).  Default is TRUE.
-#' @param case_check_msg logical. Whether to print message to console if alternate case features are found
-#' in addition to inclusion in returned list.  Default is TRUE.
-#' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
-#' @param omit_warn logical. Whether to print message about features that are not found in current object.
-#'  Default is TRUE.
-#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
-#' features are found.  Default is FALSE.
-#' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
-#' Default is NULL which will check against features from all assays present.
-#'
-#' @import cli
-#' @importFrom purrr reduce
-#' @importFrom SeuratObject Features
-#' @importFrom stringr str_to_upper str_to_sentence
-#'
-#' @return A list of length 3 containing 1) found features, 2) not found features, 3) features found if
-#' case was modified.
-#'
-#' @export
-#'
-#' @concept check_util
-#'
-#' @examples
-#' \dontrun{
-#' features <- Gene_Present(data = obj_name, gene_list = DEG_list, print_msg = TRUE, case_check = TRUE)
-#' found_features <- features[[1]]
-#' }
-#'
-
-Gene_Present <- function(
-  data,
-  gene_list,
-  case_check = TRUE,
-  case_check_msg = TRUE,
-  print_msg = TRUE,
-  omit_warn = TRUE,
-  return_none = FALSE,
-  seurat_assay = NULL
-) {
-  lifecycle::deprecate_soft(when = "2.1.0",
-                            what = "Gene_Present()",
-                            with = "Feature_Present()",
-                            details = c("i" = "Please adjust code now to prepare for full deprecation.")
-  )
-
-  # Check object type
-  # Seurat
-  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix", "tibble")
-  if (inherits(x = data, what = "Seurat")) {
-    # set assay (if null set to active assay)
-    assays_present <- seurat_assay %||% Assays(object = data)
-
-    possible_features <- lapply(assays_present, function(j) {
-      Features(x = data, assay = j)
-    })
-
-    possible_features <- unlist(possible_features)
-  } else if ((class(x = data)[[1]] == "liger")) {
-    # get complete gene list
-    length_liger <- length(x = data@raw.data)
-
-    list_genes <- lapply(1:length_liger, function(x){
-      rownames(x = data@raw.data[[x]])
-    })
-
-    possible_features <- reduce(list_genes, function(x, y) {
-      union(x = x, y = y)})
-  } else if ((class(x = data) %in% accepted_types)) {
-    possible_features <- rownames(x = data)
-  } else {
-    all_accepted <- c(accepted_types, "Seurat", "liger")
-    cli_abort(message = c("Input data is currently accepted only in the following formats:",
-                          "i" = "{.field {glue_collapse_scCustom(input_string = all_accepted, and = FALSE)}}.")
-    )
-  }
-
-  # If any features not found
-  if (any(!gene_list %in% possible_features)) {
-    bad_features <- gene_list[!gene_list %in% possible_features]
-    found_features <- gene_list[gene_list %in% possible_features]
-    if (length(x = found_features) == 0) {
-      if (isTRUE(x = return_none)) {
-        # Combine into list and return
-        feature_list <- list(
-          found_features = NULL,
-          bad_features = bad_features,
-          wrong_case_found_features = NULL
-        )
-        return(feature_list)
-      } else {
-        cli_abort(message ="No requested features found.")
-      }
-    }
-
-    # Return message of features not found
-    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
-      cli_warn(message = c("The following features were omitted as they were not found:",
-                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
-      )
-    }
-
-    # Check if features found if case is changed.
-    if (isTRUE(x = case_check)) {
-      upper_bad_features <- str_to_upper(string = bad_features)
-      upper_found_features <- upper_bad_features[upper_bad_features %in% possible_features]
-
-      sentence_bad_features <- str_to_sentence(string = bad_features)
-      sentence_found_features <- sentence_bad_features[sentence_bad_features %in% possible_features]
-
-      # Combine case check
-      wrong_case_found_features <- c(upper_found_features, sentence_found_features)
-
-      # Additional messages if found.
-      if (length(x = wrong_case_found_features) > 0) {
-        if (isTRUE(x = case_check_msg)) {
-          cli_warn(message = c("NOTE: However, the following features were found: {.field {glue_collapse_scCustom(input_string = wrong_case_found_features, and = TRUE)}}",
-                                "i" = "Please check intended case of features provided.")
-          )
-        }
-        # Combine into list and return
-        feature_list <- list(
-          found_features = found_features,
-          bad_features = bad_features,
-          wrong_case_found_features = wrong_case_found_features
-        )
-        return(feature_list)
-      }
-    }
-    # Combine into list and return
-    feature_list <- list(
-      found_features = found_features,
-      bad_features = bad_features,
-      wrong_case_found_features = "NA (check not performed.  Set 'case_check = TRUE' to perform check."
-    )
-    return(feature_list)
-  }
-
-  # Print all found message if TRUE
-  if (isTRUE(x = print_msg)) {
-    cli_inform(message = "All features present.")
-  }
-
-  # Return full input gene list.
-  # Combine into list and return
-  feature_list <- list(
-    found_features = gene_list,
-    bad_features = NULL,
-    wrong_case_found_features = NULL
-  )
-  return(feature_list)
-}
-
-
 #' Check for alternate case features
-#
+#'
 #' Checks Seurat object for the presence of features with the same spelling but alternate case.
 #'
 #' @param seurat_object Seurat object name.
@@ -395,7 +223,6 @@ Case_Check <- function(
 #' Return warning messages for meta data columns not found.
 #'
 #' @param object Seurat or Liger object name.
-#' @param seurat_object `r lifecycle::badge("deprecated")` deprecated.  Please use `object` instead.
 #' @param meta_col_names vector of column names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object. Default is TRUE.
@@ -418,30 +245,13 @@ Case_Check <- function(
 
 Meta_Present <- function(
   object,
-  seurat_object = deprecated(),
   meta_col_names,
   print_msg = TRUE,
   omit_warn = TRUE,
   return_none = FALSE
 ) {
-  # Check is slot is supplied
-  if (lifecycle::is_present(seurat_object)) {
-    lifecycle::deprecate_warn(when = "2.1.0",
-                              what = "Meta_Present(seurat_object)",
-                              with = "Meta_Present(object)",
-                              details = c("!" = "Please adjust code now to prepare for full deprecation in v2.2.0.")
-    )
-
-  }
-
   # Set possible variables based on object type
-  if (inherits(x = object, what = "Seurat")) {
-    possible_features <- colnames(x = object@meta.data)
-  }
-
-  if (inherits(x = object, what = "liger")) {
-    possible_features <- colnames(x = object@cell.data)
-  }
+  possible_features <- colnames(x = Fetch_Meta(object = object))
 
   # If any features not found
   if (any(!meta_col_names %in% possible_features)) {
@@ -451,14 +261,14 @@ Meta_Present <- function(
     if (isFALSE(return_none)) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
-                              "i" = "The following @meta.data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
+                              "i" = "The following meta data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
         )
       }
     }
 
     # Return message of features not found
     if (length(x = bad_meta) > 0 && isTRUE(x = omit_warn)) {
-      cli_warn(message = c("The following @meta.data columns were omitted as they were not found:",
+      cli_warn(message = c("The following meta data columns were omitted as they were not found:",
                             "i" = "{.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
       )
     }
@@ -474,7 +284,7 @@ Meta_Present <- function(
 
   # Print all found message if TRUE
   if (isTRUE(x = print_msg)) {
-    cli_inform(message = "All @meta.data columns present.")
+    cli_inform(message = "All meta data columns present.")
   }
 
   # Return full input gene list.
@@ -566,7 +376,7 @@ Meta_Numeric <- function(
 #' @examples
 #' \dontrun{
 #' reductions <- Reduction_Loading_Present(seurat_object = obj_name, reduction_name = "PC_1")
-#' found_features <- features[[1]]
+#' found_reductions <- reductions[[1]]
 #' }
 #'
 
@@ -599,34 +409,34 @@ Reduction_Loading_Present <- function(
 
   # If any features not found
   if (any(!reduction_names %in% possible_reduction_names)) {
-    bad_features <- reduction_names[!reduction_names %in% possible_reduction_names]
-    found_features <- reduction_names[reduction_names %in% possible_reduction_names]
-    if (length(x = found_features) == 0) {
+    bad_reductions <- reduction_names[!reduction_names %in% possible_reduction_names]
+    found_reductions <- reduction_names[reduction_names %in% possible_reduction_names]
+    if (length(x = found_reductions) == 0) {
       if (isTRUE(x = return_none)) {
         # Combine into list and return
-        feature_list <- list(
-          found_features = NULL,
-          bad_features = bad_features
+        reduction_list <- list(
+          found_reductions = NULL,
+          bad_reductions = bad_reductions
         )
-        return(feature_list)
+        return(reduction_list)
       } else {
         cli_abort(message ="No requested features found.")
       }
     }
 
     # Return message of features not found
-    if (length(x = bad_features) > 0 && isTRUE(x = omit_warn)) {
+    if (length(x = bad_reductions) > 0 && isTRUE(x = omit_warn)) {
       cli_warn(message = c("The following features were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
     }
 
     # Combine into list and return
-    feature_list <- list(
-      found_features = found_features,
-      bad_features = bad_features
+    reduction_list <- list(
+      found_reductions = found_reductions,
+      bad_reductions = bad_reductions
     )
-    return(feature_list)
+    return(reduction_list)
   }
 
   # Print all found message if TRUE
@@ -636,11 +446,11 @@ Reduction_Loading_Present <- function(
 
   # Return full input gene list.
   # Combine into list and return
-  feature_list <- list(
-    found_features = reduction_names,
-    bad_features = NULL
+  reduction_list <- list(
+    found_reductions = reduction_names,
+    bad_reductions = NULL
   )
-  return(feature_list)
+  return(reduction_list)
 }
 
 
@@ -659,8 +469,8 @@ Reduction_Loading_Present <- function(
 #' or as suffix to current cell barcodes/names.  Default is TRUE, add as prefix.
 #' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
 #'
-#' @references Original function is part of LIGER package as non-exported function
-#' \url{https://github.com/welch-lab/liger/blob/master/R/utilities.R} (License: GPL-3).
+#' @references Original function is part of LIGER package
+#' \url{https://github.com/welch-lab/liger/blob/master/R/mergeObject.R} (License: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
 #' @import cli
@@ -1507,7 +1317,11 @@ Create_Cluster_Annotation_File <- function(
   if (is.null(x = file_path)) {
     dir_path <- getwd()
   } else {
-    dir_path <- file_path
+    if (file_path == "") {
+      dir_path <- getwd()
+    } else {
+      dir_path <- file_path
+    }
   }
   # Check directory path is exists
   if (!dir.exists(paths = dir_path)) {
@@ -1515,8 +1329,17 @@ Create_Cluster_Annotation_File <- function(
                           "i" = "Please create directory or fix {.code file_path} and re-run function.")
     )
   }
+
+  # Check extension
+  file_ext <- grep(x = file_name, pattern = ".csv$")
+
+  if (length(x = file_ext) == 0) {
+    file_name <- paste0(file_name, ".csv")
+  }
+
+
   # Confirm no files with same name in the same directory path.
-  full_path <- file.path(dir_path, paste0(file_name, ".csv"))
+  full_path <- file.path(dir_path, file_name)
   if (file.exists(full_path)) {
     cli_abort(message = c("File with name {.val {file_name}} already exists in directory directory.",
                           "i" = "Please supply a different {.code file_name}.")
@@ -1666,21 +1489,20 @@ Pull_Cluster_Annotation <- function(
 }
 
 
-#' Rename Cluster Seurat
+#' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
+#' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
+#' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
+#' @param old_ident_name optional, name to use for storing current object idents in object meta data slot.
+#' @param new_ident_name optional, name to use for storing new object idents in object meta data slot.
+#' @param overwrite logical, whether to overwrite columns in object meta data slot. if they have same
+#' names as `old_ident_name` and/or `new_ident_name`.
 #'
-#' Wrapper function to rename active identities in Seurat Object with new idents.
-#'
-#' @param seurat_object object name.
-#' @param new_idents vector of new cluster names.  Must be equal to the length of current active.ident
-#' in Seurat Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name (Optional).  Whether or not to create new named column in `Object@meta.data`
-#' to store the old identities.
-#' @param ... Extra parameters passed to \code{\link[SeuratObject]{RenameIdents}}.
-#'
-#' @return Seurat Object with new identities placed in active.ident slot.
+#' @method Rename_Clusters Seurat
 #'
 #' @import cli
+#' @importFrom lifecycle deprecated
 #'
+#' @rdname Rename_Clusters
 #' @export
 #'
 #' @concept marker_annotation_util
@@ -1688,45 +1510,86 @@ Pull_Cluster_Annotation <- function(
 #' @examples
 #' \dontrun{
 #' obj <- Rename_Clusters(seurat_object = obj_name, new_idents = new_idents_vec,
-#' meta_col_name = "Round01_Res0.6_Idents")
+#' old_ident_name = "Seurat_Idents_Round01", new_ident_name = "Round01_Res0.6_Idents")
 #' }
 #'
 
-Rename_Clusters <- function(
-  seurat_object,
+Rename_Clusters.Seurat <- function(
+  object,
   new_idents,
-  meta_col_name = NULL,
+  old_ident_name = NULL,
+  new_ident_name = NULL,
+  meta_col_name = deprecated(),
+  overwrite = FALSE,
   ...
 ) {
+  # Deprecation warning
+  if (lifecycle::is_present(meta_col_name)) {
+    lifecycle::deprecate_stop(when = "2.2.0",
+                              what = "Rename_Clusters(meta_col_name)",
+                              with = "Rename_Clusters(old_ident_name)",
+                              details = c("i" = "To store old idents please provide name to `old_ident_name`",
+                                          "i" = "To store new idents please provide name to `new_ident_name`")
+    )
+  }
+
   # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
+  Is_Seurat(seurat_object = object)
+
+  # check old ident name
+  if (!is.null(x = old_ident_name)) {
+    if (old_ident_name %in% colnames(x = object@meta.data)) {
+      if (isFALSE(x = overwrite)) {
+        cli_abort(message = c("The {.code old_ident_name}: {.field {old_ident_name}} is already a column in meta.data",
+                              "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
+      } else {
+        cli_inform(message = "Overwriting old meta.data column: {.field {old_ident_name}} as {.code overwrite = TRUE}")
+
+      }
+    } else {
+      object[[old_ident_name]] <- Idents(object = object)
+    }
+  }
+
+  # check new ident name
+  if (!is.null(x = new_ident_name) && new_ident_name %in% colnames(x = object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("The {.code new_ident_name}: {.field {new_ident_name}} is already a column in meta.data",
+                            "i" = "To overwrite current meta.data column set {.code overwrite = TRUE}."))
+    } else {
+      cli_inform(message = "Overwriting new meta.data column: {.field {new_ident_name}} as {.code overwrite = TRUE}")
+    }
+  }
 
   # Check equivalent lengths
-  if (length(x = new_idents) != length(x = levels(x = seurat_object))) {
+  if (length(x = new_idents) != length(x = levels(x = object))) {
     cli_abort(message = c("Length of {.code new_idents} must be equal to the number of active.idents in Seurat Object.",
-                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(x = levels(x = seurat_object))}}.")
+                          "i" = "{.code new_idents} length: {.field {length(x = new_idents)}} Object@active.idents length: {.field {length(x = levels(x = object))}}.")
     )
   }
 
   # Name the new idents vector
   if (is.null(x = names(x = new_idents))) {
-    names(x = new_idents) <- levels(x = seurat_object)
+    names(x = new_idents) <- levels(x = object)
   }
+
   # If named check that names are right length
-  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = seurat_object))) {
+  if (!is.null(x = names(x = new_idents)) && length(x = unique(x = names(x = new_idents))) != length(x = levels(x = object))) {
     cli_abort(message = c("The number of unique names for {.code new idents} is not equal to number of active.idents.",
-                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(x = levels(x = seurat_object))}}.")
+                          "i" = "names(new_idents) length: {.field {length(x = unique(x = names(x = new_idents)))} Object@active.idents length: {length(x = levels(x = object))}}.")
     )
   }
 
-  # Rename meta column for old ident information if desired
-  if (!is.null(x = meta_col_name)) {
-    seurat_object[[meta_col_name]] <- Idents(object = seurat_object)
+  # Add new idents
+  object <- RenameIdents(object = object, new_idents)
+
+  # Add new ident to meta.data information if desired
+  if (!is.null(x = new_ident_name)) {
+    object[[new_ident_name]] <- Idents(object = object)
   }
 
-  # Add new idents & return object
-  seurat_object <- RenameIdents(object = seurat_object, new_idents)
-  return(seurat_object)
+  # return object
+  return(object)
 }
 
 
@@ -1740,7 +1603,10 @@ Rename_Clusters <- function(
 #' Splits vector into chunks of x sizes
 #'
 #' @param x vector to split
-#' @param chunk_size size of chunks for vector to be split into, default is 100.
+#' @param chunk_size size of chunks for vector to be split into, default is NULL.  Only valid if
+#' `num_chunk` is NULL.
+#' @param num_chunk number of chunks to split the vector into, default is NULL.  Only valid if
+#' `chunk_size` is NULL.
 #' @param verbose logical, print details of vector and split, default is FALSE.
 #'
 #' @return list with vector of X length
@@ -1762,9 +1628,18 @@ Rename_Clusters <- function(
 
 Split_Vector <- function(
     x,
-    chunk_size = 100,
+    chunk_size = NULL,
+    num_chunk = NULL,
     verbose = FALSE
 ) {
+  if (!is.null(x = chunk_size) && !is.null(x = num_chunk)) {
+    cli_abort(message = "Cannot specify both {.code chunk_size} and {.code num_chunk}, use one or the other.")
+  }
+
+  # set chunk size
+  chunk_size <- chunk_size %||% (length(x = x) / num_chunk)
+
+  # Split vector
   vector_list <- split(x, ceiling(x = seq_along(x)/chunk_size))
 
   # Report info
@@ -1775,9 +1650,79 @@ Split_Vector <- function(
 
   # return list
   return(vector_list)
-
 }
 
+
+#' Create sequence with zeros
+#'
+#' Create sequences of numbers like `seq()` or `seq_len()` but with zeros prefixed to
+#' keep numerical order
+#'
+#' @param seq_length a seqeunce or numbers of numbers to create sequence.
+#' Users can provide sequence (1:XX) or number of values to add in sequence (will
+#' be used as second number in `seq_len`; 1:XX).
+#' @param num_zeros number of zeros to prefix sequence, default is  (e.g, 01, 02, 03, ...)
+#'
+#' @return vector of numbers in sequence
+#'
+#' @import cli
+#' @importFrom stringr str_pad
+#'
+#' @export
+#'
+#' @references Base code from stackoverflow post:
+#' \url{https://stackoverflow.com/a/38825614}
+#'
+#' @concept misc_util
+#'
+#' @examples
+#' # Using sequence
+#' new_seq <- seq_zeros(seq_length = 1:15, num_zeros = 1)
+#' new_seq
+#'
+#' # Using number
+#' new_seq <- seq_zeros(seq_length = 15, num_zeros = 1)
+#' new_seq
+#'
+#' # Sequence with 2 zeros
+#' new_seq <- seq_zeros(seq_length = 1:15, num_zeros = 2)
+#' new_seq
+#'
+
+seq_zeros <- function(
+    seq_length,
+    num_zeros = NULL
+) {
+  # Check seq_length
+  if (is.null(x = num_zeros)) {
+    if (length(x = seq_length) == 1) {
+      if (nchar(x = seq_length) == 1) {
+        num_zeros <- 1
+      } else {
+        num_zeros <- nchar(x = seq_length) - 1
+      }
+    } else {
+      if (nchar(x = tail(x = seq_length, n = 1)) == 1) {
+        num_zeros <- 1
+      } else {
+        num_zeros <- nchar(x = tail(x = seq_length, n = 1)) - 1
+      }
+    }
+  }
+
+  # set padding
+  padding <- 1 + num_zeros
+
+  # make sequence if single number
+  if (length(x = seq_length) == 1) {
+    seq_length <- seq_len(seq_length)
+  }
+
+  # make sequence
+  new_seq <- str_pad(string = seq_length, pad = 0, width = padding, side = "left")
+
+  return(new_seq)
+}
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2092,5 +2037,136 @@ Updated_HGNC_Symbols <- function(
 
   # Return results
   return(merged_df)
+}
 
+
+#' Update MGI Gene Symbols
+#'
+#' Update mouse gene symbols using data from MGI  This function will store cached data in package directory using (BiocFileCache).  Use of this function requires internet connection on first use (or if setting `update_symbol_data = TRUE`).  Subsequent use does not require connection and will pull from cached data.
+#'
+#' @param input_data Data source containing gene names.  Accepted formats are:
+#' \itemize{
+#'  \item \code{charcter vector}
+#'  \item \code{Seurat Objects}
+#'  \item \code{data.frame}: genes as rownames
+#'  \item \code{dgCMatrix/dgTMatrix}: genes as rownames
+#'  \item \code{tibble}: genes in first column
+#' }
+#' @param update_symbol_data logical, whether to update cached MGI data, default is NULL.
+#' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
+#' If `FALSE` the BiocFileCache stale check will be skipped and current cache will be used.
+#' If `TRUE` the BiocFileCache stale check will be skipped and MGI data will be downloaded.
+#' @param verbose logical, whether to print results detailing numbers of symbols, found, updated,
+#' and not found; default is TRUE.
+#'
+#' @return data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in MGI; output unchanged), Updated_Symbol (new symbol from MGI; output updated).
+#'
+#' @import cli
+#' @importFrom dplyr mutate filter select across left_join join_by
+#' @importFrom magrittr "%>%"
+#' @importFrom stats complete.cases
+#' @importFrom stringr str_to_upper str_replace_na str_c str_replace
+#' @importFrom tidyr drop_na everything
+#'
+#' @export
+#'
+#' @concept misc_util
+#'
+#' @examples
+#' \dontrun{
+#' new_names <- Updated_MGI_Symbols(input_data = Seurat_Object)
+#' }
+#'
+
+Updated_MGI_Symbols <- function(
+    input_data,
+    update_symbol_data = NULL,
+    verbose = TRUE
+) {
+  # Check BiocFileCache installed
+  BiocFileCache_check <- is_installed(pkg = "BiocFileCache")
+  if (isFALSE(x = BiocFileCache_check)) {
+    cli_abort(message = c(
+      "Please install the {.val BiocFileCache} package to use {.code Updated_HGNC_Symbols}",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+      "{.field `BiocManager::install({symbol$dquote_left}BiocFileCache{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  # Check input data type
+  accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix")
+
+  if (inherits(x = input_data, what = "Seurat")) {
+    input_symbols <- Features(input_data)
+  }
+  if ((class(x = input_data) %in% accepted_types)) {
+    input_symbols <- rownames(x = input_data)
+  }
+  if (inherits(x = input_data, what = "tibble")) {
+    input_symbols <-   input_data[, 1]
+  }
+  if (inherits(x = input_data, what = "character")) {
+    input_symbols <- input_data
+  }
+
+  # Check for duplicates
+  num_duplicated <- length(x = unique(x = input_symbols[duplicated(x = input_symbols)]))
+
+  if (num_duplicated > 0) {
+    cli_abort(message = c("Input data contains duplicate gene symbols.",
+                          "i" = "Check input data and/or make unique."))
+  }
+
+  # Download and process HGNC dataset if not already cached
+  mgi_data_path <- download_mgi_data(update = update_symbol_data)
+
+  mgi_long_data <- readRDS(mgi_data_path)
+
+  input_features_df <- data.frame("input_features" = input_symbols)
+
+  symbols_not_approved <- input_symbols[!input_symbols %in% mgi_long_data$symbol]
+  symbols_approved <- input_symbols[input_symbols %in% mgi_long_data$symbol]
+
+  input_features_df_approved <- input_features_df %>%
+    mutate("Approved_Symbol" = ifelse(.data[["input_features"]] %in% symbols_approved, .data[["input_features"]], NA)) %>%
+    drop_na()
+
+
+  input_features_updated_df <- mgi_long_data %>%
+    filter(.data[["prev_symbol"]] %in% symbols_not_approved) %>%
+    mutate("Updated_Symbol" = symbol) %>%
+    select(any_of(c("prev_symbol", "Updated_Symbol"))) %>%
+    rename("input_features" = any_of("prev_symbol")) %>%
+    drop_na()
+
+  symbols_not_found <- data.frame("input_features" = symbols_not_approved[!symbols_not_approved %in% input_features_updated_df$input_features]) %>%
+    mutate("Not_Found_Symbol" = .data[["input_features"]])
+
+  merged_df <- left_join(input_features_df, y = input_features_df_approved, by = join_by("input_features")) %>%
+    left_join(symbols_not_found, by = join_by("input_features")) %>%
+    left_join(input_features_updated_df, by = join_by("input_features")) %>%
+    mutate(across(everything(), ~str_replace_na(string = .x, replacement = ""))) %>%
+    mutate(Output_Features = str_c(.data[["Approved_Symbol"]], .data[["Not_Found_Symbol"]], .data[["Updated_Symbol"]])) %>%
+    mutate(across(everything(), ~str_replace(string = .x, pattern = "^$", replacement = NA_character_))) %>%
+    filter(!(.data[["input_features"]] == "QARS" & .data[["Updated_Symbol"]] == "EPRS1"))
+
+  # Report the results
+  if (isTRUE(x = verbose)) {
+    num_features <- length(input_symbols)
+
+    num_updated <- sum(complete.cases(merged_df$Updated_Symbol))
+    num_not_found <- sum(complete.cases(merged_df$Not_Found_Symbol))
+    num_approved <- sum(complete.cases(merged_df$Approved_Symbol))
+
+    cli_inform(message = c("Input features contained {.field {format(x = num_features, big.mark = ',')}} gene symbols",
+                           "{col_green({symbol$tick})} {.field {format(x = num_approved, big.mark = ',')}} were already approved symbols.",
+                           "{col_blue({symbol$arrow_right})} {.field {format(x = num_updated, big.mark = ',')}} were updated to approved symbol.",
+                           "{col_red({symbol$cross})} {.field {format(x = num_not_found, big.mark = ',')}} were not found in MGI dataset and remain unchanged."))
+  }
+
+  # Return results
+  return(merged_df)
 }

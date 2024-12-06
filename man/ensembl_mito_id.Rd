@@ -13,14 +13,17 @@ A list of six vectors
 \item{Rattus_norvegicus_mito_ensembl}{Ensembl IDs for rat mitochondrial genes}
 \item{Drosophila_melanogaster_mito_ensembl}{Ensembl IDs for fly mitochondrial genes}
 \item{Macaca_mulatta_mito_ensembl}{Ensembl IDs for macaque mitochondrial genes}
-
+\item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken mitochondrial genes}
 }
+}
+\source{
+See data-raw directory for scripts used to create gene list.
 }
 \usage{
 ensembl_mito_id
 }
 \description{
-A list of ensembl ids for mitochondrial genes (Ensembl version 105)
+A list of ensembl ids for mitochondrial genes (Ensembl version 112; 4/29/2024)
 }
 \concept{data}
 \keyword{datasets}

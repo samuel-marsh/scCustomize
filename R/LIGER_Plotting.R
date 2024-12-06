@@ -17,7 +17,10 @@
 #' if points of interest are being buried. (Default is TRUE).
 #' @param shuffle_seed Sets the seed if randomly shuffling the order of points.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
-#' technique and therefore needs to be set manually.  Default is "UMAP".
+#' technique and therefore needs to be set manually.  Default is "UMAP". (only valid for
+#' rliger < 2.0.0).
+#' @param reduction specify reduction to use when plotting.  Default is current object
+#' default reduction (only valid for rliger v2.0.0 or greater).
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
@@ -64,6 +67,7 @@ DimPlot_LIGER <- function(
   shuffle = TRUE,
   shuffle_seed = 1,
   reduction_label = "UMAP",
+  reduction = NULL,
   aspect_ratio = NULL,
   label = TRUE,
   label_size = NA,
@@ -77,19 +81,8 @@ DimPlot_LIGER <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
-
-  # Check dimreduc present
-  if (length(x = liger_object@tsne.coords) == 0) {
-    cli_abort(message = "No dimensionality reduction coordinates found.")
-  }
 
   # Set group_by defaults
   if (isFALSE(x = combination) && is.null(x = group_by)) {
@@ -114,23 +107,28 @@ DimPlot_LIGER <- function(
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
-  # Add one time dim label warning
-  if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
-    cli_inform(message = c("",
-                           "NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
-                           "on the plot.",
-                           "By default this is set to {.val UMAP}.",
-                           "Please take note of this parameter as LIGER objects do not store the name",
-                           "of reduction technique used and therefore this needs to be set manually.",
-                           "",
-                           "-----This message will be shown once per session.-----"))
-    options(scCustomize_warn_LIGER_dim_labels = FALSE)
+  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+    # Add one time dim label warning
+    if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
+      cli_inform(message = c("",
+                             "NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
+                             "on the plot.",
+                             "By default this is set to {.val UMAP}.",
+                             "Please take note of this parameter as LIGER objects do not store the name",
+                             "of reduction technique used and therefore this needs to be set manually.",
+                             "",
+                             "-----This message will be shown once per session.-----"))
+      options(scCustomize_warn_LIGER_dim_labels = FALSE)
+    }
   }
 
-  # Add raster check for scCustomize
-  raster <- raster %||% (nrow(x = liger_object@cell.data) > 2e5)
+  # cells in object
+  cells_total <- Cells(x = liger_object)
 
-  if (isTRUE(x = raster) && (nrow(x = liger_object@cell.data) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
+  # Add raster check for scCustomize
+  raster <- raster %||% (length(x = cells_total) > 2e5)
+
+  if (isTRUE(x = raster) && (length(x = cells_total) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
     cli_inform(message = c("",
                            "Rasterizing points since number of points exceeds 200,000.",
                            "To disable this behavior set {.code raster = FALSE}",
@@ -141,117 +139,58 @@ DimPlot_LIGER <- function(
 
   # Add point size
   if (is.null(x = pt_size)) {
-    cells_total <- nrow(x = liger_object@cell.data)
     # modified version of the AutoPointSize() function from Seurat
     pt_size <- AutoPointSize_scCustom(data = cells_total, raster = raster)
   }
 
-  # Create accurate axis labels
-  x_axis_label <- paste0(reduction_label, "_1")
-  y_axis_label <- paste0(reduction_label, "_2")
-
-  # plot combination plot
-  if (isTRUE(x = combination)) {
-    p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
-                                colors_use = colors_use_cluster,
-                                split_by = split_by,
-                                pt_size = pt_size,
-                                reduction_label = reduction_label,
-                                shuffle = shuffle,
-                                raster = raster,
-                                raster.dpi = raster.dpi,
-                                ggplot_default_colors = ggplot_default_colors,
-                                num_columns = num_columns,
-                                shuffle_seed = shuffle_seed,
-                                label_size = label_size,
-                                label_repel = label_repel,
-                                label_box = label_box,
-                                label_color = label_color,
-                                label = label,
-                                color_seed = color_seed)
-
-    p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
-                             colors_use = colors_use_meta,
-                             group_by = group_by,
-                             pt_size = pt_size,
-                             reduction_label = reduction_label,
-                             num_columns = num_columns,
-                             shuffle = shuffle,
-                             raster = raster,
-                             raster.dpi = raster.dpi,
-                             ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
-                             color_seed = color_seed,
-                             shuffle_seed = shuffle_seed)
-
-    p3 <- wrap_plots(p1 + p2)
-
-    # Aspect ratio changes
-    if (!is.null(x = aspect_ratio)) {
-      if (!is.numeric(x = aspect_ratio)) {
-        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-      }
-      p3 <- p3 & theme(aspect.ratio = aspect_ratio)
-    }
-
-    return(p3)
+  # liger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    plots <-LIGER2_DimPlot(liger_object = liger_object,
+                           group_by = group_by,
+                           split_by = split_by,
+                           colors_use_cluster = colors_use_cluster,
+                           colors_use_meta = colors_use_meta,
+                           pt_size = pt_size,
+                           shuffle = shuffle,
+                           shuffle_seed = shuffle_seed,
+                           reduction = reduction,
+                           aspect_ratio = aspect_ratio,
+                           label = label,
+                           label_size = label_size,
+                           label_repel = label_repel,
+                           label_box = label_box,
+                           label_color = label_color,
+                           combination = combination,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           num_columns = num_columns,
+                           ggplot_default_colors = ggplot_default_colors,
+                           color_seed = color_seed)
+  } else {
+    plots <- LIGER_DimPlot(liger_object = liger_object,
+                           group_by = group_by,
+                           split_by = split_by,
+                           colors_use_cluster = colors_use_cluster,
+                           colors_use_meta = colors_use_meta,
+                           pt_size = pt_size,
+                           shuffle = shuffle,
+                           shuffle_seed = shuffle_seed,
+                           reduction_label = reduction_label,
+                           aspect_ratio = aspect_ratio,
+                           label = label,
+                           label_size = label_size,
+                           label_repel = label_repel,
+                           label_box = label_box,
+                           label_color = label_color,
+                           combination = combination,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           num_columns = num_columns,
+                           ggplot_default_colors = ggplot_default_colors,
+                           color_seed = color_seed)
   }
-
-  # Plot by cluster
-  if (group_by == "cluster") {
-    p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
-                                colors_use = colors_use_cluster,
-                                split_by = split_by,
-                                pt_size = pt_size,
-                                reduction_label = reduction_label,
-                                shuffle = shuffle,
-                                raster = raster,
-                                raster.dpi = raster.dpi,
-                                ggplot_default_colors = ggplot_default_colors,
-                                num_columns = num_columns,
-                                shuffle_seed = shuffle_seed,
-                                label_size = label_size,
-                                label_repel = label_repel,
-                                label_box = label_box,
-                                label_color = label_color,
-                                label = label,
-                                color_seed = color_seed)
-    # Aspect ratio changes
-    if (!is.null(x = aspect_ratio)) {
-      if (!is.numeric(x = aspect_ratio)) {
-        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-      }
-      p1 <- p1 & theme(aspect.ratio = aspect_ratio)
-    }
-
-    return(p1)
-  }
-
-  # Plot by Meta
-  if (group_by != "cluster") {
-    p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
-                             colors_use = colors_use_meta,
-                             group_by = group_by,
-                             pt_size = pt_size,
-                             reduction_label = reduction_label,
-                             num_columns = num_columns,
-                             shuffle = shuffle,
-                             raster = raster,
-                             raster.dpi = raster.dpi,
-                             ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
-                             shuffle_seed = shuffle_seed,
-                             color_seed = color_seed)
-    # Aspect ratio changes
-    if (!is.null(x = aspect_ratio)) {
-      if (!is.numeric(x = aspect_ratio)) {
-        cli_abort(message = "{.code aspect_ratio} must be a {.field numeric} value.")
-      }
-      p2 <- p2 & theme(aspect.ratio = aspect_ratio)
-    }
-
-    return(p2)
-  }
+  # return plots
+  return(plots)
 }
 
 
@@ -267,8 +206,11 @@ DimPlot_LIGER <- function(
 #' coordinates (tSNE/UMAP).  Default is c('lemonchiffon', 'red'),
 #' @param pt.size_factors Adjust point size for plotting in the factor plots.
 #' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
+#' @param reduction Name of dimensionality reduction to use for plotting.  Default is "UMAP".
+#' Only for newer style liger objects.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name of
 #' technique and therefore needs to be set manually.  Default is "UMAP".
+#' Only for older style liger objects.
 #' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
 #' Helpful if number of datasets is large to avoid crowding the plot with legend.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -284,7 +226,7 @@ DimPlot_LIGER <- function(
 #' @param return_plots logical. Whether or not to return plots to the environment.  (Default is FALSE)
 #' @param cells.highlight Names of specific cells to highlight in plot (black) (default NULL).
 #' @param reorder_datasets New order to plot datasets in for the factor plots if different from current
-#' factor level order in cell.data slot.
+#' factor level order in cell.data slot. Only for older style liger objects.
 #' @param ggplot_default_colors logical.  If `colors_use_factors = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "varibow" palette.
 #' @param color_seed random seed for the palette shuffle if `colors_use_factors = NULL`.  Default = 123.
@@ -294,9 +236,9 @@ DimPlot_LIGER <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
+#' @importFrom lifecycle deprecated
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
-#' @importFrom utils packageVersion
 #'
 #' @export
 #'
@@ -319,6 +261,7 @@ plotFactors_scCustom <- function(
   colors_use_dimreduc = c('lemonchiffon', 'red'),
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
+  reduction = "UMAP",
   reduction_label = "UMAP",
   plot_legend = TRUE,
   raster = TRUE,
@@ -334,257 +277,214 @@ plotFactors_scCustom <- function(
   ggplot_default_colors = FALSE,
   color_seed = 123
 ) {
-  # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
-                          "i" = "Functionality with rliger v2+ is currently in development."))
-  }
-
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # if returning and saving
-  if (isTRUE(x = save_plots)) {
-
-    # Check file path is valid
-    if (!is.null(x = file_path) && file_path != "") {
-      if (!dir.exists(paths = file_path)) {
-        cli_abort(message = "Provided {.code file_path}: {.val {file_path}} does not exist.")
-      }
-    }
-
-    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
-    if (is.null(x = file_path)) {
-      file_path <- ""
-    }
-
-    # Check if file name provided
-    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
-    if (length(x = file_ext) == 0) {
-      file_name <- file_name
-    } else {
-      file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
-    }
-
-    if (is.null(x = file_name)) {
-      cli_abort(message = c("No file name provided.",
-                            "i" = "Please provide a file name using {.code file_name}.")
-      )
-    }
-  }
-
-  if (!is.null(x = reorder_datasets)) {
-    # Check new order contains same dataset names and number of datasets
-    if (length(x = levels(x = liger_object@cell.data$dataset)) != length(x = reorder_datasets)) {
-      cli_abort(message = c("Error reordering datasets (number mismatch).",
-                            "i" = "The number of datasets provided to {.code reorder_datasets} ({.field {length(x = reorder_datasets)}}) does not match number of datasets in LIGER object ({.field {length(x = levels(x = levels(liger_object@cell.data$dataset)))}}).")
-      )
-    } else {
-      if (!all(levels(x = liger_object@cell.data$dataset) %in% reorder_datasets)) {
-        cli_abort(message = c("Error reordering datasets (name mismatch).",
-                              "*" = "Dataset names provided to {.code reorder_datasets} do not match names of datasets in LIGER object.",
-                              "i" = "Please check spelling.")
-        )
-      } else {
-        liger_object@cell.data$dataset <- factor(x = liger_object@cell.data$dataset, levels = reorder_datasets)
-      }
-    }
-  }
-
-  # Create accurate axis labels
-  x_axis_label <- paste0(reduction_label, "_1")
-  y_axis_label <- paste0(reduction_label, "_2")
-
-  # Extract dataset number
-  num_datasets <- length(x = liger_object@scale.data)
-
-  # Default Colors for Factor Plots
-  if (is.null(x = colors_use_factors)) {
-    if (isTRUE(x = ggplot_default_colors)) {
-      colors_use_factors <- Hue_Pal(num_colors = num_datasets)
-    } else {
-      colors_use_factors <- DiscretePalette_scCustomize(num_colors = num_datasets, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
-    }
-  }
-
-  # Check valid number of colors for tsne/UMAP
-  if (length(x = colors_use_dimreduc) < 2) {
-    cli_abort(message = c("Less than two values provided to {.code colors_use_dimreduc}.",
-                          "i" = "Must provided either two colors to use for creating a gradient or a larger color gradient.")
+  # rliger version check
+  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    plotFactors_liger2_scCustom(liger_object = liger_object,
+                                num_genes = num_genes,
+                                colors_use_factors = colors_use_factors,
+                                colors_use_dimreduc = colors_use_dimreduc,
+                                pt.size_factors = pt.size_factors,
+                                pt.size_dimreduc = pt.size_dimreduc,
+                                reduction = reduction,
+                                reduction_label = reduction_label,
+                                plot_legend = plot_legend,
+                                raster = raster,
+                                raster.dpi = raster.dpi,
+                                order = order,
+                                plot_dimreduc = plot_dimreduc,
+                                save_plots = save_plots,
+                                file_path = file_path,
+                                file_name = file_name,
+                                return_plots = return_plots,
+                                cells.highlight = cells.highlight,
+                                reorder_datasets = reorder_datasets,
+                                ggplot_default_colors = ggplot_default_colors,
+                                color_seed = color_seed
+    )
+  } else {
+    plotFactors_liger_scCustom(liger_object = liger_object,
+                                num_genes = num_genes,
+                                colors_use_factors = colors_use_factors,
+                                colors_use_dimreduc = colors_use_dimreduc,
+                                pt.size_factors = pt.size_factors,
+                                pt.size_dimreduc = pt.size_dimreduc,
+                                reduction_label = reduction_label,
+                                plot_legend = plot_legend,
+                                raster = raster,
+                                raster.dpi = raster.dpi,
+                                order = order,
+                                plot_dimreduc = plot_dimreduc,
+                                save_plots = save_plots,
+                                file_path = file_path,
+                                file_name = file_name,
+                                return_plots = return_plots,
+                                cells.highlight = cells.highlight,
+                                reorder_datasets = reorder_datasets,
+                                ggplot_default_colors = ggplot_default_colors,
+                                color_seed = color_seed
     )
   }
+}
 
-  # Add one time dim label warning
-  if (getOption(x = 'scCustomize_warn_LIGER_dim_labels_plotFactors', default = TRUE)) {
-    cli_inform(message = c("",
-                           "NOTE: {.field plotFactors_scCustom} uses the {.code reduction_label} parameter to set axis labels",
-                           "on the dimensionality reduction plots.",
-                           "By default this is set to {.val UMAP}.",
-                           "Please take note of this parameter as LIGER objects do not store the name",
-                           "of reduction technique used and therefore this needs to be set manually.",
-                           "",
-                           "-----This message will be shown once per session.-----"))
-    options(scCustomize_warn_LIGER_dim_labels_plotFactors = FALSE)
+
+#' Factor Correlation Plot
+#'
+#' Plot positive correlations between gene loadings across `W` factor matrix in liger or
+#' feature loadings in reduction slot of Seurat object.
+#' Any negative correlations are set to NA and NA values set to bottom color of color gradient.
+#'
+#' @param object liger or Seurat object.
+#' @param colors_use Color palette to use for correlation values.
+#' Default is `RColorBrewer::RdBu` if `positive_only = FALSE`.
+#' If `positive_only = TRUE` the default is `viridis`.
+#' Users can also supply vector of 3 colors (low, mid, high).
+#' @param label logical, whether to add correlation values to plot result.
+#' @param label_threshold threshold for adding correlation values if `label = TRUE`.  Default
+#' is 0.5.
+#' @param label_size size of correlation labels
+#' @param plot_title Plot title.
+#' @param plot_type Controls plotting full matrix, or just the upper or lower triangles.
+#' Accepted values are: "full" (default), "upper", or "lower".
+#' @param positive_only logical, whether to limit the plotted values to only positive
+#' correlations (negative values set to 0); default is FALSE.
+#' @param x_lab_rotate logical, whether to rotate the axes labels on the x-axis.  Default is TRUE.
+#' @param cluster logical, whether to cluster the plot using `hclust` (default TRUE).  If FALSE
+#' factors are listed in numerical order.
+#' @param cluster_rect logical, whether to add rectangles around the clustered areas on plot,
+#' default is FALSE.
+#' @param cluster_rect_num number of rectangles to add to the plot, default NULL.
+#' @param cluster_rect_col color to use for rectangles, default MULL (will set color automatically).
+#'
+#' @return A ggplot object
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom cowplot theme_cowplot
+#' @importFrom dplyr arrange any_of
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyr drop_na pivot_longer
+#'
+#' @export
+#'
+#' @concept liger_plotting
+#'
+#' @examples
+#' \dontrun{
+#' Factor_Cor_Plot(object = obj)
+#'}
+#'
+
+Factor_Cor_Plot <- function(
+    object,
+    colors_use = NULL,
+    label = FALSE,
+    label_threshold = 0.5,
+    label_size = 5,
+    plot_title = NULL,
+    plot_type = "full",
+    positive_only = FALSE,
+    x_lab_rotate = TRUE,
+    cluster = TRUE,
+    cluster_rect = FALSE,
+    cluster_rect_num = NULL,
+    cluster_rect_col = NULL
+) {
+  # check plot type
+  if (!plot_type %in% c("full", "lower", "upper")) {
+    cli_abort(message = "{.code plot_type} must be one of {.field {glue_collapse_scCustom(input_string = c('full', 'lower,', 'upper'), and = FALSE)}}")
   }
 
-  # Get Data and Plot Factors
-  cli_inform(message = "{.field Generating plots}")
-  k <- ncol(x = liger_object@H.norm)
-  pb <- txtProgressBar(min = 0, max = k, style = 3)
-  W <- t(x = liger_object@W)
-  rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
-  Hs_norm <- liger_object@H.norm
-  H_raw = do.call(rbind, liger_object@H)
-  plot_list = list()
-  tsne_list = list()
-  for (i in 1:k) {
-    top_genes.W <- rownames(x = W)[order(W[, i], decreasing = T)[1:num_genes]]
-    top_genes.W.string <- paste0(top_genes.W, collapse = ", ")
-    factor_textstring <- paste0("Factor", i)
-    plot_title1 <- paste(factor_textstring, "\n", top_genes.W.string, "\n")
-    h_df = data.frame(x = 1:nrow(Hs_norm), h_norm = Hs_norm[, i],
-                      h_raw = H_raw[, i], dataset = liger_object@cell.data$dataset,
-                      highlight = FALSE)
-    if (isTRUE(x = raster)) {
-      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
-        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
-        labs(x = 'Cell', y = 'Raw H Score') +
-        ggtitle(plot_title1) +
-        theme(legend.position = 'none') +
-        scale_color_manual(values = colors_use_factors)
+  cor_mat <- Find_Factor_Cor(object = object)
 
-      if (isFALSE(x = plot_legend)) {
-        top <- top + NoLegend()
-      }
-
-      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
-        geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
-        labs(x = 'Cell', y = 'H_norm Score') +
-        theme(legend.position = 'top',
-              legend.title = element_blank()) +
-        guides(colour = guide_legend(override.aes = list(size = 2))) +
-        scale_color_manual(values = colors_use_factors)
-
-      if (isFALSE(x = plot_legend)) {
-        bottom <- bottom + NoLegend()
-      }
-
-    } else {
-      top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
-        geom_point(size = pt.size_factors) +
-        labs(x = 'Cell', y = 'Raw H Score') +
-        ggtitle(plot_title1) +
-        theme(legend.position = 'none') +
-        scale_color_manual(values = colors_use_factors)
-
-      if (isFALSE(x = plot_legend)) {
-        top <- top + NoLegend()
-      }
-
-      bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
-        geom_point(size = pt.size_factors) +
-        labs(x = 'Cell', y = 'H_norm Score') +
-        theme(legend.position = 'top',
-              legend.title = element_blank()) +
-        guides(colour = guide_legend(override.aes = list(size = 2))) +
-        scale_color_manual(values = colors_use_factors)
-
-      if (isFALSE(x = plot_legend)) {
-        bottom <- bottom + NoLegend()
-      }
-
-    }
-
-    if (!is.null(cells.highlight)) {
-      h_df[cells.highlight, 'highlight'] = TRUE
-      if (isTRUE(x = raster)) {
-        top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                                   aes(.data[["x"]], .data[["h_raw"]]),
-                                                   col = "black",
-                                                   pointsize = pt.size_factors,
-                                                   pixels = raster.dpi)
-        bottom <- bottom + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                                         aes(.data[["x"]], .data[["h_norm"]]),
-                                                         col = "black",
-                                                         pointsize = pt.size_factors,
-                                                         pixels = raster.dpi)
-      } else {
-        top <- top + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                aes(.data[["x"]], .data[["h_raw"]]),
-                                col = "black",
-                                size = pt.size_factors)
-        bottom <- bottom + geom_point(data = subset(h_df, .data[["highlight"]] == TRUE),
-                                      aes(.data[["x"]], .data[["h_norm"]]),
-                                      col = "black",
-                                      size = pt.size_factors)
-      }
-    }
-    full <- wrap_plots(top, bottom, ncol = 1)
-    plot_list[[i]] = full
-
-    # plot tSNE/UMAP
-    if (isTRUE(x = plot_dimreduc)) {
-      tsne_df <- data.frame(Hs_norm[, i], liger_object@tsne.coords)
-      factorlab <- paste0("Factor", i)
-      colnames(x = tsne_df) <- c(factorlab, x_axis_label, y_axis_label)
-
-      if (isTRUE(x = order)) {
-        tsne_df <- tsne_df[order(tsne_df[,1], decreasing = FALSE),]
-      }
-
-      if (isTRUE(x = raster)) {
-        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
-          geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
-          ggtitle(label = paste('Factor', i)) +
-          theme(legend.position = 'none') +
-          xlab(x_axis_label) +
-          ylab(y_axis_label) +
-          if (length(x = colors_use_dimreduc) == 2) {
-            scale_color_gradient(low = colors_use_dimreduc[1], high = colors_use_dimreduc[2])
-          } else {
-            scale_color_gradientn(colours = colors_use_dimreduc)
-          }
-      } else {
-        p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
-          geom_point(size = pt.size_dimreduc) +
-          ggtitle(label = paste('Factor', i)) +
-          theme(legend.position = 'none') +
-          xlab(x_axis_label) +
-          ylab(y_axis_label) +
-          if (length(x = colors_use_dimreduc) == 2) {
-            scale_color_gradient(low = colors_use_dimreduc[1], high = colors_use_dimreduc[2])
-          } else {
-            scale_color_gradientn(colours = colors_use_dimreduc)
-          }
-      }
-
-      tsne_list[[i]] = p1
-    }
-    setTxtProgressBar(pb, i)
+  # filter matrix by plot type
+  if (plot_type == "upper") {
+    plot_df <- upper_diag_cor_mat(cor_mat = cor_mat)
   }
 
-  # save plots
-  if (isTRUE(x = save_plots)) {
-    cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, ".pdf", sep=""))
-    pb <- txtProgressBar(min = 0, max = length(x = 1:k), style = 3, file = stderr())
-    for (i in 1:k) {
-      if (isTRUE(x = plot_dimreduc)) {
-        print(plot_list[[i]])
-        print(tsne_list[[i]])
-        setTxtProgressBar(pb = pb, value = i)
-      } else {
-        print(plot_list[[i]])
-        setTxtProgressBar(pb = pb, value = i)
-      }
-    }
-    close(con = pb)
-    dev.off()
+  if (plot_type == "lower") {
+    plot_df <- lower_diag_cor_mat(cor_mat = cor_mat)
   }
 
-  # return plots
-  if (isTRUE(x = return_plots)) {
-    return(list(factor_plots = plot_list,
-                dimreduc_plots = tsne_list))
+  if (plot_type == "full") {
+    plot_df <- cor_mat
   }
+
+  if (isTRUE(x = cluster)) {
+    dist_mat <- stats::as.dist((1 - plot_df) / 2)
+    hclust_res <- stats::hclust(dist_mat, method = "complete")
+
+    plot_df <- plot_df[hclust_res$order, hclust_res$order]
+  }
+
+  # Reshape for plotting
+  plot_df <- data.frame(plot_df) %>%
+    rownames_to_column("rowname") %>%
+    pivot_longer(cols = !any_of("rowname"), names_to = "Var", values_to = "corr") %>%
+    drop_na()
+
+  plot_df$rowname <- factor(plot_df$rowname, levels = rev(unique(plot_df$rowname)))
+
+  if (isTRUE(x = cluster)) {
+    plot_df$Var <- factor(plot_df$Var, levels = unique(plot_df$Var))
+  }
+
+  if (isTRUE(x = label)) {
+    plot_df$label <- ifelse(plot_df$corr >= label_threshold, round(plot_df$corr, 2), NA)
+    plot_df$label <- ifelse(plot_df$label == 1, NA, round(plot_df$label, 2))
+  }
+
+  factor_names <- levels(plot_df$rowname)
+
+  # plot
+  if (isTRUE(x = positive_only)) {
+    colors_use <- colors_use %||% viridis_light_high
+    cluster_rect_col <- cluster_rect_col %||% "white"
+
+    plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
+      theme_cowplot() +
+      geom_tile() +
+      scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
+      scale_x_discrete(expand = c(0, 0)) +
+      scale_fill_gradientn(colours = colors_use, limits = c(0,1), na.value = colors_use[1]) +
+      xlab("") +
+      ylab("")
+  } else {
+    colors_use <- colors_use %||% paletteer::paletteer_d("RColorBrewer::RdBu")
+    cluster_rect_col <- cluster_rect_col %||% "black"
+
+    plot <- ggplot(data = plot_df, mapping = aes(x = .data[["Var"]], y = .data[["rowname"]], fill = .data[["corr"]])) +
+      theme_cowplot() +
+      geom_tile() +
+      scale_y_discrete(limits = factor_names, expand = c(0, 0)) +
+      scale_x_discrete(expand = c(0, 0)) +
+      scale_fill_gradientn(colours = colors_use, limits = c(-1,1), na.value = colors_use[1]) +
+      xlab("") +
+      ylab("")
+  }
+
+  # modify plot
+  if (isTRUE(x = label)) {
+    plot <- suppressMessages(plot + geom_text(aes(label=label), size = label_size))
+  }
+
+  if (!is.null(x = plot_title)) {
+    plot <- plot + ggtitle(plot_title) + theme(plot.title = element_text(hjust = 0.5))
+  }
+
+  if (isTRUE(x = x_lab_rotate)) {
+    plot <- plot + RotatedAxis()
+  }
+
+  if (isTRUE(x = cluster_rect)) {
+    rect_list <- create_factor_hclust_rect(cor_mat = cor_mat, num_rect = cluster_rect_num, num_factors = length(x = factor_names))
+
+    plot <- plot + annotate(geom = "rect", xmin = rect_list[[1]][,1], xmax = rect_list[[1]][,2], ymin = rect_list[[2]][,1], ymax = rect_list[[2]][,2], fill = NA, color = cluster_rect_col)
+  }
+
+  # return plot
+  return(plot)
 }

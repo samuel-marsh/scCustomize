@@ -420,10 +420,18 @@ DiscretePalette_scCustomize <- function(
   shuffle_pal = FALSE,
   seed = 123
 ) {
+  palette_options <- c("alphabet", "alphabet2", "glasbey", "polychrome", "stepped", "ditto_seq", "varibow")
+
   if (is.null(x = palette)) {
     cli_abort(message = c("Must specify a palette to return colors.",
-                          "i" = "{.code palette} options are: {.field {names(palette_list)}}")
+                          "i" = "{.code palette} options are: {.field {names(palette_options)}}")
     )
+  }
+
+  # check palette valid
+  if (!palette %in% palette_options) {
+    cli_abort(message = c("The specified palette: {.field {palette}} is not valid.",
+                          "i" = "Valid palettes are: {.val {palette_options}}"))
   }
 
   # dittoseq check
@@ -510,6 +518,9 @@ scCustomize_Palette <- function(
   if (isTRUE(x = ggplot_default_colors)) {
     colors_use <- Hue_Pal(num_colors = num_groups)
   } else {
+    if (num_groups < 36 && color_seed != 123) {
+      cli_inform(message = "{.code color_seed} only applies if number of groups plotted is greater than 36.")
+    }
     if (num_groups == 1) {
       colors_use <- "dodgerblue"
     }

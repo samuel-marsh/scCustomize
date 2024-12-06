@@ -59,7 +59,7 @@ Load Seurat Object & Add QC Data
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
 pbmc <- UpdateSeuratObject(pbmc)
 
-pbmc <- Add_Cell_QC_Metrics(seurat_object = pbmc, species = "human")
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "human")
 ```
 
 We'll also add some random meta data variables to pbmc data form use in this vignette
@@ -67,47 +67,6 @@ We'll also add some random meta data variables to pbmc data form use in this vig
 pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
 ```
 
-
-## Convert Seurat Objects to LIGER Objects
-scCustomize contains the conversion function `as.LIGER()`.  This function has a few advantages over the conversion function `rliger::seuratToLiger()`.  
-
-- `as.liger` will *keep all meta data* and transfer it to LIGER by default.  
-- If a dimensionality reduction is transferred `as.liger` will also store a reduction key for use with scCustomize LIGER plotting functions to correctly set plot axes.  
-- If converting a list of Seurat objects and keeping Seurat variable genes then `as.liger` can either take union or intersection of genes between objects.  
-- `as.liger` has additional internal checks to ensure compatibility with both Seurat V3/4 & V5 object structures.
-
-```{r message=TRUE}
-pbmc_liger <- as.LIGER(x = pbmc, group.by = "sample_id")
-
-pbmc_liger
-```
-
-Confirm that information from meta.data slot was transferred to LIGER object.
-```{r}
-head(colnames(x = pbmc_liger@cell.data), 10)
-```
-
-
-
-## Convert LIGER objects to Seurat Objects  
-The liger/rliger package already contains a function `rliger::seuratToLiger()` to convert LIGER objects to Seurat Objects.  However, during this transfer a few things have issues crop up:  
-  
-* All meta data except the "dataset" column from liger_object\@cell.data is lost.
-* Seurat dimensionality reduction is set to tSNE regardless of method used in LIGER analysis
-* Seurat assay name not specified
-
-As of scCustomize v2.1.0 converting to Seurat objects from Liger can be accomplished using `as.liger` function which functions identically to previous function `Liger_to_Seurat()`.  `Liger_to_Seurat()` will continue to work until v2.2.0 at which point it will be completely deprecated.
-
-scCustomize contains modified version of this function which extends the Seurat function [`as.Seurat()`](https://github.com/samuel-marsh/scCustomize/blob/develop/docs/reference/as.Seurat.html) that solves these issues with some extra parameters:   
-  
-* `keep_meta` logical. Whether to keep meta data from the \@cell.data slot in LIGER object.  Default is TRUE.
-* `reduction_label` Name of dimensionality reduction technique used (e.g., tSNE, UMAP, etc).  Ensures dim names are set correctly in Seurat object.
-* `seurat_assay` Name of assay to use for data in Seurat object.  Default is "RNA".  
-* `assay_type` Specify whether to create V3/4 vs V5 Seurat assays.  
-
-```{r message=TRUE}
-new_seurat <- as.Seurat(x = pbmc_liger, reduction_label = "UMAP")
-```
 
 
 ## Convert Seurat or LIGER objects to Anndata objects  

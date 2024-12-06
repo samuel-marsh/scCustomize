@@ -47,6 +47,7 @@ For this vignette I will be utilizing pbmc3k dataset from the SeuratData package
 ```{r init}
 # Load Packages
 library(ggplot2)
+library(patchwork)
 library(dplyr)
 library(magrittr)
 library(Seurat)
@@ -71,6 +72,10 @@ pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
 pbmc$orig.ident <- sample(c("sample1", "sample2", "sample3", "sample4"), size = ncol(pbmc), replace = TRUE)
 pbmc@meta.data$group[pbmc@meta.data$orig.ident == "sample1" | pbmc@meta.data$orig.ident == "sample3"] <- "Group 1"
 pbmc@meta.data$group[pbmc@meta.data$orig.ident == "sample2" | pbmc@meta.data$orig.ident == "sample4"] <- "Group 2"
+
+
+pbmc@meta.data$treatment[pbmc@meta.data$orig.ident == "sample1"] <- "Control"
+pbmc@meta.data$treatment[pbmc@meta.data$orig.ident == "sample2" | pbmc@meta.data$orig.ident == "sample4" | pbmc@meta.data$orig.ident == "sample3"] <- "Treated"
 
 # Add dummy module score 
 pbmc <- AddModuleScore(object = pbmc, features = list(c("CD3E", "CD4", "THY1", "TCRA")), name = "module_score")
@@ -108,6 +113,45 @@ cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = 
 cluster_stats %>%
   kableExtra::kbl() %>%
   kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped"))  
+```
+
+
+## Plotting Cluster/Identity Proportions  
+Understanding the proportion of cells per cluster and how that may change across a group can be important aspect of single cell analysis.  scCustomize contains function `Proportion_Plot` to provide some visualization of cell proportions.  
+
+Plotting proportionality can be tricky especially when dealing with clusters of very disparate sizes (especially small clusters) so plese be aware to examine raw data as well (see `Cluster_Stats_All_Samples()`).  
+
+Also note that when splitting plot by group there are now error bars on these plots for interpretation of variance and other plotting methods should be used to convery such information.  
+
+### Basic Proportion Plots  
+`Proportion_Plot` can either return a bar graph or pie graph depending on parameter value for
+```{r eval=FALSE}
+Proportion_Plot(seurat_object = pbmc, plot_type = "bar")
+
+Proportion_Plot(seurat_object = pbmc, plot_type = "pie")
+```
+
+```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
+p1 <- Proportion_Plot(seurat_object = pbmc, plot_type = "bar")
+
+p2 <- Proportion_Plot(seurat_object = pbmc, plot_type = "pie")
+
+wrap_plots(p1, p2)
+```
+
+### Plot across groups  
+Like other plots you can also use `Proportion_Plot` to split plot across any categorical meta.data variable.  
+```{r fig.height=7, fig.width=13, fig.align='center'}
+Proportion_Plot(seurat_object = pbmc, plot_type = "bar", split.by = "treatment")
+```
+```{r fig.height=7, fig.width=13, fig.align='center'}
+Proportion_Plot(seurat_object = pbmc, plot_type = "pie", split.by = "treatment")
+```
+
+### Plot raw cell numbers  
+The default for `Proportion_Plot` is to plot the proportion of cells and not the raw number of cells per identity because that can be deceptive.  However, in some cases it can be useful and so users can change the `plot_scale` parameter to plot raw numbers of cells instead of proportions.
+```{r fig.height=7, fig.width=13, fig.align='center'}
+Proportion_Plot(seurat_object = pbmc, plot_type = "bar", split.by = "treatment", plot_scale = "count")
 ```
 
 
@@ -247,4 +291,5 @@ p3 <- Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", grou
 
 patchwork::wrap_plots(p1, p2, p3, ncol = 3)
 ```
+
 

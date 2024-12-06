@@ -5,7 +5,7 @@
 \alias{msigdb_qc_gene_list}
 \title{QC Gene Lists}
 \format{
-A list of 18 vectors
+A list of 21 vectors
 \describe{
 \item{Homo_sapiens_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for human}
 \item{Homo_sapiens_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for human}
@@ -25,11 +25,13 @@ A list of 18 vectors
 \item{Macaca_mulatta_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for macaque}
 \item{Macaca_mulatta_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for macaque}
 \item{Macaca_mulatta_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for macaque}
-
+\item{Gallus_gallus_msigdb_oxphos}{Genes in msigdb "HALLMARK_OXIDATIVE_PHOSPHORYLATION" list for chicken}
+\item{Gallus_gallus_msigdb_apop}{Genes in msigdb "HALLMARK_APOPTOSIS" list for chicken}
+\item{Gallus_gallus_msigdb_dna_repair}{Genes in msigdb "HALLMARK_DNA_REPAIR" list for chicken}
 }
 }
 \source{
-MSigDB gene sets via msigdbr package \url{https://cran.r-project.org/package=msigdbr}
+MSigDB gene sets (gene symbols) via msigdbr package \url{https://cran.r-project.org/package=msigdbr}.  See data-raw directory for scripts used to create gene list.
 }
 \usage{
 msigdb_qc_gene_list

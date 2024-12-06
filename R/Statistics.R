@@ -1,18 +1,18 @@
 #' Calculate Cluster Stats
 #'
-#' Calculates both overall and per sample cell number and percentages per cluster based on orig.ident
+#' Calculates both overall and per sample cell number and percentages per cluster based on orig.ident.
 #'
 #' @param seurat_object Seurat object name.
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
 #'
 #' @import cli
-#' @importFrom dplyr left_join rename all_of
+#' @importFrom dplyr left_join rename all_of arrange desc
 #' @importFrom janitor adorn_totals
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
 #'
-#' @return A data.frame
+#' @return A data.frame with rows in order of frequency
 #'
 #' @export
 #'
@@ -40,12 +40,14 @@ Cluster_Stats_All_Samples <- function(
   # Extract total percents
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
-    rename(Cluster = all_of("Var1"))
+    rename(Cluster = all_of("Var1")) %>%
+    arrange(desc(.data[["Freq"]]))
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
-    rename(Cluster = all_of("Var1"), Number = all_of("Freq"))
+    rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
+    arrange(desc(.data[["Number"]]))
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
@@ -56,7 +58,7 @@ Cluster_Stats_All_Samples <- function(
     rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = .data[["cell_number"]])
+    pivot_wider(names_from = group_by_var, values_from = all_of("cell_number"))
 
   # Merge cells per metadata column per cluster with cluster stats
   cluster_stats_2 <- suppressMessages(left_join(cluster_stats, cells_per_cluster_2))
@@ -66,7 +68,7 @@ Cluster_Stats_All_Samples <- function(
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
     rename(cluster = all_of("Var1"), group_by_var = all_of("Var2"), percent = all_of("Freq"))
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = .data[["percent"]]) %>%
+    pivot_wider(names_from = group_by_var, values_from = all_of("percent")) %>%
     column_to_rownames("cluster")
   colnames(x = percent_per_cluster_2) <- paste(colnames(x = percent_per_cluster_2), "%", sep = "_")
 
@@ -76,6 +78,66 @@ Cluster_Stats_All_Samples <- function(
   # Merge percent cells per metadata column per cluster with cluster stats and add Totals column
   cluster_stats <- suppressMessages(left_join(cluster_stats_2, percent_per_cluster_2)) %>%
     adorn_totals("row")
+
+  return(cluster_stats)
+}
+
+
+#' Cells per Sample
+#'
+#' Get data.frame containing the number of cells per sample.
+#'
+#' @param seurat_object Seurat object
+#' @param sample_col column name in meta.data that contains sample ID information.  Default is NULL and
+#' will use "orig.ident column
+#'
+#' @import cli
+#' @importFrom dplyr rename
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble rownames_to_column
+#'
+#' @return A data.frame
+#'
+#' @export
+#'
+#' @concept stats
+#'
+#' @examples
+#' library(Seurat)
+#' num_cells <- Cells_per_Sample(seurat_object = pbmc_small, sample_col = "orig.ident")
+#'
+
+Cells_per_Sample <- function(
+    seurat_object,
+    sample_col = NULL
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # check sample_column
+  if (!is.null(x = sample_col)) {
+    if (sample_col != "ident") {
+      Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)
+    }
+  } else {
+    cli_inform(message = "No value provided to {.code sample_col}, defaulting to {.val orig.ident}")
+    sample_col <- "orig.ident"
+  }
+
+  # Get data
+  if (sample_col == "ident") {
+    cells_per_sample <- data.frame(lengths(x = CellsByIdentities(object = seurat_object))) %>%
+      rename("Number of Cells" = 1) %>%
+      rownames_to_column(var = "Sample_ID")
+  } else {
+    Idents(object = seurat_object) <- sample_col
+    cells_per_sample <- data.frame(lengths(x = CellsByIdentities(object = seurat_object))) %>%
+      rename("Number of Cells" = 1) %>%
+      rownames_to_column(var = "Sample_ID")
+  }
+
+  # return data.frame
+  return(cells_per_sample)
 }
 
 
@@ -91,7 +153,6 @@ Cluster_Stats_All_Samples <- function(
 #' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
 #' across the entire object as opposed to by cluster or by `group_by` variable.
 #' @param assay Assay to pull feature data from.  Default is active assay.
-#' @param slot `r lifecycle::badge("deprecated")` soft-deprecated.  See `layer`
 #' @param layer Which layer to pull expression data from?  Default is "data".
 #'
 #' @return A data.frame
@@ -119,23 +180,11 @@ Percent_Expressing <- function(
   group_by = NULL,
   split_by = NULL,
   entire_object = FALSE,
-  slot = deprecated(),
   layer = "data",
   assay = NULL
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(slot)) {
-    lifecycle::deprecate_warn(when = "2.0.0",
-                              what = "Percent_Expressing(slot)",
-                              with = "Percent_Expressing(layer)",
-                              details = c("v" = "As of Seurat 5.0.0 the {.code slot} parameter is deprecated and replaced with {.code layer}.",
-                                          "i" = "Please adjust code now to prepare for full deprecation.")
-    )
-    layer <- slot
-  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -255,6 +304,10 @@ Median_Stats <- function(
   }
 
   # Check group variable present
+  if (group_by_var == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+  }
+
   group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
 
   # Check stats variables present
@@ -335,6 +388,11 @@ MAD_Stats <- function(
     mad_var = NULL,
     mad_num = 2
 ) {
+  # check mad_num
+  if (mad_num <= 0) {
+    cli_abort(message = "The {.code mad_num} parameter must be greater than 0.")
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -342,6 +400,12 @@ MAD_Stats <- function(
     default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
   } else {
     default_var <- NULL
+  }
+
+  # set to active ident if "ident" is provided
+  if (group_by_var == "ident") {
+    seurat_object[["active.ident"]] <- Idents(object = seurat_object)
+    group_by_var <- "active.ident"
   }
 
   # Check group variable present
@@ -366,11 +430,11 @@ MAD_Stats <- function(
 
   mad_by_group <- meta_data %>%
     group_by(.data[[group_by_var]]) %>%
-    summarise(across(all_of(all_variables), mad))
+    summarise(across(all_of(all_variables), mad)*mad_num)
 
   # Calculate overall medians
   mad_overall <- meta_data %>%
-    summarise(across(all_of(all_variables), mad))
+    summarise(across(all_of(all_variables), mad)*mad_num)
 
   # Create data.frame with group_by_var as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")

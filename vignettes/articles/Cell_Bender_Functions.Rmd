@@ -286,3 +286,11 @@ Now let's plot normally astrocyte restricted gene.  If Cell Bender has worked we
 ```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
 FeaturePlot_DualAssay(seurat_object = astrocytes_cortex, features = "Gja1", assay1 = "RNA", assay2 = "RAW")
 ```
+
+### Optional Parameters  
+`FeaturePlot_DualAssay` also contains optional parameter (`colors_use_assay2`) that allows for returning plots with different color palettes for each assay.  
+```{r echo=FALSE, fig.height=4, fig.width=10, fig.align='center'}
+assay2_pal <- turbo(n = 20)
+
+FeaturePlot_DualAssay(seurat_object = astrocytes_cortex, features = "Gja1", assay1 = "RNA", assay2 = "RAW", colors_use_assay2 = assay2_pal)
+```

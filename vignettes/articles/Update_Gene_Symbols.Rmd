@@ -152,3 +152,17 @@ As you can see the majority of these symbols are already updated so the input sy
 In the case of "AL031847.1" that annotation was not found in HGNC and therefore the symbol was left unchanged.  
 
 Finally in the case of "LINC00337" there was an updated symbol of "ICMT-DT" so the output symbol was updated to that current symbol.
+
+
+# Updating Mouse Gene Symbols  
+scCustomize also contains helper function to update mouse gene symbols using the [Mouse Genome Informatics (MGI)](https://www.informatics.jax.org/) database.
+
+```{r message=TRUE}
+# Load mouse dataset
+marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
+
+# Get updated symbols
+updated_symbols <- Updated_MGI_Symbols(input_data = Features(marsh_mouse_micro))
+```
+
+

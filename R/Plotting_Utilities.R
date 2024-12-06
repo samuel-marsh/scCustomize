@@ -345,6 +345,92 @@ scCustomze_Split_FeatureScatter <- function(
 }
 
 
+#' Plot identity proportions
+#'
+#' Horizontal bar plot of either the total number of cells per identity or the percent of cells per identity
+#'
+#' @param seurat_object seurat object
+#' @param group.by Identity to group by in plot
+#' @param percent logical, whether to x-axis represents total number of cells or percentage of
+#' total cells, default is FALSE; plot total number.
+#' @param colors_use named vector of colors or hex values.  Names must match levels of `group.by`.
+#' @param x_axis_log logical, whether to plot x-axis in log10 scale, default is FALSE.
+#' @param prop_label logical, whether to add label to each bar with total number of cells, default is FALSE.
+#'
+#' @return ggplot2 plot
+#'
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr select all_of
+#' @importFrom forcats fct_rev
+#' @importFrom magrittr "%>%"
+#'
+#' @references functionality inspired by `sc_dim_count` from ggsc package: \url{https://bioconductor.org/packages/ggsc/}.
+#'
+#' @noRd
+#'
+
+Overall_Prop_Plot <- function(
+    seurat_object,
+    group.by = NULL,
+    percent = FALSE,
+    colors_use,
+    x_axis_log = FALSE,
+    prop_label = FALSE
+) {
+  # Set active ident
+  if (!is.null(x = group.by) && group.by != "ident") {
+    Idents(object = seurat_object) <- group.by
+  }
+
+  # Get stats and filter
+  all_stats <- Cluster_Stats_All_Samples(seurat_object = seurat_object)
+
+  fil_stats <- all_stats %>%
+    select(all_of(c("Cluster", "Number", "Freq")))
+
+  num_clusters <- nrow(x = fil_stats) - 1
+
+  fil_stats <- fil_stats[1:num_clusters,]
+
+  # Create factor for prop plot based on that respects number of cells per cluster from Cluster_Stats_All_Samples
+  fil_stats$Cluster <- factor(fil_stats$Cluster, levels = fil_stats$Cluster)
+
+  if (isFALSE(x = percent)) {
+    plot <- ggplot(fil_stats, aes(x = .data[["Number"]], y = fct_rev(.data[["Cluster"]]), fill = .data[["Cluster"]])) +
+      geom_col() +
+      scale_fill_manual(values = colors_use) +
+      theme_ggprism_mod() +
+      xlab("Number of Cells") +
+      ylab(NULL) +
+      NoLegend()
+  } else {
+    plot <- ggplot(fil_stats, aes(x = .data[["Freq"]], y = fct_rev(.data[["Cluster"]]), fill = .data[["Cluster"]])) +
+      geom_col() +
+      scale_fill_manual(values = colors_use) +
+      theme_ggprism_mod() +
+      xlab("Percent of Cells") +
+      ylab(NULL) +
+      NoLegend()
+  }
+
+  if (isTRUE(x = prop_label)) {
+    if (isFALSE(x = percent)) {
+      plot <- plot + geom_text(data = fil_stats, aes(label = .data[["Number"]]), hjust = -0.1, fontface = "bold") + scale_x_continuous(expand = expansion(mult = c(0, .25)))
+    } else {
+      plot <- plot + geom_text(data = fil_stats, aes(label = paste0(format(round(.data[["Freq"]], digits = 1)), "%"), hjust = -0.1, fontface = "bold")) + scale_x_continuous(expand = expansion(mult = c(0, .25)))
+    }
+  }
+
+  # mod x axis if needed
+  if (isTRUE(x = x_axis_log)) {
+    plot <- plot + scale_x_log10(expand = expansion(mult = c(0, .25)))
+  }
+
+  return(plot)
+}
+
+
 #' Figure Plots
 #'
 #' Removes the axes from 2D DR plots and makes them into plot label.
@@ -441,7 +527,7 @@ Figure_Plot <- function(
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
-#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -498,6 +584,7 @@ Clustered_DotPlot_Single_Group <- function(
     exp_color_max = 2,
     print_exp_quantiles = FALSE,
     colors_use_idents = NULL,
+    show_ident_colors = TRUE,
     x_lab_rotate = TRUE,
     plot_padding = NULL,
     flip = FALSE,
@@ -512,6 +599,13 @@ Clustered_DotPlot_Single_Group <- function(
     column_label_size = 8,
     legend_label_size = 10,
     legend_title_size = 10,
+    legend_position = "right",
+    legend_orientation = NULL,
+    show_ident_legend = TRUE,
+    show_row_names = TRUE,
+    show_column_names = TRUE,
+    column_names_side = "bottom",
+    row_names_side = "right",
     raster = FALSE,
     plot_km_elbow = TRUE,
     elbow_kmax = NULL,
@@ -538,6 +632,11 @@ Clustered_DotPlot_Single_Group <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # set legend
+  if (isFALSE(x = show_ident_colors)) {
+    show_ident_legend <- FALSE
+  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -686,21 +785,26 @@ Clustered_DotPlot_Single_Group <- function(
   }
 
   # Create identity annotation
-  if (isTRUE(x = flip)) {
-    column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
-                                               col =  identity_colors_list,
-                                               na_col = "grey",
-                                               name = "Identity",
-                                               show_legend = FALSE
-    )
+  if (isTRUE(x = show_ident_colors)) {
+    if (isTRUE(x = flip)) {
+      column_ha <- ComplexHeatmap::rowAnnotation(Identity = Identity,
+                                                 col =  identity_colors_list,
+                                                 na_col = "grey",
+                                                 name = "Identity",
+                                                 show_legend = FALSE
+      )
+    } else {
+      column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
+                                                     col =  identity_colors_list,
+                                                     na_col = "grey",
+                                                     name = "Identity",
+                                                     show_legend = FALSE
+      )
+    }
   } else {
-    column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
-                                                   col =  identity_colors_list,
-                                                   na_col = "grey",
-                                                   name = "Identity",
-                                                   show_legend = FALSE
-    )
+    column_ha <- NULL
   }
+
 
   # Set middle of color scale if not specified
   if (is.null(x = exp_color_middle)) {
@@ -772,24 +876,52 @@ Clustered_DotPlot_Single_Group <- function(
   }
 
   # Create legend for point size
-  lgd_list = list(
-    ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
-    ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
-                           graphics = list(
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
-                                                              gp = gpar(fill = "black")),
-                             function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
-                                                              gp = gpar(fill = "black"))),
-                           labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
+  if (!is.null(x = legend_orientation) && legend_orientation == "horizontal") {
+    num_row <- 1
+  } else {
+    num_row <- NULL
+  }
+
+  if (isFALSE(x = show_ident_legend)) {
+    lgd_list = list(
+      ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
+                             graphics = list(
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
+                                                                gp = gpar(fill = "black"))),
+                             labels_gp = gpar(fontsize = legend_label_size),
+                             title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
+      )
     )
-  )
+  } else {
+    lgd_list = list(
+      ComplexHeatmap::Legend(at = Identity, title = "Identity", legend_gp = gpar(fill = identity_colors_list[[1]]), labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row),
+      ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
+                             graphics = list(
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.1) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.25) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.50) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = sqrt(0.75) * unit(2, "mm"),
+                                                                gp = gpar(fill = "black")),
+                               function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
+                                                                gp = gpar(fill = "black"))),
+                             labels_gp = gpar(fontsize = legend_label_size),
+                             title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
+      )
+    )
+  }
+
+
 
   # Set x label roration
   if (is.numeric(x = x_lab_rotate)) {
@@ -805,7 +937,7 @@ Clustered_DotPlot_Single_Group <- function(
   if (isTRUE(x = raster)) {
     if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
@@ -819,10 +951,14 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
+                                                  cluster_columns = cluster_feature,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
@@ -836,12 +972,16 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
+                                                  cluster_columns = cluster_ident,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   } else {
     if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun_flip,
@@ -855,10 +995,14 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
+                                                  cluster_columns = cluster_feature,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
+                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   cell_fun = cell_fun,
@@ -872,7 +1016,11 @@ Clustered_DotPlot_Single_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
+                                                  cluster_columns = cluster_ident,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   }
 
@@ -886,15 +1034,11 @@ Clustered_DotPlot_Single_Group <- function(
 
   }
   if (!is.null(x = plot_padding)) {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, padding = padding, merge_legend = TRUE, heatmap_legend_side = legend_position))
   } else {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, heatmap_legend_side = legend_position))
   }
 }
-
-
-
-
 
 
 #' Clustered DotPlot
@@ -941,7 +1085,7 @@ Clustered_DotPlot_Single_Group <- function(
 #' @param cluster_ident logical, whether to cluster and reorder identity axis.  Default is TRUE.
 #' @param column_label_size Size of the feature labels.  Provided to `column_names_gp` in Heatmap call.
 #' @param legend_label_size Size of the legend text labels.  Provided to `labels_gp` in Heatmap legend call.
-#' @param legend_title_size Sise of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
+#' @param legend_title_size Size of the legend title text labels.  Provided to `title_gp` in Heatmap legend call.
 #' @param raster Logical, whether to render in raster format (faster plotting, smaller files).  Default is FALSE.
 #' @param plot_km_elbow Logical, whether or not to return the Sum Squared Error Elbow Plot for k-means clustering.
 #' Estimating elbow of this plot is one way to determine "optimal" value for `k`.
@@ -1010,6 +1154,13 @@ Clustered_DotPlot_Multi_Group <- function(
     column_label_size = 8,
     legend_label_size = 10,
     legend_title_size = 10,
+    legend_position = "right",
+    legend_orientation = NULL,
+    show_ident_legend = TRUE,
+    show_row_names = TRUE,
+    show_column_names = TRUE,
+    column_names_side = "bottom",
+    row_names_side = "right",
     raster = FALSE,
     plot_km_elbow = TRUE,
     elbow_kmax = NULL,
@@ -1255,6 +1406,12 @@ Clustered_DotPlot_Multi_Group <- function(
   }
 
   # Create legend for point size
+  if (!is.null(x = legend_orientation) && legend_orientation == "horizontal") {
+    num_row <- 1
+  } else {
+    num_row <- NULL
+  }
+
   lgd_list = list(
     ComplexHeatmap::Legend(labels = c(10,25,50,75,100), title = "Percent Expressing",
                            graphics = list(
@@ -1269,7 +1426,7 @@ Clustered_DotPlot_Multi_Group <- function(
                              function(x, y, w, h) grid.circle(x = x, y = y, r = 1 * unit(2, "mm"),
                                                               gp = gpar(fill = "black"))),
                            labels_gp = gpar(fontsize = legend_label_size),
-                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold")
+                           title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), nrow = num_row
     )
   )
 
@@ -1300,7 +1457,11 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
+                                                  cluster_columns = cluster_feature,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1316,7 +1477,11 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
+                                                  cluster_columns = cluster_ident,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   } else {
     if (isTRUE(x = flip)) {
@@ -1334,7 +1499,11 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_ident,
-                                                  cluster_columns = cluster_feature)
+                                                  cluster_columns = cluster_feature,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     } else {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(exp_mat,
                                                   heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold")),
@@ -1350,7 +1519,11 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
                                                   cluster_rows = cluster_feature,
-                                                  cluster_columns = cluster_ident)
+                                                  cluster_columns = cluster_ident,
+                                                  show_row_names = show_row_names,
+                                                  show_column_names = show_column_names,
+                                                  column_names_side = column_names_side,
+                                                  row_names_side = row_names_side)
     }
   }
 
@@ -1364,11 +1537,261 @@ Clustered_DotPlot_Multi_Group <- function(
 
   }
   if (!is.null(x = plot_padding)) {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, padding = padding, heatmap_legend_side = legend_position))
   } else {
-    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE))
+    return(ComplexHeatmap::draw(cluster_dot_plot, annotation_legend_list = lgd_list, merge_legend = TRUE, heatmap_legend_side = legend_position))
   }
 }
+
+
+#' Cell Proportion Pie Chart
+#'
+#' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
+#' Can plot either the totals or split by a variable in `meta.data`.
+#'
+#' @param seurat_object Seurat object name.
+#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
+#' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @return ggplot2 or patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr rename all_of arrange desc
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tidyr pivot_wider
+#'
+#' @noRd
+#'
+#' @examples
+#' #' library(Seurat)
+#' Plot_Pie_Proportions(seurat_object = pbmc_small)
+#'
+
+Plot_Pie_Proportions <- function(
+    seurat_object,
+    group_by_var = "ident",
+    split.by = NULL,
+    num_columns = NULL,
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check on meta data column
+  if (group_by_var != "ident") {
+    # Check meta
+    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+    Idents(seurat_object) <- group_by_var
+  }
+
+  # check split
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  if (is.null(x = split.by)) {
+    plot_df <- table(seurat_object@active.ident) %>%
+      data.frame() %>%
+      rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
+      arrange(desc(.data[["Number"]]))
+
+    # Check colors use vs. ggplot2 color scale
+    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+    }
+
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+
+    # make plots
+    plot <-  ggplot(plot_df, aes(x="", y=.data[["Number"]], fill=.data[["Cluster"]])) +
+      geom_bar(stat="identity", width=1, color="white") +
+      coord_polar("y", start=0) +
+      theme_ggprism_mod() +
+      scale_fill_manual(values = colors_use) +
+      ggtitle("Proportion of Cells") +
+      theme(plot.title = element_text(hjust = 0.5),
+            axis.line = element_blank(),
+            axis.text = element_blank(),
+            axis.title = element_blank(),
+            axis.ticks = element_blank())
+
+    return(plot)
+  } else {
+    plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, split.by])
+    plot_df <- data.frame(plot_df) %>%
+      rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), cell_number = all_of("Freq"))
+    plot_df <- plot_df %>%
+      pivot_wider(names_from = split.by, values_from = all_of("cell_number"))
+
+    samples <- colnames(plot_df)[-1]
+
+    # Check colors use vs. ggplot2 color scale
+    if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+      cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+    }
+
+    # set default plot colors
+    if (is.null(x = colors_use)) {
+      colors_use <- scCustomize_Palette(num_groups = nrow(x = plot_df), ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    }
+
+    plots <- lapply(1:length(samples), function(x){
+      plot <- ggplot(plot_df, aes(x="", y=.data[[samples[x]]], fill=.data[["Cluster"]])) +
+        geom_bar(stat="identity", width=1, color="white") +
+        coord_polar("y", start=0) +
+        theme_ggprism_mod() +
+        scale_fill_manual(values = colors_use) +
+        ggtitle(samples[x]) +
+        theme(plot.title = element_text(hjust = 0.5),
+              axis.line = element_blank(),
+              axis.text = element_blank(),
+              axis.title = element_blank(),
+              axis.ticks = element_blank())
+    })
+
+    plots <- wrap_plots(plots, guides = "collect", ncol = num_columns)
+    plots <- plots + plot_annotation(title = "Proportion of Cells", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18)))
+
+    return(plots)
+  }
+}
+
+
+#' Cell Proportion Pie Chart
+#'
+#' Plots the proportion of cells belonging to each identity in `active.ident` of Seurat object.
+#' Can plot either the totals or split by a variable in `meta.data`.
+#'
+#' @param seurat_object Seurat object name.
+#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
+#' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of "percent" or
+#' "count". Default is "percent".
+#' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @return ggplot2 or patchwork object
+#'
+#' @import cli
+#' @import ggplot2
+#' @import patchwork
+#' @importFrom dplyr rename all_of arrange desc
+#' @importFrom magrittr "%>%"
+#' @importFrom stringr str_to_lower
+#' @importFrom tidyr pivot_wider
+#'
+#' @noRd
+#'
+#' @examples
+#' #' library(Seurat)
+#' Plot_Bar_Proportions(seurat_object = pbmc_small)
+#'
+
+Plot_Bar_Proportions <- function(
+    seurat_object,
+    group_by_var = "ident",
+    split.by = NULL,
+    plot_scale = "count",
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Check on meta data column
+  if (group_by_var != "ident") {
+    # Check meta
+    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+
+    Idents(object = seurat_object) <- group_by_var
+  }
+
+  group_by_length <- length(x = unique(x = seurat_object@active.ident))
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    colors_use <- scCustomize_Palette(num_groups = group_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+  }
+
+  # check split
+  if (!is.null(x = split.by)) {
+    split.by <- Meta_Present(object = seurat_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  }
+
+  if (plot_scale == "count") {
+    if (!is.null(x = split.by)) {
+      plot_df <- table(seurat_object@active.ident, seurat_object@meta.data[, split.by])
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), value = all_of("Freq"))
+    } else {
+      plot_df <- table(seurat_object@active.ident)
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), value = all_of("Freq"))
+      plot_df$split.by <- "Total"
+    }
+  }
+
+  if (plot_scale == "percent") {
+    if (!is.null(x = split.by)) {
+      plot_df <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, split.by]), margin = 2) * 100
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), split.by = all_of("Var2"), value = all_of("Freq"))
+    } else {
+      plot_df <- prop.table(x = table(seurat_object@active.ident)) * 100
+      plot_df <- data.frame(plot_df) %>%
+        rename(Cluster = all_of("Var1"), value = all_of("Freq"))
+      plot_df$split.by <- "Total"
+    }
+  }
+
+  # make plots
+  plot <-  ggplot(plot_df, aes(x=.data[["split.by"]], y=.data[["value"]], fill=.data[["Cluster"]])) +
+    geom_bar(stat="identity", width=0.9, color="white",) +
+    scale_fill_manual(values = colors_use) +
+    theme_ggprism_mod() +
+    ggtitle("Proportion of Cells") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_y_continuous(expand = c(0, 0)) +
+    xlab("")
+
+  if (plot_scale == "percent") {
+    plot <- plot + ylab("Percent")
+  }
+
+  if (plot_scale == "count") {
+    plot <- plot + ylab("Number of Cells")
+  }
+
+  # return plot
+  return(plot)
+}
+
+
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1469,6 +1892,83 @@ Test_Integer <- function(
   } else {
       return(FALSE)
   }
+}
+
+
+#' Modify correlation matrix
+#'
+#' Modify correlation matrix to keep bottom diagonal values.
+#'
+#' @param cor_mat correlation matrix created with `cor`.
+#'
+#' @return modified correlation matrix
+#'
+#' @noRd
+#'
+
+lower_diag_cor_mat <- function(
+    cor_mat
+) {
+  new_cormat[upper.tri(x = cor_mat)] <- NA
+  return(new_cormat)
+}
+
+
+#' Modify correlation matrix
+#'
+#' Modify correlation matrix to keep top diagonal values.
+#'
+#' @param cor_mat correlation matrix created with `cor`.
+#'
+#' @return modified correlation matrix
+#'
+#' @noRd
+#'
+
+upper_diag_cor_mat <- function(
+    cor_mat
+) {
+  cor_mat[lower.tri(x = cor_mat)]<- NA
+  return(cor_mat)
+}
+
+
+#' Get hclust rectangles
+#'
+#' get data.frames to plot hclust rectangles
+#'
+#' @param cor_mat correlation matrix created with `cor`.
+#' @param num_rect number of rectangles to plot
+#' @param num_factors number of factors in plot
+#'
+#' @return list of dataframes to use for drawing rectangles
+#'
+#' @importFrom stats hclust as.dist cutree
+#'
+#' @noRd
+#'
+
+create_factor_hclust_rect <- function(
+    cor_mat,
+    num_rect,
+    num_factors
+) {
+  n <- nrow(cor_mat)
+  method <- "complete"
+  tree <-  hclust(as.dist(1 - cor_mat), method = method)
+  hc_rect <-  cutree(tree, k = num_rect)
+  clustab <-  table(hc_rect)[unique(hc_rect[tree$order])]
+  cu <- c(0, cumsum(clustab))
+
+  rect_df <- data.frame(cbind(cu[-length(cu)], cu[-1]))
+  rownames(rect_df) <- 1:num_rect
+  rect_df <- rect_df + 0.5
+  rect_df2 <- num_factors - rect_df + 1
+
+  rect_list <- list("x_axis" = rect_df,
+                    "y_axis" = rect_df2)
+
+  return(rect_list)
 }
 
 

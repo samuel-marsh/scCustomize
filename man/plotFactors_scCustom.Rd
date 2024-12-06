@@ -11,6 +11,7 @@ plotFactors_scCustom(
   colors_use_dimreduc = c("lemonchiffon", "red"),
   pt.size_factors = 1,
   pt.size_dimreduc = 1,
+  reduction = "UMAP",
   reduction_label = "UMAP",
   plot_legend = TRUE,
   raster = TRUE,
@@ -42,8 +43,12 @@ coordinates (tSNE/UMAP).  Default is c('lemonchiffon', 'red'),}
 
 \item{pt.size_dimreduc}{Adjust point size for plotting in dimensionality reduction plots.}
 
+\item{reduction}{Name of dimensionality reduction to use for plotting.  Default is "UMAP".
+Only for newer style liger objects.}
+
 \item{reduction_label}{What to label the x and y axes of resulting plots.  LIGER does not store name of
-technique and therefore needs to be set manually.  Default is "UMAP".}
+technique and therefore needs to be set manually.  Default is "UMAP".
+Only for older style liger objects.}
 
 \item{plot_legend}{logical, whether to plot the legend on factor loading plots, default is TRUE.
 Helpful if number of datasets is large to avoid crowding the plot with legend.}
@@ -70,7 +75,7 @@ dimensionality reduction plots (Default = FALSE).}
 \item{cells.highlight}{Names of specific cells to highlight in plot (black) (default NULL).}
 
 \item{reorder_datasets}{New order to plot datasets in for the factor plots if different from current
-factor level order in cell.data slot.}
+factor level order in cell.data slot. Only for older style liger objects.}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use_factors = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "varibow" palette.}

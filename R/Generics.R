@@ -57,6 +57,25 @@ Add_Mito_Ribo <- function(object, ...) {
 }
 
 
+#' Add Hemoglobin percentages
+#'
+#' Add hemoglobin percentages to meta.data slot of Seurat Object or
+#' cell.data/cellMeta slot of Liger object
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @return An object of the same class as `object` with columns added to object meta data.
+#'
+#' @rdname Add_Hemo
+#' @export Add_Hemo
+#'
+
+Add_Hemo <- function(object, ...) {
+  UseMethod(generic = 'Add_Hemo', object = object)
+}
+
+
 #' Add Cell Complexity
 #'
 #' Add measure of cell complexity/novelty (log10GenesPerUMI) for data QC.
@@ -72,4 +91,84 @@ Add_Mito_Ribo <- function(object, ...) {
 
 Add_Cell_Complexity <- function(object, ...) {
   UseMethod(generic = 'Add_Cell_Complexity', object = object)
+}
+
+
+#' Add Percent of High Abundance Genes
+#'
+#' Add the percentage of counts occupied by the top XX most highly expressed genes in each cell.
+#'
+#' @param object Seurat or LIGER object.
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname Add_Top_Gene_Pct
+#' @export Add_Top_Gene_Pct
+#'
+
+Add_Top_Gene_Pct <- function(object, ...) {
+  UseMethod(generic = 'Add_Top_Gene_Pct', object = object)
+}
+
+
+#' Add Multiple Cell Quality Control Values with Single Function
+#'
+#' Add Mito/Ribo %, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single
+#' function call to Seurat or liger objects.
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname Add_Cell_QC_Metrics
+#' @export Add_Cell_QC_Metrics
+#'
+
+Add_Cell_QC_Metrics <- function(object, ...) {
+  UseMethod(generic = 'Add_Cell_QC_Metrics', object = object)
+}
+
+
+#' Get meta data from object
+#'
+#' Quick function to properly pull meta.data from objects.
+#'
+#' @param object Object of class Seurat or liger.
+#' @param ... Arguments passed to other methods
+#'
+#' @return A data.frame containing cell-level meta data
+#'
+#' @export
+#'
+#' @concept get_set_util
+#'
+#' @rdname Fetch_Meta
+#'
+#' @examples
+#' library(Seurat)
+#' meta_data <- Fetch_Meta(object = pbmc_small)
+#' head(meta_data, 5)
+#'
+
+Fetch_Meta <- function(object, ...) {
+  UseMethod(generic = 'Fetch_Meta', object = object)
+}
+
+
+#' Rename Clusters
+#'
+#' Wrapper function to rename active cluster identity in Seurat or Liger Object with new idents.
+#'
+#' @param object Object of class Seurat or liger.
+#' @param ... Arguments passed to other methods
+#'
+#' @return An object of the same class as `object` with updated default identities.
+#'
+#' @export
+#'
+#' @concept get_set_util
+#'
+#' @rdname Rename_Clusters
+#'
+
+Rename_Clusters <- function(object, ...) {
+  UseMethod(generic = 'Rename_Clusters', object = object)
 }
