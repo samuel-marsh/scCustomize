@@ -5,7 +5,7 @@ Any negative correlations are set to NA and NA values set to bottom color of col
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +33,7 @@ Any negative correlations are set to NA and NA values set to bottom color of col
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -102,14 +102,14 @@ Any negative correlations are set to NA and NA values set to bottom color of col
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -145,78 +145,78 @@ Any negative correlations are set to NA and NA values set to bottom color of col
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+    <dl><dt>object</dt>
 <dd><p>liger or Seurat object.</p></dd>
 
 
-<dt id="arg-colors-use">colors_use<a class="anchor" aria-label="anchor" href="#arg-colors-use"></a></dt>
+<dt>colors_use</dt>
 <dd><p>Color palette to use for correlation values.
 Default is <code>RColorBrewer::RdBu</code> if <code>positive_only = FALSE</code>.
 If <code>positive_only = TRUE</code> the default is <code>viridis</code>.
 Users can also supply vector of 3 colors (low, mid, high).</p></dd>
 
 
-<dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
+<dt>label</dt>
 <dd><p>logical, whether to add correlation values to plot result.</p></dd>
 
 
-<dt id="arg-label-threshold">label_threshold<a class="anchor" aria-label="anchor" href="#arg-label-threshold"></a></dt>
+<dt>label_threshold</dt>
 <dd><p>threshold for adding correlation values if <code>label = TRUE</code>.  Default
 is 0.5.</p></dd>
 
 
-<dt id="arg-label-size">label_size<a class="anchor" aria-label="anchor" href="#arg-label-size"></a></dt>
+<dt>label_size</dt>
 <dd><p>size of correlation labels</p></dd>
 
 
-<dt id="arg-plot-title">plot_title<a class="anchor" aria-label="anchor" href="#arg-plot-title"></a></dt>
+<dt>plot_title</dt>
 <dd><p>Plot title.</p></dd>
 
 
-<dt id="arg-plot-type">plot_type<a class="anchor" aria-label="anchor" href="#arg-plot-type"></a></dt>
+<dt>plot_type</dt>
 <dd><p>Controls plotting full matrix, or just the upper or lower triangles.
 Accepted values are: "full" (default), "upper", or "lower".</p></dd>
 
 
-<dt id="arg-positive-only">positive_only<a class="anchor" aria-label="anchor" href="#arg-positive-only"></a></dt>
+<dt>positive_only</dt>
 <dd><p>logical, whether to limit the plotted values to only positive
 correlations (negative values set to 0); default is FALSE.</p></dd>
 
 
-<dt id="arg-x-lab-rotate">x_lab_rotate<a class="anchor" aria-label="anchor" href="#arg-x-lab-rotate"></a></dt>
+<dt>x_lab_rotate</dt>
 <dd><p>logical, whether to rotate the axes labels on the x-axis.  Default is TRUE.</p></dd>
 
 
-<dt id="arg-cluster">cluster<a class="anchor" aria-label="anchor" href="#arg-cluster"></a></dt>
+<dt>cluster</dt>
 <dd><p>logical, whether to cluster the plot using <code>hclust</code> (default TRUE).  If FALSE
 factors are listed in numerical order.</p></dd>
 
 
-<dt id="arg-cluster-rect">cluster_rect<a class="anchor" aria-label="anchor" href="#arg-cluster-rect"></a></dt>
+<dt>cluster_rect</dt>
 <dd><p>logical, whether to add rectangles around the clustered areas on plot,
 default is FALSE.</p></dd>
 
 
-<dt id="arg-cluster-rect-num">cluster_rect_num<a class="anchor" aria-label="anchor" href="#arg-cluster-rect-num"></a></dt>
+<dt>cluster_rect_num</dt>
 <dd><p>number of rectangles to add to the plot, default NULL.</p></dd>
 
 
-<dt id="arg-cluster-rect-col">cluster_rect_col<a class="anchor" aria-label="anchor" href="#arg-cluster-rect-col"></a></dt>
+<dt>cluster_rect_col</dt>
 <dd><p>color to use for rectangles, default MULL (will set color automatically).</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">Factor_Cor_Plot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -232,15 +232,15 @@ default is FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 

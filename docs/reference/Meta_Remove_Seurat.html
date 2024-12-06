@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,7 +31,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -100,14 +100,14 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -132,36 +132,36 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-meta-data">meta_data<a class="anchor" aria-label="anchor" href="#arg-meta-data"></a></dt>
+    <dl><dt>meta_data</dt>
 <dd><p>data.frame containing meta data.</p></dd>
 
 
-<dt id="arg-seurat-object">seurat_object<a class="anchor" aria-label="anchor" href="#arg-seurat-object"></a></dt>
+<dt>seurat_object</dt>
 <dd><p>object name.</p></dd>
 
 
-<dt id="arg-barcodes-to-rownames">barcodes_to_rownames<a class="anchor" aria-label="anchor" href="#arg-barcodes-to-rownames"></a></dt>
+<dt>barcodes_to_rownames</dt>
 <dd><p>logical, are barcodes present as column and should they be moved to
 rownames (to be compatible with <code><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html" class="external-link">Seurat::AddMetaData</a></code>).  Default is FALSE.</p></dd>
 
 
-<dt id="arg-barcodes-colname">barcodes_colname<a class="anchor" aria-label="anchor" href="#arg-barcodes-colname"></a></dt>
+<dt>barcodes_colname</dt>
 <dd><p>name of barcodes column in meta_data.  Required if <code>barcodes_to_rownames = TRUE</code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame with only new columns.</p>
+    
+
+<p>data.frame with only new columns.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">new_meta</span> <span class="op">&lt;-</span> <span class="fu">Meta_Remove_Seurat</span><span class="op">(</span>meta_data <span class="op">=</span> <span class="va">meta_data_df</span>, seurat_object <span class="op">=</span> <span class="va">object</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html" class="external-link">AddMetaData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, metadata <span class="op">=</span> <span class="va">new_meta</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -177,15 +177,15 @@ rownames (to be compatible with <code><a href="https://mojaveazure.github.io/seu
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 

@@ -4,7 +4,7 @@ in given Seurat Object"><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -32,7 +32,7 @@ in given Seurat Object"><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -101,14 +101,14 @@ in given Seurat Object"><!-- mathjax --><script src="https://cdnjs.cloudflare.co
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -142,70 +142,70 @@ in given Seurat Object</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-seurat-object">seurat_object<a class="anchor" aria-label="anchor" href="#arg-seurat-object"></a></dt>
+    <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
 
 
-<dt id="arg-highlight-color">highlight_color<a class="anchor" aria-label="anchor" href="#arg-highlight-color"></a></dt>
+<dt>highlight_color</dt>
 <dd><p>Color to highlight cells (default "navy").  Can provide either single color to use for
 all clusters/plots or a vector of colors equal to the number of clusters to use (in order) for the clusters/plots.</p></dd>
 
 
-<dt id="arg-background-color">background_color<a class="anchor" aria-label="anchor" href="#arg-background-color"></a></dt>
+<dt>background_color</dt>
 <dd><p>non-highlighted cell colors.</p></dd>
 
 
-<dt id="arg-pt-size">pt.size<a class="anchor" aria-label="anchor" href="#arg-pt-size"></a></dt>
+<dt>pt.size</dt>
 <dd><p>point size for both highlighted cluster and background.</p></dd>
 
 
-<dt id="arg-reduction">reduction<a class="anchor" aria-label="anchor" href="#arg-reduction"></a></dt>
+<dt>reduction</dt>
 <dd><p>Dimensionality Reduction to use (if NULL then defaults to Object default).</p></dd>
 
 
-<dt id="arg-file-path">file_path<a class="anchor" aria-label="anchor" href="#arg-file-path"></a></dt>
+<dt>file_path</dt>
 <dd><p>directory file path and/or file name prefix.  Defaults to current wd.</p></dd>
 
 
-<dt id="arg-file-name">file_name<a class="anchor" aria-label="anchor" href="#arg-file-name"></a></dt>
+<dt>file_name</dt>
 <dd><p>name suffix to append after sample name.</p></dd>
 
 
-<dt id="arg-file-type">file_type<a class="anchor" aria-label="anchor" href="#arg-file-type"></a></dt>
+<dt>file_type</dt>
 <dd><p>File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".</p></dd>
 
 
-<dt id="arg-single-pdf">single_pdf<a class="anchor" aria-label="anchor" href="#arg-single-pdf"></a></dt>
-<dd><p>saves all plots to single PDF file (default = FALSE).  `file_type“ must be .pdf</p></dd>
+<dt>single_pdf</dt>
+<dd><p>saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf</p></dd>
 
 
-<dt id="arg-dpi">dpi<a class="anchor" aria-label="anchor" href="#arg-dpi"></a></dt>
+<dt>dpi</dt>
 <dd><p>dpi for image saving.</p></dd>
 
 
-<dt id="arg-raster">raster<a class="anchor" aria-label="anchor" href="#arg-raster"></a></dt>
+<dt>raster</dt>
 <dd><p>Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.</p></dd>
 
 
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dt>...</dt>
 <dd><p>Extra parameters passed to<code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Saved plots</p>
+    
+
+<p>Saved plots</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">Iterate_Cluster_Highlight_Plot</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">object</span>, highlight_color <span class="op">=</span> <span class="st">"navy"</span>,</span></span>
 <span class="r-in"><span>background_color <span class="op">=</span> <span class="st">"lightgray"</span>, file_path <span class="op">=</span> <span class="st">"path/"</span>, file_name <span class="op">=</span> <span class="st">"name"</span>, file_type <span class="op">=</span> <span class="st">"pdf"</span>,</span></span>
 <span class="r-in"><span>single_pdf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -221,15 +221,15 @@ greater than 200,000 cells.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 
