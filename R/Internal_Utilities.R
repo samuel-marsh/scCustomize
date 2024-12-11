@@ -827,7 +827,7 @@ Retrieve_IEG_Ensembl_Lists <- function(
 
   # pull lists
   qc_gene_list <- list(
-    ieg = ieg_gene_list[[ieg]]
+    ieg = ensembl_ieg_list[[ieg]]
   )
 
   return(qc_gene_list)
