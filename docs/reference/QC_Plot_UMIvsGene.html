@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,7 +31,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -100,14 +100,14 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -152,118 +152,118 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-seurat-object">seurat_object<a class="anchor" aria-label="anchor" href="#arg-seurat-object"></a></dt>
+    <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
 
 
-<dt id="arg-x-axis-label">x_axis_label<a class="anchor" aria-label="anchor" href="#arg-x-axis-label"></a></dt>
+<dt>x_axis_label</dt>
 <dd><p>Label for x axis.</p></dd>
 
 
-<dt id="arg-y-axis-label">y_axis_label<a class="anchor" aria-label="anchor" href="#arg-y-axis-label"></a></dt>
+<dt>y_axis_label</dt>
 <dd><p>Label for y axis.</p></dd>
 
 
-<dt id="arg-low-cutoff-gene">low_cutoff_gene<a class="anchor" aria-label="anchor" href="#arg-low-cutoff-gene"></a></dt>
+<dt>low_cutoff_gene</dt>
 <dd><p>Plot line a potential low threshold for filtering genes per cell.</p></dd>
 
 
-<dt id="arg-high-cutoff-gene">high_cutoff_gene<a class="anchor" aria-label="anchor" href="#arg-high-cutoff-gene"></a></dt>
+<dt>high_cutoff_gene</dt>
 <dd><p>Plot line a potential high threshold for filtering genes per cell.</p></dd>
 
 
-<dt id="arg-low-cutoff-umi">low_cutoff_UMI<a class="anchor" aria-label="anchor" href="#arg-low-cutoff-umi"></a></dt>
+<dt>low_cutoff_UMI</dt>
 <dd><p>Plot line a potential low threshold for filtering UMIs per cell.</p></dd>
 
 
-<dt id="arg-high-cutoff-umi">high_cutoff_UMI<a class="anchor" aria-label="anchor" href="#arg-high-cutoff-umi"></a></dt>
+<dt>high_cutoff_UMI</dt>
 <dd><p>Plot line a potential high threshold for filtering UMIs per cell.</p></dd>
 
 
-<dt id="arg-cutoff-line-width">cutoff_line_width<a class="anchor" aria-label="anchor" href="#arg-cutoff-line-width"></a></dt>
+<dt>cutoff_line_width</dt>
 <dd><p>numerical value for thickness of cutoff lines, default is NULL.</p></dd>
 
 
-<dt id="arg-colors-use">colors_use<a class="anchor" aria-label="anchor" href="#arg-colors-use"></a></dt>
+<dt>colors_use</dt>
 <dd><p>vector of colors to use for plotting by identity.</p></dd>
 
 
-<dt id="arg-meta-gradient-name">meta_gradient_name<a class="anchor" aria-label="anchor" href="#arg-meta-gradient-name"></a></dt>
+<dt>meta_gradient_name</dt>
 <dd><p>Name of continuous meta data variable to color points in plot by.
 (MUST be continuous variable i.e. "percent_mito").</p></dd>
 
 
-<dt id="arg-meta-gradient-color">meta_gradient_color<a class="anchor" aria-label="anchor" href="#arg-meta-gradient-color"></a></dt>
+<dt>meta_gradient_color</dt>
 <dd><p>The gradient color palette to use for plotting of meta variable (default is
 viridis "Plasma" palette with dark colors high).</p></dd>
 
 
-<dt id="arg-meta-gradient-na-color">meta_gradient_na_color<a class="anchor" aria-label="anchor" href="#arg-meta-gradient-na-color"></a></dt>
+<dt>meta_gradient_na_color</dt>
 <dd><p>Color to use for plotting values when a <code>meta_gradient_low_cutoff</code> is
 set (default is "lightgray").</p></dd>
 
 
-<dt id="arg-meta-gradient-low-cutoff">meta_gradient_low_cutoff<a class="anchor" aria-label="anchor" href="#arg-meta-gradient-low-cutoff"></a></dt>
+<dt>meta_gradient_low_cutoff</dt>
 <dd><p>Value to use as threshold for plotting.  <code>meta_gradient_name</code> values
 below this value will be plotted using <code>meta_gradient_na_color</code>.</p></dd>
 
 
-<dt id="arg-cells">cells<a class="anchor" aria-label="anchor" href="#arg-cells"></a></dt>
+<dt>cells</dt>
 <dd><p>Cells to include on the scatter plot (default is all cells).</p></dd>
 
 
-<dt id="arg-combination">combination<a class="anchor" aria-label="anchor" href="#arg-combination"></a></dt>
+<dt>combination</dt>
 <dd><p>logical (default FALSE).  Whether or not to return a plot layout with both the
 plot colored by identity and the meta data gradient plot.</p></dd>
 
 
-<dt id="arg-ident-legend">ident_legend<a class="anchor" aria-label="anchor" href="#arg-ident-legend"></a></dt>
+<dt>ident_legend</dt>
 <dd><p>logical, whether to plot the legend containing identities (left plot) when
 <code>combination = TRUE</code>.  Default is TRUE.</p></dd>
 
 
-<dt id="arg-pt-size">pt.size<a class="anchor" aria-label="anchor" href="#arg-pt-size"></a></dt>
+<dt>pt.size</dt>
 <dd><p>Passes size of points to both <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">FeatureScatter</a></code> and <code>geom_point</code>.</p></dd>
 
 
-<dt id="arg-group-by">group.by<a class="anchor" aria-label="anchor" href="#arg-group-by"></a></dt>
+<dt>group.by</dt>
 <dd><p>Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
 Default is <code>@active.ident</code>.</p></dd>
 
 
-<dt id="arg-raster">raster<a class="anchor" aria-label="anchor" href="#arg-raster"></a></dt>
+<dt>raster</dt>
 <dd><p>Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 cells.</p></dd>
 
 
-<dt id="arg-raster-dpi">raster.dpi<a class="anchor" aria-label="anchor" href="#arg-raster-dpi"></a></dt>
+<dt>raster.dpi</dt>
 <dd><p>Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(512, 512).</p></dd>
 
 
-<dt id="arg-ggplot-default-colors">ggplot_default_colors<a class="anchor" aria-label="anchor" href="#arg-ggplot-default-colors"></a></dt>
+<dt>ggplot_default_colors</dt>
 <dd><p>logical.  If <code>colors_use = NULL</code>, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.</p></dd>
 
 
-<dt id="arg-color-seed">color_seed<a class="anchor" aria-label="anchor" href="#arg-color-seed"></a></dt>
+<dt>color_seed</dt>
 <dd><p>Random seed for the "varibow" palette shuffle if <code>colors_use = NULL</code> and number of
 groups plotted is greater than 36.  Default = 123.</p></dd>
 
 
-<dt id="arg-shuffle-seed">shuffle_seed<a class="anchor" aria-label="anchor" href="#arg-shuffle-seed"></a></dt>
+<dt>shuffle_seed</dt>
 <dd><p>Sets the seed if randomly shuffling the order of points (Default is 1).</p></dd>
 
 
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dt>...</dt>
 <dd><p>Extra parameters passed to <code><a href="https://satijalab.org/seurat/reference/FeatureScatter.html" class="external-link">FeatureScatter</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
@@ -287,15 +287,15 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 

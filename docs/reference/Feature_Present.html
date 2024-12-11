@@ -4,7 +4,7 @@ genes not found."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -32,7 +32,7 @@ genes not found."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -101,14 +101,14 @@ genes not found."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -138,59 +138,59 @@ genes not found.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+    <dl><dt>data</dt>
 <dd><p>Name of input data.  Currently only data of classes: Seurat, liger, data.frame,
 dgCMatrix, dgTMatrix, tibble are accepted.  Gene_IDs must be present in rownames of the data.</p></dd>
 
 
-<dt id="arg-features">features<a class="anchor" aria-label="anchor" href="#arg-features"></a></dt>
+<dt>features</dt>
 <dd><p>vector of features to check.</p></dd>
 
 
-<dt id="arg-case-check">case_check<a class="anchor" aria-label="anchor" href="#arg-case-check"></a></dt>
+<dt>case_check</dt>
 <dd><p>logical. Whether or not to check if features are found if the case is changed from the
 input list (Sentence case to Upper and vice versa).  Default is TRUE.</p></dd>
 
 
-<dt id="arg-case-check-msg">case_check_msg<a class="anchor" aria-label="anchor" href="#arg-case-check-msg"></a></dt>
+<dt>case_check_msg</dt>
 <dd><p>logical. Whether to print message to console if alternate case features are found
 in addition to inclusion in returned list.  Default is TRUE.</p></dd>
 
 
-<dt id="arg-print-msg">print_msg<a class="anchor" aria-label="anchor" href="#arg-print-msg"></a></dt>
+<dt>print_msg</dt>
 <dd><p>logical. Whether message should be printed if all features are found.  Default is TRUE.</p></dd>
 
 
-<dt id="arg-omit-warn">omit_warn<a class="anchor" aria-label="anchor" href="#arg-omit-warn"></a></dt>
+<dt>omit_warn</dt>
 <dd><p>logical. Whether to print message about features that are not found in current object.
 Default is TRUE.</p></dd>
 
 
-<dt id="arg-return-none">return_none<a class="anchor" aria-label="anchor" href="#arg-return-none"></a></dt>
+<dt>return_none</dt>
 <dd><p>logical. Whether list of found vs. bad features should still be returned if no
 features are found.  Default is FALSE.</p></dd>
 
 
-<dt id="arg-seurat-assay">seurat_assay<a class="anchor" aria-label="anchor" href="#arg-seurat-assay"></a></dt>
+<dt>seurat_assay</dt>
 <dd><p>Name of assay to pull feature names from if <code>data</code> is Seurat Object.
 Default is NULL which will check against features from all assays present.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of length 3 containing 1) found features, 2) not found features, 3) features found if
+    
+
+<p>A list of length 3 containing 1) found features, 2) not found features, 3) features found if
 case was modified.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu">Feature_Present</span><span class="op">(</span>data <span class="op">=</span> <span class="va">obj_name</span>, features <span class="op">=</span> <span class="va">DEG_list</span>, print_msg <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>case_check <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">found_features</span> <span class="op">&lt;-</span> <span class="va">features</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -206,15 +206,15 @@ case was modified.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 

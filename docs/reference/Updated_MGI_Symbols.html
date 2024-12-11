@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,7 +31,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -100,14 +100,14 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -127,9 +127,7 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-input-data">input_data<a class="anchor" aria-label="anchor" href="#arg-input-data"></a></dt>
+    <dl><dt>input_data</dt>
 <dd><p>Data source containing gene names.  Accepted formats are:</p><ul><li><p><code>charcter vector</code></p></li>
 <li><p><code>Seurat Objects</code></p></li>
 <li><p><code>data.frame</code>: genes as rownames</p></li>
@@ -138,28 +136,30 @@
 </ul></dd>
 
 
-<dt id="arg-update-symbol-data">update_symbol_data<a class="anchor" aria-label="anchor" href="#arg-update-symbol-data"></a></dt>
+<dt>update_symbol_data</dt>
 <dd><p>logical, whether to update cached MGI data, default is NULL.
 If <code>NULL</code> BiocFileCache will check and prompt for update if cache is stale.
 If <code>FALSE</code> the BiocFileCache stale check will be skipped and current cache will be used.
 If <code>TRUE</code> the BiocFileCache stale check will be skipped and MGI data will be downloaded.</p></dd>
 
 
-<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dt>verbose</dt>
 <dd><p>logical, whether to print results detailing numbers of symbols, found, updated,
 and not found; default is TRUE.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in MGI; output unchanged), Updated_Symbol (new symbol from MGI; output updated).</p>
+    
+
+<p>data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in MGI; output unchanged), Updated_Symbol (new symbol from MGI; output updated).</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">new_names</span> <span class="op">&lt;-</span> <span class="fu">Updated_MGI_Symbols</span><span class="op">(</span>input_data <span class="op">=</span> <span class="va">Seurat_Object</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -175,15 +175,15 @@ and not found; default is TRUE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 

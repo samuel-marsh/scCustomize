@@ -1,26 +1,27 @@
 pandoc: '3.2'
-pkgdown: 2.1.0
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  articles/Cell_Bender_Functions: Cell_Bender_Functions.html
-  articles/Color_Palettes: Color_Palettes.html
-  articles/FAQ: FAQ.html
-  articles/Gene_Expression_Plotting: Gene_Expression_Plotting.html
-  articles/Helpers_and_Utilities: Helpers_and_Utilities.html
-  articles/Installation: Installation.html
-  articles/Iterative_Plotting: Iterative_Plotting.html
-  articles/LIGER_Functions: LIGER_Functions.html
-  articles/Markers_and_Cluster_Annotation: Markers_and_Cluster_Annotation.html
-  articles/Misc_Functions: Misc_Functions.html
-  articles/Object_Conversion: Object_Conversion.html
-  articles/Object_QC_Functions: Object_QC_Functions.html
-  articles/QC_Plots: QC_Plots.html
-  articles/Read_and_Write_Functions: Read_and_Write_Functions.html
-  articles/Sequencing_QC_Plots: Sequencing_QC_Plots.html
-  articles/Spatial_Plotting: Spatial_Plotting.html
-  articles/Statistics: Statistics.html
-  articles/Update_Gene_Symbols: Update_Gene_Symbols.html
-last_built: 2024-12-05T19:28Z
+  Cell_Bender_Functions: Cell_Bender_Functions.html
+  Color_Palettes: Color_Palettes.html
+  FAQ: FAQ.html
+  Gene_Expression_Plotting: Gene_Expression_Plotting.html
+  Helpers_and_Utilities: Helpers_and_Utilities.html
+  Installation: Installation.html
+  Iterative_Plotting: Iterative_Plotting.html
+  LIGER_Functions: LIGER_Functions.html
+  Markers_and_Cluster_Annotation: Markers_and_Cluster_Annotation.html
+  Misc_Functions: Misc_Functions.html
+  Object_Conversion: Object_Conversion.html
+  Object_QC_Functions: Object_QC_Functions.html
+  QC_Plots: QC_Plots.html
+  Read_and_Write_Functions: Read_and_Write_Functions.html
+  Sequencing_QC_Plots: Sequencing_QC_Plots.html
+  Spatial_Plotting: Spatial_Plotting.html
+  Statistics: Statistics.html
+  Update_Gene_Symbols: Update_Gene_Symbols.html
+last_built: 2024-12-06T16:13Z
 urls:
   reference: https://samuel-marsh.github.io/scCustomize/reference
   article: https://samuel-marsh.github.io/scCustomize/articles
+

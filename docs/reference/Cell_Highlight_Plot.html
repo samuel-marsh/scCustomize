@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,7 +31,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -100,14 +100,14 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -143,77 +143,77 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-seurat-object">seurat_object<a class="anchor" aria-label="anchor" href="#arg-seurat-object"></a></dt>
+    <dl><dt>seurat_object</dt>
 <dd><p>Seurat object name.</p></dd>
 
 
-<dt id="arg-cells-highlight">cells_highlight<a class="anchor" aria-label="anchor" href="#arg-cells-highlight"></a></dt>
+<dt>cells_highlight</dt>
 <dd><p>Cell names to highlight in named list.</p></dd>
 
 
-<dt id="arg-highlight-color">highlight_color<a class="anchor" aria-label="anchor" href="#arg-highlight-color"></a></dt>
+<dt>highlight_color</dt>
 <dd><p>Color to highlight cells.</p></dd>
 
 
-<dt id="arg-background-color">background_color<a class="anchor" aria-label="anchor" href="#arg-background-color"></a></dt>
+<dt>background_color</dt>
 <dd><p>non-highlighted cell colors (default is "lightgray")..</p></dd>
 
 
-<dt id="arg-pt-size">pt.size<a class="anchor" aria-label="anchor" href="#arg-pt-size"></a></dt>
+<dt>pt.size</dt>
 <dd><p>point size for both highlighted cluster and background.</p></dd>
 
 
-<dt id="arg-aspect-ratio">aspect_ratio<a class="anchor" aria-label="anchor" href="#arg-aspect-ratio"></a></dt>
+<dt>aspect_ratio</dt>
 <dd><p>Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 Default is NULL.</p></dd>
 
 
-<dt id="arg-figure-plot">figure_plot<a class="anchor" aria-label="anchor" href="#arg-figure-plot"></a></dt>
+<dt>figure_plot</dt>
 <dd><p>logical.  Whether to remove the axes and plot with legend on left of plot denoting
 axes labels.  (Default is FALSE).  Requires <code>split_seurat = TRUE</code>.</p></dd>
 
 
-<dt id="arg-raster">raster<a class="anchor" aria-label="anchor" href="#arg-raster"></a></dt>
+<dt>raster</dt>
 <dd><p>Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.</p></dd>
 
 
-<dt id="arg-raster-dpi">raster.dpi<a class="anchor" aria-label="anchor" href="#arg-raster-dpi"></a></dt>
+<dt>raster.dpi</dt>
 <dd><p>Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(512, 512).</p></dd>
 
 
-<dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
+<dt>label</dt>
 <dd><p>Whether to label the highlighted meta data variable(s).  Default is FALSE.</p></dd>
 
 
-<dt id="arg-split-by">split.by<a class="anchor" aria-label="anchor" href="#arg-split-by"></a></dt>
+<dt>split.by</dt>
 <dd><p>Variable in <code>@meta.data</code> to split the plot by.</p></dd>
 
 
-<dt id="arg-split-seurat">split_seurat<a class="anchor" aria-label="anchor" href="#arg-split-seurat"></a></dt>
+<dt>split_seurat</dt>
 <dd><p>logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.</p></dd>
 
 
-<dt id="arg-reduction">reduction<a class="anchor" aria-label="anchor" href="#arg-reduction"></a></dt>
+<dt>reduction</dt>
 <dd><p>Dimensionality Reduction to use (if NULL then defaults to Object default).</p></dd>
 
 
-<dt id="arg-ggplot-default-colors">ggplot_default_colors<a class="anchor" aria-label="anchor" href="#arg-ggplot-default-colors"></a></dt>
+<dt>ggplot_default_colors</dt>
 <dd><p>logical.  If <code>highlight_color = NULL</code>, Whether or not to return plot
 using default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.</p></dd>
 
 
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dt>...</dt>
 <dd><p>Extra parameters passed to<code><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object</p>
+    
+
+<p>A ggplot object</p>
     </div>
 
     <div id="ref-examples">
@@ -245,15 +245,15 @@ using default ggplot2 "hue" palette instead of default "polychrome" or "varibow"
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 

@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-
+    
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,7 +31,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Plotting Vignettes</li>
@@ -100,14 +100,14 @@
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/samuel-marsh/scCustomize/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="col-md-9 contents">
@@ -132,41 +132,41 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-
-
-<dl><dt id="arg-marker-dataframe">marker_dataframe<a class="anchor" aria-label="anchor" href="#arg-marker-dataframe"></a></dt>
+    <dl><dt>marker_dataframe</dt>
 <dd><p>data.frame containing the results of <code><a href="https://satijalab.org/seurat/reference/FindMarkers.html" class="external-link">FindMarkers</a></code>,  <code><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></code>, or other DE test data.frame.</p></dd>
 
 
-<dt id="arg-pct-name">pct.1_name<a class="anchor" aria-label="anchor" href="#arg-pct-name"></a></dt>
+<dt>pct.1_name</dt>
 <dd><p>the name of data.frame column corresponding to percent expressed in group 1.
 Default is Seurat default "pct.1".</p></dd>
 
 
-<dt id="arg-pct-name">pct.2_name<a class="anchor" aria-label="anchor" href="#arg-pct-name"></a></dt>
+<dt>pct.2_name</dt>
 <dd><p>the name of data.frame column corresponding to percent expressed in group 2.
 Default is Seurat default "pct.2".</p></dd>
 
 
-<dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
+<dt>overwrite</dt>
 <dd><p>logical.  If the <code>marker_dataframe</code> already contains column named "pct_diff" whether to
 overwrite or return error message.  Default is FALSE.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns input <code>marker_dataframe</code> with additional "pct_diff" column.</p>
+    
+
+<p>Returns input <code>marker_dataframe</code> with additional "pct_diff" column.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">marker_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj_name</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">marker_df</span> <span class="op">&lt;-</span> <span class="fu">Add_Pct_Diff</span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">marker_df</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># or piped with function</span></span></span>
 <span class="r-in"><span><span class="va">marker_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/FindAllMarkers.html" class="external-link">FindAllMarkers</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj_name</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu">Add_Pct_Diff</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -182,15 +182,15 @@ overwrite or return error message.  Default is FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer></div>
 
+  
 
 
-
-
+  
 
   </body></html>
 
