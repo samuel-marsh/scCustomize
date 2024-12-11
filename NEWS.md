@@ -1,4 +1,4 @@
-# scCustomize 3.X.X (202X-XX-XX)  
+# scCustomize 3.0.1 (2024-12-11)  
 ## Added  
   
   
@@ -6,7 +6,7 @@
     
 
 ## Fixes  
-  
+- Fixed bug in `Random_Cells_Downsample` that prevented setting identity using the `group.by` parameter.  
 
 
 
