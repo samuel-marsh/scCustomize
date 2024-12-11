@@ -8,6 +8,7 @@
 ## Fixes  
 - Fixed bug in `Random_Cells_Downsample` that prevented setting identity using the `group.by` parameter.  
 - Fixed bug in `Cell_Highlight_Plot` that didn't pass the reduction parameter properly ([#216](https://github.com/samuel-marsh/scCustomize/issues/216)).  
+- Fixed bug when retrieving ensembl IDs for IEGs.  
 
 
 
