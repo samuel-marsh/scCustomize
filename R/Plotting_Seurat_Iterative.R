@@ -301,7 +301,7 @@ Iterate_DimPlot_bySample <- function(
             xlim(x_axis) +
             ylim(y_axis)
         }
-        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
         }
       close(con = pb)
@@ -323,7 +323,7 @@ Iterate_DimPlot_bySample <- function(
             xlim(x_axis) +
             ylim(y_axis)
         }
-        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
         }
       close(con = pb)
@@ -495,7 +495,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                                                 reduction = reduction,
                                                 raster = raster,
                                                 ...))
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -513,7 +513,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                                                 reduction = reduction,
                                                 raster = raster,
                                                 ...))
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -781,7 +781,7 @@ Iterate_Meta_Highlight_Plot <- function(
                                                ...))
         }
 
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -816,7 +816,7 @@ Iterate_Meta_Highlight_Plot <- function(
                                                ...))
         }
 
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1139,9 +1139,9 @@ Iterate_FeaturePlot_scCustom <- function(
       for (i in 1:length(all_found_features)) {
         FeaturePlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
         if (!is.null(x = names(x = all_found_features))) {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1153,9 +1153,9 @@ Iterate_FeaturePlot_scCustom <- function(
       for (i in 1:length(all_found_features)) {
         FeaturePlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
         if (!is.null(x = names(x = all_found_features))) {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1345,7 +1345,7 @@ Iterate_VlnPlot_scCustom <- function(
       pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
       for (i in 1:length(x = all_found_features)) {
         VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1355,7 +1355,7 @@ Iterate_VlnPlot_scCustom <- function(
       pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
       for (i in 1:length(x = all_found_features)) {
         VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1538,9 +1538,9 @@ Iterate_Plot_Density_Custom <- function(
       for (i in 1:length(gene_list)) {
         Plot_Density_Custom(seurat_object = seurat_object, features = gene_list[i], joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1552,9 +1552,9 @@ Iterate_Plot_Density_Custom <- function(
       for (i in 1:length(gene_list)) {
         Plot_Density_Custom(seurat_object = seurat_object, features = gene_list[i], joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1766,9 +1766,9 @@ Iterate_Plot_Density_Joint <- function(
       for (i in 1:length(final_gene_list)) {
         Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = final_gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1780,9 +1780,9 @@ Iterate_Plot_Density_Joint <- function(
       for (i in 1:length(final_gene_list)) {
         Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = final_gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
