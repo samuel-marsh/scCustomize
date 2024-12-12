@@ -103,6 +103,8 @@ Iterate_PC_Loading_Plots <- function(
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param color color scheme to use.
 #' @param no_legend logical, whether or not to include plot legend, default is TRUE.
 #' @param title_prefix Value that should be used for plot title prefix if `no_legend = TRUE`.
@@ -346,7 +348,9 @@ Iterate_DimPlot_bySample <- function(
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
-#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
+#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
@@ -542,7 +546,9 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
-#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
+#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
@@ -842,6 +848,8 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param features_per_page numeric, number of features to plot on single page if `single_pdf = TRUE`.  Default is 1.
 #' @param num_columns Number of columns in plot layout (only applicable if `single_pdf = TRUE` AND
 #' `features_per_page` > 1).
@@ -1194,6 +1202,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
 #' @param dpi dpi for image saving.
@@ -1378,6 +1388,8 @@ Iterate_VlnPlot_scCustom <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
 #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
@@ -1580,6 +1592,8 @@ Iterate_Plot_Density_Custom <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
 #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
