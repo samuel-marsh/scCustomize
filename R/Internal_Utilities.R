@@ -47,7 +47,7 @@
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### Object Checks ####################
+#################### Object/Feature Checks ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -188,68 +188,6 @@ Assay5_Check <- function(
 }
 
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### FUNCTION HELPERS  ####################
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-#' Stop function without error message
-#'
-#' Modifies R options within the function call only to hide the error message from `stop` while
-#' keeping global options preserved outside of function.
-#'
-#' @return stops function without error message
-#'
-#' @author Stibu
-#' @references \url{https://stackoverflow.com/a/42945293/15568251}
-#' @details \url{https://creativecommons.org/licenses/by-sa/3.0/}
-#'
-#' @noRd
-#'
-
-stop_quietly <- function() {
-  opt <- options(show.error.messages = FALSE)
-  on.exit(options(opt))
-  stop()
-}
-
-
-#' Custom glue collapse
-#
-#' Customized glue_collapse that is based on the number of items in input list
-#'
-#' @param input_string input string to be collapsed.
-#' @param and logical.  Whether to use "and" or "or" in the collapsed string
-#'
-#' @return collapsed string
-#'
-#' @importFrom glue glue_collapse
-#'
-#' @noRd
-#'
-
-glue_collapse_scCustom <- function(
-  input_string,
-  and = TRUE
-) {
-  # Check length of input string
-  input_length <- length(x = input_string)
-
-  # set last seperator
-  if (isTRUE(x = and)) {
-    last_sep <- " and "
-  } else {
-    last_sep <- " or "
-  }
-
-  if (input_length <= 3) {
-    glue_collapse(x = input_string, sep = ", ", last = last_sep)
-  } else {
-    glue_collapse(x = input_string, sep = ", ", last = paste0(",", last_sep))
-  }
-}
-
-
 #' Perform Feature and Meta Checks before plotting
 #'
 #' Wraps the `Feature_Present`, `Meta_Present`, `Reduction_Loading_Present`, and `Case_Check` into
@@ -310,6 +248,68 @@ Feature_PreCheck <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### FUNCTION HELPERS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Stop function without error message
+#'
+#' Modifies R options within the function call only to hide the error message from `stop` while
+#' keeping global options preserved outside of function.
+#'
+#' @return stops function without error message
+#'
+#' @author Stibu
+#' @references \url{https://stackoverflow.com/a/42945293/15568251}
+#' @details \url{https://creativecommons.org/licenses/by-sa/3.0/}
+#'
+#' @noRd
+#'
+
+stop_quietly <- function() {
+  opt <- options(show.error.messages = FALSE)
+  on.exit(options(opt))
+  stop()
+}
+
+
+#' Custom glue collapse
+#
+#' Customized glue_collapse that is based on the number of items in input list
+#'
+#' @param input_string input string to be collapsed.
+#' @param and logical.  Whether to use "and" or "or" in the collapsed string
+#'
+#' @return collapsed string
+#'
+#' @importFrom glue glue_collapse
+#'
+#' @noRd
+#'
+
+glue_collapse_scCustom <- function(
+  input_string,
+  and = TRUE
+) {
+  # Check length of input string
+  input_length <- length(x = input_string)
+
+  # set last seperator
+  if (isTRUE(x = and)) {
+    last_sep <- " and "
+  } else {
+    last_sep <- " or "
+  }
+
+  if (input_length <= 3) {
+    glue_collapse(x = input_string, sep = ", ", last = last_sep)
+  } else {
+    glue_collapse(x = input_string, sep = ", ", last = paste0(",", last_sep))
+  }
+}
+
+
 #' Ask yes/no question to proceed
 #'
 #' Asks the user to answer yes/no question and returns logical value depending on
@@ -334,6 +334,35 @@ yesno <- function(msg, .envir = parent.frame()) {
   rand <- sample(length(qs))
 
   utils::menu(qs[rand]) != which(rand == 1)
+}
+
+
+#' Change function parameter value from NULL to NA
+#'
+#' Provides method to change parameter value dynamically within function to suit defaults of other functions.
+#' Used in iterative plotting functions.
+#'
+#' @return if NULL returns NA otherwise returns input value.
+#'
+#'
+#' @import cli
+#'
+#' @noRd
+#'
+
+replace_null <- function(
+    parameter
+) {
+  # check length
+  if (length(x = parameter) > 1) {
+    cli_abort(message = "{.code parameter} must be single value.")
+  }
+
+  # check NULL and swap NA
+  if (is.null(x = parameter)) {
+    parameter <- NA
+  }
+  return(parameter)
 }
 
 
