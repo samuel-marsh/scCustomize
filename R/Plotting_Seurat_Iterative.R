@@ -969,12 +969,13 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
-  if (is.null(x = file_type)) {
+  if (is.null(x = file_type) && isFALSE(x = return_plots)) {
     cli_abort(message = c("{.code file_type} not specified.",
                           "*" = "Must specify output file type format from the following:",
                           "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
-  if (!file_type %in% file_type_options) {
+
+  if (!file_type %in% file_type_options && isFALSE(x = return_plots)) {
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
