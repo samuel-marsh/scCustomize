@@ -342,6 +342,8 @@ yesno <- function(msg, .envir = parent.frame()) {
 #' Provides method to change parameter value dynamically within function to suit defaults of other functions.
 #' Used in iterative plotting functions.
 #'
+#' @param parameter the parameter to check for NULL
+#'
 #' @return if NULL returns NA otherwise returns input value.
 #'
 #'
