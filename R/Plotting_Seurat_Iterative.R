@@ -146,6 +146,8 @@ Iterate_DimPlot_bySample <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   color = "black",
   no_legend = TRUE,
@@ -272,7 +274,7 @@ Iterate_DimPlot_bySample <- function(
       }
       })
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -383,6 +385,8 @@ Iterate_Cluster_Highlight_Plot <- function(
     file_name = NULL,
     file_type = NULL,
     single_pdf = FALSE,
+    output_width = NULL,
+    output_height = NULL,
     dpi = 600,
     raster = NULL,
     ...
@@ -468,7 +472,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                                               ...))
     })
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -583,6 +587,8 @@ Iterate_Meta_Highlight_Plot <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   raster = NULL,
   ...
@@ -735,7 +741,7 @@ Iterate_Meta_Highlight_Plot <- function(
 
     })
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -888,6 +894,8 @@ Iterate_FeaturePlot_scCustom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   features_per_page = 1,
   num_columns = NULL,
   landscape = TRUE,
@@ -1016,7 +1024,7 @@ Iterate_FeaturePlot_scCustom <- function(
       cli_inform(message = "{.field Saving plots to file}")
       # save plots with cluster annotation
       if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
-        pdf(paste(file_path, file_name, file_type, sep=""))
+        pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
         pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
         for (i in 1:length(all_plots)) {
           print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
@@ -1026,7 +1034,7 @@ Iterate_FeaturePlot_scCustom <- function(
         dev.off()
       } else {
         # Save plots without cluster annotation
-        pdf(paste(file_path, file_name, file_type, sep=""))
+        pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
         pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
         for (i in 1:length(all_plots)) {
           print(all_plots[[i]])
@@ -1227,6 +1235,8 @@ Iterate_VlnPlot_scCustom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   raster = NULL,
   dpi = 600,
   ggplot_default_colors = FALSE,
@@ -1320,7 +1330,7 @@ Iterate_VlnPlot_scCustom <- function(
     pboptions(char = "=")
     all_plots <- pblapply(all_found_features,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -1406,6 +1416,8 @@ Iterate_Plot_Density_Custom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   reduction = NULL,
   combine = TRUE,
@@ -1499,7 +1511,7 @@ Iterate_Plot_Density_Custom <- function(
     cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = gene_list))) {
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]] + ggtitle((paste0(gene_list[i], "_", names(x = gene_list)[i]))))
@@ -1509,7 +1521,7 @@ Iterate_Plot_Density_Custom <- function(
       dev.off()
     } else {
       # Save plots without cluster annotation
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]])
@@ -1607,6 +1619,8 @@ Iterate_Plot_Density_Joint <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   reduction = NULL,
   combine = TRUE,
@@ -1725,7 +1739,7 @@ Iterate_Plot_Density_Joint <- function(
     cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = final_gene_list))) {
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]] + ggtitle((paste0(paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i]))))
@@ -1735,7 +1749,7 @@ Iterate_Plot_Density_Joint <- function(
       dev.off()
     } else {
       # Save plots without cluster annotation
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]])
