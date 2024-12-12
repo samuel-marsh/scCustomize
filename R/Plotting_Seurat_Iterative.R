@@ -166,13 +166,13 @@ Iterate_DimPlot_bySample <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
@@ -414,13 +414,13 @@ Iterate_Cluster_Highlight_Plot <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
@@ -631,13 +631,13 @@ Iterate_Meta_Highlight_Plot <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
@@ -964,13 +964,13 @@ Iterate_FeaturePlot_scCustom <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
@@ -1311,13 +1311,13 @@ Iterate_VlnPlot_scCustom <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
@@ -1520,13 +1520,13 @@ Iterate_Plot_Density_Custom <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
@@ -1738,13 +1738,13 @@ Iterate_Plot_Density_Joint <- function(
   # check non-default output values
   if (!is.null(x = output_width)) {
     if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
     }
   }
 
   if (!is.null(x = output_height)) {
     if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
