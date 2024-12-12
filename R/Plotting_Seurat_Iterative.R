@@ -163,6 +163,19 @@ Iterate_DimPlot_bySample <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
+
   # Harmonize pt.size across all plots
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
@@ -398,6 +411,19 @@ Iterate_Cluster_Highlight_Plot <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
+
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
     file_path <- NULL
@@ -601,6 +627,19 @@ Iterate_Meta_Highlight_Plot <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
 
   # Check meta data
   meta_data_column <- Meta_Present(object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
@@ -921,6 +960,19 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
@@ -1256,6 +1308,19 @@ Iterate_VlnPlot_scCustom <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
+
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
 
@@ -1451,6 +1516,19 @@ Iterate_Plot_Density_Custom <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
 
   # joint check
   if (!is.null(x = joint)) {
@@ -1656,6 +1734,19 @@ Iterate_Plot_Density_Joint <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is is not numeric.")
+    }
+  }
 
   # Check gene list is in list form
   if (!inherits(x = gene_list, what = "list")) {
