@@ -14,6 +14,8 @@ Iterate_Plot_Density_Custom(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   reduction = NULL,
   combine = TRUE,
@@ -40,6 +42,10 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
 
 \item{single_pdf}{saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.}
+
+\item{output_width}{the width (in inches) for output page size.  Default is NULL.}
+
+\item{output_height}{the height (in inches) for output page size.  Default is NULL.}
 
 \item{dpi}{dpi for image saving.}
 
