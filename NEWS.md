@@ -1,4 +1,4 @@
-# scCustomize 3.0.1 (2024-12-11)  
+# scCustomize 3.0.1 (2024-12-18)  
 ## Added  
 - Added new parameters `output_width` and `output_height` to the `Iterate_*` family of plotting functions ([#217](https://github.com/samuel-marsh/scCustomize/issues/217)).  
   
