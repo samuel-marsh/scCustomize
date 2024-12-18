@@ -14,6 +14,8 @@ Iterate_Cluster_Highlight_Plot(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   raster = NULL,
   ...
@@ -37,7 +39,11 @@ all clusters/plots or a vector of colors equal to the number of clusters to use 
 
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
 
-\item{single_pdf}{saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf}
+\item{single_pdf}{saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.}
+
+\item{output_width}{the width (in inches) for output page size.  Default is NULL.}
+
+\item{output_height}{the height (in inches) for output page size.  Default is NULL.}
 
 \item{dpi}{dpi for image saving.}
 

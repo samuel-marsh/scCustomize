@@ -1688,6 +1688,7 @@ Cell_Highlight_Plot <- function(
                            split.by = split.by,
                            split_seurat = split_seurat,
                            label = label,
+                           reduction = reduction,
                            ...)
 
   # Edit plot legend
@@ -1708,9 +1709,6 @@ Cell_Highlight_Plot <- function(
 
   return(plot)
 }
-
-
-
 
 
 #' DimPlot with modified default settings

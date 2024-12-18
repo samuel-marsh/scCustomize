@@ -7,7 +7,7 @@
 Random_Cells_Downsample(
   seurat_object,
   num_cells,
-  group.by = "ident",
+  group.by = NULL,
   return_list = FALSE,
   allow_lower = FALSE,
   seed = 123
@@ -20,7 +20,7 @@ Random_Cells_Downsample(
 equal to the size of ident with fewest cells.  Alternatively, can set to "min" which will
 use the maximum number of barcodes based on size of smallest group.}
 
-\item{group.by}{The ident to use to group cells.  Default is "ident" which use current active.ident.  .}
+\item{group.by}{The ident to use to group cells.  Default is NULL which use current active.ident.  .}
 
 \item{return_list}{logical, whether or not to return the results as list instead of vector, default is
 FALSE.}

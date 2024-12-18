@@ -103,6 +103,8 @@ Iterate_PC_Loading_Plots <- function(
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param color color scheme to use.
 #' @param no_legend logical, whether or not to include plot legend, default is TRUE.
 #' @param title_prefix Value that should be used for plot title prefix if `no_legend = TRUE`.
@@ -146,6 +148,8 @@ Iterate_DimPlot_bySample <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   color = "black",
   no_legend = TRUE,
@@ -158,6 +162,19 @@ Iterate_DimPlot_bySample <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # Harmonize pt.size across all plots
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
@@ -272,7 +289,7 @@ Iterate_DimPlot_bySample <- function(
       }
       })
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -299,7 +316,7 @@ Iterate_DimPlot_bySample <- function(
             xlim(x_axis) +
             ylim(y_axis)
         }
-        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
         }
       close(con = pb)
@@ -321,7 +338,7 @@ Iterate_DimPlot_bySample <- function(
             xlim(x_axis) +
             ylim(y_axis)
         }
-        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, column_list[[i]], file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
         }
       close(con = pb)
@@ -344,7 +361,9 @@ Iterate_DimPlot_bySample <- function(
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
-#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
+#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
@@ -383,12 +402,27 @@ Iterate_Cluster_Highlight_Plot <- function(
     file_name = NULL,
     file_type = NULL,
     single_pdf = FALSE,
+    output_width = NULL,
+    output_height = NULL,
     dpi = 600,
     raster = NULL,
     ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # Set file_path before path check if current dir specified as opposed to leaving set to NULL
   if (!is.null(x = file_path) && file_path == "") {
@@ -468,7 +502,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                                               ...))
     })
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -491,7 +525,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                                                 reduction = reduction,
                                                 raster = raster,
                                                 ...))
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -509,7 +543,7 @@ Iterate_Cluster_Highlight_Plot <- function(
                                                 reduction = reduction,
                                                 raster = raster,
                                                 ...))
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -538,7 +572,9 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' @param file_path directory file path and/or file name prefix.  Defaults to current wd.
 #' @param file_name name suffix to append after sample name.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
-#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf
+#' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
@@ -583,12 +619,27 @@ Iterate_Meta_Highlight_Plot <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   raster = NULL,
   ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # Check meta data
   meta_data_column <- Meta_Present(object = seurat_object, meta_col_names = meta_data_column, omit_warn = FALSE, print_msg = FALSE)[[1]]
@@ -735,7 +786,7 @@ Iterate_Meta_Highlight_Plot <- function(
 
     })
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -775,7 +826,7 @@ Iterate_Meta_Highlight_Plot <- function(
                                                ...))
         }
 
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -810,7 +861,7 @@ Iterate_Meta_Highlight_Plot <- function(
                                                ...))
         }
 
-        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, list_idents_save[[i]], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -836,6 +887,8 @@ Iterate_Meta_Highlight_Plot <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param features_per_page numeric, number of features to plot on single page if `single_pdf = TRUE`.  Default is 1.
 #' @param num_columns Number of columns in plot layout (only applicable if `single_pdf = TRUE` AND
 #' `features_per_page` > 1).
@@ -888,6 +941,8 @@ Iterate_FeaturePlot_scCustom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   features_per_page = 1,
   num_columns = NULL,
   landscape = TRUE,
@@ -905,6 +960,19 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
@@ -969,12 +1037,13 @@ Iterate_FeaturePlot_scCustom <- function(
 
   # Check file_type parameter
   file_type_options <- c(".pdf", ".png", ".tiff", ".jpeg", ".svg")
-  if (is.null(x = file_type)) {
+  if (is.null(x = file_type) && isFALSE(x = return_plots)) {
     cli_abort(message = c("{.code file_type} not specified.",
                           "*" = "Must specify output file type format from the following:",
                           "i" = "{.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}"))
   }
-  if (!file_type %in% file_type_options) {
+
+  if (!file_type %in% file_type_options && isFALSE(x = return_plots)) {
     cli_abort(message = "{.code file_type} must be one of the following: {.field {glue_collapse_scCustom(input_string = file_type_options, and = TRUE)}}")
   }
 
@@ -1015,7 +1084,7 @@ Iterate_FeaturePlot_scCustom <- function(
       cli_inform(message = "{.field Saving plots to file}")
       # save plots with cluster annotation
       if (!is.null(x = names(x = all_found_features)) && is.null(x = split.by)) {
-        pdf(paste(file_path, file_name, file_type, sep=""))
+        pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
         pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
         for (i in 1:length(all_plots)) {
           print(all_plots[[i]] + ggtitle((paste0(all_found_features[i], "_", names(x = all_found_features)[i]))))
@@ -1025,7 +1094,7 @@ Iterate_FeaturePlot_scCustom <- function(
         dev.off()
       } else {
         # Save plots without cluster annotation
-        pdf(paste(file_path, file_name, file_type, sep=""))
+        pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
         pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
         for (i in 1:length(all_plots)) {
           print(all_plots[[i]])
@@ -1130,9 +1199,9 @@ Iterate_FeaturePlot_scCustom <- function(
       for (i in 1:length(all_found_features)) {
         FeaturePlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
         if (!is.null(x = names(x = all_found_features))) {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1144,9 +1213,9 @@ Iterate_FeaturePlot_scCustom <- function(
       for (i in 1:length(all_found_features)) {
         FeaturePlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, split.by = split.by, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, ...)
         if (!is.null(x = names(x = all_found_features))) {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", names(x = all_found_features)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1185,6 +1254,8 @@ Iterate_FeaturePlot_scCustom <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
 #' @param dpi dpi for image saving.
@@ -1226,6 +1297,8 @@ Iterate_VlnPlot_scCustom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   raster = NULL,
   dpi = 600,
   ggplot_default_colors = FALSE,
@@ -1234,6 +1307,19 @@ Iterate_VlnPlot_scCustom <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # Add pt.size check
   pt.size <- pt.size %||% AutoPointSize_scCustom(data = seurat_object)
@@ -1319,7 +1405,7 @@ Iterate_VlnPlot_scCustom <- function(
     pboptions(char = "=")
     all_plots <- pblapply(all_found_features,function(gene) {VlnPlot_scCustom(seurat_object = seurat_object, features = gene, colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)})
     cli_inform(message = "{.field Saving plots to file}")
-    pdf(paste(file_path, file_name, file_type, sep=""))
+    pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
     pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
     for (i in 1:length(all_plots)) {
       print(all_plots[[i]])
@@ -1334,7 +1420,7 @@ Iterate_VlnPlot_scCustom <- function(
       pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
       for (i in 1:length(x = all_found_features)) {
         VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), dpi = dpi))
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1344,7 +1430,7 @@ Iterate_VlnPlot_scCustom <- function(
       pb <- txtProgressBar(min = 0, max = length(x = all_found_features), style = 3, file = stderr())
       for (i in 1:length(x = all_found_features)) {
         VlnPlot_scCustom(seurat_object = seurat_object, features = all_found_features[i], colors_use = colors_use, pt.size = pt.size, group.by = group.by, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, split.by = split.by, ...)
-        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), useDingbats = FALSE))
+        suppressMessages(ggsave(filename = paste(file_path, all_found_features[i], file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1367,6 +1453,8 @@ Iterate_VlnPlot_scCustom <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
 #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
@@ -1405,6 +1493,8 @@ Iterate_Plot_Density_Custom <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   reduction = NULL,
   combine = TRUE,
@@ -1426,6 +1516,19 @@ Iterate_Plot_Density_Custom <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # joint check
   if (!is.null(x = joint)) {
@@ -1498,7 +1601,7 @@ Iterate_Plot_Density_Custom <- function(
     cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = gene_list))) {
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]] + ggtitle((paste0(gene_list[i], "_", names(x = gene_list)[i]))))
@@ -1508,7 +1611,7 @@ Iterate_Plot_Density_Custom <- function(
       dev.off()
     } else {
       # Save plots without cluster annotation
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]])
@@ -1525,9 +1628,9 @@ Iterate_Plot_Density_Custom <- function(
       for (i in 1:length(gene_list)) {
         Plot_Density_Custom(seurat_object = seurat_object, features = gene_list[i], joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1539,9 +1642,9 @@ Iterate_Plot_Density_Custom <- function(
       for (i in 1:length(gene_list)) {
         Plot_Density_Custom(seurat_object = seurat_object, features = gene_list[i], joint = FALSE, viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", names(x = gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, gene_list[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1567,6 +1670,8 @@ Iterate_Plot_Density_Custom <- function(
 #' @param file_name name suffix and file extension.
 #' @param file_type File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".
 #' @param single_pdf saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.
+#' @param output_width the width (in inches) for output page size.  Default is NULL.
+#' @param output_height the height (in inches) for output page size.  Default is NULL.
 #' @param dpi dpi for image saving.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default)
 #' @param joint NULL.  This function only supports `joint = FALSE`.  Leave as NULL to generate plots.  To iterate joint plots see function: `Iterate_Plot_Density_Joint`.
@@ -1606,6 +1711,8 @@ Iterate_Plot_Density_Joint <- function(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   dpi = 600,
   reduction = NULL,
   combine = TRUE,
@@ -1627,6 +1734,19 @@ Iterate_Plot_Density_Joint <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check non-default output values
+  if (!is.null(x = output_width)) {
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+  }
+
+  if (!is.null(x = output_height)) {
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    }
+  }
 
   # Check gene list is in list form
   if (!inherits(x = gene_list, what = "list")) {
@@ -1724,7 +1844,7 @@ Iterate_Plot_Density_Joint <- function(
     cli_inform(message = "{.field Saving plots to file}")
     # save plots with cluster annotation
     if (!is.null(x = names(x = final_gene_list))) {
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]] + ggtitle((paste0(paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i]))))
@@ -1734,7 +1854,7 @@ Iterate_Plot_Density_Joint <- function(
       dev.off()
     } else {
       # Save plots without cluster annotation
-      pdf(paste(file_path, file_name, file_type, sep=""))
+      pdf(paste(file_path, file_name, file_type, sep=""), width = output_width, height = output_height)
       pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
       for (i in 1:length(all_plots)) {
         print(all_plots[[i]])
@@ -1751,9 +1871,9 @@ Iterate_Plot_Density_Joint <- function(
       for (i in 1:length(final_gene_list)) {
         Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = final_gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), dpi = dpi))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), dpi = dpi, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }
@@ -1765,9 +1885,9 @@ Iterate_Plot_Density_Joint <- function(
       for (i in 1:length(final_gene_list)) {
         Plot_Density_Joint_Only(seurat_object = seurat_object, features = final_gene_list[[i]], viridis_palette = viridis_palette, custom_palette = custom_palette, pt.size = pt.size, reduction = reduction, ...)
         if (!is.null(x = names(x = final_gene_list))) {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", names(x = final_gene_list)[i], "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         } else {
-          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), useDingbats = FALSE))
+          suppressMessages(ggsave(filename = paste(file_path, paste(final_gene_list[[i]], collapse = "_"), "_", file_name, file_type, sep=""), useDingbats = FALSE, height = replace_null(parameter = output_height), width = replace_null(parameter = output_width)))
         }
         setTxtProgressBar(pb = pb, value = i)
       }

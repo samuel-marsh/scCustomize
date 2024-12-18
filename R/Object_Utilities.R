@@ -474,7 +474,7 @@ Fetch_Meta.Seurat <- function(
 #' @param num_cells number of cells per ident to use in down-sampling.  This value must be less than or
 #' equal to the size of ident with fewest cells.  Alternatively, can set to "min" which will
 #' use the maximum number of barcodes based on size of smallest group.
-#' @param group.by The ident to use to group cells.  Default is "ident" which use current active.ident.  .
+#' @param group.by The ident to use to group cells.  Default is NULL which use current active.ident.  .
 #' @param return_list logical, whether or not to return the results as list instead of vector, default is
 #' FALSE.
 #' @param allow_lower logical, if number of cells in identity is lower than `num_cells` keep the
@@ -513,7 +513,7 @@ Fetch_Meta.Seurat <- function(
 Random_Cells_Downsample <- function(
     seurat_object,
     num_cells,
-    group.by = "ident",
+    group.by = NULL,
     return_list = FALSE,
     allow_lower = FALSE,
     seed = 123
@@ -522,7 +522,7 @@ Random_Cells_Downsample <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # set ident in case of NULL
-  group.by <- "ident" %||% group.by
+  group.by <- group.by %||% "ident"
 
   # Check and set idents if not "ident"
   if (group.by != "ident") {
@@ -536,7 +536,7 @@ Random_Cells_Downsample <- function(
     rownames_to_column("barcodes")
 
   # get unique ident vector
-  idents_all <- as.character(levels(x = Idents(object = seurat_object)))
+  idents_all <- as.character(x = levels(x = Idents(object = seurat_object)))
 
   # Find minimum length ident and warn if num_cells not equal or lower
   min_cells <- CellsByIdentities(object = seurat_object)
@@ -574,7 +574,7 @@ Random_Cells_Downsample <- function(
   # set seed and select random cells per ident
   set.seed(seed = seed)
 
-  random_cells <- lapply(1:length(idents_all), function(x) {
+  random_cells <- lapply(1:length(x = idents_all), function(x) {
     clus_barcodes <- cluster_barcodes %>%
       filter(.data[["ident"]] == idents_all[x]) %>%
       column_to_rownames("barcodes") %>%

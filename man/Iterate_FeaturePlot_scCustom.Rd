@@ -17,6 +17,8 @@ Iterate_FeaturePlot_scCustom(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   features_per_page = 1,
   num_columns = NULL,
   landscape = TRUE,
@@ -54,6 +56,10 @@ will be incorporated into plot title if \code{single_pdf = TRUE} or into file na
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
 
 \item{single_pdf}{saves all plots to single PDF file (default = FALSE).}
+
+\item{output_width}{the width (in inches) for output page size.  Default is NULL.}
+
+\item{output_height}{the height (in inches) for output page size.  Default is NULL.}
 
 \item{features_per_page}{numeric, number of features to plot on single page if \code{single_pdf = TRUE}.  Default is 1.}
 
