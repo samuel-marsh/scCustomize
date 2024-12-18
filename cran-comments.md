@@ -1,5 +1,5 @@
 ## Hotfix Update 
-This is major update to version 3.0.1.  Fixes bug preventing a function from operating correctly.  See News.md for full changelog.  
+This is major update to version 3.0.1.  Fixes 4 minor bugs that caused unexpected errors.  See News.md for full changelog.  
 
 
 
