@@ -15,6 +15,8 @@ Iterate_VlnPlot_scCustom(
   file_name = NULL,
   file_type = NULL,
   single_pdf = FALSE,
+  output_width = NULL,
+  output_height = NULL,
   raster = NULL,
   dpi = 600,
   ggplot_default_colors = FALSE,
@@ -45,6 +47,10 @@ default is the current active.ident of the object.}
 \item{file_type}{File type to save output as.  Must be one of following: ".pdf", ".png", ".tiff", ".jpeg", or ".svg".}
 
 \item{single_pdf}{saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.}
+
+\item{output_width}{the width (in inches) for output page size.  Default is NULL.}
+
+\item{output_height}{the height (in inches) for output page size.  Default is NULL.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 total points plotted (# Cells x # of features).}
