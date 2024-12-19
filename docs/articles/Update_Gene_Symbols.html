@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Updating Gene Symbols</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 06,
+            <h4 data-toc-skip class="date">Compiled: December 19,
 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Update_Gene_Symbols.Rmd" class="external-link"><code>vignettes/articles/Update_Gene_Symbols.Rmd</code></a></small>
@@ -258,9 +258,7 @@ It then checks the remaining symbols for any symbol updates.</p>
 <p>Let’s run our test symbol set:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Updated_HGNC_Symbols.html">Updated_HGNC_Symbols</a></span><span class="op">(</span>input_data <span class="op">=</span> <span class="va">test_symbols</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Downloading HGNC data from:</span></span>
-<span><span class="co">## <span style="color: #00BB00;">https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt</span></span></span>
-<span><span class="co">## Input features contained <span style="color: #00BB00;">3</span> gene symbols</span></span>
+<pre><code><span><span class="co">## Input features contained <span style="color: #00BB00;">3</span> gene symbols</span></span>
 <span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">3</span> were already approved symbols.</span></span>
 <span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">0</span> were updated to approved symbol.</span></span>
 <span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #00BB00;">0</span> were not found in HGNC dataset and remain unchanged.</span></span></code></pre>
@@ -356,7 +354,7 @@ updated symbols for 36,000 genes in ~1 second.</p>
 <span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #00BB00;">12,591</span> were not found in HGNC dataset and remain unchanged.</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## 0.891 sec elapsed</span></span></code></pre>
+<pre><code><span><span class="co">## 0.744 sec elapsed</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="examining-the-results">Examining the Results<a class="anchor" aria-label="anchor" href="#examining-the-results"></a>
@@ -612,9 +610,11 @@ Genome Informatics (MGI)</a> database.</p>
 <span></span>
 <span><span class="co"># Get updated symbols</span></span>
 <span><span class="va">updated_symbols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Updated_MGI_Symbols.html">Updated_MGI_Symbols</a></span><span class="op">(</span>input_data <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Cells.html" class="external-link">Features</a></span><span class="op">(</span><span class="va">marsh_mouse_micro</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Input features contained <span style="color: #00BB00;">12,674</span> gene symbols</span></span>
-<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">12,055</span> were already approved symbols.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">531</span> were updated to approved symbol.</span></span>
+<pre><code><span><span class="co">## Downloading MGI data from:</span></span>
+<span><span class="co">## <span style="color: #00BB00;">https://www.informatics.jax.org/downloads/reports/MGI_EntrezGene.rpt</span></span></span>
+<span><span class="co">## Input features contained <span style="color: #00BB00;">12,674</span> gene symbols</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">12,052</span> were already approved symbols.</span></span>
+<span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">534</span> were updated to approved symbol.</span></span>
 <span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #00BB00;">90</span> were not found in MGI dataset and remain unchanged.</span></span></code></pre>
 </div>
   </div>

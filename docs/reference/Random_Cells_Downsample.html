@@ -18,7 +18,7 @@ Can return either as a list (1 entry per identity class) or vector of barcodes."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@ Can return either as a list (1 entry per identity class) or vector of barcodes.<
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Random_Cells_Downsample</span><span class="op">(</span></span>
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">num_cells</span>,</span>
-<span>  group.by <span class="op">=</span> <span class="st">"ident"</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  return_list <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  allow_lower <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
@@ -147,7 +147,7 @@ use the maximum number of barcodes based on size of smallest group.</p></dd>
 
 
 <dt>group.by</dt>
-<dd><p>The ident to use to group cells.  Default is "ident" which use current active.ident.  .</p></dd>
+<dd><p>The ident to use to group cells.  Default is NULL which use current active.ident.  .</p></dd>
 
 
 <dt>return_list</dt>

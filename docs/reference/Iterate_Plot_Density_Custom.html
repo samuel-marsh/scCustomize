@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
       </span>
     </div>
 
@@ -132,6 +132,8 @@
 <span>  file_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  file_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  single_pdf <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  output_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dpi <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>  reduction <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -177,6 +179,14 @@ will be incorporated into plot title if <code>single_pdf = TRUE</code> or into f
 
 <dt>single_pdf</dt>
 <dd><p>saves all plots to single PDF file (default = FALSE).  `file_type`` must be .pdf.</p></dd>
+
+
+<dt>output_width</dt>
+<dd><p>the width (in inches) for output page size.  Default is NULL.</p></dd>
+
+
+<dt>output_height</dt>
+<dd><p>the height (in inches) for output page size.  Default is NULL.</p></dd>
 
 
 <dt>dpi</dt>
