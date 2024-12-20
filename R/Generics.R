@@ -16,7 +16,7 @@
 #'
 
 as.LIGER <- function(x, ...) {
-  UseMethod(generic = 'as.LIGER', object = x)
+  UseMethod(generic = "as.LIGER", object = x)
 }
 
 
@@ -34,7 +34,7 @@ as.LIGER <- function(x, ...) {
 #'
 
 as.anndata <- function(x, ...) {
-  UseMethod(generic = 'as.anndata', object = x)
+  UseMethod(generic = "as.anndata", object = x)
 }
 
 
@@ -53,7 +53,7 @@ as.anndata <- function(x, ...) {
 #'
 
 Add_Mito_Ribo <- function(object, ...) {
-  UseMethod(generic = 'Add_Mito_Ribo', object = object)
+  UseMethod(generic = "Add_Mito_Ribo", object = object)
 }
 
 
@@ -72,7 +72,7 @@ Add_Mito_Ribo <- function(object, ...) {
 #'
 
 Add_Hemo <- function(object, ...) {
-  UseMethod(generic = 'Add_Hemo', object = object)
+  UseMethod(generic = "Add_Hemo", object = object)
 }
 
 
@@ -90,7 +90,7 @@ Add_Hemo <- function(object, ...) {
 #'
 
 Add_Cell_Complexity <- function(object, ...) {
-  UseMethod(generic = 'Add_Cell_Complexity', object = object)
+  UseMethod(generic = "Add_Cell_Complexity", object = object)
 }
 
 
@@ -106,7 +106,7 @@ Add_Cell_Complexity <- function(object, ...) {
 #'
 
 Add_Top_Gene_Pct <- function(object, ...) {
-  UseMethod(generic = 'Add_Top_Gene_Pct', object = object)
+  UseMethod(generic = "Add_Top_Gene_Pct", object = object)
 }
 
 
@@ -123,7 +123,7 @@ Add_Top_Gene_Pct <- function(object, ...) {
 #'
 
 Add_Cell_QC_Metrics <- function(object, ...) {
-  UseMethod(generic = 'Add_Cell_QC_Metrics', object = object)
+  UseMethod(generic = "Add_Cell_QC_Metrics", object = object)
 }
 
 
@@ -149,7 +149,7 @@ Add_Cell_QC_Metrics <- function(object, ...) {
 #'
 
 Fetch_Meta <- function(object, ...) {
-  UseMethod(generic = 'Fetch_Meta', object = object)
+  UseMethod(generic = "Fetch_Meta", object = object)
 }
 
 
@@ -170,5 +170,5 @@ Fetch_Meta <- function(object, ...) {
 #'
 
 Rename_Clusters <- function(object, ...) {
-  UseMethod(generic = 'Rename_Clusters', object = object)
+  UseMethod(generic = "Rename_Clusters", object = object)
 }
