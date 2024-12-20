@@ -590,68 +590,68 @@ Retrieve_Ensembl_Hemo <- function(
 Retrieve_MSigDB_Lists <- function(
   species
 ) {
-   # Accepted species names
-   accepted_names <- data.frame(
-     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
-   )
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
 
    # Species Spelling Options
-   mouse_options <- accepted_names$Mouse_Options
-   human_options <- accepted_names$Human_Options
-   marmoset_options <- accepted_names$Marmoset_Options
-   zebrafish_options <- accepted_names$Zebrafish_Options
-   rat_options <- accepted_names$Rat_Options
-   drosophila_options <- accepted_names$Drosophila_Options
-   macaque_options <- accepted_names$Macaque_Options
-   chicken_options <- accepted_names$Chicken_Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
-   if (species %in% marmoset_options) {
-     cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
-   }
+  if (species %in% marmoset_options) {
+    cli_abort(message = "Marmoset is not currently a part of MSigDB gene list database.")
+  }
 
-   # set prefix
-   if (species %in% mouse_options) {
-     prefix <- "Mus_musculus_"
-   }
-   if (species %in% human_options) {
-     prefix <- "Homo_sapiens_"
-   }
-   if (species %in% zebrafish_options) {
-     prefix <- "Dario_rerio_"
-   }
-   if (species %in% rat_options) {
-     prefix <- "Rattus_norvegicus_"
-   }
-   if (species %in% drosophila_options) {
-     prefix <- "Drosophila_melanogaster_"
-   }
-   if (species %in% macaque_options) {
-     prefix <- "Macaca_mulatta_"
-   }
-   if (species %in% chicken_options) {
-     prefix <- "Gallus_gallus_"
-   }
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
+  if (species %in% zebrafish_options) {
+    prefix <- "Dario_rerio_"
+  }
+  if (species %in% rat_options) {
+    prefix <- "Rattus_norvegicus_"
+  }
+  if (species %in% drosophila_options) {
+    prefix <- "Drosophila_melanogaster_"
+  }
+  if (species %in% macaque_options) {
+    prefix <- "Macaca_mulatta_"
+  }
+  if (species %in% chicken_options) {
+    prefix <- "Gallus_gallus_"
+  }
 
-   # set list names
-   oxphos <- paste0(prefix, "msigdb_oxphos")
-   apop <- paste0(prefix, "msigdb_apop")
-   dna_repair <- paste0(prefix, "msigdb_dna_repair")
+  # set list names
+  oxphos <- paste0(prefix, "msigdb_oxphos")
+  apop <- paste0(prefix, "msigdb_apop")
+  dna_repair <- paste0(prefix, "msigdb_dna_repair")
 
-   # pull lists
-   qc_gene_list <- list(
-     oxphos = msigdb_qc_gene_list[[oxphos]],
-     apop = msigdb_qc_gene_list[[apop]],
-     dna_repair = msigdb_qc_gene_list[[dna_repair]]
-   )
+  # pull lists
+  qc_gene_list <- list(
+    oxphos = msigdb_qc_gene_list[[oxphos]],
+    apop = msigdb_qc_gene_list[[apop]],
+    dna_repair = msigdb_qc_gene_list[[dna_repair]]
+  )
 
-   return(qc_gene_list)
+  return(qc_gene_list)
 }
 
 
@@ -757,49 +757,49 @@ Retrieve_MSigDB_Ensembl_Lists <- function(
 Retrieve_IEG_Lists <- function(
   species
 ) {
-   # Accepted species names
-   accepted_names <- data.frame(
-     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
-     Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
-     Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
-     Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
-     Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
-     Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
-     Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
-     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
-   )
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
 
-   # Species Spelling Options
-   mouse_options <- accepted_names$Mouse_Options
-   human_options <- accepted_names$Human_Options
-   marmoset_options <- accepted_names$Marmoset_Options
-   zebrafish_options <- accepted_names$Zebrafish_Options
-   rat_options <- accepted_names$Rat_Options
-   drosophila_options <- accepted_names$Drosophila_Options
-   macaque_options <- accepted_names$Macaque_Options
-   chicken_options <- accepted_names$Chicken_Options
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
 
-   if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
-     cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
-   }
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
+  }
 
-   # set prefix
-   if (species %in% mouse_options) {
-     prefix <- "Mus_musculus_"
-   }
-   if (species %in% human_options) {
-     prefix <- "Homo_sapiens_"
-   }
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
 
-   # set list names
-   ieg <- paste0(prefix, "IEG")
+  # set list names
+  ieg <- paste0(prefix, "IEG")
 
-   # pull lists
-   qc_gene_list <- list(
-     ieg = ieg_gene_list[[ieg]]
-   )
+  # pull lists
+  qc_gene_list <- list(
+    ieg = ieg_gene_list[[ieg]]
+  )
 
-   return(qc_gene_list)
+  return(qc_gene_list)
 }
 
 
@@ -1190,7 +1190,7 @@ Add_IEG_Seurat <- function(
   ieg_name = "percent_ieg",
   ensembl_ids = FALSE,
   assay = NULL,
-    overwrite = FALSE
+  overwrite = FALSE
 ) {
   # Accepted species names
   accepted_names <- list(
@@ -1392,7 +1392,7 @@ PercentAbove_Seurat <- function(
   x,
   threshold
 ) {
-  return((length(x = x[x > threshold]) / length(x = x))*100)
+  return((length(x = x[x > threshold]) / length(x = x)) * 100)
 }
 
 
@@ -1484,7 +1484,7 @@ Percent_Expressing_Meta <- function(
   # Split data if split.by is true
   if (!is.null(x = split_by)) {
     splits <- seurat_object[[split_by, drop = TRUE]][cells, drop = TRUE]
-    expression_info$id <- paste(expression_info$id, splits, sep = '_')
+    expression_info$id <- paste(expression_info$id, splits, sep = "_")
     unique.splits <- unique(x = splits)
     id.levels <- paste0(rep(x = id.levels, each = length(x = unique.splits)), "_", rep(x = unique(x = splits), times = length(x = id.levels)))
   }
@@ -1744,15 +1744,16 @@ Metrics_Count_GEX <- function(
     raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data[1, ])
-    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
-
+    raw_data[, c(column_numbers)] <- lapply(raw_data[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data[1, ])
     all_columns <- 1:ncol(x = raw_data)
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data[,c(column_numbers_numeric)] <- lapply(raw_data[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data[, c(column_numbers_numeric)] <- lapply(raw_data[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x)})
 
     return(raw_data)
   })
@@ -1842,7 +1843,8 @@ Metrics_Count_GEX_v9plus <- function(
 
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
-    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_gex[, c(column_numbers)] <- lapply(raw_data_gex[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
       # Rename multi columns to match names from count
@@ -1890,7 +1892,8 @@ Metrics_Count_GEX_v9plus <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x = x)})
+    raw_data_gex[, c(column_numbers_numeric)] <- lapply(raw_data_gex[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x = x)})
 
     return(raw_data_gex)
   })
@@ -1982,7 +1985,8 @@ Metrics_Multi_GEX <- function(
 
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
-    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_gex[, c(column_numbers)] <- lapply(raw_data_gex[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     # Rename multi columns to match names from count
     names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
@@ -2010,7 +2014,8 @@ Metrics_Multi_GEX <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data_gex[, c(column_numbers_numeric)] <- lapply(raw_data_gex[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x)})
 
     return(raw_data_gex)
   })
@@ -2101,7 +2106,8 @@ Metrics_Multi_VDJT <- function(
     raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
 
     column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
-    raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
     all_columns <- 1:ncol(x = raw_data_vdjt)
@@ -2119,10 +2125,6 @@ Metrics_Multi_VDJT <- function(
   } else {
     names(x = raw_data_list) <- lib_names
   }
-
-  # test_return <- lapply(1:length(test_return), function(i) {
-  #   test_return[[i]]$Estimated.number.of.cells <- as.numeric(test_return[[i]]$Estimated.number.of.cells)
-  # })
 
   # Combine the list and add sample_id column
   full_data <- bind_rows(raw_data_list, .id = "sample_id")
@@ -2170,7 +2172,8 @@ Metrics_Single_File <- function(
     raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data[1, ])
-    raw_data[,c(column_numbers)] <- lapply(raw_data[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data[, c(column_numbers)] <- lapply(raw_data[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data[1, ])
@@ -2178,7 +2181,8 @@ Metrics_Single_File <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data[,c(column_numbers_numeric)] <- lapply(raw_data[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data[, c(column_numbers_numeric)] <- lapply(raw_data[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x)})
 
     # Change column names to use "_" separator instead of "." for readability
     colnames(x = raw_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data))
@@ -2208,7 +2212,8 @@ Metrics_Single_File <- function(
 
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
-    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_gex[, c(column_numbers)] <- lapply(raw_data_gex[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     # Rename multi columns to match names from count
     names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
@@ -2236,7 +2241,7 @@ Metrics_Single_File <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data_gex[, c(column_numbers_numeric)] <- lapply(raw_data_gex[, c(column_numbers_numeric)], function(x){as.numeric(x)})
 
     # Change column nams to use "_" separator instead of "." for readability
     colnames(x = raw_data_gex) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data_gex))
@@ -2262,7 +2267,8 @@ Metrics_Single_File <- function(
     raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
 
     column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
-    raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
     all_columns <- 1:ncol(x = raw_data_vdjt)
@@ -2336,7 +2342,8 @@ Metrics_Single_File_v9plus <- function(
 
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
-    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_gex[, c(column_numbers)] <- lapply(raw_data_gex[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     # check how cells metric is named and adjust renaming
     if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
@@ -2385,7 +2392,8 @@ Metrics_Single_File_v9plus <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x = x)})
+    raw_data_gex[, c(column_numbers_numeric)] <- lapply(raw_data_gex[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x = x)})
 
     # Change column nams to use "_" separator instead of "." for readability
     colnames(x = raw_data_gex) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data_gex))
@@ -2417,7 +2425,8 @@ Metrics_Single_File_v9plus <- function(
 
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
-    raw_data_gex[,c(column_numbers)] <- lapply(raw_data_gex[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_gex[, c(column_numbers)] <- lapply(raw_data_gex[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
       # Rename multi columns to match names from count
@@ -2465,7 +2474,8 @@ Metrics_Single_File_v9plus <- function(
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_gex[,c(column_numbers_numeric)] <- lapply(raw_data_gex[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data_gex[, c(column_numbers_numeric)] <- lapply(raw_data_gex[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x)})
 
     # Change column nams to use "_" separator instead of "." for readability
     colnames(x = raw_data_gex) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = raw_data_gex))
@@ -2493,14 +2503,16 @@ Metrics_Single_File_v9plus <- function(
     raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
 
     column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
-    raw_data_vdjt[,c(column_numbers)] <- lapply(raw_data_vdjt[,c(column_numbers)],function(x){as.numeric(gsub(",", "", x))})
+    raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
     all_columns <- 1:ncol(x = raw_data_vdjt)
 
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_vdjt[,c(column_numbers_numeric)] <- lapply(raw_data_vdjt[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    raw_data_vdjt[, c(column_numbers_numeric)] <- lapply(raw_data_vdjt[, c(column_numbers_numeric)], function(x) {
+      as.numeric(x)})
 
     # combine outputs into a list
     data_list <- list(
@@ -2711,7 +2723,7 @@ process_mgi_data <- function(
   colnames(mgi_full_data) <- c("MGI Marker Accession ID", "Marker Symbol", "Status", "Marker Name", "cM Position", "Chromosome", "Type", "Secondary", "Entrez Gene ID", "Synonyms", "Feature Types", "Genome Coordinate Start", "Genome Coordinate End", "Strand", "BioTypes")
 
   # set accepted gene types
-  accepted_biotypes <- c("protein coding gene", "lncRNA gene" , "lincRNA gene", "antisense lncRNA gene")
+  accepted_biotypes <- c("protein coding gene", "lncRNA gene", "lincRNA gene", "antisense lncRNA gene")
 
   # filter data: Approved Genes > select relevant categories
   mgi_filtered_data <- mgi_full_data %>%
