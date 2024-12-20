@@ -141,9 +141,10 @@ viridis_light_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n 
 #' PalettePlot(pal= pal)
 #'
 
-Single_Color_Palette <- function(pal_color,
-                                 num_colors = NULL,
-                                 seed_use = 123
+Single_Color_Palette <- function(
+    pal_color,
+    num_colors = NULL,
+    seed_use = 123
 ) {
   # Check number of colors available
   if (is.null(x = num_colors)) {
@@ -331,7 +332,7 @@ Hue_Pal <- function(
 
 ColorBlind_Pal <- function(
 ) {
-  color_blind_pal <- c("orange", "#0072B2","#009E73", "#CC79A7",
+  color_blind_pal <- c("orange", "#0072B2", "#009E73", "#CC79A7",
                        "#F0E442", "firebrick2", "#56B4E9", "gray55")
 
   return(color_blind_pal)
@@ -356,8 +357,8 @@ ColorBlind_Pal <- function(
 varibow_scCustom <- function(
   n_colors
 ) {
-  sats <- rep_len(x = c(0.55,0.7,0.85,1), length.out = n_colors)
-  vals <- rep_len(x = c(1,0.8,0.6), length.out = n_colors)
+  sats <- rep_len(x = c(0.55, 0.7 ,0.85 ,1), length.out = n_colors)
+  vals <- rep_len(x = c(1, 0.8, 0.6), length.out = n_colors)
   rainbow(n_colors, s = sats, v = vals)
 }
 
@@ -583,7 +584,7 @@ PalettePlot <- function(
   }
 
   # Generate data frame for plotting
-  palette_data <- data.frame(x = 1:length(pal), y = 1, fill = pal)
+  palette_data <- data.frame(x = seq_along(along.with = pal), y = 1, fill = pal)
 
   # Decide color labeling
   if (is.null(x = label_color_num)) {
