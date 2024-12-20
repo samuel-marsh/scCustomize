@@ -172,11 +172,10 @@ Assay_Present <- function(
 #'
 #' @noRd
 #'
-
 Assay5_Check <- function(
-    seurat_object,
-    assay = NULL
-){
+  seurat_object,
+  assay = NULL
+) {
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   if (inherits(x = seurat_object@assays[[assay]], what = "Assay")) {
@@ -205,9 +204,9 @@ Assay5_Check <- function(
 #'
 
 Feature_PreCheck <- function(
-    object,
-    features,
-    assay = NULL
+  object,
+  features,
+  assay = NULL
 ) {
   # set assay (if null set to active assay)
   assay <- assay %||% Assays(object = object)
@@ -326,9 +325,6 @@ glue_collapse_scCustom <- function(
 #'
 
 yesno <- function(msg, .envir = parent.frame()) {
-  yeses <- c("Yes")
-  nos <- c("No")
-
   cli_inform(message = msg, .envir = .envir)
   qs <- c("Yes", "No")
   rand <- sample(length(qs))
@@ -353,7 +349,7 @@ yesno <- function(msg, .envir = parent.frame()) {
 #'
 
 replace_null <- function(
-    parameter
+  parameter
 ) {
   # check length
   if (length(x = parameter) > 1) {
@@ -389,7 +385,7 @@ replace_null <- function(
 #'
 
 Retrieve_Ensembl_Mito <- function(
-    species
+  species
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -459,7 +455,7 @@ Retrieve_Ensembl_Mito <- function(
 #'
 
 Retrieve_Ensembl_Ribo <- function(
-    species
+  species
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -525,7 +521,7 @@ Retrieve_Ensembl_Ribo <- function(
 #'
 
 Retrieve_Ensembl_Hemo <- function(
-    species
+  species
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -592,7 +588,7 @@ Retrieve_Ensembl_Hemo <- function(
 #'
 
 Retrieve_MSigDB_Lists <- function(
-     species
+  species
 ) {
    # Accepted species names
    accepted_names <- data.frame(
@@ -639,6 +635,9 @@ Retrieve_MSigDB_Lists <- function(
    if (species %in% macaque_options) {
      prefix <- "Macaca_mulatta_"
    }
+   if (species %in% chicken_options) {
+     prefix <- "Gallus_gallus_"
+   }
 
    # set list names
    oxphos <- paste0(prefix, "msigdb_oxphos")
@@ -673,7 +672,7 @@ Retrieve_MSigDB_Lists <- function(
 #'
 
 Retrieve_MSigDB_Ensembl_Lists <- function(
-    species
+  species
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -720,6 +719,9 @@ Retrieve_MSigDB_Ensembl_Lists <- function(
   if (species %in% macaque_options) {
     prefix <- "Macaca_mulatta_"
   }
+  if (species %in% chicken_options) {
+    prefix <- "Gallus_gallus_"
+  }
 
   # set list names
   oxphos <- paste0(prefix, "msigdb_oxphos")
@@ -753,7 +755,7 @@ Retrieve_MSigDB_Ensembl_Lists <- function(
 #'
 
 Retrieve_IEG_Lists <- function(
-    species
+  species
 ) {
    # Accepted species names
    accepted_names <- data.frame(
@@ -777,7 +779,7 @@ Retrieve_IEG_Lists <- function(
    macaque_options <- accepted_names$Macaque_Options
    chicken_options <- accepted_names$Chicken_Options
 
-   if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options)) {
+   if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
      cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
    }
 
@@ -817,7 +819,7 @@ Retrieve_IEG_Lists <- function(
 #'
 
 Retrieve_IEG_Ensembl_Lists <- function(
-    species
+  species
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -841,7 +843,7 @@ Retrieve_IEG_Ensembl_Lists <- function(
   macaque_options <- accepted_names$Macaque_Options
   chicken_options <- accepted_names$Chicken_Options
 
-  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options)) {
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
     cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
   }
 
@@ -885,10 +887,10 @@ Retrieve_IEG_Ensembl_Lists <- function(
 #'
 
 Retrieve_Dual_Mito_Features <- function(
-    object,
-    species,
-    species_prefix,
-    assay
+  object,
+  species,
+  species_prefix,
+  assay
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -976,10 +978,10 @@ Retrieve_Dual_Mito_Features <- function(
 #'
 
 Retrieve_Dual_Ribo_Features <- function(
-    object,
-    species,
-    species_prefix,
-    assay = NULL
+  object,
+  species,
+  species_prefix,
+  assay = NULL
 ) {
   # Accepted species names
   accepted_names <- data.frame(
@@ -1080,14 +1082,14 @@ Retrieve_Dual_Ribo_Features <- function(
 
 
 Add_MSigDB_Seurat <- function(
-    seurat_object,
-    species,
-    oxphos_name = "percent_oxphos",
-    apop_name = "percent_apop",
-    dna_repair_name = "percent_dna_repair",
-    ensembl_ids = FALSE,
-    assay = NULL,
-    overwrite = FALSE
+  seurat_object,
+  species,
+  oxphos_name = "percent_oxphos",
+  apop_name = "percent_apop",
+  dna_repair_name = "percent_dna_repair",
+  ensembl_ids = FALSE,
+  assay = NULL,
+  overwrite = FALSE
 ) {
   # Accepted species names
   accepted_names <- list(
@@ -1183,11 +1185,11 @@ Add_MSigDB_Seurat <- function(
 
 
 Add_IEG_Seurat <- function(
-    seurat_object,
-    species,
-    ieg_name = "percent_ieg",
-    ensembl_ids = FALSE,
-    assay = NULL,
+  seurat_object,
+  species,
+  ieg_name = "percent_ieg",
+  ensembl_ids = FALSE,
+  assay = NULL,
     overwrite = FALSE
 ) {
   # Accepted species names
@@ -1264,9 +1266,9 @@ Add_IEG_Seurat <- function(
 #'
 
 Return_QC_Defaults <- function(
-    seurat_object,
-    features,
-    print_defaults = FALSE
+  seurat_object,
+  features,
+  print_defaults = FALSE
 ) {
   # default values
   feature_defaults <- list(
@@ -1386,7 +1388,10 @@ Return_QC_Defaults <- function(
 #' @noRd
 #'
 
-PercentAbove_Seurat <- function(x, threshold) {
+PercentAbove_Seurat <- function(
+  x,
+  threshold
+) {
   return((length(x = x[x > threshold]) / length(x = x))*100)
 }
 
@@ -1418,14 +1423,14 @@ PercentAbove_Seurat <- function(x, threshold) {
 #' @noRd
 
 Percent_Expressing_Meta <- function(
-    seurat_object,
-    features,
-    threshold = 0,
-    group_by = NULL,
-    split_by = NULL,
-    entire_object = FALSE,
-    layer = "data",
-    assay = NULL
+  seurat_object,
+  features,
+  threshold = 0,
+  group_by = NULL,
+  split_by = NULL,
+  entire_object = FALSE,
+  layer = "data",
+  assay = NULL
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -1504,7 +1509,6 @@ Percent_Expressing_Meta <- function(
 }
 
 
-
 #' Extract delimiter information from a string.
 #'
 #' Parses a string (usually a cell name) and extracts fields based on a delimiter
@@ -1522,7 +1526,11 @@ Percent_Expressing_Meta <- function(
 #' @noRd
 #'
 
-ExtractField <- function(string, field = 1, delim = "_") {
+ExtractField <- function(
+  string,
+  field = 1,
+  delim = "_"
+) {
   fields <- as.numeric(x = unlist(x = strsplit(x = as.character(x = field), split = ",")))
   if (length(x = fields) == 1) {
     return(strsplit(x = string, split = delim)[[1]][field])
@@ -1547,8 +1555,8 @@ ExtractField <- function(string, field = 1, delim = "_") {
 #'
 
 Middle_Number <- function(
-    min,
-    max
+  min,
+  max
 ) {
   min_max <- c(min, max)
   middle <- min_max[-length(min_max)] + diff(min_max) / 2
@@ -1574,8 +1582,8 @@ Middle_Number <- function(
 #'
 
 symdiff <- function(
-    x,
-    y
+  x,
+  y
 ) {
   setdiff(x = union(x = x, y = y), intersect(x = x, y = y))
 }
@@ -1595,7 +1603,7 @@ symdiff <- function(
 #'
 
 check_whole_num <- function(
-    x
+  x
 ) {
   round_x <- round(x = x)
 
@@ -1628,7 +1636,7 @@ check_whole_num <- function(
 #'
 
 drop_single_value_cols <- function(
-    df
+  df
 ) {
   if (!inherits(what = "data.frame", x = df)) {
     cli_abort(message = "{.code df} must of be of class data.frame.")
@@ -1675,7 +1683,7 @@ drop_single_value_cols <- function(
 #'
 
 Is_Color <- function(
-    colors
+  colors
 ) {
   sapply(colors, function(X) {
     tryCatch(is.matrix(x = col2rgb(col = X)),
@@ -1720,11 +1728,11 @@ Is_Color <- function(
 #'
 
 Metrics_Count_GEX <- function(
-    lib_list,
-    base_path,
-    secondary_path,
-    lib_names
-){
+  lib_list,
+  base_path,
+  secondary_path,
+  lib_names
+) {
   cli_inform(message = "Reading {.field Gene Expression} Metrics")
   raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
     if (is.null(x = secondary_path)) {
@@ -1800,11 +1808,11 @@ Metrics_Count_GEX <- function(
 #'
 
 Metrics_Count_GEX_v9plus <- function(
-    lib_list,
-    base_path,
-    secondary_path,
-    lib_names
-){
+  lib_list,
+  base_path,
+  secondary_path,
+  lib_names
+) {
   cli_inform(message = "Reading {.field Gene Expression} Metrics")
   raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
     if (is.null(x = secondary_path)) {
@@ -1939,11 +1947,11 @@ Metrics_Count_GEX_v9plus <- function(
 #'
 
 Metrics_Multi_GEX <- function(
-    lib_list,
-    base_path,
-    secondary_path,
-    lib_names
-){
+  lib_list,
+  base_path,
+  secondary_path,
+  lib_names
+) {
   cli_inform(message = "Reading {.field Gene Expression} Metrics")
 
   raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
@@ -2059,11 +2067,11 @@ Metrics_Multi_GEX <- function(
 #'
 
 Metrics_Multi_VDJT <- function(
-    lib_list,
-    base_path,
-    secondary_path,
-    lib_names
-){
+  lib_list,
+  base_path,
+  secondary_path,
+  lib_names
+) {
   cli_inform(message = "Reading {.field VDJ T} Metrics")
 
   raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
@@ -2154,8 +2162,8 @@ Metrics_Multi_VDJT <- function(
 #'
 
 Metrics_Single_File <- function(
-    base_path,
-    cellranger_multi = FALSE
+  base_path,
+  cellranger_multi = FALSE
 ) {
   # Read GEX count metrics
   if (isFALSE(x = cellranger_multi)) {
@@ -2301,8 +2309,8 @@ Metrics_Single_File <- function(
 #'
 
 Metrics_Single_File_v9plus <- function(
-    base_path,
-    cellranger_multi = FALSE
+  base_path,
+  cellranger_multi = FALSE
 ){
   # read count metrics
   if (isFALSE(x = cellranger_multi)) {
@@ -2545,7 +2553,7 @@ Metrics_Single_File_v9plus <- function(
 
 
 download_hgnc_data <- function(
-    update = NULL
+  update = NULL
 ) {
   # Get cache
   bfc <- .get_bioc_cache()
@@ -2595,7 +2603,7 @@ download_hgnc_data <- function(
 
 
 download_mgi_data <- function(
-    update = NULL
+  update = NULL
 ) {
   # Get cache
   bfc <- .get_bioc_cache()
@@ -2647,8 +2655,8 @@ download_mgi_data <- function(
 #'
 
 process_hgnc_data <- function(
-    from,
-    to
+  from,
+  to
 ) {
   # read in data
   hgnc_full_data <- data.table::fread(file = from, data.table = FALSE)
@@ -2693,8 +2701,8 @@ process_hgnc_data <- function(
 #'
 
 process_mgi_data <- function(
-    from,
-    to
+  from,
+  to
 ) {
   # read in data
   mgi_full_data <- data.table::fread(file = from, data.table = FALSE)
