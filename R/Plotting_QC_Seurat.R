@@ -580,7 +580,7 @@ QC_Plots_Combined_Vln <- function(
 #'
 
 QC_Histogram <- function(
-    seurat_object,
+  seurat_object,
     features,
     low_cutoff = NULL,
     high_cutoff = NULL,
@@ -592,7 +592,7 @@ QC_Histogram <- function(
     plot_title = NULL,
     assay = NULL,
     print_defaults = FALSE
-){
+) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
