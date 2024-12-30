@@ -25,7 +25,7 @@
 #'
 
 Default_DimReduc_LIGER <- function(
-    liger_object
+  liger_object
 ) {
   if (length(x = liger_object@dimReds) > 0) {
     default_reduc <- liger_object@uns$defaultDimRed
@@ -59,7 +59,7 @@ Default_DimReduc_LIGER <- function(
 #'
 
 LIGER_Default_Cluster_Name <- function(
-    liger_object
+  liger_object
 ) {
   if (is.null(x = rliger::defaultCluster(x = liger_object))) {
     cli_abort(message = "No default cell identity/cluster present in object.")
@@ -104,14 +104,15 @@ LIGER_Default_Cluster_Name <- function(
 #' @concept liger_plotting_util
 #'
 
-Generate_Plotting_df_LIGER <- function(object,
-                                       clusters = NULL,
-                                       shuffle = TRUE,
-                                       shuffle_seed = 1,
-                                       reorder.idents = FALSE,
-                                       new.order = NULL,
-                                       group_by = "dataset",
-                                       split_by = NULL
+Generate_Plotting_df_LIGER <- function(
+  object,
+  clusters = NULL,
+  shuffle = TRUE,
+  shuffle_seed = 1,
+  reorder.idents = FALSE,
+  new.order = NULL,
+  group_by = "dataset",
+  split_by = NULL
 ) {
   tsne_df <- data.frame(object@tsne.coords)
   colnames(x = tsne_df) <- c("tsne1", "tsne2")
