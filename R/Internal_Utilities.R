@@ -602,7 +602,7 @@ Retrieve_MSigDB_Lists <- function(
     Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
   )
 
-   # Species Spelling Options
+  # Species Spelling Options
   mouse_options <- accepted_names$Mouse_Options
   human_options <- accepted_names$Human_Options
   marmoset_options <- accepted_names$Marmoset_Options
@@ -1745,7 +1745,8 @@ Metrics_Count_GEX <- function(
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data[1, ])
     raw_data[, c(column_numbers)] <- lapply(raw_data[, c(column_numbers)], function(x) {
-      as.numeric(gsub(",", "", x))})
+      as.numeric(gsub(",", "", x))
+    })
 
     column_numbers_pct <- grep(pattern = "%", x = raw_data[1, ])
     all_columns <- 1:ncol(x = raw_data)
@@ -1753,7 +1754,8 @@ Metrics_Count_GEX <- function(
     column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
     raw_data[, c(column_numbers_numeric)] <- lapply(raw_data[, c(column_numbers_numeric)], function(x) {
-      as.numeric(x)})
+      as.numeric(x)
+    })
 
     return(raw_data)
   })
@@ -1844,7 +1846,8 @@ Metrics_Count_GEX_v9plus <- function(
     # Change format of numeric columns to due commas in data csv output.
     column_numbers <- grep(pattern = ",", x = raw_data_gex[1, ])
     raw_data_gex[, c(column_numbers)] <- lapply(raw_data_gex[, c(column_numbers)], function(x) {
-      as.numeric(gsub(",", "", x))})
+      as.numeric(gsub(",", "", x))
+    })
 
     if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
       # Rename multi columns to match names from count
