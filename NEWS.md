@@ -8,6 +8,7 @@
 
 ## Fixes  
 - Fixed use of chicken as default species in some QC functions.  
+- Code styling and typo fixes.  
 
 
 
