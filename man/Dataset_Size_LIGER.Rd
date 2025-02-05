@@ -4,15 +4,18 @@
 \alias{Dataset_Size_LIGER}
 \title{Check size of LIGER datasets}
 \usage{
-Dataset_Size_LIGER(liger_object, other_meta = NULL)
+Dataset_Size_LIGER(liger_object, other_meta = NULL, filter_by = NULL)
 }
 \arguments{
 \item{liger_object}{LIGER object name.}
 
-\item{other_meta}{other meta data to include in returned data.frame}
+\item{other_meta}{other meta data to include in returned data.frame.}
+
+\item{filter_by}{meta data column to filter data by.  Will filter data to return only values for  the
+largest dataset for each unique value in provided meta data column.}
 }
 \value{
-data.frame containing cells
+data.frame with dataset names, number of cells per dataset and if provided other meta data
 }
 \description{
 Returns size (number of cells) in each dataset within liger object along with other desired meta data.
