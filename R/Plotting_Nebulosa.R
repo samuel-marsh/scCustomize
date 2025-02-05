@@ -65,7 +65,7 @@ Plot_Density_Custom <- function(
   }
 
   # Check version of Nebulosa and ggplot2
-  if (packageVersion(pkg = 'ggplot2') >= "3.5.0" && packageVersion(pkg = 'Nebulosa') < "1.12.1") {
+  if (packageVersion(pkg = "ggplot2") >= "3.5.0" && packageVersion(pkg = "Nebulosa") < "1.12.1") {
     cli_abort(message = c("In order to use {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} with ggplot2 v3.5.0 please update to latest version of Nebulosa package (v1.12.1).",
                          "i" = "This can be installed with the following commands: ",
                          "----------------------------------------",
@@ -182,7 +182,7 @@ Plot_Density_Joint_Only <- function(
   }
 
   # Check version of Nebulosa and ggplot2
-  if (packageVersion(pkg = 'ggplot2') >= "3.5.0" && packageVersion(pkg = 'Nebulosa') < "1.12.1") {
+  if (packageVersion(pkg = "ggplot2") >= "3.5.0" && packageVersion(pkg = "Nebulosa") < "1.12.1") {
     cli_abort(message = c("In order to use {.field Plot_Density_Custom} & {.field Plot_Density_Joint_Only} with ggplot2 v3.5.0 please update to latest version of Nebulosa package (v1.12.1).",
                           "i" = "This can be installed with the following commands: ",
                           "----------------------------------------",
