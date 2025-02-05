@@ -4,12 +4,12 @@
 \alias{Dataset_Size_LIGER}
 \title{Check size of LIGER datasets}
 \usage{
-Dataset_Size_LIGER(liger_object, other_meta = NULL, filter_by = NULL)
+Dataset_Size_LIGER(liger_object, meta_data_column = NULL, filter_by = NULL)
 }
 \arguments{
 \item{liger_object}{LIGER object name.}
 
-\item{other_meta}{other meta data to include in returned data.frame.}
+\item{meta_data_column}{other meta data to include in returned data.frame.}
 
 \item{filter_by}{meta data column to filter data by.  Will filter data to return only values for  the
 largest dataset for each unique value in provided meta data column.}
@@ -22,7 +22,16 @@ Returns size (number of cells) in each dataset within liger object along with ot
 }
 \examples{
 \dontrun{
-cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, other_meta = c("Age", "Sex"))
+# Return values for all datasets
+cells_per_dataset <- Dataset_Size_LIGER(liger_object = object)
+
+# Return values for all datasets and include Age and Treatment meta data values
+cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, meta_data_column = c("Age", "Treatment"))
+
+# Return values for all datasets and include Age and Treatment meta data values and filter to return
+largest Dataset by Treatment
+cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, meta_data_column = c("Age", "Treatment"),
+filter_by = "Treatment")
 }
 
 }
