@@ -514,7 +514,7 @@ Cells_by_Identities_LIGER <- function(
 #' Returns size (number of cells) in each dataset within liger object along with other desired meta data.
 #'
 #' @param liger_object LIGER object name.
-#' @param other_meta other meta data to include in returned data.frame.
+#' @param meta_data_column other meta data to include in returned data.frame.
 #' @param filter_by meta data column to filter data by.  Will filter data to return only values for  the
 #' largest dataset for each unique value in provided meta data column.
 #'
@@ -530,13 +530,22 @@ Cells_by_Identities_LIGER <- function(
 #'
 #' @examples
 #' \dontrun{
-#' cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, other_meta = c("Age", "Sex"))
+#' # Return values for all datasets
+#' cells_per_dataset <- Dataset_Size_LIGER(liger_object = object)
+#'
+#' # Return values for all datasets and include Age and Treatment meta data values
+#' cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, meta_data_column = c("Age", "Treatment"))
+#'
+#' # Return values for all datasets and include Age and Treatment meta data values and filter to return
+#' largest Dataset by Treatment
+#' cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, meta_data_column = c("Age", "Treatment"),
+#' filter_by = "Treatment")
 #' }
 #'
 
 Dataset_Size_LIGER <- function(
     liger_object,
-    other_meta = NULL,
+    meta_data_column = NULL,
     filter_by = NULL
 ) {
   # Check LIGER
@@ -551,11 +560,11 @@ Dataset_Size_LIGER <- function(
   rownames(dataset_cells_df) <- NULL
 
   # Extract and combine with other sample meta if provided
-  if (!is.null(x = other_meta)) {
+  if (!is.null(x = meta_data_column)) {
     # Extract sample meta
     meta <- Fetch_Meta(object = tcells)
 
-    found_meta <- Meta_Present(object = liger_object, meta_col_names = found_meta, print_msg = FALSE)[[1]]
+    found_meta <- Meta_Present(object = liger_object, meta_col_names = meta_data_column, print_msg = FALSE)[[1]]
 
     sample_meta <- Extract_Sample_Meta(object = liger_object, sample_name = "dataset", variables_include = found_meta)
 
@@ -567,7 +576,7 @@ Dataset_Size_LIGER <- function(
   if (!is.null(x = filter_by)) {
     # check in other meta
     if (!filter_by %in% found_meta) {
-      cli_abort(message = "The {.code filter_by} value ({.field {filter_by}}) must also be present in {.code other_meta} and dataset.")
+      cli_abort(message = "The {.code filter_by} value ({.field {filter_by}}) must also be present in {.code meta_data_column} and dataset.")
     }
 
     # filter to largest datasets for each ident in filter_by column
