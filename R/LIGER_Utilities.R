@@ -597,6 +597,52 @@ Dataset_Size_LIGER <- function(
 }
 
 
+#' Get Reference Dataset
+#'
+#' Function to select reference dataset to use in liger based on meta data information
+#'
+#' @param liger_object LIGER object name.
+#' @param meta_data_column meta data column to use for selecting largest dataset.
+#' @param value value from column `meta_data_column` to use for selecting largest dataset.
+#'
+#' @return dataset name as character
+#'
+#' @import cli
+#' @importFrom dplyr filter pull
+#' @importFrom magrittr "%>%"
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # standalone use
+#' ref_dataset <- Get_Reference_LIGER(liger_object = object, meta_data_column = "Treatment", value = "Ctrl")
+#'
+#' # use within `quantileNorm`
+#' object <- quantileNorm(object = object, reference = Get_Reference_LIGER(liger_object = object,
+#' meta_data_column = "Treatment", value = "Ctrl"))
+#' }
+#'
+
+Get_Reference_LIGER <- function(
+    liger_object,
+    meta_data_column,
+    value
+) {
+  ref_dataset <- Dataset_Size_LIGER(liger_object = liger_object, meta_data_column = meta_data_column, filter_by = meta_data_column) %>%
+    filter(.data[[meta_data_column]] == value)
+
+  # print results
+  cli_inform(message = c("Selecting reference dataset from {.field {meta_data_column}} for value {.val {value}}.",
+                         "i" = "Selected dataset: {.field {ref_dataset[['dataset']]}}, containing {.field {ref_dataset[['num_cells']]}} cells."))
+
+  # return
+  return(ref_dataset[['dataset']])
+}
+
+
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
 #' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
 #' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
