@@ -514,11 +514,15 @@ Cells_by_Identities_LIGER <- function(
 #' Returns size (number of cells) in each dataset within liger object along with other desired meta data.
 #'
 #' @param liger_object LIGER object name.
-#' @param other_meta other meta data to include in returned data.frame
+#' @param other_meta other meta data to include in returned data.frame.
+#' @param filter_by meta data column to filter data by.  Will filter data to return only values for  the
+#' largest dataset for each unique value in provided meta data column.
 #'
-#' @return data.frame containing cells
+#' @return data.frame with dataset names, number of cells per dataset and if provided other meta data
 #'
-#' @importFrom dplyr right_join join_by
+#' @import cli
+#' @importFrom dplyr right_join join_by group_by slice
+#' @importFrom magrittr "%>%"
 #'
 #' @export
 #'
@@ -532,7 +536,8 @@ Cells_by_Identities_LIGER <- function(
 
 Dataset_Size_LIGER <- function(
     liger_object,
-    other_meta = NULL
+    other_meta = NULL,
+    filter_by = NULL
 ) {
   # Create num_cells data.frame
   cells_per_dataset <- sapply(rliger::datasets(x = liger_object), ncol)
@@ -547,17 +552,27 @@ Dataset_Size_LIGER <- function(
     # Extract sample meta
     meta <- Fetch_Meta(object = tcells)
 
-    other_meta <- Meta_Present(object = liger_object, meta_col_names = other_meta, print_msg = FALSE)[[1]]
+    found_meta <- Meta_Present(object = liger_object, meta_col_names = found_meta, print_msg = FALSE)[[1]]
 
-    sample_meta <- Extract_Sample_Meta(object = liger_object, sample_name = "dataset", variables_include = other_meta)
+    sample_meta <- Extract_Sample_Meta(object = liger_object, sample_name = "dataset", variables_include = found_meta)
 
     # join data
-    merged <- right_join(x = dataset_cells_df, y = sample_meta, by = join_by("dataset"))
-
-    return(merged)
-  } else {
-    return(dataset_cells_df)
+    dataset_cells_df <- right_join(x = dataset_cells_df, y = sample_meta, by = join_by("dataset"))
   }
+
+  # filter data to return only largest dataset for each unique value in filter_by meta data column.
+  if (!is.null(x = filter_by)) {
+    # check in other meta
+    if (!filter_by %in% found_meta) {
+      cli_abort(message = "The {.code filter_by} value ({.field {filter_by}}) must also be present in {.code other_meta} and dataset.")
+    }
+
+    # filter to largest datasets for each ident in filter_by column
+    dataset_cells_df <- dataset_cells_df %>%
+      group_by(.data[[filter_by]]) %>%
+      slice_max(n = 1, order_by = .data[["num_cells"]])
+  }
+  return(dataset_cells_df)
 }
 
 
