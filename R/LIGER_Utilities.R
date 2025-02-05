@@ -539,6 +539,9 @@ Dataset_Size_LIGER <- function(
     other_meta = NULL,
     filter_by = NULL
 ) {
+  # Check LIGER
+  Is_LIGER(liger_object = liger_object)
+
   # Create num_cells data.frame
   cells_per_dataset <- sapply(rliger::datasets(x = liger_object), ncol)
   dataset_names <- names(rliger::datasets(x = liger_object))
