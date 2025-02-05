@@ -2,6 +2,7 @@
 ## Added  
 - Add support for LIGER objects using `Extract_Sample_Meta`.  
 - Added new function `Dataset_Size_LIGER` to return data.frame containing cells per dataset in liger object in addition to accompanying sample meta data if desired.  
+- Added new function `Get_Reference_LIGER` to return name of dataset matching selection criteria to use as reference for `rliger::quantileNorm()`.  
 
   
   
