@@ -13,7 +13,7 @@ Extract_Sample_Meta(
 )
 }
 \arguments{
-\item{object}{Seurat object}
+\item{object}{Seurat or LIGER object}
 
 \item{sample_name}{meta.data column to use as sample.  Output data.frame will contain one row per
 level or unique value in this variable.}
