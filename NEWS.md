@@ -1,5 +1,7 @@
 # scCustomize 3.X.X (202X-XX-XX)  
 ## Added  
+- Add support for LIGER objects using `Extract_Sample_Meta`.  
+- Added new function `Dataset_Size_LIGER` to return data.frame containing cells per dataset in liger object in addition to accompanying sample meta data if desired.  
 
   
   
