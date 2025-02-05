@@ -517,6 +517,7 @@ Cells_by_Identities_LIGER <- function(
 #' @param meta_data_column other meta data to include in returned data.frame.
 #' @param filter_by meta data column to filter data by.  Will filter data to return only values for  the
 #' largest dataset for each unique value in provided meta data column.
+#' @param print_filter logical, whether to print filtered results to console, default is FALSE.
 #'
 #' @return data.frame with dataset names, number of cells per dataset and if provided other meta data
 #'
@@ -546,7 +547,8 @@ Cells_by_Identities_LIGER <- function(
 Dataset_Size_LIGER <- function(
     liger_object,
     meta_data_column = NULL,
-    filter_by = NULL
+    filter_by = NULL,
+    print_filter = FALSE
 ) {
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
@@ -584,6 +586,13 @@ Dataset_Size_LIGER <- function(
       group_by(.data[[filter_by]]) %>%
       slice_max(n = 1, order_by = .data[["num_cells"]])
   }
+
+  # print results if TRUE
+  if (isTRUE(x = print_filter)) {
+    print(dataset_cells_df)
+  }
+
+  # return results
   return(dataset_cells_df)
 }
 
