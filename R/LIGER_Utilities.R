@@ -509,6 +509,58 @@ Cells_by_Identities_LIGER <- function(
 }
 
 
+#' Check size of LIGER datasets
+#'
+#' Returns size (number of cells) in each dataset within liger object along with other desired meta data.
+#'
+#' @param liger_object LIGER object name.
+#' @param other_meta other meta data to include in returned data.frame
+#'
+#' @return data.frame containing cells
+#'
+#' @importFrom dplyr right_join join_by
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, other_meta = c("Age", "Sex"))
+#' }
+#'
+
+Dataset_Size_LIGER <- function(
+    liger_object,
+    other_meta = NULL
+) {
+  # Create num_cells data.frame
+  cells_per_dataset <- sapply(rliger::datasets(x = liger_object), ncol)
+  dataset_names <- names(rliger::datasets(x = liger_object))
+  dataset_cells_df <- data.frame("dataset" = dataset_names, "num_cells" = cells_per_dataset)
+
+  # remove row names
+  rownames(dataset_cells_df) <- NULL
+
+  # Extract and combine with other sample meta if provided
+  if (!is.null(x = other_meta)) {
+    # Extract sample meta
+    meta <- Fetch_Meta(object = tcells)
+
+    other_meta <- Meta_Present(object = liger_object, meta_col_names = other_meta, print_msg = FALSE)[[1]]
+
+    sample_meta <- Extract_Sample_Meta(object = liger_object, sample_name = "dataset", variables_include = other_meta)
+
+    # join data
+    merged <- right_join(x = dataset_cells_df, y = sample_meta, by = join_by("dataset"))
+
+    return(merged)
+  } else {
+    return(dataset_cells_df)
+  }
+}
+
+
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
 #' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
 #' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
