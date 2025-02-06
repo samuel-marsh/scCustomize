@@ -11,6 +11,7 @@
 
 ## Fixes  
 - Fixed use of chicken as default species in some QC functions.  
+- Fixed bug in `Read_Metrics_10X` that caused function failure.  
 - Code styling and typo fixes.  
 
 
