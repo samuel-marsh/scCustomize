@@ -12,6 +12,7 @@
 ## Fixes  
 - Fixed use of chicken as default species in some QC functions.  
 - Fixed bug in `Read_Metrics_10X` that caused function failure.  
+- Fixed bug in `Subset_LIGER` to ignore cluster column when subsetting based on other meta data variable.  
 - Code styling and typo fixes.  
 
 
