@@ -991,8 +991,6 @@ Plot_By_Meta_LIGER2 <- function(
 #' @param pt.size_factors Adjust point size for plotting in the factor plots.
 #' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
 #' @param reduction Name of dimensionality reduction to use for plotting.
-#' @param reduction_label `r lifecycle::badge("deprecated")` deprecated for newer style liger
-#' objects.  Use `reduction` instead.
 #' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
 #' Helpful if number of datasets is large to avoid crowding the plot with legend.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -1007,7 +1005,6 @@ Plot_By_Meta_LIGER2 <- function(
 #' @param file_name name suffix to append after sample name.
 #' @param return_plots logical. Whether or not to return plots to the environment.  (Default is FALSE)
 #' @param cells.highlight Names of specific cells to highlight in plot (black) (default NULL).
-#' @param reorder_datasets `r lifecycle::badge("deprecated")` deprecated for newer style liger objects
 #' @param ggplot_default_colors logical.  If `colors_use_factors = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "varibow" palette.
 #' @param color_seed random seed for the palette shuffle if `colors_use_factors = NULL`.  Default = 123.
@@ -1043,7 +1040,6 @@ plotFactors_liger2_scCustom <- function(
     pt.size_factors = 1,
     pt.size_dimreduc = 1,
     reduction = "UMAP",
-    reduction_label = deprecated(),
     plot_legend = TRUE,
     raster = TRUE,
     raster.dpi = c(512, 512),
@@ -1054,27 +1050,9 @@ plotFactors_liger2_scCustom <- function(
     file_name = NULL,
     return_plots = FALSE,
     cells.highlight = NULL,
-    reorder_datasets = deprecated(),
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
-  # Check is slot is supplied
-  if (lifecycle::is_present(reorder_datasets)) {
-    lifecycle::deprecate_warn(when = "2.2.0",
-                              what = "plotFactors_scCustom(reorder_datasets)",
-                              details = c("i" = "The {.code reorder_datasets} parameter is deprecated for newer style Liger objects.")
-    )
-  }
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(reduction_label)) {
-    lifecycle::deprecate_warn(when = "2.2.0",
-                              what = "plotFactors_scCustom(reduction_label)",
-                              details = c("v" = "The {.code reduction_label} parameter is deprecated for newer style Liger objects.",
-                                          "i" = "Use {.code reduction} parameter instead")
-    )
-  }
-
   # if returning and saving
   if (isTRUE(x = save_plots)) {
     # Check file path is valid

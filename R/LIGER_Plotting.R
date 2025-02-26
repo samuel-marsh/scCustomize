@@ -289,7 +289,6 @@ plotFactors_scCustom <- function(
                                 pt.size_factors = pt.size_factors,
                                 pt.size_dimreduc = pt.size_dimreduc,
                                 reduction = reduction,
-                                reduction_label = reduction_label,
                                 plot_legend = plot_legend,
                                 raster = raster,
                                 raster.dpi = raster.dpi,
@@ -300,7 +299,6 @@ plotFactors_scCustom <- function(
                                 file_name = file_name,
                                 return_plots = return_plots,
                                 cells.highlight = cells.highlight,
-                                reorder_datasets = reorder_datasets,
                                 ggplot_default_colors = ggplot_default_colors,
                                 color_seed = color_seed
     )
