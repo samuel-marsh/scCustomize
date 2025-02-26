@@ -820,7 +820,7 @@ Subset_LIGER <- function(
   }
 
   # Check meta present
-  if (!is.null(x = cluster_col)) {
+  if (!is.null(x = cluster_col) && !is.null(x = cluster)) {
     cluster_col <- Meta_Present(object = liger_object, meta_col_names = cluster_col, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
