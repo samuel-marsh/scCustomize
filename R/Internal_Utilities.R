@@ -247,6 +247,52 @@ Feature_PreCheck <- function(
 }
 
 
+#' Check for Normalized Data in Seurat object
+#'
+#' Runs a check to determine if all values in the "data" layer of object are whole numbers.  If so
+#' functions returns error message to first normalize data.
+#'
+#' @param object Seurat object.
+#' @param assay Name of assay to check for normalized values within.
+#' @param error logical, whether the function errors if no normalized data is found (default is TRUE), or
+#' if value of the check is returned.
+#'
+#' @returns
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' Check_Normalized(object = obj)
+#'}
+#'
+
+Check_Normalized <- function(
+    object,
+    assay = NULL,
+    error = TRUE
+) {
+  # set assay (if null set to active assay)
+  assay <- assay %||% Assays(object = object)
+
+  # Check if data is normalized by checking for whole numbers
+  data <- suppressWarnings(LayerData(object = object, layer = "data", assay = "RNA"))
+  value <- all(floor(x = data) == data)
+
+  # check if erroring or returning value
+  if (isTRUE(x = error)) {
+    if (isTRUE(x = value)) {
+      cli_abort(message = c("The data is not normalized.",
+                            "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
+                            "i" = "Please run "))
+    } else {
+      scCustomize:::stop_quietly()
+    }
+  } else {
+    return(value)
+  }
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### FUNCTION HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1373,7 +1419,6 @@ Add_IEG_Seurat <- function(
 #' object <- define_malat1_threshold(object = normalized_counts)
 #' }
 #'
-
 
 define_malat1_threshold <- function(
     counts,
