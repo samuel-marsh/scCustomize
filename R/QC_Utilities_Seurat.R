@@ -873,6 +873,186 @@ Add_Top_Gene_Pct.Seurat <- function(
 }
 
 
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param malat1_threshold_name name to use for the new meta.data column containing percent IEG gene counts.
+#' Default is set dependent on species gene symbol.
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `malat1_threshold_name` is present in meta.data slot.
+#' @param homolog_name feature name for MALAT1 homolog in non-default species (if annotated).
+#' @param bw The "bandwidth" value when plotting the density function to the MALAT1 distribution;
+#' default is bw = 0.1, but this parameter should be lowered (e.g. to 0.01) if you run the function and
+#' the line that's produced doesn't look like it's tracing the shape of the histogram accurately (this will
+#' make the line less "stiff" and more fitted to the data)
+#' @param lwd The "line width" fed to the abline function which adds the vertical red line to the output plots;
+#' default is 2, and it can be increased or decreased depending on the user's plotting preferences
+#' @param breaks The number of bins used for plotting the histogram of normalized MALAT1 values; default is 100
+#' @param chosen_min The minimum MALAT1 value cutoff above which a MALAT1 peak in the density function should
+#' be found. This value is necessary to determine which peak in the density function fitted to the MALAT1
+#' distribution is likely representative of what we would expect to find in real cells. This is because
+#' some samples may have large numbers of cells or empty droplets with lower than expected normalized MALAT1 values,
+#' and therefore have a peak close to or at zero. Ideally, "chosen_min" would be manually chosen after looking at
+#' a histogram of MALAT1 values, and be the normalized MALAT1 value that cuts out all of the cells that look like
+#' they stray from the expected distribution (a unimodal distribution above zero). The default value is 1 as this
+#' works well in many test cases, but different types of normalization may make the user want to change this
+#' parameter (e.g. Seurat's original normalization function generates different results to their SCT function)
+#' which may change the MALAT1 distribution). Increase or decrease chosen_min depending on where your MALAT1 peak is located.
+#' @param smooth The "smoothing parameter" fed into the "smooth.spline" function that adjusts the trade-off between
+#' the smoothness of the line fitting the histogram, and how closely it fits the histogram; the default is 1,
+#' and can be lowered if it looks like the line is underfitting the data, and raised in the case of overfitting.
+#' The ideal scenario is for the line to trace the histogram in a way where the only inflection point(s) are between
+#' major peaks, e.g. separating the group of poor-quality cells or empty droplets with lower normalized MALAT1
+#' expression from higher-quality cells with higher normalized MALAT1 expression.
+#' @param abs_min The absolute lowest value allowed as the MALAT1 threshold. This parameter increases the
+#' robustness of the function if working with an outlier data distribution (e.g. an entire sample is poor
+#' quality so there is a unimodal MALAT1 distribution that is very low but above zero, but also many
+#' values close to zero) and prevents a resulting MALAT1 threshold of zero. In the case where a calculated
+#' MALAT1 value is zero, the function will return 0.3 by default.
+#' @param rough_max A rough value for the location of a MALAT1 peak if a peak is not found. This is possible
+#' if there are so few cells with higher MALAT1 values, that a distribution fitted to the data finds no local maxima.
+#' For example, if a sample only has poor-quality cells such that all have near-zero MALAT1 expression,
+#' the fitted function may look similar to a positive quadratic function which has no local maxima.
+#' In this case, the function searches for the closest MALAT1 value to the default value, 2, to use in place of
+#' a real local maximum.
+#'
+#' @import cli
+#'
+#' @method Add_MALAT1_Threshold Seurat
+#'
+#' @references This function incorporates a threshold calculation and procedure as described in
+#' Clarke & Bader (2024). bioRxiv \url{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
+#' whenever using this function.
+#'
+#' @author Zoe Clark (original function and manuscript) & Samuel Marsh (wrappers and updates for inclusion in package)
+#'
+#' @return Seurat object with added meta.data column
+#'
+#' @export
+#' @rdname Add_MALAT1_Threshold
+#'
+#' @concept qc_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_MALAT1_Threshold(object = object, species = "Human")
+#' }
+#'
+
+Add_MALAT1_Threshold.Seurat <- function(
+    object,
+    species,
+    malat1_threshold_name = NULL,
+    ensembl_ids = FALSE,
+    assay = NULL,
+    overwrite = FALSE,
+    homolog_name = NULL,
+    bw = 0.1,
+    lwd = 2,
+    breaks = 100,
+    chosen_min = 1,
+    smooth = 1,
+    abs_min = 0.3,
+    rough_max = 2
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = object)
+
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, Drosophila, and Chicken are not currently supported by default.  Please supply MALAT1 homolog/ortholog feature name.")
+  }
+
+  # Set meta data column name
+  if (species %in% mouse_options) {
+    if (is.null(x = malat1_threshold_name)) {
+      malat1_threshold_name <- "Malat1_Threshold"
+    }
+  }
+
+  if (species %in% human_options) {
+    if (is.null(x = malat1_threshold_name)) {
+      malat1_threshold_name <- "MALAT1_Threshold"
+    }
+  }
+
+  # Overwrite check
+  if (malat1_threshold_name %in% colnames(x = object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {malat1_threshold_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code malat1_threshold_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {malat1_threshold_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Checks species
+  if (is.null(x = species)) {
+    cli_abort(message = c("No species name or abbreivation was provided to {.code species} parameter.",
+                          "i" = "If not using default species please set {.code species = other}.")
+    )
+  }
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    if (species %in% mouse_options) {
+      malat_id <- "Malat1"
+    }
+    if (species %in% human_options) {
+      malat_id <- "MALAT1"
+    }
+  } else {
+    malat_id <- Retrieve_MALAT1_Ensembl_Lists(species = species)
+  }
+
+  # check malat1 present
+  malat_id <- scCustomize:::Feature_PreCheck(object = object, features = malat_id)
+
+  # Get data
+  cli_inform(message = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.")
+  cli_inform(message = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}")
+  malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data")[,1])
+
+  # run threshold function
+  threshold <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max)
+
+  malat1_threshold <- malat_norm_data > threshold
+  object[[malat1_threshold_name]] <- malat1_threshold
+  object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+
+  object <- LogSeuratCommand(object = object)
+
+  return(object)
+}
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.

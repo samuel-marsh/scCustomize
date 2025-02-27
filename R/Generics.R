@@ -110,6 +110,25 @@ Add_Top_Gene_Pct <- function(object, ...) {
 }
 
 
+#' Add MALAT1 QC Threshold
+#'
+#' Adds TRUE/FALSE values to each cell based on calculation of MALAT1 threshold.
+#' This function incorporates a threshold calculation and procedure as described in
+#' Clarke & Bader (2024). bioRxiv \url{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
+#' whenever using this function.
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname Add_MALAT1_Threshold
+#' @export Add_MALAT1_Threshold
+#'
+
+Add_MALAT1_Threshold <- function(object, ...) {
+  UseMethod(generic = "Add_MALAT1_Threshold", object = object)
+}
+
+
 #' Add Multiple Cell Quality Control Values with Single Function
 #'
 #' Add Mito/Ribo %, Cell Complexity (log10GenesPerUMI), Top Gene Percent with single
