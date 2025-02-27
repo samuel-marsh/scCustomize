@@ -1402,6 +1402,8 @@ Add_IEG_Seurat <- function(
 #' In this case, the function searches for the closest MALAT1 value to the default value, 2, to use in place of
 #' a real local maximum.
 #'
+#' @import cli
+#'
 #' @noRd
 #'
 #' @references This function incorporates a threshold calculation and procedure as described in
