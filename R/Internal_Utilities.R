@@ -1381,7 +1381,7 @@ Return_QC_Defaults <- function(
 #' @author Satija Lab & all co-Authors of Seurat Package
 #' @references See Utilities.R in source code of Seurat \url{https://github.com/satijalab/seurat/blob/master/R/utilities.R}  (Licence: GPL-3).
 #'
-#' @note modified from Seurat version to return a percentage instead of proportion/decimal as part of `Percent_Expressing` function.  To be replaced following next Seurat version update.
+#' @note modified from Seurat version to return a percentage instead of proportion/decimal as part of `Percent_Expressing` function.
 #'
 #' @keywords internal
 #'
@@ -1392,7 +1392,7 @@ PercentAbove_Seurat <- function(
   x,
   threshold
 ) {
-  return((length(x = x[x > threshold]) / length(x = x)) * 100)
+  return((sum(x > threshold, na.rm = T) / length(x = x)) * 100)
 }
 
 
