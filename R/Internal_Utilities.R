@@ -257,7 +257,7 @@ Feature_PreCheck <- function(
 #' @param error logical, whether the function errors if no normalized data is found (default is TRUE), or
 #' if value of the check is returned.
 #'
-#' @returns
+#' @returns either error message, nothing, or logical value depending on `error` parameter.
 #' @noRd
 #'
 #' @examples
@@ -285,7 +285,7 @@ Check_Normalized <- function(
                             "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
                             "i" = "Please run "))
     } else {
-      scCustomize:::stop_quietly()
+      stop_quietly()
     }
   } else {
     return(value)
