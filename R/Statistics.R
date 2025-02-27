@@ -255,7 +255,7 @@ Percent_Expressing <- function(
   row_dim_names <- features_list
   col_dim_names <- names(x = percent_expressing)
   mat_dims <- list(row_dim_names, col_dim_names)
-  final_df <- data.frame(matrix(unlist(percent_expressing), nrow = length(features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
+  final_df <- data.frame(matrix(unlist(x = percent_expressing), nrow = length(x = features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
   return(final_df)
 }
 
