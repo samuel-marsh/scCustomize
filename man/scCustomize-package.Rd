@@ -56,6 +56,7 @@ Other contributors:
   \item Ming Tang \email{tangming2005@gmail.com} [contributor]
   \item Velina Kozareva [contributor]
   \item Lucas Graybuck \email{lucasg@alleninstitute.org} [contributor]
+  \item Zoe Clarke \email{TBD} [contributor]
 }
 
 }
