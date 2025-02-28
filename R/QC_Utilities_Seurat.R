@@ -945,6 +945,7 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' a real local maximum.
 #'
 #' @import cli
+#' @import pbapply
 #'
 #' @method Add_MALAT1_Threshold Seurat
 #'
@@ -970,10 +971,12 @@ Add_Top_Gene_Pct.Seurat <- function(
 Add_MALAT1_Threshold.Seurat <- function(
     object,
     species,
+    sample_col = NULL,
     malat1_threshold_name = NULL,
     ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE,
+    whole_object = FALSE,
     homolog_name = NULL,
     bw = 0.1,
     lwd = 2,
@@ -985,6 +988,13 @@ Add_MALAT1_Threshold.Seurat <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = object)
+
+  # Check for sample column
+  if (is.null(x = sample_col) && isFALSE(x = whole_object)) {
+    cli_abort(message = c("No sample column provided to {.code sample_col} parameter.",
+                          "i" = "Please provide name of column in meta.data that contains sample IDs to use for MALAT1 thresholding.")
+    )
+  }
 
   # Accepted species names
   accepted_names <- data.frame(
@@ -1065,14 +1075,37 @@ Add_MALAT1_Threshold.Seurat <- function(
   # Get data
   cli_inform(message = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.")
   cli_inform(message = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}")
-  malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data")[,1])
 
-  # run threshold function
-  threshold <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max)
+  # split data and run by sample
+  if (isTRUE(x = whole_object)) {
+    malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data")[,1])
 
-  malat1_threshold <- malat_norm_data > threshold
-  object[[malat1_threshold_name]] <- malat1_threshold
-  object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+    # run threshold function
+    threshold <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max)
+
+    malat1_threshold <- malat_norm_data > threshold
+    object[[malat1_threshold_name]] <- malat1_threshold
+    object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+  } else {
+    Idents(object = object) <- sample_col
+    cells_by_sample <- CellsByIdentities(object = object)
+
+    sample_col_names <- unique(x = object[[sample_col]])
+
+    threshold <- pblapply(1:length(x = sample_col_names), function(x) {
+      malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[x])[,1])
+
+      # run threshold function
+      threshold <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max)
+
+      malat1_threshold <- malat_norm_data > threshold
+      malat1_threshold
+    })
+
+    malat1_threshold <- bind_rows(threshold)
+    object[[malat1_threshold_name]] <- malat1_threshold
+    object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+  }
 
   object <- LogSeuratCommand(object = object)
 
