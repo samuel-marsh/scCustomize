@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = "Ming", family = "Tang", role = c("ctb"), email = "tangming2005@gmail.com"),
     person(given = 'Velina', family = 'Kozareva', role = c('ctb')),
     person("Lucas", "Graybuck", email = "lucasg@alleninstitute.org", role = c('ctb')),
-    person("Zoe", "Clarke", email = "zoe.clarke@utoronto.ca", role = c('ctb'), comment = c(ORCID = "0000-0003-0336-8049")))
+    person("Zoe", "Clarke", email = "zoe.clarke@utoronto.ca", role = c('ctb'), comment = c(ORCID = "0000-0003-0336-8049"))
     )
 URL: https://github.com/samuel-marsh/scCustomize, https://samuel-marsh.github.io/scCustomize/, https://doi.org/10.5281/zenodo.5706431
 BugReports: https://github.com/samuel-marsh/scCustomize/issues
