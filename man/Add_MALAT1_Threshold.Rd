@@ -10,10 +10,12 @@ Add_MALAT1_Threshold(object, ...)
 \method{Add_MALAT1_Threshold}{Seurat}(
   object,
   species,
+  sample_col = NULL,
   malat1_threshold_name = NULL,
   ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE,
+  whole_object = FALSE,
   homolog_name = NULL,
   bw = 0.1,
   lwd = 2,
