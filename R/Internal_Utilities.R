@@ -274,8 +274,8 @@ Check_Normalized <- function(
   # set assay (if null set to active assay)
   assay <- assay %||% Assays(object = object)
 
-  # Check if data is normalized by checking for whole numbers
-  data <- suppressWarnings(LayerData(object = object, layer = "data", assay = "RNA"))
+  # Check if data is normalized by checking for whole numbers (limit to first 100 cells for speed and memory considerations)
+  data <- suppressWarnings(LayerData(object = object, layer = "data", assay = "RNA")[,1:100])
   value <- all(floor(x = data) == data)
 
   # check if erroring or returning value
