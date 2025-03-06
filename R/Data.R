@@ -170,3 +170,20 @@
 #' homologs according to HGNC.  See data-raw directory for scripts used to create gene list.
 #'
 "ensembl_ieg_list"
+
+
+#' MALAT1 gene lists
+#'
+#' Ensembl IDs for MALAT1 (Ensembl version 112; 4/29/2024)
+#'
+#' @format A list of seven vectors
+#' \describe{
+#'   \item{Mus_musculus_MALAT1_ensembl}{Ensembl ID for mouse Malat1}
+#'   \item{Homo_sapiens_MALAT1_ensembl}{Ensembl ID for human MALAT1}
+#'
+#' }
+#' @concept data
+#'
+#' @source See data-raw directory for scripts used to create gene list.
+#'
+"ensembl_malat1_list"
