@@ -648,7 +648,7 @@ Add_Hemo.Seurat <- function(
     species_use <- "Drosophila"
     hemo_pattern <- "^glob"
   }
-  if (species %in% drosophila_options) {
+  if (species %in% chicken_options) {
     species_use <- "Chicken"
     hemo_pattern <- "^HB[^(P)]"
   }

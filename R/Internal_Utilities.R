@@ -832,7 +832,7 @@ Retrieve_IEG_Lists <- function(
   chicken_options <- accepted_names$Chicken_Options
 
   if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
-    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, Drosophila, and Chicken are not currently supported.")
   }
 
   # set prefix
