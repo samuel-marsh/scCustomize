@@ -644,7 +644,8 @@ QC_Histogram <- function(
   # Plot
   if (is.null(x = split.by)) {
     plot_list <- lapply(1:length(x = all_found_features), function(x) {
-      plot <- ggplot(data = seurat_object@meta.data, aes(x = .data[[all_found_features[x]]])) +
+      data_to_plot <- FetchData(object = seurat_object, vars = all_found_features)
+      plot <- ggplot(data = data_to_plot, aes(x = .data[[all_found_features[x]]])) +
         geom_histogram(color = "black", fill = colors_use, bins = bins) +
         theme_cowplot() +
         geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
