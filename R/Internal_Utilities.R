@@ -296,11 +296,11 @@ Check_Normalized <- function(
   }
 
   # Check normalized by seeing if all values are whole numbers
-  value <- all(floor(x = data) == data)
+  value <- !all(floor(x = data) == data)
 
   # check if erroring or returning value
   if (isTRUE(x = error)) {
-    if (isTRUE(x = value)) {
+    if (isFALSE(x = value)) {
       cli_abort(message = c("The data is not normalized.",
                             "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
                             "i" = "Please Normalize data first."))
