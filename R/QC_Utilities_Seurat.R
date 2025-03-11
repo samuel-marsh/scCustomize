@@ -1148,10 +1148,6 @@ Add_MALAT1_Threshold.Seurat <- function(
 
     sample_col_names <- names(x = cells_by_sample)
 
-    if (isTRUE(x = save_plots)) {
-      plot_list <- list()
-    }
-
     # calculate threshold
     cli_inform(message = "Calculating thresholds across {.field {length(x = sample_col_names)}} from meta.data column {.field {sample_col}}.")
     threshold_all <- pblapply(1:length(x = sample_col_names), function(x) {
@@ -1161,19 +1157,23 @@ Add_MALAT1_Threshold.Seurat <- function(
       res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
 
       threshold <- res[[1]]
-      if (isTRUE(x = save_plots)) {
-        plot_list[[x]] <- res[[2]]
-      }
 
       malat1_threshold <- malat_norm_data > threshold
-      malat1_threshold <- data.frame("malat1_threshold" = malat1_threshold)
+      malat1_threshold <- data.frame(malat1_threshold_name = malat1_threshold)
       rownames(malat1_threshold) <- cells_by_sample[[x]]
-      return(malat1_threshold)
+
+      res_list <- list("thresholds" = malat1_threshold,
+                       "plots" = res[[2]])
     })
 
     # save plots
     if (isTRUE(x = save_plots)) {
       cli_inform(message = "{.field Saving plots to file}")
+
+      # Extract plots into a list
+      plots_list <- lapply(threshold_all, function(res) res$plots)
+
+      # save plots
       pdf(file = paste(save_plot_path, save_plot_name, sep=""), width = plot_width, height = plot_height)
       pb <- txtProgressBar(min = 0, max = length(x = plot_list), style = 3, file = stderr())
       for (i in 1:length(x = plot_list)) {
@@ -1185,7 +1185,11 @@ Add_MALAT1_Threshold.Seurat <- function(
     }
 
     # Combine results and add to object
-    malat1_threshold <- bind_rows(threshold_all)
+    cli_inform("Adding results to object as {.field {malat1_threshold_name}}.")
+    # Extract thresholds and bind them into a single data frame
+    thresholds_list <- lapply(threshold_all, function(res) res$thresholds)
+    thresholds_df <- bind_rows(thresholds_list)
+
     object[[malat1_threshold_name]] <- malat1_threshold
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
   }
