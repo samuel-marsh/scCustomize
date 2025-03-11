@@ -1154,7 +1154,7 @@ Add_MALAT1_Threshold.Seurat <- function(
 
     # calculate threshold
     cli_inform(message = "Calculating thresholds across {.field {length(x = sample_col_names)}} from meta.data column {.field {sample_col}}.")
-    res <- pblapply(1:length(x = sample_col_names), function(x) {
+    threshold_all <- pblapply(1:length(x = sample_col_names), function(x) {
       malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
 
       # run threshold function
@@ -1182,7 +1182,8 @@ Add_MALAT1_Threshold.Seurat <- function(
       dev.off()
     }
 
-    malat1_threshold <- bind_rows(threshold)
+    # Combine results and add to object
+    malat1_threshold <- bind_rows(threshold_all)
     object[[malat1_threshold_name]] <- malat1_threshold
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
   }
