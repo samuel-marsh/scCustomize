@@ -1116,8 +1116,8 @@ Add_MALAT1_Threshold.Seurat <- function(
   malat_id <- scCustomize:::Feature_PreCheck(object = object, features = malat_id)
 
   # Get data
-  cli_inform(message = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.")
-  cli_inform(message = c("*" = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}"))
+  cli_inform(message = c("*" = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}."))
+  cli_inform(message = c("i" = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}"))
 
   # split data and run by sample or whole object
   if (isTRUE(x = whole_object)) {
