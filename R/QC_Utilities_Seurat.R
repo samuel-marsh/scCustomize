@@ -188,33 +188,6 @@ Add_Cell_QC_Metrics.Seurat <- function(
     object <- Add_Hemo(object = object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
   }
 
-  # LEAVING AS INDEPDENT FFUNCTION FOR NOW
-  # # Add MALAT1 Threshold
-  # if (isTRUE(x = add_malat1_threshold)) {
-  #   # Set meta data column name
-  #   if (species %in% mouse_options) {
-  #     if (is.null(x = malat1_threshold_name)) {
-  #       malat1_threshold_name <- "Malat1_Threshold"
-  #     }
-  #   }
-  #
-  #   if (species %in% human_options) {
-  #     if (is.null(x = malat1_threshold_name)) {
-  #       malat1_threshold_name <- "MALAT1_Threshold"
-  #     }
-  #   }
-  #   cli_inform(message = c("*" = 'Adding {.field MALAT1 QC Threshold as "{malat1_threshold_name}"} to meta.data as {.field {malat1_threshold_name}}.'))
-  #
-  #   # Check if data is normalized
-  #   if (isTRUE(x = Check_Normalized(object = object, assay = assay, error = FALSE))) {
-  #     cli_inform(message = c("Layer with normalized data not present.",
-  #                            "i" = "Normalizing Data."))
-  #     object <- NormalizeData(object = object)
-  #   }
-  #
-  #   object <- Add_MALAT1_Threshold(object = object, species = species, malat1_threshold_name = malat1_threshold_name, assay = assay, overwrite = overwrite)
-  # }
-
   # Add cell cycle
   if (isTRUE(x = add_cell_cycle)) {
     if (!species %in% human_options) {
