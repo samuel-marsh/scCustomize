@@ -1149,7 +1149,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     sample_col_names <- names(x = cells_by_sample)
 
     # calculate threshold
-    cli_inform(message = "Calculating thresholds across {.field {length(x = sample_col_names)}} from meta.data column {.field {sample_col}}.")
+    cli_inform(message = "Calculating thresholds across {.field {length(x = sample_col_names)}} samples from meta.data column {.field {sample_col}}.")
     threshold_all <- pblapply(1:length(x = sample_col_names), function(x) {
       malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
 
