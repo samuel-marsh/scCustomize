@@ -274,6 +274,17 @@ Check_Normalized <- function(
   # set assay (if null set to active assay)
   assay <- assay %||% Assays(object = object)
 
+  # First check if data present
+  if (length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0) {
+    if (isTRUE(x = error)) {
+      cli_abort(message = c("Layer with normalized data not present.",
+                            "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
+                            "i" = "Please Normalize data first."))
+    } else {
+      stop_quietly()
+    }
+  }
+
   # Pull data to check (limit to first 100 cells for speed and memory considerations)
   if (length(x = Cells(x = object)) > 100) {
     data <- suppressWarnings(LayerData(object = object, layer = "data", assay = "RNA")[,1:100])
@@ -289,7 +300,7 @@ Check_Normalized <- function(
     if (isTRUE(x = value)) {
       cli_abort(message = c("The data is not normalized.",
                             "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
-                            "i" = "Please run "))
+                            "i" = "Please Normalize data first."))
     } else {
       stop_quietly()
     }
