@@ -1161,7 +1161,9 @@ Add_MALAT1_Threshold.Seurat <- function(
       res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
 
       threshold <- res[[1]]
-      plot_list[[x]] <- res[[2]]
+      if (isTRUE(x = save_plots)) {
+        plot_list[[x]] <- res[[2]]
+      }
 
       malat1_threshold <- malat_norm_data > threshold
       malat1_threshold
