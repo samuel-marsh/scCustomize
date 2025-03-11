@@ -989,7 +989,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     assay = NULL,
     overwrite = FALSE,
     print_plots = NULL,
-    save_plots = TRUE,
+    save_plots = FALSE,
     save_plot_path = NULL,
     save_plot_name = NULL,
     plot_width = NULL,
@@ -1117,7 +1117,7 @@ Add_MALAT1_Threshold.Seurat <- function(
 
   # Get data
   cli_inform(message = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.")
-  cli_inform(message = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}")
+  cli_inform(message = c("*" = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}"))
 
   # split data and run by sample or whole object
   if (isTRUE(x = whole_object)) {
@@ -1155,7 +1155,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     # calculate threshold
     cli_inform(message = "Calculating thresholds for {.val [malat_id]} across {.field {length(x = sample_col_names)}} from meta.data column {.field {sample_col}}.")
     res <- pblapply(1:length(x = sample_col_names), function(x) {
-      malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[x])[,1])
+      malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
 
       # run threshold function
       res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
