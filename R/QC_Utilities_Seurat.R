@@ -901,6 +901,7 @@ Add_Top_Gene_Pct.Seurat <- function(
 
 
 #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param sample_col column name in meta.data that contains sample ID information.
 #' @param malat1_threshold_name name to use for the new meta.data column containing percent IEG gene counts.
 #' Default is set dependent on species gene symbol.
 #' @param ensembl_ids logical, whether feature names in the object are gene names or
@@ -908,6 +909,15 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with the name provided to `malat1_threshold_name` is present in meta.data slot.
+#' @param print_plots logical, should plots be printed to output when running function (default is NULL).
+#' Will automatically set to FALSE if performing across samples or TRUE if performing across whole object.
+#' @param save_plots logical, whether or not to save plots to pdf (default is FALSE).
+#' @param save_plot_path path to save location for plots (default is NULL; current working directory).
+#' @param save_plot_name name for pdf file containing plots.
+#' @param plot_width the width (in inches) for output page size.  Default is NULL.
+#' @param plot_height the height (in inches) for output page size.  Default is NULL.
+#' @param whole_object logical, whether to perform calculation on whole object (default is FALSE).
+#' Should be only be run if object contains single sample.
 #' @param homolog_name feature name for MALAT1 homolog in non-default species (if annotated).
 #' @param bw The "bandwidth" value when plotting the density function to the MALAT1 distribution;
 #' default is bw = 0.1, but this parameter should be lowered (e.g. to 0.01) if you run the function and
@@ -945,7 +955,9 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' a real local maximum.
 #'
 #' @import cli
+#' @import ggplot2
 #' @import pbapply
+#' @importFrom utils txtProgressBar setTxtProgressBar
 #'
 #' @method Add_MALAT1_Threshold Seurat
 #'
@@ -976,6 +988,12 @@ Add_MALAT1_Threshold.Seurat <- function(
     ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE,
+    print_plots = NULL,
+    save_plots = TRUE,
+    save_plot_path = NULL,
+    save_plot_name = NULL,
+    plot_width = NULL,
+    plot_height = NULL,
     whole_object = FALSE,
     homolog_name = NULL,
     bw = 0.1,
@@ -1054,6 +1072,31 @@ Add_MALAT1_Threshold.Seurat <- function(
     )
   }
 
+  if (isTRUE(x = save_plots)) {
+    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+    if (!is.null(x = save_plot_path) && save_plot_path == "") {
+      save_plot_path <- NULL
+    }
+
+    # Check file path is valid
+    if (!is.null(x = save_plot_path)) {
+      if (!dir.exists(paths = save_plot_path)) {
+        cli_abort(message = "Provided {.code save_plot_path}: {symbol$dquote_left}{.field {save_plot_path}}{symbol$dquote_right} does not exist.")
+      }
+    }
+
+    # Check if file name provided
+    if (is.null(x = save_plot_name)) {
+      cli_abort(message = "No file name provided.  Please provide a file name using {.code save_plot_name}.")
+    }
+
+    # append .pdf if needed
+    file_ext <- grep(x = save_plot_name, pattern = ".pdf$")
+    if (length(x = file_ext) == 0) {
+      cli_abort(message = "{.code save_plot_name} must end with file extension '.pdf'.")
+    }
+  }
+
   # Set default assay
   assay <- assay %||% DefaultAssay(object = object)
 
@@ -1076,12 +1119,25 @@ Add_MALAT1_Threshold.Seurat <- function(
   cli_inform(message = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.")
   cli_inform(message = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}")
 
-  # split data and run by sample
+  # split data and run by sample or whole object
   if (isTRUE(x = whole_object)) {
     malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data")[,1])
 
+    # set plot params
+    plot_title <- NULL
+    print_plots <- print_plots %||% TRUE
+
     # run threshold function
-    threshold <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max)
+    res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = plot_title)
+
+    # split results
+    threshold <- res[[1]]
+
+    # save plots
+    if (isTRUE(x = save_plots)) {
+      plots <- res[[2]]
+      ggsave(plots, filename = paste(save_plot_path, save_plot_name, sep=""), width = replace_null(parameter = plot_width), height = replace_null(parameter = plot_height))
+    }
 
     malat1_threshold <- malat_norm_data > threshold
     object[[malat1_threshold_name]] <- malat1_threshold
@@ -1090,17 +1146,39 @@ Add_MALAT1_Threshold.Seurat <- function(
     Idents(object = object) <- sample_col
     cells_by_sample <- CellsByIdentities(object = object)
 
-    sample_col_names <- unique(x = object[[sample_col]])
+    sample_col_names <- names(x = cells_by_sample)
 
-    threshold <- pblapply(1:length(x = sample_col_names), function(x) {
+    if (isTRUE(x = save_plots)) {
+      plot_list <- list()
+    }
+
+    # calculate threshold
+    cli_inform(message = "Calculating thresholds for {.val [malat_id]} across {.field {length(x = sample_col_names)}} from meta.data column {.field {sample_col}}.")
+    res <- pblapply(1:length(x = sample_col_names), function(x) {
       malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[x])[,1])
 
       # run threshold function
-      threshold <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max)
+      res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
+
+      threshold <- res[[1]]
+      plot_list[[x]] <- res[[2]]
 
       malat1_threshold <- malat_norm_data > threshold
       malat1_threshold
     })
+
+    # save plots
+    if (isTRUE(x = save_plots)) {
+      cli_inform(message = "{.field Saving plots to file}")
+      pdf(file = paste(save_plot_path, save_plot_name, sep=""), width = plot_width, height = plot_height)
+      pb <- txtProgressBar(min = 0, max = length(x = plot_list), style = 3, file = stderr())
+      for (i in 1:length(x = plot_list)) {
+        print(plot_list[[i]])
+        setTxtProgressBar(pb = pb, value = i)
+      }
+      close(con = pb)
+      dev.off()
+    }
 
     malat1_threshold <- bind_rows(threshold)
     object[[malat1_threshold_name]] <- malat1_threshold
