@@ -279,7 +279,6 @@ Check_Normalized <- function(
     value <- FALSE
     if (isTRUE(x = error)) {
       cli_abort(message = c("Layer with normalized data not present.",
-                            "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
                             "i" = "Please Normalize data first."))
     } else {
       return(value)
