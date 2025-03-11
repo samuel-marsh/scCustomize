@@ -275,7 +275,7 @@ Check_Normalized <- function(
   assay <- assay %||% Assays(object = object)
 
   # First check if data present
-  if (length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0) {
+  if (isTRUE(x = length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0)) {
     if (isTRUE(x = error)) {
       cli_abort(message = c("Layer with normalized data not present.",
                             "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
