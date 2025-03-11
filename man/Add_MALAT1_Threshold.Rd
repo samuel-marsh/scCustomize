@@ -15,6 +15,12 @@ Add_MALAT1_Threshold(object, ...)
   ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE,
+  print_plots = NULL,
+  save_plots = TRUE,
+  save_plot_path = NULL,
+  save_plot_name = NULL,
+  plot_width = NULL,
+  plot_height = NULL,
   whole_object = FALSE,
   homolog_name = NULL,
   bw = 0.1,
@@ -33,6 +39,8 @@ Add_MALAT1_Threshold(object, ...)
 
 \item{species}{Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).}
 
+\item{sample_col}{column name in meta.data that contains sample ID information.}
+
 \item{malat1_threshold_name}{name to use for the new meta.data column containing percent IEG gene counts.
 Default is set dependent on species gene symbol.}
 
@@ -43,6 +51,22 @@ ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
 
 \item{overwrite}{Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 function will abort if columns with the name provided to \code{malat1_threshold_name} is present in meta.data slot.}
+
+\item{print_plots}{logical, should plots be printed to output when running function (default is NULL).
+Will automatically set to FALSE if performing across samples or TRUE if performing across whole object.}
+
+\item{save_plots}{logical, whether or not to save plots to pdf (default is FALSE).}
+
+\item{save_plot_path}{path to save location for plots (default is NULL; current working directory).}
+
+\item{save_plot_name}{name for pdf file containing plots.}
+
+\item{plot_width}{the width (in inches) for output page size.  Default is NULL.}
+
+\item{plot_height}{the height (in inches) for output page size.  Default is NULL.}
+
+\item{whole_object}{logical, whether to perform calculation on whole object (default is FALSE).
+Should be only be run if object contains single sample.}
 
 \item{homolog_name}{feature name for MALAT1 homolog in non-default species (if annotated).}
 
