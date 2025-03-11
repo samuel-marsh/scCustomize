@@ -1431,7 +1431,8 @@ Add_IEG_Seurat <- function(
 #'
 
 define_malat1_threshold <- function(
-    counts, bw = 0.1,
+    counts,
+    bw = 0.1,
     lwd = 2,
     breaks = 100,
     chosen_min = 1,
