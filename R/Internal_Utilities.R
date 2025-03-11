@@ -283,6 +283,9 @@ Check_Normalized <- function(
     } else {
       return(value)
     }
+  } else {
+    value <- TRUE
+    return(value)
   }
 
   # Pull data to check (limit to first 100 cells for speed and memory considerations)
