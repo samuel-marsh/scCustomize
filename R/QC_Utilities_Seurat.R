@@ -1045,6 +1045,9 @@ Add_MALAT1_Threshold.Seurat <- function(
     )
   }
 
+  # check normalized
+  Check_Normalized(object = object, assay = assay, error = TRUE)
+
   if (isTRUE(x = save_plots)) {
     # Set file_path before path check if current dir specified as opposed to leaving set to NULL
     if (!is.null(x = save_plot_path) && save_plot_path == "") {
@@ -1067,6 +1070,15 @@ Add_MALAT1_Threshold.Seurat <- function(
     file_ext <- grep(x = save_plot_name, pattern = ".pdf$")
     if (length(x = file_ext) == 0) {
       cli_abort(message = "{.code save_plot_name} must end with file extension '.pdf'.")
+    }
+
+    # check non-default output values
+    if (!is.numeric(x = output_width)) {
+      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    }
+
+    if (!is.numeric(x = output_height)) {
+      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
     }
   }
 
