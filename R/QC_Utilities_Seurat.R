@@ -914,8 +914,8 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' @param save_plots logical, whether or not to save plots to pdf (default is FALSE).
 #' @param save_plot_path path to save location for plots (default is NULL; current working directory).
 #' @param save_plot_name name for pdf file containing plots.
-#' @param plot_width the width (in inches) for output page size.  Default is NULL.
-#' @param plot_height the height (in inches) for output page size.  Default is NULL.
+#' @param plot_width the width (in inches) for output page size.  Default is 11.
+#' @param plot_height the height (in inches) for output page size.  Default is 8.
 #' @param whole_object logical, whether to perform calculation on whole object (default is FALSE).
 #' Should be only be run if object contains single sample.
 #' @param homolog_name feature name for MALAT1 homolog in non-default species (if annotated).
