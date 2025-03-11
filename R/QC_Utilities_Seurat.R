@@ -1166,7 +1166,9 @@ Add_MALAT1_Threshold.Seurat <- function(
       }
 
       malat1_threshold <- malat_norm_data > threshold
-      malat1_threshold
+      malat1_threshold <- data.frame("malat1_threshold" = malat1_threshold)
+      rownames(malat1_threshold) <- cells_by_sample[[x]]
+      return(malat1_threshold)
     })
 
     # save plots
