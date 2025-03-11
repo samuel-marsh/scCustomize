@@ -275,17 +275,19 @@ Check_Normalized <- function(
   assay <- assay %||% Assays(object = object)
 
   # First check if data present
-  if (isTRUE(x = length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0)) {
-    value <- FALSE
-    if (isTRUE(x = error)) {
-      cli_abort(message = c("Layer with normalized data not present.",
-                            "i" = "Please Normalize data first."))
+  if (isTRUE(x = Assay5_Check(seurat_object = object, assay = assay))) {
+    if (isTRUE(x = length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0)) {
+      value <- FALSE
+      if (isTRUE(x = error)) {
+        cli_abort(message = c("Layer with normalized data not present.",
+                              "i" = "Please Normalize data first."))
+      } else {
+        return(value)
+      }
     } else {
+      value <- TRUE
       return(value)
     }
-  } else {
-    value <- TRUE
-    return(value)
   }
 
   # Pull data to check (limit to first 100 cells for speed and memory considerations)
