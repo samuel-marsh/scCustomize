@@ -1073,12 +1073,12 @@ Add_MALAT1_Threshold.Seurat <- function(
     }
 
     # check non-default output values
-    if (!is.numeric(x = output_width)) {
-      cli_abort(message = "The value provided to {.code output_width} ({.field {output_width}}) is not numeric.")
+    if (!is.numeric(x = plot_width)) {
+      cli_abort(message = "The value provided to {.code plot_width} ({.field {plot_width}}) is not numeric.")
     }
 
-    if (!is.numeric(x = output_height)) {
-      cli_abort(message = "The value provided to {.code output_height} ({.field {output_height}}) is not numeric.")
+    if (!is.numeric(x = plot_height)) {
+      cli_abort(message = "The value provided to {.code plot_height} ({.field {plot_height}}) is not numeric.")
     }
   }
 
