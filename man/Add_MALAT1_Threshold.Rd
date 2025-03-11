@@ -16,11 +16,11 @@ Add_MALAT1_Threshold(object, ...)
   assay = NULL,
   overwrite = FALSE,
   print_plots = NULL,
-  save_plots = TRUE,
+  save_plots = FALSE,
   save_plot_path = NULL,
   save_plot_name = NULL,
-  plot_width = NULL,
-  plot_height = NULL,
+  plot_width = 11,
+  plot_height = 8,
   whole_object = FALSE,
   homolog_name = NULL,
   bw = 0.1,
@@ -61,9 +61,9 @@ Will automatically set to FALSE if performing across samples or TRUE if performi
 
 \item{save_plot_name}{name for pdf file containing plots.}
 
-\item{plot_width}{the width (in inches) for output page size.  Default is NULL.}
+\item{plot_width}{the width (in inches) for output page size.  Default is 11.}
 
-\item{plot_height}{the height (in inches) for output page size.  Default is NULL.}
+\item{plot_height}{the height (in inches) for output page size.  Default is 8.}
 
 \item{whole_object}{logical, whether to perform calculation on whole object (default is FALSE).
 Should be only be run if object contains single sample.}
