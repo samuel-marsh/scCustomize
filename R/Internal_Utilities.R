@@ -276,12 +276,13 @@ Check_Normalized <- function(
 
   # First check if data present
   if (isTRUE(x = length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0)) {
+    value <- FALSE
     if (isTRUE(x = error)) {
       cli_abort(message = c("Layer with normalized data not present.",
                             "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
                             "i" = "Please Normalize data first."))
     } else {
-      stop_quietly()
+      return(value)
     }
   }
 
@@ -302,7 +303,7 @@ Check_Normalized <- function(
                             "*" = "The {symbol$dquote_left}data{symbol$dquote_right} layer contains all whole numbers.",
                             "i" = "Please Normalize data first."))
     } else {
-      stop_quietly()
+      return(value)
     }
   } else {
     return(value)
