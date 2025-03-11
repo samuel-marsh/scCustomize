@@ -1190,7 +1190,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     thresholds_list <- lapply(threshold_all, function(res) res$thresholds)
     thresholds_df <- bind_rows(thresholds_list)
 
-    object[[malat1_threshold_name]] <- malat1_threshold
+    object[[malat1_threshold_name]] <- thresholds_df
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
   }
 
