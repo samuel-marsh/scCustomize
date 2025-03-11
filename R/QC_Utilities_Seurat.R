@@ -1113,7 +1113,7 @@ Add_MALAT1_Threshold.Seurat <- function(
   }
 
   # check malat1 present
-  malat_id <- scCustomize:::Feature_PreCheck(object = object, features = malat_id)
+  malat_id <- Feature_PreCheck(object = object, features = malat_id)
 
   # Get data
   cli_inform(message = c("*" = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}."))
