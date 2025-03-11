@@ -1175,9 +1175,9 @@ Add_MALAT1_Threshold.Seurat <- function(
 
       # save plots
       pdf(file = paste(save_plot_path, save_plot_name, sep=""), width = plot_width, height = plot_height)
-      pb <- txtProgressBar(min = 0, max = length(x = plot_list), style = 3, file = stderr())
-      for (i in 1:length(x = plot_list)) {
-        print(plot_list[[i]])
+      pb <- txtProgressBar(min = 0, max = length(x = plots_list), style = 3, file = stderr())
+      for (i in 1:length(x = plots_list)) {
+        print(plots_list[[i]])
         setTxtProgressBar(pb = pb, value = i)
       }
       close(con = pb)
@@ -1185,7 +1185,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     }
 
     # Combine results and add to object
-    cli_inform("Adding results to object as {.field {malat1_threshold_name}}.")
+    cli_inform("Adding results to object as {.val {malat1_threshold_name}}.")
     # Extract thresholds and bind them into a single data frame
     thresholds_list <- lapply(threshold_all, function(res) res$thresholds)
     thresholds_df <- bind_rows(thresholds_list)
