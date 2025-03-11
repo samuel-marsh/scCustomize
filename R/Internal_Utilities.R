@@ -1407,6 +1407,9 @@ Add_IEG_Seurat <- function(
 #' the fitted function may look similar to a positive quadratic function which has no local maxima.
 #' In this case, the function searches for the closest MALAT1 value to the default value, 2, to use in place of
 #' a real local maximum.
+#' @param print_plots logical, whether to print the plots while running the function (default is TRUE).
+#' @param return_plots logical, whether to return plots as part of the results of the function (default is FALSE).
+#' @param plot_title title to add to plot patchwork, default is NULL.
 #'
 #' @import cli
 #' @import ggplot2
@@ -1440,7 +1443,8 @@ define_malat1_threshold <- function(
     abs_min = 0.3,
     rough_max = 2,
     print_plots = TRUE,
-    return_plots = FALSE
+    return_plots = FALSE,
+    plot_title = NULL
 ) {
   tryCatch({
     # Calculate the density values
@@ -1547,7 +1551,7 @@ define_malat1_threshold <- function(
       geom_vline(xintercept = x_intercept1, color = "red", linewidth = lwd) +
       ggtitle("MALAT1")
 
-    plots <- patchwork::wrap_plots(p1, p2, p3, p4, ncol = 2)
+    plots <- patchwork::wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(title = plot_title, theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = rel(2))))
 
     if (isTRUE(x = print_plots)) {
       print(plots)
