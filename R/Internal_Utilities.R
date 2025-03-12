@@ -1322,6 +1322,8 @@ Add_IEG_Seurat <- function(
   seurat_object,
   species,
   ieg_name = "percent_ieg",
+  ieg_module_score = TRUE,
+  ieg_module_name = "ieg_score",
   ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE
@@ -1372,6 +1374,22 @@ Add_IEG_Seurat <- function(
   # Add mito and ribo columns
   if (length(x = ieg_found) > 0) {
     seurat_object[[ieg_name]] <- PercentageFeatureSet(object = seurat_object, features = ieg_found, assay = assay)
+
+    if (isTRUE(x = ieg_module_score)) {
+      # Overwrite check
+      if (ieg_module_name %in% colnames(x = seurat_object@meta.data)) {
+        if (isFALSE(x = overwrite)) {
+          cli_abort(message = c("Column with {.val {ieg_module_name}} already present in meta.data slot.",
+                                "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code ieg_module_name}*")
+          )
+        }
+        cli_inform(message = c("Column with {.val {ieg_module_name}} already present in meta.data slot.",
+                               "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+        )
+      }
+
+      seurat_object <- AddModuleScore(object = seurat_object, features = list(ieg_found), search = FALSE, name = ieg_module_name)
+    }
   }
 
   # Log Command
