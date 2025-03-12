@@ -1432,6 +1432,7 @@ Add_IEG_Seurat <- function(
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom cowplot theme_cowplot
 #'
 #' @noRd
 #'
@@ -1492,7 +1493,7 @@ define_malat1_threshold <- function(
       geom_line(data = fit_df, aes(x = .data[["x"]], y = .data[["y"]]), color = "blue", na.rm = TRUE) +
       geom_point(data = local_maxima_df, aes(x = .data[["x"]], y = .data[["y"]]), color = "red", size = 3, na.rm = TRUE) +
       ggtitle("Density Plot with Local Maxima") +
-      cowplot::theme_cowplot() +
+      theme_cowplot() +
       ylim(-0.05, NA)
 
 
@@ -1511,7 +1512,7 @@ define_malat1_threshold <- function(
       geom_line(data = fit_df, aes(x = .data[["x"]], y = .data[["y"]]), color = "blue", na.rm = TRUE) +
       geom_point(data = local_minima_df, aes(x = .data[["x"]], y = .data[["y"]]), color = "red", size = 3, na.rm = TRUE) +
       ggtitle("Density Plot with Local Minima") +
-      cowplot::theme_cowplot() +
+      theme_cowplot() +
       ylim(-0.05, NA)
 
     # Find biggest local maximum greater than desired value (default 1)
@@ -1545,7 +1546,7 @@ define_malat1_threshold <- function(
         x = "Normalized MALAT1 expression",
         y = "Density value"
       ) +
-      cowplot::theme_cowplot() +
+      theme_cowplot() +
       ylim(-0.05, NA)
 
     # Grab intercept
@@ -1565,11 +1566,11 @@ define_malat1_threshold <- function(
 
     p4 <- ggplot(data = data.frame(counts), aes(x = .data[["counts"]])) +
       geom_histogram(color = "black", bins = breaks, fill = "dodgerblue", na.rm = TRUE) +
-      cowplot::theme_cowplot() +
+      theme_cowplot() +
       geom_vline(xintercept = x_intercept1, color = "red", linewidth = lwd) +
       ggtitle("MALAT1")
 
-    plots <- patchwork::wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(title = plot_title, theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = rel(2))), tag_levels = "A")
+    plots <- wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(title = plot_title, theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = rel(2))), tag_levels = "A")
 
     if (isTRUE(x = print_plots)) {
       print(plots)
@@ -1587,7 +1588,7 @@ define_malat1_threshold <- function(
     # Code to execute if an error occurs
     ggplot(data = data.frame(counts), aes(x = .data[["counts"]])) +
       geom_histogram(color = "black", bins = breaks, fill = "dodgerblue") +
-      cowplot::theme_cowplot() +
+      theme_cowplot() +
       ggtitle("MALAT1")
 
     stop(" An error occurred: Please make sure you have use a vector of normalized counts as input. This may also indicate that you have no high MALAT1 peaks, meaning this particular sample may be poor quality. Please check your histogram of normalized MALAT1 counts to investigate: ", e$message)
