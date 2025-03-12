@@ -322,8 +322,6 @@ FeaturePlot_scCustom <- function(
         vars = all_found_features[i],
         layer = layer)
 
-      feature_plot <- all_found_features[i]
-
       # Pull min and max values
       # Pull min and max values
       min.cutoff <- mapply(
