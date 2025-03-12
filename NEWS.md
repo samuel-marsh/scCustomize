@@ -19,6 +19,7 @@
 - Fixed bug in `Read_Metrics_10X` that caused function failure.  
 - Fixed bug in `Subset_LIGER` to ignore cluster column when subsetting based on other meta data variable.  
 - Fixed bug in `QC_Histogram` that didn't allow it to properly plot feature data.  
+- Fixed bug in `FeaturePlot_scCustom` that prevented `max.cutoff`/`min.cutoff` from being correctly passed when splitting plots ([#228](https://github.com/samuel-marsh/scCustomize/issues/228)).  
 - Code styling and typo fixes.  
 
 
