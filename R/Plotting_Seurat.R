@@ -201,6 +201,15 @@ FeaturePlot_scCustom <- function(
       alpha_exp <- 1
   }
 
+  # Check cutoff length before passing to Seurat
+  if (length(x = min.cutoff) > 1 && length(x = min.cutoff) != length(x = all_found_features)) {
+    cli_abort(message = "The length of {.code min.cutoff} ({.field {length(x = min.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
+  }
+
+  if (length(x = max.cutoff) > 1 && length(x = max.cutoff) != length(x = all_found_features)) {
+    cli_abort(message = "The length of {.code max.cutoff} ({.field {length(x = max.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
+  }
+
   # plot no split & combined
   if (is.null(x = split.by) && isTRUE(x = combine)) {
     # Keep until Seurat version required is > 5
@@ -304,16 +313,8 @@ FeaturePlot_scCustom <- function(
       min.cutoff <- rep(x = min.cutoff, length(x = all_found_features))
     }
 
-    if (length(x = min.cutoff) > 1 && length(x = min.cutoff) != length(x = all_found_features)) {
-      cli_abort(message = "The length of {.code min.cutoff} ({.field {length(x = min.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
-    }
-
     if (length(x = max.cutoff) == 1) {
       max.cutoff <- rep(x = max.cutoff, length(x = all_found_features))
-    }
-
-    if (length(x = max.cutoff) > 1 && length(x = max.cutoff) != length(x = all_found_features)) {
-      cli_abort(message = "The length of {.code max.cutoff} ({.field {length(x = max.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
     }
 
     plot_list <- lapply(1:length(x = all_found_features), function(i){
