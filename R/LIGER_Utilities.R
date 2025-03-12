@@ -564,7 +564,7 @@ Dataset_Size_LIGER <- function(
   # Extract and combine with other sample meta if provided
   if (!is.null(x = meta_data_column)) {
     # Extract sample meta
-    meta <- Fetch_Meta(object = tcells)
+    meta <- Fetch_Meta(object = liger_object)
 
     found_meta <- Meta_Present(object = liger_object, meta_col_names = meta_data_column, print_msg = FALSE)[[1]]
 
