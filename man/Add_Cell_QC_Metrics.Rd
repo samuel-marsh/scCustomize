@@ -51,6 +51,7 @@ Add_Cell_QC_Metrics(object, ...)
   add_top_pct = TRUE,
   add_MSigDB = TRUE,
   add_IEG = TRUE,
+  add_IEG_module_score = TRUE,
   add_hemo = TRUE,
   add_cell_cycle = TRUE,
   mito_name = "percent_mito",
@@ -62,6 +63,7 @@ Add_Cell_QC_Metrics(object, ...)
   apop_name = "percent_apop",
   dna_repair_name = "percent_dna_repair",
   ieg_name = "percent_ieg",
+  ieg_module_name = "ieg_score",
   hemo_name = "percent_hemo",
   mito_pattern = NULL,
   ribo_pattern = NULL,
@@ -166,6 +168,10 @@ chicken).  Default is FALSE.}
 
 \item{overwrite}{Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 function will abort if column with name provided to \code{meta_col_name} is present in meta.data slot.}
+
+\item{add_IEG_module_score}{logical, whether to add module score belonging to IEG genes to object (Default is TRUE).}
+
+\item{ieg_module_name}{name to use for new meta data column for module score of IEGs.  Default is "ieg_score".}
 }
 \value{
 A liger Object
