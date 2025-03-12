@@ -272,7 +272,6 @@ FeaturePlot_scCustom <- function(
     }
     names(x = min.cutoff) <- names(x = max.cutoff) <- all_found_features
 
-
     max_exp_value <- max.cutoff
     min_exp_value <- min.cutoff
 
@@ -300,6 +299,22 @@ FeaturePlot_scCustom <- function(
 
   # plotting split multiple features
   if (!is.null(x = split.by) && length(x = all_found_features) > 1) {
+    # Check cutoff lengths and modify if needed
+    if (length(x = min.cutoff) == 1) {
+      min.cutoff <- rep(x = min.cutoff, length(x = all_found_features))
+    }
+
+    if (length(x = min.cutoff) > 1 && length(x = min.cutoff) != length(x = all_found_features)) {
+      cli_abort(message = "The length of {.code min.cutoff} ({.field {length(x = min.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
+    }
+
+    if (length(x = max.cutoff) == 1) {
+      max.cutoff <- rep(x = max.cutoff, length(x = all_found_features))
+    }
+
+    if (length(x = max.cutoff) > 1 && length(x = max.cutoff) != length(x = all_found_features)) {
+      cli_abort(message = "The length of {.code max.cutoff} ({.field {length(x = max.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
+    }
 
     plot_list <- lapply(1:length(x = all_found_features), function(i){
       feature_data <- FetchData(
@@ -319,7 +334,7 @@ FeaturePlot_scCustom <- function(
             no = cutoff
           ))
         },
-        cutoff = min.cutoff,
+        cutoff = min.cutoff[i],
         feature = feature_plot
       )
       max.cutoff <- mapply(
@@ -330,7 +345,7 @@ FeaturePlot_scCustom <- function(
             no = cutoff
           ))
         },
-        cutoff = max.cutoff,
+        cutoff = max.cutoff[i],
         feature = feature_plot
       )
       check.lengths <- unique(x = vapply(
