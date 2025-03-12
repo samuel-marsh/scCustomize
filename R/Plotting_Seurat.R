@@ -242,7 +242,7 @@ FeaturePlot_scCustom <- function(
       FUN = function(cutoff, feature) {
         return(ifelse(
           test = is.na(x = cutoff),
-          yes = min(data[, feature]),
+          yes = min(feature_data[, feature]),
           no = cutoff
         ))
       },
@@ -253,7 +253,7 @@ FeaturePlot_scCustom <- function(
       FUN = function(cutoff, feature) {
         return(ifelse(
           test = is.na(x = cutoff),
-          yes = max(data[, feature]),
+          yes = max(feature_data[, feature]),
           no = cutoff
         ))
       },
@@ -328,7 +328,7 @@ FeaturePlot_scCustom <- function(
         FUN = function(cutoff, feature) {
           return(ifelse(
             test = is.na(x = cutoff),
-            yes = min(data[, feature]),
+            yes = min(feature_data[, feature]),
             no = cutoff
           ))
         },
@@ -339,7 +339,7 @@ FeaturePlot_scCustom <- function(
         FUN = function(cutoff, feature) {
           return(ifelse(
             test = is.na(x = cutoff),
-            yes = max(data[, feature]),
+            yes = max(feature_data[, feature]),
             no = cutoff
           ))
         },
