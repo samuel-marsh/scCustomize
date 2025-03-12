@@ -37,7 +37,9 @@
 #' @param label logical, whether to label the clusters.  Default is FALSE.
 #' @param label_feature_yaxis logical, whether to place feature labels on secondary y-axis as opposed to
 #' above legend key.  Default is FALSE.  When setting `label_feature_yaxis = TRUE` the number of columns
-#' in plot output will automatically be set to the number of levels in `split.by'`
+#' in plot output will automatically be set to the number of levels in `split.by'`.
+#' @param min.cutoff,max.cutoff Vector of minimum and maximum cutoff values for each feature,
+#' may specify quantile in the form of 'q##' where '##' is the quantile (eg, 'q1', 'q10').
 #' @param combine Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
 #' If FALSE, return a list of ggplot objects.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
