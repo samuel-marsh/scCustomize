@@ -14,6 +14,7 @@
 #' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
 #' object (Default is TRUE).
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_IEG_module_score logical, whether to add module score belonging to IEG genes to object (Default is TRUE).
 #' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
 #' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
 #' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
@@ -34,6 +35,7 @@
 #' @param dna_repair_name name to use for new meta data column for percentage of MSigDB DNA repair
 #' counts.  Default is "percent_dna_repair"..
 #' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
+#' @param ieg_module_name name to use for new meta data column for module score of IEGs.  Default is "ieg_score".
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
 #' Default is "percent_mito".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
@@ -86,6 +88,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     add_top_pct = TRUE,
     add_MSigDB = TRUE,
     add_IEG = TRUE,
+    add_IEG_module_score = TRUE,
     add_hemo = TRUE,
     add_cell_cycle = TRUE,
     mito_name = "percent_mito",
@@ -97,6 +100,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     apop_name = "percent_apop",
     dna_repair_name = "percent_dna_repair",
     ieg_name = "percent_ieg",
+    ieg_module_name = "ieg_score",
     hemo_name = "percent_hemo",
     mito_pattern = NULL,
     ribo_pattern = NULL,
@@ -177,8 +181,12 @@ Add_Cell_QC_Metrics.Seurat <- function(
       cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, Drosophila, Chicken} are not currently supported.",
                            "i" = "No column will be added to object meta.data"))
     } else {
-      cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
-      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
+      if (isTRUE(x = add_IEG_module_score)) {
+        cli_inform(message = c("*" = "Adding {.field IEG Percentages} & {.field IEG Module Score} to meta.data."))
+      } else {
+        cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
+      }
+      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids, ieg_module_score = add_IEG_module_score, ieg_module_name = ieg_module_name)
     }
   }
 
