@@ -335,7 +335,7 @@ FeaturePlot_scCustom <- function(
           ))
         },
         cutoff = min.cutoff[i],
-        feature = feature_plot
+        feature = all_found_features[i]
       )
       max.cutoff <- mapply(
         FUN = function(cutoff, feature) {
@@ -346,10 +346,10 @@ FeaturePlot_scCustom <- function(
           ))
         },
         cutoff = max.cutoff[i],
-        feature = feature_plot
+        feature = all_found_features[i]
       )
       check.lengths <- unique(x = vapply(
-        X = list(feature_plot, min.cutoff, max.cutoff),
+        X = list(all_found_features[i], min.cutoff, max.cutoff),
         FUN = length,
         FUN.VALUE = numeric(length = 1)
       ))
@@ -358,7 +358,7 @@ FeaturePlot_scCustom <- function(
           message = "There must be the same number of minimum and maximum cuttoffs as there are features"
         )
       }
-      names(x = min.cutoff) <- names(x = max.cutoff) <- feature_plot
+      names(x = min.cutoff) <- names(x = max.cutoff) <- all_found_features[i]
 
       max_exp_value <- max.cutoff
       min_exp_value <- min.cutoff
