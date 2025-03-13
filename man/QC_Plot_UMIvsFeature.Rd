@@ -19,6 +19,7 @@ QC_Plot_UMIvsFeature(
   group.by = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -56,6 +57,8 @@ than 100,000 cells.}
 
 \item{raster.dpi}{Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(512, 512).}
+
+\item{assay}{Name of assay to use, defaults to the active assay.}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}

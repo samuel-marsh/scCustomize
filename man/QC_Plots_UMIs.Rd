@@ -21,6 +21,7 @@ QC_Plots_UMIs(
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
   raster = NULL,
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   ...
@@ -60,6 +61,8 @@ default is the current active.ident of the object.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 100,000 total points plotted (# Cells x # of features).}
+
+\item{assay}{Name of assay to use, defaults to the active assay.}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
