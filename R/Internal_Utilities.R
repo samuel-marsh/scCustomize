@@ -434,6 +434,37 @@ replace_null <- function(
 }
 
 
+#' Check if file name has proper extension at the end
+#'
+#' Checks if file name has the correct extension at the end and returns logical value
+#'
+#' @param file_name string containing file name to check
+#' @param extension the extension to check
+#'
+#' @return TRUE if extension is present otherwise FALSE
+#'
+#'
+#' @import cli
+#'
+#' @noRd
+#'
+
+check_extension <- function(
+    file_name,
+    extension
+) {
+  # check extension
+  file_ext <- grep(x = file_name, pattern = paste0(extension, "$"))
+
+  res <- ifelse(
+    test = length(x = file_ext) == 0,
+    yes = FALSE,
+    no = TRUE
+  )
+  return(res)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### QC HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
