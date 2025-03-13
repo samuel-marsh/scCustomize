@@ -937,6 +937,158 @@ Retrieve_IEG_Ensembl_Lists <- function(
 }
 
 
+#' Retrieve exAM Gene Lists
+#'
+#' Retrieves species specific exAM gene lists
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 2 sets of gene_symbols
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_exAM_Lists <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, Drosophila, and Chicken are not currently supported.")
+  }
+
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
+
+  if (species %in% human_options) {
+    # set list names
+    exAM1 <- paste0(prefix, "exAM_union")
+    exAM2 <- paste0(prefix, "exAM_micro")
+
+    # pull lists
+    qc_gene_list <- list(
+      "exAM_union" = exAM_gene_list[[exAM1]],
+      "exAM_micro" = exAM_gene_list[[exAM2]]
+    )
+  } else {
+    # set list names
+    exAM1 <- paste0(prefix, "exAM_union")
+
+    # pull lists
+    qc_gene_list <- list(
+      "exAM_union" = exAM_gene_list[[exAM1]]
+    )
+  }
+
+  return(qc_gene_list)
+}
+
+
+#' Retrieve exAM Gene Lists (Ensembl)
+#'
+#' Retrieves species specific exAM gene lists with ensembl IDs
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return list of 2 sets of ensembl IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_exAM_Ensembl_Lists <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, and Drosophila are not currently supported.")
+  }
+
+  # set prefix
+  if (species %in% mouse_options) {
+    prefix <- "Mus_musculus_"
+  }
+  if (species %in% human_options) {
+    prefix <- "Homo_sapiens_"
+  }
+
+  if (species %in% human_options) {
+    # set list names
+    exAM1 <- paste0(prefix, "exAM_union_ensembl")
+    exAM2 <- paste0(prefix, "exAM_micro_ensembl")
+
+    # pull lists
+    qc_gene_list <- list(
+      "exAM_union" = exAM_gene_list[[exAM1]],
+      "exAM_micro" = exAM_gene_list[[exAM2]]
+    )
+  } else {
+    # set list names
+    exAM1 <- paste0(prefix, "exAM_union_ensembl")
+
+    # pull lists
+    qc_gene_list <- list(
+      "exAM_union" = exAM_gene_list[[exAM1]]
+    )
+  }
+
+  return(qc_gene_list)
+}
+
+
 #' Retrieve dual species gene lists mitochondrial
 #'
 #' Returns vector of all mitochondrial genes across all species in dataset.
