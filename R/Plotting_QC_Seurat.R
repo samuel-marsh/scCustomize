@@ -24,6 +24,7 @@
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param assay Name of assay to use, defaults to the active assay.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -118,6 +119,7 @@ QC_Plots_Genes <- function(
 #' @param y_axis_log logical. Whether to change y axis to log10 scale (Default is FALSE).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 100,000 total points plotted (# Cells x # of features).
+#' @param assay Name of assay to use, defaults to the active assay.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -748,6 +750,7 @@ QC_Histogram <- function(
 #' greater than 100,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
+#' @param assay Name of assay to use, defaults to the active assay.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed Random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -998,6 +1001,7 @@ QC_Plot_UMIvsGene <- function(
 #' than 100,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
+#' @param assay Name of assay to use, defaults to the active assay.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using default
 #' ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -1109,6 +1113,7 @@ QC_Plot_GenevsFeature <- function(
 #' than 100,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
 #' Default is c(512, 512).
+#' @param assay Name of assay to use, defaults to the active assay.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
