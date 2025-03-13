@@ -14,6 +14,7 @@
 - The following parameters in `plotFactors_scCustom` have been fully deprecated for LIGER objects >= V2: `reorder_datasets` and `reduction_label`.  
 - Following prior deprecation warnings the following functions are now fully deprecated and replaced with updated functions: `Add_Cell_Complexity_LIGER`, `Add_Cell_Complexity_Seurat`, `Add_Cell_Complexity_Seurat`, `Add_Mito_Ribo_LIGER`, `Add_Mito_Ribo_Seurat`, `Gene_Present`, `Meta_Present_LIGER`, and `Split_FeatureScatter`.  
 - Changed internal function `PercentAbove_Seurat` to match updates to Seurat to appropriately deal with NA values.  
+- Changed functionality of several `QC_Plot*` functions to dynamically set nFeature or nCount variable name based on assay specified.  
     
 
 ## Fixes  
