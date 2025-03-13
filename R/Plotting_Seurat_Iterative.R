@@ -55,11 +55,9 @@ Iterate_PC_Loading_Plots <- function(
   }
 
   # check file extension
-  file_ext <- grep(x = file_name, pattern = ".pdf$")
-  if (length(x = file_ext) == 0) {
+  if (isFALSE(x = check_extension(file_name = file_name, extension = ".pdf"))) {
     file_name <- paste0(file_name, ".pdf")
   }
-
 
   # Set dims to plot if not specified
   num_pc_present <- length(seurat_object@reductions$pca@stdev)
