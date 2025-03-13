@@ -277,7 +277,7 @@ FeaturePlot_scCustom <- function(
       FUN.VALUE = numeric(length = 1)
     ))
     if (length(x = check.lengths) != 1) {
-      abort(
+      cli_abort(
         message = "There must be the same number of minimum and maximum cuttoffs as there are features"
       )
     }
@@ -355,7 +355,7 @@ FeaturePlot_scCustom <- function(
         FUN.VALUE = numeric(length = 1)
       ))
       if (length(x = check.lengths) != 1) {
-        abort(
+        cli_abort(
           message = "There must be the same number of minimum and maximum cuttoffs as there are features"
         )
       }
