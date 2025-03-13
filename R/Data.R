@@ -187,3 +187,41 @@
 #' @source See data-raw directory for scripts used to create gene list.
 #'
 "ensembl_malat1_list"
+
+
+#' exAM gene lists
+#'
+#' Gene symbols for exAM genes
+#'
+#' @format A list of three vectors
+#' \describe{
+#'   \item{Mus_musculus_exAM_union}{Gene symbols for exAM genes from source publication (see below)}
+#'   \item{Homo_sapiens_exAM_union}{Human gene symbols for homologous genes from mouse gene list}
+#'   \item{Homo_sapiens_exAM_micro}{Human gene symbols for human microglia list}
+#'
+#' }
+#' @concept data
+#'
+#' @source Gene list is from: SI Table 22 Marsh et al., 2022 (Nature Neuroscience) from \doi{10.1038/s41593-022-01022-8}.
+#' See data-raw directory for scripts used to create gene list.
+#'
+"exAM_gene_list"
+
+
+#' Immediate Early Gene (IEG) gene lists
+#'
+#' Ensembl IDs for immediate early genes (Ensembl version 112; 4/29/2024)
+#'
+#' @format A list of three vectors
+#' \describe{
+#'   \item{Mus_musculus_exAM_union_ensembl}{Ensembl ID for exAM genes from source publication (see below)}
+#'   \item{Homo_sapiens_exAM_union_ensembl}{Human Ensembl ID for exAM genes for homologous genes from mouse gene list}
+#'   \item{Homo_sapiens_exAM_micro_ensembl}{Human Ensembl ID for exAM genes for human microglia list}
+#'
+#' }
+#' @concept data
+#'
+#' @source Gene list is from: SI Table 22 Marsh et al., 2022 (Nature Neuroscience) from \doi{10.1038/s41593-022-01022-8}.
+#' See data-raw directory for scripts used to create gene list.
+#'
+"ensembl_exAM_list"
