@@ -984,7 +984,8 @@ Add_MALAT1_Threshold.Seurat <- function(
     chosen_min = 1,
     smooth = 1,
     abs_min = 0.3,
-    rough_max = 2
+    rough_max = 2,
+    ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = object)
@@ -1327,14 +1328,14 @@ exAM_Scoring <- function(
     # check features present
     exAM_found <- Feature_PreCheck(object = seurat_object, features = exAM_gene_list[["exAM_union"]])
 
-    if (species %in% human) {
+    if (species %in% human_options) {
       exAM_found2 <- Feature_PreCheck(object = seurat_object, features = exAM_gene_list[["exAM_micro"]])
     }
   } else {
     # check features present
     exAM_found <- exAM_gene_list[["exAM_union"]]
 
-    if (species %in% human) {
+    if (species %in% human_options) {
       exAM_found2 <- exAM_gene_list[["exAM_micro"]]
     }
   }
