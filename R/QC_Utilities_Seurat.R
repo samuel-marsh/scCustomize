@@ -1193,6 +1193,149 @@ Add_MALAT1_Threshold.Seurat <- function(
 }
 
 
+#' Add exAM Gene List Module Scores
+#'
+#' Adds module scores from exAM genes from mouse and human.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param exam_module_name name to use for the new meta.data column containing module scores.
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `exam_module_name` is present in meta.data slot.
+#' @param exclude_unfound logical, whether to exclude features not presne tin current object (default is FALSE).
+#' @param seed seed for reproducibility (default is 1).
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @references Gene list is from: SI Table 22 Marsh et al., 2022 (Nature Neuroscience) from \doi{10.1038/s41593-022-01022-8}.
+#' See data-raw directory for scripts used to create gene list.
+#'
+#' @export
+#'
+#' @concept qc_util
+#'
+
+exAM_Scoring <- function(
+    seurat_object,
+    species,
+    exam_module_name = NULL,
+    ensembl_ids = FALSE,
+    assay = NULL,
+    overwrite = FALSE,
+    exclude_unfound = FALSE,
+    seed = 1
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  if (species %in% c(marmoset_options, rat_options, zebrafish_options, macaque_options, drosophila_options, chicken_options)) {
+    cli_abort(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, Drosophila, Chicken} are not currently supported.",
+                         "i" = "No column will be added to object meta.data"))
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Overwrite check
+  if (exam_module_name %in% colnames(x = seurat_object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {exam_module_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code exam_module_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {exam_module_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    exAM_gene_list <- Retrieve_exAM_Lists(species = species)
+  } else {
+    exAM_gene_list <- Retrieve_exAM_Ensembl_Lists(species = species)
+  }
+
+  if (isTRUE(x = exclude_unfound)) {
+    # check features present
+    exAM_found <- Feature_PreCheck(object = seurat_object, features = exAM_gene_list[["exAM_union"]])
+
+    if (species %in% human) {
+      exAM_found2 <- Feature_PreCheck(object = seurat_object, features = exAM_gene_list[["exAM_micro"]])
+    }
+  } else {
+    # check features present
+    exAM_found <- exAM_gene_list[["exAM_union"]]
+
+    if (species %in% human) {
+      exAM_found2 <- exAM_gene_list[["exAM_micro"]]
+    }
+  }
+
+  # set module score names
+  if (is.null(x = exam_module_name)) {
+    if (species %in% human_options) {
+      exam_module_name <- c("exAM_Union_Score", "exAM_Microglia_Score")
+    } else {
+      exam_module_name <- c("exAM_Union_Score")
+    }
+  } else {
+    if (species %in% human_options && length(x = exam_module_name) != 2) {
+      cli_abort("{.code exam_module_name} must be length 2 when {.code species = {symbol$dquote_left}human{symbol$dquote_right}}.")
+    }
+  }
+
+  # Add mito and ribo columns
+  if (length(x = exAM_found) > 0) {
+    seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found), name = exam_module_name[1], search = search, seed = seed)
+  }
+
+  if (species %in% human_options) {
+    if (length(x = exAM_found2) > 0) {
+      seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found2), name = exam_module_name[2], search = search, seed = seed)
+    }
+  }
+
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
+
+  # return final object
+  return(seurat_object)
+}
+
+
+
+
 #' Calculate and add differences post-cell bender analysis
 #'
 #' Calculate the difference in features and UMIs per cell when both cell bender and raw assays are present.
