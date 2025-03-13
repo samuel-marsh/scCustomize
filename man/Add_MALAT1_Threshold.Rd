@@ -29,7 +29,8 @@ Add_MALAT1_Threshold(object, ...)
   chosen_min = 1,
   smooth = 1,
   abs_min = 0.3,
-  rough_max = 2
+  rough_max = 2,
+  ...
 )
 }
 \arguments{
