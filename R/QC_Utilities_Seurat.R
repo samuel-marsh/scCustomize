@@ -1219,6 +1219,12 @@ Add_MALAT1_Threshold.Seurat <- function(
 #'
 #' @concept qc_util
 #'
+#' @examples
+#' \dontrun{
+#' # Seurat
+#' seurat_object <- exAM_Scoring(seurat_object = seurat_object, species = "human")
+#'}
+#'
 
 exAM_Scoring <- function(
     seurat_object,
