@@ -1317,12 +1317,16 @@ exAM_Scoring <- function(
 
   # Add mito and ribo columns
   if (length(x = exAM_found) > 0) {
+    cli_inform(message = "Adding module score for exAM union gene list as {.field {symbol$dquote_left}{exam_module_name[1]}{symbol$dquote_right}}.")
     seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found), name = exam_module_name[1], search = search, seed = seed)
+    colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[1], "1"), replacement = exam_module_name[1], x = colnames(seurat_object@meta.data))
   }
 
   if (species %in% human_options) {
     if (length(x = exAM_found2) > 0) {
+      cli_inform(message = "Adding module score for exAM union gene list as {.field {symbol$dquote_left}{exam_module_name[2]}{symbol$dquote_right}}.")
       seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found2), name = exam_module_name[2], search = search, seed = seed)
+      colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[2], "1"), replacement = exam_module_name[2], x = colnames(seurat_object@meta.data))
     }
   }
 
@@ -1332,8 +1336,6 @@ exAM_Scoring <- function(
   # return final object
   return(seurat_object)
 }
-
-
 
 
 #' Calculate and add differences post-cell bender analysis
