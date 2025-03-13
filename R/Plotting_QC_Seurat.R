@@ -72,7 +72,7 @@ QC_Plots_Genes <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set default assay
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   nFeature <- paste0("nFeature_", assay)
 
@@ -167,7 +167,7 @@ QC_Plots_UMIs <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set default assay
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   nCount <- paste0("nCount_", assay)
 
@@ -809,7 +809,7 @@ QC_Plot_UMIvsGene <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set default assay
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   nCount <- paste0("nCount_", assay)
   nFeature <- paste0("nFeature_", assay)
@@ -1049,7 +1049,7 @@ QC_Plot_GenevsFeature <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set default assay
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   nFeature <- paste0("nFeature_", assay)
 
@@ -1161,7 +1161,7 @@ QC_Plot_UMIvsFeature <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Set default assay
-  assay <- assay %||% DefaultAssay(object = object)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
 
   nCount <- paste0("nCount_", assay)
 
