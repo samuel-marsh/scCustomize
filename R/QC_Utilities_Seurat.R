@@ -1055,6 +1055,9 @@ Add_MALAT1_Threshold.Seurat <- function(
     )
   }
 
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
   # check normalized
   Check_Normalized(object = object, assay = assay, error = TRUE)
 
@@ -1091,9 +1094,6 @@ Add_MALAT1_Threshold.Seurat <- function(
       cli_abort(message = "The value provided to {.code plot_height} ({.field {plot_height}}) is not numeric.")
     }
   }
-
-  # Set default assay
-  assay <- assay %||% DefaultAssay(object = object)
 
   # Retrieve gene lists
   if (isFALSE(x = ensembl_ids)) {
