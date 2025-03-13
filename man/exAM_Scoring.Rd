@@ -41,6 +41,13 @@ Seurat object
 \description{
 Adds module scores from exAM genes from mouse and human.
 }
+\examples{
+\dontrun{
+# Seurat
+seurat_object <- exAM_Scoring(seurat_object = seurat_object, species = "human")
+}
+
+}
 \references{
 Gene list is from: SI Table 22 Marsh et al., 2022 (Nature Neuroscience) from \doi{10.1038/s41593-022-01022-8}.
 See data-raw directory for scripts used to create gene list.
