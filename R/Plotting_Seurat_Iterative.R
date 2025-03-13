@@ -54,6 +54,13 @@ Iterate_PC_Loading_Plots <- function(
     }
   }
 
+  # check file extension
+  file_ext <- grep(x = file_name, pattern = ".pdf$")
+  if (length(x = file_ext) == 0) {
+    file_name <- paste0(file_name, ".pdf")
+  }
+
+
   # Set dims to plot if not specified
   num_pc_present <- length(seurat_object@reductions$pca@stdev)
   if (is.null(x = dims_plot)) {
@@ -77,9 +84,11 @@ Iterate_PC_Loading_Plots <- function(
   all_plots <- pblapply(dims_list, function(x) {
     PC_Plotting(seurat_object = seurat_object, dim_number = x)
   })
+
+
   # Save plots
   cli_inform(message = "Saving plots to file")
-  pdf(file = paste(file_path, name_prefix, file_name, ".pdf", sep=""), height = 11, width = 8.5)
+  pdf(file = paste(file_path, name_prefix, file_name, sep=""), height = 11, width = 8.5)
   pb <- txtProgressBar(min = 0, max = length(all_plots), style = 3, file = stderr())
   for (i in 1:length(all_plots)) {
     print(all_plots[[i]])
