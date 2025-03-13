@@ -6,6 +6,7 @@
 - Added new function `Add_MALAT1_Threshold` which implements QC procedure from Clarke & Bader (2024). bioRxiv \url{doi.org/10.1101/2024.07.14.603469}.   
 - Added new internal function `Check_Normalized` to confirm data within "data" layer of Seurat object is actually normalized (relevant only for V3/4 style objects/assays).  
 - Added new parameters to `Add_Cell_QC_Metrics` (Seurat ONLY) to add module score of IEGs in addition to percent expressing.  
+- Added new function `exAM_Scoring` to add module scores for exAM gene sets from Marsh et al., 2022 (\doi{10.1038/s41593-022-01022-8}).  
 
   
   
