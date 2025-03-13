@@ -8,6 +8,7 @@ exAM_Scoring(
   seurat_object,
   species,
   exam_module_name = NULL,
+  method = "Seurat",
   ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE,
