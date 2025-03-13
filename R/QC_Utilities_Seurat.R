@@ -1288,6 +1288,19 @@ exAM_Scoring <- function(
     }
   }
 
+  # set module score names
+  if (is.null(x = exam_module_name)) {
+    if (species %in% human_options) {
+      exam_module_name <- c("exAM_Union_Score", "exAM_Microglia_Score")
+    } else {
+      exam_module_name <- c("exAM_Union_Score")
+    }
+  } else {
+    if (species %in% human_options && length(x = exam_module_name) != 2) {
+      cli_abort("{.code exam_module_name} must be length 2 when {.code species = {symbol$dquote_left}human{symbol$dquote_right}}.")
+    }
+  }
+
   # Overwrite check
   if (exam_module_name %in% colnames(x = seurat_object@meta.data)) {
     if (isFALSE(x = overwrite)) {
@@ -1323,19 +1336,6 @@ exAM_Scoring <- function(
 
     if (species %in% human) {
       exAM_found2 <- exAM_gene_list[["exAM_micro"]]
-    }
-  }
-
-  # set module score names
-  if (is.null(x = exam_module_name)) {
-    if (species %in% human_options) {
-      exam_module_name <- c("exAM_Union_Score", "exAM_Microglia_Score")
-    } else {
-      exam_module_name <- c("exAM_Union_Score")
-    }
-  } else {
-    if (species %in% human_options && length(x = exam_module_name) != 2) {
-      cli_abort("{.code exam_module_name} must be length 2 when {.code species = {symbol$dquote_left}human{symbol$dquote_right}}.")
     }
   }
 
