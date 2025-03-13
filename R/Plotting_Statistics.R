@@ -957,7 +957,7 @@ Proportion_Plot <- function(
     group_by_var = "ident",
     split.by = NULL,
     num_columns = NULL,
-    x_lab_rotate = FALSE,
+    x_lab_rotate = TRUE,
     colors_use = NULL,
     ggplot_default_colors = FALSE,
     color_seed = 123
