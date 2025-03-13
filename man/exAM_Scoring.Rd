@@ -23,6 +23,8 @@ exAM_Scoring(
 
 \item{exam_module_name}{name to use for the new meta.data column containing module scores.}
 
+\item{method}{method to use for module scoring, currently only "Seurat" is supported.}
+
 \item{ensembl_ids}{logical, whether feature names in the object are gene names or
 ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
 

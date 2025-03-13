@@ -33,12 +33,13 @@ Returns size (number of cells) in each dataset within liger object along with ot
 cells_per_dataset <- Dataset_Size_LIGER(liger_object = object)
 
 # Return values for all datasets and include Age and Treatment meta data values
-cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, meta_data_column = c("Age", "Treatment"))
+cells_per_dataset <- Dataset_Size_LIGER(liger_object = object,
+meta_data_column = c("Age", "Treatment"))
 
 # Return values for all datasets and include Age and Treatment meta data values and filter to return
 largest Dataset by Treatment
-cells_per_dataset <- Dataset_Size_LIGER(liger_object = object, meta_data_column = c("Age", "Treatment"),
-filter_by = "Treatment")
+cells_per_dataset <- Dataset_Size_LIGER(liger_object = object,
+meta_data_column = c("Age", "Treatment"), filter_by = "Treatment")
 }
 
 }
