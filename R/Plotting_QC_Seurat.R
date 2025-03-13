@@ -62,6 +62,7 @@ QC_Plots_Genes <- function(
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
   raster = NULL,
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   ...
@@ -69,7 +70,12 @@ QC_Plots_Genes <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nFeature_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  nFeature <- paste0("nFeature_", assay)
+
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nFeature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -150,6 +156,7 @@ QC_Plots_UMIs <- function(
   x_lab_rotate = TRUE,
   y_axis_log = FALSE,
   raster = NULL,
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   ...
@@ -157,7 +164,12 @@ QC_Plots_UMIs <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = "nCount_RNA", group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  nCount <- paste0("nCount_", assay)
+
+  plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nCount, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
     geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
@@ -784,6 +796,7 @@ QC_Plot_UMIvsGene <- function(
   group.by = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -791,6 +804,12 @@ QC_Plot_UMIvsGene <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  nCount <- paste0("nCount_", assay)
+  nFeature <- paste0("nFeature_", assay)
 
   # Default raster check
   if (isTRUE(x = combination)) {
@@ -865,23 +884,23 @@ QC_Plot_UMIvsGene <- function(
   }
 
   # Calculate Correlation for all data
-  plot_cor_full <- round(x = cor(x = featurescatter_data_sort[, "nCount_RNA"], y = featurescatter_data_sort[, "nFeature_RNA"]), digits = 2)
+  plot_cor_full <- round(x = cor(x = featurescatter_data_sort[, nCount], y = featurescatter_data_sort[, nFeature]), digits = 2)
 
   if (is.null(x = meta_gradient_name)) {
     featurescatter_data_sort_filter <- featurescatter_data_sort %>%
-      filter(.data[["nCount_RNA"]] > low_cutoff_UMI & .data[["nCount_RNA"]] < high_cutoff_UMI & .data[["nFeature_RNA"]] > low_cutoff_gene & .data[["nFeature_RNA"]] < high_cutoff_gene)
+      filter(.data[[nCount]] > low_cutoff_UMI & .data[[nCount]] < high_cutoff_UMI & .data[[nFeature]] > low_cutoff_gene & .data[[nFeature]] < high_cutoff_gene)
   } else {
     featurescatter_data_sort_filter <- featurescatter_data_sort %>%
-      filter(.data[["nCount_RNA"]] > low_cutoff_UMI & .data[["nCount_RNA"]] < high_cutoff_UMI & .data[["nFeature_RNA"]] > low_cutoff_gene & .data[["nFeature_RNA"]] < high_cutoff_gene & .data[[meta_gradient_name]] < meta_gradient_low_cutoff)
+      filter(.data[[nCount]] > low_cutoff_UMI & .data[[nCount]] < high_cutoff_UMI & .data[[nFeature]] > low_cutoff_gene & .data[[nFeature]] < high_cutoff_gene & .data[[meta_gradient_name]] < meta_gradient_low_cutoff)
   }
 
   # Calculate correlation based on cutoffs
-  plot_cor_filtered <- round(x = cor(x = featurescatter_data_sort_filter[, "nCount_RNA"], y = featurescatter_data_sort_filter[, "nFeature_RNA"]), digits = 2)
+  plot_cor_filtered <- round(x = cor(x = featurescatter_data_sort_filter[, nCount], y = featurescatter_data_sort_filter[, nFeature]), digits = 2)
 
   # Plot with meta gradient
   if (!is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
     if (isTRUE(x = raster)) {
-      p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
+      p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[[nCount]], y = .data[[nFeature]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
@@ -893,7 +912,7 @@ QC_Plot_UMIvsGene <- function(
         ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".  ", "\nThe low cutoff for plotting ", meta_gradient_name, " is: ", meta_cutoff_reported)))
       return(p1)
     }
-    p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
+    p1 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[[nCount]], y = .data[[nFeature]])) +
       geom_point(mapping = aes(color = .data[[meta_gradient_name]]), size = pt.size) +
       scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
       theme_cowplot() +
@@ -907,7 +926,7 @@ QC_Plot_UMIvsGene <- function(
   }
   # Plot by identity
   if (is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
-    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+    p1 <- FeatureScatter(object = seurat_object, feature1 = nCount, feature2 = nFeature, cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
       xlab(x_axis_label) +
@@ -918,7 +937,7 @@ QC_Plot_UMIvsGene <- function(
 
   if (isTRUE(x = combination)) {
     # Plot by identity
-    p1 <- FeatureScatter(object = seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+    p1 <- FeatureScatter(object = seurat_object, feature1 = nCount, feature2 = nFeature, cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
       geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
       geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
       xlab(x_axis_label) +
@@ -930,7 +949,7 @@ QC_Plot_UMIvsGene <- function(
 
     # Plot with meta gradient
     if (isTRUE(x = raster)) {
-      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
+      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[[nCount]], y = .data[[nFeature]])) +
         geom_scattermore(mapping = aes(color = .data[[meta_gradient_name]]), pointsize = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
@@ -940,7 +959,7 @@ QC_Plot_UMIvsGene <- function(
         xlab(x_axis_label) +
         ylab(y_axis_label)
     } else {
-      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[["nCount_RNA"]], y = .data[["nFeature_RNA"]])) +
+      p2 <- ggplot(data = featurescatter_data_sort, mapping = aes(x = .data[[nCount]], y = .data[[nFeature]])) +
         geom_point(mapping = aes(color = .data[[meta_gradient_name]]), size = pt.size) +
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
@@ -1016,6 +1035,7 @@ QC_Plot_GenevsFeature <- function(
   group.by = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -1023,6 +1043,11 @@ QC_Plot_GenevsFeature <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  nFeature <- paste0("nFeature_", assay)
 
   # Label x axis
   if (is.null(x = x_axis_label)) {
@@ -1055,7 +1080,7 @@ QC_Plot_GenevsFeature <- function(
   }
 
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nFeature_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nFeature, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
@@ -1121,6 +1146,7 @@ QC_Plot_UMIvsFeature <- function(
   group.by = NULL,
   raster = NULL,
   raster.dpi = c(512, 512),
+  assay = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   shuffle_seed = 1,
@@ -1128,6 +1154,11 @@ QC_Plot_UMIvsFeature <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  nCount <- paste0("nCount_", assay)
 
   # Label x axis
   if (is.null(x = x_axis_label)) {
@@ -1160,7 +1191,7 @@ QC_Plot_UMIvsFeature <- function(
   }
 
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = "nCount_RNA", pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nCount, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
