@@ -22,7 +22,8 @@ Function to select reference dataset to use in liger based on meta data informat
 \examples{
 \dontrun{
 # standalone use
-ref_dataset <- Get_Reference_LIGER(liger_object = object, meta_data_column = "Treatment", value = "Ctrl")
+ref_dataset <- Get_Reference_LIGER(liger_object = object, meta_data_column = "Treatment",
+value = "Ctrl")
 
 # use within `quantileNorm`
 object <- quantileNorm(object = object, reference = Get_Reference_LIGER(liger_object = object,
