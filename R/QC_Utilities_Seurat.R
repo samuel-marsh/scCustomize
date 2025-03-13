@@ -1302,7 +1302,7 @@ exAM_Scoring <- function(
   }
 
   # Overwrite check
-  if (exam_module_name %in% colnames(x = seurat_object@meta.data)) {
+  if (any(exam_module_name %in% colnames(x = seurat_object@meta.data))) {
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("Column with {.val {exam_module_name}} already present in meta.data slot.",
                             "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code exam_module_name}*")
