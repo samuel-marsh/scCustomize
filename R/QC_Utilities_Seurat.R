@@ -1224,6 +1224,7 @@ exAM_Scoring <- function(
     seurat_object,
     species,
     exam_module_name = NULL,
+    method = "Seurat",
     ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE,
@@ -1263,6 +1264,21 @@ exAM_Scoring <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  if (method == "UCell") {
+    # Check Nebulosa installed
+    UCell_check <- is_installed(pkg = "UCell")
+    if (isFALSE(x = UCell_check)) {
+      cli_abort(message = c(
+        "Please install the {.val UCell} package to use {.code method = {symbol$dquote_left}UCell{symbol$dquote_right}}",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+        "{.field `BiocManager::install({symbol$dquote_left}UCell{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
+    }
+  }
 
   # Overwrite check
   if (exam_module_name %in% colnames(x = seurat_object@meta.data)) {
