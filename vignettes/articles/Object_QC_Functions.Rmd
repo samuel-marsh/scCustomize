@@ -53,12 +53,16 @@ library(Seurat)
 library(scCustomize)
 
 pbmc <- pbmc3k.SeuratData::pbmc3k
+hcabm <- hcabm40k.SeuratData::hcabm40k
 ```
 
 
 ```{r include=FALSE}
 pbmc <- UpdateSeuratObject(pbmc)
 pbmc <- NormalizeData(pbmc)
+
+hcabm <- UpdateSeuratObject(hcabm)
+hcabm <- NormalizeData(hcabm)
 ```
 
 We'll add some random meta data variables to pbmc data form use in this vignette
@@ -239,3 +243,46 @@ In scCustomize the percent of gene expression from the following gene lists can 
   
 * Oxidative Phosphorylation, Apoptosis, & DNA Repair (all default species except Marmoset)  
     - Species specific gene lists from [MSigDB Hallmark Gene Sets](https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H) 
+
+
+## Calculate and Add MALAT1 Threshold  
+Another QC metric that has been proposed is based on the level of expression of long non-coding RNA MALAT1 ([*Clarke & Bader, 2024*](https://doi.org/10.1101/2024.07.14.603469})).  Their analysis demonstrates that low MALAT1 expression is characteristic of low quality cells and created function to determine a cutoff threshold to call low quality/damaged cells.  Their metric has now been incorporated into scCustomize as `Add_MALAT1_Threshold`.
+
+**NOTE: If you utilize this function please cite the above manuscript in addition to scCustomize).**  
+
+**NOTE: This function is currently only available for human and mouse as those are only species with MALAT1 annotated**  
+
+For best results this function should be run on per sample basis using normalized count matrix. To get started all the function requires is Seurat Object, the species being analyzed, and the name of meta.data column that contains sample ID information.  
+```{r message=TRUE}
+hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", sample_col = "orig.ident")
+```
+
+**NOTE: The function is also compatible with Ensembl IDs by specifying `ensembl_ids = TRUE` in function call.**  
+
+The function will calculate the threshold for each sample and adds new column to meta.data containing logical value (TRUE/FALSE) designating cells above or below the threshold.  This can then be visualized as any meta.data column.  
+
+```{r}
+VlnPlot_scCustom(seurat_object = hcabm, features = "nFeature_RNA", split.by = "MALAT1_Threshold")
+FeatureScatter_scCustom(seurat_object = hcabm, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", split.by = "MALAT1_Threshold", pt.size = 1)
+```
+
+In addition to basic parameters there are several optional parameters that can be invoked.  The first set relate to a series of plots the are created when determining the threshold.  For detailed description of these plots and their interpretation please see [Clarke & Bader GitHub Repo](https://github.com/BaderLab/MALAT1_threshold).  The optional parameters within scCustomize are:  
+- `print_plots` whether or not to print plots to output while running function (default is FALSE).  
+- `save_plots` whether or not to save plots to PDF file while running function (default is FALSE).  
+- `save_plot_path` directory path to save the plots.  
+- `save_plot_name` file name for PDF document with plots.  
+- `plot_width` plot width (inches)
+- `plot_height` plot height (inches)
+
+```{r eval=FALSE}
+hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", sample_col = "orig.ident", save_plots = TRUE, save_plot_path = "plots/QC_Plots/", save_plot_name = "MALAT1_Threshold_Plots")
+```
+
+Here is eample of plots for one of the samples in the hcabm dataset.
+
+```{r}
+
+```
+
+
+Finally, there are also a series of parameters of the MALAT1 function itself that can be modified.  For deeper description of parameters below please see manual documentation for `Add_MALAT1_Threshold()` and above mentioned manuscript: `bw`, `lwd`, `breaks`, `chosen_min`, `smooth`, `abs_min`, `rough_max`.
