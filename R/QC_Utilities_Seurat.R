@@ -1146,6 +1146,8 @@ Add_MALAT1_Threshold.Seurat <- function(
     malat1_threshold <- malat_norm_data > threshold
     object[[malat1_threshold_name]] <- malat1_threshold
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+    cli_inform(message = "A total of {.field {length(which(object[[malat1_threshold_name]] == FALSE))}} ({.field {length(which(object[[malat1_threshold_name]] == FALSE)) / length(x = Cells(object = object))}}) fall below the threshold.")
+
   } else {
     Idents(object = object) <- sample_col
     cells_by_sample <- CellsByIdentities(object = object)
@@ -1188,14 +1190,15 @@ Add_MALAT1_Threshold.Seurat <- function(
       dev.off()
     }
 
-    # Combine results and add to object
-    cli_inform(message = "Adding results to object as {.val {malat1_threshold_name}}.")
     # Extract thresholds and bind them into a single data frame
     thresholds_list <- lapply(threshold_all, function(res) {
       res$thresholds
     })
     thresholds_df <- bind_rows(thresholds_list)
+    cli_inform(message = "A total of {.field {length(which(thresholds_df[[malat1_threshold_name]] == FALSE))}} ({.field {length(which(thresholds_df[[malat1_threshold_name]] == FALSE)) / length(x = Cells(object = object))}}) fall below the threshold.")
 
+    # Add to object
+    cli_inform(message = "Adding results to object as {.val {malat1_threshold_name}}.")
     object[[malat1_threshold_name]] <- thresholds_df
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
   }
