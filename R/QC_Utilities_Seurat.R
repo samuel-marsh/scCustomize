@@ -938,6 +938,7 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' @import cli
 #' @import ggplot2
 #' @import pbapply
+#' @importFrom scales label_percent
 #' @importFrom stats density lm predict smooth.spline
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #'
@@ -1146,7 +1147,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     malat1_threshold <- malat_norm_data > threshold
     object[[malat1_threshold_name]] <- malat1_threshold
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
-    cli_inform(message = "A total of {.field {length(which(object[[malat1_threshold_name]] == FALSE))}} ({.field {length(which(object[[malat1_threshold_name]] == FALSE)) / length(x = Cells(object = object))}}) fall below the threshold.")
+    cli_inform(message = "A total of {.field {length(which(object[[malat1_threshold_name]] == FALSE))}} ({.field {label_percent()(length(which(object[[malat1_threshold_name]] == FALSE)) / length(x = Cells(x = object))}}) fall below the threshold.")
 
   } else {
     Idents(object = object) <- sample_col
@@ -1195,7 +1196,7 @@ Add_MALAT1_Threshold.Seurat <- function(
       res$thresholds
     })
     thresholds_df <- bind_rows(thresholds_list)
-    cli_inform(message = "A total of {.field {length(which(thresholds_df[[malat1_threshold_name]] == FALSE))}} ({.field {length(which(thresholds_df[[malat1_threshold_name]] == FALSE)) / length(x = Cells(object = object))}}) fall below the threshold.")
+    cli_inform(message = "A total of {.field {length(which(thresholds_df[['malat1_threshold_name']] == FALSE))}} ({.field {label_percent()(length(which(thresholds_df[['malat1_threshold_name']] == FALSE)) / length(x = Cells(x = object))}}) fall below the threshold.")
 
     # Add to object
     cli_inform(message = "Adding results to object as {.val {malat1_threshold_name}}.")
