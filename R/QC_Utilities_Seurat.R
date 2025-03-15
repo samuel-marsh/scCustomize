@@ -1019,7 +1019,7 @@ Add_MALAT1_Threshold.Seurat <- function(
   macaque_options <- accepted_names$Macaque_Options
   chicken_options <- accepted_names$Chicken_Options
 
-  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options)) {
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && is.null(x = homolog_name)) {
     cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, Drosophila, and Chicken are not currently supported by default.  Please supply MALAT1 homolog/ortholog feature name.")
   }
 
@@ -1033,6 +1033,12 @@ Add_MALAT1_Threshold.Seurat <- function(
   if (species %in% human_options) {
     if (is.null(x = malat1_threshold_name)) {
       malat1_threshold_name <- "MALAT1_Threshold"
+    }
+  }
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && !is.null(x = homolog_name)) {
+    if (is.null(x = malat1_threshold_name)) {
+      malat1_threshold_name <- paste0(homolog_name, "_Threshold")
     }
   }
 
@@ -1103,6 +1109,9 @@ Add_MALAT1_Threshold.Seurat <- function(
     if (species %in% human_options) {
       malat_id <- "MALAT1"
     }
+    if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && is.null(x = homolog_name)) {
+      malat_id <- homolog_name
+    }
   } else {
     malat_id <- Retrieve_MALAT1_Ensembl_Lists(species = species)
   }
@@ -1111,8 +1120,8 @@ Add_MALAT1_Threshold.Seurat <- function(
   malat_id <- Feature_PreCheck(object = object, features = malat_id)
 
   # Get data
-  cli_inform(message = c("*" = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}."))
-  cli_inform(message = c("i" = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}"))
+  cli_inform(message = c("*" = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.",
+                         "i" = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}"))
 
   # split data and run by sample or whole object
   if (isTRUE(x = whole_object)) {
