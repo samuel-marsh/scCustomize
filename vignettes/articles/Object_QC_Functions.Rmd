@@ -250,7 +250,7 @@ Another QC metric that has been proposed is based on the level of expression of 
 
 **NOTE: If you utilize this function please cite the above manuscript in addition to scCustomize).**  
 
-**NOTE: This function is currently only available for human and mouse as those are only species with MALAT1 annotated**  
+**NOTE: This function is currently only available for human and mouse as those are only species with MALAT1 annotated.  See section below on non-default species for more info.**  
 
 For best results this function should be run on per sample basis using normalized count matrix. To get started all the function requires is Seurat Object, the species being analyzed, and the name of meta.data column that contains sample ID information.  
 ```{r message=TRUE}
@@ -259,6 +259,20 @@ hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", sample_col = "o
 
 **NOTE: The function is also compatible with Ensembl IDs by specifying `ensembl_ids = TRUE` in function call.**  
 
+#### Single Sample Object  
+If your Seurat object only has a single sample or you want to run the calculation across the entire object then you can supply the optional parameter of `whole_object = TRUE`.  
+```{r eval=FALSE}
+hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", whole_object = TRUE)
+```
+
+#### Non-default species   
+Currently, humans and mice are the only species for which MALAT1 has been annotated in the genome.  If your analysis includes annotation of MALAT1 homolog/paralog in new species you can supply that value to optional parameter `homolog_name`.  
+```{r eval=FALSE}
+hcabm <- Add_MALAT1_Threshold(object = OBJECT, species = "marmoset", homolog_name = "MALAT1_HOMOLOG_SYMBOL_OR_ID_NUMBER")
+```
+
+
+### Visualizing the Results  
 The function will calculate the threshold for each sample and adds new column to meta.data containing logical value (TRUE/FALSE) designating cells above or below the threshold.  This can then be visualized as any meta.data column.  
 
 ```{r}
@@ -266,6 +280,8 @@ VlnPlot_scCustom(seurat_object = hcabm, features = "nFeature_RNA", split.by = "M
 FeatureScatter_scCustom(seurat_object = hcabm, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", split.by = "MALAT1_Threshold", pt.size = 1)
 ```
 
+
+### Visualizing & Saving Threshold Calculation Plots    
 In addition to basic parameters there are several optional parameters that can be invoked.  The first set relate to a series of plots the are created when determining the threshold.  For detailed description of these plots and their interpretation please see [Clarke & Bader GitHub Repo](https://github.com/BaderLab/MALAT1_threshold).  The optional parameters within scCustomize are:  
 - `print_plots` whether or not to print plots to output while running function (default is FALSE).  
 - `save_plots` whether or not to save plots to PDF file while running function (default is FALSE).  
@@ -285,4 +301,5 @@ Here is eample of plots for one of the samples in the hcabm dataset.
 ```
 
 
+### Optional Parameters to Modify Threshold Calculation    
 Finally, there are also a series of parameters of the MALAT1 function itself that can be modified.  For deeper description of parameters below please see manual documentation for `Add_MALAT1_Threshold()` and above mentioned manuscript: `bw`, `lwd`, `breaks`, `chosen_min`, `smooth`, `abs_min`, `rough_max`.
