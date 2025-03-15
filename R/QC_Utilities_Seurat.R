@@ -937,7 +937,6 @@ Add_Top_Gene_Pct.Seurat <- function(
 #'
 #' @import cli
 #' @import ggplot2
-#' @import parallel
 #' @import pbapply
 #' @importFrom scales label_percent
 #' @importFrom stats density lm predict smooth.spline
@@ -1165,40 +1164,21 @@ Add_MALAT1_Threshold.Seurat <- function(
 
     # calculate threshold
     cli_inform(message = "Calculating thresholds across {.field {length(x = sample_col_names)}} samples from meta.data column {.field {sample_col}}.")
-    if (isFALSE(x = parallel)) {
-      threshold_all <- pblapply(1:length(x = sample_col_names), function(x) {
-        malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
+    threshold_all <- pblapply(1:length(x = sample_col_names), function(x) {
+      malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
 
-        # run threshold function
-        res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
+      # run threshold function
+      res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
 
-        threshold <- res[[1]]
+      threshold <- res[[1]]
 
-        malat1_threshold <- malat_norm_data > threshold
-        malat1_threshold <- data.frame(malat1_threshold_name = malat1_threshold)
-        rownames(malat1_threshold) <- cells_by_sample[[x]]
+      malat1_threshold <- malat_norm_data > threshold
+      malat1_threshold <- data.frame(malat1_threshold_name = malat1_threshold)
+      rownames(malat1_threshold) <- cells_by_sample[[x]]
 
-        res_list <- list("thresholds" = malat1_threshold,
-                         "plots" = res[[2]])
-      })
-    } else {
-      threshold_all <- mclapply(mc.cores = num_cores, 1:length(x = sample_col_names), function(x) {
-        malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
-
-        # run threshold function
-        res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
-
-        threshold <- res[[1]]
-
-        malat1_threshold <- malat_norm_data > threshold
-        malat1_threshold <- data.frame(malat1_threshold_name = malat1_threshold)
-        rownames(malat1_threshold) <- cells_by_sample[[x]]
-
-        res_list <- list("thresholds" = malat1_threshold,
-                         "plots" = res[[2]])
-      })
-    }
-
+      res_list <- list("thresholds" = malat1_threshold,
+                       "plots" = res[[2]])
+    })
 
     # save plots
     if (isTRUE(x = save_plots)) {
