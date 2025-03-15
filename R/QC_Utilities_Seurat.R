@@ -1189,9 +1189,11 @@ Add_MALAT1_Threshold.Seurat <- function(
     }
 
     # Combine results and add to object
-    cli_inform("Adding results to object as {.val {malat1_threshold_name}}.")
+    cli_inform(message = "Adding results to object as {.val {malat1_threshold_name}}.")
     # Extract thresholds and bind them into a single data frame
-    thresholds_list <- lapply(threshold_all, function(res) res$thresholds)
+    thresholds_list <- lapply(threshold_all, function(res) {
+      res$thresholds
+    })
     thresholds_df <- bind_rows(thresholds_list)
 
     object[[malat1_threshold_name]] <- thresholds_df
