@@ -6,7 +6,8 @@
 \usage{
 Extract_Top_Markers(
   marker_dataframe,
-  num_genes = 10,
+  num_features = 10,
+  num_genes = deprecated(),
   group_by = "cluster",
   rank_by = "avg_log2FC",
   gene_column = "gene",
@@ -19,7 +20,9 @@ Extract_Top_Markers(
 \arguments{
 \item{marker_dataframe}{data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.}
 
-\item{num_genes}{number of genes per group (e.g., cluster) to include in output list.}
+\item{num_features}{number of features per group (e.g., cluster) to include in output list.}
+
+\item{num_genes}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{num_features}.}
 
 \item{group_by}{column name of \code{marker_dataframe} to group data by.  Default is "cluster" based on
 \code{\link[Seurat]{FindAllMarkers}}.}
