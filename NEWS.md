@@ -1,4 +1,4 @@
-# scCustomize 3.X.X (202X-XX-XX)  
+# scCustomize 3.1.0 (2025-XX-XX)  
 ## Added  
 - Add support for LIGER objects using `Extract_Sample_Meta`.  
 - Added new function `Dataset_Size_LIGER` to return data.frame containing cells per dataset in liger object in addition to accompanying sample meta data if desired.  
@@ -11,6 +11,7 @@
   
   
 ## Changed  
+- **BREAKING CHANGE** The parameter `num_genes` has been soft-deprecated in `Extract_Top_Markers`.  Please use `num_features` instead.  Using `num_genes` will warn user but still work until scCustomize v3.2.0.  
 - The following parameters in `plotFactors_scCustom` have been fully deprecated for LIGER objects >= V2: `reorder_datasets` and `reduction_label`.  
 - Following prior deprecation warnings the following functions are now fully deprecated and replaced with updated functions: `Add_Cell_Complexity_LIGER`, `Add_Cell_Complexity_Seurat`, `Add_Cell_Complexity_Seurat`, `Add_Mito_Ribo_LIGER`, `Add_Mito_Ribo_Seurat`, `Gene_Present`, `Meta_Present_LIGER`, and `Split_FeatureScatter`.  
 - Changed internal function `PercentAbove_Seurat` to match updates to Seurat to appropriately deal with NA values.  
