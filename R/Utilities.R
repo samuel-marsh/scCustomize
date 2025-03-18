@@ -1186,7 +1186,7 @@ Add_Pct_Diff <- function(
 #' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
 #' @import cli
-#' @importFrom dplyr group_by slice_max
+#' @importFrom dplyr group_by slice_max slice_min
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -1236,16 +1236,31 @@ Extract_Top_Markers <- function(
 
   # create filtered data.frame
   if (is.null(x = group_by)) {
-    filtered_markers <- marker_dataframe %>%
-      rownames_to_column("rownames") %>%
-      slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
-      column_to_rownames("rownames")
+    if (rank_by == "p_val_adj") {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        slice_min(n = num_genes, order_by = .data[[rank_by]]) %>%
+        column_to_rownames("rownames")
+    } else {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
+        column_to_rownames("rownames")
+    }
   } else {
-    filtered_markers <- marker_dataframe %>%
-      rownames_to_column("rownames") %>%
-      group_by(.data[[group_by]]) %>%
-      slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
-      column_to_rownames("rownames")
+    if (rank_by == "p_val_adj") {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        group_by(.data[[group_by]]) %>%
+        slice_min(n = num_genes, order_by = .data[[rank_by]]) %>%
+        column_to_rownames("rownames")
+    } else {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        group_by(.data[[group_by]]) %>%
+        slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
+        column_to_rownames("rownames")
+    }
   }
 
   if (isTRUE(x = gene_rownames_to_column)) {
