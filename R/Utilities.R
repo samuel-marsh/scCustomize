@@ -1169,7 +1169,8 @@ Add_Pct_Diff <- function(
 #'  or similar analysis.
 #'
 #' @param marker_dataframe data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.
-#' @param num_genes number of genes per group (e.g., cluster) to include in output list.
+#' @param num_features number of features per group (e.g., cluster) to include in output list.
+#' @param num_genes `r lifecycle::badge("deprecated")` soft-deprecated. See `num_features`.
 #' @param group_by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
 #'  \code{\link[Seurat]{FindAllMarkers}}.
 #' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group_by`.
@@ -1187,6 +1188,7 @@ Add_Pct_Diff <- function(
 #'
 #' @import cli
 #' @importFrom dplyr group_by slice_max slice_min
+#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -1205,7 +1207,8 @@ Add_Pct_Diff <- function(
 
 Extract_Top_Markers <- function(
   marker_dataframe,
-  num_genes = 10,
+  num_features = 10,
+  num_genes = deprecated(),
   group_by = "cluster",
   rank_by = "avg_log2FC",
   gene_column = "gene",
@@ -1214,6 +1217,14 @@ Extract_Top_Markers <- function(
   named_vector = TRUE,
   make_unique = FALSE
 ) {
+  if (lifecycle::is_present(num_genes)) {
+    lifecycle::deprecate_warn(when = "3.2.0",
+                              what = "Extract_Top_Markers(num_genes)",
+                              details = c("i" = "The {.code num_genes} parameter is soft-deprecated.  Please update code to use `num_features` instead.")
+    )
+    num_features <- num_genes
+  }
+
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
     cli_abort(message = "{.code rank_by}: {.val {rank_by}} not found in column names of {.code marker_dataframe}.")
