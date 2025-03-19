@@ -1366,14 +1366,14 @@ exAM_Scoring <- function(
   if (length(x = exAM_found) > 0) {
     cli_inform(message = c("i" = "{col_cyan('Please cite')} {.field Marsh et al., (2022). doi.org/10.1038/s41593-022-01022-8} {col_cyan('when using exAM Scoring function.')}"))
     cli_inform(message = "Adding module score for exAM union gene list as {.field {symbol$dquote_left}{exam_module_name[1]}{symbol$dquote_right}}.")
-    seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found), name = exam_module_name[1], search = search, seed = seed)
+    seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found), name = exam_module_name[1], search = FALSE, seed = seed)
     colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[1], "1"), replacement = exam_module_name[1], x = colnames(seurat_object@meta.data))
   }
 
   if (species %in% human_options) {
     if (length(x = exAM_found2) > 0) {
       cli_inform(message = "Adding module score for exAM Microglia Factor gene list as {.field {symbol$dquote_left}{exam_module_name[2]}{symbol$dquote_right}}.")
-      seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found2), name = exam_module_name[2], search = search, seed = seed)
+      seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found2), name = exam_module_name[2], search = FALSE, seed = seed)
       colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[2], "1"), replacement = exam_module_name[2], x = colnames(seurat_object@meta.data))
     }
   }
