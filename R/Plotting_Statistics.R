@@ -979,7 +979,7 @@ Proportion_Plot <- function(
     plot <- Plot_Bar_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, plot_scale = plot_scale, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
 
     if (isTRUE(x = x_lab_rotate)) {
-      plot <- plot + RotatedAxis()
+      plot <- plot + theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
     }
   }
 

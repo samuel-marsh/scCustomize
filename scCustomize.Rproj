@@ -21,3 +21,5 @@ PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageBuildArgs: --no-build-vignettes
 PackageCheckArgs: --ignore-vignettes
+
+QuitChildProcessesOnExit: Yes
