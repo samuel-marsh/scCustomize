@@ -986,3 +986,132 @@ Proportion_Plot <- function(
   # Return plot
   return(plot)
 }
+
+
+#' Cell Proportion Plot per Sample
+#'
+#' Plots the proportion of cells belonging to each identity per sample split by grouping
+#' variable/condition.
+#'
+#' @param seurat_object Seurat object name.
+#' @param cluster name of meta.data column containing cluster values.  Default is `ident`
+#' which defaults to current active.ident.
+#' @param split.by name of meta.data column containing sample group/condition variable.
+#' @param sample_col name of meta.data column that contains sample ID information.
+#' @param pt.size the size of points in plot (default is 1.5).
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE). Only valid if `plot_type = "bar"`.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom dplyr all_of select group_by summarize mutate ungroup left_join join_by
+#' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr complete replace_na
+#'
+#' @export
+#'
+#' @concept stats_plotting
+#'
+#' @examples
+#' \dontrun{
+#' Proportion_Plot_per_Sample(seurat_object = obj, split.by = "Diagnosis",
+#' sample_col = "orig.ident")
+#' }
+#'
+
+Proportion_Plot_per_Sample <- function(
+    seurat_object,
+    cluster = "ident",
+    split.by,
+    sample_col,
+    pt.size = 1.5,
+    x_lab_rotate = TRUE,
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Assign temp variable if `cluster = "ident"`
+  if (cluster == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+  }
+
+  # Check all variables exist
+  bad_meta <- Meta_Present(object = seurat_object, meta_col_names = c(cluster, split.by, sample_col), print_msg = FALSE, omit_warn = FALSE)[[2]]
+
+  if (length(x = bad_meta) > 0) {
+    cli_abort(message = c("The following variables were not found in object meta.data:",
+                          "i" = "{.field {bad_meta}}"))
+  }
+
+  plot_df <- Fetch_Meta(object = seurat_object) %>%
+    group_by(.data[[sample_col]], .data[[cluster]]) %>%
+    summarize(cell_count = n(), .groups = "drop") %>%
+    group_by(.data[[sample_col]]) %>%
+    mutate("percent_cells" = (.data[["cell_count"]] / sum(.data[["cell_count"]])) * 100) %>%
+    ungroup()
+
+  colnames(plot_df) <- c("sample_id", "cluster", "count", "percent")
+
+  plot_df <- plot_df %>%
+    complete(.data[["cluster"]], .data[["sample_id"]]) %>%
+    replace_na(, replace = list("count" = 0,
+                                "percent" = 0))
+
+  # Add split.by variable
+  sample_meta <- Extract_Sample_Meta(object = seurat_object) %>%
+    ungroup() %>%
+    select(all_of(c(sample_col, split.by)))
+
+  plot_df <- left_join(plot_df, sample_meta, by = join_by("sample_id"))
+
+  # Set plot colors
+  split_by_length <- length(x = unique(x = plot_df[[split.by]]))
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    if (split_by_length == 2 || split_by_length > 8) {
+      colors_use <- scCustomize_Palette(num_groups = split_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    } else {
+      colors_use <- Dark2_Pal()
+    }
+  } else {
+    if (length(x = colors_use) != split_by_length) {
+      cli_abort(message = "The number of colors supplied to {.code colors_use} ({.field {length(x = colors_use)}}) does not equal number of groups in {.code split.by} ({.field {split_by_length}}).")
+    }
+  }
+
+  # Create the plot
+  plot <- ggplot(plot_df, aes(x = .data[["cluster"]], y = .data[["percent"]], color = .data[[split.by]])) +
+    geom_boxplot(outlier.shape = NA, position = position_dodge(width = 0.9)) +
+    geom_quasirandom(dodge.width = 0.9, size = pt.size) +
+    scale_color_manual(values = colors_use) +
+    labs(
+      title = "Percent of Cells per Cluster per Sample",
+      y = "Percent of Cells",
+      color = split.by
+    ) +
+    theme(legend.position = "top",
+          axis.title.x = element_blank())
+
+  # rotate x-axis
+  if (isTRUE(x_lab_rotate)) {
+    plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
+  } else {
+    plot <- plot + theme_ggprism_mod()
+  }
+
+  # return
+  return(plot)
+}
