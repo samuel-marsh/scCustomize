@@ -1057,10 +1057,10 @@ Proportion_Plot_per_Sample <- function(
     mutate("percent_cells" = (.data[["cell_count"]] / sum(.data[["cell_count"]])) * 100) %>%
     ungroup()
 
-  colnames(plot_df) <- c("sample_id", "cluster", "count", "percent")
+  colnames(plot_df) <- c(sample_col, "cluster", "count", "percent")
 
   plot_df <- plot_df %>%
-    complete(.data[["cluster"]], .data[["sample_id"]]) %>%
+    complete(.data[["cluster"]], .data[[sample_col]]) %>%
     replace_na(, replace = list("count" = 0,
                                 "percent" = 0))
 
@@ -1069,7 +1069,7 @@ Proportion_Plot_per_Sample <- function(
     ungroup() %>%
     select(all_of(c(sample_col, split.by)))
 
-  plot_df <- left_join(plot_df, sample_meta, by = join_by("sample_id"))
+  plot_df <- left_join(plot_df, sample_meta, by = join_by(sample_col))
 
   # Set plot colors
   split_by_length <- length(x = unique(x = plot_df[[split.by]]))
