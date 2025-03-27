@@ -979,8 +979,6 @@ Add_MALAT1_Threshold.Seurat <- function(
     plot_height = 8,
     whole_object = FALSE,
     homolog_name = NULL,
-    parallel = FALSE,
-    num_cores = NULL,
     bw = 0.1,
     lwd = 2,
     breaks = 100,
@@ -1062,11 +1060,6 @@ Add_MALAT1_Threshold.Seurat <- function(
     cli_abort(message = c("No species name or abbreivation was provided to {.code species} parameter.",
                           "i" = "If not using default species please set {.code species = other}.")
     )
-  }
-
-  # Confirm num_cores specified
-  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
-    cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
   }
 
   # Set default assay
