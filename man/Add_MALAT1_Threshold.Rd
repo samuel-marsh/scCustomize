@@ -23,8 +23,6 @@ Add_MALAT1_Threshold(object, ...)
   plot_height = 8,
   whole_object = FALSE,
   homolog_name = NULL,
-  parallel = FALSE,
-  num_cores = NULL,
   bw = 0.1,
   lwd = 2,
   breaks = 100,
