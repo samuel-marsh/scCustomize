@@ -1051,6 +1051,7 @@ Proportion_Plot_per_Sample <- function(
   }
 
   plot_df <- Fetch_Meta(object = seurat_object) %>%
+    droplevels %>%
     group_by(.data[[sample_col]], .data[[cluster]]) %>%
     summarize(cell_count = n(), .groups = "drop") %>%
     group_by(.data[[sample_col]]) %>%
