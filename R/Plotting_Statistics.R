@@ -1101,15 +1101,19 @@ Proportion_Plot_per_Sample <- function(
       title = "Percent of Cells per Cluster per Sample",
       y = "Percent of Cells",
       color = split.by
-    ) +
-    theme(legend.position = "top",
-          axis.title.x = element_blank())
+    )
 
   # rotate x-axis
   if (isTRUE(x_lab_rotate)) {
-    plot <- plot + theme_ggprism_mod(axis_text_angle = 45)
+    plot <- plot +
+      theme_ggprism_mod(axis_text_angle = 45) +
+      theme(legend.position = "top",
+            axis.title.x = element_blank())
   } else {
-    plot <- plot + theme_ggprism_mod()
+    plot <- plot +
+      theme_ggprism_mod() +
+      theme(legend.position = "top",
+            axis.title.x = element_blank())
   }
 
   # return
