@@ -7,6 +7,7 @@
 - Added new internal function `Check_Normalized` to confirm data within "data" layer of Seurat object is actually normalized (relevant only for V3/4 style objects/assays).  
 - Added new parameters to `Add_Cell_QC_Metrics` (Seurat ONLY) to add module score of IEGs in addition to percent expressing.  
 - Added new function `exAM_Scoring` to add module scores for exAM gene sets from Marsh et al., 2022 (\doi{10.1038/s41593-022-01022-8}).  
+- Added new function `Proportion_Plot_per_Sample` to plot proportion of cells per sample across a specified condition.  
 
   
   
