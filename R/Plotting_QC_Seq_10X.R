@@ -1711,6 +1711,11 @@ Seq_QC_Plot_Antisense <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### 10X SEQ QC COMBINED LAYOUTS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' QC Plots Sequencing metrics (Layout)
 #'
 #' Plot a combined plot of the basic QC metrics from sequencing output.
