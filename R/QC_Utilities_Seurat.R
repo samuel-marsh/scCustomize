@@ -205,7 +205,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     } else {
       cli_inform(message = c("*" = "Adding {.field Cell Cycle Scoring} to meta.data."))
       if (isFALSE(x = Check_Normalized(object = object, assay = assay, error = FALSE))) {
-        cli_inform(message = c("Layer with normalized data not present.",
+        cli_inform(message = c("x" = "Layer with normalized data not present.",
                                "i" = "Normalizing Data."))
         object <- NormalizeData(object = object)
       }
