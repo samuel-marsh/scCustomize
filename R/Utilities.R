@@ -1250,12 +1250,12 @@ Extract_Top_Markers <- function(
     if (rank_by == "p_val_adj") {
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
-        slice_min(n = num_genes, order_by = .data[[rank_by]], with_ties = FALSE) %>%
+        slice_min(n = num_features, order_by = .data[[rank_by]], with_ties = FALSE) %>%
         column_to_rownames("rownames")
     } else {
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
-        slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
+        slice_max(n = num_features, order_by = .data[[rank_by]]) %>%
         column_to_rownames("rownames")
     }
   } else {
@@ -1263,13 +1263,13 @@ Extract_Top_Markers <- function(
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
         group_by(.data[[group_by]]) %>%
-        slice_min(n = num_genes, order_by = .data[[rank_by]], with_ties = FALSE) %>%
+        slice_min(n = num_features, order_by = .data[[rank_by]], with_ties = FALSE) %>%
         column_to_rownames("rownames")
     } else {
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
         group_by(.data[[group_by]]) %>%
-        slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
+        slice_max(n = num_features, order_by = .data[[rank_by]]) %>%
         column_to_rownames("rownames")
     }
   }
