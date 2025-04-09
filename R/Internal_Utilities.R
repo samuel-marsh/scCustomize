@@ -1571,6 +1571,13 @@ Add_IEG_Seurat <- function(
         )
       }
 
+      # check normalized
+      if (isFALSE(x = Check_Normalized(object = seurat_object, assay = assay, error = FALSE))) {
+        cli_inform(message = c("x" = "Layer with normalized data not present.",
+                               "i" = "Normalizing Data."))
+        seurat_object <- NormalizeData(object = seurat_object)
+      }
+
       seurat_object <- AddModuleScore(object = seurat_object, features = list(ieg_found), search = FALSE, name = ieg_module_name)
     }
   }
