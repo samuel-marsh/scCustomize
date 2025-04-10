@@ -10,7 +10,7 @@
 #' @import cli
 #' @importFrom dplyr left_join rename all_of arrange desc
 #' @importFrom janitor adorn_totals
-#' @importFrom magrittr "%>%"
+#' @importFrom magrittr "%>%" .
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
 #'
