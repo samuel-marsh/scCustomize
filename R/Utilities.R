@@ -1217,6 +1217,11 @@ Extract_Top_Markers <- function(
   named_vector = TRUE,
   make_unique = FALSE
 ) {
+  if (!inherits(what = "data.frame", x = marker_dataframe)) {
+    cli_abort(message = "The `marker_dataframe` is of class {.field {class(x = marker_dataframe)}} but needs to be {.field data.frame}.")
+  }
+
+
   if (lifecycle::is_present(num_genes)) {
     lifecycle::deprecate_warn(when = "3.2.0",
                               what = "Extract_Top_Markers(num_genes)",
@@ -1243,7 +1248,6 @@ Extract_Top_Markers <- function(
                           "i" = "Set {.code gene_rownames_to_column} to move genes from rownames to column.")
     )
   }
-
 
   # create filtered data.frame
   if (is.null(x = group_by)) {
