@@ -4,15 +4,22 @@
 \alias{Cluster_Stats_All_Samples}
 \title{Calculate Cluster Stats}
 \usage{
-Cluster_Stats_All_Samples(seurat_object, group_by_var = "orig.ident")
+Cluster_Stats_All_Samples(
+  seurat_object,
+  group_by_var = "orig.ident",
+  order_by_freq = TRUE
+)
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
 \item{group_by_var}{meta data column to classify samples (default = "orig.ident").}
+
+\item{order_by_freq}{logical, whether the data.frame should be ordered by frequency of
+identity (default; TRUE), or by cluster/fector order (FALSE).}
 }
 \value{
-A data.frame with rows in order of frequency
+A data.frame with rows in order of frequency or cluster order
 }
 \description{
 Calculates both overall and per sample cell number and percentages per cluster based on orig.ident.
