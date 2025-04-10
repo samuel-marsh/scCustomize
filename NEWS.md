@@ -30,6 +30,7 @@
 - Fixed check for file extension in `Iterate_PC_Loading_Plots`.  New internal function `check_extension` to ease these checks package-wide.  
 - Fixed bug in behavior of `Extract_Top_Markers` when sorting the markers by "p_val_adj" that was selecting genes with highest p values instaed of lowest ([#229](https://github.com/samuel-marsh/scCustomize/issues/229)).  
 - Fixed rotation of x-axis text in `Proportion_Plot`.  
+- Added check for correct input format in `Extract_Top_Markers`.  
 - Code styling and typo fixes.  
 
 
