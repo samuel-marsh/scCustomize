@@ -4,6 +4,8 @@
 #'
 #' @param seurat_object Seurat object name.
 #' @param group_by_var meta data column to classify samples (default = "orig.ident").
+#' @param order_by_freq logical, whether the data.frame should be ordered by frequency of
+#' identity (default; TRUE), or by cluster/fector order (FALSE).
 #'
 #' @import cli
 #' @importFrom dplyr left_join rename all_of arrange desc
@@ -12,7 +14,7 @@
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
 #'
-#' @return A data.frame with rows in order of frequency
+#' @return A data.frame with rows in order of frequency or cluster order
 #'
 #' @export
 #'
@@ -26,7 +28,8 @@
 
 Cluster_Stats_All_Samples <- function(
   seurat_object,
-  group_by_var = "orig.ident"
+  group_by_var = "orig.ident",
+  order_by_freq = TRUE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -41,13 +44,13 @@ Cluster_Stats_All_Samples <- function(
   total_percent <- prop.table(x = table(seurat_object@active.ident)) * 100
   total_percent <- data.frame(total_percent) %>%
     rename(Cluster = all_of("Var1")) %>%
-    arrange(desc(.data[["Freq"]]))
+    {if (isTRUE(x = order_by_freq)) arrange(., desc(.data[["Freq"]]))  else . }
 
   # Extract total cell number per cluster across all samples
   total_cells <- table(seurat_object@active.ident) %>%
     data.frame() %>%
     rename(Cluster = all_of("Var1"), Number = all_of("Freq")) %>%
-    arrange(desc(.data[["Number"]]))
+    {if (isTRUE(x = order_by_freq)) arrange(., desc(.data[["Number"]])) else . }
 
   # Cluster overall stats across all animals
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
