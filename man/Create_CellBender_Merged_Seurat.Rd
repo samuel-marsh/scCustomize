@@ -8,8 +8,10 @@ Create_CellBender_Merged_Seurat(
   raw_cell_bender_matrix = NULL,
   raw_counts_matrix = NULL,
   raw_assay_name = "RAW",
-  min_cells = 5,
-  min_features = 200,
+  min_cells = deprecated(),
+  min_features = deprecated(),
+  min.cells = 5,
+  min.features = 200,
   ...
 )
 }
@@ -20,10 +22,14 @@ Create_CellBender_Merged_Seurat(
 
 \item{raw_assay_name}{a key value to use specifying the name of assay.  Default is "RAW".}
 
-\item{min_cells}{value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
+\item{min_cells}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{min.cells}.}
+
+\item{min_features}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{min.features}.}
+
+\item{min.cells}{value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 Default is 5.}
 
-\item{min_features}{value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
+\item{min.features}{value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 Default is 200.}
 
 \item{...}{Extra parameters passed to \code{\link[SeuratObject]{CreateSeuratObject}}.}
