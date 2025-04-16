@@ -13,7 +13,8 @@
   
   
 ## Changed  
-- **BREAKING CHANGE** The parameter `num_genes` has been soft-deprecated in `Extract_Top_Markers`.  Please use `num_features` instead.  Using `num_genes` will warn user but still work until scCustomize v3.2.0.  
+- **BREAKING CHANGE** The parameter `num_genes` has been soft-deprecated in `Extract_Top_Markers`.  Please use `num_features` instead.  Using `num_genes` will warn user but still work until scCustomize v3.3.0.  
+- **BREAKING CHANGE** The parameter `min_cells` and `min_features` have been soft-deprecated in `Create_CellBender_Merged_Seurat`.  Please use `min.cells` and `min.features` instead.  Using `min_cells` and `min_features` will warn user but still work until scCustomize v3.3.0.  
 - The following parameters in `plotFactors_scCustom` have been fully deprecated for LIGER objects >= V2: `reorder_datasets` and `reduction_label`.  
 - Following prior deprecation warnings the following functions are now fully deprecated and replaced with updated functions: `Add_Cell_Complexity_LIGER`, `Add_Cell_Complexity_Seurat`, `Add_Cell_Complexity_Seurat`, `Add_Mito_Ribo_LIGER`, `Add_Mito_Ribo_Seurat`, `Gene_Present`, `Meta_Present_LIGER`, and `Split_FeatureScatter`.  
 - Changed internal function `PercentAbove_Seurat` to match updates to Seurat to appropriately deal with NA values.  
