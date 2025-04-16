@@ -85,15 +85,18 @@ Create_10X_H5 <- function(
 #' @param raw_cell_bender_matrix matrix file containing the cell bender correct counts.
 #' @param raw_counts_matrix matrix file contain the uncorrected Cell Ranger (or other) counts.
 #' @param raw_assay_name a key value to use specifying the name of assay.  Default is "RAW".
-#' @param min_cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
+#' @param min_cells `r lifecycle::badge("deprecated")` soft-deprecated. See `min.cells`.
+#' @param min_features `r lifecycle::badge("deprecated")` soft-deprecated. See `min.features`.
+#' @param min.cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #' Default is 5.
-#' @param min_features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
+#' @param min.features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #'  Default is 200.
 #' @param ... Extra parameters passed to \code{\link[SeuratObject]{CreateSeuratObject}}.
 #'
 #' @import cli
 #' @import Seurat
 #' @importFrom dplyr intersect
+#' @importFrom lifecycle deprecated
 #'
 #' @return A Seurat Object contain both the Cell Bender corrected counts ("RNA" assay) and uncorrected
 #' counts ("RAW" assay; or other name specified to `raw_assay_name`).
@@ -113,10 +116,30 @@ Create_CellBender_Merged_Seurat <- function(
   raw_cell_bender_matrix = NULL,
   raw_counts_matrix = NULL,
   raw_assay_name = "RAW",
-  min_cells = 5,
-  min_features = 200,
+  min_cells = deprecated(),
+  min_features = deprecated(),
+  min.cells = 5,
+  min.features = 200,
   ...
 ) {
+  if (lifecycle::is_present(min_cells)) {
+    lifecycle::deprecate_warn(when = "3.3.0",
+                              what = "Create_CellBender_Merged_Seurat(min_cells)",
+                              details = c("i" = "The {.code min_cells} parameter is soft-deprecated.  Please update code to use `min.cells` instead.")
+    )
+    min.cells <- min_cells
+  }
+
+  if (lifecycle::is_present(min_features)) {
+    lifecycle::deprecate_warn(when = "3.3.0",
+                              what = "Create_CellBender_Merged_Seurat(min_features)",
+                              details = c("i" = "The {.code min_features} parameter is soft-deprecated.  Please update code to use `min.features` instead.")
+    )
+    min.features <- min_features
+  }
+
+
+
   # Filter Cell Bender matrix for Cell Ranger cells
   cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(x = raw_cell_bender_matrix))
 
@@ -126,7 +149,7 @@ Create_CellBender_Merged_Seurat <- function(
 
   # Create Seurat Object
   cli_inform(message = "{.field Creating Seurat Object from Cell Bender matrix.}")
-  cell_bender_seurat <- CreateSeuratObject(counts = raw_cell_bender_matrix, min.cells = min_cells, min.features = min_features, ...)
+  cell_bender_seurat <- CreateSeuratObject(counts = raw_cell_bender_matrix, min.cells = min.cells, min.features = min.features, ...)
 
   # Pull cell and gene names
   cell_names_seurat <- colnames(x = cell_bender_seurat)
