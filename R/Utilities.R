@@ -1223,7 +1223,7 @@ Extract_Top_Markers <- function(
 
 
   if (lifecycle::is_present(num_genes)) {
-    lifecycle::deprecate_warn(when = "3.2.0",
+    lifecycle::deprecate_warn(when = "3.3.0",
                               what = "Extract_Top_Markers(num_genes)",
                               details = c("i" = "The {.code num_genes} parameter is soft-deprecated.  Please update code to use `num_features` instead.")
     )
