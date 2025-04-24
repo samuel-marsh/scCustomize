@@ -218,7 +218,7 @@ Feature_PreCheck <- function(
 
   reduction_list <- Reduction_Loading_Present(seurat_object = object, reduction_names = meta_list[[2]], omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
-  all_not_found_features <- c(features_list[[2]], meta_list[[2]], reduction_list[[2]])
+  all_not_found_features <- reduction_list[[2]]
 
   all_found_features <- c(features_list[[1]], meta_list[[1]], reduction_list[[1]])
 
