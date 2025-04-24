@@ -391,11 +391,11 @@ Reduction_Loading_Present <- function(
   if (length(x = seurat_object@reductions) == 0) {
     if (isTRUE(x = return_none)) {
       # Combine into list and return
-      feature_list <- list(
+      reduction_list <- list(
         found_features = NULL,
-        bad_features = NULL
+        bad_features = reduction_names
       )
-      return(feature_list)
+      return(reduction_list)
     } else {
       cli_abort(message ="No reductions present in object.")
     }
