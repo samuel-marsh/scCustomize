@@ -253,8 +253,19 @@ Another QC metric that has been proposed is based on the level of expression of 
 **NOTE: This function is currently only available for human and mouse as those are only species with MALAT1 annotated.  See section below on non-default species for more info.**  
 
 For best results this function should be run on per sample basis using normalized count matrix. To get started all the function requires is Seurat Object, the species being analyzed, and the name of meta.data column that contains sample ID information.  
+
+For this example we are going to use a subset of data from Hammond et al., 2019.  
+
+```{r include=FALSE}
+raw_data <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz", move_genes_rownames = T)
+raw_data <- Merge_Sparse_Data_All(matrix_list = raw_data, add_cell_ids = names(x = raw_data))
+hammond_subset <- CreateSeuratObject(counts = raw_data, names.field = 1, names.delim = "_", min.cells = 5, min.features = 200)
+hammond_subset <- NormalizeData(hammond_subset)
+```
+
+
 ```{r message=TRUE}
-hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", sample_col = "orig.ident")
+hammond_subset <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", sample_col = "orig.ident")
 ```
 
 **NOTE: The function is also compatible with Ensembl IDs by specifying `ensembl_ids = TRUE` in function call.**  
@@ -262,7 +273,7 @@ hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", sample_col = "o
 #### Single Sample Object  
 If your Seurat object only has a single sample or you want to run the calculation across the entire object then you can supply the optional parameter of `whole_object = TRUE`.  
 ```{r eval=FALSE}
-hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", whole_object = TRUE)
+hcabm <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", whole_object = TRUE)
 ```
 
 #### Non-default species   
@@ -275,9 +286,9 @@ hcabm <- Add_MALAT1_Threshold(object = OBJECT, species = "marmoset", homolog_nam
 ### Visualizing the Results  
 The function will calculate the threshold for each sample and adds new column to meta.data containing logical value (TRUE/FALSE) designating cells above or below the threshold.  This can then be visualized as any meta.data column.  
 
-```{r}
-VlnPlot_scCustom(seurat_object = hcabm, features = "nFeature_RNA", split.by = "MALAT1_Threshold")
-FeatureScatter_scCustom(seurat_object = hcabm, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", split.by = "MALAT1_Threshold", pt.size = 1)
+```{r fig.height=5, fig.width=13, fig.align='center'}
+VlnPlot_scCustom(seurat_object = hammond_subset, features = "nFeature_RNA", split.by = "Malat1_Threshold")
+FeatureScatter_scCustom(seurat_object = hammond_subset, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", split.by = "Malat1_Threshold", pt.size = 1)
 ```
 
 
@@ -291,14 +302,14 @@ In addition to basic parameters there are several optional parameters that can b
 - `plot_height` plot height (inches)
 
 ```{r eval=FALSE}
-hcabm <- Add_MALAT1_Threshold(object = hcabm, species = "human", sample_col = "orig.ident", save_plots = TRUE, save_plot_path = "plots/QC_Plots/", save_plot_name = "MALAT1_Threshold_Plots")
+hcabm <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", sample_col = "orig.ident", save_plots = TRUE, save_plot_path = "plots/QC_Plots/", save_plot_name = "MALAT1_Threshold_Plots")
 ```
 
-Here is eample of plots for one of the samples in the hcabm dataset.
-
-```{r}
-
-```
+Here is eample of plots for one of the samples in the Hammond et al., subset dataset.
+<center>
+<img src="../reference/figures/assets/malat1_example.tiff" width=49%>  
+*Example outputs with default naming based on file name or providing `sample_names` parameter.*
+</center>
 
 
 ### Optional Parameters to Modify Threshold Calculation    
