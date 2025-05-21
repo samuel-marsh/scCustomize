@@ -307,7 +307,7 @@ hcabm <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", sample
 
 Here is eample of plots for one of the samples in the Hammond et al., subset dataset.
 <center>
-<img src="../reference/figures/assets/malat1_example.tiff" width=49%>  
+<img src="../reference/figures/assets/malat1_example.png" width=49%>  
 *Example outputs with default naming based on file name or providing `sample_names` parameter.*
 </center>
 
