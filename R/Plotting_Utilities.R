@@ -1550,7 +1550,7 @@ Clustered_DotPlot_Multi_Group <- function(
 #' Can plot either the totals or split by a variable in `meta.data`.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param group.by meta data column to classify samples (default = "ident" and will use `active.ident`.
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
 #' @param colors_use color palette to use for plotting.
@@ -1578,7 +1578,7 @@ Clustered_DotPlot_Multi_Group <- function(
 
 Plot_Pie_Proportions <- function(
     seurat_object,
-    group_by_var = "ident",
+    group.by = "ident",
     split.by = NULL,
     num_columns = NULL,
     colors_use = NULL,
@@ -1589,11 +1589,11 @@ Plot_Pie_Proportions <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  if (group_by_var != "ident") {
+  if (group.by != "ident") {
     # Check meta
-    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(seurat_object) <- group_by_var
+    Idents(seurat_object) <- group.by
   }
 
   # check split
@@ -1678,7 +1678,7 @@ Plot_Pie_Proportions <- function(
 #' Can plot either the totals or split by a variable in `meta.data`.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param group.by meta data column to classify samples (default = "ident" and will use `active.ident`.
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of "percent" or
 #' "count". Default is "percent".
@@ -1708,7 +1708,7 @@ Plot_Pie_Proportions <- function(
 
 Plot_Bar_Proportions <- function(
     seurat_object,
-    group_by_var = "ident",
+    group.by = "ident",
     split.by = NULL,
     plot_scale = "count",
     colors_use = NULL,
@@ -1719,11 +1719,11 @@ Plot_Bar_Proportions <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  if (group_by_var != "ident") {
+  if (group.by != "ident") {
     # Check meta
-    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(object = seurat_object) <- group_by_var
+    Idents(object = seurat_object) <- group.by
   }
 
   group_by_length <- length(x = unique(x = seurat_object@active.ident))
