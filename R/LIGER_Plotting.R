@@ -3,7 +3,9 @@
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' If `combination = TRUE` will plot both clusters and meta data variable.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' @param split_by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
@@ -26,7 +28,7 @@
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -44,6 +46,7 @@
 #' @return A ggplot/patchwork object
 #'
 #' @import ggplot2
+
 #' @importFrom patchwork wrap_plots
 #' @importFrom utils packageVersion
 #'
@@ -59,7 +62,8 @@
 
 DimPlot_LIGER <- function(
   liger_object,
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   split_by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
@@ -84,24 +88,33 @@ DimPlot_LIGER <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Set group_by defaults
-  if (isFALSE(x = combination) && is.null(x = group_by)) {
-    group_by <- "cluster"
+  # check deprecation
+  if (lifecycle::is_present(group_by)) {
+    lifecycle::deprecate_warn(when = "3.1.0",
+                              what = "DimPlot_LIGER(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
   }
 
-  if (isTRUE(x = combination) && is.null(x = group_by)) {
-    group_by <- "dataset"
+  # Set group.by defaults
+  if (isFALSE(x = combination) && is.null(x = group.by)) {
+    group.by <- "cluster"
+  }
+
+  if (isTRUE(x = combination) && is.null(x = group.by)) {
+    group.by <- "dataset"
   }
 
   # Group by cluster options
   cluster_options <- c("cluster", "Cluster", "clusters", "Clusters")
-  if (group_by %in% cluster_options) {
-    group_by <- "cluster"
+  if (group.by %in% cluster_options) {
+    group.by <- "cluster"
   }
 
-  # Check group_by parameter
-  if (!group_by == "cluster")
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  # Check group.by parameter
+  if (!group.by == "cluster")
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
   if (!is.null(x = split_by)) {
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
@@ -145,8 +158,8 @@ DimPlot_LIGER <- function(
 
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    plots <-LIGER2_DimPlot(liger_object = liger_object,
-                           group_by = group_by,
+    plots <- LIGER2_DimPlot(liger_object = liger_object,
+                           group.by = group.by,
                            split_by = split_by,
                            colors_use_cluster = colors_use_cluster,
                            colors_use_meta = colors_use_meta,
@@ -168,7 +181,7 @@ DimPlot_LIGER <- function(
                            color_seed = color_seed)
   } else {
     plots <- LIGER_DimPlot(liger_object = liger_object,
-                           group_by = group_by,
+                           group.by = group.by,
                            split_by = split_by,
                            colors_use_cluster = colors_use_cluster,
                            colors_use_meta = colors_use_meta,

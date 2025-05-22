@@ -87,7 +87,7 @@ LIGER_Default_Cluster_Name <- function(
 #' @param shuffle_seed Random seed for reproducibility of point shuffling (default 1).
 #' @param redorder.idents logical whether to reorder the datasets from default order before plotting (default FALSE).
 #' @param new.order new dataset factor order for plotting.  must set reorder.idents = TRUE.
-#' @param group_by meta data varibale to group plots by
+#' @param group.by meta data varibale to group plots by
 #' @param split_by meta data variable to splot plots by
 #'
 #' @return A data.frame with information for plotting
@@ -111,18 +111,18 @@ Generate_Plotting_df_LIGER <- function(
   shuffle_seed = 1,
   reorder.idents = FALSE,
   new.order = NULL,
-  group_by = "dataset",
+  group.by = "dataset",
   split_by = NULL
 ) {
   tsne_df <- data.frame(object@tsne.coords)
   colnames(x = tsne_df) <- c("tsne1", "tsne2")
-  tsne_df[[group_by]] <- object@cell.data[[group_by]]
+  tsne_df[[group.by]] <- object@cell.data[[group.by]]
   if (!is.null(x = split_by)) {
     tsne_df[[split_by]] <- object@cell.data[[split_by]]
   }
 
   if (isTRUE(x = reorder.idents)) {
-    tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
+    tsne_df[[group.by]]  <- factor(x = tsne_df[[group.by]], levels = new.order)
   }
   c_names <- names(x = object@clusters)
   if (is.null(x = clusters)) {
@@ -154,7 +154,7 @@ Generate_Plotting_df_LIGER2 <- function(
   shuffle_seed = 1,
   reorder.idents = FALSE,
   new.order = NULL,
-  group_by = "dataset",
+  group.by = "dataset",
   split_by = NULL
 ) {
   # Set reduction if null
@@ -165,13 +165,13 @@ Generate_Plotting_df_LIGER2 <- function(
   }
 
   reduc_df <- data.frame(Embeddings(object = object, reduction = reduction))
-  reduc_df[[group_by]] <- object@cellMeta[[group_by]]
+  reduc_df[[group.by]] <- object@cellMeta[[group.by]]
   if (!is.null(x = split_by)) {
     reduc_df[[split_by]] <- object@cellMeta[[split_by]]
   }
 
   if (isTRUE(x = reorder.idents)) {
-    reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
+    reduc_df[[group.by]]  <- factor(x = reduc_df[[group.by]], levels = new.order)
   }
   cluster_col <- LIGER_Default_Cluster_Name(liger_object = object)
   if (is.null(x = clusters)) {
@@ -203,7 +203,7 @@ Generate_Plotting_df_LIGER2 <- function(
 #' @param colors_use colors to use for plotting by cluster.  By default if number of levels plotted is
 #' less than or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with
 #' shuffle = TRUE both from \code{\link{DiscretePalette_scCustomize}}.
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' @param split_by meta data variable to split plots by (i.e. "dataset").
 #' @param title plot title.
@@ -218,7 +218,7 @@ Generate_Plotting_df_LIGER2 <- function(
 #' @param label logical.  Whether or not to label the clusters.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -256,7 +256,7 @@ Generate_Plotting_df_LIGER2 <- function(
 Plot_By_Cluster_LIGER <- function(
   liger_object,
   colors_use = NULL,
-  group_by = "dataset",
+  group.by = "dataset",
   split_by = NULL,
   title = NULL,
   pt_size = NULL,
@@ -283,7 +283,7 @@ Plot_By_Cluster_LIGER <- function(
   }
 
   # Create plotting data.frame
-  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
+  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group.by = group.by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
   if (!is.null(x = split_by)) {
     list_of_splits <- unique(x = tsne_df[[split_by]])
@@ -469,7 +469,7 @@ Plot_By_Cluster_LIGER <- function(
 Plot_By_Cluster_LIGER2 <- function(
     liger_object,
     colors_use = NULL,
-    group_by = "dataset",
+    group.by = "dataset",
     split_by = NULL,
     title = NULL,
     pt_size = NULL,
@@ -494,7 +494,7 @@ Plot_By_Cluster_LIGER2 <- function(
   reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
   # Create plotting data.frame
-  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
+  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group.by = group.by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
 
   if (!is.null(x = split_by)) {
     list_of_splits <- unique(x = reduc_df[[split_by]])
@@ -683,7 +683,7 @@ Plot_By_Cluster_LIGER2 <- function(
 #' @param colors_use colors to use for plotting by cluster.  By default if number of levels plotted is
 #' less than or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with
 #' shuffle = TRUE both from \code{\link{DiscretePalette_scCustomize}}.
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' @param split_by meta data variable to split plots by (i.e. "dataset").
 #' @param title plot title.
@@ -727,7 +727,7 @@ Plot_By_Cluster_LIGER2 <- function(
 Plot_By_Meta_LIGER <- function(
     liger_object,
     colors_use = NULL,
-    group_by = "dataset",
+    group.by = "dataset",
     split_by = NULL,
     title = NULL,
     pt_size = NULL,
@@ -748,7 +748,7 @@ Plot_By_Meta_LIGER <- function(
     cli_abort(message = "No dimensionality reduction coordinates found.")
   }
 
-  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
+  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group.by = group.by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
   if (!is.null(x = split_by)) {
     list_of_splits <- unique(x = tsne_df[[split_by]])
@@ -770,7 +770,7 @@ Plot_By_Meta_LIGER <- function(
     }
   }
 
-  meta_length <- length(x = unique(x = liger_object@cell.data[[group_by]]))
+  meta_length <- length(x = unique(x = liger_object@cell.data[[group.by]]))
 
   # set default plot colors
   if (is.null(x = colors_use)) {
@@ -781,12 +781,12 @@ Plot_By_Meta_LIGER <- function(
   x_axis_label <- paste0(reduction_label, "_1")
   y_axis_label <- paste0(reduction_label, "_2")
 
-  group_by <- sym(x = group_by)
+  group.by <- sym(x = group.by)
 
   if (isTRUE(x = raster)) {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x) {
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group_by)) +
+        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
           theme_cowplot() +
           geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -800,7 +800,7 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
         theme_cowplot() +
         geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -816,7 +816,7 @@ Plot_By_Meta_LIGER <- function(
   } else {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x) {
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group_by)) +
+        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -830,7 +830,7 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -859,7 +859,7 @@ Plot_By_Meta_LIGER <- function(
 Plot_By_Meta_LIGER2 <- function(
     liger_object,
     colors_use = NULL,
-    group_by = "dataset",
+    group.by = "dataset",
     split_by = NULL,
     title = NULL,
     pt_size = NULL,
@@ -878,7 +878,7 @@ Plot_By_Meta_LIGER2 <- function(
   # Set reduction
   reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
-  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
+  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group.by = group.by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
 
   if (!is.null(x = split_by)) {
     list_of_splits <- unique(x = reduc_df[[split_by]])
@@ -900,7 +900,7 @@ Plot_By_Meta_LIGER2 <- function(
     }
   }
 
-  meta_length <- length(x = unique(x = liger_object@cellMeta[[group_by]]))
+  meta_length <- length(x = unique(x = liger_object@cellMeta[[group.by]]))
 
   # set default plot colors
   if (is.null(x = colors_use)) {
@@ -911,12 +911,12 @@ Plot_By_Meta_LIGER2 <- function(
   x_axis_label <- names(x = reduc_df)[1]
   y_axis_label <- names(x = reduc_df)[2]
 
-  group_by <- sym(x = group_by)
+  group.by <- sym(x = group.by)
 
   if (isTRUE(x = raster)) {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x) {
-        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
           theme_cowplot() +
           geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -928,7 +928,7 @@ Plot_By_Meta_LIGER2 <- function(
           guides(col = guide_legend(title = "", override.aes = list(size = 4)))
       })
     } else {
-      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
         theme_cowplot() +
         geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -942,7 +942,7 @@ Plot_By_Meta_LIGER2 <- function(
   } else {
     if (!is.null(x = split_by)) {
       p1 <- lapply(1:length(x = list_of_splits), function(x) {
-        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -954,7 +954,7 @@ Plot_By_Meta_LIGER2 <- function(
           guides(col = guide_legend(title = "", override.aes = list(size = 4)))
       })
     } else {
-      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -1607,7 +1607,7 @@ plotFactors_liger_scCustom <- function(
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' @param split_by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
@@ -1627,7 +1627,7 @@ plotFactors_liger_scCustom <- function(
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -1660,7 +1660,7 @@ plotFactors_liger_scCustom <- function(
 
 LIGER_DimPlot <- function(
     liger_object,
-    group_by = NULL,
+    group.by = NULL,
     split_by = NULL,
     colors_use_cluster = NULL,
     colors_use_meta = NULL,
@@ -1684,24 +1684,24 @@ LIGER_DimPlot <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Set group_by defaults
-  if (isFALSE(x = combination) && is.null(x = group_by)) {
-    group_by <- "cluster"
+  # Set group.by defaults
+  if (isFALSE(x = combination) && is.null(x = group.by)) {
+    group.by <- "cluster"
   }
 
-  if (isTRUE(x = combination) && is.null(x = group_by)) {
-    group_by <- "dataset"
+  if (isTRUE(x = combination) && is.null(x = group.by)) {
+    group.by <- "dataset"
   }
 
   # Group by cluster options
   cluster_options <- c("cluster", "Cluster", "clusters", "Clusters")
-  if (group_by %in% cluster_options) {
-    group_by <- "cluster"
+  if (group.by %in% cluster_options) {
+    group.by <- "cluster"
   }
 
-  # Check group_by parameter
-  if (!group_by == "cluster")
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  # Check group.by parameter
+  if (!group.by == "cluster")
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
   if (!is.null(x = split_by)) {
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
@@ -1765,7 +1765,7 @@ LIGER_DimPlot <- function(
 
     p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction_label = reduction_label,
                              num_columns = num_columns,
@@ -1791,7 +1791,7 @@ LIGER_DimPlot <- function(
   }
 
   # Plot by cluster
-  if (group_by == "cluster") {
+  if (group.by == "cluster") {
     p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
                                 split_by = split_by,
@@ -1821,10 +1821,10 @@ LIGER_DimPlot <- function(
   }
 
   # Plot by Meta
-  if (group_by != "cluster") {
+  if (group.by != "cluster") {
     p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction_label = reduction_label,
                              num_columns = num_columns,
@@ -1854,7 +1854,7 @@ LIGER_DimPlot <- function(
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' @param split_by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
@@ -1874,7 +1874,7 @@ LIGER_DimPlot <- function(
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -1907,7 +1907,7 @@ LIGER_DimPlot <- function(
 
 LIGER2_DimPlot <- function(
     liger_object,
-    group_by = NULL,
+    group.by = NULL,
     split_by = NULL,
     colors_use_cluster = NULL,
     colors_use_meta = NULL,
@@ -1931,24 +1931,24 @@ LIGER2_DimPlot <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Set group_by defaults
-  if (isFALSE(x = combination) && is.null(x = group_by)) {
-    group_by <- "cluster"
+  # Set group.by defaults
+  if (isFALSE(x = combination) && is.null(x = group.by)) {
+    group.by <- "cluster"
   }
 
-  if (isTRUE(x = combination) && is.null(x = group_by)) {
-    group_by <- "dataset"
+  if (isTRUE(x = combination) && is.null(x = group.by)) {
+    group.by <- "dataset"
   }
 
   # Group by cluster options
   cluster_options <- c("cluster", "Cluster", "clusters", "Clusters")
-  if (group_by %in% cluster_options) {
-    group_by <- "cluster"
+  if (group.by %in% cluster_options) {
+    group.by <- "cluster"
   }
 
-  # Check group_by parameter
-  if (!group_by == "cluster")
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  # Check group.by parameter
+  if (!group.by == "cluster")
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
   if (!is.null(x = split_by)) {
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
@@ -1997,7 +1997,7 @@ LIGER2_DimPlot <- function(
 
     p2 <- Plot_By_Meta_LIGER2(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction = reduction,
                              num_columns = num_columns,
@@ -2023,7 +2023,7 @@ LIGER2_DimPlot <- function(
   }
 
   # Plot by cluster
-  if (group_by == "cluster") {
+  if (group.by == "cluster") {
     p1 <- Plot_By_Cluster_LIGER2(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
                                 split_by = split_by,
@@ -2053,10 +2053,10 @@ LIGER2_DimPlot <- function(
   }
 
   # Plot by Meta
-  if (group_by != "cluster") {
+  if (group.by != "cluster") {
     p2 <- Plot_By_Meta_LIGER2(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction = reduction,
                              num_columns = num_columns,

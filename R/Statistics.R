@@ -3,13 +3,15 @@
 #' Calculates both overall and per sample cell number and percentages per cluster based on orig.ident.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var meta data column to classify samples (default = "orig.ident").
+#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by meta data column to classify samples (default = "orig.ident").
 #' @param order_by_freq logical, whether the data.frame should be ordered by frequency of
 #' identity (default; TRUE), or by cluster/fector order (FALSE).
 #'
 #' @import cli
 #' @importFrom dplyr left_join rename all_of arrange desc
 #' @importFrom janitor adorn_totals
+#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
@@ -22,22 +24,33 @@
 #'
 #' @examples
 #' \dontrun{
-#' stats <- Cluster_Stats_All_Samples(seurat_object = object, group_by_var = "orig.ident")
+#' stats <- Cluster_Stats_All_Samples(seurat_object = object, group.by = "orig.ident")
 #' }
 #'
 
 Cluster_Stats_All_Samples <- function(
   seurat_object,
-  group_by_var = "orig.ident",
+  group_by_var = deprecated(),
+  group.by = "orig.ident",
   order_by_freq = TRUE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check deprecation
+  if (lifecycle::is_present(group_by_var)) {
+    lifecycle::deprecate_warn(when = "3.1.0",
+                              what = "Cluster_Stats_All_Samples(group_by_var)",
+                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by_var
+  }
+
+
   # Check on meta data column
   possible_meta_col <- colnames(x = seurat_object@meta.data)
-  if (!group_by_var %in% possible_meta_col) {
-    cli_abort(message = "{.val {group_by_var}} was not found in meta.data slot of Seurat Object.")
+  if (!group.by %in% possible_meta_col) {
+    cli_abort(message = "{.val {group.by}} was not found in meta.data slot of Seurat Object.")
   }
 
   # Extract total percents
@@ -63,22 +76,22 @@ Cluster_Stats_All_Samples <- function(
   cluster_stats <- suppressMessages(left_join(total_cells, total_percent))
 
   # Extract cells per metadata column per cluster
-  cells_per_cluster_2 <- table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var])
+  cells_per_cluster_2 <- table(seurat_object@active.ident, seurat_object@meta.data[, group.by])
   cells_per_cluster_2 <- data.frame(cells_per_cluster_2) %>%
-    rename(Cluster = all_of("Var1"), group_by_var = all_of("Var2"), cell_number = all_of("Freq"))
+    rename(Cluster = all_of("Var1"), group.by = all_of("Var2"), cell_number = all_of("Freq"))
 
   cells_per_cluster_2 <- cells_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = all_of("cell_number"))
+    pivot_wider(names_from = group.by, values_from = all_of("cell_number"))
 
   # Merge cells per metadata column per cluster with cluster stats
   cluster_stats_2 <- suppressMessages(left_join(cluster_stats, cells_per_cluster_2))
 
   # Calculate and extract percents of cells per cluster per
-  percent_per_cluster_2 <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, group_by_var]), margin = 2) * 100
+  percent_per_cluster_2 <- prop.table(x = table(seurat_object@active.ident, seurat_object@meta.data[, group.by]), margin = 2) * 100
   percent_per_cluster_2 <- data.frame(percent_per_cluster_2) %>%
-    rename(cluster = all_of("Var1"), group_by_var = all_of("Var2"), percent = all_of("Freq"))
+    rename(cluster = all_of("Var1"), group.by = all_of("Var2"), percent = all_of("Freq"))
   percent_per_cluster_2 <- percent_per_cluster_2 %>%
-    pivot_wider(names_from = group_by_var, values_from = all_of("percent")) %>%
+    pivot_wider(names_from = group.by, values_from = all_of("percent")) %>%
     column_to_rownames("cluster")
   colnames(x = percent_per_cluster_2) <- paste(colnames(x = percent_per_cluster_2), "%", sep = "_")
 
@@ -172,6 +185,7 @@ Cells_per_Sample <- function(
 #' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
 #'
 #' @import cli
+#' @importFrom lifecycle deprecated
 #'
 #' @export
 #'
@@ -187,7 +201,8 @@ Percent_Expressing <- function(
   seurat_object,
   features,
   threshold = 0,
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   split_by = NULL,
   entire_object = FALSE,
   layer = "data",
@@ -195,6 +210,15 @@ Percent_Expressing <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check deprecation
+  if (lifecycle::is_present(group_by)) {
+    lifecycle::deprecate_warn(when = "3.1.0",
+                              what = "Percent_Expressing(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -275,7 +299,8 @@ Percent_Expressing <- function(
 #' Get quick values for median Genes, UMIs, %mito per cell grouped by meta.data variable.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var Column in meta.data slot to group results by (default = "orig.ident").
+#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by meta data column to classify samples (default = "orig.ident").
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 #' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
 #' in addition to variables supplied to `median_var`.
@@ -285,6 +310,7 @@ Percent_Expressing <- function(
 #' @return A data.frame.
 #'
 #' @importFrom dplyr group_by select summarise any_of across all_of
+#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom stats median
 #'
@@ -294,18 +320,28 @@ Percent_Expressing <- function(
 #'
 #' @examples
 #' \dontrun{
-#' med_stats <- Median_Stats(seurat_object - obj, group_by_var = "orig.ident")
+#' med_stats <- Median_Stats(seurat_object - obj, group.by = "orig.ident")
 #' }
 #'
 
 Median_Stats <- function(
   seurat_object,
-  group_by_var = "orig.ident",
+  group_by_var = deprecated(),
+  group.by = "orig.ident",
   default_var = TRUE,
   median_var = NULL
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check deprecation
+  if (lifecycle::is_present(group_by_var)) {
+    lifecycle::deprecate_warn(when = "3.1.0",
+                              what = "Median_Stats(group_by_var)",
+                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by_var
+  }
 
   if (isTRUE(x = default_var)) {
     default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
@@ -314,11 +350,11 @@ Median_Stats <- function(
   }
 
   # Check group variable present
-  if (group_by_var == "ident") {
+  if (group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
   }
 
-  group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check stats variables present
   all_variables <- c(default_var, median_var)
@@ -332,26 +368,26 @@ Median_Stats <- function(
   all_variables <- Meta_Numeric(data = meta_numeric_check)
 
   # Create column names for final data frame from valid columns
-  all_variable_col_names <- c(group_by_var, paste0("Median_", all_variables))
+  all_variable_col_names <- c(group.by, paste0("Median_", all_variables))
 
   # Calculate medians for each group_by
   meta_data <- Fetch_Meta(object = seurat_object)
 
   median_by_group <- meta_data %>%
-    group_by(.data[[group_by_var]]) %>%
+    group_by(.data[[group.by]]) %>%
     summarise(across(all_of(all_variables), median))
 
   # Calculate overall medians
   median_overall <- meta_data %>%
     summarise(across(all_of(all_variables), median))
 
-  # Create data.frame with group_by_var as column name
+  # Create data.frame with group.by as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
-  colnames(x = meta_col_name_df) <- group_by_var
+  colnames(x = meta_col_name_df) <- group.by
   # Merge with overall median data.frame
   median_overall <- cbind(meta_col_name_df, median_overall)
 
-  # Merge by group_by_var and overall median data.frames
+  # Merge by group.by and overall median data.frames
   median_all <- rbind(median_by_group, median_overall)
 
   # Rename columns and return data.frame
@@ -366,7 +402,8 @@ Median_Stats <- function(
 #' Get quick values for X x median absolute deviation for Genes, UMIs, %mito per cell grouped by meta.data variable.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var Column in meta.data slot to group results by (default = "orig.ident").
+#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by meta data column to classify samples (default = "orig.ident").
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 #' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
 #' in addition to variables supplied to `mad_var`.
@@ -378,6 +415,7 @@ Median_Stats <- function(
 #' @return A data.frame.
 #'
 #' @importFrom dplyr group_by select summarise any_of across all_of
+#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom stats mad
 #'
@@ -393,18 +431,28 @@ Median_Stats <- function(
 
 MAD_Stats <- function(
     seurat_object,
-    group_by_var = "orig.ident",
+    group_by_var = deprecated(),
+    group.by = "orig.ident",
     default_var = TRUE,
     mad_var = NULL,
     mad_num = 2
 ) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # check deprecation
+  if (lifecycle::is_present(group_by_var)) {
+    lifecycle::deprecate_warn(when = "3.1.0",
+                              what = "MAD_Stats(group_by_var)",
+                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by_var
+  }
+
   # check mad_num
   if (mad_num <= 0) {
     cli_abort(message = "The {.code mad_num} parameter must be greater than 0.")
   }
-
-  # Check Seurat
-  Is_Seurat(seurat_object = seurat_object)
 
   if (isTRUE(x = default_var)) {
     default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
@@ -413,13 +461,13 @@ MAD_Stats <- function(
   }
 
   # set to active ident if "ident" is provided
-  if (group_by_var == "ident") {
+  if (group.by == "ident") {
     seurat_object[["active.ident"]] <- Idents(object = seurat_object)
-    group_by_var <- "active.ident"
+    group.by <- "active.ident"
   }
 
   # Check group variable present
-  group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check stats variables present
   all_variables <- c(default_var, mad_var)
@@ -433,26 +481,26 @@ MAD_Stats <- function(
   all_variables <- Meta_Numeric(data = meta_numeric_check)
 
   # Create column names for final data frame from valid columns
-  all_variable_col_names <- c(group_by_var, paste0("MAD x ", mad_num, " ", all_variables))
+  all_variable_col_names <- c(group.by, paste0("MAD x ", mad_num, " ", all_variables))
 
   # Calculate medians for each group_by
   meta_data <- Fetch_Meta(object = seurat_object)
 
   mad_by_group <- meta_data %>%
-    group_by(.data[[group_by_var]]) %>%
+    group_by(.data[[group.by]]) %>%
     summarise(across(all_of(all_variables), mad)*mad_num)
 
   # Calculate overall medians
   mad_overall <- meta_data %>%
     summarise(across(all_of(all_variables), mad)*mad_num)
 
-  # Create data.frame with group_by_var as column name
+  # Create data.frame with group.by as column name
   meta_col_name_df <- data.frame(col_name = "Totals (All Cells)")
-  colnames(x = meta_col_name_df) <- group_by_var
+  colnames(x = meta_col_name_df) <- group.by
   # Merge with overall median data.frame
   mad_overall <- cbind(meta_col_name_df, mad_overall)
 
-  # Merge by group_by_var and overall median data.frames
+  # Merge by group.by and overall median data.frames
   mad_all <- rbind(mad_by_group, mad_overall)
 
   # Rename columns and return data.frame

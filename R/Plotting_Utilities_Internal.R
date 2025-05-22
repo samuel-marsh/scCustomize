@@ -1290,7 +1290,7 @@ Clustered_DotPlot_Multi_Group <- function(
     seurat_object[[split.by]] <- split_by_names
   }
 
-  percent_mat <- Percent_Expressing(seurat_object = seurat_object, features = all_found_features, split_by = split.by, group_by = group.by, assay = assay)
+  percent_mat <- Percent_Expressing(seurat_object = seurat_object, features = all_found_features, split_by = split.by, group.by = group.by, assay = assay)
 
   # reorder columns to match
   idx <- match(colnames(x = exp_mat), colnames(x = percent_mat))

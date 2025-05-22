@@ -1171,9 +1171,10 @@ Add_Pct_Diff <- function(
 #' @param marker_dataframe data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.
 #' @param num_features number of features per group (e.g., cluster) to include in output list.
 #' @param num_genes `r lifecycle::badge("deprecated")` soft-deprecated. See `num_features`.
-#' @param group_by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
 #'  \code{\link[Seurat]{FindAllMarkers}}.
-#' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group_by`.
+#' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group.by`.
 #' Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.
 #' @param gene_column column name of `marker_dataframe` that contains the gene IDs.  Default is "gene"
 #' based on \code{\link[Seurat]{FindAllMarkers}}.
@@ -1182,7 +1183,7 @@ Add_Pct_Diff <- function(
 #' @param data_frame Logical, whether or not to return filtered data.frame of the original `markers_dataframe` or
 #' to return a vector of gene IDs.  Default is FALSE.
 #' @param named_vector Logical, whether or not to name the vector of gene names that is returned by the function.
-#' If `TRUE` will name the vector using the column provided to `group_by`.  Default is TRUE.
+#' If `TRUE` will name the vector using the column provided to `group.by`.  Default is TRUE.
 #' @param make_unique Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 #' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
@@ -1201,7 +1202,7 @@ Add_Pct_Diff <- function(
 #' @examples
 #' \dontrun{
 #' top10_genes <- Extract_Top_Markers(marker_dataframe = markers_results, num_genes = 10,
-#' group_by = "cluster", rank_by = "avg_log2FC")
+#' group.by = "cluster", rank_by = "avg_log2FC")
 #' }
 #'
 
@@ -1209,7 +1210,8 @@ Extract_Top_Markers <- function(
   marker_dataframe,
   num_features = 10,
   num_genes = deprecated(),
-  group_by = "cluster",
+  group_by = deprecated(),
+  group.by = "cluster",
   rank_by = "avg_log2FC",
   gene_column = "gene",
   gene_rownames_to_column = FALSE,
@@ -1221,6 +1223,14 @@ Extract_Top_Markers <- function(
     cli_abort(message = "The `marker_dataframe` is of class {.field {class(x = marker_dataframe)}} but needs to be {.field data.frame}.")
   }
 
+  # check deprecation
+  if (lifecycle::is_present(group_by)) {
+    lifecycle::deprecate_warn(when = "3.1.0",
+                              what = "Extract_Top_Markers(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
 
   if (lifecycle::is_present(num_genes)) {
     lifecycle::deprecate_warn(when = "3.3.0",
@@ -1236,9 +1246,9 @@ Extract_Top_Markers <- function(
   }
 
   # Check grouping factor in marker data.frame
-  if (!is.null(x = group_by)) {
-    if (!group_by %in% colnames(x = marker_dataframe)) {
-      cli_abort(message = "{.code group_by}: {.val {group_by}} not found in column names of {.code marker_dataframe}.")
+  if (!is.null(x = group.by)) {
+    if (!group.by %in% colnames(x = marker_dataframe)) {
+      cli_abort(message = "{.code group.by}: {.val {group.by}} not found in column names of {.code marker_dataframe}.")
     }
   }
 
@@ -1250,7 +1260,7 @@ Extract_Top_Markers <- function(
   }
 
   # create filtered data.frame
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     if (rank_by == "p_val_adj") {
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
@@ -1266,13 +1276,13 @@ Extract_Top_Markers <- function(
     if (rank_by == "p_val_adj") {
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
-        group_by(.data[[group_by]]) %>%
+        group_by(.data[[group.by]]) %>%
         slice_min(n = num_features, order_by = .data[[rank_by]], with_ties = FALSE) %>%
         column_to_rownames("rownames")
     } else {
       filtered_markers <- marker_dataframe %>%
         rownames_to_column("rownames") %>%
-        group_by(.data[[group_by]]) %>%
+        group_by(.data[[group.by]]) %>%
         slice_max(n = num_features, order_by = .data[[rank_by]]) %>%
         column_to_rownames("rownames")
     }
@@ -1293,17 +1303,17 @@ Extract_Top_Markers <- function(
 
   # should gene list be named
   # check naming
-  if (isTRUE(x = named_vector) && is.null(x = group_by)) {
-    cli_warn(message = c("Cannot return named vector if {.code group_by} is NULL.",
+  if (isTRUE(x = named_vector) && is.null(x = group.by)) {
+    cli_warn(message = c("Cannot return named vector if {.code group.by} is NULL.",
                          "i" = "Returning unnamed vector.")
     )
   }
 
-  if (isTRUE(x = named_vector) && !is.null(x = group_by)) {
+  if (isTRUE(x = named_vector) && !is.null(x = group.by)) {
     if (isTRUE(x = make_unique)) {
       cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
-    names(x = gene_list) <- filtered_markers[[group_by]]
+    names(x = gene_list) <- filtered_markers[[group.by]]
     return(gene_list)
   }
 
