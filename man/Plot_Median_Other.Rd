@@ -8,7 +8,8 @@ Plot_Median_Other(
   seurat_object,
   median_var,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = NULL,
@@ -26,7 +27,9 @@ Plot_Median_Other(
 
 \item{sample_col}{Specify which column in meta.data specifies sample ID (i.e. orig.ident).}
 
-\item{group_by}{Column in meta.data slot to group results by (i.e. "Treatment").}
+\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{Column in meta.data slot to group results by (i.e. "Treatment").}
 
 \item{colors_use}{List of colors or color palette to use.  Only applicable if \code{group_by} is not NULL.}
 
@@ -61,7 +64,7 @@ pbmc_small <- AddModuleScore(object = pbmc_small, features = cd_features, ctrl =
 name = 'CD_Features')
 
 Plot_Median_Other(seurat_object = pbmc_small, median_var = "CD_Features1",
-sample_col = "orig.ident", group_by = "Treatment")
+sample_col = "orig.ident", group.by = "Treatment")
 }
 
 }

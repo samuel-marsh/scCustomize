@@ -6,7 +6,8 @@
 \usage{
 DimPlot_LIGER(
   liger_object,
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   split_by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
@@ -32,7 +33,10 @@ DimPlot_LIGER(
 \arguments{
 \item{liger_object}{\code{liger} liger_object.  Need to perform clustering before calling this function}
 
-\item{group_by}{Variable to be plotted.  If \code{NULL} will plot clusters from \code{liger@clusters} slot.
+\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{Variable to be plotted.  If \code{NULL} will plot clusters from \code{liger@clusters} slot.
+If \code{combination = TRUE} will plot both clusters and meta data variable.
 If \code{combination = TRUE} will plot both clusters and meta data variable.}
 
 \item{split_by}{Variable to split plots by.}
@@ -67,7 +71,7 @@ Default is NULL.}
 \item{label_size}{size of cluster labels.}
 
 \item{label_repel}{logical.  Whether to repel cluster labels from each other if plotting by
-cluster (if \code{group_by = NULL} or \verb{group_by = "cluster}).  Default is FALSE.}
+cluster (if \code{group.by = NULL} or \verb{group.by = "cluster}).  Default is FALSE.}
 
 \item{label_box}{logical.  Whether to put a box around the label text (uses \code{geom_text} vs \code{geom_label}).
 Default is FALSE.}

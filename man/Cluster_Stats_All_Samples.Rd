@@ -6,14 +6,17 @@
 \usage{
 Cluster_Stats_All_Samples(
   seurat_object,
-  group_by_var = "orig.ident",
+  group_by_var = deprecated(),
+  group.by = "orig.ident",
   order_by_freq = TRUE
 )
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{group_by_var}{meta data column to classify samples (default = "orig.ident").}
+\item{group_by_var}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{meta data column to classify samples (default = "orig.ident").}
 
 \item{order_by_freq}{logical, whether the data.frame should be ordered by frequency of
 identity (default; TRUE), or by cluster/fector order (FALSE).}
@@ -26,7 +29,7 @@ Calculates both overall and per sample cell number and percentages per cluster b
 }
 \examples{
 \dontrun{
-stats <- Cluster_Stats_All_Samples(seurat_object = object, group_by_var = "orig.ident")
+stats <- Cluster_Stats_All_Samples(seurat_object = object, group.by = "orig.ident")
 }
 
 }
