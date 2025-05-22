@@ -13,8 +13,19 @@
   
   
 ## Changed  
+**This release contains a number of BREAKING changes to parameter names:**  
+  
 - **BREAKING CHANGE** The parameter `num_genes` has been soft-deprecated in `Extract_Top_Markers`.  Please use `num_features` instead.  Using `num_genes` will warn user but still work until scCustomize v3.3.0.  
 - **BREAKING CHANGE** The parameter `min_cells` and `min_features` have been soft-deprecated in `Create_CellBender_Merged_Seurat`.  Please use `min.cells` and `min.features` instead.  Using `min_cells` and `min_features` will warn user but still work until scCustomize v3.3.0.  
+  
+**This release contains a number of BREAKING changes to parameter names to harmonize across scCustomize and Seurat:**  
+*Due to large number of functions affected the timeline for full deprecation of these parameters has been extended.  Old parameter names will issue warning but continue to work until v3.5.0.*  
+  
+- **BREAKING CHANGE** The `group_by` parameter has been soft-deprecated in `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample`, `Percent_Expressing`, `DimPlot_LIGER`, and `Extract_Top_Markers`.  Please use `group.by` instead.  Using `group_by` will warn user but still work until scCustomize v3.3.0.  
+- **BREAKING CHANGE** The `group_by_var` parameter has been soft-deprecated in `Proportion_Plot`, `Cluster_Stats_All_Samples`, `Median_Stats`, and `MAD_Stats`.  Please use `group.by` instead.  Using `group_by_var` will warn user but still work until scCustomize v3.3.0. 
+  
+**Non-breaking changes in this release:**  
+  
 - The following parameters in `plotFactors_scCustom` have been fully deprecated for LIGER objects >= V2: `reorder_datasets` and `reduction_label`.  
 - Following prior deprecation warnings the following functions are now fully deprecated and replaced with updated functions: `Add_Cell_Complexity_LIGER`, `Add_Cell_Complexity_Seurat`, `Add_Cell_Complexity_Seurat`, `Add_Mito_Ribo_LIGER`, `Add_Mito_Ribo_Seurat`, `Gene_Present`, `Meta_Present_LIGER`, and `Split_FeatureScatter`.  
 - Changed internal function `PercentAbove_Seurat` to match updates to Seurat to appropriately deal with NA values.  
@@ -32,6 +43,7 @@
 - Fixed bug in behavior of `Extract_Top_Markers` when sorting the markers by "p_val_adj" that was selecting genes with highest p values instaed of lowest ([#229](https://github.com/samuel-marsh/scCustomize/issues/229)).  
 - Fixed rotation of x-axis text in `Proportion_Plot`.  
 - Added check for correct input format in `Extract_Top_Markers`.  
+- Added check to `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, and `Plot_Median_Other` to ensure that `group.by` and `sample_col` are different and provide informative error message if they are the same ([#233](https://github.com/samuel-marsh/scCustomize/issues/233)).  
 - Code styling and typo fixes.  
 
 
