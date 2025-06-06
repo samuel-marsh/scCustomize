@@ -2393,7 +2393,7 @@ VariableFeaturePlot_scCustom <- function(
   repel = TRUE,
   y_axis_log = FALSE,
   assay = NULL,
-  selection.method = NULL,
+  method = NULL,
   ...
 ) {
   # Check Seurat
@@ -2403,10 +2403,10 @@ VariableFeaturePlot_scCustom <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Extract num of desired features
-  top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, selection.method = selection.method), num_features)
+  top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, method = method), num_features)
 
   # Plot
-  plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, selection.method = selection.method, cols = colors_use, ...)
+  plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, method = method, cols = colors_use, ...)
 
   # Label points
   if (isFALSE(x = label) && !is.null(x = custom_features)) {
