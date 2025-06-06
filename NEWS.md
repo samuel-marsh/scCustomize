@@ -31,6 +31,7 @@
 - Changed internal function `PercentAbove_Seurat` to match updates to Seurat to appropriately deal with NA values.  
 - Changed functionality of several `QC_Plot*` functions to dynamically set nFeature or nCount variable name based on assay specified.  
 - Changed default parameter value for `x_lab_rotate` in `Proportion_Plot` from FALSE to TRUE.  
+- Changed param `selection.method` to `method` in `VariableFeaturePlot_scCustom` to account for deprecation in Seurat/SeuratObject.  
     
 
 ## Fixes  
