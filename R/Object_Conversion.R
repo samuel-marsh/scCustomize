@@ -765,7 +765,7 @@ Liger_to_Seurat <- function(
     barcode_prefix = TRUE,
     barcode_cell_id_delimiter = "_"
 ) {
-  lifecycle::deprecate_soft(when = "2.1.0",
+  deprecate_soft(when = "2.1.0",
                             what = "Liger_to_Seurat()",
                             with = "as.Seurat()",
                             details = c("i" = "Please adjust code now to prepare for full deprecation.")

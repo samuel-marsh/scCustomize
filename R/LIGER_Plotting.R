@@ -89,8 +89,8 @@ DimPlot_LIGER <- function(
   Is_LIGER(liger_object = liger_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "DimPlot_LIGER(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -249,7 +249,6 @@ DimPlot_LIGER <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
-#' @importFrom lifecycle deprecated
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #'

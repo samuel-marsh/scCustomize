@@ -91,8 +91,8 @@ Create_10X_H5 <- function(
 #' @param raw_cell_bender_matrix matrix file containing the cell bender correct counts.
 #' @param raw_counts_matrix matrix file contain the uncorrected Cell Ranger (or other) counts.
 #' @param raw_assay_name a key value to use specifying the name of assay.  Default is "RAW".
-#' @param min_cells `r badge("deprecated")` soft-deprecated. See `min.cells`.
-#' @param min_features `r badge("deprecated")` soft-deprecated. See `min.features`.
+#' @param min_cells `r lifecycle::badge("deprecated")` soft-deprecated. See `min.cells`.
+#' @param min_features `r lifecycle::badge("deprecated")` soft-deprecated. See `min.features`.
 #' @param min.cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #' Default is 5.
 #' @param min.features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
@@ -102,7 +102,6 @@ Create_10X_H5 <- function(
 #' @import cli
 #' @import Seurat
 #' @importFrom dplyr intersect
-#' @importFrom lifecycle deprecated
 #'
 #' @return A Seurat Object contain both the Cell Bender corrected counts ("RNA" assay) and uncorrected
 #' counts ("RAW" assay; or other name specified to `raw_assay_name`).

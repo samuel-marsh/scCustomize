@@ -1189,7 +1189,6 @@ Add_Pct_Diff <- function(
 #'
 #' @import cli
 #' @importFrom dplyr group_by slice_max slice_min
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -1224,16 +1223,16 @@ Extract_Top_Markers <- function(
   }
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Extract_Top_Markers(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
     group.by <- group_by
   }
 
-  if (lifecycle::is_present(num_genes)) {
-    lifecycle::deprecate_warn(when = "3.3.0",
+  if (is_present(num_genes)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Extract_Top_Markers(num_genes)",
                               details = c("i" = "The {.code num_genes} parameter is soft-deprecated.  Please update code to use `num_features` instead.")
     )
@@ -1540,7 +1539,6 @@ Pull_Cluster_Annotation <- function(
 #' @method Rename_Clusters Seurat
 #'
 #' @import cli
-#' @importFrom lifecycle deprecated
 #'
 #' @rdname Rename_Clusters
 #' @export
@@ -1564,8 +1562,8 @@ Rename_Clusters.Seurat <- function(
   ...
 ) {
   # Deprecation warning
-  if (lifecycle::is_present(meta_col_name)) {
-    lifecycle::deprecate_stop(when = "2.2.0",
+  if (is_present(meta_col_name)) {
+    deprecate_stop(when = "2.2.0",
                               what = "Rename_Clusters(meta_col_name)",
                               with = "Rename_Clusters(old_ident_name)",
                               details = c("i" = "To store old idents please provide name to `old_ident_name`",

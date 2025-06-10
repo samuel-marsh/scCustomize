@@ -11,7 +11,6 @@
 #' @import cli
 #' @importFrom dplyr left_join rename all_of arrange desc
 #' @importFrom janitor adorn_totals
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom tidyr pivot_wider
@@ -38,8 +37,8 @@ Cluster_Stats_All_Samples <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by_var)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by_var)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Cluster_Stats_All_Samples(group_by_var)",
                               details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -185,7 +184,6 @@ Cells_per_Sample <- function(
 #' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
 #'
 #' @import cli
-#' @importFrom lifecycle deprecated
 #'
 #' @export
 #'
@@ -212,8 +210,8 @@ Percent_Expressing <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Percent_Expressing(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -310,7 +308,6 @@ Percent_Expressing <- function(
 #' @return A data.frame.
 #'
 #' @importFrom dplyr group_by select summarise any_of across all_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom stats median
 #'
@@ -335,8 +332,8 @@ Median_Stats <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by_var)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by_var)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Median_Stats(group_by_var)",
                               details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -415,7 +412,6 @@ Median_Stats <- function(
 #' @return A data.frame.
 #'
 #' @importFrom dplyr group_by select summarise any_of across all_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom stats mad
 #'
@@ -441,8 +437,8 @@ MAD_Stats <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by_var)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by_var)) {
+    deprecate_warn(when = "3.1.0",
                               what = "MAD_Stats(group_by_var)",
                               details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )

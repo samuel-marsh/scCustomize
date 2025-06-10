@@ -21,7 +21,6 @@
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -55,8 +54,8 @@ Plot_Median_Genes <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Plot_Median_Genes(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -184,7 +183,6 @@ Plot_Median_Genes <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -218,8 +216,8 @@ Plot_Median_UMIs <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Plot_Median_UMIs(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -347,7 +345,6 @@ Plot_Median_UMIs <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -382,8 +379,8 @@ Plot_Median_Mito <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Plot_Median_Mito(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -512,7 +509,6 @@ Plot_Median_Mito <- function(
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -552,8 +548,8 @@ Plot_Median_Other <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Plot_Median_Other(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -691,7 +687,6 @@ Plot_Median_Other <- function(
 #' @import ggplot2
 #' @importFrom rlang "%||%" ":="
 #' @importFrom dplyr select slice left_join rename all_of
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -722,8 +717,8 @@ Plot_Cells_per_Sample <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Plot_Cells_per_Sample(group_by)",
                               details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
@@ -1018,7 +1013,6 @@ CellBender_Diff_Plot <- function(
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr rename all_of arrange desc
-#' @importFrom lifecycle deprecated
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_to_lower
 #' @importFrom tidyr pivot_wider
@@ -1049,8 +1043,8 @@ Proportion_Plot <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # check deprecation
-  if (lifecycle::is_present(group_by_var)) {
-    lifecycle::deprecate_warn(when = "3.1.0",
+  if (is_present(group_by_var)) {
+    deprecate_warn(when = "3.1.0",
                               what = "Proportion_Plot(group_by_var)",
                               details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
     )
