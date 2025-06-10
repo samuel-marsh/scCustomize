@@ -62,7 +62,7 @@ in given Seurat Object
 \examples{
 \dontrun{
 Iterate_Cluster_Highlight_Plot(seurat_object = object, highlight_color = "navy",
-background_color = "lightgray", file_path = "path/", file_name = "name", file_type = "pdf",
+background_color = "lightgray", file_path = "path/", file_name = "name", file_type = ".pdf",
 single_pdf = TRUE)
 }
 

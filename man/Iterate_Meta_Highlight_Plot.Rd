@@ -79,7 +79,7 @@ Iterate the create plots with meta data variable of interest highlighted.
 \dontrun{
 Iterate_Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id",
 highlight_color = "navy", background_color = "lightgray", file_path = "path/",
-file_name = "name", file_type = "pdf", single_pdf = TRUE)
+file_name = "name", file_type = ".pdf", single_pdf = TRUE)
 }
 
 }

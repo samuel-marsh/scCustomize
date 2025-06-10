@@ -14,7 +14,7 @@ VariableFeaturePlot_scCustom(
   repel = TRUE,
   y_axis_log = FALSE,
   assay = NULL,
-  selection.method = NULL,
+  method = NULL,
   ...
 )
 }
@@ -38,11 +38,11 @@ variable genes.}
 
 \item{assay}{Assay to pull variable features from.}
 
+\item{...}{Extra parameters passed to \code{\link[Seurat]{VariableFeaturePlot}}.}
+
 \item{selection.method}{If more then one method use to calculate variable features specify which
 method to use for plotting.  See \code{selection.method} parameter in \code{\link[Seurat]{VariableFeaturePlot}}
 for list of options.}
-
-\item{...}{Extra parameters passed to \code{\link[Seurat]{VariableFeaturePlot}}.}
 }
 \value{
 A ggplot object
