@@ -63,7 +63,13 @@ Create_10X_H5 <- function(
                                header = TRUE,
                                stringsAsFactors = FALSE)
   }
+
   cli_inform(message = "{.field Import complete. Start write to H5}")
+  # check extension
+  if (isTRUE(x = check_extension(file_name = save_name, extension = ".h5"))) {
+    save_name <- gsub(pattern = ".h5", replacement = "", x = save_name, fixed = TRUE)
+  }
+
   temp_file <- tempfile(pattern = paste(save_name, "_", sep = ""),
                         tmpdir = save_file_path,
                         fileext=".h5")
