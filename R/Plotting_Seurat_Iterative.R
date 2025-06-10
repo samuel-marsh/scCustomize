@@ -394,7 +394,7 @@ Iterate_DimPlot_bySample <- function(
 #' @examples
 #' \dontrun{
 #' Iterate_Cluster_Highlight_Plot(seurat_object = object, highlight_color = "navy",
-#' background_color = "lightgray", file_path = "path/", file_name = "name", file_type = "pdf",
+#' background_color = "lightgray", file_path = "path/", file_name = "name", file_type = ".pdf",
 #' single_pdf = TRUE)
 #' }
 #'
@@ -607,7 +607,7 @@ Iterate_Cluster_Highlight_Plot <- function(
 #' \dontrun{
 #' Iterate_Meta_Highlight_Plot(seurat_object = object, meta_data_column = "sample_id",
 #' highlight_color = "navy", background_color = "lightgray", file_path = "path/",
-#' file_name = "name", file_type = "pdf", single_pdf = TRUE)
+#' file_name = "name", file_type = ".pdf", single_pdf = TRUE)
 #' }
 #'
 
