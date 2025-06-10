@@ -91,8 +91,8 @@ Create_10X_H5 <- function(
 #' @param raw_cell_bender_matrix matrix file containing the cell bender correct counts.
 #' @param raw_counts_matrix matrix file contain the uncorrected Cell Ranger (or other) counts.
 #' @param raw_assay_name a key value to use specifying the name of assay.  Default is "RAW".
-#' @param min_cells `r lifecycle::badge("deprecated")` soft-deprecated. See `min.cells`.
-#' @param min_features `r lifecycle::badge("deprecated")` soft-deprecated. See `min.features`.
+#' @param min_cells `r badge("deprecated")` soft-deprecated. See `min.cells`.
+#' @param min_features `r badge("deprecated")` soft-deprecated. See `min.features`.
 #' @param min.cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #' Default is 5.
 #' @param min.features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
@@ -128,16 +128,16 @@ Create_CellBender_Merged_Seurat <- function(
   min.features = 200,
   ...
 ) {
-  if (lifecycle::is_present(min_cells)) {
-    lifecycle::deprecate_warn(when = "3.3.0",
+  if (is_present(min_cells)) {
+    deprecate_warn(when = "3.3.0",
                               what = "Create_CellBender_Merged_Seurat(min_cells)",
                               details = c("i" = "The {.code min_cells} parameter is soft-deprecated.  Please update code to use `min.cells` instead.")
     )
     min.cells <- min_cells
   }
 
-  if (lifecycle::is_present(min_features)) {
-    lifecycle::deprecate_warn(when = "3.3.0",
+  if (is_present(min_features)) {
+    deprecate_warn(when = "3.3.0",
                               what = "Create_CellBender_Merged_Seurat(min_features)",
                               details = c("i" = "The {.code min_features} parameter is soft-deprecated.  Please update code to use `min.features` instead.")
     )
