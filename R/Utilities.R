@@ -1191,6 +1191,7 @@ Add_Pct_Diff <- function(
 #' @importFrom dplyr group_by slice_max slice_min
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
+#' @importFrom lifecycle is_present deprecated deprecate_warn
 #'
 #' @return filtered data.frame, vector, or named vector containing gene IDs.
 #'
