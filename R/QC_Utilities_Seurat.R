@@ -1223,7 +1223,7 @@ Add_MALAT1_Threshold.Seurat <- function(
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with the name provided to `exam_module_name` is present in meta.data slot.
-#' @param exclude_unfound logical, whether to exclude features not presne tin current object (default is FALSE).
+#' @param exclude_unfound logical, whether to exclude features not present in current object (default is FALSE).
 #' @param seed seed for reproducibility (default is 1).
 #'
 #' @return Seurat object
