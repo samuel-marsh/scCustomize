@@ -6,8 +6,8 @@
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -168,8 +168,8 @@ Plot_Median_Genes <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -330,8 +330,8 @@ Plot_Median_UMIs <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -494,8 +494,8 @@ Plot_Median_Mito <- function(
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
 #' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -672,7 +672,7 @@ Plot_Median_Other <- function(
 #' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
