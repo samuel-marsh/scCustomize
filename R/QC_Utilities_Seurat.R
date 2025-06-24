@@ -1217,7 +1217,7 @@ Add_MALAT1_Threshold.Seurat <- function(
 #' @param seurat_object object name.
 #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
 #' @param exam_module_name name to use for the new meta.data column containing module scores.
-#' @param method method to use for module scoring, currently only "Seurat" is supported.
+#' @param method method to use for module scoring, currently only "Seurat" is supported but more to be added.  .
 #' @param ensembl_ids logical, whether feature names in the object are gene names or
 #' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
