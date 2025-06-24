@@ -23,7 +23,7 @@
   
 - **BREAKING CHANGE** The `group_by` parameter has been soft-deprecated in `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample`, `Percent_Expressing`, `DimPlot_LIGER`, and `Extract_Top_Markers`.  Please use `group.by` instead.  Using `group_by` will warn user but still work until scCustomize v3.3.0.  
 - **BREAKING CHANGE** The `group_by_var` parameter has been soft-deprecated in `Proportion_Plot`, `Cluster_Stats_All_Samples`, `Median_Stats`, and `MAD_Stats`.  Please use `group.by` instead.  Using `group_by_var` will warn user but still work until scCustomize v3.3.0. 
-- **BREAKING CHANGE** The `split_by` parameter has been soft-deprecated in `Percent_Expressing`, `DimPlot_LIGER`, .  Please use `split.by` instead.  Using `split_by` will warn user but still work until scCustomize v3.3.0. 
+- **BREAKING CHANGE** The `split_by` parameter has been soft-deprecated in `Percent_Expressing`, `DimPlot_LIGER`, and internal functions.  Please use `split.by` instead.  Using `split_by` will warn user but still work until scCustomize v3.3.0. 
   
 **Non-breaking changes in this release:**  
   
