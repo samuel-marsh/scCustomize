@@ -170,10 +170,11 @@ Cells_per_Sample <- function(
 #' @param seurat_object Seurat object name.
 #' @param features Feature(s) to plot.
 #' @param threshold Expression threshold to use for calculation of percent expressing (default is 0).
-#' @param group_by Factor to group the cells by.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Factor to group the cells by.
 #' @param split_by Factor to split the groups by.
 #' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
-#' across the entire object as opposed to by cluster or by `group_by` variable.
+#' across the entire object as opposed to by cluster or by `group.by` variable.
 #' @param assay Assay to pull feature data from.  Default is active assay.
 #' @param layer Which layer to pull expression data from?  Default is "data".
 #'
@@ -225,14 +226,14 @@ Percent_Expressing <- function(
   features_list <- Feature_Present(data = seurat_object, features = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
 
   # Check group_by is in object
-  if (!is.null(x = group_by) && group_by == "ident") {
-    group_by <- NULL
+  if (!is.null(x = group.by) && group.by == "ident") {
+    group.by <- NULL
   }
 
-  if (!is.null(x = group_by)) {
+  if (!is.null(x = group.by)) {
     possible_groups <- colnames(x = seurat_object@meta.data)
-    if (!group_by %in% possible_groups) {
-      cli_abort("Grouping variable {.val {group_by}} was not found in Seurat Object.")
+    if (!group.by %in% possible_groups) {
+      cli_abort("Grouping variable {.val {group.by}} was not found in Seurat Object.")
     }
   }
 
@@ -252,10 +253,10 @@ Percent_Expressing <- function(
   if (isTRUE(x = entire_object)) {
     expression_info$id <- "All_Cells"
   } else {
-    expression_info$id <- if (is.null(x = group_by)) {
+    expression_info$id <- if (is.null(x = group.by)) {
       Idents(object = seurat_object)[cells, drop = TRUE]
     } else {
-      seurat_object[[group_by, drop = TRUE]][cells, drop = TRUE]
+      seurat_object[[group.by, drop = TRUE]][cells, drop = TRUE]
     }
   }
   if (!is.factor(x = expression_info$id)) {
@@ -421,7 +422,7 @@ Median_Stats <- function(
 #'
 #' @examples
 #' \dontrun{
-#' mad_stats <- MAD_Stats(seurat_object = obj, group_by_var = "orig.ident")
+#' mad_stats <- MAD_Stats(seurat_object = obj, group.by = "orig.ident")
 #' }
 #'
 
