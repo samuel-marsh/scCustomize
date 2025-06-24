@@ -1380,7 +1380,7 @@ Create_Cluster_Annotation_File <- function(
   # Confirm no files with same name in the same directory path.
   full_path <- file.path(dir_path, file_name)
   if (file.exists(full_path)) {
-    cli_abort(message = c("File with name {.val {file_name}} already exists in directory directory.",
+    cli_abort(message = c("File with name {.val {file_name}} already exists in directory {.val {dir_path}}.",
                           "i" = "Please supply a different {.code file_name}.")
     )
   }
