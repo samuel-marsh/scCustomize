@@ -10,7 +10,8 @@ Percent_Expressing(
   threshold = 0,
   group_by = deprecated(),
   group.by = NULL,
-  split_by = NULL,
+  split_by = deprecated(),
+  split.by = NULL,
   entire_object = FALSE,
   layer = "data",
   assay = NULL
@@ -27,7 +28,9 @@ Percent_Expressing(
 
 \item{group.by}{Factor to group the cells by.}
 
-\item{split_by}{Factor to split the groups by.}
+\item{split_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{split.by}.}
+
+\item{split.by}{Factor to split the groups by.}
 
 \item{entire_object}{logical (default = FALSE).  Whether to calculate percent of expressing cells
 across the entire object as opposed to by cluster or by \code{group.by} variable.}

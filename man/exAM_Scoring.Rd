@@ -23,7 +23,7 @@ exAM_Scoring(
 
 \item{exam_module_name}{name to use for the new meta.data column containing module scores.}
 
-\item{method}{method to use for module scoring, currently only "Seurat" is supported.}
+\item{method}{method to use for module scoring, currently only "Seurat" is supported but more to be added.  .}
 
 \item{ensembl_ids}{logical, whether feature names in the object are gene names or
 ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
@@ -33,7 +33,7 @@ ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
 \item{overwrite}{Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 function will abort if columns with the name provided to \code{exam_module_name} is present in meta.data slot.}
 
-\item{exclude_unfound}{logical, whether to exclude features not presne tin current object (default is FALSE).}
+\item{exclude_unfound}{logical, whether to exclude features not present in current object (default is FALSE).}
 
 \item{seed}{seed for reproducibility (default is 1).}
 }

@@ -8,7 +8,8 @@ DimPlot_LIGER(
   liger_object,
   group_by = deprecated(),
   group.by = NULL,
-  split_by = NULL,
+  split_by = deprecated(),
+  split.by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
   pt_size = NULL,
@@ -39,7 +40,9 @@ DimPlot_LIGER(
 If \code{combination = TRUE} will plot both clusters and meta data variable.
 If \code{combination = TRUE} will plot both clusters and meta data variable.}
 
-\item{split_by}{Variable to split plots by.}
+\item{split_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{split.by}.}
+
+\item{split.by}{Variable to split plots by.}
 
 \item{colors_use_cluster}{colors to use for plotting by clusters.  By default if number of levels plotted is
 less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
