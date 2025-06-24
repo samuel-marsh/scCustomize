@@ -102,13 +102,13 @@ cluster_stats %>%
 
 By default `Cluster_Stats_All_Samples` uses "orig.ident" as the group variable but user can specify any `@meta.data` slot variable.
 ```{r eval=FALSE}
-cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = "group")
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group.by = "group")
 
 cluster_stats
 ```
 
 ```{r echo=FALSE}
-cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group_by_var = "group")
+cluster_stats <- Cluster_Stats_All_Samples(seurat_object = pbmc, group.by = "group")
 
 cluster_stats %>%
   kableExtra::kbl() %>%
@@ -174,11 +174,11 @@ percent_express %>%
 ### Change grouping variable
 By default the function groups expression across `@active.ident` (see above) but user can specify difference variable if desired.
 ```{r eval=FALSE}
-percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group_by = "orig.ident")
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group.by = "orig.ident")
 ```
 
 ```{r echo=FALSE}
-percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group_by = "orig.ident")
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), group.by = "orig.ident")
 
 percent_express %>%
   kableExtra::kbl() %>%
@@ -222,11 +222,11 @@ scCustomize contains function `Median_Stats` to quickly calculate the medians fo
 By default `Median_Stats` will calculate medians for the following meta data columns (if present): "nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo".
 
 ```{r eval=FALSE}
-median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident")
+median_stats <- Median_Stats(seurat_object = pbmc, group.by = "orig.ident")
 ```
 
 ```{r echo=FALSE}
-median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident")
+median_stats <- Median_Stats(seurat_object = pbmc, group.by = "orig.ident")
 
 median_stats %>%
   kableExtra::kbl() %>%
@@ -239,11 +239,11 @@ In addition to default variables, users can supply their own additional meta dat
 *NOTE: The meta data column must be in numeric format (e.g., integer, numeric, dbl)*
 
 ```{r eval=FALSE}
-median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
+median_stats <- Median_Stats(seurat_object = pbmc, group.by = "orig.ident", median_var = "module_score1")
 ```
 
 ```{r echo=FALSE}
-median_stats <- Median_Stats(seurat_object = pbmc, group_by_var = "orig.ident", median_var = "module_score1")
+median_stats <- Median_Stats(seurat_object = pbmc, group.by = "orig.ident", median_var = "module_score1")
 
 median_stats %>%
   kableExtra::kbl() %>%
@@ -254,11 +254,11 @@ median_stats %>%
 In addition to calculating the median values scCustomize includes function to calculate the median absolute deviation for each of those features with function `MAD_Stats`.  By setting the parameter `mad_num` the function will retrun the MAD*mad_num.
 
 ```{r eval=FALSE}
-mad <- MAD_Stats(seurat_object = pbmc, group_by_var = "orig.ident", mad_num = 2)
+mad <- MAD_Stats(seurat_object = pbmc, group.by = "orig.ident", mad_num = 2)
 ```
 
 ```{r echo=FALSE}
-mad <- MAD_Stats(seurat_object = pbmc, group_by_var = "orig.ident", mad_num = 2)
+mad <- MAD_Stats(seurat_object = pbmc, group.by = "orig.ident", mad_num = 2)
 
 mad %>%
   kableExtra::kbl() %>%
@@ -277,17 +277,17 @@ scCustomize also contains series of functions for plotting the results of these 
 ```{r eval=FALSE}
 Plot_Median_Genes(seurat_object = pbmc)
 
-Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
+Plot_Median_Genes(seurat_object = pbmc, group.by = "group")
 
-Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group_by = "group")
+Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group.by = "group")
 ```
 
 ```{r echo=FALSE, fig.height=7, fig.width=13, fig.align='center'}
 p1 <- Plot_Median_Genes(seurat_object = pbmc)
 
-p2 <- Plot_Median_Genes(seurat_object = pbmc, group_by = "group")
+p2 <- Plot_Median_Genes(seurat_object = pbmc, group.by = "group")
 
-p3 <- Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group_by = "group")
+p3 <- Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group.by = "group")
 
 patchwork::wrap_plots(p1, p2, p3, ncol = 3)
 ```

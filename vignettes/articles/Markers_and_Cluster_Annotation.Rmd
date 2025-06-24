@@ -162,7 +162,7 @@ head(top_5_df, 10) %>%
 presto_markers <- qread("assets/presto_markers.qs")
 
 # Extract top markers
-top_5_presto <- Extract_Top_Markers(marker_dataframe = presto_markers, num_features = 5, group_by = "cluster", rank_by = "auc", gene_column = "gene")
+top_5_presto <- Extract_Top_Markers(marker_dataframe = presto_markers, num_features = 5, group.by = "cluster", rank_by = "auc", gene_column = "gene")
 head(top_5_presto, 10)
 ```
 

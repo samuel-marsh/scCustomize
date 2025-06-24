@@ -226,7 +226,7 @@ scCustomize also contains a few helpful functions for returning and plotting the
 ### Calculate Median Values & Return data.frame
 scCustomize contains function `Median_Stats` to quickly calculate the medians for basic QC stats (Genes/, UMIs/, %Mito/Cell, etc) and return a data.frame.
 ```{r}
-median_stats <- Median_Stats(seurat_object = hca_bm, group_by_var = "orig.ident")
+median_stats <- Median_Stats(seurat_object = hca_bm, group.by = "orig.ident")
 ```
 
 
@@ -239,7 +239,7 @@ median_stats %>%
 
 The `Median_Stats` function has some column names stored by default but will also calculate medians for additional meta.data columns using the optional `median_var` parameter
 ```{r eval=FALSE}
-median_stats <- Median_Stats(seurat_object = hca_bm, group_by_var = "orig.ident", median_var = "meta_data_column_name")
+median_stats <- Median_Stats(seurat_object = hca_bm, group.by = "orig.ident", median_var = "meta_data_column_name")
 ```
 
 
@@ -252,18 +252,18 @@ scCustomize also contains a few functions to plot some of these median value cal
 * `Plot_Median_Other()`  
   - *Used to plot any other numeric variable present in object meta.data slot.*
 ```{r eval=FALSE}
-Plot_Median_Genes(seurat_object = hca_bm, group_by = "group")
-Plot_Median_UMIs(seurat_object = hca_bm, group_by = "group")
-Plot_Median_Mito(seurat_object = hca_bm, group_by = "group")
-Plot_Median_Other(seurat_object = hca_bm, median_var = "percent_ribo", group_by = "group")
+Plot_Median_Genes(seurat_object = hca_bm, group.by = "group")
+Plot_Median_UMIs(seurat_object = hca_bm, group.by = "group")
+Plot_Median_Mito(seurat_object = hca_bm, group.by = "group")
+Plot_Median_Other(seurat_object = hca_bm, median_var = "percent_ribo", group.by = "group")
 ```
 
 
 ```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=13}
-p1 <- Plot_Median_Genes(seurat_object = hca_bm, group_by = "group")
-p2 <- Plot_Median_UMIs(seurat_object = hca_bm, group_by = "group")
-p3 <- Plot_Median_Mito(seurat_object = hca_bm, group_by = "group")
-p4 <- Plot_Median_Other(seurat_object = hca_bm, median_var = "percent_ribo", group_by = "group")
+p1 <- Plot_Median_Genes(seurat_object = hca_bm, group.by = "group")
+p2 <- Plot_Median_UMIs(seurat_object = hca_bm, group.by = "group")
+p3 <- Plot_Median_Mito(seurat_object = hca_bm, group.by = "group")
+p4 <- Plot_Median_Other(seurat_object = hca_bm, median_var = "percent_ribo", group.by = "group")
 
 wrap_plots(p1, p2, p3, p4, ncol = 2)
 ```
@@ -279,6 +279,6 @@ marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
 
 
 ```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=6}
-Plot_Cells_per_Sample(seurat_object = marsh_mouse_micro, group_by = "Transcription_Method")
+Plot_Cells_per_Sample(seurat_object = marsh_mouse_micro, group.by = "Transcription_Method")
 ```
 

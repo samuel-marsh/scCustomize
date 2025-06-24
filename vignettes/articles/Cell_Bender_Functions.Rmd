@@ -198,11 +198,11 @@ head(dual_seurat@meta.data, 5) %>%
 We can then use `Median_Stats()` to calculate per sample averages across all cells by supplying the new variables to the `median_var` parameter.
 
 ```{r eval=FALSE}
-median_stats <- Median_Stats(seurat_object = dual_seurat, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
+median_stats <- Median_Stats(seurat_object = dual_seurat, group.by = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
 ```
 
 ```{r echo=FALSE}
-median_stats <- Median_Stats(seurat_object = dual_seurat, group_by_var = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
+median_stats <- Median_Stats(seurat_object = dual_seurat, group.by = "orig.ident", median_var = c("nCount_Diff", "nFeature_Diff"))
 
 median_stats %>%
   kableExtra::kbl() %>%
