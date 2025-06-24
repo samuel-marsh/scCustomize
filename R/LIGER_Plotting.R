@@ -7,7 +7,8 @@
 #' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by Variable to split plots by.
+#' @param split_by `r lifecycle::badge("deprecated")` soft-deprecated. See `split.by`.
+#' @param split.by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
 #' less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from \code{\link{DiscretePalette_scCustomize}}.
@@ -64,7 +65,8 @@ DimPlot_LIGER <- function(
   liger_object,
   group_by = deprecated(),
   group.by = NULL,
-  split_by = NULL,
+  split_by = deprecated(),
+  split.by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
   pt_size = NULL,
@@ -116,8 +118,8 @@ DimPlot_LIGER <- function(
   if (!group.by == "cluster")
     group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-  if (!is.null(x = split_by)) {
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  if (!is.null(x = split.by)) {
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   if (packageVersion(pkg = 'rliger') < "2.0.0") {
@@ -160,7 +162,7 @@ DimPlot_LIGER <- function(
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
     plots <- LIGER2_DimPlot(liger_object = liger_object,
                            group.by = group.by,
-                           split_by = split_by,
+                           split.by = split.by,
                            colors_use_cluster = colors_use_cluster,
                            colors_use_meta = colors_use_meta,
                            pt_size = pt_size,
@@ -182,7 +184,7 @@ DimPlot_LIGER <- function(
   } else {
     plots <- LIGER_DimPlot(liger_object = liger_object,
                            group.by = group.by,
-                           split_by = split_by,
+                           split.by = split.by,
                            colors_use_cluster = colors_use_cluster,
                            colors_use_meta = colors_use_meta,
                            pt_size = pt_size,

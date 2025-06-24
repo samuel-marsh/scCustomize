@@ -172,7 +172,8 @@ Cells_per_Sample <- function(
 #' @param threshold Expression threshold to use for calculation of percent expressing (default is 0).
 #' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Factor to group the cells by.
-#' @param split_by Factor to split the groups by.
+#' @param split_by `r lifecycle::badge("deprecated")` soft-deprecated. See `split.by`.
+#' @param split.by Factor to split the groups by.
 #' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
 #' across the entire object as opposed to by cluster or by `group.by` variable.
 #' @param assay Assay to pull feature data from.  Default is active assay.
@@ -202,7 +203,8 @@ Percent_Expressing <- function(
   threshold = 0,
   group_by = deprecated(),
   group.by = NULL,
-  split_by = NULL,
+  split_by = deprecated(),
+  split.by = NULL,
   entire_object = FALSE,
   layer = "data",
   assay = NULL
@@ -237,11 +239,11 @@ Percent_Expressing <- function(
     }
   }
 
-  # Check split_by is in object
-  if (!is.null(x = split_by)) {
+  # Check split.by is in object
+  if (!is.null(x = split.by)) {
     possible_groups <- colnames(x = seurat_object@meta.data)
-    if (!split_by %in% possible_groups) {
-      cli_abort("Splitting variable {.val {split_by}} was not found in Seurat Object.")
+    if (!split.by %in% possible_groups) {
+      cli_abort("Splitting variable {.val {split.by}} was not found in Seurat Object.")
     }
   }
 
@@ -266,8 +268,8 @@ Percent_Expressing <- function(
   expression_info$id <- as.vector(x = expression_info$id)
 
   # Split data if split.by is true
-  if (!is.null(x = split_by)) {
-    splits <- seurat_object[[split_by, drop = TRUE]][cells, drop = TRUE]
+  if (!is.null(x = split.by)) {
+    splits <- seurat_object[[split.by, drop = TRUE]][cells, drop = TRUE]
     expression_info$id <- paste(expression_info$id, splits, sep = '_')
     unique.splits <- unique(x = splits)
     id.levels <- paste0(rep(x = id.levels, each = length(x = unique.splits)), "_", rep(x = unique(x = splits), times = length(x = id.levels)))
