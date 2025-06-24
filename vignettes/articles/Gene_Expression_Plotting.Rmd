@@ -488,7 +488,7 @@ all_markers <- FindAllMarkers(object = pbmc) %>%
   Add_Pct_Diff() %>% 
   filter(pct_diff > 0.6)
 
-top_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 7, named_vector = FALSE, make_unique = TRUE)
+top_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 7, named_vector = FALSE, make_unique = TRUE)
 
 Clustered_DotPlot(seurat_object = pbmc, features = top_markers)
 ```
@@ -499,7 +499,7 @@ all_markers <- FindAllMarkers(object = pbmc) %>%
   Add_Pct_Diff() %>% 
   filter(pct_diff > 0.6)
 
-top_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 7, named_vector = FALSE, make_unique = TRUE)
+top_markers <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 7, named_vector = FALSE, make_unique = TRUE)
 
 plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers)
 ```
