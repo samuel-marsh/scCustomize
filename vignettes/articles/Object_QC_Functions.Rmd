@@ -134,6 +134,7 @@ To simplify the process of adding cell QC metrics scCustomize contains a wrapper
 * Cell Complexity (log10(nFeature) / log10(nCount).
 * Top XX Gene Percentage.
 * Percentage of counts for IEG (human and mouse only).
+* Module score for IEG genes (human and mouse only).  
 * OXPHOS, APOP, and DNA Repair pathways (supported species only).
 * Cell Cycle Scoring (Human only).
 
@@ -314,3 +315,18 @@ Here is eample of plots for one of the samples in the Hammond et al., subset dat
 
 ### Optional Parameters to Modify Threshold Calculation    
 Finally, there are also a series of parameters of the MALAT1 function itself that can be modified.  For deeper description of parameters below please see manual documentation for `Add_MALAT1_Threshold()` and above mentioned manuscript: `bw`, `lwd`, `breaks`, `chosen_min`, `smooth`, `abs_min`, `rough_max`.
+
+## Add exAM Module Score  
+In Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) we identified sets of genes that were differentially expressed in samples that were processed with enzymatic digestion or in post-mortem human samples compared to fresh tissue (see paper for full details).  Module scores for these gene sets can be added to Seurat object using function `exAM_Scoring`.  
+
+If adding score to human data both the union score and "microglia" (post-mortem) score will be added to be meta.data slot.  When species is mouse only the union score will be added.  
+
+```{r}
+pbmc <- exAM_Scoring(seurat_object = pbmc, species = "human")
+```
+
+`exAM_Scoring` also supports use of ensembl IDs by specifying optional parameters.  
+
+```{r eval=FALSE}
+pbmc <- exAM_Scoring(seurat_object = pbmc, species = "human", ensembl_ids = TRUE)
+```
