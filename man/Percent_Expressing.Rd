@@ -23,12 +23,14 @@ Percent_Expressing(
 
 \item{threshold}{Expression threshold to use for calculation of percent expressing (default is 0).}
 
-\item{group_by}{Factor to group the cells by.}
+\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{Factor to group the cells by.}
 
 \item{split_by}{Factor to split the groups by.}
 
 \item{entire_object}{logical (default = FALSE).  Whether to calculate percent of expressing cells
-across the entire object as opposed to by cluster or by \code{group_by} variable.}
+across the entire object as opposed to by cluster or by \code{group.by} variable.}
 
 \item{layer}{Which layer to pull expression data from?  Default is "data".}
 

@@ -38,7 +38,7 @@ Get quick values for X x median absolute deviation for Genes, UMIs, \%mito per c
 }
 \examples{
 \dontrun{
-mad_stats <- MAD_Stats(seurat_object = obj, group_by_var = "orig.ident")
+mad_stats <- MAD_Stats(seurat_object = obj, group.by = "orig.ident")
 }
 
 }

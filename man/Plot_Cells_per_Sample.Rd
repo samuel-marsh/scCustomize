@@ -30,7 +30,7 @@ Plot_Cells_per_Sample(
 
 \item{colors_use}{List of colors or color palette to use.}
 
-\item{dot_size}{size of the dots plotted if \code{group_by} is not NULL.  Default is 1.}
+\item{dot_size}{size of the dots plotted if \code{group.by} is not NULL.  Default is 1.}
 
 \item{plot_title}{Plot title.}
 

@@ -28,9 +28,9 @@ Plot_Median_UMIs(
 
 \item{group.by}{Column in meta.data slot to group results by (i.e. "Treatment").}
 
-\item{colors_use}{List of colors or color palette to use.  Only applicable if \code{group_by} is not NULL.}
+\item{colors_use}{List of colors or color palette to use.  Only applicable if \code{group.by} is not NULL.}
 
-\item{dot_size}{size of the dots plotted if \code{group_by} is not NULL.  Default is 1.}
+\item{dot_size}{size of the dots plotted if \code{group.by} is not NULL.  Default is 1.}
 
 \item{plot_title}{Plot title.}
 
