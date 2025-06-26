@@ -1370,9 +1370,10 @@ Create_Cluster_Annotation_File <- function(
   }
 
   # Check extension
-  file_ext <- grep(x = file_name, pattern = ".csv$")
+  file_ext <- check_extension(file_name = file_name, extension = ".csv")
+  # file_ext <- grep(x = file_name, pattern = ".csv$")
 
-  if (length(x = file_ext) == 0) {
+  if (isFALSE(x = file_ext)) {
     file_name <- paste0(file_name, ".csv")
   }
 

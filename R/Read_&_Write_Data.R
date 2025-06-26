@@ -1498,8 +1498,8 @@ Read_CellBender_h5_Multi_File <- function(
     file_suffix <- custom_name
 
     # check suffix
-    file_ext <- grep(x = file_suffix, pattern = ".h5$")
-    if (length(x = file_ext) == 0) {
+    file_ext <- check_extension(file_name = file_suffix, extension = ".h5")
+    if (isFALSE(x = file_ext)) {
       cli_abort(message = "'custom_name' must end with file extension '.h5'.")
     }
   } else if (isTRUE(x = filtered_h5)) {
