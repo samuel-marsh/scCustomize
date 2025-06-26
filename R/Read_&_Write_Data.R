@@ -1514,7 +1514,7 @@ Read_CellBender_h5_Multi_File <- function(
     sample_list <- gsub(pattern = file_suffix, x = file.list, replacement = "")
   }
 
-  # Check sample_names length is ok
+  # Check sample_names length is OK
   if (!is.null(x = sample_names) && length(x = sample_names) != length(x = sample_list)) {
     cli_abort(message = "Length of {.code sample_names} {.field {length(x = sample_names)}} must be equal to number of samples {.field {length(x = sample_list)}}.")
   }
