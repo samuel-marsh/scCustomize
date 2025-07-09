@@ -1515,7 +1515,7 @@ Convert_Assay <- function(
   for (i in assays_convert) {
     cli_inform(message = "Converting assay {.val {i}} from {.field {convert_from}} to {.field {convert_to}}.")
     if (isTRUE(x = create_manual_assay)) {
-      seurat_object[[assay]] <- CreateAssayObject(counts = LayerData(object = seurat_object, layer = "counts"))
+      suppressWarnings(seurat_object[[assay]] <- CreateAssayObject(counts = LayerData(object = seurat_object, layer = "counts")))
     } else {
       suppressWarnings(seurat_object[[i]] <- as(seurat_object[[i]], convert_to))
     }
