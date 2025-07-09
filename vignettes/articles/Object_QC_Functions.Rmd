@@ -317,16 +317,46 @@ Here is eample of plots for one of the samples in the Hammond et al., subset dat
 Finally, there are also a series of parameters of the MALAT1 function itself that can be modified.  For deeper description of parameters below please see manual documentation for `Add_MALAT1_Threshold()` and above mentioned manuscript: `bw`, `lwd`, `breaks`, `chosen_min`, `smooth`, `abs_min`, `rough_max`.
 
 ## Add exAM Module Score  
-In Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) we identified sets of genes that were differentially expressed in samples that were processed with enzymatic digestion or in post-mortem human samples compared to fresh tissue (see paper for full details).  Module scores for these gene sets can be added to Seurat object using function `exAM_Scoring`.  
+In Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) we identified sets of genes that were differentially expressed in samples that were processed with enzymatic digestion or in post-mortem human samples compared to fresh tissue (see paper for full details).  Module scores for these gene sets can be added to Seurat object using function `exAM_Scoring`. 
 
-If adding score to human data both the union score and "microglia" (post-mortem) score will be added to be meta.data slot.  When species is mouse only the union score will be added.  
-
+To demonstrate this function we will use data objects from Marsh et al., 2022.
 ```{r}
-pbmc <- exAM_Scoring(seurat_object = pbmc, species = "human")
+# Load Marsh et al., 2022 datasets
+marsh_mouse_micro <- qs::qread(file = "assets/marsh_2020_micro.qs")
+marsh_human_pm <- qs::qread(file = "assets/marsh_human_pm.qs")
+```
+
+
+If adding score to human data both the union score and "microglia" (post-mortem) score will be added to be meta.data slot.  When species is mouse only the union score will be added.  When the function is run the name of the column added to meta.data slot will be included printed in message.
+
+
+```{r message=TRUE}
+marsh_mouse_micro <- exAM_Scoring(seurat_object = marsh_mouse_micro, species = "mouse")
+
+marsh_human_pm <- exAM_Scoring(seurat_object = marsh_human_pm, species = "human")
 ```
 
 `exAM_Scoring` also supports use of ensembl IDs by specifying optional parameters.  
 
 ```{r eval=FALSE}
-pbmc <- exAM_Scoring(seurat_object = pbmc, species = "human", ensembl_ids = TRUE)
+marsh_mouse_micro <- exAM_Scoring(seurat_object = marsh_mouse_micro, species = "mouse", ensembl_ids = TRUE)
+```
+
+
+### We can then plot the score using any of the normal plotting functions.  
+```{r eval=FALSE}
+DimPlot_scCustom(seurat_object = marsh_mouse_micro, colors_use = marsh_mouse_micro@misc$exp17_micro_colors, label.size = 5, pt.size = 0.5, repel = T)
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", na_cutoff = NA, pt.size = 0.5)
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=13, fig.cap="***A.** tSNE plot showing the clusters from Marsh et al., 2022 **B.** FeaturePlot_scCustom view of the module score showing expected localization in the "Activated" exAM cluster.*"}
+p1 <- DimPlot_scCustom(seurat_object = marsh_mouse_micro, colors_use = marsh_mouse_micro@misc$exp17_micro_colors, label.size = 5, pt.size = 0.5, repel = T)
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", na_cutoff = NA, pt.size = 0.5)
+
+wrap_plots(p1, p2)
+```
+
+```{r fig.align='center', fig.height=6, fig.width=13}
+VlnPlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", colors_use = marsh_mouse_micro@misc$exp17_micro_colors)
 ```
