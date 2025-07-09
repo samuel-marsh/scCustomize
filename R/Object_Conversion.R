@@ -1462,9 +1462,16 @@ Convert_Assay <- function(
   }
 
   if (convert_to == "Assay") {
-    if (length(x = LayerData(object = seurat_object, layer = "scale.data")) == 0) {
-      cli_abort(message = c("Object does not contain scale.data",
-                            "i" = "In order to convert Assay5 (V5) to Assay (V3/4) the object must have both normalized and scaled data."))
+    if (length(x = suppressWarnings(LayerData(object = seurat_object, layer = "data"))) == 0) {
+      create_manual_assay <- TRUE
+    } else {
+      create_manual_assay <- FALSE
+    }
+  }
+
+  if (convert_to == "Assay") {
+    if (length(x = suppressWarnings(LayerData(object = seurat_object, layer = "scale.data"))) == 0) {
+      create_manual_assay <- TRUE
     }
   }
 
@@ -1507,7 +1514,11 @@ Convert_Assay <- function(
   # convert assays
   for (i in assays_convert) {
     cli_inform(message = "Converting assay {.val {i}} from {.field {convert_from}} to {.field {convert_to}}.")
-    suppressWarnings(seurat_object[[i]] <- as(seurat_object[[i]], convert_to))
+    if (isTRUE(x = create_manual_assay)) {
+      seurat_object[[assay]] <- CreateAssayObject(counts = LayerData(object = seurat_object, layer = "counts"))
+    } else {
+      suppressWarnings(seurat_object[[i]] <- as(seurat_object[[i]], convert_to))
+    }
   }
 
   # return object
