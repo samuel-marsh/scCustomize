@@ -9,6 +9,7 @@
 - Added new function `exAM_Scoring` to add module scores for exAM gene sets from Marsh et al., 2022 (\doi{10.1038/s41593-022-01022-8}).  
 - Added new function `Proportion_Plot_per_Sample` to plot proportion of cells per sample across a specified condition.  
 - Added new parameter `order_by_freq` to `Cluster_Stats_All_Samples`.  It is `TRUE` by default and returned data.frame is ordered by cluster frequency, setting FALSE orders data.frame by cluster order.  
+- Updated `Convert_Assay` to allow V5 > V3 conversions even when normalized and scale data is absent ([#236](https://github.com/samuel-marsh/scCustomize/issues/236)).  
 
   
   
