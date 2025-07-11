@@ -2406,7 +2406,7 @@ VariableFeaturePlot_scCustom <- function(
   top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, method = selection.method), num_features)
 
   # Plot
-  plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, selection.method = selection.method, cols = colors_use, ...)
+  plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, cols = colors_use, ...)
 
   # Label points
   if (isFALSE(x = label) && !is.null(x = custom_features)) {
