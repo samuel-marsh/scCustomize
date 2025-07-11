@@ -118,26 +118,9 @@ mouse_colors <- marsh_mouse_micro@misc$exp17_micro_colors
 
 ### Plotting highly variable genes 
 scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function.  `VariableFeaturePlot_scCustom()` also contains several additional parameters for customizing visualization.
-```{r eval=FALSE}
-# Default scCustomize plot
-VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
-# Can remove labels if not desired
-VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, label = FALSE)
-# Repel labels
-VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE)
-# Change the scale of y-axis from linear to log10
-VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE, y_axis_log = TRUE)
-```
 
 
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width=13, fig.cap="***A.** Default for `VariableFeaturePlot_scCustom` labels features by default.  Plot can be modified by changing function parameters: **B.** Setting `label = FALSE`, **C.** Setting `repel=TRUE` for feature names, **D.** Setting `y_axis_log=TRUE` to plot y-axis in log scale.*"}
-p1 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
-p2 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, label = FALSE)
-p3 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE)
-p4 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20, repel = TRUE, y_axis_log = TRUE)
-
-wrap_plots(p1, p2, p3, p4) + plot_annotation(tag_levels = "A")
-```
+HERE
 
 #### Label custom features  
 In addition to labeling the top variable genes `VariableFeaturePlot_scCustom` also supports labeling a custom set of genes using the `custom_features` parameter.  
