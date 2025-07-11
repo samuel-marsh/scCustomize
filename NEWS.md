@@ -47,6 +47,7 @@
 - Fixed rotation of x-axis text in `Proportion_Plot`.  
 - Added check for correct input format in `Extract_Top_Markers`.  
 - Added check to `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, and `Plot_Median_Other` to ensure that `group.by` and `sample_col` are different and provide informative error message if they are the same ([#233](https://github.com/samuel-marsh/scCustomize/issues/233)).  
+- Fix bug in `VariableFeaturePlot_scCustom` that prevented function from running.  
 - Code styling and typo fixes.  
 
 
