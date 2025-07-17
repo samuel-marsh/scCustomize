@@ -1796,6 +1796,80 @@ Read_Metrics_CellBender <- function(
 }
 
 
+#' Read and add results from cNMF
+#'
+#' Reads the usage and spectra files from cNMF results and adds them as dimensionality
+#' reduction to seurat object.
+#'
+#' @param seurat_object Seurat object name to add cNMF reduction
+#' @param usage_file path and name of cNMF usage file
+#' @param spectra_file path and name of cNMF spectra file
+#' @param normalize logical, whether to normalize the cNMF usage data, default is TRUE
+#' @param assay assay to add reduction.  Default is NULL and will use current
+#' active assay.
+#'
+#' @return Seurat object with new dimensionality reduction "cnmf"
+#'
+#' @importFrom data.table fread
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#'
+#' @references For more information about cNMF and usage see \url{https://github.com/dylkot/cNMF}
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' object <- Read_cNMF(seurat_object = object,
+#' usage_file = "example_cNMF/example_cNMF.usages.k_27.dt_0_01.consensus.txt",
+#' spectra_file = "example_cNMF/example_cNMF.gene_spectra_score.k_27.dt_0_01.txt")
+#' }
+#'
+
+Read_cNMF <- function(
+    seurat_object,
+    usage_file,
+    spectra_file,
+    normalize = TRUE,
+    assay = NULL
+) {
+  # check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Read and transform usage data
+  usage_data <- fread(usage_file, data.table = FALSE, header = TRUE) %>%
+    column_to_rownames("V1")
+
+  colnames(x = usage_data) <- paste0("Factor_", colnames(x = usage_data))
+
+  # normalize usage data
+  if (isTRUE(x = normalize)) {
+    usage_data <- as.data.frame(t(apply(usage_data, 1, function(x) x / sum(x))))
+  }
+
+  # transform to matrix for dimreduc creation
+  usage_data <- as.matrix(x = usage_data)
+
+  # read spectra data
+  spectra_data <- fread(spectra_file, data.table = FALSE, header = TRUE) %>%
+    column_to_rownames("V1") %>%
+    t()
+
+  colnames(spectra_data) <- paste0("Factor_", colnames(spectra_data))
+
+  # create and add dimreduc object
+  cnmf_dimreduc <- CreateDimReducObject(embeddings = usage_data, loadings = spectra_data, assay = assay, key = "cNMF_")
+
+  seurat_object[["cnmf"]] <- cnmf_dimreduc
+
+  # return object
+  return(seurat_object)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### READ Utilities ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
