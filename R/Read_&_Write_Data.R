@@ -1826,7 +1826,7 @@ Read_Metrics_CellBender <- function(
 #' }
 #'
 
-Read_cNMF <- function(
+Read_Add_cNMF <- function(
     seurat_object,
     usage_file,
     spectra_file,
