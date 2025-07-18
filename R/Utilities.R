@@ -1632,6 +1632,66 @@ Rename_Clusters.Seurat <- function(
 }
 
 
+#' @param reduction name of reduction containing NMF/iNMF/cNMF data.
+#'
+#' @method Top_Genes_Factor Seurat
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @rdname Top_Genes_Factor
+#'
+#' @concept marker_annotation_util
+#'
+#' @examples
+#' \dontrun{
+#' top_genes_factor10 <- Top_Genes_Factor(object = object, factor = 1, num_genes = 10,
+#' reduction = "cNMF")
+#' }
+#'
+
+Top_Genes_Factor.Seurat <- function(
+    object,
+    factor = NULL,
+    num_genes = 10,
+    reduction,
+    ...
+) {
+  Is_Seurat(seurat_object = object)
+
+  if (is.null(x = factor)) {
+    cli_abort(message = "Must provide either factor number or {.val all} to {.code factor} parameter.")
+  }
+
+  if (factor == "all") {
+    top_genes <- lapply(X = 1:length(object[[reduction]]), function(x) {
+      TopFeatures(object = object[[reduction]], dim = x, nfeatures = num_genes)
+    })
+
+    # convert to data.frame
+    top_genes <- data.frame(top_genes)
+
+    # rename columns
+    colnames(top_genes) <- paste0("Factor", 1:27)
+  } else {
+    # check factor is present in reduction
+    num_dims <- 1:length(object[[reduction]])
+
+    if (!factor %in% num_dims) {
+      cli_abort(message = c("Factor not present in reduction.",
+                            "i" = "The reduction {.field {reduction}} contains {.field {length(x = num_dims)}}"))
+    }
+
+    # pull top genes
+    top_genes <- TopFeatures(object = object[[reduction]], dim = factor, nfeatures = num_genes, projected = FALSE, balanced = FALSE)
+  }
+
+  # return top genes
+  return(top_genes)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### GENERAL HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

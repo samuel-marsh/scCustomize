@@ -207,3 +207,23 @@ Fetch_Meta <- function(object, ...) {
 Rename_Clusters <- function(object, ...) {
   UseMethod(generic = "Rename_Clusters", object = object)
 }
+
+
+#' Extract top loading genes for LIGER factor
+#'
+#' Extract vector to the top loading genes for specified LIGER iNMF factor
+#'
+#' @param object object name.
+#' @param factor factor number to pull genes from. Set to "all" to return top loading
+#' genes from all factors
+#' @param num_genes number of top loading genes to return as vector, default is 10.
+#'
+#' @return vector of top genes for given factor or data.frame containing top genes
+#' across all factors
+#'
+#' @rdname Top_Genes_Factor
+#'
+
+Top_Genes_Factor <- function(object, factor = NULL, num_genes = 10, ...) {
+  UseMethod(generic = "Top_Genes_Factor", object = object)
+}

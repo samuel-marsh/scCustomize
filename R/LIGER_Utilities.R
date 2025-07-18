@@ -876,57 +876,73 @@ Subset_LIGER <- function(
 }
 
 
-#' Extract top loading genes for LIGER factor
-#'
-#' Extract vector to the top loading genes for specified LIGER iNMF factor
-#'
-#' @param liger_object LIGER object name.
-#' @param liger_factor LIGER factor number to pull genes from.
-#' @param num_genes number of top loading genes to return as vector.
-#'
-#' @return A LIGER Object
+#' @method Top_Genes_Factor liger
 #'
 #' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @export
 #'
+#' @rdname Top_Genes_Factor
+#'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
-#' top_genes_factor10 <- Top_Genes_Factor(liger_object = object, num_genes = 10)
+#' top_genes_factor10 <- Top_Genes_Factor(object = object, factor = 1, num_genes = 10)
 #' }
 #'
 
-Top_Genes_Factor <- function(
-    liger_object,
-    liger_factor,
-    num_genes = 10
+Top_Genes_Factor.liger <- function(
+    object,
+    factor = NULL,
+    num_genes = 10,
+    ...
 ) {
   # LIGER object check
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = object)
+
+  if (is.null(x = factor)) {
+    cli_abort(message = "Must provide either factor number or {.val all} to {.code factor} parameter.")
+  }
 
   # check number of factors present
-  if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
-    cli_abort(message = c("{.code liger_factor} provided: {.field {liger_factor}} not found",
-                          "i" = "{.code liger_object} only contains {.field {dim(x = liger_object@W)[[1]]}} factors.")
+  if (!factor %in% 1:dim(x = object@W)[[1]]) {
+    cli_abort(message = c("{.code liger_factor} provided: {.field {factor}} not found",
+                          "i" = "{.code object} only contains {.field {dim(x = object@W)[[1]]}} factors.")
     )
   }
 
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    W <- liger_object@W
-    rownames(x = W) <- rownames(x = liger_object@datasets[[1]]@scaleData)
-    top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
-    return(top_genes)
+    W <- object@W
+    rownames(x = W) <- rownames(x = object@datasets[[1]]@scaleData)
+    # pull genes
+    if (factor == "all") {
+      top_genes <- lapply(1:ncol(x = W), function(x) {
+        top_genes <- rownames(x = W)[order(W[, x], decreasing = TRUE)[1:num_genes]]
+      })
+      top_genes <- data.frame(top_genes)
+      colnames(top_genes) <- paste0("Factor_", 1:ncol(x = W))
+    } else {
+      top_genes <- rownames(x = W)[order(W[, factor], decreasing = TRUE)[1:num_genes]]
+    }
   } else {
     # Extract genes
-    W <- t(x = liger_object@W)
-    rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
-    top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
-    return(top_genes)
+    W <- t(x = object@W)
+    rownames(x = W) <- colnames(x = object@scale.data[[1]])
+    if (factor == "all") {
+      top_genes <- lapply(1:ncol(x = W), function(x) {
+        top_genes <- rownames(x = W)[order(W[, x], decreasing = TRUE)[1:num_genes]]
+      })
+      top_genes <- data.frame(top_genes)
+      colnames(top_genes) <- paste0("Factor_", 1:ncol(x = W))
+    } else {
+      top_genes <- rownames(x = W)[order(W[, factor], decreasing = TRUE)[1:num_genes]]
+
+    }
   }
+  return(top_genes)
 }
 
 
