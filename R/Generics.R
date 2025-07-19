@@ -221,6 +221,8 @@ Rename_Clusters <- function(object, ...) {
 #' @return vector of top genes for given factor or data.frame containing top genes
 #' across all factors
 #'
+#' @export
+#'
 #' @rdname Top_Genes_Factor
 #'
 
