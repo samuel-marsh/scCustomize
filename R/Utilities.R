@@ -1665,7 +1665,7 @@ Top_Genes_Factor.Seurat <- function(
   }
 
   if (factor == "all") {
-    top_genes <- lapply(X = 1:length(object[[reduction]]), function(x) {
+    top_genes <- lapply(X = 1:length(x = object[[reduction]]), function(x) {
       TopFeatures(object = object[[reduction]], dim = x, nfeatures = num_genes)
     })
 
@@ -1673,10 +1673,10 @@ Top_Genes_Factor.Seurat <- function(
     top_genes <- data.frame(top_genes)
 
     # rename columns
-    colnames(top_genes) <- paste0("Factor", 1:27)
+    colnames(top_genes) <- paste0("Factor", 1:length(x = object[[reduction]]))
   } else {
     # check factor is present in reduction
-    num_dims <- 1:length(object[[reduction]])
+    num_dims <- 1:length(x = object[[reduction]])
 
     if (!factor %in% num_dims) {
       cli_abort(message = c("Factor not present in reduction.",
