@@ -1664,6 +1664,10 @@ Top_Genes_Factor.Seurat <- function(
     cli_abort(message = "Must provide either factor number or {.val all} to {.code factor} parameter.")
   }
 
+  if (!reduction %in% Reductions(object = object)) {
+    cli_abort(message = "Provided reduction: {.field {reduction}} was not found in Seurat Object.")
+  }
+
   if (factor == "all") {
     top_genes <- lapply(X = 1:length(x = object[[reduction]]), function(x) {
       TopFeatures(object = object[[reduction]], dim = x, nfeatures = num_genes)
