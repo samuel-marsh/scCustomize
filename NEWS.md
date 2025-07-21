@@ -11,6 +11,8 @@
 - Added new parameter `order_by_freq` to `Cluster_Stats_All_Samples`.  It is `TRUE` by default and returned data.frame is ordered by cluster frequency, setting FALSE orders data.frame by cluster order.  
 - Updated `Convert_Assay` to allow V5 > V3 conversions even when normalized and scale data is absent ([#236](https://github.com/samuel-marsh/scCustomize/issues/236)).  
 - Added `Read_cNMF` to read and add results from cNMF as custom dimensionality reduction.  
+- `Top_Genes_Factor` is now S3 generic and works with either Seurat or LIGER objects.  
+- `Top_Genes_Factor` now supports `factor = "all"` which will return data.frame containing top X genes for all factors, 1 column per factor.  
 
   
   
