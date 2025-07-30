@@ -6,6 +6,7 @@
 \usage{
 Factor_Cor_Plot(
   object,
+  reduction = NULL,
   colors_use = NULL,
   label = FALSE,
   label_threshold = 0.5,
@@ -22,6 +23,8 @@ Factor_Cor_Plot(
 }
 \arguments{
 \item{object}{liger or Seurat object.}
+
+\item{reduction}{name of dimensionality reduction containing NMF loadings, Seurat only.}
 
 \item{colors_use}{Color palette to use for correlation values.
 Default is \code{RColorBrewer::RdBu} if \code{positive_only = FALSE}.
