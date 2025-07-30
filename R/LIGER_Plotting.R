@@ -349,6 +349,7 @@ plotFactors_scCustom <- function(
 #' Any negative correlations are set to NA and NA values set to bottom color of color gradient.
 #'
 #' @param object liger or Seurat object.
+#' @param reduction name of dimensionality reduction containing NMF loadings, Seurat only.
 #' @param colors_use Color palette to use for correlation values.
 #' Default is `RColorBrewer::RdBu` if `positive_only = FALSE`.
 #' If `positive_only = TRUE` the default is `viridis`.
@@ -392,6 +393,7 @@ plotFactors_scCustom <- function(
 
 Factor_Cor_Plot <- function(
     object,
+    reduction = NULL,
     colors_use = NULL,
     label = FALSE,
     label_threshold = 0.5,
@@ -410,7 +412,26 @@ Factor_Cor_Plot <- function(
     cli_abort(message = "{.code plot_type} must be one of {.field {glue_collapse_scCustom(input_string = c('full', 'lower,', 'upper'), and = FALSE)}}")
   }
 
-  cor_mat <- Find_Factor_Cor(object = object)
+  # get data Seurat
+  if (inherits(x = object, what = "Seurat")) {
+    # check a reduction provided
+    if (is.null(x = reduction)) {
+      cli_abort(message = "Must supply name of reduction to {.code reduction} parameter when plotting from Seurat object")
+    }
+
+    # check reduction present
+    if (!reduction %in% Reductions(object = object)) {
+      cli_abort(message = "Provided reduction: {.field {reduction}} was not found in Seurat Object.")
+    }
+
+    # get cor data
+    cor_mat <- Find_Factor_Cor(object = object, reduction = reduction)
+  }
+
+  # get data liger
+  if (inherits(x = object, what = "liger")) {
+    cor_mat <- Find_Factor_Cor(object = object)
+  }
 
   # filter matrix by plot type
   if (plot_type == "upper") {
