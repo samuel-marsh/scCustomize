@@ -691,12 +691,13 @@ Clustered_DotPlot_Single_Group <- function(
     exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by), assays = assay, layer = "data")[[assay]]))
 
     check_zero <- rowSums(exp_mat_df > 0)
-    check_zero
     zero_data <- names(which(x = check_zero == 0))
 
     # remove zero expression genes from found features
     all_found_features <- setdiff(all_found_features, zero_data)
   }
+
+  print("hi")
 
   # Get DotPlot data
   seurat_plot <- DotPlot(object = seurat_object, features = all_found_features, assay = assay, group.by = group.by, scale = TRUE, idents = idents, col.min = NULL, col.max = NULL)
