@@ -696,6 +696,9 @@ Clustered_DotPlot_Single_Group <- function(
     check_zero <- rowSums(exp_mat_df > 0)
     zero_data <- names(which(x = check_zero == 0))
 
+    cli_warn(message = c("The following features have no expression in any cells and were removed",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = zero_data, and = TRUE)}}."))
+
     # remove zero expression genes from found features
     all_found_features <- setdiff(all_found_features, zero_data)
   }
@@ -1290,6 +1293,9 @@ Clustered_DotPlot_Multi_Group <- function(
     check_zero <- rowSums(exp_mat_df > 0)
     check_zero
     zero_data <- names(which(x = check_zero == 0))
+
+    cli_warn(message = c("The following features have no expression in any cells and were removed",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = zero_data, and = TRUE)}}."))
 
     # remove zero expression genes from found features
     all_found_features <- setdiff(all_found_features, zero_data)
