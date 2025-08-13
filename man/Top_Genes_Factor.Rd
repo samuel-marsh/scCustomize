@@ -20,6 +20,8 @@ genes from all factors}
 
 \item{num_genes}{number of top loading genes to return as vector, default is 10.}
 
+\item{...}{Arguments passed to other methods}
+
 \item{reduction}{name of reduction containing NMF/iNMF/cNMF data.}
 }
 \value{
