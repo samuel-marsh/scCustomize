@@ -541,6 +541,9 @@ Figure_Plot <- function(
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
+#' @param nan_error logical, default is FALSE.  *ONLY* set this value to true if you get error related to
+#' NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+#' number of features being plotted.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -613,6 +616,7 @@ Clustered_DotPlot_Single_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
+    nan_error = FALSE,
     ggplot_default_colors = FALSE,
     color_seed = 123,
     seed = 123
@@ -680,6 +684,18 @@ Clustered_DotPlot_Single_Group <- function(
     cli_abort(message = c("Expression color min/max values are not compatible.",
                           "i" = "The value for {.code exp_color_min}: {.field {exp_color_min}} must be less than the value for {.code exp_color_max}: {.field {exp_color_max}}.")
     )
+  }
+
+  # check for any genes that have zero expression
+  if (isTRUE(x = nan_error)) {
+    exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by), assays = assay, layer = "data")[[assay]]))
+
+    check_zero <- rowSums(exp_mat_df > 0)
+    check_zero
+    zero_data <- names(which(x = check_zero == 0))
+
+    # remove zero expression genes from found features
+    all_found_features <- setdiff(all_found_features, zero_data)
   }
 
   # Get DotPlot data
@@ -1099,6 +1115,9 @@ Clustered_DotPlot_Single_Group <- function(
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
+#' @param nan_error logical, default is FALSE.  *ONLY* set this value to true if you get error related to
+#' NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+#' number of features being plotted.
 #' @param seed Sets seed for reproducible plotting (ComplexHeatmap plot).
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
@@ -1168,6 +1187,7 @@ Clustered_DotPlot_Multi_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
+    nan_error = FALSE,
     seed = 123
 ) {
   # Check for packages
@@ -1260,6 +1280,18 @@ Clustered_DotPlot_Multi_Group <- function(
 
   # set group.by value
   group.by <- group.by %||% "ident"
+
+  # check for any genes that have zero expression
+  if (isTRUE(x = nan_error)) {
+    exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by), assays = assay, layer = "data")[[assay]]))
+
+    check_zero <- rowSums(exp_mat_df > 0)
+    check_zero
+    zero_data <- names(which(x = check_zero == 0))
+
+    # remove zero expression genes from found features
+    all_found_features <- setdiff(all_found_features, zero_data)
+  }
 
   # Get data
   exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by, split.by), assays = assay, layer = "data")[[assay]]))

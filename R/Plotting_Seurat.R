@@ -1079,6 +1079,9 @@ DotPlot_scCustom <- function(
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
+#' @param nan_error logical, default is FALSE.  *ONLY* set this value to true if you get error related to
+#' NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+#' number of features being plotted.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -1154,6 +1157,7 @@ Clustered_DotPlot <- function(
   group.by = NULL,
   idents = NULL,
   show_parent_dend_line = TRUE,
+  nan_error = FALSE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   seed = 123
@@ -1208,6 +1212,7 @@ Clustered_DotPlot <- function(
                                    show_column_names = show_column_names,
                                    column_names_side = column_names_side,
                                    row_names_side = row_names_side,
+                                   nan_error = nan_error,
                                    seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
@@ -1247,6 +1252,7 @@ Clustered_DotPlot <- function(
                                   show_column_names = show_column_names,
                                   column_names_side = column_names_side,
                                   row_names_side = row_names_side,
+                                  nan_error = nan_error,
                                   seed = seed)
   }
 }
