@@ -688,7 +688,10 @@ Clustered_DotPlot_Single_Group <- function(
 
   # check for any genes that have zero expression
   if (isTRUE(x = nan_error)) {
-    exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by), assays = assay, layer = "data")[[assay]]))
+    # set group.by value
+    grouping <- group.by %||% "ident"
+
+    exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = grouping, assays = assay, layer = "data")[[assay]]))
 
     check_zero <- rowSums(exp_mat_df > 0)
     zero_data <- names(which(x = check_zero == 0))
@@ -696,8 +699,6 @@ Clustered_DotPlot_Single_Group <- function(
     # remove zero expression genes from found features
     all_found_features <- setdiff(all_found_features, zero_data)
   }
-
-  print("hi")
 
   # Get DotPlot data
   seurat_plot <- DotPlot(object = seurat_object, features = all_found_features, assay = assay, group.by = group.by, scale = TRUE, idents = idents, col.min = NULL, col.max = NULL)
