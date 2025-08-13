@@ -1818,6 +1818,8 @@ Read_Metrics_CellBender <- function(
 #'
 #' @export
 #'
+#' @concept read_&_write
+#'
 #' @examples
 #' \dontrun{
 #' object <- Read_cNMF(seurat_object = object,
