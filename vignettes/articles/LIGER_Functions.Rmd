@@ -229,7 +229,7 @@ Following plotting with `plotFactors_scCustom` it can sometimes be helpful to pu
 *NOTE: This function simply extracts top loading genes in order from given factor.  It does not assess whether that number of genes is significant, etc.*
 
 ```{r}
-top20_factor6 <- Top_Genes_Factor(liger_object = marsh_liger, liger_factor = 6, num_genes = 20)
+top20_factor6 <- Top_Genes_Factor(object = marsh_liger, factor = 6, num_genes = 20)
 
 head(top20_factor6, 5)
 ```
