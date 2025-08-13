@@ -1475,6 +1475,10 @@ Convert_Assay <- function(
     }
   }
 
+  if (convert_to == "Assay5") {
+    create_manual_assay <- FALSE
+  }
+
   if (is.null(x = assay)) {
     num_assays <- length(x = Assays(object = seurat_object))
     if (num_assays > 1) {
