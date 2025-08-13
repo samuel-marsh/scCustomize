@@ -50,8 +50,9 @@
 - Fixed rotation of x-axis text in `Proportion_Plot`.  
 - Added check for correct input format in `Extract_Top_Markers`.  
 - Added check to `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, and `Plot_Median_Other` to ensure that `group.by` and `sample_col` are different and provide informative error message if they are the same ([#233](https://github.com/samuel-marsh/scCustomize/issues/233)).  
-- Fix bug in `VariableFeaturePlot_scCustom` that prevented function from running.  
-- Fix `Factor_Cor_Plot` failure when using Seurat object due to lack of `reduction` parameter.  
+- Fixed bug in `VariableFeaturePlot_scCustom` that prevented function from running.  
+- Fixed `Factor_Cor_Plot` failure when using Seurat object due to lack of `reduction` parameter.  
+- Fixed issue in `Clustered_DotPlot` when feature has zero expression in any cells with new `nan_error` parameter ([#178](https://github.com/samuel-marsh/scCustomize/issues/178)).  
 - Code styling and typo fixes.  
 
 
