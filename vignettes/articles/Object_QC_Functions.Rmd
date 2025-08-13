@@ -350,11 +350,11 @@ FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_S
 ```
 
 
-```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=13, fig.cap="***A.** tSNE plot showing the clusters from Marsh et al., 2022 **B.** FeaturePlot_scCustom view of the module score showing expected localization in the "Activated" exAM cluster.*"}
+```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=13, fig.cap='***A.** tSNE plot showing the clusters from Marsh et al., 2022. **B.** FeaturePlot_scCustom view of the module score showing expected localization in the "Activated" exAM cluster.*'}
 p1 <- DimPlot_scCustom(seurat_object = marsh_mouse_micro, colors_use = marsh_mouse_micro@misc$exp17_micro_colors, label.size = 5, pt.size = 0.5, repel = T)
 p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", na_cutoff = NA, pt.size = 0.5)
 
-wrap_plots(p1, p2)
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
 ```
 
 ```{r fig.align='center', fig.height=6, fig.width=13}
