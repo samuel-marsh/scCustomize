@@ -118,8 +118,6 @@ mouse_colors <- marsh_mouse_micro@misc$exp17_micro_colors
 
 ### Plotting highly variable genes 
 scCustomize allows for plotting of highly variable genes with desired number of points labeled in single function.  `VariableFeaturePlot_scCustom()` also contains several additional parameters for customizing visualization.
-
-
 ```{r eval=FALSE}
 # Default scCustomize plot
 VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_features = 20)
@@ -140,7 +138,6 @@ p4 <- VariableFeaturePlot_scCustom(seurat_object = marsh_mouse_micro, num_featur
 
 wrap_plots(p1, p2, p3, p4) + plot_annotation(tag_levels = "A")
 ```
-
 
 #### Label custom features  
 In addition to labeling the top variable genes `VariableFeaturePlot_scCustom` also supports labeling a custom set of genes using the `custom_features` parameter.  
