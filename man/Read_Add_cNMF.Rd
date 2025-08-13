@@ -42,3 +42,4 @@ spectra_file = "example_cNMF/example_cNMF.gene_spectra_score.k_27.dt_0_01.txt")
 \references{
 For more information about cNMF and usage see \url{https://github.com/dylkot/cNMF}
 }
+\concept{read_&_write}
