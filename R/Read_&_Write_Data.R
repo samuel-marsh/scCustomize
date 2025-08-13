@@ -1563,7 +1563,7 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' Get data.frame with all metrics from the Cell Ranger count analysis (present in web_summary.html)
 #'
-#' @param base_path path to the parent directory which contains all of the subdirectories of interest or
+#' @param base_path path to the parent directory which contains all of the sub-directories of interest or
 #' alternatively can provide single csv file to read and format identically to reading multiple files.
 #' @param secondary_path path from the parent directory to count "outs/" folder which contains the
 #' "metrics_summary.csv" file.
