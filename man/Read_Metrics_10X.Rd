@@ -14,7 +14,7 @@ Read_Metrics_10X(
 )
 }
 \arguments{
-\item{base_path}{path to the parent directory which contains all of the subdirectories of interest or
+\item{base_path}{path to the parent directory which contains all of the sub-directories of interest or
 alternatively can provide single csv file to read and format identically to reading multiple files.}
 
 \item{secondary_path}{path from the parent directory to count "outs/" folder which contains the
