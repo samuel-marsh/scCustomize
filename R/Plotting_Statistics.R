@@ -62,6 +62,9 @@ Plot_Median_Genes <- function(
     group.by <- group_by
   }
 
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
+
   # add to meta if grouping by ident
   if (!is.null(x = group.by) && group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
@@ -70,13 +73,13 @@ Plot_Median_Genes <- function(
     }
   }
 
-  # Check group by is valid
-  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
-
   # Check sample_col and group.by are not the same
   if (group.by == sample_col) {
     cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
   }
+
+  # Check group by is valid
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
@@ -224,10 +227,8 @@ Plot_Median_UMIs <- function(
     group.by <- group_by
   }
 
-  # Check sample_col and group.by are not the same
-  if (group.by == sample_col) {
-    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
-  }
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
 
   # add to meta if grouping by ident
   if (!is.null(x = group.by) && group.by == "ident") {
@@ -235,6 +236,11 @@ Plot_Median_UMIs <- function(
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
     }
+  }
+
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
   }
 
   # Check group by is valid
@@ -387,10 +393,8 @@ Plot_Median_Mito <- function(
     group.by <- group_by
   }
 
-  # Check sample_col and group.by are not the same
-  if (group.by == sample_col) {
-    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
-  }
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
 
   # add to meta if grouping by ident
   if (!is.null(x = group.by) && group.by == "ident") {
@@ -398,6 +402,11 @@ Plot_Median_Mito <- function(
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
     }
+  }
+
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
   }
 
   # Check group by is valid
@@ -556,6 +565,17 @@ Plot_Median_Other <- function(
     group.by <- group_by
   }
 
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
+
+  # add to meta if grouping by ident
+  if (!is.null(x = group.by) && group.by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
+
   # Check sample_col and group.by are not the same
   if (group.by == sample_col) {
     cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
@@ -568,14 +588,6 @@ Plot_Median_Other <- function(
 
   if (is.null(x = y_axis_label)) {
     y_axis_label <- paste0("Median ", median_var)
-  }
-
-  # add to meta if grouping by ident
-  if (!is.null(x = group.by) && group.by == "ident") {
-    seurat_object[["ident"]] <- Idents(object = seurat_object)
-    if (is.null(x = legend_title)) {
-      legend_title <- "Identity"
-    }
   }
 
   # Check group by is valid
