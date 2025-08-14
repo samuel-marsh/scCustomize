@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          #- {os: macos-latest,   r: 'release'} (REMOVE UNTIL I CAN FIGURE OUT WEIRD ERRORS THAT ONLY OCCUR HERE AND NOT ANY OTHER MAC CHECKS.)
+          - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
