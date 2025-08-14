@@ -53,6 +53,7 @@
 - Fixed bug in `VariableFeaturePlot_scCustom` that prevented function from running.  
 - Fixed `Factor_Cor_Plot` failure when using Seurat object due to lack of `reduction` parameter.  
 - Fixed issue in `Clustered_DotPlot` when feature has zero expression in any cells with new `nan_error` parameter ([#178](https://github.com/samuel-marsh/scCustomize/issues/178)).  
+- Fixed error in `Barcode_Plot` that prevented plotting when using newer versions of DropletUtils.  
 - Code styling and typo fixes.  
 
 
