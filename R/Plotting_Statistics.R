@@ -62,11 +62,6 @@ Plot_Median_Genes <- function(
     group.by <- group_by
   }
 
-  # Check sample_col and group.by are not the same
-  if (group.by == sample_col) {
-    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
-  }
-
   # add to meta if grouping by ident
   if (!is.null(x = group.by) && group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
@@ -77,6 +72,11 @@ Plot_Median_Genes <- function(
 
   # Check group by is valid
   group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
+
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
+  }
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
