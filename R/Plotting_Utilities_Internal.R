@@ -489,6 +489,7 @@ Figure_Plot <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param label_selected_features a subset of `features` to only label some of the plotted features.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
 #' Default is -2.
@@ -581,6 +582,7 @@ Figure_Plot <- function(
 Clustered_DotPlot_Single_Group <- function(
     seurat_object,
     features,
+    label_selected_features = NULL,
     colors_use_exp = viridis_plasma_dark_high,
     exp_color_min = -2,
     exp_color_middle = NULL,
@@ -649,8 +651,8 @@ Clustered_DotPlot_Single_Group <- function(
   if (!is.null(x = plot_padding)) {
     if (isTRUE(x = plot_padding)) {
       # Default extra padding
-          # 2 bottom: typically mirrors unpadded plot
-          # 15 left: usually enough to make rotated labels fit in plot window
+      # 2 bottom: typically mirrors unpadded plot
+      # 15 left: usually enough to make rotated labels fit in plot window
       padding <- unit(c(2, 15, 0, 0), "mm")
     } else {
       if (length(x = plot_padding) != 4) {
@@ -953,12 +955,46 @@ Clustered_DotPlot_Single_Group <- function(
     x_lab_rotate <- 0
   }
 
+  # only plot some feature labels
+  if (!is.null(x = label_selected_features)) {
+    if (isTRUE(x = flip)) {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a column annotation
+      feature_anno_selected <- columnAnnotation(mark = anno_mark(at = selected_row_indices,
+                                                                 labels = custom_labels,
+                                                                 link_width = unit(5, "mm"),
+                                                                 labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black"),
+                                                                 side = "bottom"))
+      # remove full row names
+      show_column_names <- FALSE
+
+    } else {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a row annotation
+      feature_anno_selected <- rowAnnotation(mark = anno_mark(at = selected_row_indices,
+                                                              labels = custom_labels,
+                                                              link_width = unit(5, "mm"),
+                                                              labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black")))
+      # remove full row names
+      show_row_names <- FALSE
+
+    }
+  } else {
+    feature_anno_selected <- NULL
+  }
+
   # Create Plot
   set.seed(seed = seed)
   if (isTRUE(x = raster)) {
     if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
+                                                  heatmap_legend_param=list(title="Expression",labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
@@ -968,6 +1004,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -989,6 +1026,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
+                                                  right_annotation = feature_anno_selected,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -1012,6 +1050,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -1033,6 +1072,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
+                                                  right_annotation = feature_anno_selected,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -1068,6 +1108,7 @@ Clustered_DotPlot_Single_Group <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param label_selected_features a subset of `features` to only label some of the plotted features.
 #' @param split.by Variable in `@meta.data` to split the identities plotted by.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
@@ -1157,6 +1198,7 @@ Clustered_DotPlot_Single_Group <- function(
 Clustered_DotPlot_Multi_Group <- function(
     seurat_object,
     features,
+    label_selected_features = NULL,
     split.by,
     colors_use_exp = viridis_plasma_dark_high,
     exp_color_min = -2,
@@ -1479,6 +1521,40 @@ Clustered_DotPlot_Multi_Group <- function(
     x_lab_rotate <- 0
   }
 
+  # only plot some feature labels
+  if (!is.null(x = label_selected_features)) {
+    if (isTRUE(x = flip)) {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a column annotation
+      feature_anno_selected <- columnAnnotation(mark = anno_mark(at = selected_row_indices,
+                                                                 labels = custom_labels,
+                                                                 link_width = unit(5, "mm"),
+                                                                 labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black"),
+                                                                 side = "bottom"))
+      # remove full row names
+      show_column_names <- FALSE
+
+    } else {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a row annotation
+      feature_anno_selected <- rowAnnotation(mark = anno_mark(at = selected_row_indices,
+                                                              labels = custom_labels,
+                                                              link_width = unit(5, "mm"),
+                                                              labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black")))
+      # remove full row names
+      show_row_names <- FALSE
+
+    }
+  } else {
+    feature_anno_selected <- NULL
+  }
+
   # Create Plot
   set.seed(seed = seed)
   if (isTRUE(x = raster)) {
@@ -1500,6 +1576,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
                                                   show_column_names = show_column_names,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
     } else {
@@ -1519,6 +1596,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
+                                                  right_annotation = feature_anno_selected,
                                                   show_column_names = show_column_names,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
@@ -1542,6 +1620,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
                                                   show_column_names = show_column_names,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
     } else {
@@ -1561,6 +1640,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
+                                                  right_annotation = feature_anno_selected,
                                                   show_column_names = show_column_names,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
