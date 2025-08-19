@@ -7,6 +7,7 @@
 Clustered_DotPlot(
   seurat_object,
   features,
+  label_selected_features = NULL,
   split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
@@ -54,6 +55,8 @@ Clustered_DotPlot(
 \item{seurat_object}{Seurat object name.}
 
 \item{features}{Features to plot.}
+
+\item{label_selected_features}{a subset of \code{features} to only label some of the plotted features.}
 
 \item{split.by}{Variable in \verb{@meta.data} to split the identities plotted by.}
 
