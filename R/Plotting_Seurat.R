@@ -1177,6 +1177,7 @@ Clustered_DotPlot <- function(
   if (is.null(x = split.by)) {
     Clustered_DotPlot_Single_Group(seurat_object = seurat_object,
                                    features = features,
+                                   label_selected_features = label_selected_features,
                                    colors_use_exp = colors_use_exp,
                                    exp_color_min = exp_color_min,
                                    exp_color_middle = exp_color_middle,
@@ -1219,6 +1220,7 @@ Clustered_DotPlot <- function(
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
                                   features = features,
+                                  label_selected_features = label_selected_features,
                                   split.by = split.by,
                                   colors_use_exp = colors_use_exp,
                                   exp_color_min = exp_color_min,
