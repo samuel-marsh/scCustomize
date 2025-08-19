@@ -963,7 +963,7 @@ Clustered_DotPlot_Single_Group <- function(
       custom_labels <- selected_features
 
       # Create a column annotation
-      feature_anno_selected <- columnAnnotation(mark = anno_mark(at = selected_row_indices,
+      feature_anno_selected <- ComplexHeatmap::columnAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
                                                                  labels = custom_labels,
                                                                  link_width = unit(5, "mm"),
                                                                  labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black"),
@@ -977,7 +977,7 @@ Clustered_DotPlot_Single_Group <- function(
       custom_labels <- selected_features
 
       # Create a row annotation
-      feature_anno_selected <- rowAnnotation(mark = anno_mark(at = selected_row_indices,
+      feature_anno_selected <- ComplexHeatmap::rowAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
                                                               labels = custom_labels,
                                                               link_width = unit(5, "mm"),
                                                               labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black")))
@@ -1529,7 +1529,7 @@ Clustered_DotPlot_Multi_Group <- function(
       custom_labels <- selected_features
 
       # Create a column annotation
-      feature_anno_selected <- columnAnnotation(mark = anno_mark(at = selected_row_indices,
+      feature_anno_selected <- ComplexHeatmap::columnAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
                                                                  labels = custom_labels,
                                                                  link_width = unit(5, "mm"),
                                                                  labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black"),
@@ -1543,7 +1543,7 @@ Clustered_DotPlot_Multi_Group <- function(
       custom_labels <- selected_features
 
       # Create a row annotation
-      feature_anno_selected <- rowAnnotation(mark = anno_mark(at = selected_row_indices,
+      feature_anno_selected <- ComplexHeatmap::rowAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
                                                               labels = custom_labels,
                                                               link_width = unit(5, "mm"),
                                                               labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black")))
