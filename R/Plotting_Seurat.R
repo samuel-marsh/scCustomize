@@ -1015,6 +1015,7 @@ DotPlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param label_selected_features a subset of `features` to only label some of the plotted features.
 #' @param split.by Variable in `@meta.data` to split the identities plotted by.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
@@ -1120,6 +1121,7 @@ DotPlot_scCustom <- function(
 Clustered_DotPlot <- function(
   seurat_object,
   features,
+  label_selected_features = NULL,
   split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
