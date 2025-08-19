@@ -539,6 +539,37 @@ plots
 ```
 
 
+#### Clustered_DotPlot() only label a subset of plotted features  
+You can also provide a subset of plotted features to the optional parameter `label_selected_features` to only label those features on the resulting plot.  This can be especially useful when plotting large number of features.  Just be sure to heed warning messages regarding how to save plots accurately.  
+```{r eval=FALSE}
+# Select large number of features
+top_markers_large <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 15, named_vector = FALSE, make_unique = TRUE)
+
+# label only top 5 features
+top_markers_subset <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 7, named_vector = FALSE, make_unique = TRUE)
+
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers_large, label_selected_features = top_markers_subset, k = 8, plot_km_elbow = FALSE)
+```
+
+```{r include=FALSE, fig.align='center', fig.height=10, fig.width=10}
+pbmc <- ScaleData(pbmc, features = Features(pbmc))
+
+# Select large number of features
+top_markers_large <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 20, named_vector = FALSE, make_unique = TRUE)
+
+# label only top 5 features
+top_markers_subset <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 5, named_vector = FALSE, make_unique = TRUE)
+
+plots <- Clustered_DotPlot(seurat_object = pbmc, features = top_markers_large, label_selected_features = top_markers_subset, k = 8, plot_km_elbow = FALSE)
+```
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=10}
+plots
+```
+
+
+
+
 #### Clustered_DotPlot() split by additional grouping variable  
 `Clustered_DotPlot` can now plot with additional grouping variable provided to `split.by` parameter.
 
