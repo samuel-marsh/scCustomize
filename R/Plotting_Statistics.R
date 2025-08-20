@@ -19,7 +19,7 @@
 #' @return A ggplot object
 #'
 #' @import ggplot2
-#' @import ggprism theme_prism
+#' @importFrom ggprism theme_prism
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom dplyr n select slice left_join any_of
 #' @importFrom magrittr "%>%"
