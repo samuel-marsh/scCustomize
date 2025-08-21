@@ -1227,22 +1227,22 @@ Retrieve_lncRNA <- function(
   chicken_options <- accepted_names$Chicken_Options
 
   if (species %in% mouse_options) {
-    lncRNA <- ensembl_lncRNA_id$Mus_musculus_lncRNA
+    lncRNA <- lncRNA_gene_list$Mus_musculus_lncRNA
   }
   if (species %in% human_options) {
-    lncRNA <- ensembl_lncRNA_id$Homo_sapiens_lncRNA
+    lncRNA <- lncRNA_gene_list$Homo_sapiens_lncRNA
   }
   if (species %in% zebrafish_options) {
-    lncRNA <- ensembl_lncRNA_id$Danio_rerio_lncRNA
+    lncRNA <- lncRNA_gene_list$Danio_rerio_lncRNA
   }
   if (species %in% rat_options) {
-    lncRNA <- ensembl_lncRNA_id$Rattus_norvegicus_lncRNA
+    lncRNA <- lncRNA_gene_list$Rattus_norvegicus_lncRNA
   }
   if (species %in% macaque_options) {
-    lncRNA <- ensembl_lncRNA_id$Macaca_mulatta_lncRNA
+    lncRNA <- lncRNA_gene_list$Macaca_mulatta_lncRNA
   }
   if (species %in% chicken_options) {
-    lncRNA <- ensembl_lncRNA_id$Gallus_gallus_lncRNA
+    lncRNA <- lncRNA_gene_list$Gallus_gallus_lncRNA
   }
 
   return(lncRNA)
@@ -1629,7 +1629,6 @@ Add_MSigDB_Seurat <- function(
 #' @noRd
 #'
 
-
 Add_IEG_Seurat <- function(
   seurat_object,
   species,
@@ -1717,6 +1716,93 @@ Add_IEG_Seurat <- function(
   # return final object
   return(seurat_object)
 }
+
+
+#' Add lncRNA Gene List Percentages
+#'
+#' Adds percentage of counts from lncRNA genes from mouse and human.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA gene counts. Default is "percent_lncRNA".
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `lncRNA_name` is present in meta.data slot.
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Add_lncRNA_Seurat <- function(
+    seurat_object,
+    species,
+    lncRNA_name = "percent_lncRNA",
+    ensembl_ids = FALSE,
+    assay = NULL,
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Overwrite check
+  if (lncRNA_name %in% colnames(x = seurat_object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {lncRNA_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code lncRNA_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {lncRNA_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    lncRNA_gene_list <- Retrieve_lncRNA(species = species)
+  } else {
+    lncRNA_gene_list <- Retrieve_Ensembl_lncRNA(species = species)
+  }
+
+  lncRNA_found <- Feature_PreCheck(object = seurat_object, features = lncRNA_gene_list)
+
+  # Add mito and ribo columns
+  if (length(x = lncRNA_found) > 0) {
+    seurat_object[[lncRNA_name]] <- PercentageFeatureSet(object = seurat_object, features = lncRNA_found, assay = assay)
+  }
+
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
+
+  # return final object
+  return(seurat_object)
+}
+
 
 
 #' Define MALAT1 QC Threshold
