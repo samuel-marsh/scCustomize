@@ -145,9 +145,9 @@ Create_lncRNA_List <- function(
 # Create & Save Lists -------------------------------------------------------------------------
 ensembl_lncRNA_id <- Create_Ensembl_lncRNA_List()
 
-save(ensembl_lncRNA_id, file = "data/ensembl_lncRNA_id.rda")
+save(ensembl_lncRNA_id, file = "data/ensembl_lncRNA_id.rda", compress = "xz")
 
 lncRNA_gene_list <- Create_lncRNA_List()
 
-save(lncRNA_gene_list, file = "data/lncRNA_gene_list.rda")
+save(lncRNA_gene_list, file = "data/lncRNA_gene_list.rda", compress = "xz")
 
