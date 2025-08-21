@@ -1120,6 +1120,135 @@ Retrieve_exAM_Ensembl_Lists <- function(
 }
 
 
+#' Ensembl lncRNA IDs
+#'
+#' Retrieves Ensembl IDs for lncRNA genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Ensembl Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_Ensembl_lncRNA <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% mouse_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Mus_musculus_lncRNA_ensembl
+  }
+  if (species %in% human_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Homo_sapiens_lncRNA_ensembl
+  }
+  if (species %in% marmoset_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Callithrix_jacchus_lncRNA_ensembl
+  }
+  if (species %in% zebrafish_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Danio_rerio_lncRNA_ensembl
+  }
+  if (species %in% rat_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Rattus_norvegicus_lncRNA_ensembl
+  }
+  if (species %in% macaque_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Macaca_mulatta_lncRNA_ensembl
+  }
+  if (species %in% chicken_options) {
+    lncRNA_ensembl <- ensembl_lncRNA_id$Gallus_gallus_lncRNA_ensembl
+  }
+
+  return(lncRNA_ensembl)
+}
+
+
+#' lncRNA IDs
+#'
+#' Retrieves gene symbol IDs for lncRNA genes
+#'
+#' @param species species to retrieve IDs.
+#'
+#' @return vector of Gene IDs
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Retrieve_lncRNA <- function(
+    species
+) {
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% mouse_options) {
+    lncRNA <- ensembl_lncRNA_id$Mus_musculus_lncRNA
+  }
+  if (species %in% human_options) {
+    lncRNA <- ensembl_lncRNA_id$Homo_sapiens_lncRNA
+  }
+  if (species %in% zebrafish_options) {
+    lncRNA <- ensembl_lncRNA_id$Danio_rerio_lncRNA
+  }
+  if (species %in% rat_options) {
+    lncRNA <- ensembl_lncRNA_id$Rattus_norvegicus_lncRNA
+  }
+  if (species %in% macaque_options) {
+    lncRNA <- ensembl_lncRNA_id$Macaca_mulatta_lncRNA
+  }
+  if (species %in% chicken_options) {
+    lncRNA <- ensembl_lncRNA_id$Gallus_gallus_lncRNA
+  }
+
+  return(lncRNA)
+}
+
+
 #' Retrieve dual species gene lists mitochondrial
 #'
 #' Returns vector of all mitochondrial genes across all species in dataset.
