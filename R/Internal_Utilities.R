@@ -195,6 +195,7 @@ Assay5_Check <- function(
 #' @param object Seurat object
 #' @param features vector of features and/or meta data variables to plot.
 #' @param assay Assay to use (default all assays present).
+#' @param print_missing logical, whether to print the names of missing features.  Default is TRUE.
 #'
 #' @return vector of features and/or meta data that were found in object.
 #'
@@ -206,7 +207,8 @@ Assay5_Check <- function(
 Feature_PreCheck <- function(
   object,
   features,
-  assay = NULL
+  assay = NULL,
+  print_missing = TRUE
 ) {
   # set assay (if null set to active assay)
   assay <- assay %||% Assays(object = object)
