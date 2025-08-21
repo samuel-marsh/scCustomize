@@ -16,6 +16,7 @@
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
 #' @param add_IEG_module_score logical, whether to add module score belonging to IEG genes to object (Default is TRUE).
 #' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
+#' @param add_lncRNA logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).
 #' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
 #' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
@@ -38,6 +39,8 @@
 #' @param ieg_module_name name to use for new meta data column for module score of IEGs.  Default is "ieg_score".
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
 #' Default is "percent_mito".
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA counts.
+#' Default is "percent_lncRNA".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
@@ -90,6 +93,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     add_IEG = TRUE,
     add_IEG_module_score = TRUE,
     add_hemo = TRUE,
+    add_lncRNA = TRUE,
     add_cell_cycle = TRUE,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
@@ -102,6 +106,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     ieg_name = "percent_ieg",
     ieg_module_name = "ieg_score",
     hemo_name = "percent_hemo",
+    lncRNA_name = "percent_lncRNA",
     mito_pattern = NULL,
     ribo_pattern = NULL,
     hemo_pattern = NULL,
@@ -194,6 +199,21 @@ Add_Cell_QC_Metrics.Seurat <- function(
   if (isTRUE(x = add_hemo)) {
     cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
     object <- Add_Hemo(object = object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
+  }
+
+  # Add lncRNA
+  if (isTRUE(x = add_lncRNA)) {
+    if (species %in% marmoset_options && isFALSE(x = ensembl_ids)) {
+      cli_warn(message = c("{.val Marmoset} lncRNAs do not currently have annotated symbols (only Ensembl IDs) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    }
+    if (species %in% drosophila_options) {
+      cli_warn(message = c("{.val Drosophila} do not have separate lncRNA gene biotype (only ncRNA) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    } else {
+      cli_inform(message = c("*" = "Adding {.field lncRNA Percentages} to meta.data."))
+      object <- Add_lncRNA_Seurat(seurat_object = object, species = species, lncRNA_name = lncRNA_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
+    }
   }
 
   # Add cell cycle

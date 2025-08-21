@@ -1012,6 +1012,7 @@ Find_Factor_Cor <- function(
 #' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
 #' object (Default is TRUE).
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_lncRNA logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).
 #' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
@@ -1032,6 +1033,8 @@ Find_Factor_Cor <- function(
 #' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
 #' Default is "percent_mito".
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA counts.
+#' Default is "percent_lncRNA".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
@@ -1080,6 +1083,7 @@ Add_Cell_QC_Metrics.liger <- function(
     add_MSigDB = TRUE,
     add_IEG = TRUE,
     add_hemo = TRUE,
+    add_lncRNA = TRUE,
     add_cell_cycle = TRUE,
     species,
     mito_name = "percent_mito",
@@ -1092,6 +1096,7 @@ Add_Cell_QC_Metrics.liger <- function(
     dna_repair_name = "percent_dna_repair",
     ieg_name = "percent_ieg",
     hemo_name = "percent_hemo",
+    lncRNA_name = "percent_lncRNA",
     mito_pattern = NULL,
     ribo_pattern = NULL,
     hemo_pattern = NULL,
@@ -1175,6 +1180,21 @@ Add_Cell_QC_Metrics.liger <- function(
   if (isTRUE(x = add_hemo)) {
     cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
     liger_object <- Add_Hemo(object = liger_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, overwrite = overwrite, ensembl_ids = ensembl_ids)
+  }
+
+  # Add lncRNA
+  if (isTRUE(x = add_lncRNA)) {
+    if (species %in% marmoset_options && isFALSE(x = ensembl_ids)) {
+      cli_warn(message = c("{.val Marmoset} lncRNAs do not currently have annotated symbols (only Ensembl IDs) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    }
+    if (species %in% drosophila_options) {
+      cli_warn(message = c("{.val Drosophila} do not have separate lncRNA gene biotype (only ncRNA) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    } else {
+      cli_inform(message = c("*" = "Adding {.field lncRNA Percentages} to meta.data."))
+      object <- Add_lncRNA_LIGER(liger_object = object, species = species, lncRNA_name = lncRNA_name, overwrite = overwrite, ensembl_ids = ensembl_ids)
+    }
   }
 
   # return object
