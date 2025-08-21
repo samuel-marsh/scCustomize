@@ -10,7 +10,7 @@
 #'   \item{Rattus_norvegicus_mito_ensembl}{Ensembl IDs for rat mitochondrial genes}
 #'   \item{Drosophila_melanogaster_mito_ensembl}{Ensembl IDs for fly mitochondrial genes}
 #'   \item{Macaca_mulatta_mito_ensembl}{Ensembl IDs for macaque mitochondrial genes}
-#'   \item{Gallus_gallus_ribo_ensembl}{Ensembl IDs for chicken mitochondrial genes}
+#'   \item{Gallus_gallus_mito_ensembl}{Ensembl IDs for chicken mitochondrial genes}
 #' }
 #' @concept data
 #' @source See data-raw directory for scripts used to create gene list.
@@ -225,3 +225,44 @@
 #' See data-raw directory for scripts used to create gene list.
 #'
 "ensembl_exAM_list"
+
+
+#' Ensembl lncRNA IDs
+#'
+#' A list of ensembl ids for lncRNA genes (Ensembl version 113; 04/08/2025)
+#'
+#' @format A list of seven vectors
+#' \describe{
+#'   \item{Mus_musculus_lncRNA_ensembl}{Ensembl IDs for mouse lncRNA genes}
+#'   \item{Homo_sapiens_lncRNA_ensembl}{Ensembl IDs for human lncRNA genes}
+#'   \item{Callithrix_jacchus_lncRNA_ensembl}{Ensembl IDs for marmoset lncRNA genes}
+#'   \item{Danio_rerio_lncRNA_ensembl}{Ensembl IDs for zebrafish lncRNA genes}
+#'   \item{Rattus_norvegicus_lncRNA_ensembl}{Ensembl IDs for rat lncRNA genes}
+#'   \item{Macaca_mulatta_lncRNA_ensembl}{Ensembl IDs for macaque lncRNA genes}
+#'   \item{Gallus_gallus_lncRNA_ensembl}{Ensembl IDs for chicken lncRNA genes}
+#' }
+#' @concept data
+#' @source See data-raw directory for scripts used to create gene list.
+#'
+#'
+"ensembl_lncRNA_id"
+
+
+#' lncRNA gene list
+#'
+#' A list of gene symbol ids for lncRNA genes (Ensembl version 113; 04/08/2025)
+#'
+#' @format A list of six vectors
+#' \describe{
+#'   \item{Mus_musculus_lncRNA}{Ensembl IDs for mouse lncRNA genes}
+#'   \item{Homo_sapiens_lncRNA}{Ensembl IDs for human lncRNA genes}
+#'   \item{Danio_rerio_lncRNA}{Ensembl IDs for zebrafish lncRNA genes}
+#'   \item{Rattus_norvegicus_lncRNA}{Ensembl IDs for rat lncRNA genes}
+#'   \item{Macaca_mulatta_lncRNA}{Ensembl IDs for macaque lncRNA genes}
+#'   \item{Gallus_gallus_lncRNA}{Ensembl IDs for chicken lncRNA genes}
+#' }
+#' @concept data
+#' @source See data-raw directory for scripts used to create gene list.
+#'
+#'
+"lncRNA_gene_list"
