@@ -1793,7 +1793,7 @@ Add_lncRNA_Seurat <- function(
     lncRNA_gene_list <- Retrieve_Ensembl_lncRNA(species = species)
   }
 
-  lncRNA_found <- Feature_PreCheck(object = seurat_object, features = lncRNA_gene_list)
+  lncRNA_found <- Feature_PreCheck(object = seurat_object, features = lncRNA_gene_list, print_missing = FALSE)
 
   # Add mito and ribo columns
   if (length(x = lncRNA_found) > 0) {
