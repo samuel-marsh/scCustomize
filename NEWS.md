@@ -14,6 +14,7 @@
 - `Top_Genes_Factor` is now S3 generic and works with either Seurat or LIGER objects.  
 - `Top_Genes_Factor` now supports `factor = "all"` which will return data.frame containing top X genes for all factors, 1 column per factor.  
 - Added parameter `label_selected_features` to `Clustered_DotPlot` to allow for labeling only subset of plotted features.  
+- Added new parameter to `Add_Cell_QC_Metrics` to add percentage of lncRNA counts per cell (see `add_lncRNA` parameter).  
 
   
   
