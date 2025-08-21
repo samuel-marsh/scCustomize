@@ -2297,3 +2297,91 @@ Add_IEG_LIGER <- function(
   # return final object
   return(liger_object)
 }
+
+
+#' Add lncRNA Gene List Percentages
+#'
+#' Adds percentage of counts from lncRNA genes.
+#'
+#' @param liger_object object name.
+#' @param species Species of origin for given Seurat Object.
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA gene counts. Default is "percent_lncRNA".
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param overwrite Logical.  Whether to overwrite existing meta data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `lncRNA_name` is present in meta data slot.
+#'
+#' @return liger object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Add_lncRNA_LIGER <- function(
+    liger_object,
+    species,
+    lncRNA_name = "percent_lncRNA",
+    ensembl_ids = FALSE,
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+  )
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  # Check Seurat
+  Is_LIGER(liger_object = liger_object)
+
+  # Overwrite check
+  meta_names <- colnames(x = Fetch_Meta(object = liger_object))
+
+  if (lncRNA_name %in% meta_names) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {lncRNA_name}} already present in meta data.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code lncRNA_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {lncRNA_name}} already present in meta data.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    lncRNA_gene_list <- Retrieve_lncRNA(species = species)
+  } else {
+    lncRNA_gene_list <- Retrieve_Ensembl_lncRNA(species = species)
+  }
+
+  all_features <- Features(x = liger_object, by_dataset = FALSE)
+
+  lncRNA_found <- intersect(x = lncRNA_gene_list, y = all_features)
+
+  # Add ieg column
+  if (length(x = lncRNA_found) > 0) {
+    if (packageVersion(pkg = "rliger") > "1.0.1") {
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(lncRNA_name = lncRNA_found), verbose = FALSE)
+    } else {
+      percent_lncRNA <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[lncRNA_found, ]) / Matrix::colSums(x))*100}))
+      object@cell.data[, lncRNA_name] <- percent_lncRNA
+    }
+  }
+
+  # return final object
+  return(liger_object)
+}
