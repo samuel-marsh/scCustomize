@@ -1,5 +1,5 @@
-## Hotfix to v3.1.0  
-Found 2 errors in documentation and have corrected them.  Sorry for missing them in first submission!
+## Hotfix to v3.1.0 and v3.1.1  
+Fixed fuerther errors of doi/url formatting in manual docs.  Sorry for missing them in earlier submission!
 
 
 ## Update 
