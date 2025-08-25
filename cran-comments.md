@@ -1,5 +1,5 @@
 ## Hotfix to v3.1.0  
-Found 2 errors in documentation and have corrected them.
+Found 2 errors in documentation and have corrected them.  Sorry for missing them in first submission!
 
 
 ## Update 
