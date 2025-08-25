@@ -965,7 +965,7 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' @method Add_MALAT1_Threshold Seurat
 #'
 #' @references This function incorporates a threshold calculation and procedure as described in
-#' Clarke & Bader (2024). bioRxiv \doi{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
+#' Clarke & Bader (2024). bioRxiv \doi{10.1101/2024.07.14.603469}.  Please cite this preprint
 #' whenever using this function.
 #'
 #' @author Zoe Clark (original function and manuscript) & Samuel Marsh (wrappers and updates for inclusion in package)
