@@ -1812,7 +1812,7 @@ Add_lncRNA_Seurat <- function(
 #' Define MALAT1 QC Threshold
 #'
 #' This function is a threshold calculation and procedure as described in
-#' Clarke & Bader (2024). bioRxiv \url{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
+#' Clarke & Bader (2024). bioRxiv \doi{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
 #' whenever using this function.  The original code and function can be found here:
 #' \url{https://github.com/BaderLab/MALAT1_threshold}
 #'
@@ -1864,7 +1864,7 @@ Add_lncRNA_Seurat <- function(
 #' @noRd
 #'
 #' @references This function incorporates a threshold calculation and procedure as described in
-#' Clarke & Bader (2024). bioRxiv \url{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
+#' Clarke & Bader (2024). bioRxiv \doi{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
 #' whenever using this function.
 #'
 #' @author Zoe Clark

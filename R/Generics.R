@@ -125,7 +125,7 @@ Add_Top_Gene_Pct <- function(object, ...) {
 #'
 #' Adds TRUE/FALSE values to each cell based on calculation of MALAT1 threshold.
 #' This function incorporates a threshold calculation and procedure as described in
-#' Clarke & Bader (2024). bioRxiv \url{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
+#' Clarke & Bader (2024). bioRxiv \doi{doi.org/10.1101/2024.07.14.603469}.  Please cite this preprint
 #' whenever using this function.
 #'
 #' @param object Seurat or LIGER object
