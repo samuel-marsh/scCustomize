@@ -74,6 +74,7 @@ The default parameters of the function `Add_Cell_QC_Metrics` will add:
 
 * Mitochondrial and Ribosomal Percentages (default and custom species).
 * Hemoglobin Percentages (default and custom species).
+* Percentage of counts for lncRNA (default species).   
 * Cell Complexity (log10(nFeature) / log10(nCount).
 * Top XX Gene Percentage.
 * Percentage of counts for IEG (human and mouse only).

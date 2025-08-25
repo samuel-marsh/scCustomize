@@ -75,7 +75,7 @@ pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 ## Cross-compatibility of QC Functions  
 
 ### Support for Seurat and LIGER Objects  
-All of scCustomize's functions to add quality control metrics are 100% cross compatible across Seurat and LIGER objects using the same function calls.  For more details on QC specific plotting functions see [QC Plotting & Analysis Vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html).  
+All of scCustomize's functions to add quality control metrics are 100% cross compatible across Seurat and LIGER objects using the same function calls.  For more details on QC-specific plotting functions see [QC Plotting & Analysis Vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html).  
 
 ### Support for gene symbols and Ensembl IDs  
 Additionally, all of the QC functions support objects that use either gene symbols or Ensembl IDs.  Ensembl IDs for default species (see below) are from Ensembl version 112 (updated in scCustomize on 4/29/2024).  
@@ -83,7 +83,7 @@ Additionally, all of the QC functions support objects that use either gene symbo
 If your object using ensembl IDs as features names then simply add `ensembl_ids` parameter that is present in all QC functions.  
 ```{r eval=FALSE}
 # Using gene name patterns
-obj <- Add_Mito_Ribo(object = obj, species = "Human", ensembl_ids = TRUE)
+obj <- Add_Cell_QC_Metrics(object = obj, species = "Human", ensembl_ids = TRUE)
 ```
 
 
@@ -111,15 +111,15 @@ However custom prefixes can be used for species with different annotations. Simp
 
 ```{r eval=FALSE}
 # Using gene name patterns
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "regexp_pattern_mito", ribo_pattern = "regexp_pattern_ribo")
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "other", mito_pattern = "regexp_pattern_mito", ribo_pattern = "regexp_pattern_ribo")
 
 # Using feature name lists
 mito_gene_list <- c("gene1", "gene2", "etc")
 ribo_gene_list <- c("gene1", "gene2", "etc")
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
 
 # Using combination of gene lists and gene name patterns
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern_ribo")
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern_ribo")
 ```
 
 </details>
@@ -131,6 +131,7 @@ To simplify the process of adding cell QC metrics scCustomize contains a wrapper
 
 * Mitochondrial and Ribosomal Percentages (default and custom species).
 * Hemoglobin percentages (default and custom species).  
+* Percentage of counts for lncRNA (default species).   
 * Cell Complexity (log10(nFeature) / log10(nCount).
 * Top XX Gene Percentage.
 * Percentage of counts for IEG (human and mouse only).
