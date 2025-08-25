@@ -1,3 +1,7 @@
+## Hotfix to v3.1.0  
+Found 2 errors in documentation and have corrected them.
+
+
 ## Update 
 This is major update to version 3.1.0.  Contains bug fixes and new functions. This version also updates maintainer email address and adds one new author to package.  See News.md for full changelog.  
 
