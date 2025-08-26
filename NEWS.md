@@ -1,3 +1,17 @@
+# scCustomize 3.1.4 (2025-08-XX)  
+## Added  
+- Added cNMF vignette.  
+- Added `reduction_name` and `reduction_key` parameters to `Read_Add_cNMF` to allow for control over reduction name (and ability to add results from more than one run of cNMF to the same Seurat object).  
+
+## Changed  
+
+
+
+## Fixes  
+- Fixed errors in plotting with `Factor_Cor_Plot` that occured due to partial matrix plotting and row clustering.  
+
+
+
 # scCustomize 3.1.3 (2025-08-25)  
 ## Added  
 - Add support for LIGER objects using `Extract_Sample_Meta`.  
