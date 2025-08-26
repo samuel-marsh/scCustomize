@@ -1804,9 +1804,13 @@ Read_Metrics_CellBender <- function(
 #' @param seurat_object Seurat object name to add cNMF reduction
 #' @param usage_file path and name of cNMF usage file
 #' @param spectra_file path and name of cNMF spectra file
+#' @param reduction_name name to use for reduction to be added, default is "cnmf".
+#' @param reduction_key key to use for reduction to be added, default is "cNMF_".
 #' @param normalize logical, whether to normalize the cNMF usage data, default is TRUE
 #' @param assay assay to add reduction.  Default is NULL and will use current
 #' active assay.
+#' @param overwrite logical, whether to overwrite a reduction with the name `reduction_name` already
+#' present in reduction slot of given Seurat object.
 #'
 #' @return Seurat object with new dimensionality reduction "cnmf"
 #'
@@ -1832,11 +1836,21 @@ Read_Add_cNMF <- function(
     seurat_object,
     usage_file,
     spectra_file,
+    reduction_name = "cnmf",
+    reduction_key = "cNMF_",
     normalize = TRUE,
-    assay = NULL
+    assay = NULL,
+    overwrite = FALSE
 ) {
   # check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # check reduction present
+  if (reduction_name %in% Reductions(object = seurat_object) && isFALSE(x = overwrite)) {
+    cli_abort(message = c("A reduction with name {.field {reduction_name}} is already present in Seurat object.",
+                          "i" = "To run function and overwrite existing reduction set parameter {.code overwrite = TRUE}",
+                          "i" = "To keep existing reduction and add new reduction change respective {.code reduction_name} and {.code reduction_key} parameters."))
+  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -1863,9 +1877,9 @@ Read_Add_cNMF <- function(
   colnames(spectra_data) <- paste0("Factor_", colnames(spectra_data))
 
   # create and add dimreduc object
-  cnmf_dimreduc <- CreateDimReducObject(embeddings = usage_data, loadings = spectra_data, assay = assay, key = "cNMF_")
+  cnmf_dimreduc <- CreateDimReducObject(embeddings = usage_data, loadings = spectra_data, assay = assay, key = reduction_key)
 
-  seurat_object[["cnmf"]] <- cnmf_dimreduc
+  seurat_object[[reduction_name]] <- cnmf_dimreduc
 
   # return object
   return(seurat_object)
