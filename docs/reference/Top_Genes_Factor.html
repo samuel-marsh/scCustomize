@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract top loading genes for LIGER factor</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/LIGER_Utilities.R" class="external-link"><code>R/LIGER_Utilities.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Generics.R" class="external-link"><code>R/Generics.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/LIGER_Utilities.R" class="external-link"><code>R/LIGER_Utilities.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Utilities.R" class="external-link"><code>R/Utilities.R</code></a></small>
     <div class="hidden name"><code>Top_Genes_Factor.Rd</code></div>
     </div>
 
@@ -122,34 +122,55 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Top_Genes_Factor</span><span class="op">(</span><span class="va">liger_object</span>, <span class="va">liger_factor</span>, num_genes <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Top_Genes_Factor</span><span class="op">(</span><span class="va">object</span>, factor <span class="op">=</span> <span class="cn">NULL</span>, num_genes <span class="op">=</span> <span class="fl">10</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for liger</span></span>
+<span><span class="fu">Top_Genes_Factor</span><span class="op">(</span><span class="va">object</span>, factor <span class="op">=</span> <span class="cn">NULL</span>, num_genes <span class="op">=</span> <span class="fl">10</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for Seurat</span></span>
+<span><span class="fu">Top_Genes_Factor</span><span class="op">(</span><span class="va">object</span>, factor <span class="op">=</span> <span class="cn">NULL</span>, num_genes <span class="op">=</span> <span class="fl">10</span>, <span class="va">reduction</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>liger_object</dt>
-<dd><p>LIGER object name.</p></dd>
+    <dl><dt>object</dt>
+<dd><p>object name.</p></dd>
 
 
-<dt>liger_factor</dt>
-<dd><p>LIGER factor number to pull genes from.</p></dd>
+<dt>factor</dt>
+<dd><p>factor number to pull genes from. Set to "all" to return top loading
+genes from all factors</p></dd>
 
 
 <dt>num_genes</dt>
-<dd><p>number of top loading genes to return as vector.</p></dd>
+<dd><p>number of top loading genes to return as vector, default is 10.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed to other methods</p></dd>
+
+
+<dt>reduction</dt>
+<dd><p>name of reduction containing NMF/iNMF/cNMF data.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A LIGER Object</p>
+<p>vector of top genes for given factor or data.frame containing top genes
+across all factors</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">top_genes_factor10</span> <span class="op">&lt;-</span> <span class="fu">Top_Genes_Factor</span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">object</span>, num_genes <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">top_genes_factor10</span> <span class="op">&lt;-</span> <span class="fu">Top_Genes_Factor</span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, factor <span class="op">=</span> <span class="fl">1</span>, num_genes <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">top_genes_factor10</span> <span class="op">&lt;-</span> <span class="fu">Top_Genes_Factor</span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, factor <span class="op">=</span> <span class="fl">1</span>, num_genes <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>reduction <span class="op">=</span> <span class="st">"cNMF"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

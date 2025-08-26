@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -143,6 +143,8 @@
 <span>  alpha_na_exp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  label_feature_yaxis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  max.cutoff <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  min.cutoff <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -238,7 +240,12 @@ value between 0-1.</p></dd>
 <dt>label_feature_yaxis</dt>
 <dd><p>logical, whether to place feature labels on secondary y-axis as opposed to
 above legend key.  Default is FALSE.  When setting <code>label_feature_yaxis = TRUE</code> the number of columns
-in plot output will automatically be set to the number of levels in <code>split.by'</code></p></dd>
+in plot output will automatically be set to the number of levels in <code>split.by'</code>.</p></dd>
+
+
+<dt>min.cutoff, max.cutoff</dt>
+<dd><p>Vector of minimum and maximum cutoff values for each feature,
+may specify quantile in the form of 'q##' where '##' is the quantile (eg, 'q1', 'q10').</p></dd>
 
 
 <dt>combine</dt>

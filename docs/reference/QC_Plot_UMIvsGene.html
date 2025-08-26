@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -143,6 +143,7 @@
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raster.dpi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">512</span><span class="op">)</span>,</span>
+<span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ggplot_default_colors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  color_seed <span class="op">=</span> <span class="fl">123</span>,</span>
 <span>  shuffle_seed <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -239,6 +240,10 @@ greater than 100,000 cells.</p></dd>
 <dt>raster.dpi</dt>
 <dd><p>Pixel resolution for rasterized plots, passed to geom_scattermore().
 Default is c(512, 512).</p></dd>
+
+
+<dt>assay</dt>
+<dd><p>Name of assay to use, defaults to the active assay.</p></dd>
 
 
 <dt>ggplot_default_colors</dt>

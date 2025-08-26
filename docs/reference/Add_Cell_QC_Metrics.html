@@ -18,7 +18,7 @@ function call to Seurat or liger objects."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -135,6 +135,7 @@ function call to Seurat or liger objects.</p>
 <span>  add_MSigDB <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_IEG <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_hemo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_lncRNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_cell_cycle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">species</span>,</span>
 <span>  mito_name <span class="op">=</span> <span class="st">"percent_mito"</span>,</span>
@@ -147,6 +148,7 @@ function call to Seurat or liger objects.</p>
 <span>  dna_repair_name <span class="op">=</span> <span class="st">"percent_dna_repair"</span>,</span>
 <span>  ieg_name <span class="op">=</span> <span class="st">"percent_ieg"</span>,</span>
 <span>  hemo_name <span class="op">=</span> <span class="st">"percent_hemo"</span>,</span>
+<span>  lncRNA_name <span class="op">=</span> <span class="st">"percent_lncRNA"</span>,</span>
 <span>  mito_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribo_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hemo_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -170,7 +172,9 @@ function call to Seurat or liger objects.</p>
 <span>  add_top_pct <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_MSigDB <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_IEG <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_IEG_module_score <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_hemo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_lncRNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_cell_cycle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  mito_name <span class="op">=</span> <span class="st">"percent_mito"</span>,</span>
 <span>  ribo_name <span class="op">=</span> <span class="st">"percent_ribo"</span>,</span>
@@ -181,7 +185,9 @@ function call to Seurat or liger objects.</p>
 <span>  apop_name <span class="op">=</span> <span class="st">"percent_apop"</span>,</span>
 <span>  dna_repair_name <span class="op">=</span> <span class="st">"percent_dna_repair"</span>,</span>
 <span>  ieg_name <span class="op">=</span> <span class="st">"percent_ieg"</span>,</span>
+<span>  ieg_module_name <span class="op">=</span> <span class="st">"ieg_score"</span>,</span>
 <span>  hemo_name <span class="op">=</span> <span class="st">"percent_hemo"</span>,</span>
+<span>  lncRNA_name <span class="op">=</span> <span class="st">"percent_lncRNA"</span>,</span>
 <span>  mito_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribo_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hemo_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -232,6 +238,10 @@ object (Default is TRUE).</p></dd>
 
 <dt>add_hemo</dt>
 <dd><p>logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).</p></dd>
+
+
+<dt>add_lncRNA</dt>
+<dd><p>logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).</p></dd>
 
 
 <dt>add_cell_cycle</dt>
@@ -294,6 +304,11 @@ counts.  Default is "percent_dna_repair"..</p></dd>
 Default is "percent_mito".</p></dd>
 
 
+<dt>lncRNA_name</dt>
+<dd><p>name to use for the new meta.data column containing percent lncRNA counts.
+Default is "percent_lncRNA".</p></dd>
+
+
 <dt>mito_pattern</dt>
 <dd><p>A regex pattern to match features against for mitochondrial genes (will set automatically if
 species is mouse or human; marmoset features list saved separately).</p></dd>
@@ -348,6 +363,14 @@ chicken).  Default is FALSE.</p></dd>
 <dt>overwrite</dt>
 <dd><p>Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 function will abort if column with name provided to <code>meta_col_name</code> is present in meta.data slot.</p></dd>
+
+
+<dt>add_IEG_module_score</dt>
+<dd><p>logical, whether to add module score belonging to IEG genes to object (Default is TRUE).</p></dd>
+
+
+<dt>ieg_module_name</dt>
+<dd><p>name to use for new meta data column for module score of IEGs.  Default is "ieg_score".</p></dd>
 
 </dl></div>
     <div id="value">

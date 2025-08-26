@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -142,8 +142,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #2: QC Plots &amp; Analysis</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19,
-2024</h4>
+            <h4 data-toc-skip class="date">Compiled: August 26,
+2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/QC_Plots.Rmd" class="external-link"><code>vignettes/articles/QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>QC_Plots.Rmd</code></div>
@@ -437,7 +437,7 @@ basis.</p>
 calculate the medians for basic QC stats (Genes/, UMIs/, %Mito/Cell,
 etc) and return a data.frame.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -676,7 +676,7 @@ Totals (All Cells)
 by default but will also calculate medians for additional meta.data
 columns using the optional <code>median_var</code> parameter</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"meta_data_column_name"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"meta_data_column_name"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="plotting-median-values">Plotting Median Values<a class="anchor" aria-label="anchor" href="#plotting-median-values"></a>
@@ -703,10 +703,10 @@ meta.data slot.</em></li>
 </li>
 </ul>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/Plot_Median_UMIs.html">Plot_Median_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/Plot_Median_Mito.html">Plot_Median_Mito</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, median_var <span class="op">=</span> <span class="st">"percent_ribo"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/Plot_Median_UMIs.html">Plot_Median_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/Plot_Median_Mito.html">Plot_Median_Mito</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, median_var <span class="op">=</span> <span class="st">"percent_ribo"</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QC_Plots_files/figure-html/unnamed-chunk-21-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">

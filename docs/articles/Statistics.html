@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -142,8 +142,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Statistics Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19,
-2024</h4>
+            <h4 data-toc-skip class="date">Compiled: August 26,
+2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Statistics.Rmd" class="external-link"><code>vignettes/articles/Statistics.Rmd</code></a></small>
       <div class="hidden name"><code>Statistics.Rmd</code></div>
@@ -598,7 +598,7 @@ Total
 as the group variable but user can specify any <code>@meta.data</code>
 slot variable.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">cluster_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Cluster_Stats_All_Samples.html">Cluster_Stats_All_Samples</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cluster_stats</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
@@ -1024,7 +1024,7 @@ CD8A
 <code>@active.ident</code> (see above) but user can specify difference
 variable if desired.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, group_by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1092,58 +1092,31 @@ expression within group split by meta data variable</p>
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-Naive.CD4.T_Group.1
+Naive.CD4.T
 </th>
 <th style="text-align:right;">
-Naive.CD4.T_Group.2
+Memory.CD4.T
 </th>
 <th style="text-align:right;">
-Memory.CD4.T_Group.1
+CD14..Mono
 </th>
 <th style="text-align:right;">
-Memory.CD4.T_Group.2
+B
 </th>
 <th style="text-align:right;">
-CD14..Mono_Group.1
+CD8.T
 </th>
 <th style="text-align:right;">
-CD14..Mono_Group.2
+FCGR3A..Mono
 </th>
 <th style="text-align:right;">
-B_Group.1
+NK
 </th>
 <th style="text-align:right;">
-B_Group.2
+DC
 </th>
 <th style="text-align:right;">
-CD8.T_Group.1
-</th>
-<th style="text-align:right;">
-CD8.T_Group.2
-</th>
-<th style="text-align:right;">
-FCGR3A..Mono_Group.2
-</th>
-<th style="text-align:right;">
-FCGR3A..Mono_Group.1
-</th>
-<th style="text-align:right;">
-NK_Group.1
-</th>
-<th style="text-align:right;">
-NK_Group.2
-</th>
-<th style="text-align:right;">
-DC_Group.2
-</th>
-<th style="text-align:right;">
-DC_Group.1
-</th>
-<th style="text-align:right;">
-Platelet_Group.1
-</th>
-<th style="text-align:right;">
-Platelet_Group.2
+Platelet
 </th>
 </tr></thead>
 <tbody>
@@ -1152,55 +1125,28 @@ Platelet_Group.2
 CD4
 </td>
 <td style="text-align:right;">
-6.371191
+6.743185
 </td>
 <td style="text-align:right;">
-7.142857
+15.942029
 </td>
 <td style="text-align:right;">
-17.39130
+24.375
 </td>
 <td style="text-align:right;">
-14.347826
+1.453488
 </td>
 <td style="text-align:right;">
-24.255319
+2.583026
 </td>
 <td style="text-align:right;">
-24.48980
+27.160494
 </td>
 <td style="text-align:right;">
-0.000000
+0.6451613
 </td>
 <td style="text-align:right;">
-2.673797
-</td>
-<td style="text-align:right;">
-3.623188
-</td>
-<td style="text-align:right;">
-1.503759
-</td>
-<td style="text-align:right;">
-31.25
-</td>
-<td style="text-align:right;">
-23.170732
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1.408451
-</td>
-<td style="text-align:right;">
-37.5
-</td>
-<td style="text-align:right;">
-31.25
-</td>
-<td style="text-align:right;">
-0
+34.375
 </td>
 <td style="text-align:right;">
 0
@@ -1211,55 +1157,28 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-13.573407
+13.342898
 </td>
 <td style="text-align:right;">
-13.095238
+8.902691
 </td>
 <td style="text-align:right;">
-10.67194
+1.875
 </td>
 <td style="text-align:right;">
-6.956522
+2.616279
 </td>
 <td style="text-align:right;">
-2.553192
+50.553505
 </td>
 <td style="text-align:right;">
-1.22449
+3.703704
 </td>
 <td style="text-align:right;">
-1.273885
+8.3870968
 </td>
 <td style="text-align:right;">
-3.743316
-</td>
-<td style="text-align:right;">
-55.797101
-</td>
-<td style="text-align:right;">
-45.112782
-</td>
-<td style="text-align:right;">
-3.75
-</td>
-<td style="text-align:right;">
-3.658537
-</td>
-<td style="text-align:right;">
-7.142857
-</td>
-<td style="text-align:right;">
-9.859155
-</td>
-<td style="text-align:right;">
-0.0
-</td>
-<td style="text-align:right;">
-6.25
-</td>
-<td style="text-align:right;">
-0
+3.125
 </td>
 <td style="text-align:right;">
 0
@@ -1392,7 +1311,7 @@ Mito/Cell).</p>
 following meta data columns (if present): “nCount_RNA”, “nFeature_RNA”,
 “percent_mito”, “percent_ribo”, “percent_mito_ribo”.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1526,7 +1445,7 @@ additional meta data columns to calculate medians using the
 <code>median_var</code> parameter.<br><em>NOTE: The meta data column must be in numeric format (e.g., integer,
 numeric, dbl)</em></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">median_stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Median_Stats.html">Median_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1678,7 +1597,7 @@ function to calculate the median absolute deviation for each of those
 features with function <code>MAD_Stats</code>. By setting the parameter
 <code>mad_num</code> the function will retrun the MAD*mad_num.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MAD_Stats.html">MAD_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by_var <span class="op">=</span> <span class="st">"orig.ident"</span>, mad_num <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MAD_Stats.html">MAD_Stats</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span>, mad_num <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -1819,9 +1738,9 @@ results of these median calculations:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span>, group_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Statistics_files/figure-html/unnamed-chunk-27-1.png" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>

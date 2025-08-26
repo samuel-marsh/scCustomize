@@ -18,7 +18,7 @@ separate assays within the object."><!-- mathjax --><script src="https://cdnjs.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -128,8 +128,10 @@ separate assays within the object.</p>
 <span>  raw_cell_bender_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raw_counts_matrix <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raw_assay_name <span class="op">=</span> <span class="st">"RAW"</span>,</span>
-<span>  min_cells <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  min_features <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  min_cells <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  min_features <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  min.cells <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  min.features <span class="op">=</span> <span class="fl">200</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -149,17 +151,25 @@ separate assays within the object.</p>
 
 
 <dt>min_cells</dt>
-<dd><p>value to supply to min.cells parameter of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.
-Default is 5.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated. See <code>min.cells</code>.</p></dd>
 
 
 <dt>min_features</dt>
-<dd><p>value to supply to min.features parameter of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated. See <code>min.features</code>.</p></dd>
+
+
+<dt>min.cells</dt>
+<dd><p>value to supply to min.cells parameter of <code><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.
+Default is 5.</p></dd>
+
+
+<dt>min.features</dt>
+<dd><p>value to supply to min.features parameter of <code><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.
 Default is 200.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Extra parameters passed to <code><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.</p></dd>
+<dd><p>Extra parameters passed to <code><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">

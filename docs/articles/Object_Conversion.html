@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -142,8 +142,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Object Format Conversion</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19,
-2024</h4>
+            <h4 data-toc-skip class="date">Compiled: August 26,
+2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Object_Conversion.Rmd" class="external-link"><code>vignettes/articles/Object_Conversion.Rmd</code></a></small>
       <div class="hidden name"><code>Object_Conversion.Rmd</code></div>
@@ -178,7 +178,7 @@ them to separate package/deprecate them.</em></strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># read object</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/UpdateSeuratObject.html" class="external-link">UpdateSeuratObject</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/UpdateSeuratObject.html" class="external-link">UpdateSeuratObject</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
 <p>We’ll also add some random meta data variables to pbmc data form use
@@ -221,9 +221,9 @@ python.</li>
 <span><span class="co">## rows:</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BB00;">orig.ident</span></span></span>
 <span><span class="co">## <span style="color: #00BBBB;">•</span> Creating anndata object.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">•</span> Writing anndata file: <span style="color: #0000BB;">"/Users/marsh_mbp/Desktop/pbmc_anndata.h5ad"</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> Writing anndata file: <span style="color: #0000BB;">"/Users/samuelmarsh/Desktop/pbmc_anndata.h5ad"</span></span></span></code></pre>
 <pre><code><span><span class="co">## AnnData object with n_obs × n_vars = 2638 × 13714</span></span>
-<span><span class="co">##     obs: 'nCount_RNA', 'nFeature_RNA', 'seurat_annotations', 'percent.mt', 'RNA_snn_res.0.5', 'seurat_clusters', 'percent_mito', 'percent_ribo', 'percent_mito_ribo', 'log10GenesPerUMI', 'percent_top50', 'percent_oxphos', 'percent_apop', 'percent_dna_repair', 'percent_ieg', 'percent_hemo', 'S.Score', 'G2M.Score', 'Phase', 'sample_id'</span></span>
+<span><span class="co">##     obs: 'nCount_RNA', 'nFeature_RNA', 'seurat_annotations', 'percent.mt', 'RNA_snn_res.0.5', 'seurat_clusters', 'percent_mito', 'percent_ribo', 'percent_mito_ribo', 'log10GenesPerUMI', 'percent_top50', 'percent_oxphos', 'percent_apop', 'percent_dna_repair', 'percent_ieg', 'ieg_score1', 'percent_hemo', 'percent_lncRNA', 'S.Score', 'G2M.Score', 'Phase', 'sample_id'</span></span>
 <span><span class="co">##     var: 'names'</span></span>
 <span><span class="co">##     obsm: 'X_pca', 'X_umap'</span></span>
 <span><span class="co">##     layers: 'counts_RNA'</span></span></code></pre>

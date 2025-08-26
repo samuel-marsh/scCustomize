@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for liger</span></span>
-<span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Embeddings.html" class="external-link">Embeddings</a></span><span class="op">(</span><span class="va">object</span>, reduction <span class="op">=</span> <span class="cn">NULL</span>, iNMF <span class="op">=</span> <span class="cn">FALSE</span>, check_only <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Embeddings.html" class="external-link">Embeddings</a></span><span class="op">(</span><span class="va">object</span>, reduction <span class="op">=</span> <span class="cn">NULL</span>, iNMF <span class="op">=</span> <span class="cn">FALSE</span>, check_only <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -159,10 +159,10 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Extract embedding matrix for current dimensionality reduction</span></span></span>
-<span class="r-in"><span><span class="va">UMAP_coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Embeddings.html" class="external-link">Embeddings</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">liger_object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">UMAP_coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Embeddings.html" class="external-link">Embeddings</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">liger_object</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract iNMF h.norm matrix</span></span></span>
-<span class="r-in"><span><span class="va">iNMF_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Embeddings.html" class="external-link">Embeddings</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">liger_object</span>, reduction <span class="op">=</span> <span class="st">"iNMF"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">iNMF_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Embeddings.html" class="external-link">Embeddings</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">liger_object</span>, reduction <span class="op">=</span> <span class="st">"iNMF"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

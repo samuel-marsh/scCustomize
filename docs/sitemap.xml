@@ -166,6 +166,12 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Hemo.liger.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_MALAT1_Threshold.Seurat.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_MALAT1_Threshold.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Add_Mito_Ribo.Seurat.html</loc>
   </url>
   <url>
@@ -271,6 +277,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Dark2_Pal.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Dataset_Size_LIGER.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/DimPlot_All_Samples.html</loc>
   </url>
   <url>
@@ -329,6 +338,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Gene_Present.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Get_Reference_LIGER.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Hue_Pal.html</loc>
@@ -442,6 +454,9 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Proportion_Plot.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Proportion_Plot_per_Sample.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Pull_Cluster_Annotation.html</loc>
   </url>
   <url>
@@ -491,6 +506,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Read10X_h5_Multi_Directory.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_Add_cNMF.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Read_CellBender_h5_Mat.html</loc>
@@ -649,10 +667,19 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/deprecated.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_exAM_list.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_hemo_id.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_ieg_list.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_lncRNA_id.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_malat1_list.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_mito_id.html</loc>
@@ -661,10 +688,19 @@
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ensembl_ribo_id.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/exAM_Scoring.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/exAM_gene_list.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/ieg_gene_list.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/lncRNA_gene_list.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/msigdb_qc_ensembl_list.html</loc>

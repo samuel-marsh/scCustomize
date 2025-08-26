@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -141,8 +141,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>LIGER Plotting &amp; Functionality</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19,
-2024</h4>
+            <h4 data-toc-skip class="date">Compiled: August 26,
+2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/LIGER_Functions.Rmd" class="external-link"><code>vignettes/articles/LIGER_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>LIGER_Functions.Rmd</code></div>
@@ -235,10 +235,10 @@ in-line with Seurat for ease of use.</p>
 <p><code>DimPlot_LIGER</code> supports grouping and splitting plots by
 meta data variables or cluster and will return patchwork layout</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, group_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>, colors_use_meta <span class="op">=</span> <span class="fu"><a href="../reference/JCO_Four.html">JCO_Four</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, group.by <span class="op">=</span> <span class="st">"Transcription_Method"</span>, colors_use_meta <span class="op">=</span> <span class="fu"><a href="../reference/JCO_Four.html">JCO_Four</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-6-1.png" width="576" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, group_by <span class="op">=</span> <span class="st">"Cluster"</span>, split_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_LIGER.html">DimPlot_LIGER</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, group.by <span class="op">=</span> <span class="st">"Cluster"</span>, split_by <span class="op">=</span> <span class="st">"Transcription_Method"</span>,</span>
 <span>    label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="LIGER_Functions_files/figure-html/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;"></p>
 </div>
@@ -392,7 +392,7 @@ the list of genes that loads highly on particular iNMF factor.<br><em>NOTE: This
 given factor. It does not assess whether that number of genes is
 significant, etc.</em></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">top20_factor6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Top_Genes_Factor.html">Top_Genes_Factor</a></span><span class="op">(</span>liger_object <span class="op">=</span> <span class="va">marsh_liger</span>, liger_factor <span class="op">=</span> <span class="fl">6</span>, num_genes <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">top20_factor6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Top_Genes_Factor.html">Top_Genes_Factor</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">marsh_liger</span>, factor <span class="op">=</span> <span class="fl">6</span>, num_genes <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">top20_factor6</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Junb" "Jun"  "Klf2" "Klf6" "Btg2"</span></span></code></pre>
@@ -432,7 +432,7 @@ object).</em></p>
 <h3 id="gene-utilities">Gene Utilities<a class="anchor" aria-label="anchor" href="#gene-utilities"></a>
 </h3>
 <p>As discussed in <a href="https://samuel-marsh.github.io/scCustomize/articles/Helpers_and_Utilities.html">helpers
-vignette</a>, the <code><a href="../reference/deprecated.html">Gene_Present()</a></code> function can be used to
+vignette</a>, the <code>Gene_Present()</code> function can be used to
 check if list of genes are present in a LIGER object.</p>
 <p>By default this will query all datasets in the object to create
 unified gene list and check input gene list against that list.</p>

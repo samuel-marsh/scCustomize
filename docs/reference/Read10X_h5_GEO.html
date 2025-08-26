@@ -18,7 +18,7 @@ them by NCBI GEO or other repos or programs (i.e. Cell Bender)"><!-- mathjax -->
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -190,7 +190,7 @@ Otherwise a sparse matrix containing the expression data will be returned.</p>
 <span class="r-in"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="st">'path/to/data/directory'</span></span></span>
 <span class="r-in"><span><span class="va">expression_matrices</span> <span class="op">&lt;-</span> <span class="fu">Read10X_h5_GEO</span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">data_dir</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># To create object from single file</span></span></span>
-<span class="r-in"><span><span class="va">seurat_object</span> <span class="op">=</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expression_matrices</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seurat_object</span> <span class="op">=</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">expression_matrices</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

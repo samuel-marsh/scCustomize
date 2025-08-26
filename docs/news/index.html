@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -117,6 +117,69 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="3.1.3" id="sccustomize-313-2025-08-25">scCustomize 3.1.3 (2025-08-25)<small>2025-08-26</small><a class="anchor" aria-label="anchor" href="#sccustomize-313-2025-08-25"></a></h2>
+<div class="section level3">
+<h3 id="added-3-1-3">Added<a class="anchor" aria-label="anchor" href="#added-3-1-3"></a></h3>
+<ul><li>Add support for LIGER objects using <code>Extract_Sample_Meta</code>.<br></li>
+<li>Added new function <code>Dataset_Size_LIGER</code> to return data.frame containing cells per dataset in liger object in addition to accompanying sample meta data if desired.<br></li>
+<li>Added new function <code>Get_Reference_LIGER</code> to return name of dataset matching selection criteria to use as reference for <code><a href="https://welch-lab.github.io/liger/reference/quantileNorm.html" class="external-link">rliger::quantileNorm()</a></code>.<br></li>
+<li>Added new function <code>Add_MALAT1_Threshold</code> which implements QC procedure from Clarke &amp; Bader (2024). bioRxiv .<br></li>
+<li>Added new internal function <code>Check_Normalized</code> to confirm data within “data” layer of Seurat object is actually normalized (relevant only for V3/4 style objects/assays).<br></li>
+<li>Added new parameters to <code>Add_Cell_QC_Metrics</code> (Seurat ONLY) to add module score of IEGs in addition to percent expressing.<br></li>
+<li>Added new function <code>exAM_Scoring</code> to add module scores for exAM gene sets from Marsh et al., 2022 ().<br></li>
+<li>Added new function <code>Proportion_Plot_per_Sample</code> to plot proportion of cells per sample across a specified condition.<br></li>
+<li>Added new parameter <code>order_by_freq</code> to <code>Cluster_Stats_All_Samples</code>. It is <code>TRUE</code> by default and returned data.frame is ordered by cluster frequency, setting FALSE orders data.frame by cluster order.<br></li>
+<li>Updated <code>Convert_Assay</code> to allow V5 &gt; V3 conversions even when normalized and scale data is absent (<a href="https://github.com/samuel-marsh/scCustomize/issues/236" class="external-link">#236</a>).<br></li>
+<li>Added <code>Read_Add_cNMF</code> to read and add results from cNMF as custom dimensionality reduction.<br></li>
+<li>
+<code>Top_Genes_Factor</code> is now S3 generic and works with either Seurat or LIGER objects.<br></li>
+<li>
+<code>Top_Genes_Factor</code> now supports <code>factor = "all"</code> which will return data.frame containing top X genes for all factors, 1 column per factor.<br></li>
+<li>Added parameter <code>label_selected_features</code> to <code>Clustered_DotPlot</code> to allow for labeling only subset of plotted features.<br></li>
+<li>Added new parameter to <code>Add_Cell_QC_Metrics</code> to add percentage of lncRNA counts per cell (see <code>add_lncRNA</code> parameter).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-3-1-3">Changed<a class="anchor" aria-label="anchor" href="#changed-3-1-3"></a></h3>
+<p><strong>This release contains a number of BREAKING changes to parameter names:</strong></p>
+<ul><li>
+<strong>BREAKING CHANGE</strong> The parameter <code>num_genes</code> has been soft-deprecated in <code>Extract_Top_Markers</code>. Please use <code>num_features</code> instead. Using <code>num_genes</code> will warn user but still work until scCustomize v3.3.0.<br></li>
+<li>
+<strong>BREAKING CHANGE</strong> The parameter <code>min_cells</code> and <code>min_features</code> have been soft-deprecated in <code>Create_CellBender_Merged_Seurat</code>. Please use <code>min.cells</code> and <code>min.features</code> instead. Using <code>min_cells</code> and <code>min_features</code> will warn user but still work until scCustomize v3.3.0.</li>
+</ul><p><strong>This release contains a number of BREAKING changes to parameter names to harmonize across scCustomize and Seurat:</strong><br><em>Due to large number of functions affected the timeline for full deprecation of these parameters has been extended. Old parameter names will issue warning but continue to work until v3.3.0.</em></p>
+<ul><li>
+<strong>BREAKING CHANGE</strong> The <code>group_by</code> parameter has been soft-deprecated in <code>Plot_Median_Genes</code>, <code>Plot_Median_UMIs</code>, <code>Plot_Median_Mito</code>, <code>Plot_Median_Other</code>, <code>Plot_Cells_per_Sample</code>, <code>Percent_Expressing</code>, <code>DimPlot_LIGER</code>, and <code>Extract_Top_Markers</code>. Please use <code>group.by</code> instead. Using <code>group_by</code> will warn user but still work until scCustomize v3.3.0.<br></li>
+<li>
+<strong>BREAKING CHANGE</strong> The <code>group_by_var</code> parameter has been soft-deprecated in <code>Proportion_Plot</code>, <code>Cluster_Stats_All_Samples</code>, <code>Median_Stats</code>, and <code>MAD_Stats</code>. Please use <code>group.by</code> instead. Using <code>group_by_var</code> will warn user but still work until scCustomize v3.3.0.</li>
+<li>
+<strong>BREAKING CHANGE</strong> The <code>split_by</code> parameter has been soft-deprecated in <code>Percent_Expressing</code>, <code>DimPlot_LIGER</code>, and internal functions. Please use <code>split.by</code> instead. Using <code>split_by</code> will warn user but still work until scCustomize v3.3.0.</li>
+</ul><p><strong>Non-breaking changes in this release:</strong></p>
+<ul><li>The following parameters in <code>plotFactors_scCustom</code> have been fully deprecated for LIGER objects &gt;= V2: <code>reorder_datasets</code> and <code>reduction_label</code>.<br></li>
+<li>Following prior deprecation warnings the following functions are now fully deprecated and replaced with updated functions: <code>Add_Cell_Complexity_LIGER</code>, <code>Add_Cell_Complexity_Seurat</code>, <code>Add_Cell_Complexity_Seurat</code>, <code>Add_Mito_Ribo_LIGER</code>, <code>Add_Mito_Ribo_Seurat</code>, <code>Gene_Present</code>, <code>Meta_Present_LIGER</code>, and <code>Split_FeatureScatter</code>.<br></li>
+<li>Changed internal function <code>PercentAbove_Seurat</code> to match updates to Seurat to appropriately deal with NA values.<br></li>
+<li>Changed functionality of several <code>QC_Plot*</code> functions to dynamically set nFeature or nCount variable name based on assay specified.<br></li>
+<li>Changed default parameter value for <code>x_lab_rotate</code> in <code>Proportion_Plot</code> from FALSE to TRUE.<br></li>
+<li>Changed param <code>selection.method</code> to <code>method</code> in <code>VariableFeaturePlot_scCustom</code> to account for deprecation in Seurat/SeuratObject.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-3-1-3">Fixes<a class="anchor" aria-label="anchor" href="#fixes-3-1-3"></a></h3>
+<ul><li>Fixed use of chicken as default species in some QC functions.<br></li>
+<li>Fixed bug in <code>Read_Metrics_10X</code> that caused function failure.<br></li>
+<li>Fixed bug in <code>Subset_LIGER</code> to ignore cluster column when subsetting based on other meta data variable.<br></li>
+<li>Fixed bug in <code>QC_Histogram</code> that didn’t allow it to properly plot feature data.<br></li>
+<li>Fixed bug in <code>FeaturePlot_scCustom</code> that prevented <code>max.cutoff</code>/<code>min.cutoff</code> from being correctly passed when splitting plots (<a href="https://github.com/samuel-marsh/scCustomize/issues/228" class="external-link">#228</a>).<br></li>
+<li>Fixed check for file extension in <code>Iterate_PC_Loading_Plots</code>. New internal function <code>check_extension</code> to ease these checks package-wide.<br></li>
+<li>Fixed bug in behavior of <code>Extract_Top_Markers</code> when sorting the markers by “p_val_adj” that was selecting genes with highest p values instaed of lowest (<a href="https://github.com/samuel-marsh/scCustomize/issues/229" class="external-link">#229</a>).<br></li>
+<li>Fixed rotation of x-axis text in <code>Proportion_Plot</code>.<br></li>
+<li>Added check for correct input format in <code>Extract_Top_Markers</code>.<br></li>
+<li>Added check to <code>Plot_Median_Genes</code>, <code>Plot_Median_UMIs</code>, <code>Plot_Median_Mito</code>, and <code>Plot_Median_Other</code> to ensure that <code>group.by</code> and <code>sample_col</code> are different and provide informative error message if they are the same (<a href="https://github.com/samuel-marsh/scCustomize/issues/233" class="external-link">#233</a>).<br></li>
+<li>Fixed bug in <code>VariableFeaturePlot_scCustom</code> that prevented function from running.<br></li>
+<li>Fixed <code>Factor_Cor_Plot</code> failure when using Seurat object due to lack of <code>reduction</code> parameter.<br></li>
+<li>Fixed issue in <code>Clustered_DotPlot</code> when feature has zero expression in any cells with new <code>nan_error</code> parameter (<a href="https://github.com/samuel-marsh/scCustomize/issues/178" class="external-link">#178</a>).<br></li>
+<li>Fixed error in <code>Barcode_Plot</code> that prevented plotting when using newer versions of DropletUtils.<br></li>
+<li>Code styling and typo fixes.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="3.0.1" id="sccustomize-301-2024-12-18">scCustomize 3.0.1 (2024-12-18)<small>2024-12-18</small><a class="anchor" aria-label="anchor" href="#sccustomize-301-2024-12-18"></a></h2>
 <div class="section level3">
 <h3 id="added-3-0-1">Added<a class="anchor" aria-label="anchor" href="#added-3-0-1"></a></h3>
@@ -205,7 +268,7 @@
 <li>Changed storage location for <code>Add_Alt_Feature_ID</code> to <code>@misc</code> slot of object for safer storage across object filtering.<br></li>
 <li>Added error check in <code>as.anndata</code> to explicitly check for installation of anndata before starting conversion (<a href="https://github.com/samuel-marsh/scCustomize/issues/162" class="external-link">#162</a>).<br></li>
 <li>Updated <code>Plot_Median_Genes</code>, <code>Plot_Median_UMIs</code>, <code>Plot_Median_Mito</code>, <code>Plot_Median_Other</code>, <code>Plot_Cells_per_Sample</code> to understand “ident” as grouping variable.<br></li>
-<li>Updated <code>Store_Misc_Info_Seurat</code> to use Seurat accessor/setter function <code><a href="https://mojaveazure.github.io/seurat-object/reference/Misc.html" class="external-link">Seurat::Misc()</a></code>.<br></li>
+<li>Updated <code>Store_Misc_Info_Seurat</code> to use Seurat accessor/setter function <code><a href="https://satijalab.github.io/seurat-object/reference/Misc.html" class="external-link">Seurat::Misc()</a></code>.<br></li>
 <li>Updated documentation for <code>sample_names</code> in <code>Read_CellBender_h5_Multi_File</code> to clarify parameter behavior (related to (<a href="https://github.com/samuel-marsh/scCustomize/issues/208" class="external-link">#208</a>)).<br></li>
 <li>Updated <code>Read_Metrics_10X</code> to support adjusts to metrics summary format and metric names in output from Cell Ranger v9+.<br></li>
 <li>Some reorganization of R/ directory/scripts.</li>
@@ -274,7 +337,7 @@
 <ul><li>Added <code>title_prefix</code> parameter to <code>Iterate_DimPlot_bySample</code> to unify with <code>Meta_Highlight_Plot</code>.<br></li>
 <li>Added function <code>Split_Vector</code> to split vector in chunks of predetermined sizes.<br></li>
 <li>Added new function <code>Updated_HGNC_Symbols</code> to update human gene symbols. After first use does not require internet connection.<br></li>
-<li>Added command logging to QC metric-related commands using <code><a href="https://mojaveazure.github.io/seurat-object/reference/LogSeuratCommand.html" class="external-link">Seurat::LogSeuratCommand()</a></code>.<br></li>
+<li>Added command logging to QC metric-related commands using <code><a href="https://satijalab.github.io/seurat-object/reference/LogSeuratCommand.html" class="external-link">Seurat::LogSeuratCommand()</a></code>.<br></li>
 <li>Added parameter <code>plot_legend</code> to <code>plotFactors_scCustom</code> to allow for removal to legend in factor loading plots.<br></li>
 <li>Added new functionality to <code>Iterate_FeaturePlot_scCustom</code> to allow for plotting multiple plots per page when saving to single PDF document (see new parameters: <code>features_per_page</code> and <code>landscape</code>.<br></li>
 <li>Added <code>LIGER_Features</code> utility function for LIGER objects (analogous to <code>Seurat::Features()</code>).<br></li>
@@ -550,7 +613,7 @@
 <h3 id="added-1-0-0">Added<a class="anchor" aria-label="anchor" href="#added-1-0-0"></a></h3>
 <ul><li>Added <code>mito_name</code> parameter to <code>QC_Plots_Mito</code> to allow for custom specification of meta data column name that contains mitochondrial information.</li>
 <li>Added <code><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln()</a></code> function to return patchwork layout of 3 QC plots.</li>
-<li>Added Rhesus Macaque (macaca mulatta) to the accepted species list for <code><a href="../reference/deprecated.html">Add_Mito_Ribo_Seurat()</a></code> and <code><a href="../reference/deprecated.html">Add_Mito_Ribo_LIGER()</a></code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/28" class="external-link">#28</a>).</li>
+<li>Added Rhesus Macaque (macaca mulatta) to the accepted species list for <code>Add_Mito_Ribo_Seurat()</code> and <code>Add_Mito_Ribo_LIGER()</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/28" class="external-link">#28</a>).</li>
 <li>Added <code>alpha_exp</code> and <code>alpha_na_exp</code> parameters to <code>FeaturePlot_scCustom</code> to allow for control of color scale transparency (<a href="https://github.com/samuel-marsh/scCustomize/issues/21" class="external-link">#21</a>).</li>
 <li>
 <code>*_Highlight_Plot</code> functions can now plot multiple variables simultaneously using either one color for all variables or one color per variable (<a href="https://github.com/samuel-marsh/scCustomize/issues/34" class="external-link">#34</a>).</li>
@@ -565,7 +628,7 @@
 <li>Added <code>ensembl_ids</code> parameter for <code>Add_Mito_Ribo_*</code> functions. If <code>ensembl_ids = TRUE</code> functions will retrieve stored ensembl IDs representing mitochondrial and ribosomal genes for accepted default species.<br></li>
 <li>Added parameter <code>label_feature_yaxis</code> to <code>FeaturePlot_scCustom</code>. Allows for plotting of feature names on secondary y-axis when using <code>split.by</code> (<a href="https://github.com/samuel-marsh/scCustomize/issues/60" class="external-link">#60</a>).<br></li>
 <li>Added <code>Add_Sample_Meta</code> function for addition of sample-level meta data to cell-level <code>@meta.data</code> slot of Seurat objects.<br></li>
-<li>Added a matrix check in <code>Read_GEO_Delim</code> to check for issues with imported matrices. Check is modified version of <code><a href="https://mojaveazure.github.io/seurat-object/reference/CheckMatrix.html" class="external-link">SeuratObject::CheckMatrix</a></code> called <code><a href="../reference/CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code>. Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.<br></li>
+<li>Added a matrix check in <code>Read_GEO_Delim</code> to check for issues with imported matrices. Check is modified version of <code><a href="https://satijalab.github.io/seurat-object/reference/CheckMatrix.html" class="external-link">SeuratObject::CheckMatrix</a></code> called <code><a href="../reference/CheckMatrix_scCustom.html">CheckMatrix_scCustom()</a></code>. Will warn if infinite, logical, non-integer (whole), or NA/NaN values are detected in input matrix.<br></li>
 <li>
 <code>QC_Plot_UMIvsGene</code> will now returned filtered correlation value that takes into account <code>meta_gradient_name</code> if provided in addition to nFeature_RNA and nCount_RNA.</li>
 <li>Added new function <code>Variable_Features_ALL_LIGER</code> which allows for detection/selection of variable genes from entire LIGER object instead of iterating by dataset.</li>

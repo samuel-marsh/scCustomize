@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
 
 <dt>barcodes_to_rownames</dt>
 <dd><p>logical, are barcodes present as column and should they be moved to
-rownames (to be compatible with <code><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html" class="external-link">Seurat::AddMetaData</a></code>).  Default is FALSE.</p></dd>
+rownames (to be compatible with <code><a href="https://satijalab.github.io/seurat-object/reference/AddMetaData.html" class="external-link">Seurat::AddMetaData</a></code>).  Default is FALSE.</p></dd>
 
 
 <dt>barcodes_colname</dt>
@@ -160,7 +160,7 @@ rownames (to be compatible with <code><a href="https://mojaveazure.github.io/seu
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="va">new_meta</span> <span class="op">&lt;-</span> <span class="fu">Meta_Remove_Seurat</span><span class="op">(</span>meta_data <span class="op">=</span> <span class="va">meta_data_df</span>, seurat_object <span class="op">=</span> <span class="va">object</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AddMetaData.html" class="external-link">AddMetaData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, metadata <span class="op">=</span> <span class="va">new_meta</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/AddMetaData.html" class="external-link">AddMetaData</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">object</span>, metadata <span class="op">=</span> <span class="va">new_meta</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

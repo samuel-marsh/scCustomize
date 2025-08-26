@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -142,8 +142,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Object QC Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 19,
-2024</h4>
+            <h4 data-toc-skip class="date">Compiled: August 26,
+2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Object_QC_Functions.Rmd" class="external-link"><code>vignettes/articles/Object_QC_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Object_QC_Functions.Rmd</code></div>
@@ -174,7 +174,8 @@ analysis: performing quality control and filtering.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.html" class="external-link">pbmc3k</a></span></span></code></pre></div>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.html" class="external-link">pbmc3k</a></span></span>
+<span><span class="va">hcabm</span> <span class="op">&lt;-</span> <span class="fu">hcabm40k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/hcabm40k.SeuratData/man/hcabm40k.html" class="external-link">hcabm40k</a></span></span></code></pre></div>
 <p>We’ll add some random meta data variables to pbmc data form use in
 this vignette</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -189,7 +190,7 @@ this vignette</p>
 </h4>
 <p>All of scCustomize’s functions to add quality control metrics are
 100% cross compatible across Seurat and LIGER objects using the same
-function calls. For more details on QC specific plotting functions see
+function calls. For more details on QC-specific plotting functions see
 <a href="https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html">QC
 Plotting &amp; Analysis Vignette</a>.</p>
 </div>
@@ -204,7 +205,7 @@ are from Ensembl version 112 (updated in scCustomize on 4/29/2024).</p>
 functions.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Using gene name patterns</span></span>
-<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj</span>, species <span class="op">=</span> <span class="st">"Human"</span>, ensembl_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">obj</span>, species <span class="op">=</span> <span class="st">"Human"</span>, ensembl_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -439,15 +440,16 @@ function.</em></p>
 <details><summary><strong>What is example of how this works?</strong>
 </summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Using gene name patterns</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern_mito"</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern_ribo"</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_pattern <span class="op">=</span> <span class="st">"regexp_pattern_mito"</span>,</span>
+<span>    ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern_ribo"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using feature name lists</span></span>
 <span><span class="va">mito_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
 <span><span class="va">ribo_gene_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gene1"</span>, <span class="st">"gene2"</span>, <span class="st">"etc"</span><span class="op">)</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_features <span class="op">=</span> <span class="va">ribo_gene_list</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Using combination of gene lists and gene name patterns</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Mito_Ribo.html">Add_Mito_Ribo</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"Human"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern_ribo"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_Cell_QC_Metrics.html">Add_Cell_QC_Metrics</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, species <span class="op">=</span> <span class="st">"other"</span>, mito_features <span class="op">=</span> <span class="va">mito_gene_list</span>, ribo_pattern <span class="op">=</span> <span class="st">"regexp_pattern_ribo"</span><span class="op">)</span></span></code></pre></div>
 </details><p> </p>
 </div>
 </div>
@@ -464,9 +466,13 @@ in more detail below but using the default parameters of the function
 species).</li>
 <li>Hemoglobin percentages (default and custom species).<br>
 </li>
+<li>Percentage of counts for lncRNA (default species).<br>
+</li>
 <li>Cell Complexity (log10(nFeature) / log10(nCount).</li>
 <li>Top XX Gene Percentage.</li>
 <li>Percentage of counts for IEG (human and mouse only).</li>
+<li>Module score for IEG genes (human and mouse only).<br>
+</li>
 <li>OXPHOS, APOP, and DNA Repair pathways (supported species only).</li>
 <li>Cell Cycle Scoring (Human only).</li>
 </ul>
@@ -481,9 +487,10 @@ species).</li>
 <span><span class="co">## Calculating percent expressing top 50 for layer: <span style="color: #00BB00;">counts</span></span></span>
 <span><span class="co">## <span style="color: #00BBBB;">•</span> Adding <span style="color: #00BB00;">MSigDB Oxidative Phosphorylation, Apoptosis, and DNA Repair</span></span></span>
 <span><span class="co">##   <span style="color: #00BB00;">Percentages</span> to meta.data.</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">•</span> Adding <span style="color: #00BB00;">IEG Percentages</span> to meta.data.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> Adding <span style="color: #00BB00;">IEG Percentages</span> &amp; <span style="color: #00BB00;">IEG Module Score</span> to meta.data.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">•</span> Adding <span style="color: #00BB00;">Hemoglobin Percentages</span> to meta.data.</span></span>
 <span><span class="co">## Adding Percent Hemoglobin for <span style="color: #00BB00;">Human</span> using gene symbol pattern: <span style="color: #0000BB;">"^HB[^(P)]"</span>.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> Adding <span style="color: #00BB00;">lncRNA Percentages</span> to meta.data.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">•</span> Adding <span style="color: #00BB00;">Cell Cycle Scoring</span> to meta.data.</span></span>
 <span><span class="co">## Calculating <span style="color: #00BB00;">Cell Cycle Scores</span>.</span></span></code></pre>
 </div>
@@ -523,7 +530,7 @@ use example data provided by 10X Genomics <a href="https://www.10xgenomics.com/d
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pbmc_dual_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Read10X_h5</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"~/Downloads/10k_hgmm_3p_gemx_Multiplex_count_raw_feature_bc_matrix.h5"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pbmc_dual_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">pbmc_dual_species</span>, min.cells <span class="op">=</span> <span class="fl">5</span>, min.features <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pbmc_dual_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">pbmc_dual_species</span>, min.cells <span class="op">=</span> <span class="fl">5</span>, min.features <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p>For dual species analyses the only other information you need to
 provide is what the prefixes are used in front of gene IDs. In this case
 the prefixes are “GRCh38-” and “GRCm39-”.</p>
@@ -638,6 +645,174 @@ Hallmark Gene Sets</a>
 </ul>
 </li>
 </ul>
+</div>
+<div class="section level3">
+<h3 id="calculate-and-add-malat1-threshold">Calculate and Add MALAT1 Threshold<a class="anchor" aria-label="anchor" href="#calculate-and-add-malat1-threshold"></a>
+</h3>
+<p>Another QC metric that has been proposed is based on the level of
+expression of long non-coding RNA MALAT1 (<a href="https://doi.org/10.1101/2024.07.14.603469%7D" class="external-link"><em>Clarke &amp;
+Bader, 2024</em></a>). Their analysis demonstrates that low MALAT1
+expression is characteristic of low quality cells and created function
+to determine a cutoff threshold to call low quality/damaged cells. Their
+metric has now been incorporated into scCustomize as
+<code>Add_MALAT1_Threshold</code>.</p>
+<p><strong>NOTE: If you utilize this function please cite the above
+manuscript in addition to scCustomize).</strong></p>
+<p><strong>NOTE: This function is currently only available for human and
+mouse as those are only species with MALAT1 annotated. See section below
+on non-default species for more info.</strong></p>
+<p>For best results this function should be run on per sample basis
+using normalized count matrix. To get started all the function requires
+is Seurat Object, the species being analyzed, and the name of meta.data
+column that contains sample ID information.</p>
+<p>For this example we are going to use a subset of data from Hammond et
+al., 2019.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hammond_subset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_MALAT1_Threshold.html">Add_MALAT1_Threshold</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hammond_subset</span>, species <span class="op">=</span> <span class="st">"mouse"</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">•</span> Adding MALAT1 Threshold for <span style="color: #00BB00;">mouse</span> using gene id: <span style="color: #0000BB;">"Malat1"</span>.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BBBB;">Please cite</span> <span style="color: #00BB00;">Clarke &amp; Bader (2024). doi.org/10.1101/2024.07.14.603469</span> <span style="color: #00BBBB;">when</span></span></span>
+<span><span class="co">##   <span style="color: #00BBBB;">using MALAT1 thresholding function.</span></span></span>
+<span><span class="co">## Calculating thresholds across <span style="color: #00BB00;">4</span> samples from meta.data column <span style="color: #00BB00;">orig.ident</span>.</span></span>
+<span><span class="co">## A total of <span style="color: #00BB00;">280</span> cells (<span style="color: #00BB00;">3%</span>) fall below the threshold.</span></span>
+<span><span class="co">## Adding results to object as <span style="color: #0000BB;">"Malat1_Threshold"</span>.</span></span></code></pre>
+<p><strong>NOTE: The function is also compatible with Ensembl IDs by
+specifying <code>ensembl_ids = TRUE</code> in function
+call.</strong></p>
+<div class="section level5">
+<h5 id="single-sample-object">Single Sample Object<a class="anchor" aria-label="anchor" href="#single-sample-object"></a>
+</h5>
+<p>If your Seurat object only has a single sample or you want to run the
+calculation across the entire object then you can supply the optional
+parameter of <code>whole_object = TRUE</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hcabm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_MALAT1_Threshold.html">Add_MALAT1_Threshold</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hammond_subset</span>, species <span class="op">=</span> <span class="st">"mouse"</span>, whole_object <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level5">
+<h5 id="non-default-species-1">Non-default species<a class="anchor" aria-label="anchor" href="#non-default-species-1"></a>
+</h5>
+<p>Currently, humans and mice are the only species for which MALAT1 has
+been annotated in the genome. If your analysis includes annotation of
+MALAT1 homolog/paralog in new species you can supply that value to
+optional parameter <code>homolog_name</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hcabm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_MALAT1_Threshold.html">Add_MALAT1_Threshold</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">OBJECT</span>, species <span class="op">=</span> <span class="st">"marmoset"</span>, homolog_name <span class="op">=</span> <span class="st">"MALAT1_HOMOLOG_SYMBOL_OR_ID_NUMBER"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="visualizing-the-results">Visualizing the Results<a class="anchor" aria-label="anchor" href="#visualizing-the-results"></a>
+</h4>
+<p>The function will calculate the threshold for each sample and adds
+new column to meta.data containing logical value (TRUE/FALSE)
+designating cells above or below the threshold. This can then be
+visualized as any meta.data column.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hammond_subset</span>, features <span class="op">=</span> <span class="st">"nFeature_RNA"</span>, split.by <span class="op">=</span> <span class="st">"Malat1_Threshold"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-23-1.png" width="1248" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hammond_subset</span>, feature1 <span class="op">=</span> <span class="st">"nCount_RNA"</span>, feature2 <span class="op">=</span> <span class="st">"nFeature_RNA"</span>,</span>
+<span>    split.by <span class="op">=</span> <span class="st">"Malat1_Threshold"</span>, pt.size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-23-2.png" width="1248" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level4">
+<h4 id="visualizing-saving-threshold-calculation-plots">Visualizing &amp; Saving Threshold Calculation Plots<a class="anchor" aria-label="anchor" href="#visualizing-saving-threshold-calculation-plots"></a>
+</h4>
+<p>In addition to basic parameters there are several optional parameters
+that can be invoked. The first set relate to a series of plots the are
+created when determining the threshold. For detailed description of
+these plots and their interpretation please see <a href="https://github.com/BaderLab/MALAT1_threshold" class="external-link">Clarke &amp; Bader
+GitHub Repo</a>. The optional parameters within scCustomize are:<br>
+- <code>print_plots</code> whether or not to print plots to output while
+running function (default is FALSE).<br>
+- <code>save_plots</code> whether or not to save plots to PDF file while
+running function (default is FALSE).<br>
+- <code>save_plot_path</code> directory path to save the plots.<br>
+- <code>save_plot_name</code> file name for PDF document with
+plots.<br>
+- <code>plot_width</code> plot width (inches) - <code>plot_height</code>
+plot height (inches)</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hcabm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Add_MALAT1_Threshold.html">Add_MALAT1_Threshold</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">hammond_subset</span>, species <span class="op">=</span> <span class="st">"mouse"</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
+<span>    save_plots <span class="op">=</span> <span class="cn">TRUE</span>, save_plot_path <span class="op">=</span> <span class="st">"plots/QC_Plots/"</span>, save_plot_name <span class="op">=</span> <span class="st">"MALAT1_Threshold_Plots"</span><span class="op">)</span></span></code></pre></div>
+Here is eample of plots for one of the samples in the Hammond et al.,
+subset dataset.
+<center>
+<img src="../reference/figures/assets/malat1_example.png" width="49%"><br><em>Example outputs with default naming based on file name or providing
+<code>sample_names</code> parameter.</em>
+</center>
+</div>
+<div class="section level4">
+<h4 id="optional-parameters-to-modify-threshold-calculation">Optional Parameters to Modify Threshold Calculation<a class="anchor" aria-label="anchor" href="#optional-parameters-to-modify-threshold-calculation"></a>
+</h4>
+<p>Finally, there are also a series of parameters of the MALAT1 function
+itself that can be modified. For deeper description of parameters below
+please see manual documentation for <code><a href="../reference/Add_MALAT1_Threshold.html">Add_MALAT1_Threshold()</a></code>
+and above mentioned manuscript: <code>bw</code>, <code>lwd</code>,
+<code>breaks</code>, <code>chosen_min</code>, <code>smooth</code>,
+<code>abs_min</code>, <code>rough_max</code>.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="add-exam-module-score">Add exAM Module Score<a class="anchor" aria-label="anchor" href="#add-exam-module-score"></a>
+</h3>
+<p>In Marsh et al., 2022 (<a href="https://doi.org/10.1038/s41593-022-01022-8" class="external-link"><em>Nature
+Neuroscience</em></a>) we identified sets of genes that were
+differentially expressed in samples that were processed with enzymatic
+digestion or in post-mortem human samples compared to fresh tissue (see
+paper for full details). Module scores for these gene sets can be added
+to Seurat object using function <code>exAM_Scoring</code>.</p>
+<p>To demonstrate this function we will use data objects from Marsh et
+al., 2022.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load Marsh et al., 2022 datasets</span></span>
+<span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span></span>
+<span><span class="va">marsh_human_pm</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_human_pm.qs"</span><span class="op">)</span></span></code></pre></div>
+<p>If adding score to human data both the union score and “microglia”
+(post-mortem) score will be added to be meta.data slot. When species is
+mouse only the union score will be added. When the function is run the
+name of the column added to meta.data slot will be included printed in
+message.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exAM_Scoring.html">exAM_Scoring</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, species <span class="op">=</span> <span class="st">"mouse"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BBBB;">Please cite</span> <span style="color: #00BB00;">Marsh et al., (2022). doi.org/10.1038/s41593-022-01022-8</span> <span style="color: #00BBBB;">when</span></span></span>
+<span><span class="co">##   <span style="color: #00BBBB;">using exAM Scoring function.</span></span></span>
+<span><span class="co">## Adding module score for exAM union gene list as <span style="color: #00BB00;">“exAM_Union_Score”</span>.</span></span></code></pre>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">marsh_human_pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exAM_Scoring.html">exAM_Scoring</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_human_pm</span>, species <span class="op">=</span> <span class="st">"human"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #00BBBB;">Please cite</span> <span style="color: #00BB00;">Marsh et al., (2022). doi.org/10.1038/s41593-022-01022-8</span> <span style="color: #00BBBB;">when</span></span></span>
+<span><span class="co">##   <span style="color: #00BBBB;">using exAM Scoring function.</span></span></span>
+<span><span class="co">## Adding module score for exAM union gene list as <span style="color: #00BB00;">“exAM_Union_Score”</span>.</span></span>
+<span><span class="co">## Adding module score for exAM Microglia Factor gene list as</span></span>
+<span><span class="co">## <span style="color: #00BB00;">“exAM_Microglia_Score”</span>.</span></span></code></pre>
+<p><code>exAM_Scoring</code> also supports use of ensembl IDs by
+specifying optional parameters.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/exAM_Scoring.html">exAM_Scoring</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, species <span class="op">=</span> <span class="st">"mouse"</span>, ensembl_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="we-can-then-plot-the-score-using-any-of-the-normal-plotting-functions-">We can then plot the score using any of the normal plotting
+functions.<a class="anchor" aria-label="anchor" href="#we-can-then-plot-the-score-using-any-of-the-normal-plotting-functions-"></a>
+</h4>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, colors_use <span class="op">=</span> <span class="va">marsh_mouse_micro</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">exp17_micro_colors</span>,</span>
+<span>    label.size <span class="op">=</span> <span class="fl">5</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span>, repel <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"exAM_Union_Score"</span>, na_cutoff <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>    pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+&lt;img src=“/Users/samuelmarsh/Desktop/Bioinformatics
+Software/scCustomize/docs/articles/Object_QC_Functions_files/figure-html/unnamed-chunk-29-1.png”
+alt=“<em><strong>A.</strong> tSNE plot showing the clusters from Marsh
+et al., 2022. <strong>B.</strong> FeaturePlot_scCustom view of the
+module score showing expected localization in the ”Activated” exAM
+cluster.</em>” width=“1248” /&gt;
+<p class="caption">
+<em><strong>A.</strong> tSNE plot showing the clusters from Marsh et
+al., 2022. <strong>B.</strong> FeaturePlot_scCustom view of the module
+score showing expected localization in the “Activated” exAM
+cluster.</em>
+</p>
+</div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"exAM_Union_Score"</span>, colors_use <span class="op">=</span> <span class="va">marsh_mouse_micro</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">exp17_micro_colors</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-30-1.png" width="1248" style="display: block; margin: auto;"></p>
+</div>
 </div>
 </div>
   </div>

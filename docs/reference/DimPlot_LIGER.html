@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -124,8 +124,10 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DimPlot_LIGER</span><span class="op">(</span></span>
 <span>  <span class="va">liger_object</span>,</span>
-<span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  split_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  split_by <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  split.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use_cluster <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use_meta <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -155,11 +157,20 @@
 
 
 <dt>group_by</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated. See <code>group.by</code>.</p></dd>
+
+
+<dt>group.by</dt>
 <dd><p>Variable to be plotted.  If <code>NULL</code> will plot clusters from <code>liger@clusters</code> slot.
+If <code>combination = TRUE</code> will plot both clusters and meta data variable.
 If <code>combination = TRUE</code> will plot both clusters and meta data variable.</p></dd>
 
 
 <dt>split_by</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated. See <code>split.by</code>.</p></dd>
+
+
+<dt>split.by</dt>
 <dd><p>Variable to split plots by.</p></dd>
 
 
@@ -214,7 +225,7 @@ Default is NULL.</p></dd>
 
 <dt>label_repel</dt>
 <dd><p>logical.  Whether to repel cluster labels from each other if plotting by
-cluster (if <code>group_by = NULL</code> or <code>group_by = "cluster</code>).  Default is FALSE.</p></dd>
+cluster (if <code>group.by = NULL</code> or <code>group.by = "cluster</code>).  Default is FALSE.</p></dd>
 
 
 <dt>label_box</dt>

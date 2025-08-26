@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -125,7 +125,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span></span>
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
-<span>  group_by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group_by <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dot_size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  plot_title <span class="op">=</span> <span class="st">"Cells/Nuclei per Sample"</span>,</span>
@@ -148,6 +149,10 @@
 
 
 <dt>group_by</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> soft-deprecated. See <code>group.by</code>.</p></dd>
+
+
+<dt>group.by</dt>
 <dd><p>Column in meta.data slot to group results by (i.e. "Treatment").</p></dd>
 
 
@@ -156,7 +161,7 @@
 
 
 <dt>dot_size</dt>
-<dd><p>size of the dots plotted if <code>group_by</code> is not NULL.  Default is 1.</p></dd>
+<dd><p>size of the dots plotted if <code>group.by</code> is not NULL.  Default is 1.</p></dd>
 
 
 <dt>plot_title</dt>
@@ -194,7 +199,7 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>, group_by <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>, group.by <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

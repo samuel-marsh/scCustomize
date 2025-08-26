@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
       </span>
     </div>
 
@@ -147,6 +147,10 @@
           <p><code><a href="Read10X_h5_Multi_Directory.html">Read10X_h5_Multi_Directory()</a></code> </p>
         </td>
         <td><p>Load 10X h5 count matrices from multiple directories</p></td>
+      </tr><tr><td>
+          <p><code><a href="Read_Add_cNMF.html">Read_Add_cNMF()</a></code> </p>
+        </td>
+        <td><p>Read and add results from cNMF</p></td>
       </tr><tr><td>
           <p><code><a href="Read_CellBender_h5_Mat.html">Read_CellBender_h5_Mat()</a></code> </p>
         </td>
@@ -536,6 +540,10 @@
         </td>
         <td><p>Add Hemoglobin percentages</p></td>
       </tr><tr><td>
+          <p><code><a href="Add_MALAT1_Threshold.html">Add_MALAT1_Threshold()</a></code> </p>
+        </td>
+        <td><p>Add MALAT1 QC Threshold</p></td>
+      </tr><tr><td>
           <p><code><a href="Add_Mito_Ribo.html">Add_Mito_Ribo()</a></code> </p>
         </td>
         <td><p>Add Mito and Ribo percentages</p></td>
@@ -543,6 +551,10 @@
           <p><code><a href="Add_Top_Gene_Pct.html">Add_Top_Gene_Pct()</a></code> </p>
         </td>
         <td><p>Add Percent of High Abundance Genes</p></td>
+      </tr><tr><td>
+          <p><code><a href="exAM_Scoring.html">exAM_Scoring()</a></code> </p>
+        </td>
+        <td><p>Add exAM Gene List Module Scores</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="getters-setters">Getters/Setters <a href="#getters-setters" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p><p>Functions to extract data from or add additional data to Seurat objects</p>
@@ -656,6 +668,10 @@
         </td>
         <td><p>Extract Cells by identity</p></td>
       </tr><tr><td>
+          <p><code><a href="Dataset_Size_LIGER.html">Dataset_Size_LIGER()</a></code> </p>
+        </td>
+        <td><p>Check size of LIGER datasets</p></td>
+      </tr><tr><td>
           <p><code><a href="Embeddings.html">Embeddings(<i>&lt;liger&gt;</i>)</a></code> </p>
         </td>
         <td><p>Extract matrix of embeddings</p></td>
@@ -671,6 +687,10 @@
           <p><code><a href="Find_Factor_Cor.html">Find_Factor_Cor()</a></code> </p>
         </td>
         <td><p>Find Factor Correlations</p></td>
+      </tr><tr><td>
+          <p><code><a href="Get_Reference_LIGER.html">Get_Reference_LIGER()</a></code> </p>
+        </td>
+        <td><p>Get Reference Dataset</p></td>
       </tr><tr><td>
           <p><code><a href="Idents.html">Idents(<i>&lt;liger&gt;</i>)</a></code> <code><a href="Idents.html">`Idents&lt;-`(<i>&lt;liger&gt;</i>)</a></code> </p>
         </td>
@@ -743,6 +763,10 @@
           <p><code><a href="Rename_Clusters.html">Rename_Clusters()</a></code> </p>
         </td>
         <td><p>Rename Clusters</p></td>
+      </tr><tr><td>
+          <p><code><a href="Top_Genes_Factor.html">Top_Genes_Factor()</a></code> </p>
+        </td>
+        <td><p>Extract top loading genes for LIGER factor</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="project-organization-utilities">Project Organization Utilities <a href="#project-organization-utilities" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions to provide ease of use for organization of analysis projects.</p>
@@ -815,11 +839,19 @@
           <p><code><a href="Proportion_Plot.html">Proportion_Plot()</a></code> </p>
         </td>
         <td><p>Cell Proportion Plot</p></td>
+      </tr><tr><td>
+          <p><code><a href="Proportion_Plot_per_Sample.html">Proportion_Plot_per_Sample()</a></code> </p>
+        </td>
+        <td><p>Cell Proportion Plot per Sample</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="data">Data <a href="#data" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Reference data for package functions.</p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="ensembl_exAM_list.html">ensembl_exAM_list</a></code> </p>
+        </td>
+        <td><p>Immediate Early Gene (IEG) gene lists</p></td>
+      </tr><tr><td>
           <p><code><a href="ensembl_hemo_id.html">ensembl_hemo_id</a></code> </p>
         </td>
         <td><p>Ensembl Hemo IDs</p></td>
@@ -827,6 +859,14 @@
           <p><code><a href="ensembl_ieg_list.html">ensembl_ieg_list</a></code> </p>
         </td>
         <td><p>Immediate Early Gene (IEG) gene lists</p></td>
+      </tr><tr><td>
+          <p><code><a href="ensembl_lncRNA_id.html">ensembl_lncRNA_id</a></code> </p>
+        </td>
+        <td><p>Ensembl lncRNA IDs</p></td>
+      </tr><tr><td>
+          <p><code><a href="ensembl_malat1_list.html">ensembl_malat1_list</a></code> </p>
+        </td>
+        <td><p>MALAT1 gene lists</p></td>
       </tr><tr><td>
           <p><code><a href="ensembl_mito_id.html">ensembl_mito_id</a></code> </p>
         </td>
@@ -836,9 +876,17 @@
         </td>
         <td><p>Ensembl Ribo IDs</p></td>
       </tr><tr><td>
+          <p><code><a href="exAM_gene_list.html">exAM_gene_list</a></code> </p>
+        </td>
+        <td><p>exAM gene lists</p></td>
+      </tr><tr><td>
           <p><code><a href="ieg_gene_list.html">ieg_gene_list</a></code> </p>
         </td>
         <td><p>Immediate Early Gene (IEG) gene lists</p></td>
+      </tr><tr><td>
+          <p><code><a href="lncRNA_gene_list.html">lncRNA_gene_list</a></code> </p>
+        </td>
+        <td><p>lncRNA gene list</p></td>
       </tr><tr><td>
           <p><code><a href="msigdb_qc_ensembl_list.html">msigdb_qc_ensembl_list</a></code> </p>
         </td>
