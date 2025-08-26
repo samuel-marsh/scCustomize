@@ -57,6 +57,8 @@ navbar:
           href: articles/LIGER_Functions.html
         - text: "Cell Bender Functionality & Plotting"
           href: articles/Cell_Bender_Functions.html
+        - text: "cNMF Functionality & Plotting"
+          href: articles/cNMF_Functionality.html
     - text: "News/Changelog"
       href: news/index.html
     - text: "Reference"
