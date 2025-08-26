@@ -1,4 +1,4 @@
-## Hotfix to v3.1.0 and v3.1.1  
+## Hotfix to v3.1.0 and v3.1.1  and v3.1.2
 Fixed fuerther errors of doi/url formatting in manual docs.  Sorry for missing them in earlier submission!
 
 
