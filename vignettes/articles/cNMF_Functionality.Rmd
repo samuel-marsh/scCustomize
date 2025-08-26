@@ -1,0 +1,127 @@
+---
+title: "cNMF_Functionality & Plotting"
+date: 'Compiled: `r format(Sys.Date(), "%B %d, %Y")`'
+output: rmarkdown::html_vignette
+theme: united
+df_print: kable
+vignette: >
+  %\VignetteIndexEntry{cNMF_Functionality & Plotting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+***
+
+<style>
+p.caption {
+  font-size: 0.9em;
+}
+</style>
+ 
+```{r setup, include=FALSE}
+all_times <- list()  # store the time for each chunk
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res <- difftime(Sys.time(), now, units = "secs")
+      all_times[[options$label]] <<- res
+    }
+  }
+}))
+knitr::opts_chunk$set(
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 95),
+  message = FALSE,
+  warning = FALSE,
+  time_it = TRUE
+)
+```
+
+
+## Interaction with consensus non-negative matrix factorization (cNMF)  
+scCustomize contains functions to aid in the interaction with results of consensus non-negative matrix factorization (cNMF) and Seurat objects.  For more information on cNMF see [cNMF GitHub Repo](https://github.com/dylkot/cNMF) and [cNMF Publication](https://elifesciences.org/articles/43803).  
+
+For this example we will use example outputs from using the pbmc3k object run using the same paramters as shown in [cNMF R vignette](https://htmlpreview.github.io/?https://github.com/dylkot/cNMF/blob/main/Tutorials/R_vignette.nb.html).  
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tibble)
+library(magrittr)
+library(Seurat)
+library(scCustomize)
+
+# Load pbmc dataset
+pbmc <- pbmc3k.SeuratData::pbmc3k
+```
+
+```{r include=FALSE}
+# Update pbmc check
+pbmc <- UpdateSeuratObject(pbmc)
+
+pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nCount_RNA > 200)
+
+# change cell barcodes
+cells <- Cells(pbmc)
+
+cells_mod <- gsub(pattern = "$", replacement = "-1", x = cells)
+
+colnames(pbmc) <- cells_mod
+```
+
+```{r fig.align='center', fig.height=8, fig.width=13, message=FALSE, warning=FALSE}
+# Run basic analysis (copied from pbmc3k vignette)
+pbmc <- NormalizeData(pbmc) %>% 
+  FindVariableFeatures() %>% 
+  ScaleData() %>% 
+  RunPCA() %>% 
+  FindNeighbors(dims = 1:10) %>% 
+  FindClusters(resolution = 0.5) %>% 
+  RunUMAP(dims = 1:10)
+
+
+new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T", "B", "CD8 T", "FCGR3A+ Mono",
+    "NK", "DC", "Platelet")
+names(new.cluster.ids) <- levels(pbmc)
+pbmc <- RenameIdents(pbmc, new.cluster.ids)
+DimPlot_scCustom(pbmc, label = TRUE, pt.size = 0.5) + NoLegend()
+```
+
+
+
+## Loading the results of cNMF  
+scCustomize contains the function `Read_Add_cNMF` that can take the results from cNMF and add custom dimensionality reduction to Seurat object.  The function only requires user to supply the paths to the cNMF usage and spectra files that contain the cell and feature loadings respectively.  By default this will add new reduction "cnmf" to the Seurat object.  
+
+```{r}
+pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_7.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_7.dt_0_1.txt")
+```
+
+
+## cNMF Plotting  
+cNMF results can be plotted in several ways using scCustomize.  
+
+### Plotting factor loading 
+The cNMF factor cell loadings can be plotted like any other reduction using `FeaturePlot_scCustom`.  Just supply the name of the factor like any other reduction.
+
+```{r fig.align='center', fig.height=10, fig.width=13}
+FeaturePlot_scCustom(seurat_object = pbmc, features = c("cNMF_1", "cNMF_2", "cNMF_3", "cNMF_4"))
+```
+
+
+### Plot factor correlation  
+scCustomize also has plotting function `Factor_Cor_Plot` to examine relationships between factors by plotting the correlation of feature loadings for cNMF factors.  
+```{r}
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf")
+```
+
+`Factor_Cor_Plot1` also contains a number of optional parameters to change the output plot.
+```{r}
+# Only plot positive correlations
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
+
+# Only plot 1 of the diagonals
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", positive_only = T, cluster = F)
+```
+
