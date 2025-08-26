@@ -6,8 +6,10 @@
 \usage{
 Extract_Top_Markers(
   marker_dataframe,
-  num_genes = 10,
-  group_by = "cluster",
+  num_features = 10,
+  num_genes = deprecated(),
+  group_by = deprecated(),
+  group.by = "cluster",
   rank_by = "avg_log2FC",
   gene_column = "gene",
   gene_rownames_to_column = FALSE,
@@ -19,12 +21,16 @@ Extract_Top_Markers(
 \arguments{
 \item{marker_dataframe}{data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.}
 
-\item{num_genes}{number of genes per group (e.g., cluster) to include in output list.}
+\item{num_features}{number of features per group (e.g., cluster) to include in output list.}
 
-\item{group_by}{column name of \code{marker_dataframe} to group data by.  Default is "cluster" based on
+\item{num_genes}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{num_features}.}
+
+\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{column name of \code{marker_dataframe} to group data by.  Default is "cluster" based on
 \code{\link[Seurat]{FindAllMarkers}}.}
 
-\item{rank_by}{column name of \code{marker_dataframe} to rank data by when selecting \code{num_genes} per \code{group_by}.
+\item{rank_by}{column name of \code{marker_dataframe} to rank data by when selecting \code{num_genes} per \code{group.by}.
 Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.}
 
 \item{gene_column}{column name of \code{marker_dataframe} that contains the gene IDs.  Default is "gene"
@@ -37,7 +43,7 @@ column.  Default is FALSE.}
 to return a vector of gene IDs.  Default is FALSE.}
 
 \item{named_vector}{Logical, whether or not to name the vector of gene names that is returned by the function.
-If \code{TRUE} will name the vector using the column provided to \code{group_by}.  Default is TRUE.}
+If \code{TRUE} will name the vector using the column provided to \code{group.by}.  Default is TRUE.}
 
 \item{make_unique}{Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 Not applicable when \code{data_frame = TRUE} or \code{named_vector = TRUE}.}
@@ -52,7 +58,7 @@ or similar analysis.
 \examples{
 \dontrun{
 top10_genes <- Extract_Top_Markers(marker_dataframe = markers_results, num_genes = 10,
-group_by = "cluster", rank_by = "avg_log2FC")
+group.by = "cluster", rank_by = "avg_log2FC")
 }
 
 }

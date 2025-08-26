@@ -135,19 +135,19 @@ scCustomize contains function `Extract_Top_Markers` to get the top N genes from 
 ### Returns a Named Vector (Default)
 ```{r}
 # By default it returns a named vector of genes (each gene named for cluster it was associated with)
-top_5 <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, rank_by = "avg_log2FC")
+top_5 <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 5, rank_by = "avg_log2FC")
 head(top_5, 10) 
 ```
 
 ### Return data.frame (Optional)
 ```{r eval=FALSE}
-top_5_df <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, data_frame = TRUE, rank_by = "avg_log2FC")
+top_5_df <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 5, data_frame = TRUE, rank_by = "avg_log2FC")
 
 head(top_5_df, 10) 
 ```
 
 ```{r echo=FALSE}
-top_5_df <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, data_frame = TRUE, rank_by = "avg_log2FC")
+top_5_df <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 5, data_frame = TRUE, rank_by = "avg_log2FC")
 
 head(top_5_df, 10) %>%
   kableExtra::kbl(row.names = TRUE) %>%
@@ -162,7 +162,7 @@ head(top_5_df, 10) %>%
 presto_markers <- qread("assets/presto_markers.qs")
 
 # Extract top markers
-top_5_presto <- Extract_Top_Markers(marker_dataframe = presto_markers, num_genes = 5, group_by = "cluster", rank_by = "auc", gene_column = "gene")
+top_5_presto <- Extract_Top_Markers(marker_dataframe = presto_markers, num_features = 5, group.by = "cluster", rank_by = "auc", gene_column = "gene")
 head(top_5_presto, 10)
 ```
 
@@ -171,12 +171,12 @@ When returning an unnamed vector you may want to return a unique list without an
 
 ```{r}
 # Default parameters
-top_5 <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, rank_by = "avg_log2FC", named_vector = FALSE)
+top_5 <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 5, rank_by = "avg_log2FC", named_vector = FALSE)
 
 any(duplicated(x = top_5))
 
 # Set `make_unique = TRUE`
-top_5_unique <- Extract_Top_Markers(marker_dataframe = all_markers, num_genes = 5, rank_by = "avg_log2FC", named_vector = FALSE, make_unique = TRUE)
+top_5_unique <- Extract_Top_Markers(marker_dataframe = all_markers, num_features = 5, rank_by = "avg_log2FC", named_vector = FALSE, make_unique = TRUE)
 
 any(duplicated(x = top_5_unique))
 ```

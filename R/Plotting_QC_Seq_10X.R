@@ -1711,6 +1711,11 @@ Seq_QC_Plot_Antisense <- function(
 }
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### 10X SEQ QC COMBINED LAYOUTS ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' QC Plots Sequencing metrics (Layout)
 #'
 #' Plot a combined plot of the basic QC metrics from sequencing output.
@@ -1940,7 +1945,7 @@ Barcode_Plot <- function(
                           "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}}."))
   }
 
-  if (!all(c("knee", "inflection") %in% names(x = br_out@metadata)) && !all(c("rank", "total", "fitted") %in% names(x = br_out@listData))) {
+  if (!all(c("knee", "inflection") %in% names(x = br_out@metadata)) || !all(c("rank", "total") %in% names(x = br_out@listData))) {
     cli_abort(message = c("{.code br_out} appears to be missing necessarily information.",
                           "i" = "Ensure {.code br_out} is output of {.code {.field DropletUtils::barcodeRanks}} and no errors occured when running code."))
   }
@@ -1950,7 +1955,8 @@ Barcode_Plot <- function(
     scale_y_log10() +
     scale_x_log10() +
     theme_cowplot() +
-    geom_line(mapping = aes(x = .data[["rank"]], y = .data[["fitted"]], color = "red"), show.legend = FALSE) +
+    # geom_line(mapping = aes(x = .data[["rank"]], y = .data[["fitted"]], color = "red"), show.legend = FALSE) +
+    # removed in latest version of DropletUtils and not really necessary anyways
     geom_hline(yintercept = br_out@metadata$knee, linetype = "dashed", color = "dodgerblue") +
     geom_hline(yintercept = br_out@metadata$inflection, linetype = "dashed", color = "forestgreen") +
     annotate("text", x = 1, y = br_out@metadata$knee, label = paste0("Knee (", br_out@metadata$knee, ")"), vjust = -0.5, hjust = 0) +

@@ -300,7 +300,7 @@ Add_Sample_Meta <- function(
 #' Returns a by identity meta.data data.frame with one row per sample.  Useful for downstream
 #' quick view of sample breakdown, meta data table creation, and/or use in pseudobulk analysis
 #'
-#' @param object Seurat object
+#' @param object Seurat or LIGER object
 #' @param sample_name meta.data column to use as sample.  Output data.frame will contain one row per
 #' level or unique value in this variable.
 #' @param variables_include `@meta.data` columns to keep in final data.frame.  All other columns will
@@ -363,9 +363,9 @@ Extract_Sample_Meta <- function(
 
   # Generate nCount and nFeature variable vectors for exclusion
   if (is.null(x = variables_exclude)) {
-    nFeature_cols <- grep(x = colnames(x = object@meta.data), pattern = "^nFeature", value = TRUE)
+    nFeature_cols <- grep(x = colnames(x = meta_df), pattern = "^nFeature", value = TRUE)
 
-    nCount_cols <- grep(x = colnames(x = object@meta.data), pattern = "^nCount", value = TRUE)
+    nCount_cols <- grep(x = colnames(x = meta_df), pattern = "^nCount", value = TRUE)
 
     combined_exclude <- c(nFeature_cols, nCount_cols, "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
 

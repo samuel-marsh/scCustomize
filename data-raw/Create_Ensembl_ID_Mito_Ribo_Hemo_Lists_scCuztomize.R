@@ -194,7 +194,7 @@ save(ensembl_mito_id, file = "data/ensembl_mito_id.rda")
 
 ensembl_ribo_id <- Create_Ensembl_Ribo_List()
 
-save(ensembl_ribo_id, file = "data/ensembl_ribo_id.rda")
+save(ensembl_ribo_id, file = "data/ensembl_ribo_id.rda", compress = "xz")
 
 ensembl_hemo_id <- Create_Ensembl_Hemo_List()
 

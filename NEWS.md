@@ -1,3 +1,67 @@
+# scCustomize 3.1.3 (2025-08-25)  
+## Added  
+- Add support for LIGER objects using `Extract_Sample_Meta`.  
+- Added new function `Dataset_Size_LIGER` to return data.frame containing cells per dataset in liger object in addition to accompanying sample meta data if desired.  
+- Added new function `Get_Reference_LIGER` to return name of dataset matching selection criteria to use as reference for `rliger::quantileNorm()`.  
+- Added new function `Add_MALAT1_Threshold` which implements QC procedure from Clarke & Bader (2024). bioRxiv \doi{doi.org/10.1101/2024.07.14.603469}.   
+- Added new internal function `Check_Normalized` to confirm data within "data" layer of Seurat object is actually normalized (relevant only for V3/4 style objects/assays).  
+- Added new parameters to `Add_Cell_QC_Metrics` (Seurat ONLY) to add module score of IEGs in addition to percent expressing.  
+- Added new function `exAM_Scoring` to add module scores for exAM gene sets from Marsh et al., 2022 (\doi{10.1038/s41593-022-01022-8}).  
+- Added new function `Proportion_Plot_per_Sample` to plot proportion of cells per sample across a specified condition.  
+- Added new parameter `order_by_freq` to `Cluster_Stats_All_Samples`.  It is `TRUE` by default and returned data.frame is ordered by cluster frequency, setting FALSE orders data.frame by cluster order.  
+- Updated `Convert_Assay` to allow V5 > V3 conversions even when normalized and scale data is absent ([#236](https://github.com/samuel-marsh/scCustomize/issues/236)).  
+- Added `Read_Add_cNMF` to read and add results from cNMF as custom dimensionality reduction.  
+- `Top_Genes_Factor` is now S3 generic and works with either Seurat or LIGER objects.  
+- `Top_Genes_Factor` now supports `factor = "all"` which will return data.frame containing top X genes for all factors, 1 column per factor.  
+- Added parameter `label_selected_features` to `Clustered_DotPlot` to allow for labeling only subset of plotted features.  
+- Added new parameter to `Add_Cell_QC_Metrics` to add percentage of lncRNA counts per cell (see `add_lncRNA` parameter).  
+
+  
+  
+## Changed  
+**This release contains a number of BREAKING changes to parameter names:**  
+  
+- **BREAKING CHANGE** The parameter `num_genes` has been soft-deprecated in `Extract_Top_Markers`.  Please use `num_features` instead.  Using `num_genes` will warn user but still work until scCustomize v3.3.0.  
+- **BREAKING CHANGE** The parameter `min_cells` and `min_features` have been soft-deprecated in `Create_CellBender_Merged_Seurat`.  Please use `min.cells` and `min.features` instead.  Using `min_cells` and `min_features` will warn user but still work until scCustomize v3.3.0.  
+  
+**This release contains a number of BREAKING changes to parameter names to harmonize across scCustomize and Seurat:**  
+*Due to large number of functions affected the timeline for full deprecation of these parameters has been extended.  Old parameter names will issue warning but continue to work until v3.3.0.*  
+  
+- **BREAKING CHANGE** The `group_by` parameter has been soft-deprecated in `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample`, `Percent_Expressing`, `DimPlot_LIGER`, and `Extract_Top_Markers`.  Please use `group.by` instead.  Using `group_by` will warn user but still work until scCustomize v3.3.0.  
+- **BREAKING CHANGE** The `group_by_var` parameter has been soft-deprecated in `Proportion_Plot`, `Cluster_Stats_All_Samples`, `Median_Stats`, and `MAD_Stats`.  Please use `group.by` instead.  Using `group_by_var` will warn user but still work until scCustomize v3.3.0. 
+- **BREAKING CHANGE** The `split_by` parameter has been soft-deprecated in `Percent_Expressing`, `DimPlot_LIGER`, and internal functions.  Please use `split.by` instead.  Using `split_by` will warn user but still work until scCustomize v3.3.0. 
+  
+**Non-breaking changes in this release:**  
+  
+- The following parameters in `plotFactors_scCustom` have been fully deprecated for LIGER objects >= V2: `reorder_datasets` and `reduction_label`.  
+- Following prior deprecation warnings the following functions are now fully deprecated and replaced with updated functions: `Add_Cell_Complexity_LIGER`, `Add_Cell_Complexity_Seurat`, `Add_Cell_Complexity_Seurat`, `Add_Mito_Ribo_LIGER`, `Add_Mito_Ribo_Seurat`, `Gene_Present`, `Meta_Present_LIGER`, and `Split_FeatureScatter`.  
+- Changed internal function `PercentAbove_Seurat` to match updates to Seurat to appropriately deal with NA values.  
+- Changed functionality of several `QC_Plot*` functions to dynamically set nFeature or nCount variable name based on assay specified.  
+- Changed default parameter value for `x_lab_rotate` in `Proportion_Plot` from FALSE to TRUE.  
+- Changed param `selection.method` to `method` in `VariableFeaturePlot_scCustom` to account for deprecation in Seurat/SeuratObject.  
+    
+
+## Fixes  
+- Fixed use of chicken as default species in some QC functions.  
+- Fixed bug in `Read_Metrics_10X` that caused function failure.  
+- Fixed bug in `Subset_LIGER` to ignore cluster column when subsetting based on other meta data variable.  
+- Fixed bug in `QC_Histogram` that didn't allow it to properly plot feature data.  
+- Fixed bug in `FeaturePlot_scCustom` that prevented `max.cutoff`/`min.cutoff` from being correctly passed when splitting plots ([#228](https://github.com/samuel-marsh/scCustomize/issues/228)).  
+- Fixed check for file extension in `Iterate_PC_Loading_Plots`.  New internal function `check_extension` to ease these checks package-wide.  
+- Fixed bug in behavior of `Extract_Top_Markers` when sorting the markers by "p_val_adj" that was selecting genes with highest p values instaed of lowest ([#229](https://github.com/samuel-marsh/scCustomize/issues/229)).  
+- Fixed rotation of x-axis text in `Proportion_Plot`.  
+- Added check for correct input format in `Extract_Top_Markers`.  
+- Added check to `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, and `Plot_Median_Other` to ensure that `group.by` and `sample_col` are different and provide informative error message if they are the same ([#233](https://github.com/samuel-marsh/scCustomize/issues/233)).  
+- Fixed bug in `VariableFeaturePlot_scCustom` that prevented function from running.  
+- Fixed `Factor_Cor_Plot` failure when using Seurat object due to lack of `reduction` parameter.  
+- Fixed issue in `Clustered_DotPlot` when feature has zero expression in any cells with new `nan_error` parameter ([#178](https://github.com/samuel-marsh/scCustomize/issues/178)).  
+- Fixed error in `Barcode_Plot` that prevented plotting when using newer versions of DropletUtils.  
+- Code styling and typo fixes.  
+
+
+
+
+
 # scCustomize 3.0.1 (2024-12-18)  
 ## Added  
 - Added new parameters `output_width` and `output_height` to the `Iterate_*` family of plotting functions ([#217](https://github.com/samuel-marsh/scCustomize/issues/217)).  

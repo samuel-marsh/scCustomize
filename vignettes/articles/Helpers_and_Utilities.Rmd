@@ -74,6 +74,7 @@ The default parameters of the function `Add_Cell_QC_Metrics` will add:
 
 * Mitochondrial and Ribosomal Percentages (default and custom species).
 * Hemoglobin Percentages (default and custom species).
+* Percentage of counts for lncRNA (default species).   
 * Cell Complexity (log10(nFeature) / log10(nCount).
 * Top XX Gene Percentage.
 * Percentage of counts for IEG (human and mouse only).
@@ -152,7 +153,7 @@ While some original number columns are not valid at sample-level it can be valua
 ```{r}
 sample_meta <- Extract_Sample_Meta(object = pbmc, sample_name = "sample_id", variables_exclude = c("nFeature_RNA", "nCount_RNA", "seurat_annotations", "orig.ident"))
 
-sample_median <- Median_Stats(seurat_object = pbmc, group_by_var = "sample_id")
+sample_median <- Median_Stats(seurat_object = pbmc, group.by = "sample_id")
 
 sample_merged <- right_join(x = sample_meta, y = sample_median)
 ```

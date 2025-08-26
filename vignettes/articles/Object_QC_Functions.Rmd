@@ -53,12 +53,16 @@ library(Seurat)
 library(scCustomize)
 
 pbmc <- pbmc3k.SeuratData::pbmc3k
+hcabm <- hcabm40k.SeuratData::hcabm40k
 ```
 
 
 ```{r include=FALSE}
 pbmc <- UpdateSeuratObject(pbmc)
 pbmc <- NormalizeData(pbmc)
+
+hcabm <- UpdateSeuratObject(hcabm)
+hcabm <- NormalizeData(hcabm)
 ```
 
 We'll add some random meta data variables to pbmc data form use in this vignette
@@ -71,7 +75,7 @@ pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
 ## Cross-compatibility of QC Functions  
 
 ### Support for Seurat and LIGER Objects  
-All of scCustomize's functions to add quality control metrics are 100% cross compatible across Seurat and LIGER objects using the same function calls.  For more details on QC specific plotting functions see [QC Plotting & Analysis Vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html).  
+All of scCustomize's functions to add quality control metrics are 100% cross compatible across Seurat and LIGER objects using the same function calls.  For more details on QC-specific plotting functions see [QC Plotting & Analysis Vignette](https://samuel-marsh.github.io/scCustomize/articles/QC_Plots.html).  
 
 ### Support for gene symbols and Ensembl IDs  
 Additionally, all of the QC functions support objects that use either gene symbols or Ensembl IDs.  Ensembl IDs for default species (see below) are from Ensembl version 112 (updated in scCustomize on 4/29/2024).  
@@ -79,7 +83,7 @@ Additionally, all of the QC functions support objects that use either gene symbo
 If your object using ensembl IDs as features names then simply add `ensembl_ids` parameter that is present in all QC functions.  
 ```{r eval=FALSE}
 # Using gene name patterns
-obj <- Add_Mito_Ribo(object = obj, species = "Human", ensembl_ids = TRUE)
+obj <- Add_Cell_QC_Metrics(object = obj, species = "Human", ensembl_ids = TRUE)
 ```
 
 
@@ -107,15 +111,15 @@ However custom prefixes can be used for species with different annotations. Simp
 
 ```{r eval=FALSE}
 # Using gene name patterns
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_pattern = "regexp_pattern_mito", ribo_pattern = "regexp_pattern_ribo")
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "other", mito_pattern = "regexp_pattern_mito", ribo_pattern = "regexp_pattern_ribo")
 
 # Using feature name lists
 mito_gene_list <- c("gene1", "gene2", "etc")
 ribo_gene_list <- c("gene1", "gene2", "etc")
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_features = ribo_gene_list)
 
 # Using combination of gene lists and gene name patterns
-pbmc <- Add_Mito_Ribo(object = pbmc, species = "Human", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern_ribo")
+pbmc <- Add_Cell_QC_Metrics(object = pbmc, species = "other", mito_features = mito_gene_list, ribo_pattern = "regexp_pattern_ribo")
 ```
 
 </details>
@@ -127,9 +131,11 @@ To simplify the process of adding cell QC metrics scCustomize contains a wrapper
 
 * Mitochondrial and Ribosomal Percentages (default and custom species).
 * Hemoglobin percentages (default and custom species).  
+* Percentage of counts for lncRNA (default species).   
 * Cell Complexity (log10(nFeature) / log10(nCount).
 * Top XX Gene Percentage.
 * Percentage of counts for IEG (human and mouse only).
+* Module score for IEG genes (human and mouse only).  
 * OXPHOS, APOP, and DNA Repair pathways (supported species only).
 * Cell Cycle Scoring (Human only).
 
@@ -239,3 +245,119 @@ In scCustomize the percent of gene expression from the following gene lists can 
   
 * Oxidative Phosphorylation, Apoptosis, & DNA Repair (all default species except Marmoset)  
     - Species specific gene lists from [MSigDB Hallmark Gene Sets](https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=H) 
+
+
+## Calculate and Add MALAT1 Threshold  
+Another QC metric that has been proposed is based on the level of expression of long non-coding RNA MALAT1 ([*Clarke & Bader, 2024*](https://doi.org/10.1101/2024.07.14.603469})).  Their analysis demonstrates that low MALAT1 expression is characteristic of low quality cells and created function to determine a cutoff threshold to call low quality/damaged cells.  Their metric has now been incorporated into scCustomize as `Add_MALAT1_Threshold`.
+
+**NOTE: If you utilize this function please cite the above manuscript in addition to scCustomize).**  
+
+**NOTE: This function is currently only available for human and mouse as those are only species with MALAT1 annotated.  See section below on non-default species for more info.**  
+
+For best results this function should be run on per sample basis using normalized count matrix. To get started all the function requires is Seurat Object, the species being analyzed, and the name of meta.data column that contains sample ID information.  
+
+For this example we are going to use a subset of data from Hammond et al., 2019.  
+
+```{r include=FALSE}
+raw_data <- Read_GEO_Delim(data_dir = "assets/GSE121654_RAW_Hammond/", file_suffix = ".dge.txt.gz", move_genes_rownames = T)
+raw_data <- Merge_Sparse_Data_All(matrix_list = raw_data, add_cell_ids = names(x = raw_data))
+hammond_subset <- CreateSeuratObject(counts = raw_data, names.field = 1, names.delim = "_", min.cells = 5, min.features = 200)
+hammond_subset <- NormalizeData(hammond_subset)
+```
+
+
+```{r message=TRUE}
+hammond_subset <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", sample_col = "orig.ident")
+```
+
+**NOTE: The function is also compatible with Ensembl IDs by specifying `ensembl_ids = TRUE` in function call.**  
+
+#### Single Sample Object  
+If your Seurat object only has a single sample or you want to run the calculation across the entire object then you can supply the optional parameter of `whole_object = TRUE`.  
+```{r eval=FALSE}
+hcabm <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", whole_object = TRUE)
+```
+
+#### Non-default species   
+Currently, humans and mice are the only species for which MALAT1 has been annotated in the genome.  If your analysis includes annotation of MALAT1 homolog/paralog in new species you can supply that value to optional parameter `homolog_name`.  
+```{r eval=FALSE}
+hcabm <- Add_MALAT1_Threshold(object = OBJECT, species = "marmoset", homolog_name = "MALAT1_HOMOLOG_SYMBOL_OR_ID_NUMBER")
+```
+
+
+### Visualizing the Results  
+The function will calculate the threshold for each sample and adds new column to meta.data containing logical value (TRUE/FALSE) designating cells above or below the threshold.  This can then be visualized as any meta.data column.  
+
+```{r fig.height=5, fig.width=13, fig.align='center'}
+VlnPlot_scCustom(seurat_object = hammond_subset, features = "nFeature_RNA", split.by = "Malat1_Threshold")
+FeatureScatter_scCustom(seurat_object = hammond_subset, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", split.by = "Malat1_Threshold", pt.size = 1)
+```
+
+
+### Visualizing & Saving Threshold Calculation Plots    
+In addition to basic parameters there are several optional parameters that can be invoked.  The first set relate to a series of plots the are created when determining the threshold.  For detailed description of these plots and their interpretation please see [Clarke & Bader GitHub Repo](https://github.com/BaderLab/MALAT1_threshold).  The optional parameters within scCustomize are:  
+- `print_plots` whether or not to print plots to output while running function (default is FALSE).  
+- `save_plots` whether or not to save plots to PDF file while running function (default is FALSE).  
+- `save_plot_path` directory path to save the plots.  
+- `save_plot_name` file name for PDF document with plots.  
+- `plot_width` plot width (inches)
+- `plot_height` plot height (inches)
+
+```{r eval=FALSE}
+hcabm <- Add_MALAT1_Threshold(object = hammond_subset, species = "mouse", sample_col = "orig.ident", save_plots = TRUE, save_plot_path = "plots/QC_Plots/", save_plot_name = "MALAT1_Threshold_Plots")
+```
+
+Here is eample of plots for one of the samples in the Hammond et al., subset dataset.
+<center>
+<img src="../reference/figures/assets/malat1_example.png" width=49%>  
+*Example outputs with default naming based on file name or providing `sample_names` parameter.*
+</center>
+
+
+### Optional Parameters to Modify Threshold Calculation    
+Finally, there are also a series of parameters of the MALAT1 function itself that can be modified.  For deeper description of parameters below please see manual documentation for `Add_MALAT1_Threshold()` and above mentioned manuscript: `bw`, `lwd`, `breaks`, `chosen_min`, `smooth`, `abs_min`, `rough_max`.
+
+## Add exAM Module Score  
+In Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-022-01022-8)) we identified sets of genes that were differentially expressed in samples that were processed with enzymatic digestion or in post-mortem human samples compared to fresh tissue (see paper for full details).  Module scores for these gene sets can be added to Seurat object using function `exAM_Scoring`. 
+
+To demonstrate this function we will use data objects from Marsh et al., 2022.
+```{r}
+# Load Marsh et al., 2022 datasets
+marsh_mouse_micro <- qs::qread(file = "assets/marsh_2020_micro.qs")
+marsh_human_pm <- qs::qread(file = "assets/marsh_human_pm.qs")
+```
+
+
+If adding score to human data both the union score and "microglia" (post-mortem) score will be added to be meta.data slot.  When species is mouse only the union score will be added.  When the function is run the name of the column added to meta.data slot will be included printed in message.
+
+
+```{r message=TRUE}
+marsh_mouse_micro <- exAM_Scoring(seurat_object = marsh_mouse_micro, species = "mouse")
+
+marsh_human_pm <- exAM_Scoring(seurat_object = marsh_human_pm, species = "human")
+```
+
+`exAM_Scoring` also supports use of ensembl IDs by specifying optional parameters.  
+
+```{r eval=FALSE}
+marsh_mouse_micro <- exAM_Scoring(seurat_object = marsh_mouse_micro, species = "mouse", ensembl_ids = TRUE)
+```
+
+
+### We can then plot the score using any of the normal plotting functions.  
+```{r eval=FALSE}
+DimPlot_scCustom(seurat_object = marsh_mouse_micro, colors_use = marsh_mouse_micro@misc$exp17_micro_colors, label.size = 5, pt.size = 0.5, repel = T)
+FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", na_cutoff = NA, pt.size = 0.5)
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=6, fig.width=13, fig.cap='***A.** tSNE plot showing the clusters from Marsh et al., 2022. **B.** FeaturePlot_scCustom view of the module score showing expected localization in the "Activated" exAM cluster.*'}
+p1 <- DimPlot_scCustom(seurat_object = marsh_mouse_micro, colors_use = marsh_mouse_micro@misc$exp17_micro_colors, label.size = 5, pt.size = 0.5, repel = T)
+p2 <- FeaturePlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", na_cutoff = NA, pt.size = 0.5)
+
+wrap_plots(p1, p2) + plot_annotation(tag_levels = "A")
+```
+
+```{r fig.align='center', fig.height=6, fig.width=13}
+VlnPlot_scCustom(seurat_object = marsh_mouse_micro, features = "exAM_Union_Score", colors_use = marsh_mouse_micro@misc$exp17_micro_colors)
+```

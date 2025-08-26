@@ -59,7 +59,7 @@ as.LIGER.Seurat <- function(
     ...
 ) {
   # liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = "rliger") > "1.0.1") {
     cli_abort(message = c("{.code scCustomize::as.Liger} is for rliger < v2.0.0.",
                           "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::as.liger}."))
   }
@@ -148,7 +148,7 @@ as.LIGER.Seurat <- function(
     var_genes <- VariableFeatures(object = x)
 
     if (!length(x = var_genes) > 0) {
-      cli_abort(message ="{.code use_seurat_var_genes = TRUE}, but no variable features found in Seurat object.")
+      cli_abort(message = "{.code use_seurat_var_genes = TRUE}, but no variable features found in Seurat object.")
     }
   }
 
@@ -161,7 +161,7 @@ as.LIGER.Seurat <- function(
     # Split data by dataset
     idents <- names(x = cells_per_dataset)
 
-    raw_data_list <- lapply(idents, function(x){
+    raw_data_list <- lapply(idents, function(x) {
       raw_data_full[, cells_per_dataset[[x]]]
     })
 
@@ -170,7 +170,7 @@ as.LIGER.Seurat <- function(
 
   # If multiple layers
   if (length(x = count_layers) > 1) {
-    raw_data_list <- lapply(count_layers, function (i){
+    raw_data_list <- lapply(count_layers, function(i) {
       counts <- LayerData(object = x, layer = i)
     })
 
@@ -279,7 +279,7 @@ as.LIGER.list <- function(
     ...
 ) {
   # liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = "rliger") > "1.0.1") {
     cli_abort(message = c("{.code scCustomize::as.Liger} is for rliger < v2.0.0.",
                           "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::as.liger}."))
   }
@@ -353,7 +353,7 @@ as.LIGER.list <- function(
 
     for (m in var_genes) {
       if (!length(x = m) > 0) {
-        cli_abort(message ="{.code use_seurat_var_genes = TRUE}, but not all objects in list have variable features.")
+        cli_abort(message = "{.code use_seurat_var_genes = TRUE}, but not all objects in list have variable features.")
       }
     }
 
@@ -374,7 +374,7 @@ as.LIGER.list <- function(
   }
 
   # Get raw data & cells
-  raw_data_list <- lapply(x, function(e){
+  raw_data_list <- lapply(x, function(e) {
     counts_layer <- Layers(object = e, search = "counts")
     LayerData(object = e, layer = counts_layer)
   })
@@ -528,7 +528,7 @@ as.Seurat.liger <- function(
     ...
 ) {
   # liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = "rliger") > "1.0.1") {
     cli_abort(message = c("{.code scCustomize::as.Seurat} is for rliger < v2.0.0.",
                           "i" = "For optimal functionality with rliger v2.0.0+ please use {.code rliger::ligerToSeurat}."))
   }
@@ -543,7 +543,7 @@ as.Seurat.liger <- function(
   key_name <- paste0(reduction_label, "_")
 
   # adjust raw data slot if needed
-  if (!inherits(x = x@raw.data[[1]], what = 'dgCMatrix')) {
+  if (!inherits(x = x@raw.data[[1]], what = "dgCMatrix")) {
     x@raw.data <- lapply(x@raw.data, as, Class = "CsparseMatrix")
   }
 
@@ -561,7 +561,7 @@ as.Seurat.liger <- function(
 
     # set assay value
     if (convert_to %in% accepted_V5) {
-      if (packageVersion(pkg = 'Seurat') < "5") {
+      if (packageVersion(pkg = "Seurat") < "5") {
         cli_abort(message = "Seurat version must be v5.0.0 or greater to create To create Assay5.")
       }
 
@@ -618,7 +618,7 @@ as.Seurat.liger <- function(
                                          paste0("rawiNMF_", seq_len(ncol(rinmf.loadings))))
 
     inmf.embeddings <- x@H.norm
-    rinmf.embeddings <- do.call(what = 'rbind', args = x@H)
+    rinmf.embeddings <- do.call(what = "rbind", args = x@H)
 
     dimnames(x = inmf.embeddings) <- list(unlist(x = lapply(x@scale.data, rownames), use.names = FALSE),
                                           paste0("iNMF_", seq_len(ncol(inmf.loadings))))
@@ -765,7 +765,7 @@ Liger_to_Seurat <- function(
     barcode_prefix = TRUE,
     barcode_cell_id_delimiter = "_"
 ) {
-  lifecycle::deprecate_soft(when = "2.1.0",
+  deprecate_soft(when = "2.1.0",
                             what = "Liger_to_Seurat()",
                             with = "as.Seurat()",
                             details = c("i" = "Please adjust code now to prepare for full deprecation.")
@@ -783,7 +783,7 @@ Liger_to_Seurat <- function(
   key_name <- paste0(reduction_label, "_")
 
   # adjust raw data slot if needed
-  if (!inherits(x = liger_object@raw.data[[1]], what = 'dgCMatrix')) {
+  if (!inherits(x = liger_object@raw.data[[1]], what = "dgCMatrix")) {
     liger_object@raw.data <- lapply(liger_object@raw.data, as, Class = "CsparseMatrix")
   }
 
@@ -801,7 +801,7 @@ Liger_to_Seurat <- function(
 
     # set assay value
     if (convert_to %in% accepted_V5) {
-      if (packageVersion(pkg = 'Seurat') < "5") {
+      if (packageVersion(pkg = "Seurat") < "5") {
         cli_abort(message = "Seurat version must be v5.0.0 or greater to create To create Assay5.")
       }
 
@@ -858,7 +858,7 @@ Liger_to_Seurat <- function(
                                          paste0("rawiNMF_", seq_len(ncol(rinmf.loadings))))
 
     inmf.embeddings <- liger_object@H.norm
-    rinmf.embeddings <- do.call(what = 'rbind', args = liger_object@H)
+    rinmf.embeddings <- do.call(what = "rbind", args = liger_object@H)
 
     dimnames(x = inmf.embeddings) <- list(unlist(x = lapply(liger_object@scale.data, rownames), use.names = FALSE),
                                           paste0("iNMF_", seq_len(ncol(inmf.loadings))))
@@ -1204,7 +1204,7 @@ as.anndata.liger <- function(
     ...
 ) {
   # temp liger version check
-  if (packageVersion(pkg = 'rliger') > "1.0.1") {
+  if (packageVersion(pkg = "rliger") > "1.0.1") {
     cli_abort(message = c("Liger functionality is currently restricted to rliger v1.0.1 or lower.",
                           "i" = "Functionality with rliger v2+ is currently in development."))
   }
@@ -1323,7 +1323,7 @@ as.anndata.liger <- function(
                                          paste0("rawiNMF_", seq_len(ncol(rinmf.loadings))))
 
     inmf.embeddings <- x@H.norm
-    rinmf.embeddings <- do.call(what = 'rbind', args = x@H)
+    rinmf.embeddings <- do.call(what = "rbind", args = x@H)
 
     dimnames(x = inmf.embeddings) <- list(unlist(x = lapply(x@scale.data, rownames), use.names = FALSE),
                                           paste0("iNMF_", seq_len(ncol(inmf.loadings))))
@@ -1449,7 +1449,7 @@ Convert_Assay <- function(
 
   # set assay value
   if (convert_to %in% accepted_V5) {
-    if (packageVersion(pkg = 'Seurat') < "5") {
+    if (packageVersion(pkg = "Seurat") < "5") {
       cli_abort(message = "Seurat version must be v5.0.0 or greater to create Assay5.")
     }
 
@@ -1462,10 +1462,21 @@ Convert_Assay <- function(
   }
 
   if (convert_to == "Assay") {
-    if (length(x = LayerData(object = seurat_object, layer = "scale.data")) == 0) {
-      cli_abort(message = c("Object does not contain scale.data",
-                            "i" = "In order to convert Assay5 (V5) to Assay (V3/4) the object must have both normalized and scaled data."))
+    if (length(x = suppressWarnings(LayerData(object = seurat_object, layer = "data"))) == 0) {
+      create_manual_assay <- TRUE
+    } else {
+      create_manual_assay <- FALSE
     }
+  }
+
+  if (convert_to == "Assay") {
+    if (length(x = suppressWarnings(LayerData(object = seurat_object, layer = "scale.data"))) == 0) {
+      create_manual_assay <- TRUE
+    }
+  }
+
+  if (convert_to == "Assay5") {
+    create_manual_assay <- FALSE
   }
 
   if (is.null(x = assay)) {
@@ -1507,7 +1518,11 @@ Convert_Assay <- function(
   # convert assays
   for (i in assays_convert) {
     cli_inform(message = "Converting assay {.val {i}} from {.field {convert_from}} to {.field {convert_to}}.")
-    suppressWarnings(seurat_object[[i]] <- as(seurat_object[[i]], convert_to))
+    if (isTRUE(x = create_manual_assay)) {
+      suppressWarnings(seurat_object[[assay]] <- CreateAssayObject(counts = LayerData(object = seurat_object, layer = "counts")))
+    } else {
+      suppressWarnings(seurat_object[[i]] <- as(seurat_object[[i]], convert_to))
+    }
   }
 
   # return object

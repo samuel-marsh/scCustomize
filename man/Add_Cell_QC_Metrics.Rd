@@ -17,6 +17,7 @@ Add_Cell_QC_Metrics(object, ...)
   add_MSigDB = TRUE,
   add_IEG = TRUE,
   add_hemo = TRUE,
+  add_lncRNA = TRUE,
   add_cell_cycle = TRUE,
   species,
   mito_name = "percent_mito",
@@ -29,6 +30,7 @@ Add_Cell_QC_Metrics(object, ...)
   dna_repair_name = "percent_dna_repair",
   ieg_name = "percent_ieg",
   hemo_name = "percent_hemo",
+  lncRNA_name = "percent_lncRNA",
   mito_pattern = NULL,
   ribo_pattern = NULL,
   hemo_pattern = NULL,
@@ -51,7 +53,9 @@ Add_Cell_QC_Metrics(object, ...)
   add_top_pct = TRUE,
   add_MSigDB = TRUE,
   add_IEG = TRUE,
+  add_IEG_module_score = TRUE,
   add_hemo = TRUE,
+  add_lncRNA = TRUE,
   add_cell_cycle = TRUE,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
@@ -62,7 +66,9 @@ Add_Cell_QC_Metrics(object, ...)
   apop_name = "percent_apop",
   dna_repair_name = "percent_dna_repair",
   ieg_name = "percent_ieg",
+  ieg_module_name = "ieg_score",
   hemo_name = "percent_hemo",
+  lncRNA_name = "percent_lncRNA",
   mito_pattern = NULL,
   ribo_pattern = NULL,
   hemo_pattern = NULL,
@@ -96,6 +102,8 @@ object (Default is TRUE).}
 \item{add_IEG}{logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).}
 
 \item{add_hemo}{logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).}
+
+\item{add_lncRNA}{logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).}
 
 \item{add_cell_cycle}{logical, whether to addcell cycle scores and phase based on
 \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
@@ -133,6 +141,9 @@ counts.  Default is "percent_dna_repair"..}
 \item{hemo_name}{name to use for the new meta.data column containing percent hemoglobin counts.
 Default is "percent_mito".}
 
+\item{lncRNA_name}{name to use for the new meta.data column containing percent lncRNA counts.
+Default is "percent_lncRNA".}
+
 \item{mito_pattern}{A regex pattern to match features against for mitochondrial genes (will set automatically if
 species is mouse or human; marmoset features list saved separately).}
 
@@ -166,6 +177,10 @@ chicken).  Default is FALSE.}
 
 \item{overwrite}{Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 function will abort if column with name provided to \code{meta_col_name} is present in meta.data slot.}
+
+\item{add_IEG_module_score}{logical, whether to add module score belonging to IEG genes to object (Default is TRUE).}
+
+\item{ieg_module_name}{name to use for new meta data column for module score of IEGs.  Default is "ieg_score".}
 }
 \value{
 A liger Object

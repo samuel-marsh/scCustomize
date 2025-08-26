@@ -25,7 +25,7 @@
 #'
 
 Default_DimReduc_LIGER <- function(
-    liger_object
+  liger_object
 ) {
   if (length(x = liger_object@dimReds) > 0) {
     default_reduc <- liger_object@uns$defaultDimRed
@@ -59,7 +59,7 @@ Default_DimReduc_LIGER <- function(
 #'
 
 LIGER_Default_Cluster_Name <- function(
-    liger_object
+  liger_object
 ) {
   if (is.null(x = rliger::defaultCluster(x = liger_object))) {
     cli_abort(message = "No default cell identity/cluster present in object.")
@@ -87,8 +87,8 @@ LIGER_Default_Cluster_Name <- function(
 #' @param shuffle_seed Random seed for reproducibility of point shuffling (default 1).
 #' @param redorder.idents logical whether to reorder the datasets from default order before plotting (default FALSE).
 #' @param new.order new dataset factor order for plotting.  must set reorder.idents = TRUE.
-#' @param group_by meta data varibale to group plots by
-#' @param split_by meta data variable to splot plots by
+#' @param group.by meta data varibale to group plots by
+#' @param split.by meta data variable to splot plots by
 #'
 #' @return A data.frame with information for plotting
 #'
@@ -104,24 +104,25 @@ LIGER_Default_Cluster_Name <- function(
 #' @concept liger_plotting_util
 #'
 
-Generate_Plotting_df_LIGER <- function(object,
-                                       clusters = NULL,
-                                       shuffle = TRUE,
-                                       shuffle_seed = 1,
-                                       reorder.idents = FALSE,
-                                       new.order = NULL,
-                                       group_by = "dataset",
-                                       split_by = NULL
+Generate_Plotting_df_LIGER <- function(
+  object,
+  clusters = NULL,
+  shuffle = TRUE,
+  shuffle_seed = 1,
+  reorder.idents = FALSE,
+  new.order = NULL,
+  group.by = "dataset",
+  split.by = NULL
 ) {
   tsne_df <- data.frame(object@tsne.coords)
   colnames(x = tsne_df) <- c("tsne1", "tsne2")
-  tsne_df[[group_by]] <- object@cell.data[[group_by]]
-  if (!is.null(x = split_by)) {
-    tsne_df[[split_by]] <- object@cell.data[[split_by]]
+  tsne_df[[group.by]] <- object@cell.data[[group.by]]
+  if (!is.null(x = split.by)) {
+    tsne_df[[split.by]] <- object@cell.data[[split.by]]
   }
 
   if (isTRUE(x = reorder.idents)) {
-    tsne_df[[group_by]]  <- factor(x = tsne_df[[group_by]], levels = new.order)
+    tsne_df[[group.by]]  <- factor(x = tsne_df[[group.by]], levels = new.order)
   }
   c_names <- names(x = object@clusters)
   if (is.null(x = clusters)) {
@@ -134,26 +135,27 @@ Generate_Plotting_df_LIGER <- function(object,
       c_names <- names(x = object@clusters)
     }
   }
-  tsne_df[['Cluster']] <- clusters[c_names]
+  tsne_df[["Cluster"]] <- clusters[c_names]
 
   if (isTRUE(x = shuffle)) {
     set.seed(shuffle_seed)
-    idx <- sample(x = 1:nrow(tsne_df))
+    idx <- sample(x = 1:nrow(x = tsne_df))
     tsne_df <- tsne_df[idx, ]
   }
   return(tsne_df)
 }
 
 
-Generate_Plotting_df_LIGER2 <- function(object,
-                                        reduction = NULL,
-                                        clusters = NULL,
-                                        shuffle = TRUE,
-                                        shuffle_seed = 1,
-                                        reorder.idents = FALSE,
-                                        new.order = NULL,
-                                        group_by = "dataset",
-                                        split_by = NULL
+Generate_Plotting_df_LIGER2 <- function(
+  object,
+  reduction = NULL,
+  clusters = NULL,
+  shuffle = TRUE,
+  shuffle_seed = 1,
+  reorder.idents = FALSE,
+  new.order = NULL,
+  group.by = "dataset",
+  split.by = NULL
 ) {
   # Set reduction if null
   if (!is.null(x = reduction)) {
@@ -163,13 +165,13 @@ Generate_Plotting_df_LIGER2 <- function(object,
   }
 
   reduc_df <- data.frame(Embeddings(object = object, reduction = reduction))
-  reduc_df[[group_by]] <- object@cellMeta[[group_by]]
-  if (!is.null(x = split_by)) {
-    reduc_df[[split_by]] <- object@cellMeta[[split_by]]
+  reduc_df[[group.by]] <- object@cellMeta[[group.by]]
+  if (!is.null(x = split.by)) {
+    reduc_df[[split.by]] <- object@cellMeta[[split.by]]
   }
 
   if (isTRUE(x = reorder.idents)) {
-    reduc_df[[group_by]]  <- factor(x = reduc_df[[group_by]], levels = new.order)
+    reduc_df[[group.by]]  <- factor(x = reduc_df[[group.by]], levels = new.order)
   }
   cluster_col <- LIGER_Default_Cluster_Name(liger_object = object)
   if (is.null(x = clusters)) {
@@ -181,7 +183,7 @@ Generate_Plotting_df_LIGER2 <- function(object,
       clusters <- object@cellMeta[[cluster_col]]
     }
   }
-  reduc_df[['Cluster']] <- clusters
+  reduc_df[["Cluster"]] <- clusters
 
   if (isTRUE(x = shuffle)) {
     set.seed(shuffle_seed)
@@ -201,14 +203,14 @@ Generate_Plotting_df_LIGER2 <- function(object,
 #' @param colors_use colors to use for plotting by cluster.  By default if number of levels plotted is
 #' less than or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with
 #' shuffle = TRUE both from \code{\link{DiscretePalette_scCustomize}}.
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by meta data variable to split plots by (i.e. "dataset").
+#' @param split.by meta data variable to split plots by (i.e. "dataset").
 #' @param title plot title.
 #' @param pt_size Adjust point size for plotting.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store
 #' name of technique and therefore needs to be set manually.  Default is "UMAP".
-#' @param num_columns Number of columns to plot by if `split_by` is not NULL.
+#' @param num_columns Number of columns to plot by if `split.by` is not NULL.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for
 #' crowded plots if points of interest are being buried. (Default is TRUE).
 #' @param shuffle_seed Sets the seed if randomly shuffling the order of points.
@@ -216,7 +218,7 @@ Generate_Plotting_df_LIGER2 <- function(object,
 #' @param label logical.  Whether or not to label the clusters.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -252,28 +254,28 @@ Generate_Plotting_df_LIGER2 <- function(object,
 #'
 
 Plot_By_Cluster_LIGER <- function(
-    liger_object,
-    colors_use = NULL,
-    group_by = "dataset",
-    split_by = NULL,
-    title = NULL,
-    pt_size = NULL,
-    reduction_label = "UMAP",
-    num_columns = NULL,
-    shuffle = TRUE,
-    shuffle_seed = 1,
-    legend.size = 5,
-    label = TRUE,
-    label_size = NA,
-    label_repel = FALSE,
-    label_box = FALSE,
-    label_color = "black",
-    reorder.idents = FALSE,
-    new.order = NULL,
-    raster = NULL,
-    raster.dpi = c(512, 512),
-    ggplot_default_colors = FALSE,
-    color_seed = 123
+  liger_object,
+  colors_use = NULL,
+  group.by = "dataset",
+  split.by = NULL,
+  title = NULL,
+  pt_size = NULL,
+  reduction_label = "UMAP",
+  num_columns = NULL,
+  shuffle = TRUE,
+  shuffle_seed = 1,
+  legend.size = 5,
+  label = TRUE,
+  label_size = NA,
+  label_repel = FALSE,
+  label_box = FALSE,
+  label_color = "black",
+  reorder.idents = FALSE,
+  new.order = NULL,
+  raster = NULL,
+  raster.dpi = c(512, 512),
+  ggplot_default_colors = FALSE,
+  color_seed = 123
 ) {
   # Check dimreduc present
   if (length(x = liger_object@tsne.coords) == 0) {
@@ -281,32 +283,31 @@ Plot_By_Cluster_LIGER <- function(
   }
 
   # Create plotting data.frame
-  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
+  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group.by = group.by, split.by = split.by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
-  if (!is.null(x = split_by)) {
-    list_of_splits <- unique(x = tsne_df[[split_by]])
+  if (!is.null(x = split.by)) {
+    list_of_splits <- unique(x = tsne_df[[split.by]])
   }
 
   # Get length of meta data feature
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
     split.by_length <- length(x = list_of_splits)
 
     # Calculate number of rows for selected number of columns
-    num_rows <- ceiling(x = split.by_length/num_columns)
+    num_rows <- ceiling(x = split.by_length / num_columns)
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "*" = "{.field {split.by}} only contains: {.field {split.by_length}} variables.",
                             "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
       )
     }
   }
 
-  centers <- tsne_df %>% group_by(.data[['Cluster']]) %>% summarize(
-    tsne1 = median(x = .data[['tsne1']]),
-    tsne2 = median(x = .data[['tsne2']])
-  )
+  centers <- tsne_df %>%
+    group_by(.data[["Cluster"]]) %>%
+    summarize(tsne1 = median(x = .data[["tsne1"]]), tsne2 = median(x = .data[["tsne2"]]))
 
   cluster_length <- length(x = unique(x = liger_object@clusters))
 
@@ -321,9 +322,9 @@ Plot_By_Cluster_LIGER <- function(
 
   # plot
   if (isTRUE(x = raster)) {
-    if (!is.null(x = split_by)) {
-      p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
+    if (!is.null(x = split.by)) {
+      p2 <- lapply(1:length(x = list_of_splits), function(x) {
+        p2 <- ggplot(subset(tsne_df, tsne_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = .data[["Cluster"]])) +
           theme_cowplot() +
           geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -340,14 +341,14 @@ Plot_By_Cluster_LIGER <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+            mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (isTRUE(x = label)) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+            mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -355,7 +356,7 @@ Plot_By_Cluster_LIGER <- function(
         }
       })
     } else {
-      p2 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
+      p2 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = .data[["Cluster"]])) +
         theme_cowplot() +
         geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -371,14 +372,14 @@ Plot_By_Cluster_LIGER <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+          mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (isTRUE(x = label)) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+          mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -387,9 +388,9 @@ Plot_By_Cluster_LIGER <- function(
 
     }
   } else {
-    if (!is.null(x = split_by)) {
-      p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
+    if (!is.null(x = split.by)) {
+      p2 <- lapply(1:length(x = list_of_splits), function(x) {
+        p2 <- ggplot(subset(tsne_df, tsne_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = .data[["Cluster"]])) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -406,14 +407,14 @@ Plot_By_Cluster_LIGER <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+            mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (isTRUE(x = label)) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+            mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -421,7 +422,7 @@ Plot_By_Cluster_LIGER <- function(
         }
       })
     } else {
-      p2 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = .data[['Cluster']])) +
+      p2 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = .data[["Cluster"]])) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -437,14 +438,14 @@ Plot_By_Cluster_LIGER <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+          mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (isTRUE(x = label)) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+          mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -452,12 +453,12 @@ Plot_By_Cluster_LIGER <- function(
       }
     }
   }
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
-    p2 <- wrap_plots(p2) + plot_layout(nrow = num_rows, ncol = num_columns, guides = 'collect')
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
+    p2 <- wrap_plots(p2) + plot_layout(nrow = num_rows, ncol = num_columns, guides = "collect")
     return(p2)
   }
-  if (!is.null(x = split_by) && is.null(x = num_columns)) {
-    p2 <- wrap_plots(p2) + plot_layout(guides = 'collect')
+  if (!is.null(x = split.by) && is.null(x = num_columns)) {
+    p2 <- wrap_plots(p2) + plot_layout(guides = "collect")
     return(p2)
   } else {
     return(p2)
@@ -468,8 +469,8 @@ Plot_By_Cluster_LIGER <- function(
 Plot_By_Cluster_LIGER2 <- function(
     liger_object,
     colors_use = NULL,
-    group_by = "dataset",
-    split_by = NULL,
+    group.by = "dataset",
+    split.by = NULL,
     title = NULL,
     pt_size = NULL,
     reduction = NULL,
@@ -493,23 +494,23 @@ Plot_By_Cluster_LIGER2 <- function(
   reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
   # Create plotting data.frame
-  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
+  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group.by = group.by, split.by = split.by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
 
-  if (!is.null(x = split_by)) {
-    list_of_splits <- unique(x = reduc_df[[split_by]])
+  if (!is.null(x = split.by)) {
+    list_of_splits <- unique(x = reduc_df[[split.by]])
   }
 
   # Get length of meta data feature
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
     split.by_length <- length(x = list_of_splits)
 
     # Calculate number of rows for selected number of columns
-    num_rows <- ceiling(x = split.by_length/num_columns)
+    num_rows <- ceiling(x = split.by_length / num_columns)
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "*" = "{.field {split.by}} only contains: {.field {split.by_length}} variables.",
                             "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
       )
     }
@@ -520,10 +521,8 @@ Plot_By_Cluster_LIGER2 <- function(
   y_axis_label <- names(x = reduc_df)[2]
 
   centers <- reduc_df %>%
-    group_by(.data[['Cluster']]) %>%
-    summarize(dr1 = median(x = .data[[x_axis_label]]),
-              dr2 = median(x = .data[[y_axis_label]])
-    )
+    group_by(.data[["Cluster"]]) %>%
+    summarize(dr1 = median(x = .data[[x_axis_label]]), dr2 = median(x = .data[[y_axis_label]]))
 
   colnames(x = centers) <- c("Cluster", x_axis_label, y_axis_label)
 
@@ -535,9 +534,9 @@ Plot_By_Cluster_LIGER2 <- function(
 
   # plot
   if (isTRUE(x = raster)) {
-    if (!is.null(x = split_by)) {
-      p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(data = subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+    if (!is.null(x = split.by)) {
+      p2 <- lapply(1:length(x = list_of_splits), function(x) {
+        p2 <- ggplot(data = subset(reduc_df, reduc_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[["Cluster"]])) +
           theme_cowplot() +
           geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -554,14 +553,14 @@ Plot_By_Cluster_LIGER2 <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+            mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (isTRUE(x = label)) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+            mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -569,7 +568,7 @@ Plot_By_Cluster_LIGER2 <- function(
         }
       })
     } else {
-      p2 <- ggplot(data = reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+      p2 <- ggplot(data = reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[["Cluster"]])) +
         theme_cowplot() +
         geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -585,14 +584,14 @@ Plot_By_Cluster_LIGER2 <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+          mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (isTRUE(x = label)) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+          mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -600,9 +599,9 @@ Plot_By_Cluster_LIGER2 <- function(
       }
     }
   } else {
-    if (!is.null(x = split_by)) {
-      p2 <- lapply(1:length(x = list_of_splits), function(x){
-        p2 <- ggplot(data = subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+    if (!is.null(x = split.by)) {
+      p2 <- lapply(1:length(x = list_of_splits), function(x) {
+        p2 <- ggplot(data = subset(reduc_df, reduc_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[["Cluster"]])) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -619,14 +618,14 @@ Plot_By_Cluster_LIGER2 <- function(
           geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+            mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
             show.legend = FALSE, color = label_color
           ) + scale_fill_manual(values = colors_use)
         } else if (isTRUE(x = label)) {
           geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
           p2 <- p2 + geom.use(
             data = centers,
-            mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+            mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
             show.legend = FALSE
           )
         } else {
@@ -634,7 +633,7 @@ Plot_By_Cluster_LIGER2 <- function(
         }
       })
     } else {
-      p2 <- ggplot(data = reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[['Cluster']])) +
+      p2 <- ggplot(data = reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[["Cluster"]])) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -648,14 +647,14 @@ Plot_By_Cluster_LIGER2 <- function(
         geom.use <- ifelse(test = label_repel, yes = geom_label_repel, no = geom_label)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']], fill = .data[['Cluster']]), size = label_size,
+          mapping = aes(label = .data[["Cluster"]], fill = .data[["Cluster"]]), size = label_size,
           show.legend = FALSE, color = label_color
         ) + scale_fill_manual(values = colors_use)
       } else if (isTRUE(x = label)) {
         geom.use <- ifelse(test = label_repel, yes = geom_text_repel, no = geom_text)
         p2 <- p2 + geom.use(
           data = centers,
-          mapping = aes(label = .data[['Cluster']]), size = label_size, color = label_color,
+          mapping = aes(label = .data[["Cluster"]]), size = label_size, color = label_color,
           show.legend = FALSE
         )
       } else {
@@ -663,12 +662,12 @@ Plot_By_Cluster_LIGER2 <- function(
       }
     }
   }
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
-    p2 <- wrap_plots(p2) + plot_layout(nrow = num_rows, ncol = num_columns, guides = 'collect')
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
+    p2 <- wrap_plots(p2) + plot_layout(nrow = num_rows, ncol = num_columns, guides = "collect")
     return(p2)
   }
-  if (!is.null(x = split_by) && is.null(x = num_columns)) {
-    p2 <- wrap_plots(p2) + plot_layout(guides = 'collect')
+  if (!is.null(x = split.by) && is.null(x = num_columns)) {
+    p2 <- wrap_plots(p2) + plot_layout(guides = "collect")
     return(p2)
   } else {
     return(p2)
@@ -684,14 +683,14 @@ Plot_By_Cluster_LIGER2 <- function(
 #' @param colors_use colors to use for plotting by cluster.  By default if number of levels plotted is
 #' less than or equal to 36 it will use "polychrome" and if greater than 36 will use "varibow" with
 #' shuffle = TRUE both from \code{\link{DiscretePalette_scCustomize}}.
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by meta data variable to split plots by (i.e. "dataset").
+#' @param split.by meta data variable to split plots by (i.e. "dataset").
 #' @param title plot title.
 #' @param pt_size Adjust point size for plotting.
 #' @param reduction_label What to label the x and y axes of resulting plots.  LIGER does not store name
 #' of technique and therefore needs to be set manually.  Default is "UMAP".
-#' @param num_columns Number of columns to plot by if `split_by` is not NULL.
+#' @param num_columns Number of columns to plot by if `split.by` is not NULL.
 #' @param shuffle logical. Whether to randomly shuffle the order of points. This can be useful for
 #' crowded plots if points of interest are being buried. (Default is TRUE).
 #' @param shuffle_seed Sets the seed if randomly shuffling the order of points.
@@ -728,8 +727,8 @@ Plot_By_Cluster_LIGER2 <- function(
 Plot_By_Meta_LIGER <- function(
     liger_object,
     colors_use = NULL,
-    group_by = "dataset",
-    split_by = NULL,
+    group.by = "dataset",
+    split.by = NULL,
     title = NULL,
     pt_size = NULL,
     reduction_label = "UMAP",
@@ -749,29 +748,29 @@ Plot_By_Meta_LIGER <- function(
     cli_abort(message = "No dimensionality reduction coordinates found.")
   }
 
-  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
+  tsne_df <- Generate_Plotting_df_LIGER(object = liger_object, group.by = group.by, split.by = split.by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed)
 
-  if (!is.null(x = split_by)) {
-    list_of_splits <- unique(x = tsne_df[[split_by]])
+  if (!is.null(x = split.by)) {
+    list_of_splits <- unique(x = tsne_df[[split.by]])
   }
 
   # Get length of meta data feature
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
     split.by_length <- length(x = list_of_splits)
 
     # Calculate number of rows for selected number of columns
-    num_rows <- ceiling(x = split.by_length/num_columns)
+    num_rows <- ceiling(x = split.by_length / num_columns)
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "*" = "{.field {split.by}} only contains: {.field {split.by_length}} variables.",
                             "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
       )
     }
   }
 
-  meta_length <- length(x = unique(x = liger_object@cell.data[[group_by]]))
+  meta_length <- length(x = unique(x = liger_object@cell.data[[group.by]]))
 
   # set default plot colors
   if (is.null(x = colors_use)) {
@@ -782,12 +781,12 @@ Plot_By_Meta_LIGER <- function(
   x_axis_label <- paste0(reduction_label, "_1")
   y_axis_label <- paste0(reduction_label, "_2")
 
-  group_by <- sym(x = group_by)
+  group.by <- sym(x = group.by)
 
   if (isTRUE(x = raster)) {
-    if (!is.null(x = split_by)) {
-      p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
+    if (!is.null(x = split.by)) {
+      p1 <- lapply(1:length(x = list_of_splits), function(x) {
+        ggplot(subset(tsne_df, tsne_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
           theme_cowplot() +
           geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -801,7 +800,7 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
         theme_cowplot() +
         geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -815,9 +814,9 @@ Plot_By_Meta_LIGER <- function(
 
     }
   } else {
-    if (!is.null(x = split_by)) {
-      p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(tsne_df, tsne_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
+    if (!is.null(x = split.by)) {
+      p1 <- lapply(1:length(x = list_of_splits), function(x) {
+        ggplot(subset(tsne_df, tsne_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -831,7 +830,7 @@ Plot_By_Meta_LIGER <- function(
           ylab(y_axis_label)
       })
     } else {
-      p1 <- ggplot(tsne_df, aes(x = .data[['tsne1']], y = .data[['tsne2']], color = !!group_by)) +
+      p1 <- ggplot(tsne_df, aes(x = .data[["tsne1"]], y = .data[["tsne2"]], color = !!group.by)) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -844,11 +843,11 @@ Plot_By_Meta_LIGER <- function(
         ylab(y_axis_label)
     }
   }
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
     p1 <- wrap_plots(p1) + plot_layout(nrow = num_rows, ncol = num_columns)
     return(p1)
   }
-  if (!is.null(x = split_by) && is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && is.null(x = num_columns)) {
     p1 <- wrap_plots(p1)
     return(p1)
   } else {
@@ -860,8 +859,8 @@ Plot_By_Meta_LIGER <- function(
 Plot_By_Meta_LIGER2 <- function(
     liger_object,
     colors_use = NULL,
-    group_by = "dataset",
-    split_by = NULL,
+    group.by = "dataset",
+    split.by = NULL,
     title = NULL,
     pt_size = NULL,
     reduction = NULL,
@@ -879,29 +878,29 @@ Plot_By_Meta_LIGER2 <- function(
   # Set reduction
   reduction <- reduction %||% Default_DimReduc_LIGER(liger_object = liger_object)
 
-  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group_by = group_by, split_by = split_by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
+  reduc_df <- Generate_Plotting_df_LIGER2(object = liger_object, group.by = group.by, split.by = split.by, reorder.idents = reorder.idents, shuffle = shuffle, shuffle_seed = shuffle_seed, reduction = reduction)
 
-  if (!is.null(x = split_by)) {
-    list_of_splits <- unique(x = reduc_df[[split_by]])
+  if (!is.null(x = split.by)) {
+    list_of_splits <- unique(x = reduc_df[[split.by]])
   }
 
   # Get length of meta data feature
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
     split.by_length <- length(x = list_of_splits)
 
     # Calculate number of rows for selected number of columns
-    num_rows <- ceiling(x = split.by_length/num_columns)
+    num_rows <- ceiling(x = split.by_length / num_columns)
 
     # Check column and row compatibility
     if (num_columns > split.by_length) {
       cli_abort(message = c("The number of columns specified is greater than the number of meta data variables.",
-                            "*" = "{.field {split_by}} only contains: {.field {split.by_length}} variables.",
+                            "*" = "{.field {split.by}} only contains: {.field {split.by_length}} variables.",
                             "i" = "Please adjust {.code num_columns} to be less than or equal to: {.field {split.by_length}}.")
       )
     }
   }
 
-  meta_length <- length(x = unique(x = liger_object@cellMeta[[group_by]]))
+  meta_length <- length(x = unique(x = liger_object@cellMeta[[group.by]]))
 
   # set default plot colors
   if (is.null(x = colors_use)) {
@@ -912,12 +911,12 @@ Plot_By_Meta_LIGER2 <- function(
   x_axis_label <- names(x = reduc_df)[1]
   y_axis_label <- names(x = reduc_df)[2]
 
-  group_by <- sym(x = group_by)
+  group.by <- sym(x = group.by)
 
   if (isTRUE(x = raster)) {
-    if (!is.null(x = split_by)) {
-      p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+    if (!is.null(x = split.by)) {
+      p1 <- lapply(1:length(x = list_of_splits), function(x) {
+        ggplot(subset(reduc_df, reduc_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
           theme_cowplot() +
           geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -929,7 +928,7 @@ Plot_By_Meta_LIGER2 <- function(
           guides(col = guide_legend(title = "", override.aes = list(size = 4)))
       })
     } else {
-      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
         theme_cowplot() +
         geom_scattermore(pointsize = pt_size, pixels = raster.dpi) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -941,9 +940,9 @@ Plot_By_Meta_LIGER2 <- function(
 
     }
   } else {
-    if (!is.null(x = split_by)) {
-      p1 <- lapply(1:length(x = list_of_splits), function(x){
-        ggplot(subset(reduc_df, reduc_df[[split_by]] %in% list_of_splits[x]),aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+    if (!is.null(x = split.by)) {
+      p1 <- lapply(1:length(x = list_of_splits), function(x) {
+        ggplot(subset(reduc_df, reduc_df[[split.by]] %in% list_of_splits[x]), aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
           theme_cowplot() +
           geom_point(size = pt_size) +
           guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -955,7 +954,7 @@ Plot_By_Meta_LIGER2 <- function(
           guides(col = guide_legend(title = "", override.aes = list(size = 4)))
       })
     } else {
-      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group_by)) +
+      p1 <- ggplot(reduc_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = !!group.by)) +
         theme_cowplot() +
         geom_point(size = pt_size) +
         guides(color = guide_legend(override.aes = list(size = legend.size))) +
@@ -966,11 +965,11 @@ Plot_By_Meta_LIGER2 <- function(
         guides(col = guide_legend(title = "", override.aes = list(size = 4)))
     }
   }
-  if (!is.null(x = split_by) && !is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && !is.null(x = num_columns)) {
     p1 <- wrap_plots(p1) + plot_layout(nrow = num_rows, ncol = num_columns)
     return(p1)
   }
-  if (!is.null(x = split_by) && is.null(x = num_columns)) {
+  if (!is.null(x = split.by) && is.null(x = num_columns)) {
     p1 <- wrap_plots(p1)
     return(p1)
   } else {
@@ -992,8 +991,6 @@ Plot_By_Meta_LIGER2 <- function(
 #' @param pt.size_factors Adjust point size for plotting in the factor plots.
 #' @param pt.size_dimreduc Adjust point size for plotting in dimensionality reduction plots.
 #' @param reduction Name of dimensionality reduction to use for plotting.
-#' @param reduction_label `r lifecycle::badge("deprecated")` deprecated for newer style liger
-#' objects.  Use `reduction` instead.
 #' @param plot_legend logical, whether to plot the legend on factor loading plots, default is TRUE.
 #' Helpful if number of datasets is large to avoid crowding the plot with legend.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
@@ -1008,7 +1005,6 @@ Plot_By_Meta_LIGER2 <- function(
 #' @param file_name name suffix to append after sample name.
 #' @param return_plots logical. Whether or not to return plots to the environment.  (Default is FALSE)
 #' @param cells.highlight Names of specific cells to highlight in plot (black) (default NULL).
-#' @param reorder_datasets `r lifecycle::badge("deprecated")` deprecated for newer style liger objects
 #' @param ggplot_default_colors logical.  If `colors_use_factors = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "varibow" palette.
 #' @param color_seed random seed for the palette shuffle if `colors_use_factors = NULL`.  Default = 123.
@@ -1018,7 +1014,6 @@ Plot_By_Meta_LIGER2 <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
-#' @importFrom lifecycle deprecated
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #'
@@ -1040,11 +1035,10 @@ plotFactors_liger2_scCustom <- function(
     liger_object,
     num_genes = 8,
     colors_use_factors = NULL,
-    colors_use_dimreduc = c('lemonchiffon', 'red'),
+    colors_use_dimreduc = c("lemonchiffon", "red"),
     pt.size_factors = 1,
     pt.size_dimreduc = 1,
     reduction = "UMAP",
-    reduction_label = deprecated(),
     plot_legend = TRUE,
     raster = TRUE,
     raster.dpi = c(512, 512),
@@ -1055,27 +1049,9 @@ plotFactors_liger2_scCustom <- function(
     file_name = NULL,
     return_plots = FALSE,
     cells.highlight = NULL,
-    reorder_datasets = deprecated(),
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
-  # Check is slot is supplied
-  if (lifecycle::is_present(reorder_datasets)) {
-    lifecycle::deprecate_warn(when = "2.2.0",
-                              what = "plotFactors_scCustom(reorder_datasets)",
-                              details = c("i" = "The {.code reorder_datasets} parameter is deprecated for newer style Liger objects.")
-    )
-  }
-
-  # Check is slot is supplied
-  if (lifecycle::is_present(reduction_label)) {
-    lifecycle::deprecate_warn(when = "2.2.0",
-                              what = "plotFactors_scCustom(reduction_label)",
-                              details = c("v" = "The {.code reduction_label} parameter is deprecated for newer style Liger objects.",
-                                          "i" = "Use {.code reduction} parameter instead")
-    )
-  }
-
   # if returning and saving
   if (isTRUE(x = save_plots)) {
     # Check file path is valid
@@ -1158,9 +1134,9 @@ plotFactors_liger2_scCustom <- function(
     if (isTRUE(x = raster)) {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
-        labs(x = 'Cell', y = 'Raw H Score') +
+        labs(x = "Cell", y = "Raw H Score") +
         ggtitle(plot_title1) +
-        theme(legend.position = 'none') +
+        theme(legend.position = "none") +
         scale_color_manual(values = colors_use_factors)
 
       if (isFALSE(x = plot_legend)) {
@@ -1169,8 +1145,8 @@ plotFactors_liger2_scCustom <- function(
 
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
-        labs(x = 'Cell', y = 'H_norm Score') +
-        theme(legend.position = 'top',
+        labs(x = "Cell", y = "H_norm Score") +
+        theme(legend.position = "top",
               legend.title = element_blank()) +
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
@@ -1182,9 +1158,9 @@ plotFactors_liger2_scCustom <- function(
     } else {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
-        labs(x = 'Cell', y = 'Raw H Score') +
+        labs(x = "Cell", y = "Raw H Score") +
         ggtitle(plot_title1) +
-        theme(legend.position = 'none') +
+        theme(legend.position = "none") +
         scale_color_manual(values = colors_use_factors)
 
       if (isFALSE(x = plot_legend)) {
@@ -1193,8 +1169,8 @@ plotFactors_liger2_scCustom <- function(
 
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
-        labs(x = 'Cell', y = 'H_norm Score') +
-        theme(legend.position = 'top',
+        labs(x = "Cell", y = "H_norm Score") +
+        theme(legend.position = "top",
               legend.title = element_blank()) +
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
@@ -1206,7 +1182,7 @@ plotFactors_liger2_scCustom <- function(
     }
 
     if (!is.null(cells.highlight)) {
-      h_df[cells.highlight, 'highlight'] = TRUE
+      h_df[cells.highlight, "highlight"] = TRUE
       if (isTRUE(x = raster)) {
         top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                       aes(.data[["x"]], .data[["h_raw"]]),
@@ -1245,8 +1221,8 @@ plotFactors_liger2_scCustom <- function(
       if (isTRUE(x = raster)) {
         p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
           geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
-          ggtitle(label = paste('Factor', i)) +
-          theme(legend.position = 'none') +
+          ggtitle(label = paste("Factor", i)) +
+          theme(legend.position = "none") +
           xlab(x_axis_label) +
           ylab(y_axis_label) +
           if (length(x = colors_use_dimreduc) == 2) {
@@ -1257,8 +1233,8 @@ plotFactors_liger2_scCustom <- function(
       } else {
         p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
           geom_point(size = pt.size_dimreduc) +
-          ggtitle(label = paste('Factor', i)) +
-          theme(legend.position = 'none') +
+          ggtitle(label = paste("Factor", i)) +
+          theme(legend.position = "none") +
           xlab(x_axis_label) +
           ylab(y_axis_label) +
           if (length(x = colors_use_dimreduc) == 2) {
@@ -1450,7 +1426,7 @@ plotFactors_liger_scCustom <- function(
   }
 
   # Add one time dim label warning
-  if (getOption(x = 'scCustomize_warn_LIGER_dim_labels_plotFactors', default = TRUE)) {
+  if (getOption(x = "scCustomize_warn_LIGER_dim_labels_plotFactors", default = TRUE)) {
     cli_inform(message = c("",
                            "NOTE: {.field plotFactors_scCustom} uses the {.code reduction_label} parameter to set axis labels",
                            "on the dimensionality reduction plots.",
@@ -1483,9 +1459,9 @@ plotFactors_liger_scCustom <- function(
     if (isTRUE(x = raster)) {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
-        labs(x = 'Cell', y = 'Raw H Score') +
+        labs(x = "Cell", y = "Raw H Score") +
         ggtitle(plot_title1) +
-        theme(legend.position = 'none') +
+        theme(legend.position = "none") +
         scale_color_manual(values = colors_use_factors)
 
       if (isFALSE(x = plot_legend)) {
@@ -1494,8 +1470,8 @@ plotFactors_liger_scCustom <- function(
 
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_scattermore(pointsize = pt.size_factors, pixels = raster.dpi) +
-        labs(x = 'Cell', y = 'H_norm Score') +
-        theme(legend.position = 'top',
+        labs(x = "Cell", y = "H_norm Score") +
+        theme(legend.position = "top",
               legend.title = element_blank()) +
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
@@ -1507,9 +1483,9 @@ plotFactors_liger_scCustom <- function(
     } else {
       top <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_raw"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
-        labs(x = 'Cell', y = 'Raw H Score') +
+        labs(x = "Cell", y = "Raw H Score") +
         ggtitle(plot_title1) +
-        theme(legend.position = 'none') +
+        theme(legend.position = "none") +
         scale_color_manual(values = colors_use_factors)
 
       if (isFALSE(x = plot_legend)) {
@@ -1518,8 +1494,8 @@ plotFactors_liger_scCustom <- function(
 
       bottom <- ggplot(h_df, aes(x = .data[["x"]], y=.data[["h_norm"]], col = .data[["dataset"]])) +
         geom_point(size = pt.size_factors) +
-        labs(x = 'Cell', y = 'H_norm Score') +
-        theme(legend.position = 'top',
+        labs(x = "Cell", y = "H_norm Score") +
+        theme(legend.position = "top",
               legend.title = element_blank()) +
         guides(colour = guide_legend(override.aes = list(size = 2))) +
         scale_color_manual(values = colors_use_factors)
@@ -1531,7 +1507,7 @@ plotFactors_liger_scCustom <- function(
     }
 
     if (!is.null(cells.highlight)) {
-      h_df[cells.highlight, 'highlight'] = TRUE
+      h_df[cells.highlight, "highlight"] = TRUE
       if (isTRUE(x = raster)) {
         top <- top + geom_scattermore(data = subset(h_df, .data[["highlight"]] == TRUE),
                                       aes(.data[["x"]], .data[["h_raw"]]),
@@ -1570,8 +1546,8 @@ plotFactors_liger_scCustom <- function(
       if (isTRUE(x = raster)) {
         p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
           geom_scattermore(pointsize = pt.size_dimreduc, pixels = raster.dpi) +
-          ggtitle(label = paste('Factor', i)) +
-          theme(legend.position = 'none') +
+          ggtitle(label = paste("Factor", i)) +
+          theme(legend.position = "none") +
           xlab(x_axis_label) +
           ylab(y_axis_label) +
           if (length(x = colors_use_dimreduc) == 2) {
@@ -1582,8 +1558,8 @@ plotFactors_liger_scCustom <- function(
       } else {
         p1 <- ggplot(tsne_df, aes(x = .data[[x_axis_label]], y = .data[[y_axis_label]], color = .data[[factorlab]])) +
           geom_point(size = pt.size_dimreduc) +
-          ggtitle(label = paste('Factor', i)) +
-          theme(legend.position = 'none') +
+          ggtitle(label = paste("Factor", i)) +
+          theme(legend.position = "none") +
           xlab(x_axis_label) +
           ylab(y_axis_label) +
           if (length(x = colors_use_dimreduc) == 2) {
@@ -1630,9 +1606,9 @@ plotFactors_liger_scCustom <- function(
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by Variable to split plots by.
+#' @param split.by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
 #' less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from \code{\link{DiscretePalette_scCustomize}}.
@@ -1650,7 +1626,7 @@ plotFactors_liger_scCustom <- function(
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -1683,8 +1659,8 @@ plotFactors_liger_scCustom <- function(
 
 LIGER_DimPlot <- function(
     liger_object,
-    group_by = NULL,
-    split_by = NULL,
+    group.by = NULL,
+    split.by = NULL,
     colors_use_cluster = NULL,
     colors_use_meta = NULL,
     pt_size = NULL,
@@ -1707,32 +1683,32 @@ LIGER_DimPlot <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Set group_by defaults
-  if (isFALSE(x = combination) && is.null(x = group_by)) {
-    group_by <- "cluster"
+  # Set group.by defaults
+  if (isFALSE(x = combination) && is.null(x = group.by)) {
+    group.by <- "cluster"
   }
 
-  if (isTRUE(x = combination) && is.null(x = group_by)) {
-    group_by <- "dataset"
+  if (isTRUE(x = combination) && is.null(x = group.by)) {
+    group.by <- "dataset"
   }
 
   # Group by cluster options
   cluster_options <- c("cluster", "Cluster", "clusters", "Clusters")
-  if (group_by %in% cluster_options) {
-    group_by <- "cluster"
+  if (group.by %in% cluster_options) {
+    group.by <- "cluster"
   }
 
-  # Check group_by parameter
-  if (!group_by == "cluster")
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  # Check group.by parameter
+  if (!group.by == "cluster")
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-  if (!is.null(x = split_by)) {
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  if (!is.null(x = split.by)) {
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
-  if (packageVersion(pkg = 'rliger') < "2.0.0") {
+  if (packageVersion(pkg = "rliger") < "2.0.0") {
     # Add one time dim label warning
-    if (getOption(x = 'scCustomize_warn_LIGER_dim_labels', default = TRUE)) {
+    if (getOption(x = "scCustomize_warn_LIGER_dim_labels", default = TRUE)) {
       cli_inform(message = c("",
                              "NOTE: {.field DimPlot_LIGER} uses the {.code reduction_label} parameter to set axis labels ",
                              "on the plot.",
@@ -1751,7 +1727,7 @@ LIGER_DimPlot <- function(
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = cells_total) > 2e5)
 
-  if (isTRUE(x = raster) && (length(x = cells_total) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
+  if (isTRUE(x = raster) && (length(x = cells_total) > 2e5) && getOption(x = "scCustomize_warn_raster_LIGER", default = TRUE)) {
     cli_inform(message = c("",
                            "Rasterizing points since number of points exceeds 200,000.",
                            "To disable this behavior set {.code raster = FALSE}",
@@ -1770,7 +1746,7 @@ LIGER_DimPlot <- function(
   if (isTRUE(x = combination)) {
     p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
-                                split_by = split_by,
+                                split.by = split.by,
                                 pt_size = pt_size,
                                 reduction_label = reduction_label,
                                 shuffle = shuffle,
@@ -1788,7 +1764,7 @@ LIGER_DimPlot <- function(
 
     p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction_label = reduction_label,
                              num_columns = num_columns,
@@ -1796,7 +1772,7 @@ LIGER_DimPlot <- function(
                              raster = raster,
                              raster.dpi = raster.dpi,
                              ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
+                             split.by = split.by,
                              color_seed = color_seed,
                              shuffle_seed = shuffle_seed)
 
@@ -1814,10 +1790,10 @@ LIGER_DimPlot <- function(
   }
 
   # Plot by cluster
-  if (group_by == "cluster") {
+  if (group.by == "cluster") {
     p1 <- Plot_By_Cluster_LIGER(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
-                                split_by = split_by,
+                                split.by = split.by,
                                 pt_size = pt_size,
                                 reduction_label = reduction_label,
                                 shuffle = shuffle,
@@ -1844,10 +1820,10 @@ LIGER_DimPlot <- function(
   }
 
   # Plot by Meta
-  if (group_by != "cluster") {
+  if (group.by != "cluster") {
     p2 <- Plot_By_Meta_LIGER(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction_label = reduction_label,
                              num_columns = num_columns,
@@ -1855,7 +1831,7 @@ LIGER_DimPlot <- function(
                              raster = raster,
                              raster.dpi = raster.dpi,
                              ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
+                             split.by = split.by,
                              shuffle_seed = shuffle_seed,
                              color_seed = color_seed)
     # Aspect ratio changes
@@ -1877,9 +1853,9 @@ LIGER_DimPlot <- function(
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by Variable to split plots by.
+#' @param split.by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
 #' less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from \code{\link{DiscretePalette_scCustomize}}.
@@ -1897,7 +1873,7 @@ LIGER_DimPlot <- function(
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -1930,8 +1906,8 @@ LIGER_DimPlot <- function(
 
 LIGER2_DimPlot <- function(
     liger_object,
-    group_by = NULL,
-    split_by = NULL,
+    group.by = NULL,
+    split.by = NULL,
     colors_use_cluster = NULL,
     colors_use_meta = NULL,
     pt_size = NULL,
@@ -1954,27 +1930,27 @@ LIGER2_DimPlot <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Set group_by defaults
-  if (isFALSE(x = combination) && is.null(x = group_by)) {
-    group_by <- "cluster"
+  # Set group.by defaults
+  if (isFALSE(x = combination) && is.null(x = group.by)) {
+    group.by <- "cluster"
   }
 
-  if (isTRUE(x = combination) && is.null(x = group_by)) {
-    group_by <- "dataset"
+  if (isTRUE(x = combination) && is.null(x = group.by)) {
+    group.by <- "dataset"
   }
 
   # Group by cluster options
   cluster_options <- c("cluster", "Cluster", "clusters", "Clusters")
-  if (group_by %in% cluster_options) {
-    group_by <- "cluster"
+  if (group.by %in% cluster_options) {
+    group.by <- "cluster"
   }
 
-  # Check group_by parameter
-  if (!group_by == "cluster")
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  # Check group.by parameter
+  if (!group.by == "cluster")
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-  if (!is.null(x = split_by)) {
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  if (!is.null(x = split.by)) {
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   # cells in object
@@ -1983,7 +1959,7 @@ LIGER2_DimPlot <- function(
   # Add raster check for scCustomize
   raster <- raster %||% (length(x = cells_total) > 2e5)
 
-  if (isTRUE(x = raster) && (length(x = cells_total) > 2e5) && getOption(x = 'scCustomize_warn_raster_LIGER', default = TRUE)) {
+  if (isTRUE(x = raster) && (length(x = cells_total) > 2e5) && getOption(x = "scCustomize_warn_raster_LIGER", default = TRUE)) {
     cli_inform(message = c("",
                            "Rasterizing points since number of points exceeds 200,000.",
                            "To disable this behavior set {.code raster = FALSE}",
@@ -2002,7 +1978,7 @@ LIGER2_DimPlot <- function(
   if (isTRUE(x = combination)) {
     p1 <- Plot_By_Cluster_LIGER2(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
-                                split_by = split_by,
+                                split.by = split.by,
                                 pt_size = pt_size,
                                 reduction = reduction,
                                 shuffle = shuffle,
@@ -2020,7 +1996,7 @@ LIGER2_DimPlot <- function(
 
     p2 <- Plot_By_Meta_LIGER2(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction = reduction,
                              num_columns = num_columns,
@@ -2028,7 +2004,7 @@ LIGER2_DimPlot <- function(
                              raster = raster,
                              raster.dpi = raster.dpi,
                              ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
+                             split.by = split.by,
                              color_seed = color_seed,
                              shuffle_seed = shuffle_seed)
 
@@ -2046,10 +2022,10 @@ LIGER2_DimPlot <- function(
   }
 
   # Plot by cluster
-  if (group_by == "cluster") {
+  if (group.by == "cluster") {
     p1 <- Plot_By_Cluster_LIGER2(liger_object = liger_object,
                                 colors_use = colors_use_cluster,
-                                split_by = split_by,
+                                split.by = split.by,
                                 pt_size = pt_size,
                                 reduction = reduction,
                                 shuffle = shuffle,
@@ -2076,10 +2052,10 @@ LIGER2_DimPlot <- function(
   }
 
   # Plot by Meta
-  if (group_by != "cluster") {
+  if (group.by != "cluster") {
     p2 <- Plot_By_Meta_LIGER2(liger_object = liger_object,
                              colors_use = colors_use_meta,
-                             group_by = group_by,
+                             group.by = group.by,
                              pt_size = pt_size,
                              reduction = reduction,
                              num_columns = num_columns,
@@ -2087,7 +2063,7 @@ LIGER2_DimPlot <- function(
                              raster = raster,
                              raster.dpi = raster.dpi,
                              ggplot_default_colors = ggplot_default_colors,
-                             split_by = split_by,
+                             split.by = split.by,
                              shuffle_seed = shuffle_seed,
                              color_seed = color_seed)
     # Aspect ratio changes
@@ -2201,32 +2177,32 @@ Add_MSigDB_LIGER <- function(
 
   # Add meta data columns
   if (oxphos_found > 0) {
-    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    if (packageVersion(pkg = "rliger") > "1.0.1") {
       object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(oxphos_name = oxphos_found), verbose = FALSE)
     } else {
       percent_oxphos <- unlist(lapply(object@raw.data, function(x) {
-        (Matrix::colSums(x[oxphos_found, ])/Matrix::colSums(x))*100}))
+        (Matrix::colSums(x[oxphos_found, ]) / Matrix::colSums(x))*100}))
       object@cell.data[ , oxphos_name] <- percent_oxphos
     }
   }
 
   if (apop_found > 0) {
-    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    if (packageVersion(pkg = "rliger") > "1.0.1") {
       object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(apop_name = apop_found), verbose = FALSE)
     } else {
       percent_apop <- unlist(lapply(object@raw.data, function(x) {
-        (Matrix::colSums(x[apop_found, ])/Matrix::colSums(x))*100}))
+        (Matrix::colSums(x[apop_found, ]) / Matrix::colSums(x))*100}))
       object@cell.data[ , apop_name] <- percent_apop
     }
   }
 
   if (dna_repair_found > 0) {
-    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    if (packageVersion(pkg = "rliger") > "1.0.1") {
       object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(dna_repair_name = dna_repair_found), verbose = FALSE)
     } else {
       percent_dna_repair <- unlist(lapply(object@raw.data, function(x) {
-        (Matrix::colSums(x[dna_repair_found, ])/Matrix::colSums(x))*100}))
-      object@cell.data[ , dna_repair_name] <- percent_dna_repair
+        (Matrix::colSums(x[dna_repair_found, ]) / Matrix::colSums(x))*100}))
+      object@cell.data[, dna_repair_name] <- percent_dna_repair
     }
   }
 
@@ -2309,12 +2285,100 @@ Add_IEG_LIGER <- function(
 
   # Add ieg column
   if (length(x = ieg_found) > 0) {
-    if (packageVersion(pkg = 'rliger') > "1.0.1") {
+    if (packageVersion(pkg = "rliger") > "1.0.1") {
       object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(ieg_name = ieg_found), verbose = FALSE)
     } else {
       percent_ieg <- unlist(lapply(object@raw.data, function(x) {
-        (Matrix::colSums(x[ieg_found, ])/Matrix::colSums(x))*100}))
-      object@cell.data[ , ieg_name] <- percent_ieg
+        (Matrix::colSums(x[ieg_found, ]) / Matrix::colSums(x))*100}))
+      object@cell.data[, ieg_name] <- percent_ieg
+    }
+  }
+
+  # return final object
+  return(liger_object)
+}
+
+
+#' Add lncRNA Gene List Percentages
+#'
+#' Adds percentage of counts from lncRNA genes.
+#'
+#' @param liger_object object name.
+#' @param species Species of origin for given Seurat Object.
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA gene counts. Default is "percent_lncRNA".
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param overwrite Logical.  Whether to overwrite existing meta data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `lncRNA_name` is present in meta data slot.
+#'
+#' @return liger object
+#'
+#' @import cli
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+
+Add_lncRNA_LIGER <- function(
+    liger_object,
+    species,
+    lncRNA_name = "percent_lncRNA",
+    ensembl_ids = FALSE,
+    overwrite = FALSE
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "Gg")
+  )
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  # Check Seurat
+  Is_LIGER(liger_object = liger_object)
+
+  # Overwrite check
+  meta_names <- colnames(x = Fetch_Meta(object = liger_object))
+
+  if (lncRNA_name %in% meta_names) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {lncRNA_name}} already present in meta data.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code lncRNA_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {lncRNA_name}} already present in meta data.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    lncRNA_gene_list <- Retrieve_lncRNA(species = species)
+  } else {
+    lncRNA_gene_list <- Retrieve_Ensembl_lncRNA(species = species)
+  }
+
+  all_features <- Features(x = liger_object, by_dataset = FALSE)
+
+  lncRNA_found <- intersect(x = lncRNA_gene_list, y = all_features)
+
+  # Add ieg column
+  if (length(x = lncRNA_found) > 0) {
+    if (packageVersion(pkg = "rliger") > "1.0.1") {
+      object <- rliger::runGeneralQC(object = object, mito = FALSE, ribo = FALSE, hemo = FALSE, features = list(lncRNA_name = lncRNA_found), verbose = FALSE)
+    } else {
+      percent_lncRNA <- unlist(lapply(object@raw.data, function(x) {
+        (Matrix::colSums(x[lncRNA_found, ]) / Matrix::colSums(x))*100}))
+      object@cell.data[, lncRNA_name] <- percent_lncRNA
     }
   }
 

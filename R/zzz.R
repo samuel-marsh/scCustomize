@@ -26,7 +26,10 @@
 #'    and therefore needs to be set manually.}
 #' }
 #'
-#' @importFrom lifecycle deprecated
+#' @import cli
+#' @importFrom lifecycle deprecated deprecate_soft deprecate_stop
+#' deprecate_warn is_present
+#' @importFrom rlang check_installed is_installed
 #'
 #' @keywords internal
 #' @docType package

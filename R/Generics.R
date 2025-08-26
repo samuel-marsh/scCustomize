@@ -2,6 +2,12 @@
 #################### GENERICS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### OBJECT CONVERSION ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 #' Convert objects to LIGER objects
 #'
 #' Convert objects (Seurat & lists of Seurat Objects) to anndata objects
@@ -16,7 +22,7 @@
 #'
 
 as.LIGER <- function(x, ...) {
-  UseMethod(generic = 'as.LIGER', object = x)
+  UseMethod(generic = "as.LIGER", object = x)
 }
 
 
@@ -34,8 +40,13 @@ as.LIGER <- function(x, ...) {
 #'
 
 as.anndata <- function(x, ...) {
-  UseMethod(generic = 'as.anndata', object = x)
+  UseMethod(generic = "as.anndata", object = x)
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### QC UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Add Mito and Ribo percentages
@@ -53,7 +64,7 @@ as.anndata <- function(x, ...) {
 #'
 
 Add_Mito_Ribo <- function(object, ...) {
-  UseMethod(generic = 'Add_Mito_Ribo', object = object)
+  UseMethod(generic = "Add_Mito_Ribo", object = object)
 }
 
 
@@ -72,7 +83,7 @@ Add_Mito_Ribo <- function(object, ...) {
 #'
 
 Add_Hemo <- function(object, ...) {
-  UseMethod(generic = 'Add_Hemo', object = object)
+  UseMethod(generic = "Add_Hemo", object = object)
 }
 
 
@@ -90,7 +101,7 @@ Add_Hemo <- function(object, ...) {
 #'
 
 Add_Cell_Complexity <- function(object, ...) {
-  UseMethod(generic = 'Add_Cell_Complexity', object = object)
+  UseMethod(generic = "Add_Cell_Complexity", object = object)
 }
 
 
@@ -106,7 +117,26 @@ Add_Cell_Complexity <- function(object, ...) {
 #'
 
 Add_Top_Gene_Pct <- function(object, ...) {
-  UseMethod(generic = 'Add_Top_Gene_Pct', object = object)
+  UseMethod(generic = "Add_Top_Gene_Pct", object = object)
+}
+
+
+#' Add MALAT1 QC Threshold
+#'
+#' Adds TRUE/FALSE values to each cell based on calculation of MALAT1 threshold.
+#' This function incorporates a threshold calculation and procedure as described in
+#' Clarke & Bader (2024). bioRxiv \doi{10.1101/2024.07.14.603469}.  Please cite this preprint
+#' whenever using this function.
+#'
+#' @param object Seurat or LIGER object
+#' @param ... Arguments passed to other methods
+#'
+#' @rdname Add_MALAT1_Threshold
+#' @export Add_MALAT1_Threshold
+#'
+
+Add_MALAT1_Threshold <- function(object, ...) {
+  UseMethod(generic = "Add_MALAT1_Threshold", object = object)
 }
 
 
@@ -123,8 +153,13 @@ Add_Top_Gene_Pct <- function(object, ...) {
 #'
 
 Add_Cell_QC_Metrics <- function(object, ...) {
-  UseMethod(generic = 'Add_Cell_QC_Metrics', object = object)
+  UseMethod(generic = "Add_Cell_QC_Metrics", object = object)
 }
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### GENERAL UTILITIES ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 #' Get meta data from object
@@ -149,7 +184,7 @@ Add_Cell_QC_Metrics <- function(object, ...) {
 #'
 
 Fetch_Meta <- function(object, ...) {
-  UseMethod(generic = 'Fetch_Meta', object = object)
+  UseMethod(generic = "Fetch_Meta", object = object)
 }
 
 
@@ -170,5 +205,28 @@ Fetch_Meta <- function(object, ...) {
 #'
 
 Rename_Clusters <- function(object, ...) {
-  UseMethod(generic = 'Rename_Clusters', object = object)
+  UseMethod(generic = "Rename_Clusters", object = object)
+}
+
+
+#' Extract top loading genes for LIGER factor
+#'
+#' Extract vector to the top loading genes for specified LIGER iNMF factor
+#'
+#' @param object object name.
+#' @param factor factor number to pull genes from. Set to "all" to return top loading
+#' genes from all factors
+#' @param num_genes number of top loading genes to return as vector, default is 10.
+#' @param ... Arguments passed to other methods
+#'
+#' @return vector of top genes for given factor or data.frame containing top genes
+#' across all factors
+#'
+#' @export
+#'
+#' @rdname Top_Genes_Factor
+#'
+
+Top_Genes_Factor <- function(object, factor = NULL, num_genes = 10, ...) {
+  UseMethod(generic = "Top_Genes_Factor", object = object)
 }

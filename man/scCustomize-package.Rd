@@ -49,13 +49,14 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Samuel Marsh \email{samuel.marsh@childrens.harvard.edu} (\href{https://orcid.org/0000-0002-3012-6945}{ORCID})
+\strong{Maintainer}: Samuel Marsh \email{sccustomize@gmail.com} (\href{https://orcid.org/0000-0002-3012-6945}{ORCID})
 
 Other contributors:
 \itemize{
   \item Ming Tang \email{tangming2005@gmail.com} [contributor]
   \item Velina Kozareva [contributor]
   \item Lucas Graybuck \email{lucasg@alleninstitute.org} [contributor]
+  \item Zoe Clarke \email{zoe.clarke@utoronto.ca} (\href{https://orcid.org/0000-0003-0336-8049}{ORCID}) [contributor]
 }
 
 }

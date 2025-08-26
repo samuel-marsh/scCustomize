@@ -8,10 +8,11 @@ Proportion_Plot(
   seurat_object,
   plot_type = "bar",
   plot_scale = "percent",
-  group_by_var = "ident",
+  group_by_var = deprecated(),
+  group.by = "ident",
   split.by = NULL,
   num_columns = NULL,
-  x_lab_rotate = FALSE,
+  x_lab_rotate = TRUE,
   colors_use = NULL,
   ggplot_default_colors = FALSE,
   color_seed = 123
@@ -26,7 +27,9 @@ is \code{"bar"}}
 \item{plot_scale}{whether to plot bar chart as total cell counts or percents, value must be one of \code{"percent"} or
 \code{"count"}. Default is \code{"percent"}.}
 
-\item{group_by_var}{meta data column to classify samples (default = "ident" and will use \code{active.ident}.}
+\item{group_by_var}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{meta data column to classify samples (default = "ident" and will use \code{active.ident}).}
 
 \item{split.by}{meta data variable to use to split plots.  Default is NULL which will plot across entire object.}
 

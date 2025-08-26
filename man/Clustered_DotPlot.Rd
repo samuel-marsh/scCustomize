@@ -7,6 +7,7 @@
 Clustered_DotPlot(
   seurat_object,
   features,
+  label_selected_features = NULL,
   split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
@@ -44,6 +45,7 @@ Clustered_DotPlot(
   group.by = NULL,
   idents = NULL,
   show_parent_dend_line = TRUE,
+  nan_error = FALSE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   seed = 123
@@ -53,6 +55,8 @@ Clustered_DotPlot(
 \item{seurat_object}{Seurat object name.}
 
 \item{features}{Features to plot.}
+
+\item{label_selected_features}{a subset of \code{features} to only label some of the plotted features.}
 
 \item{split.by}{Variable in \verb{@meta.data} to split the identities plotted by.}
 
@@ -154,6 +158,10 @@ will be set dependent on length of feature list up to \code{elbow_kmax = 20}.}
 \item{show_parent_dend_line}{Logical, Sets parameter of same name in \code{ComplexHeatmap::Heatmap()}.
 From \code{ComplexHeatmap::Heatmap()}: When heatmap is split, whether to add a dashed line to mark parent
 dendrogram and children dendrograms.  Default is TRUE.}
+
+\item{nan_error}{logical, default is FALSE.  \emph{ONLY} set this value to true if you get error related to
+NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+number of features being plotted.}
 
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}

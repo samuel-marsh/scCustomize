@@ -4,9 +4,10 @@
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -32,13 +33,14 @@
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
 #' # Plot
-#' Plot_Median_Genes(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
+#' Plot_Median_Genes(seurat_object = pbmc_small, sample_col = "orig.ident",  group.by = "sample_id")
 #'
 
 Plot_Median_Genes <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = "Median Genes/Cell per Sample",
@@ -51,30 +53,47 @@ Plot_Median_Genes <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Plot_Median_Genes(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
+
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
+
   # add to meta if grouping by ident
-  if (!is.null(x = group_by) && group_by == "ident") {
+  if (!is.null(x = group.by) && group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
     }
   }
 
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
+  }
+
   # Check group by is valid
-  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
-  medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = "nFeature_RNA", default_var = FALSE) %>%
+  medians <- Median_Stats(seurat_object = seurat_object, group.by = sample_col, median_var = "nFeature_RNA", default_var = FALSE) %>%
     slice(-n()) %>%
     droplevels()
 
   meta <- Fetch_Meta(object = seurat_object)
 
-  if (!is.null(x = group_by)) {
+  if (!is.null(x = group.by)) {
     meta <- meta %>%
-      select(any_of(c(sample_col, group_by)))
+      select(any_of(c(sample_col, group.by)))
   } else {
     meta <- meta %>%
       select(any_of(sample_col))
@@ -84,15 +103,15 @@ Plot_Median_Genes <- function(
 
   meta <- data.frame(meta[!duplicated(x = meta[,sample_col]),])
 
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
 
   # Check colors_use
-  if (!is.null(x = group_by)) {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group_by]]))
+  if (!is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
     if (is.null(x = colors_use)) {
       if (group_by_length <= 8) {
         colors_use <- Dark2_Pal()
@@ -105,7 +124,7 @@ Plot_Median_Genes <- function(
   }
 
   # Generate base plot
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     merged$samples_plotting <- "Samples"
 
     plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_nFeature_RNA"]])) +
@@ -116,7 +135,7 @@ Plot_Median_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nFeature_RNA"]], fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Median_nFeature_RNA"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
@@ -150,9 +169,10 @@ Plot_Median_Genes <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -178,13 +198,14 @@ Plot_Median_Genes <- function(
 #' pbmc_small$sample_id <- sample(c("sample1", "sample2"), size = ncol(pbmc_small), replace = TRUE)
 #'
 #' # Plot
-#' Plot_Median_UMIs(seurat_object = pbmc_small, sample_col = "orig.ident",  group_by = "sample_id")
+#' Plot_Median_UMIs(seurat_object = pbmc_small, sample_col = "orig.ident",  group.by = "sample_id")
 #'
 
 Plot_Median_UMIs <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = "Median UMIs/Cell per Sample",
@@ -197,30 +218,47 @@ Plot_Median_UMIs <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Plot_Median_UMIs(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
+
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
+
   # add to meta if grouping by ident
-  if (!is.null(x = group_by) && group_by == "ident") {
+  if (!is.null(x = group.by) && group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
     }
   }
 
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
+  }
+
   # Check group by is valid
-  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
-  medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = "nCount_RNA", default_var = FALSE) %>%
+  medians <- Median_Stats(seurat_object = seurat_object, group.by = sample_col, median_var = "nCount_RNA", default_var = FALSE) %>%
     slice(-n()) %>%
     droplevels()
 
   meta <- Fetch_Meta(object = seurat_object)
 
-  if (!is.null(x = group_by)) {
+  if (!is.null(x = group.by)) {
     meta <- meta %>%
-      select(any_of(c(sample_col, group_by)))
+      select(any_of(c(sample_col, group.by)))
   } else {
     meta <- meta %>%
       select(any_of(sample_col))
@@ -230,15 +268,15 @@ Plot_Median_UMIs <- function(
 
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
 
   # Check colors_use
-  if (!is.null(x = group_by)) {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group_by]]))
+  if (!is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
     if (is.null(x = colors_use)) {
       if (group_by_length <= 8) {
         colors_use <- Dark2_Pal()
@@ -251,7 +289,7 @@ Plot_Median_UMIs <- function(
   }
 
   # Generate base plot
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     merged$samples_plotting <- "Samples"
 
     plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_nCount_RNA"]])) +
@@ -262,7 +300,7 @@ Plot_Median_UMIs <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Median_nCount_RNA"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
@@ -296,9 +334,10 @@ Plot_Median_UMIs <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -324,14 +363,15 @@ Plot_Median_UMIs <- function(
 #' obj <- Add_Mito_Ribo_Seurat(seurat_object = obj, species = "human")
 #'
 #' # Plot
-#' Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "sample_id")
+#' Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group.by = "sample_id")
 #'}
 #'
 
 Plot_Median_Mito <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = "Median % Mito per Sample",
@@ -344,30 +384,47 @@ Plot_Median_Mito <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Plot_Median_Mito(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
+
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
+
   # add to meta if grouping by ident
-  if (!is.null(x = group_by) && group_by == "ident") {
+  if (!is.null(x = group.by) && group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
     }
   }
 
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
+  }
+
   # Check group by is valid
-  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
-  medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = "percent_mito", default_var = FALSE) %>%
+  medians <- Median_Stats(seurat_object = seurat_object, group.by = sample_col, median_var = "percent_mito", default_var = FALSE) %>%
     slice(-n()) %>%
     droplevels()
 
   meta <- Fetch_Meta(object = seurat_object)
 
-  if (!is.null(x = group_by)) {
+  if (!is.null(x = group.by)) {
     meta <- meta %>%
-      select(any_of(c(sample_col, group_by)))
+      select(any_of(c(sample_col, group.by)))
   } else {
     meta <- meta %>%
       select(any_of(sample_col))
@@ -377,15 +434,15 @@ Plot_Median_Mito <- function(
 
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
 
   # Check colors_use
-  if (!is.null(x = group_by)) {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group_by]]))
+  if (!is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
     if (is.null(x = colors_use)) {
       if (group_by_length <= 8) {
         colors_use <- Dark2_Pal()
@@ -398,7 +455,7 @@ Plot_Median_Mito <- function(
   }
 
   # Generate base plot
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     merged$samples_plotting <- "Samples"
 
     plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[["Median_percent_mito"]])) +
@@ -409,7 +466,7 @@ Plot_Median_Mito <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Median_percent_mito"]], fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Median_percent_mito"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
@@ -444,9 +501,10 @@ Plot_Median_Mito <- function(
 #' @param seurat_object Seurat object name.
 #' @param median_var Variable in meta.data slot to calculate and plot median values for.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
-#' @param colors_use List of colors or color palette to use.  Only applicable if `group_by` is not NULL.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
+#' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -476,7 +534,7 @@ Plot_Median_Mito <- function(
 #' name = 'CD_Features')
 #'
 #' Plot_Median_Other(seurat_object = pbmc_small, median_var = "CD_Features1",
-#' sample_col = "orig.ident", group_by = "Treatment")
+#' sample_col = "orig.ident", group.by = "Treatment")
 #' }
 #'
 
@@ -484,7 +542,8 @@ Plot_Median_Other <- function(
   seurat_object,
   median_var,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = NULL,
@@ -497,6 +556,31 @@ Plot_Median_Other <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Plot_Median_Other(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
+
+  # set group.by to ident if NULL
+  group.by <- group.by %||% "ident"
+
+  # add to meta if grouping by ident
+  if (!is.null(x = group.by) && group.by == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+    if (is.null(x = legend_title)) {
+      legend_title <- "Identity"
+    }
+  }
+
+  # Check sample_col and group.by are not the same
+  if (group.by == sample_col) {
+    cli_abort(message = "{.code group.by} and {.code sample_col} cannot be the same variable.")
+  }
+
   # Set plot and y axis labels if NULL
   if (is.null(x = plot_title)) {
     plot_title <- paste0("Median ", median_var, " per Sample")
@@ -506,30 +590,22 @@ Plot_Median_Other <- function(
     y_axis_label <- paste0("Median ", median_var)
   }
 
-  # add to meta if grouping by ident
-  if (!is.null(x = group_by) && group_by == "ident") {
-    seurat_object[["ident"]] <- Idents(object = seurat_object)
-    if (is.null(x = legend_title)) {
-      legend_title <- "Identity"
-    }
-  }
-
   # Check group by is valid
-  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
 
   # Calculate medians and merge with meta.data
-  medians <- Median_Stats(seurat_object = seurat_object, group_by_var = sample_col, median_var = median_var, default_var = FALSE) %>%
+  medians <- Median_Stats(seurat_object = seurat_object, group.by = sample_col, median_var = median_var, default_var = FALSE) %>%
     slice(-n()) %>%
     droplevels()
 
   meta <- Fetch_Meta(object = seurat_object)
 
-  if (!is.null(x = group_by)) {
+  if (!is.null(x = group.by)) {
     meta <- meta %>%
-      select(any_of(c(sample_col, group_by)))
+      select(any_of(c(sample_col, group.by)))
   } else {
     meta <- meta %>%
       select(any_of(sample_col))
@@ -539,15 +615,15 @@ Plot_Median_Other <- function(
 
   meta <- data.frame(meta[!duplicated(meta[,sample_col]),])
 
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     colnames(x = meta) <- sample_col
   }
 
   merged <- suppressMessages(left_join(medians, meta))
 
   # Check colors_use
-  if (!is.null(x = group_by)) {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group_by]]))
+  if (!is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
     if (is.null(x = colors_use)) {
       if (group_by_length <= 8) {
         colors_use <- Dark2_Pal()
@@ -560,7 +636,7 @@ Plot_Median_Other <- function(
   }
 
   # Generate base plot
-  if (is.null(x = group_by)) {
+  if (is.null(x = group.by)) {
     merged$samples_plotting <- "Samples"
 
     plot <- ggplot(merged, aes(x = .data[["samples_plotting"]], y = .data[[paste0("Median_", median_var)]])) +
@@ -571,7 +647,7 @@ Plot_Median_Other <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[[paste0("Median_", median_var)]], fill = .data[[group_by]])) +
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[[paste0("Median_", median_var)]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
@@ -605,9 +681,10 @@ Plot_Median_Other <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by Column in meta.data slot to group results by (i.e. "Treatment").
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.
-#' @param dot_size size of the dots plotted if `group_by` is not NULL.  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
 #' @param plot_title Plot title.
 #' @param y_axis_label Label for y axis.
 #' @param x_axis_label Label for x axis.
@@ -630,14 +707,15 @@ Plot_Median_Other <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group_by = "Treatment")
+#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "Treatment")
 #' }
 #'
 
 Plot_Cells_per_Sample <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = "Cells/Nuclei per Sample",
@@ -650,13 +728,22 @@ Plot_Cells_per_Sample <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Plot_Cells_per_Sample(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
+
   # Check grouping variable is present
-  if (is.null(x = group_by)) {
-    cli_abort(message = "Must provide meta data variable to {.code group_by} in order to plot data.")
+  if (is.null(x = group.by)) {
+    cli_abort(message = "Must provide meta data variable to {.code group.by} in order to plot data.")
   }
 
   # add to meta if grouping by ident
-  if (!is.null(x = group_by) && group_by == "ident") {
+  if (!is.null(x = group.by) && group.by == "ident") {
     seurat_object[["ident"]] <- Idents(object = seurat_object)
     if (is.null(x = legend_title)) {
       legend_title <- "Identity"
@@ -664,7 +751,7 @@ Plot_Cells_per_Sample <- function(
   }
 
   # Check group by is valid
-  group_by <- Meta_Present(object = seurat_object, meta_col_names = group_by, print_msg = FALSE)[[1]]
+  group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE)[[1]]
 
   # Check sample_col is valid
   sample_col <- Meta_Present(object = seurat_object, meta_col_names = sample_col, print_msg = FALSE)[[1]]
@@ -677,7 +764,7 @@ Plot_Cells_per_Sample <- function(
   meta <- Fetch_Meta(object = seurat_object)
 
   meta <- meta %>%
-    select(all_of(c(sample_col, group_by)))
+    select(all_of(c(sample_col, group.by)))
 
   meta[[sample_col]] <- factor(meta[[sample_col]], ordered = FALSE)
 
@@ -686,8 +773,8 @@ Plot_Cells_per_Sample <- function(
   merged <- suppressMessages(left_join(total_cells, meta))
 
   # Check colors_use
-  if (!is.null(x = group_by)) {
-    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group_by]]))
+  if (!is.null(x = group.by)) {
+    group_by_length <- length(x = unique(x = seurat_object@meta.data[[group.by]]))
     if (is.null(x = colors_use)) {
       if (group_by_length <= 8) {
         colors_use <- Dark2_Pal()
@@ -700,7 +787,7 @@ Plot_Cells_per_Sample <- function(
   }
 
   # Generate base plot
-  plot <- ggplot(data = merged, mapping = aes(x = .data[[group_by]], y = .data[["Number_of_Cells"]], fill = .data[[group_by]])) +
+  plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
     geom_boxplot(fill = "white") +
     geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
     scale_fill_manual(values = colors_use) +
@@ -921,7 +1008,8 @@ CellBender_Diff_Plot <- function(
 #' is `"bar"`
 #' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of `"percent"` or
 #' `"count"`. Default is `"percent"`.
-#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by meta data column to classify samples (default = "ident" and will use `active.ident`).
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
 #' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE). Only valid if `plot_type = "bar"`.
@@ -954,14 +1042,28 @@ Proportion_Plot <- function(
     seurat_object,
     plot_type = "bar",
     plot_scale = "percent",
-    group_by_var = "ident",
+    group_by_var = deprecated(),
+    group.by = "ident",
     split.by = NULL,
     num_columns = NULL,
-    x_lab_rotate = FALSE,
+    x_lab_rotate = TRUE,
     colors_use = NULL,
     ggplot_default_colors = FALSE,
     color_seed = 123
 ) {
+  # Check seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # check deprecation
+  if (is_present(group_by_var)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Proportion_Plot(group_by_var)",
+                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by_var
+  }
+
+  # check plot type
   if (!plot_type %in% c("bar", "pie")) {
     cli_abort(message = "{.code plot_type} must be one of {.val bar} or {.val pie}")
   }
@@ -972,17 +1074,153 @@ Proportion_Plot <- function(
   }
 
   if (plot_type == "pie") {
-    plot <- Plot_Pie_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, num_columns = num_columns, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    plot <- Plot_Pie_Proportions(seurat_object = seurat_object, group.by = group.by, split.by = split.by, num_columns = num_columns, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
   }
 
   if (plot_type == "bar") {
-    plot <- Plot_Bar_Proportions(seurat_object = seurat_object, group_by_var = group_by_var, split.by = split.by, plot_scale = plot_scale, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    plot <- Plot_Bar_Proportions(seurat_object = seurat_object, group.by = group.by, split.by = split.by, plot_scale = plot_scale, colors_use = colors_use, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
 
     if (isTRUE(x = x_lab_rotate)) {
-      plot <- plot + RotatedAxis()
+      plot <- plot + theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
     }
   }
 
   # Return plot
+  return(plot)
+}
+
+
+#' Cell Proportion Plot per Sample
+#'
+#' Plots the proportion of cells belonging to each identity per sample split by grouping
+#' variable/condition.
+#'
+#' @param seurat_object Seurat object name.
+#' @param cluster name of meta.data column containing cluster values.  Default is `ident`
+#' which defaults to current active.ident.
+#' @param split.by name of meta.data column containing sample group/condition variable.
+#' @param sample_col name of meta.data column that contains sample ID information.
+#' @param pt.size the size of points in plot (default is 1.5).
+#' @param x_lab_rotate Rotate x-axis labels 45 degrees (Default is FALSE). Only valid if `plot_type = "bar"`.
+#' @param colors_use color palette to use for plotting.
+#' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
+#' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
+#' groups plotted is greater than 36.  Default = 123.
+#'
+#' @import cli
+#' @import ggplot2
+#' @importFrom dplyr all_of select group_by summarize mutate ungroup left_join join_by
+#' @importFrom ggbeeswarm geom_quasirandom
+#' @importFrom magrittr "%>%"
+#' @importFrom tidyr complete replace_na
+#'
+#' @export
+#'
+#' @concept stats_plotting
+#'
+#' @examples
+#' \dontrun{
+#' Proportion_Plot_per_Sample(seurat_object = obj, split.by = "Diagnosis",
+#' sample_col = "orig.ident")
+#' }
+#'
+
+Proportion_Plot_per_Sample <- function(
+    seurat_object,
+    cluster = "ident",
+    split.by,
+    sample_col,
+    pt.size = 1.5,
+    x_lab_rotate = TRUE,
+    colors_use = NULL,
+    ggplot_default_colors = FALSE,
+    color_seed = 123
+) {
+  Is_Seurat(seurat_object = seurat_object)
+
+  # Assign temp variable if `cluster = "ident"`
+  if (cluster == "ident") {
+    seurat_object[["ident"]] <- Idents(object = seurat_object)
+  }
+
+  # Check all variables exist
+  bad_meta <- Meta_Present(object = seurat_object, meta_col_names = c(cluster, split.by, sample_col), print_msg = FALSE, omit_warn = FALSE)[[2]]
+
+  if (length(x = bad_meta) > 0) {
+    cli_abort(message = c("The following variables were not found in object meta.data:",
+                          "i" = "{.field {bad_meta}}"))
+  }
+
+  plot_df <- Fetch_Meta(object = seurat_object) %>%
+    droplevels %>%
+    group_by(.data[[sample_col]], .data[[cluster]]) %>%
+    summarize(cell_count = n(), .groups = "drop") %>%
+    group_by(.data[[sample_col]]) %>%
+    mutate("percent_cells" = (.data[["cell_count"]] / sum(.data[["cell_count"]])) * 100) %>%
+    ungroup()
+
+  colnames(x = plot_df) <- c("sample_id", "cluster", "count", "percent")
+
+  plot_df <- plot_df %>%
+    complete(.data[["cluster"]], .data[["sample_id"]]) %>%
+    replace_na(, replace = list("count" = 0,
+                                "percent" = 0))
+
+  # Add split.by variable
+  sample_meta <- Extract_Sample_Meta(object = seurat_object) %>%
+    ungroup() %>%
+    select(all_of(c(sample_col, split.by)))
+
+  colnames(x = sample_meta) <- c("sample_id", split.by)
+
+  plot_df <- left_join(plot_df, sample_meta, by = join_by("sample_id"))
+
+  # Set plot colors
+  split_by_length <- length(x = unique(x = plot_df[[split.by]]))
+
+  # Check colors use vs. ggplot2 color scale
+  if (!is.null(x = colors_use) && isTRUE(x = ggplot_default_colors)) {
+    cli_abort(message = "Cannot provide both custom palette to {.code colors_use} and specify {.code ggplot_default_colors = TRUE}.")
+  }
+
+  # set default plot colors
+  if (is.null(x = colors_use)) {
+    if (split_by_length == 2 || split_by_length > 8) {
+      colors_use <- scCustomize_Palette(num_groups = split_by_length, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed)
+    } else {
+      colors_use <- Dark2_Pal()
+    }
+  } else {
+    if (length(x = colors_use) != split_by_length) {
+      cli_abort(message = "The number of colors supplied to {.code colors_use} ({.field {length(x = colors_use)}}) does not equal number of groups in {.code split.by} ({.field {split_by_length}}).")
+    }
+  }
+
+  # Create the plot
+  plot <- ggplot(plot_df, aes(x = .data[["cluster"]], y = .data[["percent"]], color = .data[[split.by]])) +
+    geom_boxplot(outlier.shape = NA, position = position_dodge(width = 0.9)) +
+    geom_quasirandom(dodge.width = 0.9, size = pt.size) +
+    scale_color_manual(values = colors_use) +
+    labs(
+      title = "Percent of Cells per Cluster per Sample",
+      y = "Percent of Cells",
+      color = split.by
+    )
+
+  # rotate x-axis
+  if (isTRUE(x_lab_rotate)) {
+    plot <- plot +
+      theme_ggprism_mod(axis_text_angle = 45) +
+      theme(legend.position = "top",
+            axis.title.x = element_blank())
+  } else {
+    plot <- plot +
+      theme_ggprism_mod() +
+      theme(legend.position = "top",
+            axis.title.x = element_blank())
+  }
+
+  # return
   return(plot)
 }

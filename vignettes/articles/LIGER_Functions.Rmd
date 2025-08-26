@@ -106,12 +106,12 @@ DimPlot_LIGER(liger_object = marsh_liger, combination = T, colors_use_cluster = 
 ### Grouping and Splitting Plots
 `DimPlot_LIGER` supports grouping and splitting plots by meta data variables or cluster and will return patchwork layout
 ```{r fig.height=4, fig.width=6, fig.align='center'}
-DimPlot_LIGER(liger_object = marsh_liger, group_by = "Transcription_Method", colors_use_meta = JCO_Four())
+DimPlot_LIGER(liger_object = marsh_liger, group.by = "Transcription_Method", colors_use_meta = JCO_Four())
 ```
 
 
 ```{r fig.height=8, fig.width=12, fig.align='center'}
-DimPlot_LIGER(liger_object = marsh_liger, group_by = "Cluster", split_by = "Transcription_Method", label = FALSE)
+DimPlot_LIGER(liger_object = marsh_liger, group.by = "Cluster", split_by = "Transcription_Method", label = FALSE)
 ```
 
 
@@ -229,7 +229,7 @@ Following plotting with `plotFactors_scCustom` it can sometimes be helpful to pu
 *NOTE: This function simply extracts top loading genes in order from given factor.  It does not assess whether that number of genes is significant, etc.*
 
 ```{r}
-top20_factor6 <- Top_Genes_Factor(liger_object = marsh_liger, liger_factor = 6, num_genes = 20)
+top20_factor6 <- Top_Genes_Factor(object = marsh_liger, factor = 6, num_genes = 20)
 
 head(top20_factor6, 5)
 ```

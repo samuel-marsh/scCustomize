@@ -7,7 +7,8 @@
 Plot_Median_Mito(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
   plot_title = "Median \% Mito per Sample",
@@ -23,11 +24,13 @@ Plot_Median_Mito(
 
 \item{sample_col}{Specify which column in meta.data specifies sample ID (i.e. orig.ident).}
 
-\item{group_by}{Column in meta.data slot to group results by (i.e. "Treatment").}
+\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
 
-\item{colors_use}{List of colors or color palette to use.  Only applicable if \code{group_by} is not NULL.}
+\item{group.by}{Column in meta.data slot to group results by (i.e. "Treatment").}
 
-\item{dot_size}{size of the dots plotted if \code{group_by} is not NULL.  Default is 1.}
+\item{colors_use}{List of colors or color palette to use.  Only applicable if \code{group.by} is not NULL.}
+
+\item{dot_size}{size of the dots plotted if \code{group.by} is not NULL.  Default is 1.}
 
 \item{plot_title}{Plot title.}
 
@@ -54,7 +57,7 @@ Plot of median percent mito per cell per sample grouped by desired meta data var
 obj <- Add_Mito_Ribo_Seurat(seurat_object = obj, species = "human")
 
 # Plot
-Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group_by = "sample_id")
+Plot_Median_Mito(seurat_object = obj, sample_col = "orig.ident",  group.by = "sample_id")
 }
 
 }

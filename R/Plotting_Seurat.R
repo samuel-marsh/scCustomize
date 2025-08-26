@@ -37,7 +37,9 @@
 #' @param label logical, whether to label the clusters.  Default is FALSE.
 #' @param label_feature_yaxis logical, whether to place feature labels on secondary y-axis as opposed to
 #' above legend key.  Default is FALSE.  When setting `label_feature_yaxis = TRUE` the number of columns
-#' in plot output will automatically be set to the number of levels in `split.by'`
+#' in plot output will automatically be set to the number of levels in `split.by'`.
+#' @param min.cutoff,max.cutoff Vector of minimum and maximum cutoff values for each feature,
+#' may specify quantile in the form of 'q##' where '##' is the quantile (eg, 'q1', 'q10').
 #' @param combine Combine plots into a single \code{\link[patchwork]{patchwork}ed} ggplot object.
 #' If FALSE, return a list of ggplot objects.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
@@ -83,6 +85,8 @@ FeaturePlot_scCustom <- function(
   alpha_na_exp = NULL,
   label = FALSE,
   label_feature_yaxis = FALSE,
+  max.cutoff = NA,
+  min.cutoff = NA,
   combine = TRUE,
   ...
 ) {
@@ -199,26 +203,35 @@ FeaturePlot_scCustom <- function(
       alpha_exp <- 1
   }
 
+  # Check cutoff length before passing to Seurat
+  if (length(x = min.cutoff) > 1 && length(x = min.cutoff) != length(x = all_found_features)) {
+    cli_abort(message = "The length of {.code min.cutoff} ({.field {length(x = min.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
+  }
+
+  if (length(x = max.cutoff) > 1 && length(x = max.cutoff) != length(x = all_found_features)) {
+    cli_abort(message = "The length of {.code max.cutoff} ({.field {length(x = max.cutoff)}}) must be single value or equal in length to number of features being plotted ({.field {length(x = all_found_features)}}).")
+  }
+
   # plot no split & combined
   if (is.null(x = split.by) && isTRUE(x = combine)) {
     # Keep until Seurat version required is > 5
     if (seurat_version >= "5") {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
     } else {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
     }
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && isFALSE(x = combine)) {
     if (seurat_version >= "5") {
-      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...))
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
         plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
       })
     } else {
-      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, ...))
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
         plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
@@ -234,14 +247,49 @@ FeaturePlot_scCustom <- function(
       object = seurat_object,
       vars = all_found_features,
       layer = layer)
+
     # Pull min and max values
-    max_exp_value <- max(feature_data)
-    min_exp_value <- min(feature_data)
+    min.cutoff <- mapply(
+      FUN = function(cutoff, feature) {
+        return(ifelse(
+          test = is.na(x = cutoff),
+          yes = min(feature_data[, feature]),
+          no = cutoff
+        ))
+      },
+      cutoff = min.cutoff,
+      feature = all_found_features
+    )
+    max.cutoff <- mapply(
+      FUN = function(cutoff, feature) {
+        return(ifelse(
+          test = is.na(x = cutoff),
+          yes = max(feature_data[, feature]),
+          no = cutoff
+        ))
+      },
+      cutoff = max.cutoff,
+      feature = all_found_features
+    )
+    check.lengths <- unique(x = vapply(
+      X = list(all_found_features, min.cutoff, max.cutoff),
+      FUN = length,
+      FUN.VALUE = numeric(length = 1)
+    ))
+    if (length(x = check.lengths) != 1) {
+      cli_abort(
+        message = "There must be the same number of minimum and maximum cuttoffs as there are features"
+      )
+    }
+    names(x = min.cutoff) <- names(x = max.cutoff) <- all_found_features
+
+    max_exp_value <- max.cutoff
+    min_exp_value <- min.cutoff
 
     if (seurat_version >= "5") {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp,, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
     } else {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label,, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
     }
 
     if (isTRUE(x = label_feature_yaxis)) {
@@ -262,21 +310,64 @@ FeaturePlot_scCustom <- function(
 
   # plotting split multiple features
   if (!is.null(x = split.by) && length(x = all_found_features) > 1) {
+    # Check cutoff lengths and modify if needed
+    if (length(x = min.cutoff) == 1) {
+      min.cutoff <- rep(x = min.cutoff, length(x = all_found_features))
+    }
+
+    if (length(x = max.cutoff) == 1) {
+      max.cutoff <- rep(x = max.cutoff, length(x = all_found_features))
+    }
 
     plot_list <- lapply(1:length(x = all_found_features), function(i){
       feature_data <- FetchData(
         object = seurat_object,
         vars = all_found_features[i],
         layer = layer)
-      # Pull min and max values
-      max_exp_value <- max(feature_data)
-      min_exp_value <- min(feature_data)
 
+      # Pull min and max values
+      # Pull min and max values
+      min.cutoff <- mapply(
+        FUN = function(cutoff, feature) {
+          return(ifelse(
+            test = is.na(x = cutoff),
+            yes = min(feature_data[, feature]),
+            no = cutoff
+          ))
+        },
+        cutoff = min.cutoff[i],
+        feature = all_found_features[i]
+      )
+      max.cutoff <- mapply(
+        FUN = function(cutoff, feature) {
+          return(ifelse(
+            test = is.na(x = cutoff),
+            yes = max(feature_data[, feature]),
+            no = cutoff
+          ))
+        },
+        cutoff = max.cutoff[i],
+        feature = all_found_features[i]
+      )
+      check.lengths <- unique(x = vapply(
+        X = list(all_found_features[i], min.cutoff, max.cutoff),
+        FUN = length,
+        FUN.VALUE = numeric(length = 1)
+      ))
+      if (length(x = check.lengths) != 1) {
+        cli_abort(
+          message = "There must be the same number of minimum and maximum cuttoffs as there are features"
+        )
+      }
+      names(x = min.cutoff) <- names(x = max.cutoff) <- all_found_features[i]
+
+      max_exp_value <- max.cutoff
+      min_exp_value <- min.cutoff
 
       if (seurat_version >= "5") {
-        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
       } else {
-        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
       }
 
       if (isTRUE(x = label_feature_yaxis)) {
@@ -924,6 +1015,7 @@ DotPlot_scCustom <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param label_selected_features a subset of `features` to only label some of the plotted features.
 #' @param split.by Variable in `@meta.data` to split the identities plotted by.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
@@ -988,6 +1080,9 @@ DotPlot_scCustom <- function(
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
+#' @param nan_error logical, default is FALSE.  *ONLY* set this value to true if you get error related to
+#' NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+#' number of features being plotted.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -1026,6 +1121,7 @@ DotPlot_scCustom <- function(
 Clustered_DotPlot <- function(
   seurat_object,
   features,
+  label_selected_features = NULL,
   split.by = NULL,
   colors_use_exp = viridis_plasma_dark_high,
   exp_color_min = -2,
@@ -1063,6 +1159,7 @@ Clustered_DotPlot <- function(
   group.by = NULL,
   idents = NULL,
   show_parent_dend_line = TRUE,
+  nan_error = FALSE,
   ggplot_default_colors = FALSE,
   color_seed = 123,
   seed = 123
@@ -1080,6 +1177,7 @@ Clustered_DotPlot <- function(
   if (is.null(x = split.by)) {
     Clustered_DotPlot_Single_Group(seurat_object = seurat_object,
                                    features = features,
+                                   label_selected_features = label_selected_features,
                                    colors_use_exp = colors_use_exp,
                                    exp_color_min = exp_color_min,
                                    exp_color_middle = exp_color_middle,
@@ -1117,10 +1215,12 @@ Clustered_DotPlot <- function(
                                    show_column_names = show_column_names,
                                    column_names_side = column_names_side,
                                    row_names_side = row_names_side,
+                                   nan_error = nan_error,
                                    seed = seed)
   } else {
     Clustered_DotPlot_Multi_Group(seurat_object = seurat_object,
                                   features = features,
+                                  label_selected_features = label_selected_features,
                                   split.by = split.by,
                                   colors_use_exp = colors_use_exp,
                                   exp_color_min = exp_color_min,
@@ -1156,6 +1256,7 @@ Clustered_DotPlot <- function(
                                   show_column_names = show_column_names,
                                   column_names_side = column_names_side,
                                   row_names_side = row_names_side,
+                                  nan_error = nan_error,
                                   seed = seed)
   }
 }
@@ -2312,10 +2413,10 @@ VariableFeaturePlot_scCustom <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Extract num of desired features
-  top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, selection.method = selection.method), num_features)
+  top_features <- head(x = VariableFeatures(object = seurat_object, assay = assay, method = selection.method), num_features)
 
   # Plot
-  plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, selection.method = selection.method, cols = colors_use, ...)
+  plot <- VariableFeaturePlot(object = seurat_object, pt.size = pt.size, assay = assay, cols = colors_use, ...)
 
   # Label points
   if (isFALSE(x = label) && !is.null(x = custom_features)) {

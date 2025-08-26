@@ -1,5 +1,9 @@
-## Hotfix Update 
-This is major update to version 3.0.1.  Fixes 4 minor bugs that caused unexpected errors.  See News.md for full changelog.  
+## Hotfix to v3.1.0 and v3.1.1  and v3.1.2
+Fixed fuerther errors of doi/url formatting in manual docs.  Sorry for missing them in earlier submission!
+
+
+## Update 
+This is major update to version 3.1.0.  Contains bug fixes and new functions. This version also updates maintainer email address and adds one new author to package.  See News.md for full changelog.  
 
 
 
@@ -8,7 +12,7 @@ This is major update to version 3.0.1.  Fixes 4 minor bugs that caused unexpecte
 0 errors | 0 warnings | 1 notes
 
 ### Test environments  
-- Run locally, R4.4.0, Platform: x86_64-apple-darwin20 (64-bit) with `devtools:check()`.  
+- Run locally, R4.5.0, Platform: aarch64-apple-darwin20 with `devtools:check()`.  
 - Also run via GitHub Actions via `usethis::use_github_action_check_standard`
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
 

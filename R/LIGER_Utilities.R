@@ -509,6 +509,133 @@ Cells_by_Identities_LIGER <- function(
 }
 
 
+#' Check size of LIGER datasets
+#'
+#' Returns size (number of cells) in each dataset within liger object along with other desired meta data.
+#'
+#' @param liger_object LIGER object name.
+#' @param meta_data_column other meta data to include in returned data.frame.
+#' @param filter_by meta data column to filter data by.  Will filter data to return only values for  the
+#' largest dataset for each unique value in provided meta data column.
+#' @param print_filter logical, whether to print filtered results to console, default is FALSE.
+#'
+#' @return data.frame with dataset names, number of cells per dataset and if provided other meta data
+#'
+#' @import cli
+#' @importFrom dplyr right_join join_by group_by slice
+#' @importFrom magrittr "%>%"
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # Return values for all datasets
+
+#' }
+#'
+
+Dataset_Size_LIGER <- function(
+    liger_object,
+    meta_data_column = NULL,
+    filter_by = NULL,
+    print_filter = FALSE
+) {
+  # Check LIGER
+  Is_LIGER(liger_object = liger_object)
+
+  # Create num_cells data.frame
+  cells_per_dataset <- sapply(rliger::datasets(x = liger_object), ncol)
+  dataset_names <- names(rliger::datasets(x = liger_object))
+  dataset_cells_df <- data.frame("dataset" = dataset_names, "num_cells" = cells_per_dataset)
+
+  # remove row names
+  rownames(dataset_cells_df) <- NULL
+
+  # Extract and combine with other sample meta if provided
+  if (!is.null(x = meta_data_column)) {
+    # Extract sample meta
+    meta <- Fetch_Meta(object = liger_object)
+
+    found_meta <- Meta_Present(object = liger_object, meta_col_names = meta_data_column, print_msg = FALSE)[[1]]
+
+    sample_meta <- Extract_Sample_Meta(object = liger_object, sample_name = "dataset", variables_include = found_meta)
+
+    # join data
+    dataset_cells_df <- right_join(x = dataset_cells_df, y = sample_meta, by = join_by("dataset"))
+  }
+
+  # filter data to return only largest dataset for each unique value in filter_by meta data column.
+  if (!is.null(x = filter_by)) {
+    # check in other meta
+    if (!filter_by %in% found_meta) {
+      cli_abort(message = "The {.code filter_by} value ({.field {filter_by}}) must also be present in {.code meta_data_column} and dataset.")
+    }
+
+    # filter to largest datasets for each ident in filter_by column
+    dataset_cells_df <- dataset_cells_df %>%
+      group_by(.data[[filter_by]]) %>%
+      slice_max(n = 1, order_by = .data[["num_cells"]])
+  }
+
+  # print results if TRUE
+  if (isTRUE(x = print_filter)) {
+    print(dataset_cells_df)
+  }
+
+  # return results
+  return(dataset_cells_df)
+}
+
+
+#' Get Reference Dataset
+#'
+#' Function to select reference dataset to use in liger based on meta data information
+#'
+#' @param liger_object LIGER object name.
+#' @param meta_data_column meta data column to use for selecting largest dataset.
+#' @param value value from column `meta_data_column` to use for selecting largest dataset.
+#'
+#' @return dataset name as character
+#'
+#' @import cli
+#' @importFrom dplyr filter pull
+#' @importFrom magrittr "%>%"
+#'
+#' @export
+#'
+#' @concept liger_object_util
+#'
+#' @examples
+#' \dontrun{
+#' # standalone use
+#' ref_dataset <- Get_Reference_LIGER(liger_object = object, meta_data_column = "Treatment",
+#' value = "Ctrl")
+#'
+#' # use within `quantileNorm`
+#' object <- quantileNorm(object = object, reference = Get_Reference_LIGER(liger_object = object,
+#' meta_data_column = "Treatment", value = "Ctrl"))
+#' }
+#'
+
+Get_Reference_LIGER <- function(
+    liger_object,
+    meta_data_column,
+    value
+) {
+  ref_dataset <- Dataset_Size_LIGER(liger_object = liger_object, meta_data_column = meta_data_column, filter_by = meta_data_column) %>%
+    filter(.data[[meta_data_column]] == value)
+
+  # print results
+  cli_inform(message = c("Selecting reference dataset from {.field {meta_data_column}} for value {.val {value}}.",
+                         "i" = "Selected dataset: {.field {ref_dataset[['dataset']]}}, containing {.field {ref_dataset[['num_cells']]}} cells."))
+
+  # return
+  return(ref_dataset[['dataset']])
+}
+
+
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
 #' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
 #' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
@@ -686,7 +813,7 @@ Subset_LIGER <- function(
   }
 
   # Check meta present
-  if (!is.null(x = cluster_col)) {
+  if (!is.null(x = cluster_col) && !is.null(x = cluster)) {
     cluster_col <- Meta_Present(object = liger_object, meta_col_names = cluster_col, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
@@ -749,57 +876,73 @@ Subset_LIGER <- function(
 }
 
 
-#' Extract top loading genes for LIGER factor
-#'
-#' Extract vector to the top loading genes for specified LIGER iNMF factor
-#'
-#' @param liger_object LIGER object name.
-#' @param liger_factor LIGER factor number to pull genes from.
-#' @param num_genes number of top loading genes to return as vector.
-#'
-#' @return A LIGER Object
+#' @method Top_Genes_Factor liger
 #'
 #' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @export
 #'
+#' @rdname Top_Genes_Factor
+#'
 #' @concept liger_object_util
 #'
 #' @examples
 #' \dontrun{
-#' top_genes_factor10 <- Top_Genes_Factor(liger_object = object, num_genes = 10)
+#' top_genes_factor10 <- Top_Genes_Factor(object = object, factor = 1, num_genes = 10)
 #' }
 #'
 
-Top_Genes_Factor <- function(
-    liger_object,
-    liger_factor,
-    num_genes = 10
+Top_Genes_Factor.liger <- function(
+    object,
+    factor = NULL,
+    num_genes = 10,
+    ...
 ) {
   # LIGER object check
-  Is_LIGER(liger_object = liger_object)
+  Is_LIGER(liger_object = object)
+
+  if (is.null(x = factor)) {
+    cli_abort(message = "Must provide either factor number or {.val all} to {.code factor} parameter.")
+  }
 
   # check number of factors present
-  if (!liger_factor %in% 1:dim(x = liger_object@W)[[1]]) {
-    cli_abort(message = c("{.code liger_factor} provided: {.field {liger_factor}} not found",
-                          "i" = "{.code liger_object} only contains {.field {dim(x = liger_object@W)[[1]]}} factors.")
+  if (!factor %in% 1:dim(x = object@W)[[1]]) {
+    cli_abort(message = c("{.code liger_factor} provided: {.field {factor}} not found",
+                          "i" = "{.code object} only contains {.field {dim(x = object@W)[[1]]}} factors.")
     )
   }
 
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    W <- liger_object@W
-    rownames(x = W) <- rownames(x = liger_object@datasets[[1]]@scaleData)
-    top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
-    return(top_genes)
+    W <- object@W
+    rownames(x = W) <- rownames(x = object@datasets[[1]]@scaleData)
+    # pull genes
+    if (factor == "all") {
+      top_genes <- lapply(1:ncol(x = W), function(x) {
+        top_genes <- rownames(x = W)[order(W[, x], decreasing = TRUE)[1:num_genes]]
+      })
+      top_genes <- data.frame(top_genes)
+      colnames(top_genes) <- paste0("Factor_", 1:ncol(x = W))
+    } else {
+      top_genes <- rownames(x = W)[order(W[, factor], decreasing = TRUE)[1:num_genes]]
+    }
   } else {
     # Extract genes
-    W <- t(x = liger_object@W)
-    rownames(x = W) <- colnames(x = liger_object@scale.data[[1]])
-    top_genes <- rownames(x = W)[order(W[, liger_factor], decreasing = TRUE)[1:num_genes]]
-    return(top_genes)
+    W <- t(x = object@W)
+    rownames(x = W) <- colnames(x = object@scale.data[[1]])
+    if (factor == "all") {
+      top_genes <- lapply(1:ncol(x = W), function(x) {
+        top_genes <- rownames(x = W)[order(W[, x], decreasing = TRUE)[1:num_genes]]
+      })
+      top_genes <- data.frame(top_genes)
+      colnames(top_genes) <- paste0("Factor_", 1:ncol(x = W))
+    } else {
+      top_genes <- rownames(x = W)[order(W[, factor], decreasing = TRUE)[1:num_genes]]
+
+    }
   }
+  return(top_genes)
 }
 
 
@@ -869,6 +1012,7 @@ Find_Factor_Cor <- function(
 #' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
 #' object (Default is TRUE).
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_lncRNA logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).
 #' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
@@ -889,6 +1033,8 @@ Find_Factor_Cor <- function(
 #' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
 #' Default is "percent_mito".
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA counts.
+#' Default is "percent_lncRNA".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
@@ -937,6 +1083,7 @@ Add_Cell_QC_Metrics.liger <- function(
     add_MSigDB = TRUE,
     add_IEG = TRUE,
     add_hemo = TRUE,
+    add_lncRNA = TRUE,
     add_cell_cycle = TRUE,
     species,
     mito_name = "percent_mito",
@@ -949,6 +1096,7 @@ Add_Cell_QC_Metrics.liger <- function(
     dna_repair_name = "percent_dna_repair",
     ieg_name = "percent_ieg",
     hemo_name = "percent_hemo",
+    lncRNA_name = "percent_lncRNA",
     mito_pattern = NULL,
     ribo_pattern = NULL,
     hemo_pattern = NULL,
@@ -1032,6 +1180,21 @@ Add_Cell_QC_Metrics.liger <- function(
   if (isTRUE(x = add_hemo)) {
     cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
     liger_object <- Add_Hemo(object = liger_object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, overwrite = overwrite, ensembl_ids = ensembl_ids)
+  }
+
+  # Add lncRNA
+  if (isTRUE(x = add_lncRNA)) {
+    if (species %in% marmoset_options && isFALSE(x = ensembl_ids)) {
+      cli_warn(message = c("{.val Marmoset} lncRNAs do not currently have annotated symbols (only Ensembl IDs) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    }
+    if (species %in% drosophila_options) {
+      cli_warn(message = c("{.val Drosophila} do not have separate lncRNA gene biotype (only ncRNA) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    } else {
+      cli_inform(message = c("*" = "Adding {.field lncRNA Percentages} to meta.data."))
+      object <- Add_lncRNA_LIGER(liger_object = object, species = species, lncRNA_name = lncRNA_name, overwrite = overwrite, ensembl_ids = ensembl_ids)
+    }
   }
 
   # return object

@@ -14,7 +14,9 @@
 #' gene lists: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", "HALLMARK_APOPTOSIS", and "HALLMARK_DNA_REPAIR" to
 #' object (Default is TRUE).
 #' @param add_IEG logical, whether to add percentage of counts belonging to IEG genes to object (Default is TRUE).
+#' @param add_IEG_module_score logical, whether to add module score belonging to IEG genes to object (Default is TRUE).
 #' @param add_hemo logical, whether to add percentage of counts belonging to homoglobin genes to object (Default is TRUE).
+#' @param add_lncRNA logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).
 #' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
 #' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
@@ -34,8 +36,11 @@
 #' @param dna_repair_name name to use for new meta data column for percentage of MSigDB DNA repair
 #' counts.  Default is "percent_dna_repair"..
 #' @param ieg_name name to use for new meta data column for percentage of IEG counts.  Default is "percent_ieg".
+#' @param ieg_module_name name to use for new meta data column for module score of IEGs.  Default is "ieg_score".
 #' @param hemo_name name to use for the new meta.data column containing percent hemoglobin counts.
 #' Default is "percent_mito".
+#' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA counts.
+#' Default is "percent_lncRNA".
 #' @param mito_pattern A regex pattern to match features against for mitochondrial genes (will set automatically if
 #' species is mouse or human; marmoset features list saved separately).
 #' @param ribo_pattern A regex pattern to match features against for ribosomal genes
@@ -86,7 +91,9 @@ Add_Cell_QC_Metrics.Seurat <- function(
     add_top_pct = TRUE,
     add_MSigDB = TRUE,
     add_IEG = TRUE,
+    add_IEG_module_score = TRUE,
     add_hemo = TRUE,
+    add_lncRNA = TRUE,
     add_cell_cycle = TRUE,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
@@ -97,7 +104,9 @@ Add_Cell_QC_Metrics.Seurat <- function(
     apop_name = "percent_apop",
     dna_repair_name = "percent_dna_repair",
     ieg_name = "percent_ieg",
+    ieg_module_name = "ieg_score",
     hemo_name = "percent_hemo",
+    lncRNA_name = "percent_lncRNA",
     mito_pattern = NULL,
     ribo_pattern = NULL,
     hemo_pattern = NULL,
@@ -177,8 +186,12 @@ Add_Cell_QC_Metrics.Seurat <- function(
       cli_warn(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, Drosophila, Chicken} are not currently supported.",
                            "i" = "No column will be added to object meta.data"))
     } else {
-      cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
-      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
+      if (isTRUE(x = add_IEG_module_score)) {
+        cli_inform(message = c("*" = "Adding {.field IEG Percentages} & {.field IEG Module Score} to meta.data."))
+      } else {
+        cli_inform(message = c("*" = "Adding {.field IEG Percentages} to meta.data."))
+      }
+      object <- Add_IEG_Seurat(seurat_object = object, species = species, ieg_name = ieg_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids, ieg_module_score = add_IEG_module_score, ieg_module_name = ieg_module_name)
     }
   }
 
@@ -186,6 +199,21 @@ Add_Cell_QC_Metrics.Seurat <- function(
   if (isTRUE(x = add_hemo)) {
     cli_inform(message = c("*" = "Adding {.field Hemoglobin Percentages} to meta.data."))
     object <- Add_Hemo(object = object, species = species, hemo_name = hemo_name, hemo_pattern = hemo_pattern, hemo_features = hemo_features, assay = assay, overwrite = overwrite)
+  }
+
+  # Add lncRNA
+  if (isTRUE(x = add_lncRNA)) {
+    if (species %in% marmoset_options && isFALSE(x = ensembl_ids)) {
+      cli_warn(message = c("{.val Marmoset} lncRNAs do not currently have annotated symbols (only Ensembl IDs) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    }
+    if (species %in% drosophila_options) {
+      cli_warn(message = c("{.val Drosophila} do not have separate lncRNA gene biotype (only ncRNA) in Ensembl database.",
+                           "i" = "No columns will be added to object meta.data"))
+    } else {
+      cli_inform(message = c("*" = "Adding {.field lncRNA Percentages} to meta.data."))
+      object <- Add_lncRNA_Seurat(seurat_object = object, species = species, lncRNA_name = lncRNA_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
+    }
   }
 
   # Add cell cycle
@@ -196,8 +224,8 @@ Add_Cell_QC_Metrics.Seurat <- function(
       ))
     } else {
       cli_inform(message = c("*" = "Adding {.field Cell Cycle Scoring} to meta.data."))
-      if (length(grep(x = Layers(object = object), pattern = "data", value = T)) == 0) {
-        cli_inform(message = c("Layer with normalized data not present.",
+      if (isFALSE(x = Check_Normalized(object = object, assay = assay, error = FALSE))) {
+        cli_inform(message = c("x" = "Layer with normalized data not present.",
                                "i" = "Normalizing Data."))
         object <- NormalizeData(object = object)
       }
@@ -621,7 +649,7 @@ Add_Hemo.Seurat <- function(
     species_use <- "Drosophila"
     hemo_pattern <- "^glob"
   }
-  if (species %in% drosophila_options) {
+  if (species %in% chicken_options) {
     species_use <- "Chicken"
     hemo_pattern <- "^HB[^(P)]"
   }
@@ -870,6 +898,504 @@ Add_Top_Gene_Pct.Seurat <- function(
   object <- LogSeuratCommand(object = object)
 
   return(object)
+}
+
+
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param sample_col column name in meta.data that contains sample ID information.
+#' @param malat1_threshold_name name to use for the new meta.data column containing percent IEG gene counts.
+#' Default is set dependent on species gene symbol.
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `malat1_threshold_name` is present in meta.data slot.
+#' @param print_plots logical, should plots be printed to output when running function (default is NULL).
+#' Will automatically set to FALSE if performing across samples or TRUE if performing across whole object.
+#' @param save_plots logical, whether or not to save plots to pdf (default is FALSE).
+#' @param save_plot_path path to save location for plots (default is NULL; current working directory).
+#' @param save_plot_name name for pdf file containing plots.
+#' @param plot_width the width (in inches) for output page size.  Default is 11.
+#' @param plot_height the height (in inches) for output page size.  Default is 8.
+#' @param whole_object logical, whether to perform calculation on whole object (default is FALSE).
+#' Should be only be run if object contains single sample.
+#' @param homolog_name feature name for MALAT1 homolog in non-default species (if annotated).
+#' @param bw The "bandwidth" value when plotting the density function to the MALAT1 distribution;
+#' default is bw = 0.1, but this parameter should be lowered (e.g. to 0.01) if you run the function and
+#' the line that's produced doesn't look like it's tracing the shape of the histogram accurately (this will
+#' make the line less "stiff" and more fitted to the data)
+#' @param lwd The "line width" fed to the abline function which adds the vertical red line to the output plots;
+#' default is 2, and it can be increased or decreased depending on the user's plotting preferences
+#' @param breaks The number of bins used for plotting the histogram of normalized MALAT1 values; default is 100
+#' @param chosen_min The minimum MALAT1 value cutoff above which a MALAT1 peak in the density function should
+#' be found. This value is necessary to determine which peak in the density function fitted to the MALAT1
+#' distribution is likely representative of what we would expect to find in real cells. This is because
+#' some samples may have large numbers of cells or empty droplets with lower than expected normalized MALAT1 values,
+#' and therefore have a peak close to or at zero. Ideally, "chosen_min" would be manually chosen after looking at
+#' a histogram of MALAT1 values, and be the normalized MALAT1 value that cuts out all of the cells that look like
+#' they stray from the expected distribution (a unimodal distribution above zero). The default value is 1 as this
+#' works well in many test cases, but different types of normalization may make the user want to change this
+#' parameter (e.g. Seurat's original normalization function generates different results to their SCT function)
+#' which may change the MALAT1 distribution). Increase or decrease chosen_min depending on where your MALAT1 peak is located.
+#' @param smooth The "smoothing parameter" fed into the "smooth.spline" function that adjusts the trade-off between
+#' the smoothness of the line fitting the histogram, and how closely it fits the histogram; the default is 1,
+#' and can be lowered if it looks like the line is underfitting the data, and raised in the case of overfitting.
+#' The ideal scenario is for the line to trace the histogram in a way where the only inflection point(s) are between
+#' major peaks, e.g. separating the group of poor-quality cells or empty droplets with lower normalized MALAT1
+#' expression from higher-quality cells with higher normalized MALAT1 expression.
+#' @param abs_min The absolute lowest value allowed as the MALAT1 threshold. This parameter increases the
+#' robustness of the function if working with an outlier data distribution (e.g. an entire sample is poor
+#' quality so there is a unimodal MALAT1 distribution that is very low but above zero, but also many
+#' values close to zero) and prevents a resulting MALAT1 threshold of zero. In the case where a calculated
+#' MALAT1 value is zero, the function will return 0.3 by default.
+#' @param rough_max A rough value for the location of a MALAT1 peak if a peak is not found. This is possible
+#' if there are so few cells with higher MALAT1 values, that a distribution fitted to the data finds no local maxima.
+#' For example, if a sample only has poor-quality cells such that all have near-zero MALAT1 expression,
+#' the fitted function may look similar to a positive quadratic function which has no local maxima.
+#' In this case, the function searches for the closest MALAT1 value to the default value, 2, to use in place of
+#' a real local maximum.
+#'
+#' @import cli
+#' @import ggplot2
+#' @import pbapply
+#' @importFrom scales label_percent
+#' @importFrom stats density lm predict smooth.spline
+#' @importFrom utils txtProgressBar setTxtProgressBar
+#'
+#' @method Add_MALAT1_Threshold Seurat
+#'
+#' @references This function incorporates a threshold calculation and procedure as described in
+#' Clarke & Bader (2024). bioRxiv \doi{10.1101/2024.07.14.603469}.  Please cite this preprint
+#' whenever using this function.
+#'
+#' @author Zoe Clark (original function and manuscript) & Samuel Marsh (wrappers and updates for inclusion in package)
+#'
+#' @return Seurat object with added meta.data column
+#'
+#' @export
+#' @rdname Add_MALAT1_Threshold
+#'
+#' @concept qc_util
+#'
+#' @examples
+#' \dontrun{
+#' object <- Add_MALAT1_Threshold(object = object, species = "Human")
+#' }
+#'
+
+Add_MALAT1_Threshold.Seurat <- function(
+    object,
+    species,
+    sample_col = NULL,
+    malat1_threshold_name = NULL,
+    ensembl_ids = FALSE,
+    assay = NULL,
+    overwrite = FALSE,
+    print_plots = NULL,
+    save_plots = FALSE,
+    save_plot_path = NULL,
+    save_plot_name = NULL,
+    plot_width = 11,
+    plot_height = 8,
+    whole_object = FALSE,
+    homolog_name = NULL,
+    bw = 0.1,
+    lwd = 2,
+    breaks = 100,
+    chosen_min = 1,
+    smooth = 1,
+    abs_min = 0.3,
+    rough_max = 2,
+    ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = object)
+
+  # Check for sample column
+  if (is.null(x = sample_col) && isFALSE(x = whole_object)) {
+    cli_abort(message = c("No sample column provided to {.code sample_col} parameter.",
+                          "i" = "Please provide name of column in meta.data that contains sample IDs to use for MALAT1 thresholding.")
+    )
+  }
+
+  # Accepted species names
+  accepted_names <- data.frame(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && is.null(x = homolog_name)) {
+    cli_abort(message = "Rat, Marmoset, Macaque, Zebrafish, Drosophila, and Chicken are not currently supported by default.  Please supply MALAT1 homolog/ortholog feature name.")
+  }
+
+  # Set meta data column name
+  if (species %in% mouse_options) {
+    if (is.null(x = malat1_threshold_name)) {
+      malat1_threshold_name <- "Malat1_Threshold"
+    }
+  }
+
+  if (species %in% human_options) {
+    if (is.null(x = malat1_threshold_name)) {
+      malat1_threshold_name <- "MALAT1_Threshold"
+    }
+  }
+
+  if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && !is.null(x = homolog_name)) {
+    if (is.null(x = malat1_threshold_name)) {
+      malat1_threshold_name <- paste0(homolog_name, "_Threshold")
+    }
+  }
+
+  # Overwrite check
+  if (malat1_threshold_name %in% colnames(x = object@meta.data)) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {malat1_threshold_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code malat1_threshold_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {malat1_threshold_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Checks species
+  if (is.null(x = species)) {
+    cli_abort(message = c("No species name or abbreivation was provided to {.code species} parameter.",
+                          "i" = "If not using default species please set {.code species = other}.")
+    )
+  }
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = object)
+
+  # check normalized
+  Check_Normalized(object = object, assay = assay, error = TRUE)
+
+  if (isTRUE(x = save_plots)) {
+    # Set file_path before path check if current dir specified as opposed to leaving set to NULL
+    if (!is.null(x = save_plot_path) && save_plot_path == "") {
+      save_plot_path <- NULL
+    }
+
+    # Check file path is valid
+    if (!is.null(x = save_plot_path)) {
+      if (!dir.exists(paths = save_plot_path)) {
+        cli_abort(message = "Provided {.code save_plot_path}: {symbol$dquote_left}{.field {save_plot_path}}{symbol$dquote_right} does not exist.")
+      }
+    }
+
+    # Check if file name provided
+    if (is.null(x = save_plot_name)) {
+      cli_abort(message = "No file name provided.  Please provide a file name using {.code save_plot_name}.")
+    }
+
+    # append .pdf if needed
+    file_ext <- grep(x = save_plot_name, pattern = ".pdf$")
+    if (length(x = file_ext) == 0) {
+      cli_abort(message = "{.code save_plot_name} must end with file extension '.pdf'.")
+    }
+
+    # check non-default output values
+    if (!is.numeric(x = plot_width)) {
+      cli_abort(message = "The value provided to {.code plot_width} ({.field {plot_width}}) is not numeric.")
+    }
+
+    if (!is.numeric(x = plot_height)) {
+      cli_abort(message = "The value provided to {.code plot_height} ({.field {plot_height}}) is not numeric.")
+    }
+  }
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    if (species %in% mouse_options) {
+      malat_id <- "Malat1"
+    }
+    if (species %in% human_options) {
+      malat_id <- "MALAT1"
+    }
+    if (species %in% c(marmoset_options, zebrafish_options, rat_options, drosophila_options, macaque_options, chicken_options) && is.null(x = homolog_name)) {
+      malat_id <- homolog_name
+    }
+  } else {
+    malat_id <- Retrieve_MALAT1_Ensembl_Lists(species = species)
+  }
+
+  # check malat1 present
+  malat_id <- Feature_PreCheck(object = object, features = malat_id)
+
+  # Get data
+  cli_inform(message = c("*" = "Adding MALAT1 Threshold for {.field {species}} using gene id: {.val {malat_id}}.",
+                         "i" = "{col_cyan('Please cite')} {.field Clarke & Bader (2024). doi.org/10.1101/2024.07.14.603469} {col_cyan('when using MALAT1 thresholding function.')}"))
+
+  # split data and run by sample or whole object
+  if (isTRUE(x = whole_object)) {
+    malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data")[,1])
+
+    # set plot params
+    plot_title <- NULL
+    print_plots <- print_plots %||% TRUE
+
+    # run threshold function
+    res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = plot_title)
+
+    # split results
+    threshold <- res[[1]]
+
+    # save plots
+    if (isTRUE(x = save_plots)) {
+      plots <- res[[2]]
+      ggsave(plots, filename = paste(save_plot_path, save_plot_name, sep=""), width = replace_null(parameter = plot_width), height = replace_null(parameter = plot_height))
+    }
+
+    malat1_threshold <- malat_norm_data > threshold
+    object[[malat1_threshold_name]] <- malat1_threshold
+    object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+    cli_inform(message = "A total of {.field {length(which(object[[malat1_threshold_name]] == FALSE))}} cells ({.field {label_percent()(length(which(object[[malat1_threshold_name]] == FALSE)) / length(x = Cells(x = object)))}}) fall below the threshold.")
+
+  } else {
+    Idents(object = object) <- sample_col
+    cells_by_sample <- CellsByIdentities(object = object)
+
+    sample_col_names <- names(x = cells_by_sample)
+
+    # calculate threshold
+    cli_inform(message = "Calculating thresholds across {.field {length(x = sample_col_names)}} samples from meta.data column {.field {sample_col}}.")
+    threshold_all <- pblapply(1:length(x = sample_col_names), function(x) {
+      malat_norm_data <- as.numeric(x = FetchData(object, vars = malat_id, layer = "data", cells = cells_by_sample[[x]])[,1])
+
+      # run threshold function
+      res <- define_malat1_threshold(counts = malat_norm_data, bw = bw, lwd = lwd, breaks = breaks, chosen_min = chosen_min, smooth = smooth, abs_min = abs_min, rough_max = rough_max, print_plots = print_plots, return_plots = TRUE, plot_title = sample_col_names[x])
+
+      threshold <- res[[1]]
+
+      malat1_threshold <- malat_norm_data > threshold
+      malat1_threshold <- data.frame(malat1_threshold_name = malat1_threshold)
+      rownames(malat1_threshold) <- cells_by_sample[[x]]
+
+      res_list <- list("thresholds" = malat1_threshold,
+                       "plots" = res[[2]])
+    })
+
+    # save plots
+    if (isTRUE(x = save_plots)) {
+      cli_inform(message = "{.field Saving plots to file}")
+
+      # Extract plots into a list
+      plots_list <- lapply(threshold_all, function(res) res$plots)
+
+      # save plots
+      pdf(file = paste(save_plot_path, save_plot_name, sep=""), width = plot_width, height = plot_height)
+      pb <- txtProgressBar(min = 0, max = length(x = plots_list), style = 3, file = stderr())
+      for (i in 1:length(x = plots_list)) {
+        print(plots_list[[i]])
+        setTxtProgressBar(pb = pb, value = i)
+      }
+      close(con = pb)
+      dev.off()
+    }
+
+    # Extract thresholds and bind them into a single data frame
+    thresholds_list <- lapply(threshold_all, function(res) {
+      res$thresholds
+    })
+    thresholds_df <- bind_rows(thresholds_list)
+    cli_inform(message = "A total of {.field {length(which(thresholds_df[['malat1_threshold_name']] == FALSE))}} cells ({.field {label_percent()(length(which(thresholds_df[['malat1_threshold_name']] == FALSE)) / length(x = Cells(x = object)))}}) fall below the threshold.")
+
+    # Add to object
+    cli_inform(message = "Adding results to object as {.val {malat1_threshold_name}}.")
+    object[[malat1_threshold_name]] <- thresholds_df
+    object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
+  }
+
+  object <- LogSeuratCommand(object = object)
+
+  return(object)
+}
+
+
+#' Add exAM Gene List Module Scores
+#'
+#' Adds module scores from exAM genes from mouse and human.
+#'
+#' @param seurat_object object name.
+#' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
+#' @param exam_module_name name to use for the new meta.data column containing module scores.
+#' @param method method to use for module scoring, currently only "Seurat" is supported but more to be added.  .
+#' @param ensembl_ids logical, whether feature names in the object are gene names or
+#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
+#' @param assay Assay to use (default is the current object default assay).
+#' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
+#' function will abort if columns with the name provided to `exam_module_name` is present in meta.data slot.
+#' @param exclude_unfound logical, whether to exclude features not present in current object (default is FALSE).
+#' @param seed seed for reproducibility (default is 1).
+#'
+#' @return Seurat object
+#'
+#' @import cli
+#'
+#' @references Gene list is from: SI Table 22 Marsh et al., 2022 (Nature Neuroscience) from \doi{10.1038/s41593-022-01022-8}.
+#' See data-raw directory for scripts used to create gene list.
+#'
+#' @export
+#'
+#' @concept qc_util
+#'
+#' @examples
+#' \dontrun{
+#' # Seurat
+#' seurat_object <- exAM_Scoring(seurat_object = seurat_object, species = "human")
+#'}
+#'
+
+exAM_Scoring <- function(
+    seurat_object,
+    species,
+    exam_module_name = NULL,
+    method = "Seurat",
+    ensembl_ids = FALSE,
+    assay = NULL,
+    overwrite = FALSE,
+    exclude_unfound = FALSE,
+    seed = 1
+) {
+  # Accepted species names
+  accepted_names <- list(
+    Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
+    Human_Options = c("Human", "human", "Hu", "hu", "Hs", "hs"),
+    Marmoset_Options = c("Marmoset", "marmoset", "CJ", "Cj", "cj", NA),
+    Zebrafish_Options = c("Zebrafish", "zebrafish", "DR", "Dr", "dr", NA),
+    Rat_Options = c("Rat", "rat", "RN", "Rn", "rn", NA),
+    Drosophila_Options = c("Drosophila", "drosophila", "DM", "Dm", "dm", NA),
+    Macaque_Options = c("Macaque", "macaque", "Rhesus", "macaca", "mmulatta", NA),
+    Chicken_Options = c("Chicken", "chicken", "Gallus", "gallus", "Gg", "gg")
+  )
+
+  # Species Spelling Options
+  mouse_options <- accepted_names$Mouse_Options
+  human_options <- accepted_names$Human_Options
+  marmoset_options <- accepted_names$Marmoset_Options
+  zebrafish_options <- accepted_names$Zebrafish_Options
+  rat_options <- accepted_names$Rat_Options
+  drosophila_options <- accepted_names$Drosophila_Options
+  macaque_options <- accepted_names$Macaque_Options
+  chicken_options <- accepted_names$Chicken_Options
+
+  if (!species %in% unlist(x = accepted_names)) {
+    cli_inform(message = "The supplied species ({.field {species}}) is not currently supported.")
+  }
+
+  if (species %in% c(marmoset_options, rat_options, zebrafish_options, macaque_options, drosophila_options, chicken_options)) {
+    cli_abort(message = c("{.val Rat, Marmoset, Macaque, Zebrafish, Drosophila, Chicken} are not currently supported.",
+                         "i" = "No column will be added to object meta.data"))
+  }
+
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  if (method == "UCell") {
+    # Check Nebulosa installed
+    UCell_check <- is_installed(pkg = "UCell")
+    if (isFALSE(x = UCell_check)) {
+      cli_abort(message = c(
+        "Please install the {.val UCell} package to use {.code method = {symbol$dquote_left}UCell{symbol$dquote_right}}",
+        "i" = "This can be accomplished with the following commands: ",
+        "----------------------------------------",
+        "{.field `install.packages({symbol$dquote_left}BiocManager{symbol$dquote_right})`}",
+        "{.field `BiocManager::install({symbol$dquote_left}UCell{symbol$dquote_right})`}",
+        "----------------------------------------"
+      ))
+    }
+  }
+
+  # set module score names
+  if (is.null(x = exam_module_name)) {
+    if (species %in% human_options) {
+      exam_module_name <- c("exAM_Union_Score", "exAM_Microglia_Score")
+    } else {
+      exam_module_name <- c("exAM_Union_Score")
+    }
+  } else {
+    if (species %in% human_options && length(x = exam_module_name) != 2) {
+      cli_abort("{.code exam_module_name} must be length 2 when {.code species = {symbol$dquote_left}human{symbol$dquote_right}}.")
+    }
+  }
+
+  # Overwrite check
+  if (any(exam_module_name %in% colnames(x = seurat_object@meta.data))) {
+    if (isFALSE(x = overwrite)) {
+      cli_abort(message = c("Column with {.val {exam_module_name}} already present in meta.data slot.",
+                            "i" = "*To run function and overwrite column set parameter {.code overwrite = TRUE} or change respective {.code exam_module_name}*")
+      )
+    }
+    cli_inform(message = c("Column with {.val {exam_module_name}} already present in meta.data slot.",
+                           "i" = "Overwriting those column as {.code overwrite = TRUE.}")
+    )
+  }
+
+  # Set default assay
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Retrieve gene lists
+  if (isFALSE(x = ensembl_ids)) {
+    exAM_gene_list <- Retrieve_exAM_Lists(species = species)
+  } else {
+    exAM_gene_list <- Retrieve_exAM_Ensembl_Lists(species = species)
+  }
+
+  if (isTRUE(x = exclude_unfound)) {
+    # check features present
+    exAM_found <- Feature_PreCheck(object = seurat_object, features = exAM_gene_list[["exAM_union"]])
+
+    if (species %in% human_options) {
+      exAM_found2 <- Feature_PreCheck(object = seurat_object, features = exAM_gene_list[["exAM_micro"]])
+    }
+  } else {
+    # check features present
+    exAM_found <- exAM_gene_list[["exAM_union"]]
+
+    if (species %in% human_options) {
+      exAM_found2 <- exAM_gene_list[["exAM_micro"]]
+    }
+  }
+
+  # Add cite check
+  if (length(x = exAM_found) > 0) {
+    cli_inform(message = c("i" = "{col_cyan('Please cite')} {.field Marsh et al., (2022). doi.org/10.1038/s41593-022-01022-8} {col_cyan('when using exAM Scoring function.')}"))
+    cli_inform(message = "Adding module score for exAM union gene list as {.field {symbol$dquote_left}{exam_module_name[1]}{symbol$dquote_right}}.")
+    seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found), name = exam_module_name[1], search = FALSE, seed = seed)
+    colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[1], "1"), replacement = exam_module_name[1], x = colnames(seurat_object@meta.data))
+  }
+
+  if (species %in% human_options) {
+    if (length(x = exAM_found2) > 0) {
+      cli_inform(message = "Adding module score for exAM Microglia Factor gene list as {.field {symbol$dquote_left}{exam_module_name[2]}{symbol$dquote_right}}.")
+      seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found2), name = exam_module_name[2], search = FALSE, seed = seed)
+      colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[2], "1"), replacement = exam_module_name[2], x = colnames(seurat_object@meta.data))
+    }
+  }
+
+  # Log Command
+  seurat_object <- LogSeuratCommand(object = seurat_object)
+
+  # return final object
+  return(seurat_object)
 }
 
 

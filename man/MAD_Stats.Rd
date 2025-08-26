@@ -6,7 +6,8 @@
 \usage{
 MAD_Stats(
   seurat_object,
-  group_by_var = "orig.ident",
+  group_by_var = deprecated(),
+  group.by = "orig.ident",
   default_var = TRUE,
   mad_var = NULL,
   mad_num = 2
@@ -15,7 +16,9 @@ MAD_Stats(
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{group_by_var}{Column in meta.data slot to group results by (default = "orig.ident").}
+\item{group_by_var}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{meta data column to classify samples (default = "orig.ident").}
 
 \item{default_var}{logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
@@ -35,7 +38,7 @@ Get quick values for X x median absolute deviation for Genes, UMIs, \%mito per c
 }
 \examples{
 \dontrun{
-mad_stats <- MAD_Stats(seurat_object = obj, group_by_var = "orig.ident")
+mad_stats <- MAD_Stats(seurat_object = obj, group.by = "orig.ident")
 }
 
 }

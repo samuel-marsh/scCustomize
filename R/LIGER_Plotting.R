@@ -3,9 +3,12 @@
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by Variable to split plots by.
+#' If `combination = TRUE` will plot both clusters and meta data variable.
+#' @param split_by `r lifecycle::badge("deprecated")` soft-deprecated. See `split.by`.
+#' @param split.by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
 #' less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
 #' both from \code{\link{DiscretePalette_scCustomize}}.
@@ -26,7 +29,7 @@
 #' @param label logical.  Whether or not to label the clusters.  ONLY applies to plotting by cluster.  Default is TRUE.
 #' @param label_size size of cluster labels.
 #' @param label_repel logical.  Whether to repel cluster labels from each other if plotting by
-#' cluster (if `group_by = NULL` or `group_by = "cluster`).  Default is FALSE.
+#' cluster (if `group.by = NULL` or `group.by = "cluster`).  Default is FALSE.
 #' @param label_box logical.  Whether to put a box around the label text (uses `geom_text` vs `geom_label`).
 #' Default is FALSE.
 #' @param label_color Color to use for cluster labels.  Default is "black".
@@ -44,6 +47,7 @@
 #' @return A ggplot/patchwork object
 #'
 #' @import ggplot2
+
 #' @importFrom patchwork wrap_plots
 #' @importFrom utils packageVersion
 #'
@@ -59,8 +63,10 @@
 
 DimPlot_LIGER <- function(
   liger_object,
-  group_by = NULL,
-  split_by = NULL,
+  group_by = deprecated(),
+  group.by = NULL,
+  split_by = deprecated(),
+  split.by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
   pt_size = NULL,
@@ -84,27 +90,36 @@ DimPlot_LIGER <- function(
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
 
-  # Set group_by defaults
-  if (isFALSE(x = combination) && is.null(x = group_by)) {
-    group_by <- "cluster"
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "DimPlot_LIGER(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
   }
 
-  if (isTRUE(x = combination) && is.null(x = group_by)) {
-    group_by <- "dataset"
+  # Set group.by defaults
+  if (isFALSE(x = combination) && is.null(x = group.by)) {
+    group.by <- "cluster"
+  }
+
+  if (isTRUE(x = combination) && is.null(x = group.by)) {
+    group.by <- "dataset"
   }
 
   # Group by cluster options
   cluster_options <- c("cluster", "Cluster", "clusters", "Clusters")
-  if (group_by %in% cluster_options) {
-    group_by <- "cluster"
+  if (group.by %in% cluster_options) {
+    group.by <- "cluster"
   }
 
-  # Check group_by parameter
-  if (!group_by == "cluster")
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  # Check group.by parameter
+  if (!group.by == "cluster")
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-  if (!is.null(x = split_by)) {
-    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split_by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+  if (!is.null(x = split.by)) {
+    group_by_var <- Meta_Present(object = liger_object, meta_col_names = split.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
   }
 
   if (packageVersion(pkg = 'rliger') < "2.0.0") {
@@ -145,9 +160,9 @@ DimPlot_LIGER <- function(
 
   # liger version check
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    plots <-LIGER2_DimPlot(liger_object = liger_object,
-                           group_by = group_by,
-                           split_by = split_by,
+    plots <- LIGER2_DimPlot(liger_object = liger_object,
+                           group.by = group.by,
+                           split.by = split.by,
                            colors_use_cluster = colors_use_cluster,
                            colors_use_meta = colors_use_meta,
                            pt_size = pt_size,
@@ -168,8 +183,8 @@ DimPlot_LIGER <- function(
                            color_seed = color_seed)
   } else {
     plots <- LIGER_DimPlot(liger_object = liger_object,
-                           group_by = group_by,
-                           split_by = split_by,
+                           group.by = group.by,
+                           split.by = split.by,
                            colors_use_cluster = colors_use_cluster,
                            colors_use_meta = colors_use_meta,
                            pt_size = pt_size,
@@ -236,7 +251,6 @@ DimPlot_LIGER <- function(
 #' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
-#' @importFrom lifecycle deprecated
 #' @importFrom patchwork wrap_plots
 #' @importFrom scattermore geom_scattermore
 #'
@@ -289,7 +303,6 @@ plotFactors_scCustom <- function(
                                 pt.size_factors = pt.size_factors,
                                 pt.size_dimreduc = pt.size_dimreduc,
                                 reduction = reduction,
-                                reduction_label = reduction_label,
                                 plot_legend = plot_legend,
                                 raster = raster,
                                 raster.dpi = raster.dpi,
@@ -300,7 +313,6 @@ plotFactors_scCustom <- function(
                                 file_name = file_name,
                                 return_plots = return_plots,
                                 cells.highlight = cells.highlight,
-                                reorder_datasets = reorder_datasets,
                                 ggplot_default_colors = ggplot_default_colors,
                                 color_seed = color_seed
     )
@@ -337,6 +349,7 @@ plotFactors_scCustom <- function(
 #' Any negative correlations are set to NA and NA values set to bottom color of color gradient.
 #'
 #' @param object liger or Seurat object.
+#' @param reduction name of dimensionality reduction containing NMF loadings, Seurat only.
 #' @param colors_use Color palette to use for correlation values.
 #' Default is `RColorBrewer::RdBu` if `positive_only = FALSE`.
 #' If `positive_only = TRUE` the default is `viridis`.
@@ -380,6 +393,7 @@ plotFactors_scCustom <- function(
 
 Factor_Cor_Plot <- function(
     object,
+    reduction = NULL,
     colors_use = NULL,
     label = FALSE,
     label_threshold = 0.5,
@@ -398,7 +412,26 @@ Factor_Cor_Plot <- function(
     cli_abort(message = "{.code plot_type} must be one of {.field {glue_collapse_scCustom(input_string = c('full', 'lower,', 'upper'), and = FALSE)}}")
   }
 
-  cor_mat <- Find_Factor_Cor(object = object)
+  # get data Seurat
+  if (inherits(x = object, what = "Seurat")) {
+    # check a reduction provided
+    if (is.null(x = reduction)) {
+      cli_abort(message = "Must supply name of reduction to {.code reduction} parameter when plotting from Seurat object")
+    }
+
+    # check reduction present
+    if (!reduction %in% Reductions(object = object)) {
+      cli_abort(message = "Provided reduction: {.field {reduction}} was not found in Seurat Object.")
+    }
+
+    # get cor data
+    cor_mat <- Find_Factor_Cor(object = object, reduction = reduction)
+  }
+
+  # get data liger
+  if (inherits(x = object, what = "liger")) {
+    cor_mat <- Find_Factor_Cor(object = object)
+  }
 
   # filter matrix by plot type
   if (plot_type == "upper") {

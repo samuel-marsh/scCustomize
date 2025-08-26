@@ -63,7 +63,13 @@ Create_10X_H5 <- function(
                                header = TRUE,
                                stringsAsFactors = FALSE)
   }
+
   cli_inform(message = "{.field Import complete. Start write to H5}")
+  # check extension
+  if (isTRUE(x = check_extension(file_name = save_name, extension = ".h5"))) {
+    save_name <- gsub(pattern = ".h5", replacement = "", x = save_name, fixed = TRUE)
+  }
+
   temp_file <- tempfile(pattern = paste(save_name, "_", sep = ""),
                         tmpdir = save_file_path,
                         fileext=".h5")
@@ -85,9 +91,11 @@ Create_10X_H5 <- function(
 #' @param raw_cell_bender_matrix matrix file containing the cell bender correct counts.
 #' @param raw_counts_matrix matrix file contain the uncorrected Cell Ranger (or other) counts.
 #' @param raw_assay_name a key value to use specifying the name of assay.  Default is "RAW".
-#' @param min_cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
+#' @param min_cells `r lifecycle::badge("deprecated")` soft-deprecated. See `min.cells`.
+#' @param min_features `r lifecycle::badge("deprecated")` soft-deprecated. See `min.features`.
+#' @param min.cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #' Default is 5.
-#' @param min_features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
+#' @param min.features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #'  Default is 200.
 #' @param ... Extra parameters passed to \code{\link[SeuratObject]{CreateSeuratObject}}.
 #'
@@ -113,10 +121,30 @@ Create_CellBender_Merged_Seurat <- function(
   raw_cell_bender_matrix = NULL,
   raw_counts_matrix = NULL,
   raw_assay_name = "RAW",
-  min_cells = 5,
-  min_features = 200,
+  min_cells = deprecated(),
+  min_features = deprecated(),
+  min.cells = 5,
+  min.features = 200,
   ...
 ) {
+  if (is_present(min_cells)) {
+    deprecate_warn(when = "3.3.0",
+                              what = "Create_CellBender_Merged_Seurat(min_cells)",
+                              details = c("i" = "The {.code min_cells} parameter is soft-deprecated.  Please update code to use `min.cells` instead.")
+    )
+    min.cells <- min_cells
+  }
+
+  if (is_present(min_features)) {
+    deprecate_warn(when = "3.3.0",
+                              what = "Create_CellBender_Merged_Seurat(min_features)",
+                              details = c("i" = "The {.code min_features} parameter is soft-deprecated.  Please update code to use `min.features` instead.")
+    )
+    min.features <- min_features
+  }
+
+
+
   # Filter Cell Bender matrix for Cell Ranger cells
   cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(x = raw_cell_bender_matrix))
 
@@ -126,7 +154,7 @@ Create_CellBender_Merged_Seurat <- function(
 
   # Create Seurat Object
   cli_inform(message = "{.field Creating Seurat Object from Cell Bender matrix.}")
-  cell_bender_seurat <- CreateSeuratObject(counts = raw_cell_bender_matrix, min.cells = min_cells, min.features = min_features, ...)
+  cell_bender_seurat <- CreateSeuratObject(counts = raw_cell_bender_matrix, min.cells = min.cells, min.features = min.features, ...)
 
   # Pull cell and gene names
   cell_names_seurat <- colnames(x = cell_bender_seurat)
@@ -1470,8 +1498,8 @@ Read_CellBender_h5_Multi_File <- function(
     file_suffix <- custom_name
 
     # check suffix
-    file_ext <- grep(x = file_suffix, pattern = ".h5$")
-    if (length(x = file_ext) == 0) {
+    file_ext <- check_extension(file_name = file_suffix, extension = ".h5")
+    if (isFALSE(x = file_ext)) {
       cli_abort(message = "'custom_name' must end with file extension '.h5'.")
     }
   } else if (isTRUE(x = filtered_h5)) {
@@ -1486,7 +1514,7 @@ Read_CellBender_h5_Multi_File <- function(
     sample_list <- gsub(pattern = file_suffix, x = file.list, replacement = "")
   }
 
-  # Check sample_names length is ok
+  # Check sample_names length is OK
   if (!is.null(x = sample_names) && length(x = sample_names) != length(x = sample_list)) {
     cli_abort(message = "Length of {.code sample_names} {.field {length(x = sample_names)}} must be equal to number of samples {.field {length(x = sample_list)}}.")
   }
@@ -1535,7 +1563,7 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' Get data.frame with all metrics from the Cell Ranger count analysis (present in web_summary.html)
 #'
-#' @param base_path path to the parent directory which contains all of the subdirectories of interest or
+#' @param base_path path to the parent directory which contains all of the sub-directories of interest or
 #' alternatively can provide single csv file to read and format identically to reading multiple files.
 #' @param secondary_path path from the parent directory to count "outs/" folder which contains the
 #' "metrics_summary.csv" file.
@@ -1641,7 +1669,7 @@ Read_Metrics_10X <- function(
 
     return(data_list)
   } else {
-    temp_csv <- read.csv(file = file.path(base_path, lib_list[1], secondary_path))
+    temp_csv <- read.csv(file = file.path(base_path, lib_list[1], secondary_path, "metrics_summary.csv"))
     if (ncol(x = temp_csv) > nrow(x = temp_csv)) {
       count_gex_metrics <- Metrics_Count_GEX(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
     } else {
@@ -1765,6 +1793,82 @@ Read_Metrics_CellBender <- function(
   rownames(x = full_data) <- full_data$sample_id
 
   return(full_data)
+}
+
+
+#' Read and add results from cNMF
+#'
+#' Reads the usage and spectra files from cNMF results and adds them as dimensionality
+#' reduction to seurat object.
+#'
+#' @param seurat_object Seurat object name to add cNMF reduction
+#' @param usage_file path and name of cNMF usage file
+#' @param spectra_file path and name of cNMF spectra file
+#' @param normalize logical, whether to normalize the cNMF usage data, default is TRUE
+#' @param assay assay to add reduction.  Default is NULL and will use current
+#' active assay.
+#'
+#' @return Seurat object with new dimensionality reduction "cnmf"
+#'
+#' @importFrom data.table fread
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#'
+#' @references For more information about cNMF and usage see \url{https://github.com/dylkot/cNMF}
+#'
+#' @export
+#'
+#' @concept read_&_write
+#'
+#' @examples
+#' \dontrun{
+#' object <- Read_cNMF(seurat_object = object,
+#' usage_file = "example_cNMF/example_cNMF.usages.k_27.dt_0_01.consensus.txt",
+#' spectra_file = "example_cNMF/example_cNMF.gene_spectra_score.k_27.dt_0_01.txt")
+#' }
+#'
+
+Read_Add_cNMF <- function(
+    seurat_object,
+    usage_file,
+    spectra_file,
+    normalize = TRUE,
+    assay = NULL
+) {
+  # check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # set assay (if null set to active assay)
+  assay <- assay %||% DefaultAssay(object = seurat_object)
+
+  # Read and transform usage data
+  usage_data <- fread(usage_file, data.table = FALSE, header = TRUE) %>%
+    column_to_rownames("V1")
+
+  colnames(x = usage_data) <- paste0("Factor_", colnames(x = usage_data))
+
+  # normalize usage data
+  if (isTRUE(x = normalize)) {
+    usage_data <- as.data.frame(t(apply(usage_data, 1, function(x) x / sum(x))))
+  }
+
+  # transform to matrix for dimreduc creation
+  usage_data <- as.matrix(x = usage_data)
+
+  # read spectra data
+  spectra_data <- fread(spectra_file, data.table = FALSE, header = TRUE) %>%
+    column_to_rownames("V1") %>%
+    t()
+
+  colnames(spectra_data) <- paste0("Factor_", colnames(spectra_data))
+
+  # create and add dimreduc object
+  cnmf_dimreduc <- CreateDimReducObject(embeddings = usage_data, loadings = spectra_data, assay = assay, key = "cNMF_")
+
+  seurat_object[["cnmf"]] <- cnmf_dimreduc
+
+  # return object
+  return(seurat_object)
 }
 
 

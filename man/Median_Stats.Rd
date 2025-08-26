@@ -6,7 +6,8 @@
 \usage{
 Median_Stats(
   seurat_object,
-  group_by_var = "orig.ident",
+  group_by_var = deprecated(),
+  group.by = "orig.ident",
   default_var = TRUE,
   median_var = NULL
 )
@@ -14,7 +15,9 @@ Median_Stats(
 \arguments{
 \item{seurat_object}{Seurat object name.}
 
-\item{group_by_var}{Column in meta.data slot to group results by (default = "orig.ident").}
+\item{group_by_var}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
+\item{group.by}{meta data column to classify samples (default = "orig.ident").}
 
 \item{default_var}{logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
@@ -31,7 +34,7 @@ Get quick values for median Genes, UMIs, \%mito per cell grouped by meta.data va
 }
 \examples{
 \dontrun{
-med_stats <- Median_Stats(seurat_object - obj, group_by_var = "orig.ident")
+med_stats <- Median_Stats(seurat_object - obj, group.by = "orig.ident")
 }
 
 }

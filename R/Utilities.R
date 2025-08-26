@@ -258,7 +258,7 @@ Meta_Present <- function(
     bad_meta <- meta_col_names[!meta_col_names %in% possible_features]
     found_meta <- meta_col_names[meta_col_names %in% possible_features]
 
-    if (isFALSE(return_none)) {
+    if (isFALSE(x = return_none)) {
       if (length(x = found_meta) < 1) {
         cli_abort(message = c("No meta data columns found.",
                               "i" = "The following meta data columns were not found: {.field {glue_collapse_scCustom(input_string = bad_meta, and = TRUE)}}")
@@ -391,11 +391,11 @@ Reduction_Loading_Present <- function(
   if (length(x = seurat_object@reductions) == 0) {
     if (isTRUE(x = return_none)) {
       # Combine into list and return
-      feature_list <- list(
+      reduction_list <- list(
         found_features = NULL,
-        bad_features = NULL
+        bad_features = reduction_names
       )
-      return(feature_list)
+      return(reduction_list)
     } else {
       cli_abort(message ="No reductions present in object.")
     }
@@ -1169,10 +1169,12 @@ Add_Pct_Diff <- function(
 #'  or similar analysis.
 #'
 #' @param marker_dataframe data.frame output from \code{\link[Seurat]{FindAllMarkers}} or similar analysis.
-#' @param num_genes number of genes per group (e.g., cluster) to include in output list.
-#' @param group_by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
+#' @param num_features number of features per group (e.g., cluster) to include in output list.
+#' @param num_genes `r lifecycle::badge("deprecated")` soft-deprecated. See `num_features`.
+#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by column name of `marker_dataframe` to group data by.  Default is "cluster" based on
 #'  \code{\link[Seurat]{FindAllMarkers}}.
-#' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group_by`.
+#' @param rank_by column name of `marker_dataframe` to rank data by when selecting `num_genes` per `group.by`.
 #' Default is "avg_log2FC" based on \code{\link[Seurat]{FindAllMarkers}}.
 #' @param gene_column column name of `marker_dataframe` that contains the gene IDs.  Default is "gene"
 #' based on \code{\link[Seurat]{FindAllMarkers}}.
@@ -1181,12 +1183,12 @@ Add_Pct_Diff <- function(
 #' @param data_frame Logical, whether or not to return filtered data.frame of the original `markers_dataframe` or
 #' to return a vector of gene IDs.  Default is FALSE.
 #' @param named_vector Logical, whether or not to name the vector of gene names that is returned by the function.
-#' If `TRUE` will name the vector using the column provided to `group_by`.  Default is TRUE.
+#' If `TRUE` will name the vector using the column provided to `group.by`.  Default is TRUE.
 #' @param make_unique Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 #' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
 #' @import cli
-#' @importFrom dplyr group_by slice_max
+#' @importFrom dplyr group_by slice_max slice_min
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -1199,14 +1201,16 @@ Add_Pct_Diff <- function(
 #' @examples
 #' \dontrun{
 #' top10_genes <- Extract_Top_Markers(marker_dataframe = markers_results, num_genes = 10,
-#' group_by = "cluster", rank_by = "avg_log2FC")
+#' group.by = "cluster", rank_by = "avg_log2FC")
 #' }
 #'
 
 Extract_Top_Markers <- function(
   marker_dataframe,
-  num_genes = 10,
-  group_by = "cluster",
+  num_features = 10,
+  num_genes = deprecated(),
+  group_by = deprecated(),
+  group.by = "cluster",
   rank_by = "avg_log2FC",
   gene_column = "gene",
   gene_rownames_to_column = FALSE,
@@ -1214,15 +1218,36 @@ Extract_Top_Markers <- function(
   named_vector = TRUE,
   make_unique = FALSE
 ) {
+  if (!inherits(what = "data.frame", x = marker_dataframe)) {
+    cli_abort(message = "The `marker_dataframe` is of class {.field {class(x = marker_dataframe)}} but needs to be {.field data.frame}.")
+  }
+
+  # check deprecation
+  if (is_present(group_by)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Extract_Top_Markers(group_by)",
+                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- group_by
+  }
+
+  if (is_present(num_genes)) {
+    deprecate_warn(when = "3.1.0",
+                              what = "Extract_Top_Markers(num_genes)",
+                              details = c("i" = "The {.code num_genes} parameter is soft-deprecated.  Please update code to use `num_features` instead.")
+    )
+    num_features <- num_genes
+  }
+
   # Check ranking factor in marker data.frame
   if (!rank_by %in% colnames(x = marker_dataframe)) {
     cli_abort(message = "{.code rank_by}: {.val {rank_by}} not found in column names of {.code marker_dataframe}.")
   }
 
   # Check grouping factor in marker data.frame
-  if (!is.null(x = group_by)) {
-    if (!group_by %in% colnames(x = marker_dataframe)) {
-      cli_abort(message = "{.code group_by}: {.val {group_by}} not found in column names of {.code marker_dataframe}.")
+  if (!is.null(x = group.by)) {
+    if (!group.by %in% colnames(x = marker_dataframe)) {
+      cli_abort(message = "{.code group.by}: {.val {group.by}} not found in column names of {.code marker_dataframe}.")
     }
   }
 
@@ -1233,19 +1258,33 @@ Extract_Top_Markers <- function(
     )
   }
 
-
   # create filtered data.frame
-  if (is.null(x = group_by)) {
-    filtered_markers <- marker_dataframe %>%
-      rownames_to_column("rownames") %>%
-      slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
-      column_to_rownames("rownames")
+  if (is.null(x = group.by)) {
+    if (rank_by == "p_val_adj") {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        slice_min(n = num_features, order_by = .data[[rank_by]], with_ties = FALSE) %>%
+        column_to_rownames("rownames")
+    } else {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        slice_max(n = num_features, order_by = .data[[rank_by]]) %>%
+        column_to_rownames("rownames")
+    }
   } else {
-    filtered_markers <- marker_dataframe %>%
-      rownames_to_column("rownames") %>%
-      group_by(.data[[group_by]]) %>%
-      slice_max(n = num_genes, order_by = .data[[rank_by]]) %>%
-      column_to_rownames("rownames")
+    if (rank_by == "p_val_adj") {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        dplyr::group_by(.data[[group.by]]) %>%
+        slice_min(n = num_features, order_by = .data[[rank_by]], with_ties = FALSE) %>%
+        column_to_rownames("rownames")
+    } else {
+      filtered_markers <- marker_dataframe %>%
+        rownames_to_column("rownames") %>%
+        dplyr::group_by(.data[[group.by]]) %>%
+        slice_max(n = num_features, order_by = .data[[rank_by]]) %>%
+        column_to_rownames("rownames")
+    }
   }
 
   if (isTRUE(x = gene_rownames_to_column)) {
@@ -1263,17 +1302,17 @@ Extract_Top_Markers <- function(
 
   # should gene list be named
   # check naming
-  if (isTRUE(x = named_vector) && is.null(x = group_by)) {
-    cli_warn(message = c("Cannot return named vector if {.code group_by} is NULL.",
+  if (isTRUE(x = named_vector) && is.null(x = group.by)) {
+    cli_warn(message = c("Cannot return named vector if {.code group.by} is NULL.",
                          "i" = "Returning unnamed vector.")
     )
   }
 
-  if (isTRUE(x = named_vector) && !is.null(x = group_by)) {
+  if (isTRUE(x = named_vector) && !is.null(x = group.by)) {
     if (isTRUE(x = make_unique)) {
       cli_abort(message = "Cannot return unique list if {.code named_vector = TRUE}.")
     }
-    names(x = gene_list) <- filtered_markers[[group_by]]
+    names(x = gene_list) <- filtered_markers[[group.by]]
     return(gene_list)
   }
 
@@ -1331,9 +1370,10 @@ Create_Cluster_Annotation_File <- function(
   }
 
   # Check extension
-  file_ext <- grep(x = file_name, pattern = ".csv$")
+  file_ext <- check_extension(file_name = file_name, extension = ".csv")
+  # file_ext <- grep(x = file_name, pattern = ".csv$")
 
-  if (length(x = file_ext) == 0) {
+  if (isFALSE(x = file_ext)) {
     file_name <- paste0(file_name, ".csv")
   }
 
@@ -1341,7 +1381,7 @@ Create_Cluster_Annotation_File <- function(
   # Confirm no files with same name in the same directory path.
   full_path <- file.path(dir_path, file_name)
   if (file.exists(full_path)) {
-    cli_abort(message = c("File with name {.val {file_name}} already exists in directory directory.",
+    cli_abort(message = c("File with name {.val {file_name}} already exists in directory {.val {dir_path}}.",
                           "i" = "Please supply a different {.code file_name}.")
     )
   }
@@ -1500,7 +1540,6 @@ Pull_Cluster_Annotation <- function(
 #' @method Rename_Clusters Seurat
 #'
 #' @import cli
-#' @importFrom lifecycle deprecated
 #'
 #' @rdname Rename_Clusters
 #' @export
@@ -1524,8 +1563,8 @@ Rename_Clusters.Seurat <- function(
   ...
 ) {
   # Deprecation warning
-  if (lifecycle::is_present(meta_col_name)) {
-    lifecycle::deprecate_stop(when = "2.2.0",
+  if (is_present(meta_col_name)) {
+    deprecate_stop(when = "2.2.0",
                               what = "Rename_Clusters(meta_col_name)",
                               with = "Rename_Clusters(old_ident_name)",
                               details = c("i" = "To store old idents please provide name to `old_ident_name`",
@@ -1590,6 +1629,70 @@ Rename_Clusters.Seurat <- function(
 
   # return object
   return(object)
+}
+
+
+#' @param reduction name of reduction containing NMF/iNMF/cNMF data.
+#'
+#' @method Top_Genes_Factor Seurat
+#'
+#' @import cli
+#'
+#' @export
+#'
+#' @rdname Top_Genes_Factor
+#'
+#' @concept marker_annotation_util
+#'
+#' @examples
+#' \dontrun{
+#' top_genes_factor10 <- Top_Genes_Factor(object = object, factor = 1, num_genes = 10,
+#' reduction = "cNMF")
+#' }
+#'
+
+Top_Genes_Factor.Seurat <- function(
+    object,
+    factor = NULL,
+    num_genes = 10,
+    reduction,
+    ...
+) {
+  Is_Seurat(seurat_object = object)
+
+  if (is.null(x = factor)) {
+    cli_abort(message = "Must provide either factor number or {.val all} to {.code factor} parameter.")
+  }
+
+  if (!reduction %in% Reductions(object = object)) {
+    cli_abort(message = "Provided reduction: {.field {reduction}} was not found in Seurat Object.")
+  }
+
+  if (factor == "all") {
+    top_genes <- lapply(X = 1:length(x = object[[reduction]]), function(x) {
+      TopFeatures(object = object[[reduction]], dim = x, nfeatures = num_genes)
+    })
+
+    # convert to data.frame
+    top_genes <- data.frame(top_genes)
+
+    # rename columns
+    colnames(top_genes) <- paste0("Factor", 1:length(x = object[[reduction]]))
+  } else {
+    # check factor is present in reduction
+    num_dims <- 1:length(x = object[[reduction]])
+
+    if (!factor %in% num_dims) {
+      cli_abort(message = c("Factor not present in reduction.",
+                            "i" = "The reduction {.field {reduction}} contains {.field {length(x = num_dims)}}"))
+    }
+
+    # pull top genes
+    top_genes <- TopFeatures(object = object[[reduction]], dim = factor, nfeatures = num_genes, projected = FALSE, balanced = FALSE)
+  }
+
+  # return top genes
+  return(top_genes)
 }
 
 

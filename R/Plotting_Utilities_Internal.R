@@ -489,6 +489,7 @@ Figure_Plot <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param label_selected_features a subset of `features` to only label some of the plotted features.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
 #' Default is -2.
@@ -541,6 +542,9 @@ Figure_Plot <- function(
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
+#' @param nan_error logical, default is FALSE.  *ONLY* set this value to true if you get error related to
+#' NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+#' number of features being plotted.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
@@ -578,6 +582,7 @@ Figure_Plot <- function(
 Clustered_DotPlot_Single_Group <- function(
     seurat_object,
     features,
+    label_selected_features = NULL,
     colors_use_exp = viridis_plasma_dark_high,
     exp_color_min = -2,
     exp_color_middle = NULL,
@@ -613,6 +618,7 @@ Clustered_DotPlot_Single_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
+    nan_error = FALSE,
     ggplot_default_colors = FALSE,
     color_seed = 123,
     seed = 123
@@ -645,8 +651,8 @@ Clustered_DotPlot_Single_Group <- function(
   if (!is.null(x = plot_padding)) {
     if (isTRUE(x = plot_padding)) {
       # Default extra padding
-          # 2 bottom: typically mirrors unpadded plot
-          # 15 left: usually enough to make rotated labels fit in plot window
+      # 2 bottom: typically mirrors unpadded plot
+      # 15 left: usually enough to make rotated labels fit in plot window
       padding <- unit(c(2, 15, 0, 0), "mm")
     } else {
       if (length(x = plot_padding) != 4) {
@@ -680,6 +686,23 @@ Clustered_DotPlot_Single_Group <- function(
     cli_abort(message = c("Expression color min/max values are not compatible.",
                           "i" = "The value for {.code exp_color_min}: {.field {exp_color_min}} must be less than the value for {.code exp_color_max}: {.field {exp_color_max}}.")
     )
+  }
+
+  # check for any genes that have zero expression
+  if (isTRUE(x = nan_error)) {
+    # set group.by value
+    grouping <- group.by %||% "ident"
+
+    exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = grouping, assays = assay, layer = "data")[[assay]]))
+
+    check_zero <- rowSums(exp_mat_df > 0)
+    zero_data <- names(which(x = check_zero == 0))
+
+    cli_warn(message = c("The following features have no expression in any cells and were removed:",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = zero_data, and = TRUE)}}."))
+
+    # remove zero expression genes from found features
+    all_found_features <- setdiff(all_found_features, zero_data)
   }
 
   # Get DotPlot data
@@ -932,12 +955,46 @@ Clustered_DotPlot_Single_Group <- function(
     x_lab_rotate <- 0
   }
 
+  # only plot some feature labels
+  if (!is.null(x = label_selected_features)) {
+    if (isTRUE(x = flip)) {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a column annotation
+      feature_anno_selected <- ComplexHeatmap::columnAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
+                                                                 labels = custom_labels,
+                                                                 link_width = unit(5, "mm"),
+                                                                 labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black"),
+                                                                 side = "bottom"))
+      # remove full row names
+      show_column_names <- FALSE
+
+    } else {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a row annotation
+      feature_anno_selected <- ComplexHeatmap::rowAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
+                                                              labels = custom_labels,
+                                                              link_width = unit(5, "mm"),
+                                                              labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black")))
+      # remove full row names
+      show_row_names <- FALSE
+
+    }
+  } else {
+    feature_anno_selected <- NULL
+  }
+
   # Create Plot
   set.seed(seed = seed)
   if (isTRUE(x = raster)) {
     if (isTRUE(x = flip)) {
       cluster_dot_plot <- ComplexHeatmap::Heatmap(t(exp_mat),
-                                                  heatmap_legend_param=list(title="Expression", labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
+                                                  heatmap_legend_param=list(title="Expression",labels_gp = gpar(fontsize = legend_label_size), title_gp = gpar(fontsize = legend_title_size, fontface = "bold"), direction = legend_orientation),
                                                   col=col_fun,
                                                   rect_gp = gpar(type = "none"),
                                                   layer_fun = layer_fun,
@@ -947,6 +1004,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -968,6 +1026,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
+                                                  right_annotation = feature_anno_selected,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -991,6 +1050,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = ident_km_repeats,
                                                   border = "black",
                                                   left_annotation = column_ha,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_km_repeats = feature_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -1012,6 +1072,7 @@ Clustered_DotPlot_Single_Group <- function(
                                                   row_km_repeats = feature_km_repeats,
                                                   border = "black",
                                                   top_annotation = column_ha,
+                                                  right_annotation = feature_anno_selected,
                                                   column_km_repeats = ident_km_repeats,
                                                   show_parent_dend_line = show_parent_dend_line,
                                                   column_names_rot = x_lab_rotate,
@@ -1047,6 +1108,7 @@ Clustered_DotPlot_Single_Group <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param features Features to plot.
+#' @param label_selected_features a subset of `features` to only label some of the plotted features.
 #' @param split.by Variable in `@meta.data` to split the identities plotted by.
 #' @param colors_use_exp Color palette to use for plotting expression scale.  Default is `viridis::plasma(n = 20, direction = -1)`.
 #' @param exp_color_min Minimum scaled average expression threshold (everything smaller will be set to this).
@@ -1099,6 +1161,9 @@ Clustered_DotPlot_Single_Group <- function(
 #' @param show_parent_dend_line Logical, Sets parameter of same name in `ComplexHeatmap::Heatmap()`.
 #' From `ComplexHeatmap::Heatmap()`: When heatmap is split, whether to add a dashed line to mark parent
 #' dendrogram and children dendrograms.  Default is TRUE.
+#' @param nan_error logical, default is FALSE.  *ONLY* set this value to true if you get error related to
+#' NaN values when attempting to use plotting function.  Plotting may be slightly slower if TRUE depending on
+#' number of features being plotted.
 #' @param seed Sets seed for reproducible plotting (ComplexHeatmap plot).
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
@@ -1133,6 +1198,7 @@ Clustered_DotPlot_Single_Group <- function(
 Clustered_DotPlot_Multi_Group <- function(
     seurat_object,
     features,
+    label_selected_features = NULL,
     split.by,
     colors_use_exp = viridis_plasma_dark_high,
     exp_color_min = -2,
@@ -1168,6 +1234,7 @@ Clustered_DotPlot_Multi_Group <- function(
     group.by = NULL,
     idents = NULL,
     show_parent_dend_line = TRUE,
+    nan_error = FALSE,
     seed = 123
 ) {
   # Check for packages
@@ -1261,6 +1328,21 @@ Clustered_DotPlot_Multi_Group <- function(
   # set group.by value
   group.by <- group.by %||% "ident"
 
+  # check for any genes that have zero expression
+  if (isTRUE(x = nan_error)) {
+    exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by), assays = assay, layer = "data")[[assay]]))
+
+    check_zero <- rowSums(exp_mat_df > 0)
+    check_zero
+    zero_data <- names(which(x = check_zero == 0))
+
+    cli_warn(message = c("The following features have no expression in any cells and were removed:",
+                         "i" = "{.field {glue_collapse_scCustom(input_string = zero_data, and = TRUE)}}."))
+
+    # remove zero expression genes from found features
+    all_found_features <- setdiff(all_found_features, zero_data)
+  }
+
   # Get data
   exp_mat_df <- suppressMessages(data.frame(AverageExpression(object = seurat_object, features = all_found_features, group.by = c(group.by, split.by), assays = assay, layer = "data")[[assay]]))
 
@@ -1290,7 +1372,7 @@ Clustered_DotPlot_Multi_Group <- function(
     seurat_object[[split.by]] <- split_by_names
   }
 
-  percent_mat <- Percent_Expressing(seurat_object = seurat_object, features = all_found_features, split_by = split.by, group_by = group.by, assay = assay)
+  percent_mat <- Percent_Expressing(seurat_object = seurat_object, features = all_found_features, split.by = split.by, group.by = group.by, assay = assay)
 
   # reorder columns to match
   idx <- match(colnames(x = exp_mat), colnames(x = percent_mat))
@@ -1439,6 +1521,40 @@ Clustered_DotPlot_Multi_Group <- function(
     x_lab_rotate <- 0
   }
 
+  # only plot some feature labels
+  if (!is.null(x = label_selected_features)) {
+    if (isTRUE(x = flip)) {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a column annotation
+      feature_anno_selected <- ComplexHeatmap::columnAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
+                                                                 labels = custom_labels,
+                                                                 link_width = unit(5, "mm"),
+                                                                 labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black"),
+                                                                 side = "bottom"))
+      # remove full row names
+      show_column_names <- FALSE
+
+    } else {
+      selected_features <- label_selected_features
+      selected_row_indices <- which(rownames(x = exp_mat) %in% selected_features)
+      custom_labels <- selected_features
+
+      # Create a row annotation
+      feature_anno_selected <- ComplexHeatmap::rowAnnotation(mark = ComplexHeatmap::anno_mark(at = selected_row_indices,
+                                                              labels = custom_labels,
+                                                              link_width = unit(5, "mm"),
+                                                              labels_gp = gpar(fontsize = row_label_size, fontface = row_label_fontface, col = "black")))
+      # remove full row names
+      show_row_names <- FALSE
+
+    }
+  } else {
+    feature_anno_selected <- NULL
+  }
+
   # Create Plot
   set.seed(seed = seed)
   if (isTRUE(x = raster)) {
@@ -1460,6 +1576,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
                                                   show_column_names = show_column_names,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
     } else {
@@ -1479,6 +1596,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
+                                                  right_annotation = feature_anno_selected,
                                                   show_column_names = show_column_names,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
@@ -1502,6 +1620,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_columns = cluster_feature,
                                                   show_row_names = show_row_names,
                                                   show_column_names = show_column_names,
+                                                  bottom_annotation = feature_anno_selected,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
     } else {
@@ -1521,6 +1640,7 @@ Clustered_DotPlot_Multi_Group <- function(
                                                   cluster_rows = cluster_feature,
                                                   cluster_columns = cluster_ident,
                                                   show_row_names = show_row_names,
+                                                  right_annotation = feature_anno_selected,
                                                   show_column_names = show_column_names,
                                                   column_names_side = column_names_side,
                                                   row_names_side = row_names_side)
@@ -1550,7 +1670,7 @@ Clustered_DotPlot_Multi_Group <- function(
 #' Can plot either the totals or split by a variable in `meta.data`.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param group.by meta data column to classify samples (default = "ident" and will use `active.ident`.
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
 #' @param colors_use color palette to use for plotting.
@@ -1578,7 +1698,7 @@ Clustered_DotPlot_Multi_Group <- function(
 
 Plot_Pie_Proportions <- function(
     seurat_object,
-    group_by_var = "ident",
+    group.by = "ident",
     split.by = NULL,
     num_columns = NULL,
     colors_use = NULL,
@@ -1589,11 +1709,11 @@ Plot_Pie_Proportions <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  if (group_by_var != "ident") {
+  if (group.by != "ident") {
     # Check meta
-    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(seurat_object) <- group_by_var
+    Idents(seurat_object) <- group.by
   }
 
   # check split
@@ -1678,7 +1798,7 @@ Plot_Pie_Proportions <- function(
 #' Can plot either the totals or split by a variable in `meta.data`.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var meta data column to classify samples (default = "ident" and will use `active.ident`.
+#' @param group.by meta data column to classify samples (default = "ident" and will use `active.ident`.
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of "percent" or
 #' "count". Default is "percent".
@@ -1708,7 +1828,7 @@ Plot_Pie_Proportions <- function(
 
 Plot_Bar_Proportions <- function(
     seurat_object,
-    group_by_var = "ident",
+    group.by = "ident",
     split.by = NULL,
     plot_scale = "count",
     colors_use = NULL,
@@ -1719,11 +1839,11 @@ Plot_Bar_Proportions <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   # Check on meta data column
-  if (group_by_var != "ident") {
+  if (group.by != "ident") {
     # Check meta
-    group_by_var <- Meta_Present(object = seurat_object, meta_col_names = group_by_var, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(object = seurat_object) <- group_by_var
+    Idents(object = seurat_object) <- group.by
   }
 
   group_by_length <- length(x = unique(x = seurat_object@active.ident))
@@ -1970,224 +2090,3 @@ create_factor_hclust_rect <- function(
 
   return(rect_list)
 }
-
-
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#################### GGPLOT2/THEMES ####################
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-#' Unrotate x axis on VlnPlot
-#'
-#' Shortcut for thematic modification to unrotate the x axis (e.g., for Seurat VlnPlot is rotated by default).
-#'
-#' @param ... extra arguments passed to `ggplot2::theme()`.
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @export
-#'
-#' @return Returns a list-like object of class _theme_.
-#'
-#' @concept themes
-#'
-#' @examples
-#' library(Seurat)
-#' p <- VlnPlot(object = pbmc_small, features = "CD3E")
-#' p + UnRotate_X()
-#'
-
-UnRotate_X <- function(...) {
-  unrotate_x_theme <- theme(
-    axis.text.x =
-      element_text(angle = 0,
-                   hjust = 0.5),
-    validate = TRUE,
-    ...
-  )
-  return(unrotate_x_theme)
-}
-
-
-#' Blank Theme
-#'
-#' Shortcut for thematic modification to remove all axis labels and grid lines
-#'
-#' @param ... extra arguments passed to `ggplot2::theme()`.
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @export
-#'
-#' @return Returns a list-like object of class _theme_.
-#'
-#' @concept themes
-#'
-#' @examples
-#' # Generate a plot and customize theme
-#' library(ggplot2)
-#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
-#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
-#' p + Blank_Theme()
-#'
-
-Blank_Theme <- function(...) {
-  blank_theme <- theme(
-    axis.line = element_blank(),
-    axis.text.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    panel.background = element_blank(),
-    panel.border = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    plot.background = element_blank(),
-    validate = TRUE,
-    ...
-  )
-  return(blank_theme)
-}
-
-
-#' Move Legend Position
-#'
-#' Shortcut for thematic modification to move legend position.
-#'
-#' @param position valid position to move legend.  Default is "right".
-#' @param ... extra arguments passed to `ggplot2::theme()`.
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @export
-#'
-#' @return Returns a list-like object of class _theme_.
-#'
-#' @concept themes
-#'
-#' @examples
-#' # Generate a plot and customize theme
-#' library(ggplot2)
-#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
-#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
-#' p + Move_Legend("left")
-#'
-
-Move_Legend <- function(
-  position = "right",
-  ...
-) {
-  move_legend_theme <- theme(
-    legend.position = position,
-    validate = TRUE,
-    ...
-  )
-  return(move_legend_theme)
-}
-
-
-#' Modified ggprism theme
-#'
-#' Modified ggprism theme which restores the legend title.
-#'
-#' @param palette `string`. Palette name, use
-#' `names(ggprism_data$themes)` to show all valid palette names.
-#' @param base_size `numeric`. Base font size, given in `"pt"`.
-#' @param base_family `string`. Base font family, default is `"sans"`.
-#' @param base_fontface `string`. Base font face, default is `"bold"`.
-#' @param base_line_size `numeric`. Base linewidth for line elements
-#' @param base_rect_size `numeric`. Base linewidth for rect elements
-#' @param axis_text_angle `integer`. Angle of axis text in degrees.
-#' One of: `0, 45, 90, 270`.
-#' @param border `logical`. Should a border be drawn around the plot?
-#' Clipping will occur unless e.g. `coord_cartesian(clip = "off")` is used.
-#'
-#' @references theme is a modified version of `theme_prism` from ggprism package \url{https://github.com/csdaw/ggprism}
-#' (License: GPL-3).  Param text is from `ggprism:theme_prism()` documentation \code{\link[ggprism]{theme_prism}}.
-#' Theme adaptation based on ggprism vignette
-#' \url{https://csdaw.github.io/ggprism/articles/themes.html#make-your-own-ggprism-theme-1}.
-#'
-#' @import ggplot2
-#' @importFrom ggprism theme_prism
-#'
-#' @export
-#'
-#' @return Returns a list-like object of class _theme_.
-#'
-#' @concept themes
-#'
-#' @examples
-#' # Generate a plot and customize theme
-#' library(ggplot2)
-#' df <- data.frame(x = rnorm(n = 100, mean = 20, sd = 2), y = rbinom(n = 100, size = 100, prob = 0.2))
-#' p <- ggplot(data = df, mapping = aes(x = x, y = y)) + geom_point(mapping = aes(color = 'red'))
-#' p + theme_ggprism_mod()
-#'
-
-theme_ggprism_mod <- function(
-  palette = "black_and_white",
-  base_size = 14,
-  base_family = "sans",
-  base_fontface = "bold",
-  base_line_size = base_size / 20,
-  base_rect_size = base_size / 20,
-  axis_text_angle = 0,
-  border = FALSE
-) {
-  mod_theme <- theme_prism(palette = palette,
-              base_size = base_size,
-              base_family = base_family,
-              base_fontface = base_fontface,
-              base_line_size = base_line_size,
-              base_rect_size = base_rect_size,
-              axis_text_angle = axis_text_angle,
-              border = border) %+replace%
-    theme(legend.title = element_text(hjust = 0),
-          axis.text = element_text(size = rel(0.95), face = "plain")
-    )
-
-  mod_theme[c("legend.text.align", "legend.title.align")] <- NULL
-
-  return(mod_theme)
-}
-
-
-#' Remove Right Y Axis
-#'
-#' Shortcut for removing right y axis from ggplot2 object
-#'
-#' @importFrom ggplot2 theme
-#'
-#' @references Shortcut slightly modified from Seurat \url{https://github.com/satijalab/seurat/blob/c4638730d0639d770ad12c35f50d19108e0491db/R/visualization.R#L1039-L1048}
-#'
-#' @keywords internal
-#'
-#' @return Returns a list-like object of class _theme_.
-#'
-#' @noRd
-#'
-#' @examples
-#' \dontrun{
-#' # Generate a plot without axes, labels, or grid lines
-#' library(ggplot2)
-#' p <- FeaturePlot(object = obj, features = "Cx3cr1")
-#' p + No_Right()
-#' }
-
-No_Right <- function() {
-  no.right <- theme(
-    axis.line.y.right = element_blank(),
-    axis.ticks.y.right = element_blank(),
-    axis.text.y.right = element_blank(),
-    axis.title.y.right = element_text(
-      face = "bold",
-      size = 14,
-      margin = margin(r = 7),
-      angle = 270
-    )
-  )
-  return(no.right)
-}
-
-

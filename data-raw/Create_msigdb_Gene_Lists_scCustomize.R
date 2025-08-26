@@ -179,7 +179,7 @@ msigdb_qc_gene_list <- list(
   Gallus_gallus_msigdb_dna_repair = msig_chicken_DNA_repair_direct
 )
 
-save(msigdb_qc_gene_list, file = "data/msigdb_qc_gene_list.rda")
+save(msigdb_qc_gene_list, file = "data/msigdb_qc_gene_list.rda", compress = "xz")
 
 # Create Ensembl ID Lists --------------------------------------------------------------------
 library(dplyr)
@@ -359,4 +359,4 @@ msigdb_qc_ensembl_list <- list(
   Gallus_gallus_msigdb_dna_repair = msig_chicken_DNA_repair_direct_ensembl
 )
 
-save(msigdb_qc_ensembl_list, file = "data/msigdb_qc_ensembl_list.rda")
+save(msigdb_qc_ensembl_list, file = "data/msigdb_qc_ensembl_list.rda", compress = "xz")

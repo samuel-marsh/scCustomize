@@ -77,9 +77,6 @@ scCustomize also allows for the conversion of Seurat or LIGER objects to python 
     - See [reticulate website](https://rstudio.github.io/reticulate/) for more information on installation and setup of reticulate in R.
     - See [anndata website](https://anndata.readthedocs.io/en/latest/) for more information on installation and use of anndata in python.
 
-```{r include=FALSE}
-Sys.setenv(RETICULATE_PYTHON = "/Users/marsh_mbp/.virtualenvs/r-reticulate/bin/python")
-```
 
 ```{r message=TRUE}
 as.anndata(x = pbmc, file_path = "~/Desktop", file_name = "pbmc_anndata.h5ad")
