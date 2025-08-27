@@ -9,6 +9,7 @@
 
 ## Fixes  
 - Fixed errors in plotting with `Factor_Cor_Plot` that occured due to partial matrix plotting and row clustering.  
+- Fixed column naming in `Top_Genes_Factor` for Seurat objects to align with format returned for LIGER objects.  
 
 
 
