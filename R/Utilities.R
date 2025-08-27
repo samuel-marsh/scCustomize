@@ -1677,7 +1677,7 @@ Top_Genes_Factor.Seurat <- function(
     top_genes <- data.frame(top_genes)
 
     # rename columns
-    colnames(top_genes) <- paste0("Factor", 1:length(x = object[[reduction]]))
+    colnames(top_genes) <- paste0("Factor_", 1:length(x = object[[reduction]]))
   } else {
     # check factor is present in reduction
     num_dims <- 1:length(x = object[[reduction]])
