@@ -120,8 +120,39 @@ Factor_Cor_Plot(object = pbmc, reduction = "cnmf")
 ```{r}
 # Only plot positive correlations
 Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
+```
 
-# Only plot 1 of the diagonals
-Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", positive_only = T, cluster = F)
+
+## cNMF Interaction  
+scCustomize also contains functions to interact with and retrive data from the cNMF reduction.  
+*NOTE: These functions are S3 generics and can be used to retrieve the same information about LIGER iNMF reductions with given LIGER object, or from iNMF reduction in Seurat object.*  
+
+The function `Top_Genes_Factor` can be used to retrieve top loading genes from cNMF factors.  Let's check what genes load most heavily on factor 2 which we can see above loads heavily on CD14+ Monocyte cluster.  
+```{r}
+top_gene_factor1 <- Top_Genes_Factor(object = pbmc, factor = 2, reduction = "cnmf")
+
+top_gene_factor1
+```
+
+By default `Top_Genes_Factor` will return the top 10 loading genes but can return any number of genes by supplying value to the `num_genes` parameter.  
+```{r}
+top_gene_factor1 <- Top_Genes_Factor(object = pbmc, factor = 2, num_genes = 20, reduction = "cnmf")
+
+top_gene_factor1
+```
+
+If you want to retrieve the top loading genes for all factors within given reduction you can set `factor = "all"` and the function will return data.frame with one column per factor.
+```{r eval=FALSE}
+top_10_factor_df <- Top_Genes_Factor(object = pbmc, factor = "all", reduction = "cnmf")
+
+head(top_10_factor_df, 10) 
+```
+
+```{r echo=FALSE}
+top_10_factor_df <- Top_Genes_Factor(object = pbmc, factor = "all")
+
+head(top_10_factor_df, 10) %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
 ```
 
