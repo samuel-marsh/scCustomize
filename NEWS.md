@@ -2,6 +2,7 @@
 ## Added  
 - Added cNMF vignette.  
 - Added `reduction_name` and `reduction_key` parameters to `Read_Add_cNMF` to allow for control over reduction name (and ability to add results from more than one run of cNMF to the same Seurat object).  
+- Added `ReFilter_SeuratObject` function to enable easy re-filtering of object using `min.cells` and/or `min.features` parameters.  
 
 ## Changed  
 - Internal function `yesno` will now provide Yes/No options in same order everytime to avoid mistaken input.  
