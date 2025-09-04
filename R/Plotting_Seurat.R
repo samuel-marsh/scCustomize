@@ -2676,6 +2676,8 @@ FeatureScatter_scCustom <- function(
 #'
 #' @import cli
 #' @import ggplot2
+#' @import dplyr all_of pull
+#' @importFrom magrittr "%>%"
 #'
 #' @export
 #'
