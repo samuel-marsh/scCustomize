@@ -2759,10 +2759,13 @@ SpatialDimPlot_scCustom <- function(
   if (is.null(x = group.by)) {
     names(colors_use) <- levels(Idents(object = seurat_object))
   } else {
-    if (isTRUE(x = inherits(x = seurat_object@meta.data[[group.by]], what = "factor"))) {
-      names(colors_use) <- levels(seurat_object@meta.data[[group.by]])
+    group_data <- Fetch_Meta(object = seurat_object) %>% 
+      pull(all_of(group.by))
+    
+    if (isTRUE(x = inherits(x = group_data, what = "factor"))) {
+      names(colors_use) <- levels(group_data)
     } else {
-      names(colors_use) <- unique(seurat_object@meta.data[[group.by]])
+      names(colors_use) <- unique(group_data)
     }
   }
 
