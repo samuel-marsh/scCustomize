@@ -1,4 +1,4 @@
-# scCustomize 3.1.4 (2025-08-XX)  
+# scCustomize 3.1.4 (2025-09-XX)  
 ## Added  
 - Added cNMF vignette.  
 - Added `reduction_name` and `reduction_key` parameters to `Read_Add_cNMF` to allow for control over reduction name (and ability to add results from more than one run of cNMF to the same Seurat object).  
