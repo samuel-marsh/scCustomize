@@ -12,6 +12,7 @@
 ## Fixes  
 - Fixed errors in plotting with `Factor_Cor_Plot` that occured due to partial matrix plotting and row clustering.  
 - Fixed column naming in `Top_Genes_Factor` for Seurat objects to align with format returned for LIGER objects.  
+- Fixed issue with `SpatialDimPlot_scCustom` that prevented proper plotting when `group.by` was manually supplied. Thanks @mustafapir, ([#240](https://github.com/samuel-marsh/scCustomize/issues/240)).  
 
 
 
