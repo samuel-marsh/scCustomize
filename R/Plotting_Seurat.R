@@ -2676,7 +2676,7 @@ FeatureScatter_scCustom <- function(
 #'
 #' @import cli
 #' @import ggplot2
-#' @import dplyr all_of pull
+#' @importFrom dplyr all_of pull
 #' @importFrom magrittr "%>%"
 #'
 #' @export
@@ -2761,9 +2761,9 @@ SpatialDimPlot_scCustom <- function(
   if (is.null(x = group.by)) {
     names(colors_use) <- levels(Idents(object = seurat_object))
   } else {
-    group_data <- Fetch_Meta(object = seurat_object) %>% 
+    group_data <- Fetch_Meta(object = seurat_object) %>%
       pull(all_of(group.by))
-    
+
     if (isTRUE(x = inherits(x = group_data, what = "factor"))) {
       names(colors_use) <- levels(group_data)
     } else {
