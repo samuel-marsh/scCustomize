@@ -112,15 +112,49 @@ FeaturePlot_scCustom(seurat_object = pbmc, features = c("cNMF_1", "cNMF_2", "cNM
 
 ### Plot factor correlation  
 scCustomize also has plotting function `Factor_Cor_Plot` to examine relationships between factors by plotting the correlation of feature loadings for cNMF factors.  
-```{r}
+```{r fig.align='center', fig.height=8, fig.width=13}
 Factor_Cor_Plot(object = pbmc, reduction = "cnmf")
 ```
 
-`Factor_Cor_Plot1` also contains a number of optional parameters to change the output plot.
-```{r}
+By default (above) `Factor_Cor_Plot` runs hierarchical clustering on the correlations and orders the factors on the plot.  But users can also adjust this to plot the factors in numerical order.
+```{r fig.align='center', fig.height=8, fig.width=13}
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster = FALSE)
+```
+
+
+`Factor_Cor_Plot` also contains a number of other optional parameters to change the output plot.
+```{r eval=FALSE}
 # Only plot positive correlations
 Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
+
+# Only plot only the upper diagonal
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "upper", cluster = FALSE)
+
+# Only plot only the lower diagonal
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", cluster = FALSE)
+
+# Add clustering rectangles (uses `cutree`)
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster_rect = T, cluster_rect_num = 6, cluster_rect_col = "magenta")
 ```
+
+
+```{r fig.align='center', fig.height=10, fig.width=13}
+# Only plot positive correlations
+p1 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
+
+# Only plot only the upper diagonal
+p2 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "upper", cluster = FALSE)
+
+# Only plot only the lower diagonal
+p3 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", cluster = FALSE)
+
+# Add clustering rectangles (uses `cutree`)
+p4 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster_rect = TRUE, cluster_rect_num = 6, cluster_rect_col = "magenta")
+
+
+wrap_plots(p1, p2, p3, p4, ncol = 2)
+```
+
 
 
 ## cNMF Interaction  
