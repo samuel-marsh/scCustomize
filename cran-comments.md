@@ -1,9 +1,5 @@
-## Hotfix to v3.1.0 and v3.1.1  and v3.1.2
-Fixed fuerther errors of doi/url formatting in manual docs.  Sorry for missing them in earlier submission!
-
-
 ## Update 
-This is major update to version 3.1.0.  Contains bug fixes and new functions. This version also updates maintainer email address and adds one new author to package.  See News.md for full changelog.  
+This is update to version 3.2.0.  Contains bug fixes and new functions.  See News.md for full changelog.  
 
 
 
