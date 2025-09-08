@@ -5,12 +5,12 @@
 - Added `ReFilter_SeuratObject` function to enable easy re-filtering of object using `min.cells` and/or `min.features` parameters.  
 
 ## Changed  
-- Internal function `yesno` will now provide Yes/No options in same order everytime to avoid mistaken input.  
+- Internal function `yesno` will now provide Yes/No options in same order every time to avoid mistaken input.  
 
 
 
 ## Fixes  
-- Fixed errors in plotting with `Factor_Cor_Plot` that occured due to partial matrix plotting and row clustering.  
+- Fixed errors in plotting with `Factor_Cor_Plot` that occurred due to partial matrix plotting and row clustering.  
 - Fixed column naming in `Top_Genes_Factor` for Seurat objects to align with format returned for LIGER objects.  
 - Fixed issue with `SpatialDimPlot_scCustom` that prevented proper plotting when `group.by` was manually supplied. Thanks @mustafapir, ([#240](https://github.com/samuel-marsh/scCustomize/issues/240)).  
 
