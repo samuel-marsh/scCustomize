@@ -52,6 +52,7 @@ library(tibble)
 library(magrittr)
 library(Seurat)
 library(scCustomize)
+library(patchwork)
 
 # Load pbmc dataset
 pbmc <- pbmc3k.SeuratData::pbmc3k
