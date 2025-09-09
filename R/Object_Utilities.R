@@ -129,7 +129,7 @@ ReFilter_SeuratObject <- function(
     verbose = TRUE
 ) {
   # Check Seurat
-  Is_Seurat(seurat_object = pbmc)
+  Is_Seurat(seurat_object = seurat_object)
 
   # get assays
   assays <- Assays(object = seurat_object)
