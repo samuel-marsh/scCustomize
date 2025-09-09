@@ -13,9 +13,10 @@ ReFilter_SeuratObject(
 )
 }
 \arguments{
-\item{seurat_object}{seurat object to filter}
+\item{seurat_object}{Seurat object to filter}
 
-\item{min.cells}{Include features detected in at least this many cells. Will subset the counts matrix as well.}
+\item{min.cells}{Include features detected in at least this many cells. Will recalculate nCount and nFeature
+meta.data values as well.}
 
 \item{min.features}{Include cells where at least this many features are detected.}
 
@@ -28,7 +29,7 @@ removed, Default is TRUE.}
 Seurat object
 }
 \description{
-Allows for refiltering of Seurat object based on new parameters for \code{min.cells} and
+Allows for re-filtering of Seurat object based on new parameters for \code{min.cells} and
 \code{min.features} (see \code{\link[SeuratObject]{CreateSeuratObject}} for more details)
 }
 \details{
