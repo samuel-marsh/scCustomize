@@ -83,11 +83,12 @@ Merge_Seurat_List <- function(
 
 #' Re-filter Seurat object
 #'
-#' Allows for refiltering of Seurat object based on new parameters for `min.cells` and
+#' Allows for re-filtering of Seurat object based on new parameters for `min.cells` and
 #' `min.features` (see \code{\link[SeuratObject]{CreateSeuratObject}} for more details)
 #'
-#' @param seurat_object seurat object to filter
-#' @param min.cells Include features detected in at least this many cells. Will subset the counts matrix as well.
+#' @param seurat_object Seurat object to filter
+#' @param min.cells Include features detected in at least this many cells. Will recalculate nCount and nFeature
+#' meta.data values as well.
 #' @param min.features Include cells where at least this many features are detected.
 #' @param override logical, override the Yes/No interactive check (see details).  Default is FALSE; don't override.
 #' @param verbose logical, whether to print information on filtering parameters and number of cells/features
