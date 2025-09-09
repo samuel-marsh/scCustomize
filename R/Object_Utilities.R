@@ -124,7 +124,7 @@ ReFilter_SeuratObject <- function(
     seurat_object,
     min.cells = NULL,
     min.features = NULL,
-    confirm = TRUE,
+    override = FALSE,
     verbose = TRUE
 ) {
   # Check Seurat
