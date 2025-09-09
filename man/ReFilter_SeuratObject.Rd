@@ -8,7 +8,7 @@ ReFilter_SeuratObject(
   seurat_object,
   min.cells = NULL,
   min.features = NULL,
-  confirm = TRUE,
+  override = FALSE,
   verbose = TRUE
 )
 }
@@ -19,10 +19,10 @@ ReFilter_SeuratObject(
 
 \item{min.features}{Include cells where at least this many features are detected.}
 
+\item{override}{logical, override the Yes/No interactive check (see details).  Default is FALSE; don't override.}
+
 \item{verbose}{logical, whether to print information on filtering parameters and number of cells/features
 removed, Default is TRUE.}
-
-\item{override}{logical, override the Yes/No interactive check (see details).  Default is FALSE; don't override.}
 }
 \value{
 Seurat object
