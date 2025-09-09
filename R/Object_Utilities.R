@@ -181,9 +181,9 @@ ReFilter_SeuratObject <- function(
   if (isTRUE(x = verbose)) {
     cli_inform(message = c("*" = "Filtering object",
                            "i" = "Keeping cells with greater than or equal to {.field {min.features} features}.",
-                           "{col_green({symbol$double_line})} Total of {.field {num_features_rem} features} being removed.",
+                           "{col_green({symbol$double_line})} Total of {.field {num_cells_rem} cells} being removed.",
                            "i" = "Keeping features expressed in greater than or equal to {.field {min.cells} cells}.",
-                           "{col_green({symbol$arrow_right})} Total of {.field {num_cells_rem} cells} being removed."))
+                           "{col_green({symbol$arrow_right})} Total of {.field {num_features_rem} features} being removed."))
   }
 
   # subset object
