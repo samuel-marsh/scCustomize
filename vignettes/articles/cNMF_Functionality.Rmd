@@ -99,6 +99,21 @@ scCustomize contains the function `Read_Add_cNMF` that can take the results from
 pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_7.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_7.dt_0_1.txt")
 ```
 
+### Optional parameters  
+There are few optional parameters in `Read_Add_cNMF` for increased user control if desired.  
+* `reduction_name` & `reduction_key` These can used to either change defaults ("cnmf" and "cNMF_" respectively) or if user wants to add results from multiple cNMF runs different names can be supplied for each one.   
+    - For instance save second reduction with different k value.   
+* `overwrite` used to overwrite old cNMF reduction with new data using the same `reduction_name`.   
+
+```{r eval=FALSE}
+# Add result from additional cNMF run as separate reduction (for instance with different k value)
+pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_15.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_15.dt_0_1.txt", reduction_name = "cnmf.alt", reduction_key = "CNMFALT_")
+
+# Overwrite current cNMF reduction with new results but keep same `reduction_name`
+pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_15.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_15.dt_0_1.txt", overwrite = TRUE)
+```
+
+
 
 ## cNMF Plotting  
 cNMF results can be plotted in several ways using scCustomize.  
@@ -139,7 +154,7 @@ Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster_rect = T, cluster_rec
 ```
 
 
-```{r fig.align='center', fig.height=10, fig.width=13}
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=13, fig.cap="***A.** Plotting only the positive correlations (negative correlations set to 0).  **B.** Plot only the upper diagonal (must set `cluster = FALSE`).  **C.** Plot only the lower diagonal (must set `cluster = FALSE`).  **D.** Add rectangles around clustered results (uses `cutree`).*"}
 # Only plot positive correlations
 p1 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
 
@@ -153,7 +168,7 @@ p3 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", cl
 p4 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster_rect = TRUE, cluster_rect_num = 6, cluster_rect_col = "magenta")
 
 
-wrap_plots(p1, p2, p3, p4, ncol = 2)
+wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = "A")
 ```
 
 
