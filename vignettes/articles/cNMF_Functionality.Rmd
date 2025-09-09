@@ -184,7 +184,7 @@ head(top_10_factor_df, 10)
 ```
 
 ```{r echo=FALSE}
-top_10_factor_df <- Top_Genes_Factor(object = pbmc, factor = "all")
+top_10_factor_df <- Top_Genes_Factor(object = pbmc, factor = "all", reduction = "cnmf")
 
 head(top_10_factor_df, 10) %>%
   kableExtra::kbl(row.names = TRUE) %>%
