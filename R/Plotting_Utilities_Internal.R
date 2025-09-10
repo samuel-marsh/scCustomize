@@ -2029,8 +2029,8 @@ Test_Integer <- function(
 lower_diag_cor_mat <- function(
     cor_mat
 ) {
-  new_cormat[upper.tri(x = cor_mat)] <- NA
-  return(new_cormat)
+  cor_mat[upper.tri(x = cor_mat)] <- NA
+  return(cor_mat)
 }
 
 

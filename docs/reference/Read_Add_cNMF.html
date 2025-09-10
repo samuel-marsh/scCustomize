@@ -18,7 +18,7 @@ reduction to seurat object."><!-- mathjax --><script src="https://cdnjs.cloudfla
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
       </span>
     </div>
 
@@ -88,6 +88,9 @@ reduction to seurat object."><!-- mathjax --><script src="https://cdnjs.cloudfla
     <li>
       <a href="../articles/Cell_Bender_Functions.html">Cell Bender Functionality &amp; Plotting</a>
     </li>
+    <li>
+      <a href="../articles/cNMF_Functionality.html">cNMF Functionality &amp; Plotting</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">News/Changelog</a>
@@ -128,8 +131,11 @@ reduction to seurat object.</p>
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">usage_file</span>,</span>
 <span>  <span class="va">spectra_file</span>,</span>
+<span>  reduction_name <span class="op">=</span> <span class="st">"cnmf"</span>,</span>
+<span>  reduction_key <span class="op">=</span> <span class="st">"cNMF_"</span>,</span>
 <span>  normalize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  assay <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -147,6 +153,14 @@ reduction to seurat object.</p>
 <dd><p>path and name of cNMF spectra file</p></dd>
 
 
+<dt>reduction_name</dt>
+<dd><p>name to use for reduction to be added, default is "cnmf".</p></dd>
+
+
+<dt>reduction_key</dt>
+<dd><p>key to use for reduction to be added, default is "cNMF_".</p></dd>
+
+
 <dt>normalize</dt>
 <dd><p>logical, whether to normalize the cNMF usage data, default is TRUE</p></dd>
 
@@ -154,6 +168,11 @@ reduction to seurat object.</p>
 <dt>assay</dt>
 <dd><p>assay to add reduction.  Default is NULL and will use current
 active assay.</p></dd>
+
+
+<dt>overwrite</dt>
+<dd><p>logical, whether to overwrite a reduction with the name <code>reduction_name</code> already
+present in reduction slot of given Seurat object.</p></dd>
 
 </dl></div>
     <div id="value">

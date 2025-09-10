@@ -52,6 +52,7 @@ library(tibble)
 library(magrittr)
 library(Seurat)
 library(scCustomize)
+library(patchwork)
 
 # Load pbmc dataset
 pbmc <- pbmc3k.SeuratData::pbmc3k
@@ -98,6 +99,21 @@ scCustomize contains the function `Read_Add_cNMF` that can take the results from
 pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_7.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_7.dt_0_1.txt")
 ```
 
+### Optional parameters  
+There are few optional parameters in `Read_Add_cNMF` for increased user control if desired.  
+* `reduction_name` & `reduction_key` These can used to either change defaults ("cnmf" and "cNMF_" respectively) or if user wants to add results from multiple cNMF runs different names can be supplied for each one.   
+    - For instance save second reduction with different k value.   
+* `overwrite` used to overwrite old cNMF reduction with new data using the same `reduction_name`.   
+
+```{r eval=FALSE}
+# Add result from additional cNMF run as separate reduction (for instance with different k value)
+pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_15.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_15.dt_0_1.txt", reduction_name = "cnmf.alt", reduction_key = "CNMFALT_")
+
+# Overwrite current cNMF reduction with new results but keep same `reduction_name`
+pbmc <- Read_Add_cNMF(seurat_object = pbmc, usage_file = "assets/cNMF_Example_Data/example_cNMF.usages.k_15.dt_0_1.consensus.txt", spectra_file = "assets/cNMF_Example_Data/example_cNMF.gene_spectra_score.k_15.dt_0_1.txt", overwrite = TRUE)
+```
+
+
 
 ## cNMF Plotting  
 cNMF results can be plotted in several ways using scCustomize.  
@@ -112,16 +128,81 @@ FeaturePlot_scCustom(seurat_object = pbmc, features = c("cNMF_1", "cNMF_2", "cNM
 
 ### Plot factor correlation  
 scCustomize also has plotting function `Factor_Cor_Plot` to examine relationships between factors by plotting the correlation of feature loadings for cNMF factors.  
-```{r}
+```{r fig.align='center', fig.height=8, fig.width=13}
 Factor_Cor_Plot(object = pbmc, reduction = "cnmf")
 ```
 
-`Factor_Cor_Plot1` also contains a number of optional parameters to change the output plot.
-```{r}
+By default (above) `Factor_Cor_Plot` runs hierarchical clustering on the correlations and orders the factors on the plot.  But users can also adjust this to plot the factors in numerical order.
+```{r fig.align='center', fig.height=8, fig.width=13}
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster = FALSE)
+```
+
+
+`Factor_Cor_Plot` also contains a number of other optional parameters to change the output plot.
+```{r eval=FALSE}
 # Only plot positive correlations
 Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
 
-# Only plot 1 of the diagonals
-Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", positive_only = T, cluster = F)
+# Only plot only the upper diagonal
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "upper", cluster = FALSE)
+
+# Only plot only the lower diagonal
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", cluster = FALSE)
+
+# Add clustering rectangles (uses `cutree`)
+Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster_rect = T, cluster_rect_num = 6, cluster_rect_col = "magenta")
+```
+
+
+```{r echo=FALSE, fig.align='center', fig.height=10, fig.width=13, fig.cap="***A.** Plotting only the positive correlations (negative correlations set to 0).  **B.** Plot only the upper diagonal (must set `cluster = FALSE`).  **C.** Plot only the lower diagonal (must set `cluster = FALSE`).  **D.** Add rectangles around clustered results (uses `cutree`).*"}
+# Only plot positive correlations
+p1 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", positive_only = TRUE)
+
+# Only plot only the upper diagonal
+p2 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "upper", cluster = FALSE)
+
+# Only plot only the lower diagonal
+p3 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", plot_type = "lower", cluster = FALSE)
+
+# Add clustering rectangles (uses `cutree`)
+p4 <- Factor_Cor_Plot(object = pbmc, reduction = "cnmf", cluster_rect = TRUE, cluster_rect_num = 6, cluster_rect_col = "magenta")
+
+
+wrap_plots(p1, p2, p3, p4, ncol = 2) + plot_annotation(tag_levels = "A")
+```
+
+
+
+## cNMF Interaction  
+scCustomize also contains functions to interact with and retrive data from the cNMF reduction.  
+*NOTE: These functions are S3 generics and can be used to retrieve the same information about LIGER iNMF reductions with given LIGER object, or from iNMF reduction in Seurat object.*  
+
+The function `Top_Genes_Factor` can be used to retrieve top loading genes from cNMF factors.  Let's check what genes load most heavily on factor 2 which we can see above loads heavily on CD14+ Monocyte cluster.  
+```{r}
+top_gene_factor1 <- Top_Genes_Factor(object = pbmc, factor = 2, reduction = "cnmf")
+
+top_gene_factor1
+```
+
+By default `Top_Genes_Factor` will return the top 10 loading genes but can return any number of genes by supplying value to the `num_genes` parameter.  
+```{r}
+top_gene_factor1 <- Top_Genes_Factor(object = pbmc, factor = 2, num_genes = 20, reduction = "cnmf")
+
+top_gene_factor1
+```
+
+If you want to retrieve the top loading genes for all factors within given reduction you can set `factor = "all"` and the function will return data.frame with one column per factor.
+```{r eval=FALSE}
+top_10_factor_df <- Top_Genes_Factor(object = pbmc, factor = "all", reduction = "cnmf")
+
+head(top_10_factor_df, 10) 
+```
+
+```{r echo=FALSE}
+top_10_factor_df <- Top_Genes_Factor(object = pbmc, factor = "all", reduction = "cnmf")
+
+head(top_10_factor_df, 10) %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
 ```
 

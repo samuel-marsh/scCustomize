@@ -15,22 +15,22 @@ Reduction_Loading_Present(
 \arguments{
 \item{seurat_object}{object name.}
 
-\item{reduction_names}{vector of genes to check.}
+\item{reduction_names}{vector of reduction loading names to check.}
 
 \item{print_msg}{logical. Whether message should be printed if all features are found.  Default is TRUE.}
 
-\item{omit_warn}{logical. Whether to print message about features that are not found in current object.
+\item{omit_warn}{logical. Whether to print message about reduction loadings that are not found in current object.
 Default is TRUE.}
 
-\item{return_none}{logical. Whether list of found vs. bad features should still be returned if no
-features are found.  Default is FALSE.}
+\item{return_none}{logical. Whether list of found vs. bad reduction loadings should still be returned if no
+reductions are found.  Default is FALSE.}
 }
 \value{
-A list of length 3 containing 1) found features, 2) not found features.
+A list of length 3 containing 1) found reduction loadings, 2) not found reduction loadings
 }
 \description{
 Check if reduction loadings are present in object and return vector of found loading names.  Return
-warning messages for genes not found.
+warning messages for reductions not found.
 }
 \examples{
 \dontrun{

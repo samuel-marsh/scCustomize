@@ -401,9 +401,9 @@ glue_collapse_scCustom <- function(
 yesno <- function(msg, .envir = parent.frame()) {
   cli_inform(message = msg, .envir = .envir)
   qs <- c("Yes", "No")
-  rand <- sample(length(qs))
+  rand <- c(1,2)
 
-  utils::menu(qs[rand]) != which(rand == 1)
+  utils::menu(qs[1:2]) != which(rand == 1)
 }
 
 

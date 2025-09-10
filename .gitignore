@@ -2,8 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
-scCustomize.Rproj
 .DS_Store
+scCustomize.Rproj
 vignettes/assets
 README.Rmd
 index.Rmd

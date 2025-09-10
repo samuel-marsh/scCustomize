@@ -3,6 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   Cell_Bender_Functions: Cell_Bender_Functions.html
+  cNMF_Functionality: cNMF_Functionality.html
   Color_Palettes: Color_Palettes.html
   FAQ: FAQ.html
   Gene_Expression_Plotting: Gene_Expression_Plotting.html
@@ -20,7 +21,7 @@ articles:
   Spatial_Plotting: Spatial_Plotting.html
   Statistics: Statistics.html
   Update_Gene_Symbols: Update_Gene_Symbols.html
-last_built: 2025-08-26T12:53Z
+last_built: 2025-09-10T13:34Z
 urls:
   reference: https://samuel-marsh.github.io/scCustomize/reference
   article: https://samuel-marsh.github.io/scCustomize/articles

@@ -354,20 +354,20 @@ Meta_Numeric <- function(
 #' Check if reduction loadings are present
 #'
 #' Check if reduction loadings are present in object and return vector of found loading names.  Return
-#' warning messages for genes not found.
+#' warning messages for reductions not found.
 #'
 #' @param seurat_object object name.
-#' @param reduction_names vector of genes to check.
+#' @param reduction_names vector of reduction loading names to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
-#' @param omit_warn logical. Whether to print message about features that are not found in current object.
+#' @param omit_warn logical. Whether to print message about reduction loadings that are not found in current object.
 #'  Default is TRUE.
-#' @param return_none logical. Whether list of found vs. bad features should still be returned if no
-#' features are found.  Default is FALSE.
+#' @param return_none logical. Whether list of found vs. bad reduction loadings should still be returned if no
+#' reductions are found.  Default is FALSE.
 #'
 #' @importFrom purrr reduce
 #' @importFrom stringr str_to_upper str_to_sentence
 #'
-#' @return A list of length 3 containing 1) found features, 2) not found features.
+#' @return A list of length 3 containing 1) found reduction loadings, 2) not found reduction loadings
 #'
 #' @export
 #'
@@ -1677,7 +1677,7 @@ Top_Genes_Factor.Seurat <- function(
     top_genes <- data.frame(top_genes)
 
     # rename columns
-    colnames(top_genes) <- paste0("Factor", 1:length(x = object[[reduction]]))
+    colnames(top_genes) <- paste0("Factor_", 1:length(x = object[[reduction]]))
   } else {
     # check factor is present in reduction
     num_dims <- 1:length(x = object[[reduction]])

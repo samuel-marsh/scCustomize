@@ -80,6 +80,124 @@ Merge_Seurat_List <- function(
 }
 
 
+
+#' Re-filter Seurat object
+#'
+#' Allows for re-filtering of Seurat object based on new parameters for `min.cells` and
+#' `min.features` (see \code{\link[SeuratObject]{CreateSeuratObject}} for more details)
+#'
+#' @param seurat_object Seurat object to filter
+#' @param min.cells Include features detected in at least this many cells. Will recalculate nCount and nFeature
+#' meta.data values as well.
+#' @param min.features Include cells where at least this many features are detected.
+#' @param override logical, override the Yes/No interactive check (see details).  Default is FALSE; don't override.
+#' @param verbose logical, whether to print information on filtering parameters and number of cells/features
+#' removed, Default is TRUE.
+#'
+#' @returns Seurat object
+#'
+#' @details
+#' When running this function any existing reductions, graphs, and all layers except "counts" in the
+#' RNA assay.  None of these aspects will be valid once cells/features are removed.
+#' To ensure users understand this default behavior of function will provide interactive prompt that
+#' users must select "Yes" in order to continue. To avoid this behavior users can set `override = TRUE` and
+#' function will skip the interactive prompt.
+#'
+#'
+#' @export
+#'
+#' @concept misc_util
+#'
+#' @examples
+#' \dontrun{
+#' # Remove features expressed in fewer than 10 cells
+#' obj_fil <- ReFilter_SeuratObject(seurat_object = obj, min.cells = 10)
+#'
+#' # Remove cells with fewer than 1000 features
+#' obj_fil <- ReFilter_SeuratObject(seurat_object = obj, min.features = 1000)
+#'
+#' # Filter on both parameters
+#' obj_fil <- ReFilter_SeuratObject(seurat_object = obj, min.features = 1000, min.cells = 10)
+#' }
+
+
+ReFilter_SeuratObject <- function(
+    seurat_object,
+    min.cells = NULL,
+    min.features = NULL,
+    override = FALSE,
+    verbose = TRUE
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # get assays
+  assays <- Assays(object = seurat_object)
+
+  # check filtering parameters
+  if (is.null(x = min.cells) && is.null(x = min.features)) {
+    cli_abort(message = "Must provide a value to either or both {.code min.cells} or {.code min.features}")
+  }
+
+  # Set defaults if one value is NULL
+  min.cells <- min.cells %||% 0
+  min.features <- min.features %||% 0
+
+  # check for Seurat 5
+  assay_layer_check <- unlist(lapply(1:length(x = assays), function(x) {
+    Assay5_Check(seurat_object = seurat_object, assay = x)
+  }))
+
+  # Check for multiple layers and abort if TRUE
+  if (isTRUE(x = any(assay_layer_check))) {
+    layers_check <- Layers(object = seurat_object, search = "counts")
+    if (length(x = layers_check) > 1) {
+      cli_abort(message = c("Multiple layers present {.field {head(x = layers_check, n = 2)}}.",
+                            "i" = "Please run {.code JoinLayers} before running {.code ReFilter_SeuratObject}"))
+    }
+  }
+
+  # Add warning about removal
+  if (isFALSE(x = override)) {
+    if (yesno(c("This function will remove all {.field reductions, graphs, non-RNA assays} and all layers except {.val counts} in RNA assay",  "\nDo you still want to proceed?"))) {
+      return(invisible())
+    }
+  }
+
+  # Diet Object
+  DefaultAssay(object = seurat_object) <- "RNA"
+  seurat_object <- DietSeurat(object = seurat_object, layers = "counts", assays = "RNA")
+
+  # Get cells to keep
+  nfeatures <- Matrix::colSums(x = LayerData(object = seurat_object, layer = "counts") > 0)
+  cells_fil <- colnames(LayerData(object = seurat_object, layer = "counts")[, which(x = nfeatures >= min.features)])
+  num_cells_rem <- length(x = Cells(x = seurat_object)) - length(x = cells_fil)
+
+  # Get features to keep
+  num.cells <- Matrix::rowSums(x = LayerData(object = seurat_object, layer = "counts", cells = cells_fil) > 0)
+  features_fil <- rownames(LayerData(object = seurat_object, layer = "counts", cells = cells_fil)[which(x = num.cells >= min.cells), ])
+  num_features_rem <- length(x = Features(x = seurat_object)) - length(x = features_fil)
+
+  # print parameters of filtering
+  if (isTRUE(x = verbose)) {
+    cli_inform(message = c("*" = "Filtering object",
+                           "i" = "Keeping cells with greater than or equal to {.field {min.features} features}.",
+                           "{col_green({symbol$double_line})} Total of {.field {num_cells_rem} cells} being removed.",
+                           "i" = "Keeping features expressed in greater than or equal to {.field {min.cells} cells}.",
+                           "{col_green({symbol$arrow_right})} Total of {.field {num_features_rem} features} being removed."))
+  }
+
+  # subset object
+  seurat_object <- subset(x = seurat_object, cells = cells_fil, features = features_fil)
+
+  # return object
+  return(seurat_object)
+}
+
+
+
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### META DATA UTILITIES ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

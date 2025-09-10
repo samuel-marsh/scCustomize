@@ -8,8 +8,11 @@ Read_Add_cNMF(
   seurat_object,
   usage_file,
   spectra_file,
+  reduction_name = "cnmf",
+  reduction_key = "cNMF_",
   normalize = TRUE,
-  assay = NULL
+  assay = NULL,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -19,10 +22,17 @@ Read_Add_cNMF(
 
 \item{spectra_file}{path and name of cNMF spectra file}
 
+\item{reduction_name}{name to use for reduction to be added, default is "cnmf".}
+
+\item{reduction_key}{key to use for reduction to be added, default is "cNMF_".}
+
 \item{normalize}{logical, whether to normalize the cNMF usage data, default is TRUE}
 
 \item{assay}{assay to add reduction.  Default is NULL and will use current
 active assay.}
+
+\item{overwrite}{logical, whether to overwrite a reduction with the name \code{reduction_name} already
+present in reduction slot of given Seurat object.}
 }
 \value{
 Seurat object with new dimensionality reduction "cnmf"
