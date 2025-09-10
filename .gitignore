@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-scCustomize.Rproj
 .DS_Store
 vignettes/assets
 README.Rmd
