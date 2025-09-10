@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .DS_Store
+scCustomize.Rproj
 vignettes/assets
 README.Rmd
 index.Rmd
