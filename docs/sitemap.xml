@@ -115,6 +115,12 @@
     <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/Update_Gene_Symbols.html</loc>
   </url>
   <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/articles/articles/cNMF_Functionality.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/articles/cNMF_Functionality.html</loc>
+  </url>
+  <url>
     <loc>https://samuel-marsh.github.io/scCustomize/articles/index.html</loc>
   </url>
   <url>
@@ -494,6 +500,9 @@
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Random_Cells_Downsample.html</loc>
+  </url>
+  <url>
+    <loc>https://samuel-marsh.github.io/scCustomize/reference/ReFilter_SeuratObject.html</loc>
   </url>
   <url>
     <loc>https://samuel-marsh.github.io/scCustomize/reference/Read10X_GEO.html</loc>
