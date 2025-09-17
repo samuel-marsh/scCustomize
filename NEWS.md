@@ -1,3 +1,18 @@
+# scCustomize 3.X.X (202X-XX-XX)  
+## Added  
+  
+
+## Changed  
+  
+
+
+
+## Fixes  
+  
+
+
+
+
 # scCustomize 3.2.0 (2025-09-09)  
 ## Added  
 - Added cNMF vignette.  
