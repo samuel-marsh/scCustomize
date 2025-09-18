@@ -1825,6 +1825,8 @@ Cell_Highlight_Plot <- function(
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param split_downsample logical, whether to downsample the split plots by number of cells in the smallest group.
+#' Default is FALSE.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
 #' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
@@ -1855,6 +1857,8 @@ Cell_Highlight_Plot <- function(
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param downsample_seed random seed to use when selecting random cells to downsample in plot.
+#' Default = 123.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
@@ -1864,6 +1868,8 @@ Cell_Highlight_Plot <- function(
 #' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom dplyr filter pull
+#' @importFrom magrittr "%>%"
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -1881,33 +1887,35 @@ Cell_Highlight_Plot <- function(
 #'
 
 DimPlot_scCustom <- function(
-  seurat_object,
-  colors_use = NULL,
-  pt.size = NULL,
-  reduction = NULL,
-  group.by = NULL,
-  split.by = NULL,
-  split_seurat = FALSE,
-  figure_plot = FALSE,
-  aspect_ratio = NULL,
-  add_prop_plot = FALSE,
-  prop_plot_percent = FALSE,
-  prop_plot_x_log = FALSE,
-  prop_plot_label = FALSE,
-  shuffle = TRUE,
-  seed = 1,
-  label = NULL,
-  label.size = 4,
-  label.color = 'black',
-  label.box = FALSE,
-  dims = c(1, 2),
-  repel = FALSE,
-  raster = NULL,
-  raster.dpi = c(512, 512),
-  num_columns = NULL,
-  ggplot_default_colors = FALSE,
-  color_seed = 123,
-  ...
+    seurat_object,
+    colors_use = NULL,
+    pt.size = NULL,
+    reduction = NULL,
+    group.by = NULL,
+    split.by = NULL,
+    split_downsample = FALSE,
+    split_seurat = FALSE,
+    figure_plot = FALSE,
+    aspect_ratio = NULL,
+    add_prop_plot = FALSE,
+    prop_plot_percent = FALSE,
+    prop_plot_x_log = FALSE,
+    prop_plot_label = FALSE,
+    shuffle = TRUE,
+    seed = 1,
+    label = NULL,
+    label.size = 4,
+    label.color = 'black',
+    label.box = FALSE,
+    dims = c(1, 2),
+    repel = FALSE,
+    raster = NULL,
+    raster.dpi = c(512, 512),
+    num_columns = NULL,
+    ggplot_default_colors = FALSE,
+    downsample_seed = 123,
+    color_seed = 123,
+    ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -2075,7 +2083,12 @@ DimPlot_scCustom <- function(
   } else {
     if (isTRUE(x = split_seurat)) {
       # Plot Seurat Splitting
-      plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      if (isTRUE(x = split_downsample)) {
+        cli_abort(message = "{.code split_downsample} requires {.split_seurat = FALSE}.")
+      } else {
+        plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      }
+
       if (isTRUE(x = figure_plot)) {
 
         # pull axis labels
@@ -2152,14 +2165,36 @@ DimPlot_scCustom <- function(
 
       # Extract cell names per meta data list of values
       # Extract split.by list of values
-      if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-        split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
-      } else {
-        split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+      if (isFALSE(x = split_downsample)) {
+        if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+          split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+        } else {
+          split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+        }
       }
 
-      cell_names <- lapply(split_by_list, function(x) {
-        row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+      if (isTRUE(x = split_downsample)) {
+        cells_split <- data.frame(table(seurat_object@meta.data[, split.by]))
+
+        # Identity with greatest number of cells
+        min_cells <- min(cells_by_split$Freq)
+
+        min_group <- cells_by_split %>%
+          filter(.data[["Freq"]] == min_cells) %>%
+          pull(.data[["Var1"]]) %>%
+          as.character()
+
+        cli_inform(message = "Downsampling plot to {.field {min_cells}} cells per category, based on group with fewest cells ({.val {min_group}}).")
+
+        cell_names <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = min_cells, group.by = split.by, return_list = TRUE, seed = downsample_seed)
+
+        names(x = cell_names) <- cells_split$Var1
+
+        split_by_list <- cells_split$Var1
+      } else {
+        cell_names <- lapply(split_by_list, function(x) {
+          row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+      }
 
       # Unify colors across plots
       if (is.null(x = group.by)) {
