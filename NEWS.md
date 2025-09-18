@@ -1,6 +1,6 @@
 # scCustomize 3.X.X (202X-XX-XX)  
 ## Added  
-  
+- Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
 
 ## Changed  
   
