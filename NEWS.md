@@ -1,6 +1,7 @@
 # scCustomize 3.X.X (202X-XX-XX)  
 ## Added  
 - Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
+- Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
 
 ## Changed  
   
