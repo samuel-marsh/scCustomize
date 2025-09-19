@@ -17,6 +17,7 @@ Clustered_DotPlot(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   show_ident_colors = TRUE,
+  show_annotation_name = TRUE,
   x_lab_rotate = TRUE,
   plot_padding = NULL,
   flip = FALSE,
@@ -84,6 +85,9 @@ will use "varibow" with shuffle = TRUE both from \code{DiscretePalette_scCustomi
 
 \item{show_ident_colors}{logical, whether to show colors for idents on the column/rows of the plot
 (default is TRUE).}
+
+\item{show_annotation_name}{logical, whether or not to show annotation name next to color bar.  Default is
+TRUE.}
 
 \item{x_lab_rotate}{How to rotate column labels.  By default set to \code{TRUE} which rotates labels 45 degrees.
 If set \code{FALSE} rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.}
