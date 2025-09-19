@@ -590,6 +590,7 @@ Clustered_DotPlot_Single_Group <- function(
     print_exp_quantiles = FALSE,
     colors_use_idents = NULL,
     show_ident_colors = TRUE,
+    show_annotation_name = TRUE,
     x_lab_rotate = TRUE,
     plot_padding = NULL,
     flip = FALSE,
@@ -814,14 +815,16 @@ Clustered_DotPlot_Single_Group <- function(
                                                  col =  identity_colors_list,
                                                  na_col = "grey",
                                                  name = "Identity",
-                                                 show_legend = FALSE
+                                                 show_legend = FALSE,
+                                                 show_annotation_name = show_annotation_name
       )
     } else {
       column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
                                                      col =  identity_colors_list,
                                                      na_col = "grey",
                                                      name = "Identity",
-                                                     show_legend = FALSE
+                                                     show_legend = FALSE,
+                                                     show_annotation_name = show_annotation_name
       )
     }
   } else {
