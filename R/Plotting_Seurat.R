@@ -1034,6 +1034,8 @@ DotPlot_scCustom <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param show_ident_colors logical, whether to show colors for idents on the column/rows of the plot
 #' (default is TRUE).
+#' @param show_annotation_name logical, whether or not to show annotation name next to color bar.  Default is
+#' TRUE.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
 #' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
