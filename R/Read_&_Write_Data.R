@@ -1277,6 +1277,7 @@ Read_CellBender_h5_Mat <- function(
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL` will
 #' set names to the subdirectory name of each sample.  NOTE: unless `sample_list` is specified this will
 #' rename files in the order they are read which will be alphabetical.
+#' @param no_file_prefix logical, whether or not the file has prefix identical to folder name. Default is TRUE.
 #' @param h5_group_name Name of the group within H5 file that contains count data.  This is only
 #' required if H5 file contains multiple subgroups and non-default names.  Default is `NULL`.
 #' @param feature_slot_name Name of the slot contain feature names/ids.  Must be one of:
@@ -1317,6 +1318,7 @@ Read_CellBender_h5_Multi_Directory <- function(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  no_file_prefix = FALSE,
   h5_group_name = NULL,
   feature_slot_name = "features",
   replace_suffix = FALSE,
@@ -1376,7 +1378,11 @@ Read_CellBender_h5_Multi_Directory <- function(
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       # Create file path
-      file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
+      if (isFALSE(x = no_file_prefix)) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
+      } else {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, file_suffix)
+      }
 
       # read and return data
       raw_data <- Read_CellBender_h5_Mat(file_name = file_path, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
@@ -1385,7 +1391,11 @@ Read_CellBender_h5_Multi_Directory <- function(
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
       # Create file path
-      file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
+      if (isFALSE(x = no_file_prefix)) {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
+      } else {
+        file_path <- file.path(base_path, sample_list[x], secondary_path, file_suffix)
+      }
 
       # read and return data
       raw_data <- Read_CellBender_h5_Mat(file_name = file_path, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
