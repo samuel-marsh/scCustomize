@@ -2181,9 +2181,9 @@ DimPlot_scCustom <- function(
         cells_split <- data.frame(table(seurat_object@meta.data[, split.by]))
 
         # Identity with greatest number of cells
-        min_cells <- min(cells_by_split$Freq)
+        min_cells <- min(cells_split$Freq)
 
-        min_group <- cells_by_split %>%
+        min_group <- cells_split %>%
           filter(.data[["Freq"]] == min_cells) %>%
           pull(.data[["Var1"]]) %>%
           as.character()
