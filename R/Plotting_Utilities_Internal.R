@@ -2093,3 +2093,26 @@ create_factor_hclust_rect <- function(
 
   return(rect_list)
 }
+
+
+#' Get plot limits from ggplot2 object
+#'
+#' @param plot ggplot2 object to get axis limits from
+#'
+#' @returns list with x and y axis min and max values
+#' @NoRd
+#'
+#' @references Function from StackOverflow \url{https://stackoverflow.com/a/40304848}
+#'
+
+get_plot_limits <- function(
+    plot
+) {
+  gb = ggplot_build(plot)
+  xmin = gb$layout$panel_params[[1]]$x.range[1]
+  xmax = gb$layout$panel_params[[1]]$x.range[2]
+  ymin = gb$layout$panel_params[[1]]$y.range[1]
+  ymax = gb$layout$panel_params[[1]]$y.range[2]
+  plot_limits <- list(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
+  return(plot_limits)
+}
