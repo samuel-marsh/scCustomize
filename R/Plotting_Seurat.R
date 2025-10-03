@@ -2669,6 +2669,92 @@ FeatureScatter_scCustom <- function(
 }
 
 
+#' ElbowPlot with modifications
+#'
+#' Creates ElbowPlot with ability to calculate and plot cutoffs for amount of variance conferred by the PCs.
+#' Cutoff 1 is PC where principal components only contribute 5% of standard deviation and the principal components
+#' cumulatively contribute 90% of the standard deviation.
+#' Cutoff 2 is point where the percent change in variation between the consecutive PCs is less than 0.1%.
+#'
+#' @param seurat_object name of Seurat object
+#' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
+#' @param reduction The reduction to use, default is "pca"
+#' @param calc_cutoffs logical, whether or not to calculate the cutoffs
+#' @param plot_cutoffs
+#' @param line_colors
+#' @param linewidth
+#'
+#' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}
+#'
+#' @returns ggplot2 object
+#' @export
+#'
+#' @examples
+
+ElbowPlot_scCustom <- function(
+    seurat_object,
+    ndims = NULL,
+    reduction = "pca",
+    calc_cutoffs = TRUE,
+    plot_cutoffs = TRUE,
+    line_colors = c("blue", "red"),
+    linewidth = 0.5
+) {
+  # set dims if NULL
+  if (is.null(x = ndims)) {
+    ndims <- ncol(x = Embeddings(seurat_object, reduction = reduction))
+  } else {
+    if (ndims > ncol(x = Embeddings(seurat_object, reduction = reduction))) {
+      cli_warn(message = c("Number of dimensions supplied ({.field {ndims}}) is greater than total dims for reduction {.val {reduction}} ({.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}).",
+                           "i" = "Setting {.code {ndims}} to max value of {.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}."))
+    }
+  }
+
+  # Calculate the cutoffs
+  if (isTRUE(x = plot_cutoffs) && isFALSE(x = calc_cutoffs)) {
+    cli_warn(message = c("{.code calc_cutoffs} cannot be {.field {FALSE}} if {.code plot_cutoffs} is {.field {TRUE}}.",
+                         "i" = "Setting {.code calc_cutoffs = TRUE}"))
+    calc_cutoffs <- TRUE
+  }
+
+  if (isTRUE(x = calc_cutoffs)) {
+    # pct var associated with each PC
+    pctVar <- seurat_object[[reduction]]@stdev / sum(seurat_object[[reduction]]@stdev) * 100
+
+    # calculate cumulative percents
+    cumPct <- cumsum(pctVar)
+
+    # Get cut-offs
+    co1 <- which(cumPct > 90 & pctVar < 5)[1]
+    co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = T)[1] + 1
+
+  }
+
+  # Create plot
+  plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+
+  # Add cutoffs to plot
+  if (isTRUE(x = plot_cutoffs)) {
+    y_max <- get_plot_limits(plot)[["ymax"]]
+
+    plot <- plot +
+      geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = linewidth) +
+      geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
+      annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0) +
+      annotate("text", x = co2, y = y_max, label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
+  }
+
+  # print cutoffs if not plotting
+  if (isTRUE(x = calc_cutoffs) && isFALSE(x = plot_cutoffs)) {
+    cli_inform(message = c("i" = "The first cutoff is: {.field {co1}}.",
+                           "i" = "The second cutoff is: {.field {co2}}."))
+  }
+
+  # return plot
+  return(plot)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### SPATIAL PLOTTING ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
