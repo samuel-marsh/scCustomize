@@ -1,5 +1,6 @@
 # scCustomize 3.X.X (202X-XX-XX)  
 ## Added  
+- Added `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of varaince conferred by PCs.  See manual for more details.  
 - Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
 - Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
 - Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
