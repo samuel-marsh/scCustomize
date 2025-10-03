@@ -2686,6 +2686,9 @@ FeatureScatter_scCustom <- function(
 #'
 #' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}
 #'
+#' @import cli
+#' @import ggplot
+#'
 #' @returns ggplot2 object
 #' @export
 #'
@@ -2737,11 +2740,36 @@ ElbowPlot_scCustom <- function(
   if (isTRUE(x = plot_cutoffs)) {
     y_max <- get_plot_limits(plot)[["ymax"]]
 
-    plot <- plot +
-      geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = linewidth) +
-      geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
-      annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0) +
-      annotate("text", x = co2, y = y_max, label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
+    # Adjust plot if ndims is less than cutoff values
+    if (co1 > ndims) {
+      co1_missing <- TRUE
+    } else {
+      co1_missing <- FALSE
+    }
+
+    if (co2 > ndims) {
+      co2_missing <- TRUE
+    } else {
+      co2_missing <- FALSE
+    }
+
+    if (isFALSE(x = co1_missing)) {
+      plot <- plot +
+        geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = linewidth) +
+        annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
+    } else {
+      plot <- plot +
+        annotate("text", x = 1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
+    }
+
+    if (isFALSE(x = co2_missing)) {
+      plot <- plot +
+        geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
+        annotate("text", x = co2, y = y_max, label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
+    } else {
+      plot <- plot +
+        annotate("text", x = 1, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 0)
+    }
   }
 
   # print cutoffs if not plotting
