@@ -11,12 +11,14 @@ Fetch_Meta(object, ...)
 
 \method{Fetch_Meta}{liger}(object, ...)
 
-\method{Fetch_Meta}{Seurat}(object, ...)
+\method{Fetch_Meta}{Seurat}(object, columns = NULL, ...)
 }
 \arguments{
 \item{object}{Object of class Seurat or liger.}
 
 \item{...}{Arguments passed to other methods}
+
+\item{columns}{optional, name(s) of columns to return. Default is NULL; returns all columns}
 }
 \value{
 A data.frame containing cell-level meta data
