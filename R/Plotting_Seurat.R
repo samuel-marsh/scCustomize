@@ -596,7 +596,7 @@ FeaturePlot_DualAssay <- function(
 #' @param median_size Shape size for the median is plotted.
 #' @param idents Which classes to include in the plot (default is all).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
-#' greater than 100,000 total points plotted (# Cells x # of features).
+#' greater than 200,000 total points plotted (# Cells x # of features).
 #' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
@@ -688,9 +688,9 @@ VlnPlot_scCustom <- function(
     if (pt.size == 0) {
       raster <- FALSE
     } else {
-      if (length(x = num_cells) * length(x = all_found_features) > 100000 && pt.size != 0) {
+      if (num_cells * length(x = all_found_features) > 100000 && pt.size != 0) {
         raster <- TRUE
-        cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+        cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
                                "i" = "To plot in vector form set {.code raster=FALSE}")
         )
       } else {
@@ -770,7 +770,7 @@ VlnPlot_scCustom <- function(
 #' @param pt.size Adjust point size for plotting.  Default for `Stacked_VlnPlot` is 0 to avoid issues with
 #' rendering so many points in vector form.  Alternatively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
-#' greater than 100,000 total points plotted (# Cells x # of features).
+#' greater than 200,000 total points plotted (# Cells x # of features).
 #' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
@@ -838,9 +838,9 @@ Stacked_VlnPlot <- function(
   # Set rasterization
   num_cells <- length(x = Cells(x = seurat_object))
 
-  if (num_cells * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
+  if (num_cells * length(x = all_found_features) > 200000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
-    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
                            "i" = "To plot in vector form set {.code raster=FALSE}")
     )
   }
