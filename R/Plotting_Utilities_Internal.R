@@ -2100,7 +2100,7 @@ create_factor_hclust_rect <- function(
 #' @param plot ggplot2 object to get axis limits from
 #'
 #' @returns list with x and y axis min and max values
-#' @NoRd
+#' @noRd
 #'
 #' @references Function from StackOverflow \url{https://stackoverflow.com/a/40304848}
 #'
