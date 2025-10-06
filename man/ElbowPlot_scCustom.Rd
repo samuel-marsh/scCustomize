@@ -10,7 +10,7 @@ ElbowPlot_scCustom(
   reduction = "pca",
   calc_cutoffs = TRUE,
   plot_cutoffs = TRUE,
-  line_colors = c("blue", "red"),
+  line_colors = c("dodgerblue", "firebrick"),
   linewidth = 0.5
 )
 }
@@ -21,9 +21,13 @@ ElbowPlot_scCustom(
 
 \item{reduction}{The reduction to use, default is "pca"}
 
-\item{calc_cutoffs}{logical, whether or not to calculate the cutoffs}
+\item{calc_cutoffs}{logical, whether or not to calculate the cutoffs, default is TRUE.}
 
-\item{linewidth}{}
+\item{plot_cutoffs}{lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.}
+
+\item{line_colors}{colors for the cutoff lines, default is c("dodgerblue", "firebrick").}
+
+\item{linewidth}{widith of the cutoff lines, default is 0.5.}
 }
 \value{
 ggplot2 object
@@ -33,6 +37,11 @@ Creates ElbowPlot with ability to calculate and plot cutoffs for amount of varia
 Cutoff 1 is PC where principal components only contribute 5\% of standard deviation and the principal components
 cumulatively contribute 90\% of the standard deviation.
 Cutoff 2 is point where the percent change in variation between the consecutive PCs is less than 0.1\%.
+}
+\examples{
+library(Seurat)
+ElbowPlot_scCustom(object = pbmc_small)
+
 }
 \references{
 Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}

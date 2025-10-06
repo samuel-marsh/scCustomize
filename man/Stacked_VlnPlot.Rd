@@ -61,7 +61,7 @@ Default is 0.15 ("cm").  Spacing dependent on unit provided to \code{spacing_uni
 rendering so many points in vector form.  Alternatively, see \code{raster} parameter.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
-greater than 100,000 total points plotted (# Cells x # of features).}
+greater than 200,000 total points plotted (# Cells x # of features).}
 
 \item{add.noise}{logical, determine if adding a small noise for plotting (Default is TRUE).}
 
