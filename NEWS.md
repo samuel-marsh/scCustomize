@@ -13,6 +13,7 @@
 
 
 ## Fixes  
+- Fixed calculation of number of cells x number of features in `VlnPlot_scCustom` to properly rasterize plot if total is greater than 200,000.  Thanks @DavideBrex, ([#244](https://github.com/samuel-marsh/scCustomize/issues/244)).   
   
 
 
