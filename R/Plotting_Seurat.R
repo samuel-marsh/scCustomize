@@ -2679,20 +2679,23 @@ FeatureScatter_scCustom <- function(
 #' @param seurat_object name of Seurat object
 #' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
 #' @param reduction The reduction to use, default is "pca"
-#' @param calc_cutoffs logical, whether or not to calculate the cutoffs
-#' @param plot_cutoffs
-#' @param line_colors
-#' @param linewidth
+#' @param calc_cutoffs logical, whether or not to calculate the cutoffs, default is TRUE.
+#' @param plot_cutoffs lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
+#' @param line_colors colors for the cutoff lines, default is c("dodgerblue", "firebrick").
+#' @param linewidth widith of the cutoff lines, default is 0.5.
 #'
 #' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}
 #'
 #' @import cli
-#' @import ggplot
+#' @import ggplot2
 #'
 #' @returns ggplot2 object
 #' @export
 #'
 #' @examples
+#' library(Seurat)
+#' ElbowPlot_scCustom(object = pbmc_small)
+#'
 
 ElbowPlot_scCustom <- function(
     seurat_object,
@@ -2700,7 +2703,7 @@ ElbowPlot_scCustom <- function(
     reduction = "pca",
     calc_cutoffs = TRUE,
     plot_cutoffs = TRUE,
-    line_colors = c("blue", "red"),
+    line_colors = c("dodgerblue", "firebrick"),
     linewidth = 0.5
 ) {
   # set dims if NULL
@@ -2731,6 +2734,14 @@ ElbowPlot_scCustom <- function(
     co1 <- which(cumPct > 90 & pctVar < 5)[1]
     co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = T)[1] + 1
 
+  }
+
+  if (length(x = line_colors) == 1) {
+    cli_inform(message = "Only one color provided to {.code line_colors} using same color for both cutoffs.")
+    line_colors <- rep(x = line_colors, times = 2)
+  }
+  if (length(x = line_colors) > 2 || length(x = line_colors) < 1) {
+    cli_abort(message = "The number of values provided to {.code line_colors} must be either 1 or 2.")
   }
 
   # Create plot
@@ -2765,7 +2776,7 @@ ElbowPlot_scCustom <- function(
     if (isFALSE(x = co2_missing)) {
       plot <- plot +
         geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
-        annotate("text", x = co2, y = y_max, label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
+        annotate("text", x = co2, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
     } else {
       plot <- plot +
         annotate("text", x = 1, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 0)
