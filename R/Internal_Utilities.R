@@ -2944,6 +2944,117 @@ Metrics_Multi_VDJT <- function(
 }
 
 
+#' Read VDJ B Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all VDJ B metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample VDJ T metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' vdj_multi_metrics <- Metrics_Multi_VDJB(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_VDJB <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+) {
+  cli_inform(message = "Reading {.field VDJ B} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
+
+    VDJ_T_Metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ B") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name")
+
+    current_metrics <- rownames(x = VDJ_T_Metrics)
+
+    VDJ_T_Metrics <- VDJ_T_Metrics %>%
+      t() %>%
+      data.frame()
+
+    remaining_metrics <<- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
+                                        , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+
+    VDJ_T_Metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    test1 <<- colnames(VDJ_T_Metrics)
+    test2 <<- colnames(VDJ_T_Metrics2)
+
+
+
+    raw_data_vdjb <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_vdjb[1, ])
+    raw_data_vdjb[, c(column_numbers)] <- lapply(raw_data_vdjb[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjb[1, ])
+    all_columns <- 1:ncol(x = raw_data_vdjb)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_vdjb[,c(column_numbers_numeric)] <- lapply(raw_data_vdjb[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_vdjb)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
+
 #' Read single Summary Statistics csv from 10X Cell Ranger Count or Multi
 #'
 #' Get data.frame with all metrics from the Cell Ranger `count` analysis or list of data.frames if using Cell Ranger `multi`.

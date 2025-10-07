@@ -1671,10 +1671,15 @@ Read_Metrics_10X <- function(
       multi_vdjt_metrics <- Metrics_Multi_VDJT(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
     }
 
+    if ("VDJ B" %in% modalities) {
+      multi_vdjb_metrics <- Metrics_Multi_VDJB2(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    }
+
     # Return data
     data_list <- list(
       multi_gex_metrics = multi_gex_metrics,
-      multi_vdjt_metrics = multi_vdjt_metrics
+      multi_vdjt_metrics = multi_vdjt_metrics,
+      multi_vdjb_metrics = multi_vdjb_metrics
     )
 
     return(data_list)
