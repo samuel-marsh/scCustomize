@@ -1590,6 +1590,7 @@ Read_CellBender_h5_Multi_File <- function(
 #' @import pbapply
 #' @importFrom dplyr bind_rows
 #' @importFrom magrittr "%>%"
+#' @importFrom purrr compact
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
 #' @export
@@ -1668,18 +1669,23 @@ Read_Metrics_10X <- function(
     }
 
     if ("VDJ T" %in% modalities) {
-      multi_vdjt_metrics <- Metrics_Multi_VDJT(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+      multi_vdjt_metrics <- Metrics_Multi_VDJT2(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    } else {
+      multi_vdjt_metrics <- NULL
     }
 
     if ("VDJ B" %in% modalities) {
       multi_vdjb_metrics <- Metrics_Multi_VDJB2(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    } else {
+      multi_vdjb_metrics <- NULL
     }
 
     # Return data
-    data_list <- list(
-      multi_gex_metrics = multi_gex_metrics,
-      multi_vdjt_metrics = multi_vdjt_metrics,
-      multi_vdjb_metrics = multi_vdjb_metrics
+    data_list <- compact(
+      list(
+        multi_gex_metrics = multi_gex_metrics,
+        multi_vdjt_metrics = multi_vdjt_metrics,
+        multi_vdjb_metrics = multi_vdjb_metrics)
     )
 
     return(data_list)
