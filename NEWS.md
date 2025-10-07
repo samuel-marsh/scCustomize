@@ -6,6 +6,7 @@
 - Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
 - Added `columnns` parameter to `Fetch_Meta.Seurat` to allow for return of select columns only.  
 - Added support for VDJ B metrics in `Read_Metrics_10X`.  
+- Added support for Antibody Capture metrics in `Read_Metrics_10X`.  
 
 
 ## Changed  
