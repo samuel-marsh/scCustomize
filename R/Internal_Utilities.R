@@ -3004,7 +3004,7 @@ Metrics_Multi_VDJB <- function(
       t() %>%
       data.frame()
 
-    remaining_metrics <<- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
+    remaining_metrics <- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
                                         , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
 
     VDJ_B_Metrics2 <- raw_data %>%
@@ -3458,7 +3458,7 @@ Metrics_Single_File_v9plus <- function(
         t() %>%
         data.frame()
 
-      remaining_metrics <<- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
+      remaining_metrics <- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
                                           , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
 
       VDJ_B_Metrics2 <- raw_data %>%
