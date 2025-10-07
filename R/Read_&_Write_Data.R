@@ -1680,12 +1680,20 @@ Read_Metrics_10X <- function(
       multi_vdjb_metrics <- NULL
     }
 
+    if ("Antibody Capture" %in% modalities) {
+      print("hi")
+      multi_abc_metrics <- Metrics_Multi_ABC(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+    } else {
+      multi_abc_metrics <- NULL
+    }
+
     # Return data
-    data_list <- compact(
+    data_list <- purrr::compact(
       list(
         multi_gex_metrics = multi_gex_metrics,
         multi_vdjt_metrics = multi_vdjt_metrics,
-        multi_vdjb_metrics = multi_vdjb_metrics)
+        multi_vdjb_metrics = multi_vdjb_metrics,
+        multi_abc_metrics = multi_abc_metrics)
     )
 
     return(data_list)
