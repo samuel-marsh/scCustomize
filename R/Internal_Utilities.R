@@ -2993,21 +2993,21 @@ Metrics_Multi_VDJB <- function(
 
     raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
 
-    VDJ_T_Metrics <- raw_data %>%
+    VDJ_B_Metrics <- raw_data %>%
       filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ B") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name")
 
     current_metrics <- rownames(x = VDJ_T_Metrics)
 
-    VDJ_T_Metrics <- VDJ_T_Metrics %>%
+    VDJ_B_Metrics <- VDJ_T_Metrics %>%
       t() %>%
       data.frame()
 
     remaining_metrics <<- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
                                         , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
 
-    VDJ_T_Metrics2 <- raw_data %>%
+    VDJ_B_Metrics2 <- raw_data %>%
       filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
       ) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
@@ -3015,12 +3015,7 @@ Metrics_Multi_VDJB <- function(
       t() %>%
       data.frame()
 
-    test1 <<- colnames(VDJ_T_Metrics)
-    test2 <<- colnames(VDJ_T_Metrics2)
-
-
-
-    raw_data_vdjb <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+    raw_data_vdjb <- cbind(VDJ_B_Metrics, VDJ_B_Metrics2)
 
     column_numbers <- grep(pattern = ",", x = raw_data_vdjb[1, ])
     raw_data_vdjb[, c(column_numbers)] <- lapply(raw_data_vdjb[, c(column_numbers)], function(x) {
@@ -3218,6 +3213,7 @@ Metrics_Single_File <- function(
 #' @import cli
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
+#' @importFrom purrr compact
 #' @importFrom tibble column_to_rownames
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
@@ -3323,6 +3319,9 @@ Metrics_Single_File_v9plus <- function(
     cli_inform(message = "Reading {.field Gene Expression} Metrics")
     raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
+    modalities <- read.csv(file = file.path(s1_file_path, "metrics_summary.csv"), stringsAsFactors = F)$Library.Type %>%
+      unique()
+
     # Change format to column based and select relevant metrics
     GEX_metrics <- raw_data %>%
       filter(.data[["Grouped.By"]] == "Physical library ID" & .data[["Library.Type"]] == "Gene Expression") %>%
@@ -3399,50 +3398,100 @@ Metrics_Single_File_v9plus <- function(
 
     rownames(x = raw_data_gex) <- NULL
 
-    # Get VDJT metrics
-    cli_inform(message = "Reading {.field VDJ T} Metrics")
-    raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+    if ("VDJ T" %in% modalities) {
+      # Get VDJT metrics
+      cli_inform(message = "Reading {.field VDJ T} Metrics")
+      raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
-    VDJ_T_Metrics <- raw_data %>%
-      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
-      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
-      column_to_rownames("Metric.Name")
+      VDJ_T_Metrics <- raw_data %>%
+        filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name")
 
-    current_metrics <- rownames(x = VDJ_T_Metrics)
+      current_metrics <- rownames(x = VDJ_T_Metrics)
 
-    VDJ_T_Metrics <- VDJ_T_Metrics %>%
-      t() %>%
-      data.frame()
+      VDJ_T_Metrics <- VDJ_T_Metrics %>%
+        t() %>%
+        data.frame()
 
-    remaining_metrics <- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+      remaining_metrics <- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
 
-    VDJ_T_Metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
-      ) %>%
-      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
-      column_to_rownames("Metric.Name") %>%
-      t() %>%
-      data.frame()
+      VDJ_T_Metrics2 <- raw_data %>%
+        filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
+        ) %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name") %>%
+        t() %>%
+        data.frame()
 
-    raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+      raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
 
-    column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
-    raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
-      as.numeric(gsub(",", "", x))})
+      column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
+      raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
+        as.numeric(gsub(",", "", x))})
 
-    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
-    all_columns <- 1:ncol(x = raw_data_vdjt)
+      column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
+      all_columns <- 1:ncol(x = raw_data_vdjt)
 
-    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+      column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
 
-    raw_data_vdjt[, c(column_numbers_numeric)] <- lapply(raw_data_vdjt[, c(column_numbers_numeric)], function(x) {
-      as.numeric(x)})
+      raw_data_vdjt[, c(column_numbers_numeric)] <- lapply(raw_data_vdjt[, c(column_numbers_numeric)], function(x) {
+        as.numeric(x)})
+    } else {
+      raw_data_vdjt <- NULL
+    }
+
+    # VDJ B Metrics
+    if ("VDJ B" %in% modalities) {
+      # Get VDJT metrics
+      cli_inform(message = "Reading {.field VDJ B} Metrics")
+      raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+
+      VDJ_B_Metrics <- raw_data %>%
+        filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ B") %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name")
+
+      current_metrics <- rownames(x = VDJ_T_Metrics)
+
+      VDJ_B_Metrics <- VDJ_T_Metrics %>%
+        t() %>%
+        data.frame()
+
+      remaining_metrics <<- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
+                                          , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+
+      VDJ_B_Metrics2 <- raw_data %>%
+        filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
+        ) %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name") %>%
+        t() %>%
+        data.frame()
+
+      raw_data_vdjb <- cbind(VDJ_B_Metrics, VDJ_B_Metrics2)
+
+      column_numbers <- grep(pattern = ",", x = raw_data_vdjb[1, ])
+      raw_data_vdjb[, c(column_numbers)] <- lapply(raw_data_vdjb[, c(column_numbers)], function(x) {
+        as.numeric(gsub(",", "", x))})
+
+      column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjb[1, ])
+      all_columns <- 1:ncol(x = raw_data_vdjb)
+
+      column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+      raw_data_vdjb[,c(column_numbers_numeric)] <- lapply(raw_data_vdjb[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    } else {
+      raw_data_vdjb <- NULL
+    }
 
     # combine outputs into a list
-    data_list <- list(
-      multi_gex_metrics = raw_data_gex,
-      multi_vdjt_metrics = raw_data_vdjt
-    )
+    data_list <- compact(
+      list(
+        multi_gex_metrics = raw_data_gex,
+        multi_vdjt_metrics = raw_data_vdjt,
+        multi_vdjb_metrics = raw_data_vdjb)
+      )
 
     # return data list
     return(data_list)
