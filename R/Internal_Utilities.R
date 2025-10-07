@@ -2768,22 +2768,43 @@ Metrics_Multi_GEX <- function(
       as.numeric(gsub(",", "", x))})
 
     # Rename multi columns to match names from count
-    names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
-                          Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
-                          Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
-                          Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
-                          Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
-                          Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
-                          Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
-                          Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
-                          Estimated.Number.of.Cells = "Estimated.number.of.cells",
-                          Mean.Reads.per.Cell = "Mean.reads.per.cell",
-                          Median.Genes.per.Cell = "Median.genes.per.cell",
-                          Number.of.Reads = "Number.of.reads",
-                          Valid.Barcodes = "Valid.barcodes",
-                          Sequencing.Saturation = "Sequencing.saturation",
-                          Total.Genes.Detected = "Total.genes.detected",
-                          Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+    if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
+      # Rename multi columns to match names from count
+      names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                            Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                            Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                            Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                            Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                            Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                            Estimated.Number.of.Cells = "Estimated.number.of.cells",
+                            Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                            Median.Genes.per.Cell = "Median.genes.per.cell",
+                            Number.of.Reads = "Number.of.reads",
+                            Valid.Barcodes = "Valid.barcodes",
+                            Sequencing.Saturation = "Sequencing.saturation",
+                            Total.Genes.Detected = "Total.genes.detected",
+                            Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+    } else {
+      # Rename multi columns to match names from count
+      names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                            Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                            Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                            Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                            Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                            Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                            Estimated.Number.of.Cells = "Cells",
+                            Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                            Median.Genes.per.Cell = "Median.genes.per.cell",
+                            Number.of.Reads = "Number.of.reads",
+                            Valid.Barcodes = "Valid.barcodes",
+                            Sequencing.Saturation = "Sequencing.saturation",
+                            Total.Genes.Detected = "Total.genes.detected",
+                            Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+    }
 
     raw_data_gex <- raw_data_gex %>%
       rename(all_of(names_to_replace))
