@@ -1669,13 +1669,13 @@ Read_Metrics_10X <- function(
     }
 
     if ("VDJ T" %in% modalities) {
-      multi_vdjt_metrics <- Metrics_Multi_VDJT2(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+      multi_vdjt_metrics <- Metrics_Multi_VDJT(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
     } else {
       multi_vdjt_metrics <- NULL
     }
 
     if ("VDJ B" %in% modalities) {
-      multi_vdjb_metrics <- Metrics_Multi_VDJB2(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
+      multi_vdjb_metrics <- Metrics_Multi_VDJB(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
     } else {
       multi_vdjb_metrics <- NULL
     }
