@@ -3289,17 +3289,24 @@ Metrics_Single_File_v9plus <- function(
     rownames(x = raw_data_gex) <- NULL
 
     # Get VDJT metrics
+    cli_inform(message = "Reading {.field VDJ T} Metrics")
     raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
     VDJ_T_Metrics <- raw_data %>%
       filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
-      column_to_rownames("Metric.Name") %>%
+      column_to_rownames("Metric.Name")
+
+    current_metrics <- rownames(x = VDJ_T_Metrics)
+
+    VDJ_T_Metrics <- VDJ_T_Metrics %>%
       t() %>%
       data.frame()
 
+    remaining_metrics <<- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+
     VDJ_T_Metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
       ) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
