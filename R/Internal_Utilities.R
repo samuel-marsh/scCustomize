@@ -3151,10 +3151,6 @@ Metrics_Multi_ABC <- function(
       t() %>%
       data.frame()
 
-    test1 <- colnames(ABC_Metrics)
-    test2 <- colnames(ABC_Metrics2)
-
-
     raw_data_abc <- cbind(ABC_Metrics, ABC_Metrics2)
 
     column_numbers <- grep(pattern = ",", x = raw_data_abc[1, ])
