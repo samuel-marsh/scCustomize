@@ -3135,7 +3135,7 @@ Metrics_Multi_ABC <- function(
       t() %>%
       data.frame()
 
-    remaining_metrics <<- setdiff(x = c("Antibody reads in cells",
+    remaining_metrics <- setdiff(x = c("Antibody reads in cells",
                                         "Fraction antibody reads",
                                         "Fraction antibody reads in aggregate barcodes",
                                         "Mean antibody reads usable per cell",
@@ -3151,8 +3151,8 @@ Metrics_Multi_ABC <- function(
       t() %>%
       data.frame()
 
-    test1 <<- colnames(ABC_Metrics)
-    test2 <<- colnames(ABC_Metrics2)
+    test1 <- colnames(ABC_Metrics)
+    test2 <- colnames(ABC_Metrics2)
 
 
     raw_data_abc <- cbind(ABC_Metrics, ABC_Metrics2)
@@ -3676,7 +3676,7 @@ Metrics_Single_File_v9plus <- function(
         t() %>%
         data.frame()
 
-      remaining_metrics <<- setdiff(x = c("Antibody reads in cells",
+      remaining_metrics <- setdiff(x = c("Antibody reads in cells",
                                           "Fraction antibody reads",
                                           "Fraction antibody reads in aggregate barcodes",
                                           "Mean antibody reads usable per cell",
