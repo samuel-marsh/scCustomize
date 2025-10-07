@@ -5,6 +5,7 @@
 - Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
 - Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
 - Added `columnns` parameter to `Fetch_Meta.Seurat` to allow for return of select columns only.  
+- Added support for VDJ B metrics in `Read_Metrics_10X`.  
 
 
 ## Changed  
@@ -13,7 +14,8 @@
 
 
 ## Fixes  
-- Fixed calculation of number of cells x number of features in `VlnPlot_scCustom` to properly rasterize plot if total is greater than 200,000.  Thanks @DavideBrex, ([#244](https://github.com/samuel-marsh/scCustomize/issues/244)).   
+- Fixed calculation of number of cells x number of features in `VlnPlot_scCustom` to properly rasterize plot if total is greater than 200,000.  Thanks @DavideBrex, ([#244](https://github.com/samuel-marsh/scCustomize/issues/244)).  
+- Fixed issue with `Read_Metrics_10X` for outputs when `cellranger_multi = TRUE` and Cell Ranger v9+ was used to process data.  Thanks @lisch7, ([#245](https://github.com/samuel-marsh/scCustomize/issues/245)).  
   
 
 
