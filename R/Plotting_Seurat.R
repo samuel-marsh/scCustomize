@@ -2694,7 +2694,7 @@ FeatureScatter_scCustom <- function(
 #'
 #' @examples
 #' library(Seurat)
-#' ElbowPlot_scCustom(object = pbmc_small)
+#' ElbowPlot_scCustom(seurat_object = pbmc_small)
 #'
 
 ElbowPlot_scCustom <- function(
