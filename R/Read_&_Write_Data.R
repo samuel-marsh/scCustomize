@@ -1681,7 +1681,6 @@ Read_Metrics_10X <- function(
     }
 
     if ("Antibody Capture" %in% modalities) {
-      print("hi")
       multi_abc_metrics <- Metrics_Multi_ABC(lib_list = lib_list, base_path = base_path, secondary_path = secondary_path, lib_names = lib_names)
     } else {
       multi_abc_metrics <- NULL
