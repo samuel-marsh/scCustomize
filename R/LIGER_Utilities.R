@@ -401,12 +401,35 @@ Idents.liger <- function(
 
 Fetch_Meta.liger <- function(
     object,
+    columns = NULL,
     ...
 ) {
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE)
+    object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE, columns = columns)
   } else {
     object_meta <- object_meta <- slot(object = object, name = "cell.data")
+
+    # pull specific columns
+    if (!is.null(x = columns)) {
+      # check columns are present
+      meta_present <- Meta_Present(object = object, meta_col_names = columns, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+
+      found_meta <- meta_present[[1]]
+      if (length(x = found_meta) == 0) {
+        cli_abort(message = "None of the provided column names were present in object meta.data")
+      }
+
+      # report any unfound meta
+      bad_meta <- meta_present[[2]]
+      if (length(x = bad_meta) > 0) {
+        cli_warn(message = c("The following column names were not found in meta.data and were excluded:",
+                             "i" = "{.field {bad_meta}}"))
+      }
+
+      # select columns found
+      object_meta <- object_meta %>%
+        select(all_of(columns))
+    }
   }
 
   # return meta

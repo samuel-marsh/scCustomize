@@ -567,7 +567,6 @@ Extract_Sample_Meta <- function(
 
 
 #' @rdname Fetch_Meta
-#' @param columns optional, name(s) of columns to return. Default is NULL; returns all columns
 #' @importFrom methods slot
 #' @export
 #' @concept get_set_util
@@ -584,7 +583,7 @@ Fetch_Meta.Seurat <- function(
   # pull specific columns
   if (!is.null(x = columns)) {
     # check columns are present
-    meta_present <- Meta_Present(object = seurat_object, meta_col_names = columns, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+    meta_present <- Meta_Present(object = object, meta_col_names = columns, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
 
     found_meta <- meta_present[[1]]
     if (length(x = found_meta) == 0) {
