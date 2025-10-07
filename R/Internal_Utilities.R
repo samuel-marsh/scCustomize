@@ -2754,7 +2754,7 @@ Metrics_Multi_GEX <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected")) %>%
+      filter(.data[["Metric.Name"]] %in% c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected") & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Gene Expression") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
