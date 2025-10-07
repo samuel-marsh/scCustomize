@@ -4,7 +4,7 @@
 - Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
 - Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
 - Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
-- Added `columnns` parameter to `Fetch_Meta.Seurat` to allow for return of select columns only.  
+- Added `columnns` parameter to `Fetch_Meta` to allow for return of select meta data columns only.  
 - Added support for VDJ B metrics in `Read_Metrics_10X`.  
 - Added support for Antibody Capture metrics in `Read_Metrics_10X`.  
 
