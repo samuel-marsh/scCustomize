@@ -2998,9 +2998,9 @@ Metrics_Multi_VDJB <- function(
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name")
 
-    current_metrics <- rownames(x = VDJ_T_Metrics)
+    current_metrics <- rownames(x = VDJ_B_Metrics)
 
-    VDJ_B_Metrics <- VDJ_T_Metrics %>%
+    VDJ_B_Metrics <- VDJ_B_Metrics %>%
       t() %>%
       data.frame()
 
