@@ -40,7 +40,7 @@ Cutoff 2 is point where the percent change in variation between the consecutive 
 }
 \examples{
 library(Seurat)
-ElbowPlot_scCustom(object = pbmc_small)
+ElbowPlot_scCustom(seurat_object = pbmc_small)
 
 }
 \references{
