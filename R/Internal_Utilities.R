@@ -2611,7 +2611,10 @@ Metrics_Count_GEX_v9plus <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -2754,7 +2757,11 @@ Metrics_Multi_GEX <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected") & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Gene Expression") %>%
+      filter(.data[["Metric.Name"]] %in% c("Median UMI counts per cell",
+                                           "Median genes per cell",
+                                           "Median reads per cell",
+                                           "Total genes detected")
+             & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Gene Expression") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -2899,7 +2906,15 @@ Metrics_Multi_VDJT <- function(
       t() %>%
       data.frame()
 
-    remaining_metrics <- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+    remaining_metrics <- setdiff(x = c("Cells with productive TRA contig",
+                                       "Cells with productive TRB contig",
+                                       "Cells with productive V-J spanning (TRA, TRB) pair",
+                                       "Cells with productive V-J spanning pair",
+                                       "Median TRA UMIs per Cell",
+                                       "Median TRB UMIs per Cell",
+                                       "Number of cells with productive V-J spanning pair",
+                                       "Paired clonotype diversity"),
+                                 y = current_metrics)
 
     VDJ_T_Metrics2 <- raw_data %>%
       filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
@@ -2957,7 +2972,7 @@ Metrics_Multi_VDJT <- function(
 #' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
 #' directory name of each sample.
 #'
-#' @return A data frame with sample VDJ T metrics produced by Cell Ranger `multi` pipeline.
+#' @return A data frame with sample VDJ B metrics produced by Cell Ranger `multi` pipeline.
 #'
 #' @import cli
 #' @import pbapply
@@ -3004,8 +3019,18 @@ Metrics_Multi_VDJB <- function(
       t() %>%
       data.frame()
 
-    remaining_metrics <- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
-                                        , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+    remaining_metrics <- setdiff(x = c("Cells with productive IGH contig",
+                                       "Cells with productive IGK contig",
+                                       "Cells with productive IGL contig",
+                                       "Cells with productive V-J spanning (IGK, IGH) pair",
+                                       "Cells with productive V-J spanning (IGL, IGH) pair",
+                                       "Cells with productive V-J spanning pair",
+                                       "Median IGH UMIs per Cell",
+                                       "Median IGK UMIs per Cell",
+                                       "Median IGL UMIs per Cell",
+                                       "Number of cells with productive V-J spanning pair",
+                                       "Paired clonotype diversity"),
+                                 y = current_metrics)
 
     VDJ_B_Metrics2 <- raw_data %>%
       filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
@@ -3029,6 +3054,121 @@ Metrics_Multi_VDJB <- function(
     raw_data_vdjb[,c(column_numbers_numeric)] <- lapply(raw_data_vdjb[,c(column_numbers_numeric)],function(x){as.numeric(x)})
 
     return(raw_data_vdjb)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
+
+#' Read Antibody Capture Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all Antibody Capture metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample Antibody Capture metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import cli
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' abc_multi_metrics <- Metrics_Multi_ABC(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_ABC <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+) {
+  cli_inform(message = "Reading {.field Antibody Capture} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
+
+    ABC_Metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "Antibody Capture") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name")
+
+    current_metrics <- rownames(x = ABC_Metrics)
+
+    ABC_Metrics <- ABC_Metrics %>%
+      t() %>%
+      data.frame()
+
+    remaining_metrics <<- setdiff(x = c("Antibody reads in cells",
+                                        "Fraction antibody reads",
+                                        "Fraction antibody reads in aggregate barcodes",
+                                        "Mean antibody reads usable per cell",
+                                        "Median UMI counts per cell",
+                                        "Number of reads from cells associated with this sample"),
+                                  y = current_metrics)
+
+    ABC_Metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Antibody Capture"
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    test1 <<- colnames(ABC_Metrics)
+    test2 <<- colnames(ABC_Metrics2)
+
+
+    raw_data_abc <- cbind(ABC_Metrics, ABC_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_abc[1, ])
+    raw_data_abc[, c(column_numbers)] <- lapply(raw_data_abc[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_abc[1, ])
+    all_columns <- 1:ncol(x = raw_data_abc)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_abc[,c(column_numbers_numeric)] <- lapply(raw_data_abc[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_abc)
   })
 
   # Name the list items
@@ -3114,7 +3254,10 @@ Metrics_Single_File <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -3169,7 +3312,14 @@ Metrics_Single_File <- function(
       data.frame()
 
     VDJ_T_Metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig",
+                                           "Cells with productive TRB contig",
+                                           "Cells with productive V-J spanning (TRA, TRB) pair",
+                                           "Cells with productive V-J spanning pair",
+                                           "Median TRA UMIs per Cell",
+                                           "Median TRB UMIs per Cell",
+                                           "Number of cells with productive V-J spanning pair",
+                                           "Paired clonotype diversity")
       ) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
@@ -3245,7 +3395,10 @@ Metrics_Single_File_v9plus <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -3331,7 +3484,10 @@ Metrics_Single_File_v9plus <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -3414,7 +3570,15 @@ Metrics_Single_File_v9plus <- function(
         t() %>%
         data.frame()
 
-      remaining_metrics <- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+      remaining_metrics <- setdiff(x = c("Cells with productive TRA contig",
+                                         "Cells with productive TRB contig",
+                                         "Cells with productive V-J spanning (TRA, TRB) pair",
+                                         "Cells with productive V-J spanning pair",
+                                         "Median TRA UMIs per Cell",
+                                         "Median TRB UMIs per Cell",
+                                         "Number of cells with productive V-J spanning pair",
+                                         "Paired clonotype diversity"),
+                                   y = current_metrics)
 
       VDJ_T_Metrics2 <- raw_data %>%
         filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
@@ -3443,7 +3607,7 @@ Metrics_Single_File_v9plus <- function(
 
     # VDJ B Metrics
     if ("VDJ B" %in% modalities) {
-      # Get VDJT metrics
+      # Get VDJB metrics
       cli_inform(message = "Reading {.field VDJ B} Metrics")
       raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
@@ -3458,8 +3622,18 @@ Metrics_Single_File_v9plus <- function(
         t() %>%
         data.frame()
 
-      remaining_metrics <- setdiff(x = c("Cells with productive IGH contig", "Cells with productive IGK contig", "Cells with productive IGL contig", "Cells with productive V-J spanning (IGK, IGH) pair", "Cells with productive V-J spanning (IGL, IGH) pair", "Cells with productive V-J spanning pair"
-                                          , "Median IGH UMIs per Cell", "Median IGK UMIs per Cell", "Median IGL UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+      remaining_metrics <- setdiff(x = c("Cells with productive IGH contig",
+                                         "Cells with productive IGK contig",
+                                         "Cells with productive IGL contig",
+                                         "Cells with productive V-J spanning (IGK, IGH) pair",
+                                         "Cells with productive V-J spanning (IGL, IGH) pair",
+                                         "Cells with productive V-J spanning pair",
+                                         "Median IGH UMIs per Cell",
+                                         "Median IGK UMIs per Cell",
+                                         "Median IGL UMIs per Cell",
+                                         "Number of cells with productive V-J spanning pair",
+                                         "Paired clonotype diversity"),
+                                   y = current_metrics)
 
       VDJ_B_Metrics2 <- raw_data %>%
         filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
@@ -3485,14 +3659,63 @@ Metrics_Single_File_v9plus <- function(
       raw_data_vdjb <- NULL
     }
 
+    # Antibody Capture Metrics
+    if ("Antibody Capture" %in% modalities) {
+      # Get ABC metrics
+      cli_inform(message = "Reading {.field Antibody Capture} Metrics")
+      raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+
+      ABC_Metrics <- raw_data %>%
+        filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "Antibody Capture") %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name")
+
+      current_metrics <- rownames(x = ABC_Metrics)
+
+      ABC_Metrics <- ABC_Metrics %>%
+        t() %>%
+        data.frame()
+
+      remaining_metrics <<- setdiff(x = c("Antibody reads in cells",
+                                          "Fraction antibody reads",
+                                          "Fraction antibody reads in aggregate barcodes",
+                                          "Mean antibody reads usable per cell",
+                                          "Median UMI counts per cell",
+                                          "Number of reads from cells associated with this sample"),
+                                    y = current_metrics)
+
+      ABC_Metrics2 <- raw_data %>%
+        filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Antibody Capture"
+        ) %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name") %>%
+        t() %>%
+        data.frame()
+
+      raw_data_abc <- cbind(ABC_Metrics, ABC_Metrics2)
+
+      column_numbers <- grep(pattern = ",", x = raw_data_abc[1, ])
+      raw_data_abc[, c(column_numbers)] <- lapply(raw_data_abc[, c(column_numbers)], function(x) {
+        as.numeric(gsub(",", "", x))})
+
+      column_numbers_pct <- grep(pattern = "%", x = raw_data_abc[1, ])
+      all_columns <- 1:ncol(x = raw_data_abc)
+
+      column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+      raw_data_abc[,c(column_numbers_numeric)] <- lapply(raw_data_abc[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    } else {
+      raw_data_abc <- NULL
+    }
+
     # combine outputs into a list
     data_list <- compact(
       list(
         multi_gex_metrics = raw_data_gex,
         multi_vdjt_metrics = raw_data_vdjt,
-        multi_vdjb_metrics = raw_data_vdjb)
-      )
-
+        multi_vdjb_metrics = raw_data_vdjb,
+        multi_abc_metrics = raw_data_abc)
+    )
     # return data list
     return(data_list)
   }
