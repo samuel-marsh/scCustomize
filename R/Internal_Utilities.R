@@ -2899,7 +2899,7 @@ Metrics_Multi_VDJT <- function(
       t() %>%
       data.frame()
 
-    remaining_metrics <<- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+    remaining_metrics <- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
 
     VDJ_T_Metrics2 <- raw_data %>%
       filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
@@ -3303,7 +3303,7 @@ Metrics_Single_File_v9plus <- function(
       t() %>%
       data.frame()
 
-    remaining_metrics <<- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
+    remaining_metrics <- setdiff(x = c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity"), y = current_metrics)
 
     VDJ_T_Metrics2 <- raw_data %>%
       filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
