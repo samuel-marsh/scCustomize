@@ -3468,8 +3468,7 @@ Metrics_Single_File_v9plus <- function(
     cli_inform(message = "Reading {.field Gene Expression} Metrics")
     raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
-    modalities <- read.csv(file = file.path(s1_file_path, "metrics_summary.csv"), stringsAsFactors = F)$Library.Type %>%
-      unique()
+    modalities <- unique(x = raw_data[["Library.Type"]])
 
     # Change format to column based and select relevant metrics
     GEX_metrics <- raw_data %>%
