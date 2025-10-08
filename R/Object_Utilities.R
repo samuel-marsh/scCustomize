@@ -663,7 +663,7 @@ Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
 
   # Map variables
   mapping <- list(...)
-  fromCats <- names(mapping)
+  fromCats <- names(x = mapping)
   notFound <- fromCats[!fromCats %in% levels(from)]
 
   # Report if variable not found
@@ -673,14 +673,14 @@ Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
   }
 
   # Map variables continued
-  toCats <- unlist(mapping)
-  unchangedCats <- levels(from)
+  toCats <- unlist(x = mapping)
+  unchangedCats <- levels(x = from)
   unchangedCats <- unchangedCats[!unchangedCats %in% fromCats]
-  names(unchangedCats) <- unchangedCats
-  if (length(unchangedCats) > 0)
+  names(x = unchangedCats) <- unchangedCats
+  if (length(x = unchangedCats) > 0)
     toCats <- c(toCats, unchangedCats)
   to <- toCats[as.character(from)]
-  to <- factor(unname(to), levels = unique(toCats))
+  to <- factor(x = unname(to), levels = unique(toCats))
 
   # return new mapping if `newTo` is NULL
   if (is.null(x = newTo)) {
