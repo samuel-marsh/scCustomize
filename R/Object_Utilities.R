@@ -647,7 +647,7 @@ Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
   }
 
   # pul meta data
-  from <- Fetch_Meta(seurat_object, columns = from) %>%
+  from <- Fetch_Meta(object = seurat_object, columns = from) %>%
     pull()
 
   # check for NAs
