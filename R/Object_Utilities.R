@@ -607,6 +607,92 @@ Fetch_Meta.Seurat <- function(
 }
 
 
+#' Create new variable from categories in meta.data
+#'
+#' Designed for fast variable creation when a new variable is going to be created from existing
+#' variable. For example, mapping multiple samples to experimental condition.
+#'
+#' @param seurat_object name of Seurat object
+#' @param from current column in meta.data to map from
+#' @param newTo name of new column in meta.data to add new mapped variable. If NULL (default)
+#' will return the variable. If name provided will return Seurat object with new variable added.
+#' @param ... Mapping criteria, argument names are original existing categories
+#' in the `from` calumn and values are new categories in the new variable.
+#'
+#' @returns if `newTo = NULL` returns factor else returns Seurat object with new variable added.
+#'
+#' @import cli
+#' @importFrom dplyr pull
+#' @importFrom magrittr "%>%"
+#'
+#' @references This function is slightly modified version of LIGER function \code{\link[rliger]{mapCellMeta}}
+#' to allow functionality with Seurat objects. \url{https://github.com/welch-lab/liger}. (License: GPL-3).
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", newTo = "Treatment",
+#' "1" = "Ctrl", "2" = "Treated", "3" = "Treated", "4" = "Ctrl")
+#'}
+#'
+
+Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # check single variable
+  if (length(x = from) > 1) {
+    cli_abort(messsage = "The function only supports single variable provided to {.code from}.")
+  }
+
+  # pul meta data
+  from <- Fetch_Meta(seurat_object, columns = from) %>%
+    pull()
+
+  # check for NAs
+  if (isTRUE(x = anyNA(x = from))) {
+    cli_abort(message = c("The meta data column {.field {from}} contains {.val NA} values.",
+                          "i" = "Replace/remove NAs before using function."))
+  }
+
+  # check if factor
+  if (isFALSE(x = is.factor(x = from))) {
+    from <- factor(x = from)
+  }
+
+  # Map variables
+  mapping <- list(...)
+  fromCats <- names(mapping)
+  notFound <- fromCats[!fromCats %in% levels(from)]
+
+  # Report if variable not found
+  if (length(notFound) > 0) {
+    cli::cli_abort(c("The following variables were not found in {.field {from}}: {.field {notFound}}",
+                     "i" = "{.field {notFound}}"))
+  }
+
+  # Map variables continued
+  toCats <- unlist(mapping)
+  unchangedCats <- levels(from)
+  unchangedCats <- unchangedCats[!unchangedCats %in% fromCats]
+  names(unchangedCats) <- unchangedCats
+  if (length(unchangedCats) > 0)
+    toCats <- c(toCats, unchangedCats)
+  to <- toCats[as.character(from)]
+  to <- factor(unname(to), levels = unique(toCats))
+
+  # return new mapping if `newTo` is NULL
+  if (is.null(x = newTo)) {
+    return(to)
+  } else {
+    # Add to seurat object and return
+    seurat_object[[newTo]] <- to
+    return(seurat_object)
+  }
+}
+
+
 #' Randomly downsample by identity
 #'
 #' Get a randomly downsampled set of cell barcodes with even numbers of cells for each identity class.
