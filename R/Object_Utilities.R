@@ -782,7 +782,7 @@ Random_Cells_Downsample <- function(
 
     # check size of num_cells
     if (min_cells < num_cells) {
-      cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity.",
+      cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity if {.code allow_lower = FALSE}.",
                             "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
     }
   }
