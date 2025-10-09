@@ -2,6 +2,7 @@
 ## Added  
 - Added new function `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of variance conferred by PCs.  See manual for more details.  
 - Added new function `Map_New_Meta` to enable mapping of existing meta.data column to new variable.  
+- Added new function `Downsample_Seurat` as quick wrapper to create Seurat object with randomly downsampled number of cells.  
 - Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
 - Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
 - Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
@@ -11,6 +12,7 @@
 
 
 ## Changed  
+- Updated messages in `Random_Cells_Downsample`.  
   
 
 
