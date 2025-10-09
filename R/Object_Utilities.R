@@ -220,7 +220,7 @@ ReFilter_SeuratObject <- function(
 #' obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000)
 #'
 #' # Downsample specific number of cells per group but allow groups to have fewer cells
-#' if they don't have number provided
+#' # if they don't have number provided
 #' obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000, allow_lower = TRUE)
 #'
 #' # Downsample by number of cells in the smallest group
