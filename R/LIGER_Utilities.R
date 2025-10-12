@@ -408,7 +408,7 @@ Fetch_Meta.liger <- function(
     if (is.null(x = columns)) {
       object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE)
     } else {
-      bject_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE, columns = columns)
+      object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE, columns = columns)
     }
   } else {
     object_meta <- object_meta <- slot(object = object, name = "cell.data")
