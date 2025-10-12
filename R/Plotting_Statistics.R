@@ -1153,7 +1153,7 @@ Proportion_Plot_per_Sample <- function(
   }
 
   plot_df <- Fetch_Meta(object = seurat_object) %>%
-    droplevels %>%
+    droplevels() %>%
     group_by(.data[[sample_col]], .data[[cluster]]) %>%
     summarize(cell_count = n(), .groups = "drop") %>%
     group_by(.data[[sample_col]]) %>%
@@ -1168,7 +1168,7 @@ Proportion_Plot_per_Sample <- function(
                                 "percent" = 0))
 
   # Add split.by variable
-  sample_meta <- Extract_Sample_Meta(object = seurat_object) %>%
+  sample_meta <- Extract_Sample_Meta(object = seurat_object, sample_col = sample_col) %>%
     ungroup() %>%
     select(all_of(c(sample_col, split.by)))
 
