@@ -479,8 +479,9 @@ Add_Sample_Meta <- function(
 #' quick view of sample breakdown, meta data table creation, and/or use in pseudobulk analysis
 #'
 #' @param object Seurat or LIGER object
-#' @param sample_name meta.data column to use as sample.  Output data.frame will contain one row per
+#' @param sample_col meta.data column to use as sample.  Output data.frame will contain one row per
 #' level or unique value in this variable.
+#' @param sample_name `r lifecycle::badge("soft-deprecated")`. See `sample_name`.
 #' @param variables_include `@meta.data` columns to keep in final data.frame.  All other columns will
 #' be discarded.  Default is NULL.
 #' @param variables_exclude columns to discard in final data.frame.  Many cell level columns are
@@ -522,17 +523,27 @@ Add_Sample_Meta <- function(
 
 Extract_Sample_Meta <- function(
   object,
-  sample_name = "orig.ident",
+  sample_col = "orig.ident",
+  sample_name = deprecated(),
   variables_include = NULL,
   variables_exclude = NULL,
   include_all = FALSE
 ) {
+  # check deprecation
+  if (is_present(sample_name)) {
+    deprecate_warn(when = "3.1.0",
+                   what = "Extract_Sample_Meta(sample_name)",
+                   details = c("i" = "The {.code sample_name} parameter is soft-deprecated.  Please update code to use `sample_col` instead.")
+    )
+    sample_col <- sample_name
+  }
+
   # Pull meta data
   meta_df <- Fetch_Meta(object = object)
 
   # Check sample name parameter is present
-  if (!sample_name %in% colnames(x = meta_df)) {
-    cli_abort(message = "The {.code sample_name} parameter: {.val {sample_name}} was not found in object meta.data")
+  if (!sample_col %in% colnames(x = meta_df)) {
+    cli_abort(message = "The {.code sample_col} parameter: {.val {sample_col}} was not found in object meta.data")
   }
 
   if (!is.null(x = variables_include) && !is.null(x = variables_exclude) && include_all) {
@@ -596,7 +607,7 @@ Extract_Sample_Meta <- function(
 
   # Create by sample data.frame
   sample_meta_df <- meta_df %>%
-    grouped_df(vars = sample_name) %>%
+    grouped_df(vars = sample_col) %>%
     slice(1)
 
   # remove rownames
@@ -608,7 +619,7 @@ Extract_Sample_Meta <- function(
   } else {
     if (length(x = include_meta_list[[1]]) > 0) {
       sample_meta_df_filtered <- sample_meta_df %>%
-        select(any_of(c(include_meta_list[[1]], sample_name)))
+        select(any_of(c(include_meta_list[[1]], sample_col)))
       if (length(x = exclude_meta_list[[1]]) > 0) {
         sample_meta_df_filtered <- sample_meta_df_filtered %>%
           select(-any_of(exclude_meta_list[[1]]))
