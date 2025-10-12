@@ -166,6 +166,7 @@ Assay_Present <- function(
 #'
 #' @noRd
 #'
+
 Assay5_Check <- function(
   seurat_object,
   assay = NULL
@@ -254,8 +255,6 @@ Feature_PreCheck <- function(
 #' @param assay Name of assay to check for normalized values within.
 #' @param error logical, whether the function errors if no normalized data is found (default is TRUE), or
 #' if value of the check is returned.
-#'
-#' @import cli
 #'
 #' @returns either error message, nothing, or logical value depending on `error` parameter.
 #' @noRd
@@ -387,8 +386,6 @@ glue_collapse_scCustom <- function(
 #' @references function modified from function in devtools R package (License: MIT) \url{https://github.com/r-lib/devtools}.
 #' @details \url{https://github.com/r-lib/devtools/blob/9f27cc3e6335e74d6f51ed331509ebda56747901/R/release.R#L147-L156}.
 #'
-#' @import cli
-#'
 #' @noRd
 #'
 
@@ -409,9 +406,6 @@ yesno <- function(msg, .envir = parent.frame()) {
 #' @param parameter the parameter to check for NULL
 #'
 #' @return if NULL returns NA otherwise returns input value.
-#'
-#'
-#' @import cli
 #'
 #' @noRd
 #'
@@ -440,9 +434,6 @@ replace_null <- function(
 #' @param extension the extension to check
 #'
 #' @return TRUE if extension is present otherwise FALSE
-#'
-#'
-#' @import cli
 #'
 #' @noRd
 #'
@@ -475,8 +466,6 @@ check_extension <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return vector of Ensembl Gene IDs
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -546,8 +535,6 @@ Retrieve_Ensembl_Mito <- function(
 #'
 #' @return vector of Ensembl Gene IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -611,8 +598,6 @@ Retrieve_Ensembl_Ribo <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return vector of Ensembl Gene IDs
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -678,8 +663,6 @@ Retrieve_Ensembl_Hemo <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return list of 3 sets of gene_symbols
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -763,8 +746,6 @@ Retrieve_MSigDB_Lists <- function(
 #'
 #' @return list of 3 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -846,8 +827,6 @@ Retrieve_MSigDB_Ensembl_Lists <- function(
 #'
 #' @return list of 2 sets of gene_symbols
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -910,8 +889,6 @@ Retrieve_IEG_Lists <- function(
 #'
 #' @return list of 2 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -973,8 +950,6 @@ Retrieve_IEG_Ensembl_Lists <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return list of 2 sets of gene_symbols
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1050,8 +1025,6 @@ Retrieve_exAM_Lists <- function(
 #'
 #' @return list of 2 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1126,8 +1099,6 @@ Retrieve_exAM_Ensembl_Lists <- function(
 #'
 #' @return vector of Ensembl Gene IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1191,8 +1162,6 @@ Retrieve_Ensembl_lncRNA <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return vector of Gene IDs
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1258,8 +1227,6 @@ Retrieve_lncRNA <- function(
 #' @param assay Assay to use (default is the current object default assay).
 #'
 #' @return vector of gene ids
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1350,8 +1317,6 @@ Retrieve_Dual_Mito_Features <- function(
 #'
 #' @return vector of gene ids
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1438,8 +1403,6 @@ Retrieve_Dual_Ribo_Features <- function(
 #'
 #' @return list of 2 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1516,8 +1479,6 @@ Retrieve_MALAT1_Ensembl_Lists <- function(
 #' `mito_ribo_name` is present in meta.data slot.
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1619,8 +1580,6 @@ Add_MSigDB_Seurat <- function(
 #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1730,8 +1689,6 @@ Add_IEG_Seurat <- function(
 #' function will abort if columns with the name provided to `lncRNA_name` is present in meta.data slot.
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1850,7 +1807,6 @@ Add_lncRNA_Seurat <- function(
 #' @param return_plots logical, whether to return plots as part of the results of the function (default is FALSE).
 #' @param plot_title title to add to plot patchwork, default is NULL.
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom cowplot theme_cowplot
@@ -2028,8 +1984,6 @@ define_malat1_threshold <- function(
 #'
 #' @return list of found and not found features
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -2185,8 +2139,6 @@ PercentAbove_Seurat <- function(
 #' @references Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
 #' to generate values to use for plotting.  Source code can be found here:
 #' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -2394,7 +2346,6 @@ check_whole_num <- function(
 #' Code modified to match scCustomize & tidyverse style, add error checks, and
 #' add cli formatted messages.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #'
@@ -2482,7 +2433,6 @@ Is_Color <- function(
 #'
 #' @return A data frame with sample metrics produced by Cell Ranger `count` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows setdiff
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
@@ -2564,7 +2514,6 @@ Metrics_Count_GEX <- function(
 #'
 #' @return A data frame with sample metrics produced by Cell Ranger `count` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows setdiff filter select all_of rename
 #' @importFrom tibble column_to_rownames
@@ -2708,7 +2657,6 @@ Metrics_Count_GEX_v9plus <- function(
 #'
 #' @return A data frame with sample gene expression metrics produced by Cell Ranger `multi` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
@@ -2855,7 +2803,6 @@ Metrics_Multi_GEX <- function(
 #'
 #' @return A data frame with sample VDJ T metrics produced by Cell Ranger `multi` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr all_of bind_rows filter select setdiff
 #' @importFrom magrittr "%>%"
@@ -2968,7 +2915,6 @@ Metrics_Multi_VDJT <- function(
 #'
 #' @return A data frame with sample VDJ B metrics produced by Cell Ranger `multi` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr all_of bind_rows filter select setdiff
 #' @importFrom magrittr "%>%"
@@ -3084,7 +3030,6 @@ Metrics_Multi_VDJB <- function(
 #'
 #' @return A data frame with sample Antibody Capture metrics produced by Cell Ranger `multi` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr all_of bind_rows filter select setdiff
 #' @importFrom magrittr "%>%"
@@ -3189,7 +3134,6 @@ Metrics_Multi_ABC <- function(
 #'
 #' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
-#' @import cli
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
@@ -3350,7 +3294,6 @@ Metrics_Single_File <- function(
 #'
 #' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
-#' @import cli
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr compact
@@ -3739,8 +3682,6 @@ Metrics_Single_File_v9plus <- function(
 #'
 #' @param update logical, whether to manually override update parameters and download new data.
 #'
-#' @import cli
-#'
 #' @return path to data cache
 #'
 #' @references \url{https://bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html}
@@ -3783,13 +3724,12 @@ download_hgnc_data <- function(
 }
 
 
-#' Download HGNC Dataset
+#' Download MGI Dataset
 #'
-#' Internal function to download and cache the latest version of HGNC dataset for use with renaming genes.
+#' Internal function to download and cache the latest version of MGI dataset for use with renaming genes.
 #'
 #' @param update logical, whether to manually override update parameters and download new data.
 #'
-#' @import cli
 #'
 #' @return path to data cache
 #'
