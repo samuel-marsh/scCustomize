@@ -12,6 +12,7 @@
 
 
 ## Changed  
+- **BREAKING CHANGE** The `sample_name` parameter has been soft-deprecated in `Extract_Sample_Meta`.  Please use `sample_col` instead.  Using `sample_name` will warn user but still work until scCustomize v3.3.0.  
 - Updated messages in `Random_Cells_Downsample`.  
   
 
@@ -20,6 +21,7 @@
 ## Fixes  
 - Fixed calculation of number of cells x number of features in `VlnPlot_scCustom` to properly rasterize plot if total is greater than 200,000.  Thanks @DavideBrex, ([#244](https://github.com/samuel-marsh/scCustomize/issues/244)).  
 - Fixed issue with `Read_Metrics_10X` for outputs when `cellranger_multi = TRUE` and Cell Ranger v9+ was used to process data.  Thanks @lisch7, ([#245](https://github.com/samuel-marsh/scCustomize/issues/245)).  
+- Fix bug in `Proportion_Plot_per_Sample` due to missing parameter internally when pulling meta data and orig.ident did not represent sample IDs.  
   
 
 
