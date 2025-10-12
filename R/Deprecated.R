@@ -77,16 +77,16 @@
 # }
 
 
-#' @description
-#' Use [Add_Top_Gene_Pct()] instead of `Add_Top_Gene_Pct_Seurat()`.
-#'
-#' @export
-#' @keywords internal
-#' @rdname deprecated
+# @description
+# Use [Add_Top_Gene_Pct()] instead of `Add_Top_Gene_Pct_Seurat()`.
+#
+# @export
+# @keywords internal
+# @rdname deprecated
 
-Add_Top_Gene_Pct_Seurat <- function(...) {
-  lifecycle::deprecate_stop(when = "2.2.0", what = "Add_Top_Gene_Pct_Seurat()", with = "Add_Top_Gene_Pct()", details = "Deprecation error when calling function will be removed in v3.1.0+")
-}
+# Add_Top_Gene_Pct_Seurat <- function(...) {
+#   lifecycle::deprecate_stop(when = "2.2.0", what = "Add_Top_Gene_Pct_Seurat()", with = "Add_Top_Gene_Pct()", details = "Deprecation error when calling function will be removed in v3.1.0+")
+# }
 
 # @description
 # Use [Feature_Present()] instead of `Gene_Present()`.
