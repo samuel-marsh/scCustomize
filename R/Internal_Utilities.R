@@ -57,8 +57,6 @@
 #'
 #' @param seurat_object Seurat object name.
 #'
-#' @import cli
-#'
 #' @return error if not Seurat object.
 #'
 #' @noRd
@@ -67,7 +65,7 @@
 Is_Seurat <- function(
   seurat_object
 ) {
-  if (!inherits(what = "Seurat", x = seurat_object)) {
+  if (isFALSE(x = inherits(what = "Seurat", x = seurat_object))) {
     cli_abort(message = "{.code seurat_object} provided is not an object of class: Seurat.")
   }
 }
@@ -79,8 +77,6 @@ Is_Seurat <- function(
 #'
 #' @param liger_object liger object name.
 #'
-#' @import cli
-#'
 #' @return error is not LIGER object
 #'
 #' @noRd
@@ -89,7 +85,7 @@ Is_Seurat <- function(
 Is_LIGER <- function(
   liger_object
 ) {
-  if (class(x = liger_object)[[1]] != "liger") {
+  if (isFALSE(x = inherits(what = "liger", x = liger_object))) {
     cli_abort(message = "{.code liger_object} provided is not an object of class: liger")
   }
 }
@@ -103,8 +99,6 @@ Is_LIGER <- function(
 #' @param assay_list vector of genes to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object.
-#'
-#' @import cli
 #'
 #' @return List of found vs not found assays.
 #'
