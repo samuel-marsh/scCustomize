@@ -531,7 +531,7 @@ Extract_Sample_Meta <- function(
 ) {
   # check deprecation
   if (is_present(sample_name)) {
-    deprecate_warn(when = "3.1.0",
+    deprecate_warn(when = "3.2.1",
                    what = "Extract_Sample_Meta(sample_name)",
                    details = c("i" = "The {.code sample_name} parameter is soft-deprecated.  Please update code to use `sample_col` instead.")
     )
