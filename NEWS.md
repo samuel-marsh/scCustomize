@@ -14,6 +14,7 @@
 ## Changed  
 - **BREAKING CHANGE** The `sample_name` parameter has been soft-deprecated in `Extract_Sample_Meta`.  Please use `sample_col` instead.  Using `sample_name` will warn user but still work until scCustomize v3.3.0.  
 - Updated messages in `Random_Cells_Downsample`.  
+- Full deprecation of `Add_Top_Gene_Pct_Seurat`, see current `Add_Top_Gene_Pct` function.  
   
 
 
