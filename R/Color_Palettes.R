@@ -130,8 +130,6 @@ viridis_light_high <- as.vector(x = paletteer_c(palette = "viridis::viridis", n 
 #' See RColorBrewer for more info on palettes
 #' \url{https://CRAN.R-project.org/package=RColorBrewer}
 #'
-#' @import cli
-#'
 #' @export
 #'
 #' @concept palettes
@@ -199,7 +197,7 @@ Single_Color_Palette <- function(
 #'
 #' Shortcut to navy orange color plot
 #'
-#' @param flip_order Whether to flip the order of colors.
+#' @param flip_order logical, whether to flip the order of colors.
 #'
 #' @return Navy orange palette
 #'
@@ -374,10 +372,8 @@ varibow_scCustom <- function(
 #' that is normally an ordered palette.
 #' @param seed random seed for the palette shuffle.  Default = 123.
 #'
-#' @import cli
 # #' @importFrom colorway varibow (now directly ported for CRAN compatibility)
 #' @importFrom paletteer paletteer_d
-#' @importFrom rlang is_installed
 #'
 #' @return A vector of colors
 #'
@@ -552,7 +548,6 @@ scCustomize_Palette <- function(
 #' @param label_color_num logical, whether or not to numerically label the colors in output plot.
 #' Default is TRUE is number of colors in `pal` is less than 75 and FALSE is greater than 75.
 #'
-#' @import cli
 #' @import ggplot2
 #'
 #' @return Plot of all colors in supplied palette/vector
@@ -598,13 +593,13 @@ PalettePlot <- function(
   # Plot
   # Label plot
   if (isTRUE(x = label_color_num)) {
-    palette_plot <- ggplot(palette_data) +
+    palette_plot <- ggplot(data = palette_data) +
       geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
       geom_text(aes(x = .data[["x"]], y = .data[["y"]], label = .data[["x"]])) +
       scale_fill_identity() +
       theme_void()
   } else {
-    palette_plot <- ggplot(palette_data) +
+    palette_plot <- ggplot(data = palette_data) +
       geom_tile(aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["fill"]])) +
       scale_fill_identity() +
       theme_void()
