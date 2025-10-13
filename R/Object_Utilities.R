@@ -15,7 +15,6 @@
 #' See \code{\link[SeuratObject]{merge}}.
 #' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
 #'
-#' @import cli
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr reduce
 #'
@@ -273,7 +272,6 @@ Downsample_Seurat <- function(
 #' rownames (to be compatible with `Seurat::AddMetaData`).  Default is FALSE.
 #' @param barcodes_colname name of barcodes column in meta_data.  Required if `barcodes_to_rownames = TRUE`.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
@@ -342,7 +340,6 @@ Meta_Remove_Seurat <- function(
 #' should the current `seurat_object@meta.data` columns be overwritten.  Default is FALSE.  This parameter
 #' excludes values provided to `join_by_seurat` and `join_by_meta`.
 #'
-#' @import cli
 #' @importFrom data.table fread
 #' @importFrom dplyr select left_join all_of
 #' @importFrom magrittr "%>%"
@@ -498,7 +495,6 @@ Add_Sample_Meta <- function(
 #'
 #' @return Returns a data.frame with one row per `sample_name`.
 #'
-#' @import cli
 #' @importFrom dplyr any_of grouped_df select slice
 #' @importFrom magrittr "%>%"
 #'
@@ -692,7 +688,6 @@ Fetch_Meta.Seurat <- function(
 #'
 #' @returns if `newTo = NULL` returns factor else returns Seurat object with new variable added.
 #'
-#' @import cli
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
 #'
@@ -782,7 +777,6 @@ Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
 #' than `num_cells` will not be downsampled.
 #' @param seed random seed to use for downsampling.  Default is 123.
 #'
-#' @import cli
 #' @importFrom dplyr filter
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -916,8 +910,6 @@ Random_Cells_Downsample <- function(
 #' @param verbose logical, whether to print messages when running function, default is TRUE.
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -1081,7 +1073,6 @@ Store_Palette_Seurat <- function(
 #' @param overwrite logical, whether to overwrite item with the same `data_name` in the
 #' `@misc` slot of object (default is FALSE).
 #'
-#' @import cli
 #' @importFrom dplyr filter
 #'
 #' @return Seurat Object with new entries in the `obj@misc` slot.
