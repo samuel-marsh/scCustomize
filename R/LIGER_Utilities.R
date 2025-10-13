@@ -138,7 +138,6 @@ Cells.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #' @importFrom dplyr all_of select filter
 #' @importFrom magrittr "%>%"
@@ -239,7 +238,6 @@ WhichCells.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #'
 #' @export
@@ -304,7 +302,6 @@ Embeddings.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
@@ -354,7 +351,6 @@ Idents.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #'
 #' @export
@@ -454,7 +450,6 @@ Fetch_Meta.liger <- function(
 #'
 #' @return list or list of lists depending on `by_dataset` parameter
 #'
-#' @import cli
 #' @importFrom dplyr filter select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom utils packageVersion
@@ -548,7 +543,6 @@ Cells_by_Identities_LIGER <- function(
 #'
 #' @return data.frame with dataset names, number of cells per dataset and if provided other meta data
 #'
-#' @import cli
 #' @importFrom dplyr right_join join_by group_by slice
 #' @importFrom magrittr "%>%"
 #'
@@ -626,7 +620,6 @@ Dataset_Size_LIGER <- function(
 #'
 #' @return dataset name as character
 #'
-#' @import cli
 #' @importFrom dplyr filter pull
 #' @importFrom magrittr "%>%"
 #'
@@ -673,7 +666,6 @@ Get_Reference_LIGER <- function(
 #'
 #' @method Rename_Clusters liger
 #'
-#' @import cli
 #' @importFrom dplyr right_join
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -786,7 +778,6 @@ Rename_Clusters.liger <- function(
 #'
 #' @return liger object
 #'
-#' @import cli
 #' @importFrom dplyr pull filter
 #' @importFrom magrittr "%>%"
 #' @importFrom utils packageVersion
@@ -905,7 +896,6 @@ Subset_LIGER <- function(
 
 #' @method Top_Genes_Factor liger
 #'
-#' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @export
@@ -981,8 +971,6 @@ Top_Genes_Factor.liger <- function(
 #' @param reduction reduction name to pull loadings for.  Only valid if supplying a Seurat object.
 #'
 #' @return correlation matrix
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -1083,8 +1071,6 @@ Find_Factor_Cor <- function(
 #' chicken).  Default is FALSE.
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
-#'
-#' @import cli
 #'
 #' @return A liger Object
 #'
@@ -1258,10 +1244,8 @@ Add_Cell_QC_Metrics.liger <- function(
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
-#' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang ":="
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom utils packageVersion
 #'
@@ -1488,7 +1472,6 @@ Add_Mito_Ribo.liger <- function(
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
-#' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @method Add_Cell_Complexity liger
@@ -1557,7 +1540,6 @@ Add_Cell_Complexity.liger <- function(
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
-#' @import cli
 #' @importFrom magrittr "%>%"
 #'
 #' @method Add_Hemo liger
@@ -1728,10 +1710,8 @@ Add_Hemo.liger <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #' @param verbose logical, whether to print messages with status updates, default is TRUE.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of bind_rows
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #'
 #' @return A liger Object
 #'
@@ -1864,7 +1844,6 @@ Add_Top_Gene_Pct.liger <- function(
 #'
 #' @return A LIGER Object with variable genes in correct slot.
 #'
-#' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
