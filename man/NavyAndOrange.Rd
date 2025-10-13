@@ -7,7 +7,7 @@
 NavyAndOrange(flip_order = FALSE)
 }
 \arguments{
-\item{flip_order}{Whether to flip the order of colors.}
+\item{flip_order}{logical, whether to flip the order of colors.}
 }
 \value{
 Navy orange palette
