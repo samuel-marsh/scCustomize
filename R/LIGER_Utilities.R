@@ -924,9 +924,9 @@ Top_Genes_Factor.liger <- function(
   }
 
   # check number of factors present
-  if (!factor %in% 1:dim(x = object@W)[[1]]) {
+  if (!factor %in% 1:dim(x = object@W)[[1]] && factor != "all") {
     cli_abort(message = c("{.code liger_factor} provided: {.field {factor}} not found",
-                          "i" = "{.code object} only contains {.field {dim(x = object@W)[[1]]}} factors.")
+                          "i" = "{.code object} only contains {.field {dim(x = object@W)[[2]]}} factors.")
     )
   }
 
