@@ -12,10 +12,8 @@
 #' @param save_file_path file path to directory to save file.
 #' @param save_name name prefix for output H5 file.
 #'
-#' @import cli
 #' @importFrom Matrix readMM
 # #' @importFrom DropletUtils write10xCounts
-#' @importFrom rlang is_installed
 #' @importFrom Seurat Read10X
 #'
 #' @return A HDF5 format file that will be recognized as 10X Cell Ranger formatted file by Seurat or LIGER.
@@ -99,7 +97,6 @@ Create_10X_H5 <- function(
 #'  Default is 200.
 #' @param ... Extra parameters passed to \code{\link[SeuratObject]{CreateSeuratObject}}.
 #'
-#' @import cli
 #' @import Seurat
 #' @importFrom dplyr intersect
 #'
@@ -212,7 +209,6 @@ Create_CellBender_Merged_Seurat <- function(
 #' support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 #' potential PR to Seurat GitHub).
 #'
-#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
@@ -525,7 +521,6 @@ Read10X_GEO <- function(
 #'   containing a sparse matrix of the data from each type will be returned.
 #'   Otherwise a sparse matrix containing the expression data will be returned.
 #'
-#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
@@ -645,7 +640,6 @@ Read10X_h5_GEO <- function(
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
 #'
-#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Seurat Read10X
@@ -790,7 +784,6 @@ Read10X_Multi_Directory <- function(
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
 #'
-#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom Seurat Read10X_h5
@@ -958,7 +951,6 @@ Read10X_h5_Multi_Directory <- function(
 #'
 #' @return List of gene x cell matrices in list format named by sample name.
 #'
-#' @import cli
 #' @import Matrix
 #' @import parallel
 #' @import pbapply
@@ -1124,9 +1116,7 @@ Read_GEO_Delim <- function(
 #' @references Code used in function has been modified from `Seurat::Read10X_h5` function of
 #' Seurat package \url{https://github.com/satijalab/seurat} (License: GPL-3).
 #'
-#' @import cli
 #' @import Matrix
-#' @importFrom rlang is_installed
 #'
 #' @export
 #'
@@ -1295,7 +1285,6 @@ Read_CellBender_h5_Mat <- function(
 #'
 #' @return list of sparse matrices
 #'
-#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -1462,7 +1451,6 @@ Read_CellBender_h5_Multi_Directory <- function(
 #'
 #' @return list of sparse matrices
 #'
-#' @import cli
 #' @import parallel
 #' @import pbapply
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -1586,7 +1574,6 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 #' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows
 #' @importFrom magrittr "%>%"
@@ -1721,7 +1708,6 @@ Read_Metrics_10X <- function(
 #'
 #' @return A data frame with sample metrics from CellBender.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows
 #' @importFrom magrittr "%>%"
@@ -1926,8 +1912,6 @@ Read_Add_cNMF <- function(
 #' @param base_path path to the parent directory which contains all of the subdirectories of interest.
 #'
 #' @return A vector of sub-directories within `base_path`.
-#'
-#' @import cli
 #'
 #' @export
 #'

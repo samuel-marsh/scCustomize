@@ -23,7 +23,6 @@
 #' @param seurat_assay Name of assay to pull feature names from if `data` is Seurat Object.
 #' Default is NULL which will check against features from all assays present.
 #'
-#' @import cli
 #' @importFrom purrr reduce
 #' @importFrom SeuratObject Features
 #' @importFrom stringr str_to_upper str_to_sentence
@@ -164,7 +163,6 @@ Feature_Present <- function(
 #' @param return_features logical. Whether to return vector of alternate case features.  Default is TRUE.
 #' @param assay Name of assay to pull feature names from. If NULL will use the result of `DefaultAssay(seurat_object)`.
 #'
-#' @import cli
 #' @importFrom SeuratObject Features
 #' @importFrom stringr str_to_sentence str_to_upper
 #'
@@ -230,8 +228,6 @@ Case_Check <- function(
 #' `meta_col_names` are found.  Default is FALSE.
 #'
 #' @return vector of meta data columns that are present
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -473,7 +469,6 @@ Reduction_Loading_Present <- function(
 #' \url{https://github.com/welch-lab/liger/blob/master/R/mergeObject.R} (License: GPL-3).
 #' Function was modified for use in scCustomize (add progress bar, prefix vs. suffix, and delimiter options).
 #'
-#' @import cli
 #' @import Matrix
 #' @importFrom dplyr intersect
 #' @importFrom magrittr "%>%"
@@ -607,8 +602,6 @@ Merge_Sparse_Data_All <- function(
 #'
 #' @return list of lists, with one sublist per data modality.  Sub-list contain 1 matrix entry per sample
 #'
-#' @import cli
-#'
 #' @export
 #'
 #' @concept read_merge_util
@@ -652,8 +645,6 @@ Extract_Modality <- function(
 #' @param prefix logical.  Whether `add_cell_ids` should be added as prefix to current cell barcodes/names
 #' or as suffix to current cell barcodes/names.  Default is TRUE, add as prefix.
 #' @param cell_id_delimiter The delimiter to use when adding cell id prefix/suffix.  Default is "_".
-#'
-#' @import cli
 #'
 #' @return A list containing one sparse matrix for each modality
 #'
@@ -714,7 +705,6 @@ Merge_Sparse_Multimodal_All <- function(
 #'
 #' @return Emits warnings for each test and invisibly returns \code{NULL}
 #'
-#' @import cli
 #' @importFrom methods slot
 #'
 #' @references Re-implementing `CheckMatrix` only for sparse matrices with modified warning messages.  Original function from SeuratObject \url{https://github.com/satijalab/seurat-object/blob/9c0eda946e162d8595696e5280a6ecda6284db39/R/utils.R#L625-L650} (License: MIT).
@@ -1117,7 +1107,6 @@ Change_Delim_All <- function(
 #' @param overwrite logical.  If the `marker_dataframe` already contains column named "pct_diff" whether to
 #'  overwrite or return error message.  Default is FALSE.
 #'
-#' @import cli
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #'
@@ -1187,7 +1176,6 @@ Add_Pct_Diff <- function(
 #' @param make_unique Logical, whether an unnamed vector should return only unique values.  Default is FALSE.
 #' Not applicable when `data_frame = TRUE` or `named_vector = TRUE`.
 #'
-#' @import cli
 #' @importFrom dplyr group_by slice_max slice_min
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -1333,7 +1321,6 @@ Extract_Top_Markers <- function(
 #' @param file_name name to use for annotation file.  Function automatically adds file type ".csv" suffix.
 #' Default is "cluster_annotation".
 #'
-#' @import cli
 #' @importFrom utils write.csv
 #'
 #' @export
@@ -1457,7 +1444,6 @@ Cluster_Annotation_Tibble <- function(
 #' @return a list of named vectors for every cell type in the `cell_type_col` column of the annotation table and
 #' vectors new cluster names (for use with `Rename_Clusters` function or manual identity renaming).
 #'
-#' @import cli
 #' @importFrom dplyr filter pull
 #' @importFrom magrittr "%>%"
 #' @importFrom utils read.csv
@@ -1538,8 +1524,6 @@ Pull_Cluster_Annotation <- function(
 #' names as `old_ident_name` and/or `new_ident_name`.
 #'
 #' @method Rename_Clusters Seurat
-#'
-#' @import cli
 #'
 #' @rdname Rename_Clusters
 #' @export
@@ -1636,8 +1620,6 @@ Rename_Clusters.Seurat <- function(
 #'
 #' @method Top_Genes_Factor Seurat
 #'
-#' @import cli
-#'
 #' @export
 #'
 #' @rdname Top_Genes_Factor
@@ -1714,8 +1696,6 @@ Top_Genes_Factor.Seurat <- function(
 #'
 #' @return list with vector of X length
 #'
-#' @import cli
-#'
 #' @export
 #'
 #' @references Base code from stackoverflow post:
@@ -1768,7 +1748,6 @@ Split_Vector <- function(
 #'
 #' @return vector of numbers in sequence
 #'
-#' @import cli
 #' @importFrom stringr str_pad
 #'
 #' @export
@@ -1842,8 +1821,6 @@ seq_zeros <- function(
 #' @param cluster_annotation_path path to place cluster annotation file using \code{\link{Create_Cluster_Annotation_File}}.
 #' @param cluster_annotation_file_name name to use for annotation file if created (optional).
 #'
-#' @import cli
-#' @importFrom data.table fread
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
 #'
@@ -1921,8 +1898,6 @@ Setup_scRNAseq_Project <- function(
 #' @param folder_file_path folder to be copied to GCP bucket.
 #' @param gcp_bucket_path GCP bucket path to copy to files.
 #'
-#' @import cli
-#'
 #' @export
 #'
 #' @return No return value.  Performs system copy to GCP bucket.
@@ -1957,8 +1932,6 @@ Copy_To_GCP <- function(
 #'
 #' @param folder_file_path folder to be copied to GCP bucket.
 #' @param gcp_bucket_path GCP bucket path to copy to files.
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -2017,7 +1990,6 @@ Copy_From_GCP <- function(
 #'
 #' @return data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in HGNC; output unchanged), Updated_Symbol (new symbol from HGNC; output updated).
 #'
-#' @import cli
 #' @importFrom dplyr mutate filter select across left_join join_by
 #' @importFrom magrittr "%>%"
 #' @importFrom stats complete.cases
@@ -2164,7 +2136,6 @@ Updated_HGNC_Symbols <- function(
 #'
 #' @return data.frame containing columns: input_features, Approved_Symbol (already approved; output unchanged), Not_Found_Symbol (symbol not in MGI; output unchanged), Updated_Symbol (new symbol from MGI; output updated).
 #'
-#' @import cli
 #' @importFrom dplyr mutate filter select across left_join join_by
 #' @importFrom magrittr "%>%"
 #' @importFrom stats complete.cases

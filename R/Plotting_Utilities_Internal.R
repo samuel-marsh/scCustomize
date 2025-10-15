@@ -179,7 +179,6 @@ kMeans_Elbow <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr filter
@@ -553,13 +552,11 @@ Figure_Plot <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
 #' @importFrom tidyr pivot_wider
@@ -1171,13 +1168,11 @@ Clustered_DotPlot_Single_Group <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr any_of filter select pull
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
 #' @importFrom stringr str_to_lower
@@ -1684,7 +1679,6 @@ Clustered_DotPlot_Multi_Group <- function(
 #'
 #' @return ggplot2 or patchwork object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr rename all_of arrange desc
@@ -1814,7 +1808,6 @@ Plot_Pie_Proportions <- function(
 #'
 #' @return ggplot2 or patchwork object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr rename all_of arrange desc
@@ -2101,6 +2094,8 @@ create_factor_hclust_rect <- function(
 #'
 #' @returns list with x and y axis min and max values
 #' @noRd
+#'
+#' @import ggplot2
 #'
 #' @references Function from StackOverflow \url{https://stackoverflow.com/a/40304848}
 #'

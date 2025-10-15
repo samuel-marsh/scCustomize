@@ -46,7 +46,6 @@
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom methods hasArg
@@ -466,7 +465,6 @@ FeaturePlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom Seurat FeaturePlot
@@ -607,7 +605,6 @@ FeaturePlot_DualAssay <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import patchwork
 #' @import ggrastr
 #' @importFrom Seurat VlnPlot
@@ -776,7 +773,6 @@ VlnPlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom purrr map map_dbl map2
@@ -1093,13 +1089,11 @@ DotPlot_scCustom <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
 #' @importFrom stringr str_to_lower
@@ -1302,7 +1296,6 @@ Clustered_DotPlot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr filter
@@ -1515,7 +1508,6 @@ Cluster_Highlight_Plot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #'
@@ -1686,7 +1678,6 @@ Meta_Highlight_Plot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #'
@@ -1869,7 +1860,6 @@ Cell_Highlight_Plot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr filter pull
@@ -2282,7 +2272,6 @@ DimPlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import patchwork
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -2516,7 +2505,6 @@ VariableFeaturePlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom magrittr "%>%"
@@ -2686,7 +2674,6 @@ FeatureScatter_scCustom <- function(
 #'
 #' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}
 #'
-#' @import cli
 #' @import ggplot2
 #'
 #' @returns ggplot2 object
@@ -2838,7 +2825,6 @@ ElbowPlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom dplyr all_of pull
 #' @importFrom magrittr "%>%"

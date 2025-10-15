@@ -12,7 +12,6 @@
 #'
 #' @return A list of plots outputted as pdf
 #'
-#' @import cli
 #' @import patchwork
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
@@ -128,7 +127,6 @@ Iterate_PC_Loading_Plots <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
@@ -378,7 +376,6 @@ Iterate_DimPlot_bySample <- function(
 #'
 #' @return Saved plots
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
@@ -589,7 +586,6 @@ Iterate_Cluster_Highlight_Plot <- function(
 #'
 #' @return Saved plots
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom forcats fct_relevel
@@ -912,7 +908,6 @@ Iterate_Meta_Highlight_Plot <- function(
 #' value between 0-1.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{FeaturePlot}}.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
@@ -1272,7 +1267,6 @@ Iterate_FeaturePlot_scCustom <- function(
 #' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
@@ -1468,7 +1462,6 @@ Iterate_VlnPlot_scCustom <- function(
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
@@ -1685,7 +1678,6 @@ Iterate_Plot_Density_Custom <- function(
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions

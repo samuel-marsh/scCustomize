@@ -695,7 +695,6 @@ Plot_Median_Other <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom rlang "%||%" ":="
 #' @importFrom dplyr select slice left_join rename all_of
@@ -850,7 +849,6 @@ Plot_Cells_per_Sample <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom dplyr filter
@@ -1021,7 +1019,6 @@ CellBender_Diff_Plot <- function(
 #'
 #' @return ggplot2 or patchwork object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr rename all_of arrange desc
@@ -1108,7 +1105,6 @@ Proportion_Plot <- function(
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom dplyr all_of select group_by summarize mutate ungroup left_join join_by
 #' @importFrom ggbeeswarm geom_quasirandom

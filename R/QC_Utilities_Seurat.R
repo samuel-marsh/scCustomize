@@ -65,7 +65,6 @@
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
-#' @import cli
 #' @importFrom SeuratObject Layers
 #'
 #' @return A Seurat Object
@@ -287,10 +286,8 @@ Add_Cell_QC_Metrics.Seurat <- function(
 #' @param species_prefix the species prefix in front of gene symbols in object if providing two species for
 #' multi-species aligned dataset.
 #'
-#' @import cli
 #' @importFrom dplyr mutate select intersect all_of
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang ":="
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -532,10 +529,8 @@ Add_Mito_Ribo.Seurat <- function(
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
-#' @import cli
 #' @importFrom dplyr mutate select intersect all_of
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang ":="
 #' @importFrom Seurat PercentageFeatureSet AddMetaData
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -700,8 +695,6 @@ Add_Hemo.Seurat <- function(
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
-#' @import cli
-#'
 #' @method Add_Cell_Complexity Seurat
 #'
 #' @export
@@ -769,10 +762,8 @@ Add_Cell_Complexity.Seurat <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #' @param verbose logical, whether to print messages with status updates, default is TRUE.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of bind_rows
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom SeuratObject LayerData
 #'
 #' @return A Seurat Object
@@ -955,7 +946,6 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' In this case, the function searches for the closest MALAT1 value to the default value, 2, to use in place of
 #' a real local maximum.
 #'
-#' @import cli
 #' @import ggplot2
 #' @import pbapply
 #' @importFrom scales label_percent
@@ -1247,8 +1237,6 @@ Add_MALAT1_Threshold.Seurat <- function(
 #' @param seed seed for reproducibility (default is 1).
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @references Gene list is from: SI Table 22 Marsh et al., 2022 (Nature Neuroscience) from \doi{10.1038/s41593-022-01022-8}.
 #' See data-raw directory for scripts used to create gene list.
