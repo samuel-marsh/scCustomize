@@ -2672,7 +2672,7 @@ FeatureScatter_scCustom <- function(
 #' @param line_colors colors for the cutoff lines, default is c("dodgerblue", "firebrick").
 #' @param linewidth widith of the cutoff lines, default is 0.5.
 #'
-#' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}
+#' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}.
 #'
 #' @import ggplot2
 #'
