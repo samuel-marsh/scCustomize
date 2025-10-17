@@ -34,7 +34,7 @@ ggplot2 object
 }
 \description{
 Creates ElbowPlot with ability to calculate and plot cutoffs for amount of variance conferred by the PCs.
-Cutoff 1 is PC where principal components only contribute 5\% of standard deviation and the principal components
+Cutoff 1 is PC where principal components only contribute less than 5\% of standard deviation and the principal components
 cumulatively contribute 90\% of the standard deviation.
 Cutoff 2 is point where the percent change in variation between the consecutive PCs is less than 0.1\%.
 }
@@ -44,5 +44,5 @@ ElbowPlot_scCustom(seurat_object = pbmc_small)
 
 }
 \references{
-Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}
+Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}.
 }
