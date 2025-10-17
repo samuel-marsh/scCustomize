@@ -3796,7 +3796,7 @@ process_hgnc_data <- function(
   to
 ) {
   # read in data
-  hgnc_full_data <- data.table::fread(file = from, data.table = FALSE)
+  hgnc_full_data <- data.table::fread(file = from, data.table = FALSE, fill = TRUE)
 
   # filter data: Approved Genes > select relevant categories
   hgnc_filtered_data <- hgnc_full_data %>%
