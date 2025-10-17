@@ -2660,7 +2660,7 @@ FeatureScatter_scCustom <- function(
 #' ElbowPlot with modifications
 #'
 #' Creates ElbowPlot with ability to calculate and plot cutoffs for amount of variance conferred by the PCs.
-#' Cutoff 1 is PC where principal components only contribute 5% of standard deviation and the principal components
+#' Cutoff 1 is PC where principal components only contribute less than 5% of standard deviation and the principal components
 #' cumulatively contribute 90% of the standard deviation.
 #' Cutoff 2 is point where the percent change in variation between the consecutive PCs is less than 0.1%.
 #'
@@ -2693,6 +2693,9 @@ ElbowPlot_scCustom <- function(
     line_colors = c("dodgerblue", "firebrick"),
     linewidth = 0.5
 ) {
+  # check seurat
+  Is_Seurat(seurat_object = seurat_object)
+
   # set dims if NULL
   if (is.null(x = ndims)) {
     ndims <- ncol(x = Embeddings(seurat_object, reduction = reduction))
