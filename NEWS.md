@@ -24,6 +24,7 @@
 - Fixed issue with `Read_Metrics_10X` for outputs when `cellranger_multi = TRUE` and Cell Ranger v9+ was used to process data.  Thanks @lisch7, ([#245](https://github.com/samuel-marsh/scCustomize/issues/245)).  
 - Fix bug in `Proportion_Plot_per_Sample` due to missing parameter internally when pulling meta data and orig.ident did not represent sample IDs.  
 - Fixed bug in `Top_Genes_Factor` for LIGER objects when setting `factor = "all"`. Thanks @theAeon, ([#247](https://github.com/samuel-marsh/scCustomize/issues/247)).  
+- Fixed bug in `Update_HGNC_Symbols` due to error reading HGNC file.  Thanks @MD-Paris, ([#248](https://github.com/samuel-marsh/scCustomize/issues/248)).  
   
 
 
