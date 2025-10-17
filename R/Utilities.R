@@ -2050,7 +2050,7 @@ Updated_HGNC_Symbols <- function(
   }
 
   # Check input symbols have correct case
-  case_check <- str_to_upper(input_symbols)
+  case_check <- str_to_upper(string = input_symbols)
   case_check <- gsub(pattern = "(.*C[0-9XY]+)ORF(.+)", replacement = "\\1orf\\2", x = case_check)
   # Currently two genes that are case anomalies so correcting them here
   case_check <- gsub(pattern = "HSA-MIR-", replacement = "hsa-mir-", x = case_check)
@@ -2066,7 +2066,7 @@ Updated_HGNC_Symbols <- function(
   # Download and process HGNC dataset if not already cached
   hgnc_data_path <- download_hgnc_data(update = update_symbol_data)
 
-  hgnc_long_data <- readRDS(hgnc_data_path)
+  hgnc_long_data <- readRDS(file = hgnc_data_path)
 
   input_features_df <- data.frame("input_features" = input_symbols)
 
@@ -2098,7 +2098,7 @@ Updated_HGNC_Symbols <- function(
 
   # Report the results
   if (isTRUE(x = verbose)) {
-    num_features <- length(input_symbols)
+    num_features <- length(x = input_symbols)
 
     num_updated <- sum(complete.cases(merged_df$Updated_Symbol))
     num_not_found <- sum(complete.cases(merged_df$Not_Found_Symbol))
@@ -2197,7 +2197,7 @@ Updated_MGI_Symbols <- function(
   # Download and process HGNC dataset if not already cached
   mgi_data_path <- download_mgi_data(update = update_symbol_data)
 
-  mgi_long_data <- readRDS(mgi_data_path)
+  mgi_long_data <- readRDS(file = mgi_data_path)
 
   input_features_df <- data.frame("input_features" = input_symbols)
 
@@ -2229,7 +2229,7 @@ Updated_MGI_Symbols <- function(
 
   # Report the results
   if (isTRUE(x = verbose)) {
-    num_features <- length(input_symbols)
+    num_features <- length(x = input_symbols)
 
     num_updated <- sum(complete.cases(merged_df$Updated_Symbol))
     num_not_found <- sum(complete.cases(merged_df$Not_Found_Symbol))
