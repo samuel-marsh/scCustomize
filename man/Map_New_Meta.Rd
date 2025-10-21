@@ -4,21 +4,21 @@
 \alias{Map_New_Meta}
 \title{Create new variable from categories in meta.data}
 \usage{
-Map_New_Meta(seurat_object, from, newTo = NULL, ...)
+Map_New_Meta(seurat_object, from, new_col = NULL, ...)
 }
 \arguments{
 \item{seurat_object}{name of Seurat object}
 
 \item{from}{current column in meta.data to map from}
 
-\item{newTo}{name of new column in meta.data to add new mapped variable. If NULL (default)
+\item{new_col}{name of new column in meta.data to add new mapped variable. If NULL (default)
 will return the variable. If name provided will return Seurat object with new variable added.}
 
 \item{...}{Mapping criteria, argument names are original existing categories
 in the \code{from} calumn and values are new categories in the new variable.}
 }
 \value{
-if \code{newTo = NULL} returns factor else returns Seurat object with new variable added.
+if \code{new_col = NULL} returns factor else returns Seurat object with new variable added.
 }
 \description{
 Designed for fast variable creation when a new variable is going to be created from existing
@@ -26,7 +26,7 @@ variable. For example, mapping multiple samples to experimental condition.
 }
 \examples{
 \dontrun{
-seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", newTo = "Treatment",
+seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", new_col = "Treatment",
 "1" = "Ctrl", "2" = "Treated", "3" = "Treated", "4" = "Ctrl")
 }
 
