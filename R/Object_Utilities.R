@@ -681,12 +681,12 @@ Fetch_Meta.Seurat <- function(
 #'
 #' @param seurat_object name of Seurat object
 #' @param from current column in meta.data to map from
-#' @param newTo name of new column in meta.data to add new mapped variable. If NULL (default)
+#' @param new_col name of new column in meta.data to add new mapped variable. If NULL (default)
 #' will return the variable. If name provided will return Seurat object with new variable added.
 #' @param ... Mapping criteria, argument names are original existing categories
 #' in the `from` calumn and values are new categories in the new variable.
 #'
-#' @returns if `newTo = NULL` returns factor else returns Seurat object with new variable added.
+#' @returns if `new_col = NULL` returns factor else returns Seurat object with new variable added.
 #'
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
@@ -698,12 +698,17 @@ Fetch_Meta.Seurat <- function(
 #'
 #' @examples
 #' \dontrun{
-#' seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", newTo = "Treatment",
+#' seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", new_col = "Treatment",
 #' "1" = "Ctrl", "2" = "Treated", "3" = "Treated", "4" = "Ctrl")
 #'}
 #'
 
-Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
+Map_New_Meta <- function(
+    seurat_object,
+    from,
+    new_col = NULL,
+    ...
+) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -734,8 +739,8 @@ Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
 
   # Report if variable not found
   if (length(notFound) > 0) {
-    cli::cli_abort(c("The following variables were not found in {.field {from}}: {.field {notFound}}",
-                     "i" = "{.field {notFound}}"))
+    cli_abort(message = c("The following variables were not found in {.field {from}}: {.field {notFound}}",
+                          "i" = "{.field {notFound}}"))
   }
 
   # Map variables continued
@@ -748,12 +753,12 @@ Map_New_Meta <- function(seurat_object, from, newTo = NULL, ...) {
   to <- toCats[as.character(from)]
   to <- factor(x = unname(to), levels = unique(toCats))
 
-  # return new mapping if `newTo` is NULL
-  if (is.null(x = newTo)) {
+  # return new mapping if `new_col` is NULL
+  if (is.null(x = new_col)) {
     return(to)
   } else {
     # Add to seurat object and return
-    seurat_object[[newTo]] <- to
+    seurat_object[[new_col]] <- to
     return(seurat_object)
   }
 }
