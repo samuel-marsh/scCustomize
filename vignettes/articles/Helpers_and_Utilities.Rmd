@@ -59,10 +59,10 @@ pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(pbmc)
 ```
 
-We'll add some random meta data variables to pbmc data form use in this vignette
+We'll add some random meta data variables to pbmc data form use in this vignette.  See below for usage for scCustomize function `Map_New_Meta`.  
 ```{r}
 pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
-pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+pbmc <- Map_New_Meta(seurat_object = pbmc, from = "sample_id", new_col = "Batch", "sample1" = "Batch1", "sample2" = "Batch1", "sample3" = "Batch1", "sample4" = "Batch2", "sample5" = "Batch2", "sample6" = "Batch2")
 ```
 
 ## Add All Cell QC Metrics with Single Function  
@@ -90,7 +90,7 @@ For more details on cell QC metrics and the functions available in scCustomize p
 
 
 
-## Meta Data  
+## Meta Data (Add, Modify, Extract)  
 scCustomize contains a set of functions to aid in use of meta data both within and outside of objects.  
 
 ```{r, include = FALSE}
@@ -98,7 +98,7 @@ pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(object = pbmc)
 
 pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
-pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+pbmc <- Map_New_Meta(seurat_object = pbmc, from = "sample_id", new_col = "Batch", "sample1" = "Batch1", "sample2" = "Batch1", "sample3" = "Batch1", "sample4" = "Batch2", "sample5" = "Batch2", "sample6" = "Batch2")
 ```
 
 
@@ -180,6 +180,22 @@ obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_meta, join_by_seu
 ```
 
 
+### Map new meta data  
+In addition to adding sample level meta data directly scCustomize also contains helper function `Map_New_Meta` to create new meta.data variable based on an existing variable.  For instance, mapping a new column called "Treatment" on the basis on sample ID.  
+
+```{r}
+pbmc <- Map_New_Meta(seurat_object = pbmc, from = "sample_id", new_col = "Treatment", "sample1" = "Treated", "sample2" = "Control", "sample3" = "Control", "sample4" = "Treated", "sample5" = "Treated", "sample6" = "Control")
+new_meta <- Extract_Sample_Meta(pbmc, sample_col = "sample_id")
+```
+
+```{r echo=FALSE}
+new_meta %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+
+
 ### Add feature meta data  
 Starting in Seurat V5 each assay now possess it's own meta.data slot which is feature-level meta data.  During course of normal analysis this is where information on variable features is stored.  However, we can also use it to store alternate feature names, in most cases this is Ensembl IDs matching the symbols used in object creation/analysis.
 
@@ -244,7 +260,7 @@ check_symbols <- UpdateSymbolList(symbols = genes_present[[2]], verbose = TRUE)
 ```
 
 
-## Merging & Splitting Data/Objects
+## Merging & Splitting Layers/Objects
 
 ### Merging raw data
 It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later.  scCustomize features a modified version of the internal LIGER function `MergeSparseDataAll()`.
