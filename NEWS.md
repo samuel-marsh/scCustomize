@@ -25,6 +25,7 @@
 - Fix bug in `Proportion_Plot_per_Sample` due to missing parameter internally when pulling meta data and orig.ident did not represent sample IDs.  
 - Fixed bug in `Top_Genes_Factor` for LIGER objects when setting `factor = "all"`. Thanks @theAeon, ([#247](https://github.com/samuel-marsh/scCustomize/issues/247)).  
 - Fixed bug in `Update_HGNC_Symbols` due to error reading HGNC file.  Thanks @MD-Paris, ([#248](https://github.com/samuel-marsh/scCustomize/issues/248)).  
+- Fixed bug in `Variable_Features_ALL_LIGER` that didn't pass `num_genes` parameter correctly to LIGER v2+ objects.  
   
 
 
