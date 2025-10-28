@@ -2434,6 +2434,28 @@ get_seed <- function() {
   }
 }
 
+
+#' Restore previous seed when needed in `RunLeiden`
+#'
+#' @param seed old seed
+#
+#' @references from BPCells package Benjamin Parks
+#' https://github.com/bnprks/BPCells/blob/f2026c3509f5e2542f7624bdaf75669d5d45d78b/r/R/utils.R#L18
+#'
+#' @return old seed
+#'
+#' @keywords internal
+#'
+#' @noRd
+
+restore_seed <- function(seed) {
+  if (is.null(seed)) {
+    rm(".Random.seed", envir = globalenv(), inherits = FALSE)
+  } else {
+    assign(".Random.seed", seed, envir = globalenv(), inherits = FALSE)
+  }
+}
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### METRICS HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
