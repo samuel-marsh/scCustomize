@@ -2413,6 +2413,27 @@ Is_Color <- function(
 }
 
 
+#' Get current seed when needed in `RunLeiden`
+#'
+#' @param seed current seed
+#'
+#' @references from BPCells package Benjamin Parks
+#' https://github.com/bnprks/BPCells/blob/f2026c3509f5e2542f7624bdaf75669d5d45d78b/r/R/utils.R#L10
+#'
+#' @return current seed if set
+#'
+#' @keywords internal
+#'
+#' @noRd
+
+get_seed <- function() {
+  if (exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE)) {
+    return(get(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
+  } else {
+    return(NULL)
+  }
+}
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### METRICS HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
