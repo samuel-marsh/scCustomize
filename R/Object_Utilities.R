@@ -207,6 +207,8 @@ ReFilter_SeuratObject <- function(
 #' maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
 #' too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
 #' than `num_cells` will not be downsampled.
+#' @param entire_object logical, whether to downsample to specific number of cells across whole object,
+#' instead of number of cells per identity, default is FALSE.
 #' @param seed random seed to use for downsampling.  Default is 123.
 #'
 #' @returns Seurat object with randomly downsampled cells.
@@ -232,24 +234,26 @@ Downsample_Seurat <- function(
     num_cells,
     group.by = NULL,
     allow_lower = FALSE,
+    entire_object = FALSE,
     seed = 123
 ) {
   # Check seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # set ident in case of NULL
-  group.by <- group.by %||% "ident"
+  if (isFALSE(x = entire_object)) {
+    # set ident in case of NULL
+    group.by <- group.by %||% "ident"
 
-  # Check and set idents if not "ident"
-  if (group.by != "ident") {
-    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    # Check and set idents if not "ident"
+    if (group.by != "ident") {
+      group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(object = seurat_object) <- group.by
+      # Idents(object = seurat_object) <- group.by
+    }
   }
 
   # get dowqnsampled cells
-  downsample_cells <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = num_cells, group.by = group.by, allow_lower = allow_lower, seed = seed)
-
+  downsample_cells <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = num_cells, group.by = group.by, allow_lower = allow_lower, entire_object = entire_object, seed = seed, return_list = FALSE)
 
   # subset object
   seurat_object <- subset(x = seurat_object, cells = downsample_cells)
@@ -780,6 +784,8 @@ Map_New_Meta <- function(
 #' maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
 #' too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
 #' than `num_cells` will not be downsampled.
+#' @param entire_object logical, whether to downsample to specific number of cells across whole object,
+#' instead of number of cells per identity, default is FALSE.
 #' @param seed random seed to use for downsampling.  Default is 123.
 #'
 #' @importFrom dplyr filter
@@ -814,74 +820,96 @@ Random_Cells_Downsample <- function(
     group.by = NULL,
     return_list = FALSE,
     allow_lower = FALSE,
+    entire_object = FALSE,
     seed = 123
 ) {
   # Check seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # set ident in case of NULL
-  group.by <- group.by %||% "ident"
+  if (isFALSE(x = entire_object)) {
+    # set ident in case of NULL
+    group.by <- group.by %||% "ident"
 
-  # Check and set idents if not "ident"
-  if (group.by != "ident") {
-    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    # Check and set idents if not "ident"
+    if (group.by != "ident") {
+      group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(object = seurat_object) <- group.by
-  }
-
-  # get barcodes
-  cluster_barcodes <- FetchData(object = seurat_object, vars = "ident") %>%
-    rownames_to_column("barcodes")
-
-  # get unique ident vector
-  idents_all <- as.character(x = levels(x = Idents(object = seurat_object)))
-
-  # Find minimum length ident and warn if num_cells not equal or lower
-  min_cells <- CellsByIdentities(object = seurat_object)
-  ident_lengths <- lengths(x = min_cells)
-  min_cells <- min(ident_lengths)
-  min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
-
-  if (isFALSE(x = allow_lower)) {
-    # set num_cells if value is "min"
-    if (num_cells == "min") {
-      cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
-                             "{col_green({symbol$tick})} Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
-      num_cells <- min_cells
+      Idents(object = seurat_object) <- group.by
     }
 
-    # check size of num_cells
-    if (min_cells < num_cells) {
-      cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity if {.code allow_lower = FALSE}.",
-                            "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
-    }
-  }
+    # get barcodes
+    cluster_barcodes <- FetchData(object = seurat_object, vars = "ident") %>%
+      rownames_to_column("barcodes")
 
-  # set values if force
-  if (isTRUE(x = allow_lower)) {
-    num_cells <- unlist(x = lapply(1:length(x = ident_lengths), function(x){
-      val <- ident_lengths[x]
-      val <- replace(val, val < num_cells, val)
-      val <- replace(val, val > num_cells, num_cells)
-      val
-    }))
+    # get unique ident vector
+    idents_all <- as.character(x = levels(x = Idents(object = seurat_object)))
+
+    # Find minimum length ident and warn if num_cells not equal or lower
+    min_cells <- CellsByIdentities(object = seurat_object)
+    ident_lengths <- lengths(x = min_cells)
+    min_cells <- min(ident_lengths)
+    min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
+
+    if (isFALSE(x = allow_lower)) {
+      # set num_cells if value is "min"
+      if (num_cells == "min") {
+        cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
+                               "{col_green({symbol$tick})} Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
+        num_cells <- min_cells
+      }
+
+      # check size of num_cells
+      if (min_cells < num_cells) {
+        cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity if {.code allow_lower = FALSE}.",
+                              "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
+      }
+    }
+
+    # set values if force
+    if (isTRUE(x = allow_lower)) {
+      num_cells <- unlist(x = lapply(1:length(x = ident_lengths), function(x){
+        val <- ident_lengths[x]
+        val <- replace(val, val < num_cells, val)
+        val <- replace(val, val > num_cells, num_cells)
+        val
+      }))
+    } else {
+      num_cells <- rep(num_cells, length(x = idents_all))
+    }
+
+    # set seed and select random cells per ident
+    prev_seed <- get_seed()
+    on.exit(restore_seed(prev_seed), add = TRUE)
+    set.seed(seed = seed)
+
+    # get cells
+    random_cells <- lapply(1:length(x = idents_all), function(x) {
+      clus_barcodes <- cluster_barcodes %>%
+        filter(.data[["ident"]] == idents_all[x]) %>%
+        column_to_rownames("barcodes") %>%
+        rownames() %>%
+        sample(size = num_cells[x])
+    })
   } else {
-    num_cells <- rep(num_cells, length(x = idents_all))
+    # set seed and select random cells per ident
+    prev_seed <- get_seed()
+    on.exit(restore_seed(prev_seed), add = TRUE)
+    set.seed(seed = seed)
+
+    if (!is.null(x = group.by)) {
+      cli_inform(message = "The {.code group.by} parameter is ignored when {.field entire_object = TRUE}")
+    }
+    cli_inform(message = "")
+
+    # get cells
+    random_cells <- sample(x = Cells(x = seurat_object), size = num_cells)
   }
-
-  # set seed and select random cells per ident
-  set.seed(seed = seed)
-
-  random_cells <- lapply(1:length(x = idents_all), function(x) {
-    clus_barcodes <- cluster_barcodes %>%
-      filter(.data[["ident"]] == idents_all[x]) %>%
-      column_to_rownames("barcodes") %>%
-      rownames() %>%
-      sample(size = num_cells[x])
-  })
 
   # return downsampled cells
   if (isTRUE(x = return_list)) {
+    if (isTRUE(x = entire_object)) {
+      cli_warn(message = "Cannot return list when {.code entire_object = TRUE}, returning vector.")
+    }
     # return list
     return(random_cells)
   } else {
