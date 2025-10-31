@@ -491,6 +491,12 @@ Iterate_Cluster_Highlight_Plot <- function(
     }
   }
 
+  # set global pt.size if NULL
+  if (is.null(x = pt.size)) {
+    cells_by_idents <- CellsByIdentities(object = seurat_object)
+    pt.size <- AutoPointSize_scCustom(data = max(lengths(x = cells_by_idents)), raster = raster)
+  }
+
   # Single PDF option
   if (isTRUE(x = single_pdf)) {
     cli_inform(message = "{.field Generating plots}")
