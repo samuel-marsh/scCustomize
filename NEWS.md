@@ -1,4 +1,4 @@
-# scCustomize 3.2.1 (2025-10-28)  
+# scCustomize 3.2.1 (2025-11-07)  
 ## Added  
 - Added new function `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of variance conferred by PCs.  See manual for more details.  
 - Added new function `Map_New_Meta` to enable mapping of existing meta.data column to new variable.  
