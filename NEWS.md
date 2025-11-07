@@ -2,7 +2,6 @@
 ## Added  
 - Added new function `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of variance conferred by PCs.  See manual for more details.  
 - Added new function `Map_New_Meta` to enable mapping of existing meta.data column to new variable.  
-- Added new function `Downsample_Seurat` as quick wrapper to create Seurat object with randomly downsampled number of cells.  
 - Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
 - Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
 - Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
@@ -16,6 +15,7 @@
 - Updated messages in `Random_Cells_Downsample`.  
 - Full deprecation of `Add_Top_Gene_Pct_Seurat`, see current `Add_Top_Gene_Pct` function.  
 - Full deprecation of `Liger_to_Seurat` see `as.Seurat` for LIGER v1.0 objects or `rliger::ligerToSeurat` for LIGER v2.0+ objects.  
+- Updated `Iterate_Cluster_Highlight_Plot` to use consistent `pt.size` across all plots if `pt.size = NULL` in function call.  
   
 
 
