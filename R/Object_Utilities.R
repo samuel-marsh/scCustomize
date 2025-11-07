@@ -194,71 +194,71 @@ ReFilter_SeuratObject <- function(
 }
 
 
-#' Downsample Seurat Object
-#'
-#' Randomly downsample Seurat object by given number of cells per group (or by group with smallest number of cells)
-#'
-#' @param seurat_object name of Seurat object
-#' @param num_cells number of cells per ident to use in down-sampling.  This value must be less than or
-#' equal to the size of ident with fewest cells.  Alternatively, can set to "min" which will
-#' use the maximum number of barcodes based on size of smallest group.
-#' @param group.by The ident to use to group cells.  Default is NULL which use current active.ident.  .
-#' @param allow_lower logical, if number of cells in identity is lower than `num_cells` keep the
-#' maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
-#' too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
-#' than `num_cells` will not be downsampled.
-#' @param entire_object logical, whether to downsample to specific number of cells across whole object,
-#' instead of number of cells per identity, default is FALSE.
-#' @param seed random seed to use for downsampling.  Default is 123.
-#'
-#' @returns Seurat object with randomly downsampled cells.
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' # Downsample specific number of cells per group
-#' obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000)
-#'
-#' # Downsample specific number of cells per group but allow groups to have fewer cells
-#' # if they don't have number provided
-#' obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000, allow_lower = TRUE)
-#'
-#' # Downsample by number of cells in the smallest group
-#' obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = "min")
-#' }
-#'
+# Downsample Seurat Object
+#
+# Randomly downsample Seurat object by given number of cells per group (or by group with smallest number of cells)
+#
+# @param seurat_object name of Seurat object
+# @param num_cells number of cells per ident to use in down-sampling.  This value must be less than or
+# equal to the size of ident with fewest cells.  Alternatively, can set to "min" which will
+# use the maximum number of barcodes based on size of smallest group.
+# @param group.by The ident to use to group cells.  Default is NULL which use current active.ident.  .
+# @param allow_lower logical, if number of cells in identity is lower than `num_cells` keep the
+# maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
+# too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
+# than `num_cells` will not be downsampled.
+# @param entire_object logical, whether to downsample to specific number of cells across whole object,
+# instead of number of cells per identity, default is FALSE.
+# @param seed random seed to use for downsampling.  Default is 123.
+#
+# @returns Seurat object with randomly downsampled cells.
+#
+# @export
+#
+# @examples
+# \dontrun{
+# # Downsample specific number of cells per group
+# obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000)
+#
+# # Downsample specific number of cells per group but allow groups to have fewer cells
+# # if they don't have number provided
+# obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000, allow_lower = TRUE)
+#
+# # Downsample by number of cells in the smallest group
+# obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = "min")
+# }
+#
 
-Downsample_Seurat <- function(
-    seurat_object,
-    num_cells,
-    group.by = NULL,
-    allow_lower = FALSE,
-    entire_object = FALSE,
-    seed = 123
-) {
-  # Check seurat
-  Is_Seurat(seurat_object = seurat_object)
-
-  if (isFALSE(x = entire_object)) {
-    # set ident in case of NULL
-    group.by <- group.by %||% "ident"
-
-    # Check and set idents if not "ident"
-    if (group.by != "ident") {
-      group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
-
-      # Idents(object = seurat_object) <- group.by
-    }
-  }
-
-  # get dowqnsampled cells
-  downsample_cells <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = num_cells, group.by = group.by, allow_lower = allow_lower, entire_object = entire_object, seed = seed, return_list = FALSE)
-
-  # subset object
-  seurat_object <- subset(x = seurat_object, cells = downsample_cells)
-  return(seurat_object)
-}
+# Downsample_Seurat <- function(
+#     seurat_object,
+#     num_cells,
+#     group.by = NULL,
+#     allow_lower = FALSE,
+#     entire_object = FALSE,
+#     as_object = FALSE,
+#     object_sample_method = c("random", "LeverageData", "geosketch"),
+#     seed = 123
+# ) {
+#   # Check seurat
+#   Is_Seurat(seurat_object = seurat_object)
+#
+#   if (isFALSE(x = entire_object)) {
+#     # set ident in case of NULL
+#     group.by <- group.by %||% "ident"
+#
+#     # Check and set idents if not "ident"
+#     if (group.by != "ident") {
+#       group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+#     }
+#   }
+#
+#   # check sample method
+#   downsample_cells <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = num_cells, group.by = group.by, allow_lower = allow_lower, entire_object = entire_object, seed = seed, return_list = FALSE)
+#
+#   # subset object
+#   seurat_object <- subset(x = seurat_object, cells = downsample_cells)
+#   return(seurat_object)
+# }
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -823,7 +823,7 @@ Random_Cells_Downsample <- function(
     entire_object = FALSE,
     seed = 123
 ) {
-  # Check seurat
+  # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
   if (isFALSE(x = entire_object)) {
