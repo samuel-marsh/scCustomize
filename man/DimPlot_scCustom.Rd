@@ -126,6 +126,6 @@ DimPlot_scCustom(seurat_object = pbmc_small)
 \references{
 Many of the param names and descriptions are from Seurat to facilitate ease of use as
 this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
-\code{figure_plot} parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
+\code{figure_plot} parameter/code modified from code by Tim Stuart via twitter: \url{https://x.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
 }
 \concept{seurat_plotting}

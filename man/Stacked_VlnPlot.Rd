@@ -83,7 +83,7 @@ x_lab_rotate = TRUE)
 \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
 }
 \seealso{
-\url{https://twitter.com/tangming2005}
+\url{https://x.com/tangming2005}
 }
 \author{
 Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)

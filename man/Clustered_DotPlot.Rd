@@ -192,7 +192,7 @@ Clustered_DotPlot(seurat_object = pbmc_small, features = c("CD3E", "CD8", "GZMB"
 \url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
 }
 \seealso{
-\url{https://twitter.com/tangming2005}
+\url{https://x.com/tangming2005}
 }
 \author{
 Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
