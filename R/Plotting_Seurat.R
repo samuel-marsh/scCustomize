@@ -784,7 +784,7 @@ VlnPlot_scCustom <- function(
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
 #' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
-#' @seealso \url{https://twitter.com/tangming2005}
+#' @seealso \url{https://x.com/tangming2005}
 #'
 #' @examples
 #' library(Seurat)
@@ -1105,7 +1105,7 @@ DotPlot_scCustom <- function(
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
 #' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
-#' @seealso \url{https://twitter.com/tangming2005}
+#' @seealso \url{https://x.com/tangming2005}
 #'
 #' @examples
 #' \donttest{
@@ -1871,7 +1871,7 @@ Cell_Highlight_Plot <- function(
 #'
 #' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
 #' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
-#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
+#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: \url{https://x.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
 #'
 #' @concept seurat_plotting
 #'
