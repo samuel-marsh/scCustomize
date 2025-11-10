@@ -700,6 +700,8 @@ Fetch_Meta.Seurat <- function(
 #'
 #' @export
 #'
+#' @concept get_set_util
+#'
 #' @examples
 #' \dontrun{
 #' seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", new_col = "Treatment",

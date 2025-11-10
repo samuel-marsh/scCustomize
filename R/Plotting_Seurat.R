@@ -2679,6 +2679,8 @@ FeatureScatter_scCustom <- function(
 #' @returns ggplot2 object
 #' @export
 #'
+#' @concept seurat_plotting
+#'
 #' @examples
 #' library(Seurat)
 #' ElbowPlot_scCustom(seurat_object = pbmc_small)
