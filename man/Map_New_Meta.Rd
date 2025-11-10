@@ -35,3 +35,4 @@ seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", new_col = "Tre
 This function is slightly modified version of LIGER function \code{\link[rliger]{mapCellMeta}}
 to allow functionality with Seurat objects. \url{https://github.com/welch-lab/liger}. (License: GPL-3).
 }
+\concept{get_set_util}

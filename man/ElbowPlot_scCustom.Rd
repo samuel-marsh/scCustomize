@@ -46,3 +46,4 @@ ElbowPlot_scCustom(seurat_object = pbmc_small)
 \references{
 Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}.
 }
+\concept{seurat_plotting}
