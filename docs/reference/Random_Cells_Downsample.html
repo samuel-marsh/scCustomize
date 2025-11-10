@@ -18,7 +18,7 @@ Can return either as a list (1 entry per identity class) or vector of barcodes."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.1</span>
       </span>
     </div>
 
@@ -133,6 +133,7 @@ Can return either as a list (1 entry per identity class) or vector of barcodes.<
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  return_list <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  allow_lower <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  entire_object <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -163,6 +164,11 @@ FALSE.</p></dd>
 maximum number of cells, default is FALSE.  If FALSE will report error message if <code>num_cells</code> is
 too high, if TRUE will subset cells with more than <code>num_cells</code> to that value and those with less
 than <code>num_cells</code> will not be downsampled.</p></dd>
+
+
+<dt>entire_object</dt>
+<dd><p>logical, whether to downsample to specific number of cells across whole object,
+instead of number of cells per identity, default is FALSE.</p></dd>
 
 
 <dt>seed</dt>

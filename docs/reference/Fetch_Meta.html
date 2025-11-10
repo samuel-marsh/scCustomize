@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.1</span>
       </span>
     </div>
 
@@ -125,19 +125,23 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span>, columns <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for liger</span></span>
-<span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span>, columns <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for Seurat</span></span>
-<span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">Fetch_Meta</span><span class="op">(</span><span class="va">object</span>, columns <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>object</dt>
 <dd><p>Object of class Seurat or liger.</p></dd>
+
+
+<dt>columns</dt>
+<dd><p>optional, name(s) of columns to return. Default is NULL; returns all columns</p></dd>
 
 
 <dt>...</dt>

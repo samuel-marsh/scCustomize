@@ -18,7 +18,7 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.1</span>
       </span>
     </div>
 
@@ -129,7 +129,8 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Extract_Sample_Meta</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
-<span>  sample_name <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
+<span>  sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>,</span>
+<span>  sample_name <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  variables_include <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  variables_exclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_all <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -142,9 +143,13 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
 <dd><p>Seurat or LIGER object</p></dd>
 
 
-<dt>sample_name</dt>
+<dt>sample_col</dt>
 <dd><p>meta.data column to use as sample.  Output data.frame will contain one row per
 level or unique value in this variable.</p></dd>
+
+
+<dt>sample_name</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated" class="external-link"><img src="figures/lifecycle-soft-deprecated.svg" alt="[Soft-deprecated]"></a>. See <code>sample_name</code>.</p></dd>
 
 
 <dt>variables_include</dt>
@@ -180,6 +185,10 @@ Default is FALSE.</p></dd>
 <span class="r-in"><span><span class="va">pbmc_small</span><span class="op">[[</span><span class="st">"batch"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"batch1"</span>, <span class="st">"batch2"</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pbmc_small</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sample_meta</span> <span class="op">&lt;-</span> <span class="fu">Extract_Sample_Meta</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_small</span>, sample_name <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The `sample_name` argument of `Extract_Sample_Meta()` is deprecated as of</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> scCustomize 3.2.1.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The {.code sample_name} parameter is soft-deprecated.  Please update code to</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   use `sample_col` instead.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Only return specific columns from meta data (orig.ident and batch)</span></span></span>
 <span class="r-in"><span><span class="va">sample_meta2</span> <span class="op">&lt;-</span> <span class="fu">Extract_Sample_Meta</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc_small</span>, sample_name <span class="op">=</span> <span class="st">"orig.ident"</span>,</span></span>
