@@ -179,7 +179,6 @@ kMeans_Elbow <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr filter
@@ -553,13 +552,11 @@ Figure_Plot <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
 #' @importFrom tidyr pivot_wider
@@ -590,6 +587,7 @@ Clustered_DotPlot_Single_Group <- function(
     print_exp_quantiles = FALSE,
     colors_use_idents = NULL,
     show_ident_colors = TRUE,
+    show_annotation_name = TRUE,
     x_lab_rotate = TRUE,
     plot_padding = NULL,
     flip = FALSE,
@@ -814,14 +812,16 @@ Clustered_DotPlot_Single_Group <- function(
                                                  col =  identity_colors_list,
                                                  na_col = "grey",
                                                  name = "Identity",
-                                                 show_legend = FALSE
+                                                 show_legend = FALSE,
+                                                 show_annotation_name = show_annotation_name
       )
     } else {
       column_ha <- ComplexHeatmap::HeatmapAnnotation(Identity = Identity,
                                                      col =  identity_colors_list,
                                                      na_col = "grey",
                                                      name = "Identity",
-                                                     show_legend = FALSE
+                                                     show_legend = FALSE,
+                                                     show_annotation_name = show_annotation_name
       )
     }
   } else {
@@ -1168,13 +1168,11 @@ Clustered_DotPlot_Single_Group <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr any_of filter select pull
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
 #' @importFrom stringr str_to_lower
@@ -1681,7 +1679,6 @@ Clustered_DotPlot_Multi_Group <- function(
 #'
 #' @return ggplot2 or patchwork object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr rename all_of arrange desc
@@ -1811,7 +1808,6 @@ Plot_Pie_Proportions <- function(
 #'
 #' @return ggplot2 or patchwork object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr rename all_of arrange desc
@@ -2089,4 +2085,29 @@ create_factor_hclust_rect <- function(
                     "y_axis" = rect_df2)
 
   return(rect_list)
+}
+
+
+#' Get plot limits from ggplot2 object
+#'
+#' @param plot ggplot2 object to get axis limits from
+#'
+#' @returns list with x and y axis min and max values
+#' @noRd
+#'
+#' @import ggplot2
+#'
+#' @references Function from StackOverflow \url{https://stackoverflow.com/a/40304848}
+#'
+
+get_plot_limits <- function(
+    plot
+) {
+  gb = ggplot_build(plot)
+  xmin = gb$layout$panel_params[[1]]$x.range[1]
+  xmax = gb$layout$panel_params[[1]]$x.range[2]
+  ymin = gb$layout$panel_params[[1]]$y.range[1]
+  ymax = gb$layout$panel_params[[1]]$y.range[2]
+  plot_limits <- list(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
+  return(plot_limits)
 }

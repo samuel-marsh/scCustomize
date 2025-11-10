@@ -138,7 +138,6 @@ Cells.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #' @importFrom dplyr all_of select filter
 #' @importFrom magrittr "%>%"
@@ -239,7 +238,6 @@ WhichCells.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #'
 #' @export
@@ -304,7 +302,6 @@ Embeddings.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #' @importFrom dplyr pull
 #' @importFrom magrittr "%>%"
@@ -354,7 +351,6 @@ Idents.liger <- function(
 #'
 #' @concept liger_object_util
 #'
-#' @import cli
 #' @import Seurat
 #'
 #' @export
@@ -401,12 +397,39 @@ Idents.liger <- function(
 
 Fetch_Meta.liger <- function(
     object,
+    columns = NULL,
     ...
 ) {
   if (packageVersion(pkg = 'rliger') > "1.0.1") {
-    object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE)
+    if (is.null(x = columns)) {
+      object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE)
+    } else {
+      object_meta <- rliger::cellMeta(x = object, as.data.frame = TRUE, columns = columns)
+    }
   } else {
     object_meta <- object_meta <- slot(object = object, name = "cell.data")
+
+    # pull specific columns
+    if (!is.null(x = columns)) {
+      # check columns are present
+      meta_present <- Meta_Present(object = object, meta_col_names = columns, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+
+      found_meta <- meta_present[[1]]
+      if (length(x = found_meta) == 0) {
+        cli_abort(message = "None of the provided column names were present in object meta.data")
+      }
+
+      # report any unfound meta
+      bad_meta <- meta_present[[2]]
+      if (length(x = bad_meta) > 0) {
+        cli_warn(message = c("The following column names were not found in meta.data and were excluded:",
+                             "i" = "{.field {bad_meta}}"))
+      }
+
+      # select columns found
+      object_meta <- object_meta %>%
+        select(all_of(columns))
+    }
   }
 
   # return meta
@@ -427,7 +450,6 @@ Fetch_Meta.liger <- function(
 #'
 #' @return list or list of lists depending on `by_dataset` parameter
 #'
-#' @import cli
 #' @importFrom dplyr filter select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom utils packageVersion
@@ -521,7 +543,6 @@ Cells_by_Identities_LIGER <- function(
 #'
 #' @return data.frame with dataset names, number of cells per dataset and if provided other meta data
 #'
-#' @import cli
 #' @importFrom dplyr right_join join_by group_by slice
 #' @importFrom magrittr "%>%"
 #'
@@ -599,7 +620,6 @@ Dataset_Size_LIGER <- function(
 #'
 #' @return dataset name as character
 #'
-#' @import cli
 #' @importFrom dplyr filter pull
 #' @importFrom magrittr "%>%"
 #'
@@ -646,7 +666,6 @@ Get_Reference_LIGER <- function(
 #'
 #' @method Rename_Clusters liger
 #'
-#' @import cli
 #' @importFrom dplyr right_join
 #' @importFrom tibble rownames_to_column column_to_rownames
 #'
@@ -759,7 +778,6 @@ Rename_Clusters.liger <- function(
 #'
 #' @return liger object
 #'
-#' @import cli
 #' @importFrom dplyr pull filter
 #' @importFrom magrittr "%>%"
 #' @importFrom utils packageVersion
@@ -878,7 +896,6 @@ Subset_LIGER <- function(
 
 #' @method Top_Genes_Factor liger
 #'
-#' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @export
@@ -907,9 +924,9 @@ Top_Genes_Factor.liger <- function(
   }
 
   # check number of factors present
-  if (!factor %in% 1:dim(x = object@W)[[1]]) {
+  if (!factor %in% 1:dim(x = object@W)[[1]] && factor != "all") {
     cli_abort(message = c("{.code liger_factor} provided: {.field {factor}} not found",
-                          "i" = "{.code object} only contains {.field {dim(x = object@W)[[1]]}} factors.")
+                          "i" = "{.code object} only contains {.field {dim(x = object@W)[[2]]}} factors.")
     )
   }
 
@@ -954,8 +971,6 @@ Top_Genes_Factor.liger <- function(
 #' @param reduction reduction name to pull loadings for.  Only valid if supplying a Seurat object.
 #'
 #' @return correlation matrix
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -1056,8 +1071,6 @@ Find_Factor_Cor <- function(
 #' chicken).  Default is FALSE.
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
-#'
-#' @import cli
 #'
 #' @return A liger Object
 #'
@@ -1231,10 +1244,8 @@ Add_Cell_QC_Metrics.liger <- function(
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
-#' @import cli
 #' @importFrom dplyr mutate select intersect
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang ":="
 #' @importFrom tibble rownames_to_column column_to_rownames
 #' @importFrom utils packageVersion
 #'
@@ -1461,7 +1472,6 @@ Add_Mito_Ribo.liger <- function(
 #' @param overwrite Logical.  Whether to overwrite existing an meta.data column.  Default is FALSE meaning that
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #'
-#' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @method Add_Cell_Complexity liger
@@ -1530,7 +1540,6 @@ Add_Cell_Complexity.liger <- function(
 #' contain internal regex/feature lists (human, mouse, marmoset, zebrafish, rat, drosophila, and
 #' rhesus macaque).  Default is FALSE.
 #'
-#' @import cli
 #' @importFrom magrittr "%>%"
 #'
 #' @method Add_Hemo liger
@@ -1701,10 +1710,8 @@ Add_Hemo.liger <- function(
 #' function will abort if column with name provided to `meta_col_name` is present in meta.data slot.
 #' @param verbose logical, whether to print messages with status updates, default is TRUE.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of bind_rows
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #'
 #' @return A liger Object
 #'
@@ -1837,7 +1844,6 @@ Add_Top_Gene_Pct.liger <- function(
 #'
 #' @return A LIGER Object with variable genes in correct slot.
 #'
-#' @import cli
 #' @importFrom utils packageVersion
 #'
 #' @references Matching function parameter text descriptions are taken from `rliger::selectGenes`
@@ -1881,7 +1887,7 @@ Variable_Features_ALL_LIGER <- function(
     cli_inform(message = "Normalizing and identifying variable features.")
 
     temp_liger <- rliger::normalize(object = temp_liger)
-    temp_liger <- rliger::selectGenes(object = temp_liger, thresh = var.thresh, alpha = alpha.thresh, chunk = chunk)
+    temp_liger <- rliger::selectGenes(object = temp_liger, thresh = var.thresh, alpha = alpha.thresh, chunk = chunk, nGenes = num_genes)
     if (isTRUE(x = do.plot)) {
       print(rliger::plotVarFeatures(object = temp_liger, dotSize = pt.size))
     }

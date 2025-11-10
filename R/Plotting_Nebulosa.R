@@ -21,12 +21,9 @@
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 # #' @importFrom Nebulosa plot_density
-#' @importFrom rlang is_installed
-#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'
@@ -141,11 +138,9 @@ Plot_Density_Custom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
+#' @import patchwork
 # #' @importFrom Nebulosa plot_density
-#' @importFrom rlang is_installed
-#' @importFrom SeuratObject DefaultDimReduc
 #'
 #' @export
 #'

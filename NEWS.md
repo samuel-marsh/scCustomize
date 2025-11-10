@@ -1,3 +1,36 @@
+# scCustomize 3.2.1 (2025-11-07)  
+## Added  
+- Added new function `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of variance conferred by PCs.  See manual for more details.  
+- Added new function `Map_New_Meta` to enable mapping of existing meta.data column to new variable.  
+- Added `split_downsample` parameter to `DimPlot_scCustom` to downsample each group when splitting plots to the number of cells in the smallest group.  
+- Added `show_annotation_name` parameter to `Clustered_DotPlot` to control whether annotation name is shown next to color bar on plot. Thanks @Biase-lab, ([#243](https://github.com/samuel-marsh/scCustomize/issues/243)).  
+- Added `no_file_prefix` to `Read_CellBender_h5_Multi_Directory` to allow for situations where file does not share folder name as prefix, default is FALSE. Thanks @pedro-fr, ([#242](https://github.com/samuel-marsh/scCustomize/issues/242)).  
+- Added `columnns` parameter to `Fetch_Meta` to allow for return of select meta data columns instead of all columns (default remains returning all columns).  
+- Added support for VDJ B metrics in `Read_Metrics_10X`.  
+- Added support for Antibody Capture metrics in `Read_Metrics_10X`.  
+
+
+## Changed  
+- **BREAKING CHANGE** The `sample_name` parameter has been soft-deprecated in `Extract_Sample_Meta`.  Please use `sample_col` instead.  Using `sample_name` will warn user but still work until scCustomize v3.3.0.  
+- Updated messages in `Random_Cells_Downsample`.  
+- Full deprecation of `Add_Top_Gene_Pct_Seurat`, see current `Add_Top_Gene_Pct` function.  
+- Full deprecation of `Liger_to_Seurat` see `as.Seurat` for LIGER v1.0 objects or `rliger::ligerToSeurat` for LIGER v2.0+ objects.  
+- Updated `Iterate_Cluster_Highlight_Plot` to use consistent `pt.size` across all plots if `pt.size = NULL` in function call.  
+  
+
+
+## Fixes  
+- Fixed calculation of number of cells x number of features in `VlnPlot_scCustom` to properly rasterize plot if total is greater than 200,000.  Thanks @DavideBrex, ([#244](https://github.com/samuel-marsh/scCustomize/issues/244)).  
+- Fixed issue with `Read_Metrics_10X` for outputs when `cellranger_multi = TRUE` and Cell Ranger v9+ was used to process data.  Thanks @lisch7, ([#245](https://github.com/samuel-marsh/scCustomize/issues/245)).  
+- Fixed bug in `Proportion_Plot_per_Sample` due to missing parameter internally when pulling meta data and orig.ident did not represent sample IDs.  
+- Fixed bug in `Top_Genes_Factor` for LIGER objects when setting `factor = "all"`. Thanks @theAeon, ([#247](https://github.com/samuel-marsh/scCustomize/issues/247)).  
+- Fixed bug in `Update_HGNC_Symbols` due to error reading HGNC file.  Thanks @MD-Paris, ([#248](https://github.com/samuel-marsh/scCustomize/issues/248)).  
+- Fixed bug in `Variable_Features_ALL_LIGER` that didn't pass `num_genes` parameter correctly to LIGER v2+ objects.  
+  
+
+
+
+
 # scCustomize 3.2.0 (2025-09-09)  
 ## Added  
 - Added cNMF vignette.  

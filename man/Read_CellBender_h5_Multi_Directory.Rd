@@ -11,6 +11,7 @@ Read_CellBender_h5_Multi_Directory(
   custom_name = NULL,
   sample_list = NULL,
   sample_names = NULL,
+  no_file_prefix = FALSE,
   h5_group_name = NULL,
   feature_slot_name = "features",
   replace_suffix = FALSE,
@@ -37,6 +38,8 @@ read in subdirectories in parent directory.}
 \item{sample_names}{a set of sample names to use for each sample entry in returned list.  If \code{NULL} will
 set names to the subdirectory name of each sample.  NOTE: unless \code{sample_list} is specified this will
 rename files in the order they are read which will be alphabetical.}
+
+\item{no_file_prefix}{logical, whether or not the file has prefix identical to folder name. Default is TRUE.}
 
 \item{h5_group_name}{Name of the group within H5 file that contains count data.  This is only
 required if H5 file contains multiple subgroups and non-default names.  Default is \code{NULL}.}

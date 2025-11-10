@@ -10,6 +10,7 @@ Random_Cells_Downsample(
   group.by = NULL,
   return_list = FALSE,
   allow_lower = FALSE,
+  entire_object = FALSE,
   seed = 123
 )
 }
@@ -29,6 +30,9 @@ FALSE.}
 maximum number of cells, default is FALSE.  If FALSE will report error message if \code{num_cells} is
 too high, if TRUE will subset cells with more than \code{num_cells} to that value and those with less
 than \code{num_cells} will not be downsampled.}
+
+\item{entire_object}{logical, whether to downsample to specific number of cells across whole object,
+instead of number of cells per identity, default is FALSE.}
 
 \item{seed}{random seed to use for downsampling.  Default is 123.}
 }

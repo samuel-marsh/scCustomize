@@ -481,7 +481,6 @@ QC_Plots_Complexity <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom Seurat VlnPlot
 #' @importFrom patchwork wrap_plots
@@ -576,7 +575,6 @@ QC_Plots_Combined_Vln <- function(
 #'
 #' @return A patchwork object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom dplyr filter

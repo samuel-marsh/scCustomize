@@ -15,7 +15,6 @@
 #' See \code{\link[SeuratObject]{merge}}.
 #' @param project Project name for the Seurat object. See \code{\link[SeuratObject]{merge}}.
 #'
-#' @import cli
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr reduce
 #'
@@ -195,7 +194,71 @@ ReFilter_SeuratObject <- function(
 }
 
 
+# Downsample Seurat Object
+#
+# Randomly downsample Seurat object by given number of cells per group (or by group with smallest number of cells)
+#
+# @param seurat_object name of Seurat object
+# @param num_cells number of cells per ident to use in down-sampling.  This value must be less than or
+# equal to the size of ident with fewest cells.  Alternatively, can set to "min" which will
+# use the maximum number of barcodes based on size of smallest group.
+# @param group.by The ident to use to group cells.  Default is NULL which use current active.ident.  .
+# @param allow_lower logical, if number of cells in identity is lower than `num_cells` keep the
+# maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
+# too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
+# than `num_cells` will not be downsampled.
+# @param entire_object logical, whether to downsample to specific number of cells across whole object,
+# instead of number of cells per identity, default is FALSE.
+# @param seed random seed to use for downsampling.  Default is 123.
+#
+# @returns Seurat object with randomly downsampled cells.
+#
+# @export
+#
+# @examples
+# \dontrun{
+# # Downsample specific number of cells per group
+# obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000)
+#
+# # Downsample specific number of cells per group but allow groups to have fewer cells
+# # if they don't have number provided
+# obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = 1000, allow_lower = TRUE)
+#
+# # Downsample by number of cells in the smallest group
+# obj_sub <- Downsample_Seurat(seurat_object = obj, num_cells = "min")
+# }
+#
 
+# Downsample_Seurat <- function(
+#     seurat_object,
+#     num_cells,
+#     group.by = NULL,
+#     allow_lower = FALSE,
+#     entire_object = FALSE,
+#     as_object = FALSE,
+#     object_sample_method = c("random", "LeverageData", "geosketch"),
+#     seed = 123
+# ) {
+#   # Check seurat
+#   Is_Seurat(seurat_object = seurat_object)
+#
+#   if (isFALSE(x = entire_object)) {
+#     # set ident in case of NULL
+#     group.by <- group.by %||% "ident"
+#
+#     # Check and set idents if not "ident"
+#     if (group.by != "ident") {
+#       group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+#     }
+#   }
+#
+#   # check sample method
+#   downsample_cells <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = num_cells, group.by = group.by, allow_lower = allow_lower, entire_object = entire_object, seed = seed, return_list = FALSE)
+#
+#   # subset object
+#   seurat_object <- subset(x = seurat_object, cells = downsample_cells)
+#   return(seurat_object)
+# }
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -213,7 +276,6 @@ ReFilter_SeuratObject <- function(
 #' rownames (to be compatible with `Seurat::AddMetaData`).  Default is FALSE.
 #' @param barcodes_colname name of barcodes column in meta_data.  Required if `barcodes_to_rownames = TRUE`.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
@@ -282,7 +344,6 @@ Meta_Remove_Seurat <- function(
 #' should the current `seurat_object@meta.data` columns be overwritten.  Default is FALSE.  This parameter
 #' excludes values provided to `join_by_seurat` and `join_by_meta`.
 #'
-#' @import cli
 #' @importFrom data.table fread
 #' @importFrom dplyr select left_join all_of
 #' @importFrom magrittr "%>%"
@@ -419,8 +480,9 @@ Add_Sample_Meta <- function(
 #' quick view of sample breakdown, meta data table creation, and/or use in pseudobulk analysis
 #'
 #' @param object Seurat or LIGER object
-#' @param sample_name meta.data column to use as sample.  Output data.frame will contain one row per
+#' @param sample_col meta.data column to use as sample.  Output data.frame will contain one row per
 #' level or unique value in this variable.
+#' @param sample_name `r lifecycle::badge("soft-deprecated")`. See `sample_name`.
 #' @param variables_include `@meta.data` columns to keep in final data.frame.  All other columns will
 #' be discarded.  Default is NULL.
 #' @param variables_exclude columns to discard in final data.frame.  Many cell level columns are
@@ -437,7 +499,6 @@ Add_Sample_Meta <- function(
 #'
 #' @return Returns a data.frame with one row per `sample_name`.
 #'
-#' @import cli
 #' @importFrom dplyr any_of grouped_df select slice
 #' @importFrom magrittr "%>%"
 #'
@@ -462,17 +523,27 @@ Add_Sample_Meta <- function(
 
 Extract_Sample_Meta <- function(
   object,
-  sample_name = "orig.ident",
+  sample_col = "orig.ident",
+  sample_name = deprecated(),
   variables_include = NULL,
   variables_exclude = NULL,
   include_all = FALSE
 ) {
+  # check deprecation
+  if (is_present(sample_name)) {
+    deprecate_warn(when = "3.2.1",
+                   what = "Extract_Sample_Meta(sample_name)",
+                   details = c("i" = "The {.code sample_name} parameter is soft-deprecated.  Please update code to use `sample_col` instead.")
+    )
+    sample_col <- sample_name
+  }
+
   # Pull meta data
   meta_df <- Fetch_Meta(object = object)
 
   # Check sample name parameter is present
-  if (!sample_name %in% colnames(x = meta_df)) {
-    cli_abort(message = "The {.code sample_name} parameter: {.val {sample_name}} was not found in object meta.data")
+  if (!sample_col %in% colnames(x = meta_df)) {
+    cli_abort(message = "The {.code sample_col} parameter: {.val {sample_col}} was not found in object meta.data")
   }
 
   if (!is.null(x = variables_include) && !is.null(x = variables_exclude) && include_all) {
@@ -536,7 +607,7 @@ Extract_Sample_Meta <- function(
 
   # Create by sample data.frame
   sample_meta_df <- meta_df %>%
-    grouped_df(vars = sample_name) %>%
+    grouped_df(vars = sample_col) %>%
     slice(1)
 
   # remove rownames
@@ -548,7 +619,7 @@ Extract_Sample_Meta <- function(
   } else {
     if (length(x = include_meta_list[[1]]) > 0) {
       sample_meta_df_filtered <- sample_meta_df %>%
-        select(any_of(c(include_meta_list[[1]], sample_name)))
+        select(any_of(c(include_meta_list[[1]], sample_col)))
       if (length(x = exclude_meta_list[[1]]) > 0) {
         sample_meta_df_filtered <- sample_meta_df_filtered %>%
           select(-any_of(exclude_meta_list[[1]]))
@@ -574,12 +645,126 @@ Extract_Sample_Meta <- function(
 
 Fetch_Meta.Seurat <- function(
     object,
+    columns = NULL,
     ...
 ) {
   # Pull meta data
   object_meta <- slot(object = object, name = "meta.data")
 
+  # pull specific columns
+  if (!is.null(x = columns)) {
+    # check columns are present
+    meta_present <- Meta_Present(object = object, meta_col_names = columns, omit_warn = FALSE, print_msg = FALSE, return_none = TRUE)
+
+    found_meta <- meta_present[[1]]
+    if (length(x = found_meta) == 0) {
+      cli_abort(message = "None of the provided column names were present in object meta.data")
+    }
+
+    # report any unfound meta
+    bad_meta <- meta_present[[2]]
+    if (length(x = bad_meta) > 0) {
+      cli_warn(message = c("The following column names were not found in meta.data and were excluded:",
+                           "i" = "{.field {bad_meta}}"))
+    }
+
+    # select columns found
+    object_meta <- object_meta %>%
+      select(all_of(columns))
+  }
+
+  # return meta data
   return(object_meta)
+}
+
+
+#' Create new variable from categories in meta.data
+#'
+#' Designed for fast variable creation when a new variable is going to be created from existing
+#' variable. For example, mapping multiple samples to experimental condition.
+#'
+#' @param seurat_object name of Seurat object
+#' @param from current column in meta.data to map from
+#' @param new_col name of new column in meta.data to add new mapped variable. If NULL (default)
+#' will return the variable. If name provided will return Seurat object with new variable added.
+#' @param ... Mapping criteria, argument names are original existing categories
+#' in the `from` calumn and values are new categories in the new variable.
+#'
+#' @returns if `new_col = NULL` returns factor else returns Seurat object with new variable added.
+#'
+#' @importFrom dplyr pull
+#' @importFrom magrittr "%>%"
+#'
+#' @references This function is slightly modified version of LIGER function \code{\link[rliger]{mapCellMeta}}
+#' to allow functionality with Seurat objects. \url{https://github.com/welch-lab/liger}. (License: GPL-3).
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' seurat_object <- Map_New_Meta(seurat_object, from = "orig.ident", new_col = "Treatment",
+#' "1" = "Ctrl", "2" = "Treated", "3" = "Treated", "4" = "Ctrl")
+#'}
+#'
+
+Map_New_Meta <- function(
+    seurat_object,
+    from,
+    new_col = NULL,
+    ...
+) {
+  # Check Seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # check single variable
+  if (length(x = from) > 1) {
+    cli_abort(messsage = "The function only supports single variable provided to {.code from}.")
+  }
+
+  # pul meta data
+  from <- Fetch_Meta(object = seurat_object, columns = from) %>%
+    pull()
+
+  # check for NAs
+  if (isTRUE(x = anyNA(x = from))) {
+    cli_abort(message = c("The meta data column {.field {from}} contains {.val NA} values.",
+                          "i" = "Replace/remove NAs before using function."))
+  }
+
+  # check if factor
+  if (isFALSE(x = is.factor(x = from))) {
+    from <- factor(x = from)
+  }
+
+  # Map variables
+  mapping <- list(...)
+  fromCats <- names(x = mapping)
+  notFound <- fromCats[!fromCats %in% levels(from)]
+
+  # Report if variable not found
+  if (length(notFound) > 0) {
+    cli_abort(message = c("The following variables were not found in {.field {from}}: {.field {notFound}}",
+                          "i" = "{.field {notFound}}"))
+  }
+
+  # Map variables continued
+  toCats <- unlist(x = mapping)
+  unchangedCats <- levels(x = from)
+  unchangedCats <- unchangedCats[!unchangedCats %in% fromCats]
+  names(x = unchangedCats) <- unchangedCats
+  if (length(x = unchangedCats) > 0)
+    toCats <- c(toCats, unchangedCats)
+  to <- toCats[as.character(from)]
+  to <- factor(x = unname(to), levels = unique(toCats))
+
+  # return new mapping if `new_col` is NULL
+  if (is.null(x = new_col)) {
+    return(to)
+  } else {
+    # Add to seurat object and return
+    seurat_object[[new_col]] <- to
+    return(seurat_object)
+  }
 }
 
 
@@ -599,9 +784,10 @@ Fetch_Meta.Seurat <- function(
 #' maximum number of cells, default is FALSE.  If FALSE will report error message if `num_cells` is
 #' too high, if TRUE will subset cells with more than `num_cells` to that value and those with less
 #' than `num_cells` will not be downsampled.
+#' @param entire_object logical, whether to downsample to specific number of cells across whole object,
+#' instead of number of cells per identity, default is FALSE.
 #' @param seed random seed to use for downsampling.  Default is 123.
 #'
-#' @import cli
 #' @importFrom dplyr filter
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column column_to_rownames
@@ -634,74 +820,96 @@ Random_Cells_Downsample <- function(
     group.by = NULL,
     return_list = FALSE,
     allow_lower = FALSE,
+    entire_object = FALSE,
     seed = 123
 ) {
-  # Check seurat
+  # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # set ident in case of NULL
-  group.by <- group.by %||% "ident"
+  if (isFALSE(x = entire_object)) {
+    # set ident in case of NULL
+    group.by <- group.by %||% "ident"
 
-  # Check and set idents if not "ident"
-  if (group.by != "ident") {
-    group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
+    # Check and set idents if not "ident"
+    if (group.by != "ident") {
+      group.by <- Meta_Present(object = seurat_object, meta_col_names = group.by, print_msg = FALSE, omit_warn = FALSE)[[1]]
 
-    Idents(object = seurat_object) <- group.by
-  }
-
-  # get barcodes
-  cluster_barcodes <- FetchData(object = seurat_object, vars = "ident") %>%
-    rownames_to_column("barcodes")
-
-  # get unique ident vector
-  idents_all <- as.character(x = levels(x = Idents(object = seurat_object)))
-
-  # Find minimum length ident and warn if num_cells not equal or lower
-  min_cells <- CellsByIdentities(object = seurat_object)
-  ident_lengths <- lengths(x = min_cells)
-  min_cells <- min(ident_lengths)
-  min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
-
-  if (isFALSE(x = allow_lower)) {
-    # set num_cells if value is "min"
-    if (num_cells == "min") {
-      cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
-                             "{col_green({symbol$tick})} Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
-      num_cells <- min_cells
+      Idents(object = seurat_object) <- group.by
     }
 
-    # check size of num_cells
-    if (min_cells < num_cells) {
-      cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity.",
-                            "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
-    }
-  }
+    # get barcodes
+    cluster_barcodes <- FetchData(object = seurat_object, vars = "ident") %>%
+      rownames_to_column("barcodes")
 
-  # set values if force
-  if (isTRUE(x = allow_lower)) {
-    num_cells <- unlist(x = lapply(1:length(x = ident_lengths), function(x){
-      val <- ident_lengths[x]
-      val <- replace(val, val < num_cells, val)
-      val <- replace(val, val > num_cells, num_cells)
-      val
-    }))
+    # get unique ident vector
+    idents_all <- as.character(x = levels(x = Idents(object = seurat_object)))
+
+    # Find minimum length ident and warn if num_cells not equal or lower
+    min_cells <- CellsByIdentities(object = seurat_object)
+    ident_lengths <- lengths(x = min_cells)
+    min_cells <- min(ident_lengths)
+    min_cell_ident <- names(x = which(x = ident_lengths ==  min(ident_lengths)))
+
+    if (isFALSE(x = allow_lower)) {
+      # set num_cells if value is "min"
+      if (num_cells == "min") {
+        cli_inform(message = c("The number of cells was set to {.val min}, returning {.field {min_cells}} cells per identity class (equal to size of smallest identity class(es): {.val {min_cell_ident}}).",
+                               "{col_green({symbol$tick})} Total of {.field {min_cells * length(x = idents_all)}} cells across whole object."))
+        num_cells <- min_cells
+      }
+
+      # check size of num_cells
+      if (min_cells < num_cells) {
+        cli_abort(message = c("The {.code num_cells} value ({.field {num_cells}}) must be lower than or equal to the number of cells in the smallest identity if {.code allow_lower = FALSE}.",
+                              "i" = "The identity/identities {.val {min_cell_ident}} contains {.field {min_cells}} cells)."))
+      }
+    }
+
+    # set values if force
+    if (isTRUE(x = allow_lower)) {
+      num_cells <- unlist(x = lapply(1:length(x = ident_lengths), function(x){
+        val <- ident_lengths[x]
+        val <- replace(val, val < num_cells, val)
+        val <- replace(val, val > num_cells, num_cells)
+        val
+      }))
+    } else {
+      num_cells <- rep(num_cells, length(x = idents_all))
+    }
+
+    # set seed and select random cells per ident
+    prev_seed <- get_seed()
+    on.exit(restore_seed(prev_seed), add = TRUE)
+    set.seed(seed = seed)
+
+    # get cells
+    random_cells <- lapply(1:length(x = idents_all), function(x) {
+      clus_barcodes <- cluster_barcodes %>%
+        filter(.data[["ident"]] == idents_all[x]) %>%
+        column_to_rownames("barcodes") %>%
+        rownames() %>%
+        sample(size = num_cells[x])
+    })
   } else {
-    num_cells <- rep(num_cells, length(x = idents_all))
+    # set seed and select random cells per ident
+    prev_seed <- get_seed()
+    on.exit(restore_seed(prev_seed), add = TRUE)
+    set.seed(seed = seed)
+
+    if (!is.null(x = group.by)) {
+      cli_inform(message = "The {.code group.by} parameter is ignored when {.field entire_object = TRUE}")
+    }
+    cli_inform(message = "")
+
+    # get cells
+    random_cells <- sample(x = Cells(x = seurat_object), size = num_cells)
   }
-
-  # set seed and select random cells per ident
-  set.seed(seed = seed)
-
-  random_cells <- lapply(1:length(x = idents_all), function(x) {
-    clus_barcodes <- cluster_barcodes %>%
-      filter(.data[["ident"]] == idents_all[x]) %>%
-      column_to_rownames("barcodes") %>%
-      rownames() %>%
-      sample(size = num_cells[x])
-  })
 
   # return downsampled cells
   if (isTRUE(x = return_list)) {
+    if (isTRUE(x = entire_object)) {
+      cli_warn(message = "Cannot return list when {.code entire_object = TRUE}, returning vector.")
+    }
     # return list
     return(random_cells)
   } else {
@@ -735,8 +943,6 @@ Random_Cells_Downsample <- function(
 #' @param verbose logical, whether to print messages when running function, default is TRUE.
 #'
 #' @return Seurat Object with new entries in the `@misc` slot.
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -900,7 +1106,6 @@ Store_Palette_Seurat <- function(
 #' @param overwrite logical, whether to overwrite item with the same `data_name` in the
 #' `@misc` slot of object (default is FALSE).
 #'
-#' @import cli
 #' @importFrom dplyr filter
 #'
 #' @return Seurat Object with new entries in the `obj@misc` slot.

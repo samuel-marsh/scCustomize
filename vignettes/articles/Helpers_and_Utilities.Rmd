@@ -59,10 +59,10 @@ pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(pbmc)
 ```
 
-We'll add some random meta data variables to pbmc data form use in this vignette
+We'll add some random meta data variables to pbmc data form use in this vignette.  See below for usage for scCustomize function `Map_New_Meta`.  
 ```{r}
 pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
-pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+pbmc <- Map_New_Meta(seurat_object = pbmc, from = "sample_id", new_col = "Batch", "sample1" = "Batch1", "sample2" = "Batch1", "sample3" = "Batch1", "sample4" = "Batch2", "sample5" = "Batch2", "sample6" = "Batch2")
 ```
 
 ## Add All Cell QC Metrics with Single Function  
@@ -90,7 +90,7 @@ For more details on cell QC metrics and the functions available in scCustomize p
 
 
 
-## Meta Data  
+## Meta Data (Add, Modify, Extract)  
 scCustomize contains a set of functions to aid in use of meta data both within and outside of objects.  
 
 ```{r, include = FALSE}
@@ -98,7 +98,7 @@ pbmc <- pbmc3k.SeuratData::pbmc3k
 pbmc <- UpdateSeuratObject(object = pbmc)
 
 pbmc$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(pbmc), replace = TRUE)
-pbmc$batch <- sample(c("Batch1", "Batch2"), size = ncol(pbmc), replace = TRUE)
+pbmc <- Map_New_Meta(seurat_object = pbmc, from = "sample_id", new_col = "Batch", "sample1" = "Batch1", "sample2" = "Batch1", "sample3" = "Batch1", "sample4" = "Batch2", "sample5" = "Batch2", "sample6" = "Batch2")
 ```
 
 
@@ -180,6 +180,22 @@ obj <- Add_Sample_Meta(seurat_object = obj, meta_data = sample_meta, join_by_seu
 ```
 
 
+### Map new meta data  
+In addition to adding sample level meta data directly scCustomize also contains helper function `Map_New_Meta` to create new meta.data variable based on an existing variable.  For instance, mapping a new column called "Treatment" on the basis on sample ID.  
+
+```{r}
+pbmc <- Map_New_Meta(seurat_object = pbmc, from = "sample_id", new_col = "Treatment", "sample1" = "Treated", "sample2" = "Control", "sample3" = "Control", "sample4" = "Treated", "sample5" = "Treated", "sample6" = "Control")
+new_meta <- Extract_Sample_Meta(pbmc, sample_col = "sample_id")
+```
+
+```{r echo=FALSE}
+new_meta %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+
+
 ### Add feature meta data  
 Starting in Seurat V5 each assay now possess it's own meta.data slot which is feature-level meta data.  During course of normal analysis this is where information on variable features is stored.  However, we can also use it to store alternate feature names, in most cases this is Ensembl IDs matching the symbols used in object creation/analysis.
 
@@ -244,7 +260,7 @@ check_symbols <- UpdateSymbolList(symbols = genes_present[[2]], verbose = TRUE)
 ```
 
 
-## Merging & Splitting Data/Objects
+## Merging & Splitting Layers/Objects
 
 ### Merging raw data
 It can often be advantageous to merge raw data before creating analysis objects vs creating lots of objects and merging them all later.  scCustomize features a modified version of the internal LIGER function `MergeSparseDataAll()`.
@@ -289,6 +305,64 @@ pbmc <- Split_Layers(seurat_object = pbmc, split.by = "sample_id")
 ```
 
 `Split_Layers()` defaults to "RNA" assay but can be used for any assay present in object (users should check whether splitting assay other than "RNA" is valid before proceeding).
+
+
+## Downsampling Objects/Cells  
+scCustomize also contains functions to make random downsampling of object or getting a random downsampling of cells easy.  
+
+To get a random downsampling of cells you can use the `Random_Cells_Downsample` function.  This can be especially helpful to create a subset of cells to use for plotting so that different conditions are equally represented in the plot.
+
+### Downsampling Cells  
+One use case for getting a random downsample of cells is when plotting a cell-level heatmap. In this case the most important information being conveyed is the pattern of gene expression not the number of cells in each cluster.  To aid in this visualization we can randomly downsample the number of cells to be equal across clusters.  
+
+
+For this example we will remove the platelets from pbmc3k object as there are only a few of them and then plot heatmap of marker genes.
+
+```{r include=FALSE}
+pbmc_noplatelet <- pbmc3k.SeuratData::pbmc3k.final
+pbmc_noplatelet <- UpdateSeuratObject(pbmc_noplatelet)
+pbmc_noplatelet$sample_id <- sample(c("sample1", "sample2", "sample3", "sample4", "sample5", "sample6"), size = ncol(x = pbmc_noplatelet), replace = TRUE)
+pbmc_noplatelet <- Map_New_Meta(seurat_object = pbmc_noplatelet, from = "sample_id", new_col = "Batch", "sample1" = "Batch1", "sample2" = "Batch1", "sample3" = "Batch1", "sample4" = "Batch2", "sample5" = "Batch2", "sample6" = "Batch2")
+pbmc_noplatelet <- subset(pbmc_noplatelet, idents = "Platelet", invert = TRUE)
+```
+
+```{r eval=FALSE}
+pbmc_noplatelet <- subset(pbmc, idents = "Platelet", invert = TRUE)
+```
+
+First lets look at the number of cells in each cluster.
+```{r}
+cells_per_cluster <- Cluster_Stats_All_Samples(seurat_object = pbmc_noplatelet)
+```
+
+```{r echo=FALSE}
+cells_per_cluster %>%
+  kableExtra::kbl(row.names = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("bordered", "condensed", "responsive", "striped")) 
+```
+
+Now with `Random_Cells_Downsample` we can either set a number of cells per identity or we can tell it to get the a number of cells per identity equal to size of the smallest identity.
+
+```{r}
+downsample_min <- Random_Cells_Downsample(seurat_object = pbmc_noplatelet, num_cells = "min")
+```
+
+However, 32 cells is pretty small for heatmap so lets get 100 cells per identity.  Since DCs only have 32 cells we will set `allow_lower = TRUE` so that for any identities with less than 100 cells it will return all of the cells in that identity.
+```{r}
+downsample_150 <- Random_Cells_Downsample(seurat_object = pbmc_noplatelet, num_cells = 150, allow_lower = TRUE)
+```
+
+
+Now let's get the top 5 markers for each cluster and plot them.
+```{r}
+cluster_markers <- FindAllMarkers(object = pbmc_noplatelet) %>% 
+  Add_Pct_Diff()
+
+top5 <- Extract_Top_Markers(marker_dataframe = cluster_markers, num_features = 5, rank_by = "pct_diff")
+
+DoHeatmap(object = pbmc_noplatelet, features = top5, cells = downsample_150)
+```
+
 
 
 ## Storing Misc Information in Seurat Objects

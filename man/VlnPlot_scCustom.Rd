@@ -50,7 +50,7 @@ default is the current active.ident of the object.}
 \item{num_columns}{Number of columns in plot layout.  Only valid if \code{split.by != NULL}.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
-greater than 100,000 total points plotted (# Cells x # of features).}
+greater than 200,000 total points plotted (# Cells x # of features).}
 
 \item{add.noise}{logical, determine if adding a small noise for plotting (Default is TRUE).}
 

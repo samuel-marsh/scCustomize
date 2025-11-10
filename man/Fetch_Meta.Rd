@@ -7,14 +7,16 @@
 \alias{Fetch_Meta.Seurat}
 \title{Get meta data from object}
 \usage{
-Fetch_Meta(object, ...)
+Fetch_Meta(object, columns = NULL, ...)
 
-\method{Fetch_Meta}{liger}(object, ...)
+\method{Fetch_Meta}{liger}(object, columns = NULL, ...)
 
-\method{Fetch_Meta}{Seurat}(object, ...)
+\method{Fetch_Meta}{Seurat}(object, columns = NULL, ...)
 }
 \arguments{
 \item{object}{Object of class Seurat or liger.}
+
+\item{columns}{optional, name(s) of columns to return. Default is NULL; returns all columns}
 
 \item{...}{Arguments passed to other methods}
 }

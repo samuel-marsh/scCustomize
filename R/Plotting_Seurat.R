@@ -46,7 +46,6 @@
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom methods hasArg
@@ -466,7 +465,6 @@ FeaturePlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom Seurat FeaturePlot
@@ -596,7 +594,7 @@ FeaturePlot_DualAssay <- function(
 #' @param median_size Shape size for the median is plotted.
 #' @param idents Which classes to include in the plot (default is all).
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
-#' greater than 100,000 total points plotted (# Cells x # of features).
+#' greater than 200,000 total points plotted (# Cells x # of features).
 #' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
@@ -607,7 +605,6 @@ FeaturePlot_DualAssay <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import patchwork
 #' @import ggrastr
 #' @importFrom Seurat VlnPlot
@@ -688,9 +685,9 @@ VlnPlot_scCustom <- function(
     if (pt.size == 0) {
       raster <- FALSE
     } else {
-      if (length(x = num_cells) * length(x = all_found_features) > 100000 && pt.size != 0) {
+      if (num_cells * length(x = all_found_features) > 100000 && pt.size != 0) {
         raster <- TRUE
-        cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+        cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
                                "i" = "To plot in vector form set {.code raster=FALSE}")
         )
       } else {
@@ -770,13 +767,12 @@ VlnPlot_scCustom <- function(
 #' @param pt.size Adjust point size for plotting.  Default for `Stacked_VlnPlot` is 0 to avoid issues with
 #' rendering so many points in vector form.  Alternatively, see `raster` parameter.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
-#' greater than 100,000 total points plotted (# Cells x # of features).
+#' greater than 200,000 total points plotted (# Cells x # of features).
 #' @param add.noise logical, determine if adding a small noise for plotting (Default is TRUE).
 #' @param ... Extra parameters passed to \code{\link[Seurat]{VlnPlot}}.
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom purrr map map_dbl map2
@@ -788,7 +784,7 @@ VlnPlot_scCustom <- function(
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
 #' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/stacked-violin-plot-for-visualizing-single-cell-data-in-seurat/}
-#' @seealso \url{https://twitter.com/tangming2005}
+#' @seealso \url{https://x.com/tangming2005}
 #'
 #' @examples
 #' library(Seurat)
@@ -838,9 +834,9 @@ Stacked_VlnPlot <- function(
   # Set rasterization
   num_cells <- length(x = Cells(x = seurat_object))
 
-  if (num_cells * length(x = all_found_features) > 100000 && is.null(x = raster) && pt.size != 0) {
+  if (num_cells * length(x = all_found_features) > 200000 && is.null(x = raster) && pt.size != 0) {
     raster <- TRUE
-    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 100,000.",
+    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
                            "i" = "To plot in vector form set {.code raster=FALSE}")
     )
   }
@@ -1034,6 +1030,8 @@ DotPlot_scCustom <- function(
 #' will use "varibow" with shuffle = TRUE both from `DiscretePalette_scCustomize`.
 #' @param show_ident_colors logical, whether to show colors for idents on the column/rows of the plot
 #' (default is TRUE).
+#' @param show_annotation_name logical, whether or not to show annotation name next to color bar.  Default is
+#' TRUE.
 #' @param x_lab_rotate How to rotate column labels.  By default set to `TRUE` which rotates labels 45 degrees.
 #' If set `FALSE` rotation is set to 0 degrees.  Users can also supply custom angle for text rotation.
 #' @param plot_padding if plot needs extra white space padding so no plot or labels are cutoff.
@@ -1091,13 +1089,11 @@ DotPlot_scCustom <- function(
 #'
 #' @return A ComplexHeatmap or if plot_km_elbow = TRUE a list containing ggplot2 object and ComplexHeatmap.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom circlize colorRamp2
 #' @importFrom dplyr any_of filter select
 #' @importFrom grid grid.circle grid.rect gpar
 #' @importFrom magrittr "%>%"
-#' @importFrom rlang is_installed
 #' @importFrom Seurat DotPlot
 #' @importFrom stats quantile
 #' @importFrom stringr str_to_lower
@@ -1109,7 +1105,7 @@ DotPlot_scCustom <- function(
 #'
 #' @author Ming Tang (Original Code), Sam Marsh (Wrap single function, added/modified functionality)
 #' @references \url{https://divingintogeneticsandgenomics.rbind.io/post/clustered-dotplot-for-single-cell-rnaseq/}
-#' @seealso \url{https://twitter.com/tangming2005}
+#' @seealso \url{https://x.com/tangming2005}
 #'
 #' @examples
 #' \donttest{
@@ -1131,6 +1127,7 @@ Clustered_DotPlot <- function(
   print_exp_quantiles = FALSE,
   colors_use_idents = NULL,
   show_ident_colors = TRUE,
+  show_annotation_name = TRUE,
   x_lab_rotate = TRUE,
   plot_padding = NULL,
   flip = FALSE,
@@ -1185,6 +1182,7 @@ Clustered_DotPlot <- function(
                                    print_exp_quantiles = print_exp_quantiles,
                                    colors_use_idents = colors_use_idents,
                                    show_ident_colors = show_ident_colors,
+                                   show_annotation_name = show_annotation_name,
                                    x_lab_rotate = x_lab_rotate,
                                    plot_padding = plot_padding,
                                    flip = flip,
@@ -1298,7 +1296,6 @@ Clustered_DotPlot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom dplyr filter
@@ -1511,7 +1508,6 @@ Cluster_Highlight_Plot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #'
@@ -1682,7 +1678,6 @@ Meta_Highlight_Plot <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #'
@@ -1825,6 +1820,8 @@ Cell_Highlight_Plot <- function(
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident);
 #' default is the current active.ident of the object.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
+#' @param split_downsample logical, whether to downsample the split plots by number of cells in the smallest group.
+#' Default is FALSE.
 #' @param split_seurat logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 #' individual plots in layout.  Default is FALSE.
 #' @param figure_plot logical.  Whether to remove the axes and plot with legend on left of plot denoting
@@ -1855,15 +1852,18 @@ Cell_Highlight_Plot <- function(
 #' @param num_columns Number of columns in plot layout.  Only valid if `split.by != NULL`.
 #' @param ggplot_default_colors logical.  If `colors_use = NULL`, Whether or not to return plot using
 #' default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.
+#' @param downsample_seed random seed to use when selecting random cells to downsample in plot.
+#' Default = 123.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
 #' @param ... Extra parameters passed to \code{\link[Seurat]{DimPlot}}.
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
+#' @importFrom dplyr filter pull
+#' @importFrom magrittr "%>%"
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
 #'
@@ -1871,7 +1871,7 @@ Cell_Highlight_Plot <- function(
 #'
 #' @references Many of the param names and descriptions are from Seurat to facilitate ease of use as
 #' this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
-#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
+#' `figure_plot` parameter/code modified from code by Tim Stuart via twitter: \url{https://x.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
 #'
 #' @concept seurat_plotting
 #'
@@ -1881,33 +1881,35 @@ Cell_Highlight_Plot <- function(
 #'
 
 DimPlot_scCustom <- function(
-  seurat_object,
-  colors_use = NULL,
-  pt.size = NULL,
-  reduction = NULL,
-  group.by = NULL,
-  split.by = NULL,
-  split_seurat = FALSE,
-  figure_plot = FALSE,
-  aspect_ratio = NULL,
-  add_prop_plot = FALSE,
-  prop_plot_percent = FALSE,
-  prop_plot_x_log = FALSE,
-  prop_plot_label = FALSE,
-  shuffle = TRUE,
-  seed = 1,
-  label = NULL,
-  label.size = 4,
-  label.color = 'black',
-  label.box = FALSE,
-  dims = c(1, 2),
-  repel = FALSE,
-  raster = NULL,
-  raster.dpi = c(512, 512),
-  num_columns = NULL,
-  ggplot_default_colors = FALSE,
-  color_seed = 123,
-  ...
+    seurat_object,
+    colors_use = NULL,
+    pt.size = NULL,
+    reduction = NULL,
+    group.by = NULL,
+    split.by = NULL,
+    split_downsample = FALSE,
+    split_seurat = FALSE,
+    figure_plot = FALSE,
+    aspect_ratio = NULL,
+    add_prop_plot = FALSE,
+    prop_plot_percent = FALSE,
+    prop_plot_x_log = FALSE,
+    prop_plot_label = FALSE,
+    shuffle = TRUE,
+    seed = 1,
+    label = NULL,
+    label.size = 4,
+    label.color = 'black',
+    label.box = FALSE,
+    dims = c(1, 2),
+    repel = FALSE,
+    raster = NULL,
+    raster.dpi = c(512, 512),
+    num_columns = NULL,
+    ggplot_default_colors = FALSE,
+    downsample_seed = 123,
+    color_seed = 123,
+    ...
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -2075,7 +2077,12 @@ DimPlot_scCustom <- function(
   } else {
     if (isTRUE(x = split_seurat)) {
       # Plot Seurat Splitting
-      plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      if (isTRUE(x = split_downsample)) {
+        cli_abort(message = "{.code split_downsample} requires {.split_seurat = FALSE}.")
+      } else {
+        plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+      }
+
       if (isTRUE(x = figure_plot)) {
 
         # pull axis labels
@@ -2152,14 +2159,36 @@ DimPlot_scCustom <- function(
 
       # Extract cell names per meta data list of values
       # Extract split.by list of values
-      if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-        split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
-      } else {
-        split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+      if (isFALSE(x = split_downsample)) {
+        if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+          split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+        } else {
+          split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
+        }
       }
 
-      cell_names <- lapply(split_by_list, function(x) {
-        row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+      if (isTRUE(x = split_downsample)) {
+        cells_split <- data.frame(table(seurat_object@meta.data[, split.by]))
+
+        # Identity with greatest number of cells
+        min_cells <- min(cells_split$Freq)
+
+        min_group <- cells_split %>%
+          filter(.data[["Freq"]] == min_cells) %>%
+          pull(.data[["Var1"]]) %>%
+          as.character()
+
+        cli_inform(message = "Downsampling plot to {.field {min_cells}} cells per category, based on group with fewest cells ({.val {min_group}}).")
+
+        cell_names <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = min_cells, group.by = split.by, return_list = TRUE, seed = downsample_seed)
+
+        names(x = cell_names) <- cells_split$Var1
+
+        split_by_list <- cells_split$Var1
+      } else {
+        cell_names <- lapply(split_by_list, function(x) {
+          row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
+      }
 
       # Unify colors across plots
       if (is.null(x = group.by)) {
@@ -2243,7 +2272,6 @@ DimPlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import patchwork
 #' @importFrom Seurat DimPlot
 #' @importFrom SeuratObject DefaultDimReduc
@@ -2477,7 +2505,6 @@ VariableFeaturePlot_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom magrittr "%>%"
@@ -2630,6 +2657,133 @@ FeatureScatter_scCustom <- function(
 }
 
 
+#' ElbowPlot with modifications
+#'
+#' Creates ElbowPlot with ability to calculate and plot cutoffs for amount of variance conferred by the PCs.
+#' Cutoff 1 is PC where principal components only contribute less than 5% of standard deviation and the principal components
+#' cumulatively contribute 90% of the standard deviation.
+#' Cutoff 2 is point where the percent change in variation between the consecutive PCs is less than 0.1%.
+#'
+#' @param seurat_object name of Seurat object
+#' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
+#' @param reduction The reduction to use, default is "pca"
+#' @param calc_cutoffs logical, whether or not to calculate the cutoffs, default is TRUE.
+#' @param plot_cutoffs lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
+#' @param line_colors colors for the cutoff lines, default is c("dodgerblue", "firebrick").
+#' @param linewidth widith of the cutoff lines, default is 0.5.
+#'
+#' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}.
+#'
+#' @import ggplot2
+#'
+#' @returns ggplot2 object
+#' @export
+#'
+#' @examples
+#' library(Seurat)
+#' ElbowPlot_scCustom(seurat_object = pbmc_small)
+#'
+
+ElbowPlot_scCustom <- function(
+    seurat_object,
+    ndims = NULL,
+    reduction = "pca",
+    calc_cutoffs = TRUE,
+    plot_cutoffs = TRUE,
+    line_colors = c("dodgerblue", "firebrick"),
+    linewidth = 0.5
+) {
+  # check seurat
+  Is_Seurat(seurat_object = seurat_object)
+
+  # set dims if NULL
+  if (is.null(x = ndims)) {
+    ndims <- ncol(x = Embeddings(seurat_object, reduction = reduction))
+  } else {
+    if (ndims > ncol(x = Embeddings(seurat_object, reduction = reduction))) {
+      cli_warn(message = c("Number of dimensions supplied ({.field {ndims}}) is greater than total dims for reduction {.val {reduction}} ({.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}).",
+                           "i" = "Setting {.code {ndims}} to max value of {.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}."))
+    }
+  }
+
+  # Calculate the cutoffs
+  if (isTRUE(x = plot_cutoffs) && isFALSE(x = calc_cutoffs)) {
+    cli_warn(message = c("{.code calc_cutoffs} cannot be {.field {FALSE}} if {.code plot_cutoffs} is {.field {TRUE}}.",
+                         "i" = "Setting {.code calc_cutoffs = TRUE}"))
+    calc_cutoffs <- TRUE
+  }
+
+  if (isTRUE(x = calc_cutoffs)) {
+    # pct var associated with each PC
+    pctVar <- seurat_object[[reduction]]@stdev / sum(seurat_object[[reduction]]@stdev) * 100
+
+    # calculate cumulative percents
+    cumPct <- cumsum(pctVar)
+
+    # Get cut-offs
+    co1 <- which(cumPct > 90 & pctVar < 5)[1]
+    co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = T)[1] + 1
+
+  }
+
+  if (length(x = line_colors) == 1) {
+    cli_inform(message = "Only one color provided to {.code line_colors} using same color for both cutoffs.")
+    line_colors <- rep(x = line_colors, times = 2)
+  }
+  if (length(x = line_colors) > 2 || length(x = line_colors) < 1) {
+    cli_abort(message = "The number of values provided to {.code line_colors} must be either 1 or 2.")
+  }
+
+  # Create plot
+  plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+
+  # Add cutoffs to plot
+  if (isTRUE(x = plot_cutoffs)) {
+    y_max <- get_plot_limits(plot)[["ymax"]]
+
+    # Adjust plot if ndims is less than cutoff values
+    if (co1 > ndims) {
+      co1_missing <- TRUE
+    } else {
+      co1_missing <- FALSE
+    }
+
+    if (co2 > ndims) {
+      co2_missing <- TRUE
+    } else {
+      co2_missing <- FALSE
+    }
+
+    if (isFALSE(x = co1_missing)) {
+      plot <- plot +
+        geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = linewidth) +
+        annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
+    } else {
+      plot <- plot +
+        annotate("text", x = 1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
+    }
+
+    if (isFALSE(x = co2_missing)) {
+      plot <- plot +
+        geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
+        annotate("text", x = co2, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
+    } else {
+      plot <- plot +
+        annotate("text", x = 1, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 0)
+    }
+  }
+
+  # print cutoffs if not plotting
+  if (isTRUE(x = calc_cutoffs) && isFALSE(x = plot_cutoffs)) {
+    cli_inform(message = c("i" = "The first cutoff is: {.field {co1}}.",
+                           "i" = "The second cutoff is: {.field {co2}}."))
+  }
+
+  # return plot
+  return(plot)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### SPATIAL PLOTTING ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2674,7 +2828,6 @@ FeatureScatter_scCustom <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom dplyr all_of pull
 #' @importFrom magrittr "%>%"

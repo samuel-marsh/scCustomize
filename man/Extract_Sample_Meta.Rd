@@ -6,7 +6,8 @@
 \usage{
 Extract_Sample_Meta(
   object,
-  sample_name = "orig.ident",
+  sample_col = "orig.ident",
+  sample_name = deprecated(),
   variables_include = NULL,
   variables_exclude = NULL,
   include_all = FALSE
@@ -15,8 +16,10 @@ Extract_Sample_Meta(
 \arguments{
 \item{object}{Seurat or LIGER object}
 
-\item{sample_name}{meta.data column to use as sample.  Output data.frame will contain one row per
+\item{sample_col}{meta.data column to use as sample.  Output data.frame will contain one row per
 level or unique value in this variable.}
+
+\item{sample_name}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{sample_name}.}
 
 \item{variables_include}{\verb{@meta.data} columns to keep in final data.frame.  All other columns will
 be discarded.  Default is NULL.}

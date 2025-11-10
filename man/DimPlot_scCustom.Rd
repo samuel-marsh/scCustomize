@@ -11,6 +11,7 @@ DimPlot_scCustom(
   reduction = NULL,
   group.by = NULL,
   split.by = NULL,
+  split_downsample = FALSE,
   split_seurat = FALSE,
   figure_plot = FALSE,
   aspect_ratio = NULL,
@@ -30,6 +31,7 @@ DimPlot_scCustom(
   raster.dpi = c(512, 512),
   num_columns = NULL,
   ggplot_default_colors = FALSE,
+  downsample_seed = 123,
   color_seed = 123,
   ...
 )
@@ -49,6 +51,9 @@ both from \code{DiscretePalette_scCustomize}.}
 default is the current active.ident of the object.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
+
+\item{split_downsample}{logical, whether to downsample the split plots by number of cells in the smallest group.
+Default is FALSE.}
 
 \item{split_seurat}{logical.  Whether or not to display split plots like Seurat (shared y axis) or as
 individual plots in layout.  Default is FALSE.}
@@ -99,6 +104,9 @@ Default is c(512, 512).}
 \item{ggplot_default_colors}{logical.  If \code{colors_use = NULL}, Whether or not to return plot using
 default ggplot2 "hue" palette instead of default "polychrome" or "varibow" palettes.}
 
+\item{downsample_seed}{random seed to use when selecting random cells to downsample in plot.
+Default = 123.}
+
 \item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
 groups plotted is greater than 36.  Default = 123.}
 
@@ -118,6 +126,6 @@ DimPlot_scCustom(seurat_object = pbmc_small)
 \references{
 Many of the param names and descriptions are from Seurat to facilitate ease of use as
 this is simply a wrapper to alter some of the default parameters \url{https://github.com/satijalab/seurat/blob/master/R/visualization.R} (License: GPL-3).
-\code{figure_plot} parameter/code modified from code by Tim Stuart via twitter: \url{https://twitter.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
+\code{figure_plot} parameter/code modified from code by Tim Stuart via twitter: \url{https://x.com/timoast/status/1526237116035891200?s=20&t=foJOF81aPSjr1t7pk1cUPg}.
 }
 \concept{seurat_plotting}

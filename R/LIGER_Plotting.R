@@ -248,7 +248,6 @@ DimPlot_LIGER <- function(
 #'
 #' @return A list of ggplot/patchwork objects and/or PDF file.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom patchwork wrap_plots

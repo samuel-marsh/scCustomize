@@ -57,8 +57,6 @@
 #'
 #' @param seurat_object Seurat object name.
 #'
-#' @import cli
-#'
 #' @return error if not Seurat object.
 #'
 #' @noRd
@@ -67,7 +65,7 @@
 Is_Seurat <- function(
   seurat_object
 ) {
-  if (!inherits(what = "Seurat", x = seurat_object)) {
+  if (isFALSE(x = inherits(what = "Seurat", x = seurat_object))) {
     cli_abort(message = "{.code seurat_object} provided is not an object of class: Seurat.")
   }
 }
@@ -79,8 +77,6 @@ Is_Seurat <- function(
 #'
 #' @param liger_object liger object name.
 #'
-#' @import cli
-#'
 #' @return error is not LIGER object
 #'
 #' @noRd
@@ -89,7 +85,7 @@ Is_Seurat <- function(
 Is_LIGER <- function(
   liger_object
 ) {
-  if (class(x = liger_object)[[1]] != "liger") {
+  if (isFALSE(x = inherits(what = "liger", x = liger_object))) {
     cli_abort(message = "{.code liger_object} provided is not an object of class: liger")
   }
 }
@@ -103,8 +99,6 @@ Is_LIGER <- function(
 #' @param assay_list vector of genes to check.
 #' @param print_msg logical. Whether message should be printed if all features are found.  Default is TRUE.
 #' @param omit_warn logical. Whether to print message about features that are not found in current object.
-#'
-#' @import cli
 #'
 #' @return List of found vs not found assays.
 #'
@@ -172,6 +166,7 @@ Assay_Present <- function(
 #'
 #' @noRd
 #'
+
 Assay5_Check <- function(
   seurat_object,
   assay = NULL
@@ -260,8 +255,6 @@ Feature_PreCheck <- function(
 #' @param assay Name of assay to check for normalized values within.
 #' @param error logical, whether the function errors if no normalized data is found (default is TRUE), or
 #' if value of the check is returned.
-#'
-#' @import cli
 #'
 #' @returns either error message, nothing, or logical value depending on `error` parameter.
 #' @noRd
@@ -393,8 +386,6 @@ glue_collapse_scCustom <- function(
 #' @references function modified from function in devtools R package (License: MIT) \url{https://github.com/r-lib/devtools}.
 #' @details \url{https://github.com/r-lib/devtools/blob/9f27cc3e6335e74d6f51ed331509ebda56747901/R/release.R#L147-L156}.
 #'
-#' @import cli
-#'
 #' @noRd
 #'
 
@@ -415,9 +406,6 @@ yesno <- function(msg, .envir = parent.frame()) {
 #' @param parameter the parameter to check for NULL
 #'
 #' @return if NULL returns NA otherwise returns input value.
-#'
-#'
-#' @import cli
 #'
 #' @noRd
 #'
@@ -446,9 +434,6 @@ replace_null <- function(
 #' @param extension the extension to check
 #'
 #' @return TRUE if extension is present otherwise FALSE
-#'
-#'
-#' @import cli
 #'
 #' @noRd
 #'
@@ -481,8 +466,6 @@ check_extension <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return vector of Ensembl Gene IDs
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -552,8 +535,6 @@ Retrieve_Ensembl_Mito <- function(
 #'
 #' @return vector of Ensembl Gene IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -617,8 +598,6 @@ Retrieve_Ensembl_Ribo <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return vector of Ensembl Gene IDs
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -684,8 +663,6 @@ Retrieve_Ensembl_Hemo <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return list of 3 sets of gene_symbols
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -769,8 +746,6 @@ Retrieve_MSigDB_Lists <- function(
 #'
 #' @return list of 3 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -852,8 +827,6 @@ Retrieve_MSigDB_Ensembl_Lists <- function(
 #'
 #' @return list of 2 sets of gene_symbols
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -916,8 +889,6 @@ Retrieve_IEG_Lists <- function(
 #'
 #' @return list of 2 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -979,8 +950,6 @@ Retrieve_IEG_Ensembl_Lists <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return list of 2 sets of gene_symbols
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1056,8 +1025,6 @@ Retrieve_exAM_Lists <- function(
 #'
 #' @return list of 2 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1132,8 +1099,6 @@ Retrieve_exAM_Ensembl_Lists <- function(
 #'
 #' @return vector of Ensembl Gene IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1197,8 +1162,6 @@ Retrieve_Ensembl_lncRNA <- function(
 #' @param species species to retrieve IDs.
 #'
 #' @return vector of Gene IDs
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1264,8 +1227,6 @@ Retrieve_lncRNA <- function(
 #' @param assay Assay to use (default is the current object default assay).
 #'
 #' @return vector of gene ids
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1356,8 +1317,6 @@ Retrieve_Dual_Mito_Features <- function(
 #'
 #' @return vector of gene ids
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1444,8 +1403,6 @@ Retrieve_Dual_Ribo_Features <- function(
 #'
 #' @return list of 2 sets of ensembl IDs
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -1522,8 +1479,6 @@ Retrieve_MALAT1_Ensembl_Lists <- function(
 #' `mito_ribo_name` is present in meta.data slot.
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1625,8 +1580,6 @@ Add_MSigDB_Seurat <- function(
 #' function will abort if columns with the name provided to `ieg_name` is present in meta.data slot.
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1736,8 +1689,6 @@ Add_IEG_Seurat <- function(
 #' function will abort if columns with the name provided to `lncRNA_name` is present in meta.data slot.
 #'
 #' @return Seurat object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -1856,7 +1807,6 @@ Add_lncRNA_Seurat <- function(
 #' @param return_plots logical, whether to return plots as part of the results of the function (default is FALSE).
 #' @param plot_title title to add to plot patchwork, default is NULL.
 #'
-#' @import cli
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom cowplot theme_cowplot
@@ -2034,8 +1984,6 @@ define_malat1_threshold <- function(
 #'
 #' @return list of found and not found features
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -2191,8 +2139,6 @@ PercentAbove_Seurat <- function(
 #' @references Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
 #' to generate values to use for plotting.  Source code can be found here:
 #' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'
@@ -2400,7 +2346,6 @@ check_whole_num <- function(
 #' Code modified to match scCustomize & tidyverse style, add error checks, and
 #' add cli formatted messages.
 #'
-#' @import cli
 #' @importFrom dplyr select all_of
 #' @importFrom magrittr "%>%"
 #'
@@ -2468,6 +2413,49 @@ Is_Color <- function(
 }
 
 
+#' Get current seed when needed in `RunLeiden`
+#'
+#' @param seed current seed
+#'
+#' @references from BPCells package Benjamin Parks
+#' https://github.com/bnprks/BPCells/blob/f2026c3509f5e2542f7624bdaf75669d5d45d78b/r/R/utils.R#L10
+#'
+#' @return current seed if set
+#'
+#' @keywords internal
+#'
+#' @noRd
+
+get_seed <- function() {
+  if (exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE)) {
+    return(get(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
+  } else {
+    return(NULL)
+  }
+}
+
+
+#' Restore previous seed when needed in `RunLeiden`
+#'
+#' @param seed old seed
+#
+#' @references from BPCells package Benjamin Parks
+#' https://github.com/bnprks/BPCells/blob/f2026c3509f5e2542f7624bdaf75669d5d45d78b/r/R/utils.R#L18
+#'
+#' @return old seed
+#'
+#' @keywords internal
+#'
+#' @noRd
+
+restore_seed <- function(seed) {
+  if (is.null(seed)) {
+    rm(".Random.seed", envir = globalenv(), inherits = FALSE)
+  } else {
+    assign(".Random.seed", seed, envir = globalenv(), inherits = FALSE)
+  }
+}
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### METRICS HELPERS ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2488,7 +2476,6 @@ Is_Color <- function(
 #'
 #' @return A data frame with sample metrics produced by Cell Ranger `count` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows setdiff
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
@@ -2570,7 +2557,6 @@ Metrics_Count_GEX <- function(
 #'
 #' @return A data frame with sample metrics produced by Cell Ranger `count` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr bind_rows setdiff filter select all_of rename
 #' @importFrom tibble column_to_rownames
@@ -2611,7 +2597,10 @@ Metrics_Count_GEX_v9plus <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -2711,7 +2700,6 @@ Metrics_Count_GEX_v9plus <- function(
 #'
 #' @return A data frame with sample gene expression metrics produced by Cell Ranger `multi` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
@@ -2754,7 +2742,11 @@ Metrics_Multi_GEX <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c("Median UMI counts per cell",
+                                           "Median genes per cell",
+                                           "Median reads per cell",
+                                           "Total genes detected")
+             & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Gene Expression") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -2768,22 +2760,43 @@ Metrics_Multi_GEX <- function(
       as.numeric(gsub(",", "", x))})
 
     # Rename multi columns to match names from count
-    names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
-                          Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
-                          Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
-                          Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
-                          Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
-                          Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
-                          Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
-                          Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
-                          Estimated.Number.of.Cells = "Estimated.number.of.cells",
-                          Mean.Reads.per.Cell = "Mean.reads.per.cell",
-                          Median.Genes.per.Cell = "Median.genes.per.cell",
-                          Number.of.Reads = "Number.of.reads",
-                          Valid.Barcodes = "Valid.barcodes",
-                          Sequencing.Saturation = "Sequencing.saturation",
-                          Total.Genes.Detected = "Total.genes.detected",
-                          Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+    if ("Estimated.number.of.cells" %in% colnames(x = raw_data_gex)) {
+      # Rename multi columns to match names from count
+      names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                            Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                            Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                            Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                            Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                            Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                            Estimated.Number.of.Cells = "Estimated.number.of.cells",
+                            Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                            Median.Genes.per.Cell = "Median.genes.per.cell",
+                            Number.of.Reads = "Number.of.reads",
+                            Valid.Barcodes = "Valid.barcodes",
+                            Sequencing.Saturation = "Sequencing.saturation",
+                            Total.Genes.Detected = "Total.genes.detected",
+                            Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+    } else {
+      # Rename multi columns to match names from count
+      names_to_replace <- c(Reads.Mapped.to.Genome = "Mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Genome = "Confidently.mapped.to.genome",
+                            Reads.Mapped.Confidently.to.Intergenic.Regions = "Confidently.mapped.to.intergenic.regions",
+                            Reads.Mapped.Confidently.to.Intronic.Regions = "Confidently.mapped.to.intronic.regions",
+                            Reads.Mapped.Confidently.to.Exonic.Regions = "Confidently.mapped.to.exonic.regions",
+                            Reads.Mapped.Confidently.to.Transcriptome = "Confidently.mapped.to.transcriptome",
+                            Reads.Mapped.Antisense.to.Gene = "Confidently.mapped.antisense",
+                            Fraction.Reads.in.Cells = "Confidently.mapped.reads.in.cells",
+                            Estimated.Number.of.Cells = "Cells",
+                            Mean.Reads.per.Cell = "Mean.reads.per.cell",
+                            Median.Genes.per.Cell = "Median.genes.per.cell",
+                            Number.of.Reads = "Number.of.reads",
+                            Valid.Barcodes = "Valid.barcodes",
+                            Sequencing.Saturation = "Sequencing.saturation",
+                            Total.Genes.Detected = "Total.genes.detected",
+                            Median.UMI.Counts.per.Cell = "Median.UMI.counts.per.cell")
+    }
 
     raw_data_gex <- raw_data_gex %>%
       rename(all_of(names_to_replace))
@@ -2833,7 +2846,6 @@ Metrics_Multi_GEX <- function(
 #'
 #' @return A data frame with sample VDJ T metrics produced by Cell Ranger `multi` pipeline.
 #'
-#' @import cli
 #' @import pbapply
 #' @importFrom dplyr all_of bind_rows filter select setdiff
 #' @importFrom magrittr "%>%"
@@ -2870,12 +2882,26 @@ Metrics_Multi_VDJT <- function(
     VDJ_T_Metrics <- raw_data %>%
       filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
-      column_to_rownames("Metric.Name") %>%
+      column_to_rownames("Metric.Name")
+
+    current_metrics <- rownames(x = VDJ_T_Metrics)
+
+    VDJ_T_Metrics <- VDJ_T_Metrics %>%
       t() %>%
       data.frame()
 
+    remaining_metrics <- setdiff(x = c("Cells with productive TRA contig",
+                                       "Cells with productive TRB contig",
+                                       "Cells with productive V-J spanning (TRA, TRB) pair",
+                                       "Cells with productive V-J spanning pair",
+                                       "Median TRA UMIs per Cell",
+                                       "Median TRB UMIs per Cell",
+                                       "Number of cells with productive V-J spanning pair",
+                                       "Paired clonotype diversity"),
+                                 y = current_metrics)
+
     VDJ_T_Metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
       ) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
@@ -2917,6 +2943,231 @@ Metrics_Multi_VDJT <- function(
 }
 
 
+#' Read VDJ B Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all VDJ B metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample VDJ B metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' vdj_multi_metrics <- Metrics_Multi_VDJB(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_VDJB <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+) {
+  cli_inform(message = "Reading {.field VDJ B} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
+
+    VDJ_B_Metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ B") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name")
+
+    current_metrics <- rownames(x = VDJ_B_Metrics)
+
+    VDJ_B_Metrics <- VDJ_B_Metrics %>%
+      t() %>%
+      data.frame()
+
+    remaining_metrics <- setdiff(x = c("Cells with productive IGH contig",
+                                       "Cells with productive IGK contig",
+                                       "Cells with productive IGL contig",
+                                       "Cells with productive V-J spanning (IGK, IGH) pair",
+                                       "Cells with productive V-J spanning (IGL, IGH) pair",
+                                       "Cells with productive V-J spanning pair",
+                                       "Median IGH UMIs per Cell",
+                                       "Median IGK UMIs per Cell",
+                                       "Median IGL UMIs per Cell",
+                                       "Number of cells with productive V-J spanning pair",
+                                       "Paired clonotype diversity"),
+                                 y = current_metrics)
+
+    VDJ_B_Metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_vdjb <- cbind(VDJ_B_Metrics, VDJ_B_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_vdjb[1, ])
+    raw_data_vdjb[, c(column_numbers)] <- lapply(raw_data_vdjb[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjb[1, ])
+    all_columns <- 1:ncol(x = raw_data_vdjb)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_vdjb[,c(column_numbers_numeric)] <- lapply(raw_data_vdjb[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_vdjb)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
+
+#' Read Antibody Capture Statistics from 10X Cell Ranger multi
+#'
+#' Get data.frame with all Antibody Capture metrics from the Cell Ranger `multi` analysis (present in web_summary.html)
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to count "outs/" folder which contains the
+#' "metrics_summary.csv" file.
+#' @param default_10X logical (default TRUE) sets the secondary path variable to the default 10X directory structure.
+#' @param lib_list a list of sample names (matching directory names) to import.  If `NULL` will read
+#' in all samples in parent directory.
+#' @param lib_names a set of sample names to use for each sample.  If `NULL` will set names to the
+#' directory name of each sample.
+#'
+#' @return A data frame with sample Antibody Capture metrics produced by Cell Ranger `multi` pipeline.
+#'
+#' @import pbapply
+#' @importFrom dplyr all_of bind_rows filter select setdiff
+#' @importFrom magrittr "%>%"
+#' @importFrom tibble column_to_rownames
+#' @importFrom utils txtProgressBar setTxtProgressBar read.csv
+#'
+#' @keywords internal
+#'
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' abc_multi_metrics <- Metrics_Multi_ABC(base_path = base_path, lib_list = lib_list, secondary_path = secondary_path, lib_names = lib_names)
+#' }
+#'
+
+Metrics_Multi_ABC <- function(
+    lib_list,
+    base_path,
+    secondary_path,
+    lib_names
+) {
+  cli_inform(message = "Reading {.field Antibody Capture} Metrics")
+
+  raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
+    if (is.null(x = secondary_path)) {
+      file_path <- file.path(base_path, lib_list[x])
+    } else {
+      file_path <- file.path(base_path, lib_list[x], secondary_path, lib_list[x])
+    }
+
+    raw_data <- read.csv(file = file.path(file_path, "metrics_summary.csv"), stringsAsFactors = FALSE)
+
+    ABC_Metrics <- raw_data %>%
+      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "Antibody Capture") %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name")
+
+    current_metrics <- rownames(x = ABC_Metrics)
+
+    ABC_Metrics <- ABC_Metrics %>%
+      t() %>%
+      data.frame()
+
+    remaining_metrics <- setdiff(x = c("Antibody reads in cells",
+                                        "Fraction antibody reads",
+                                        "Fraction antibody reads in aggregate barcodes",
+                                        "Mean antibody reads usable per cell",
+                                        "Median UMI counts per cell",
+                                        "Number of reads from cells associated with this sample"),
+                                  y = current_metrics)
+
+    ABC_Metrics2 <- raw_data %>%
+      filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Antibody Capture"
+      ) %>%
+      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+      column_to_rownames("Metric.Name") %>%
+      t() %>%
+      data.frame()
+
+    raw_data_abc <- cbind(ABC_Metrics, ABC_Metrics2)
+
+    column_numbers <- grep(pattern = ",", x = raw_data_abc[1, ])
+    raw_data_abc[, c(column_numbers)] <- lapply(raw_data_abc[, c(column_numbers)], function(x) {
+      as.numeric(gsub(",", "", x))})
+
+    column_numbers_pct <- grep(pattern = "%", x = raw_data_abc[1, ])
+    all_columns <- 1:ncol(x = raw_data_abc)
+
+    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+    raw_data_abc[,c(column_numbers_numeric)] <- lapply(raw_data_abc[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+
+    return(raw_data_abc)
+  })
+
+  # Name the list items
+  if (is.null(x = lib_names)) {
+    names(x = raw_data_list) <- lib_list
+  } else {
+    names(x = raw_data_list) <- lib_names
+  }
+
+  # Combine the list and add sample_id column
+  full_data <- bind_rows(raw_data_list, .id = "sample_id")
+
+  # Change column nams to use "_" separator instead of "." for readability
+  colnames(x = full_data) <- gsub(pattern = "\\.", replacement = "_", x = colnames(x = full_data))
+
+  rownames(x = full_data) <- full_data$sample_id
+
+  return(full_data)
+}
+
+
 #' Read single Summary Statistics csv from 10X Cell Ranger Count or Multi
 #'
 #' Get data.frame with all metrics from the Cell Ranger `count` analysis or list of data.frames if using Cell Ranger `multi`.
@@ -2926,7 +3177,6 @@ Metrics_Multi_VDJT <- function(
 #'
 #' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
-#' @import cli
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble column_to_rownames
@@ -2981,7 +3231,10 @@ Metrics_Single_File <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -3036,7 +3289,14 @@ Metrics_Single_File <- function(
       data.frame()
 
     VDJ_T_Metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
+      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig",
+                                           "Cells with productive TRB contig",
+                                           "Cells with productive V-J spanning (TRA, TRB) pair",
+                                           "Cells with productive V-J spanning pair",
+                                           "Median TRA UMIs per Cell",
+                                           "Median TRB UMIs per Cell",
+                                           "Number of cells with productive V-J spanning pair",
+                                           "Paired clonotype diversity")
       ) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
@@ -3077,9 +3337,9 @@ Metrics_Single_File <- function(
 #'
 #' @return A data frame or list of data.frames with sample metrics from cell ranger.
 #'
-#' @import cli
 #' @importFrom dplyr all_of bind_rows filter rename select setdiff
 #' @importFrom magrittr "%>%"
+#' @importFrom purrr compact
 #' @importFrom tibble column_to_rownames
 #' @importFrom utils txtProgressBar setTxtProgressBar read.csv
 #'
@@ -3111,7 +3371,10 @@ Metrics_Single_File_v9plus <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -3185,6 +3448,8 @@ Metrics_Single_File_v9plus <- function(
     cli_inform(message = "Reading {.field Gene Expression} Metrics")
     raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
+    modalities <- unique(x = raw_data[["Library.Type"]])
+
     # Change format to column based and select relevant metrics
     GEX_metrics <- raw_data %>%
       filter(.data[["Grouped.By"]] == "Physical library ID" & .data[["Library.Type"]] == "Gene Expression") %>%
@@ -3194,7 +3459,10 @@ Metrics_Single_File_v9plus <- function(
       data.frame()
 
     GEX_metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell", "Median genes per cell", "Median reads per cell", "Total genes detected"))) %>%
+      filter(.data[["Metric.Name"]] %in% c(c("Median UMI counts per cell",
+                                             "Median genes per cell",
+                                             "Median reads per cell",
+                                             "Total genes detected"))) %>%
       select(all_of(c("Metric.Name", "Metric.Value"))) %>%
       column_to_rownames("Metric.Name") %>%
       t() %>%
@@ -3261,44 +3529,168 @@ Metrics_Single_File_v9plus <- function(
 
     rownames(x = raw_data_gex) <- NULL
 
-    # Get VDJT metrics
-    raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+    if ("VDJ T" %in% modalities) {
+      # Get VDJT metrics
+      cli_inform(message = "Reading {.field VDJ T} Metrics")
+      raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
 
-    VDJ_T_Metrics <- raw_data %>%
-      filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
-      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
-      column_to_rownames("Metric.Name") %>%
-      t() %>%
-      data.frame()
+      VDJ_T_Metrics <- raw_data %>%
+        filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ T") %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name")
 
-    VDJ_T_Metrics2 <- raw_data %>%
-      filter(.data[["Metric.Name"]] %in% c("Cells with productive TRA contig", "Cells with productive TRB contig", "Cells with productive V-J spanning (TRA, TRB) pair", "Cells with productive V-J spanning pair", "Median TRA UMIs per Cell", "Median TRB UMIs per Cell", "Number of cells with productive V-J spanning pair", "Paired clonotype diversity")
-      ) %>%
-      select(all_of(c("Metric.Name", "Metric.Value"))) %>%
-      column_to_rownames("Metric.Name") %>%
-      t() %>%
-      data.frame()
+      current_metrics <- rownames(x = VDJ_T_Metrics)
 
-    raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
+      VDJ_T_Metrics <- VDJ_T_Metrics %>%
+        t() %>%
+        data.frame()
 
-    column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
-    raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
-      as.numeric(gsub(",", "", x))})
+      remaining_metrics <- setdiff(x = c("Cells with productive TRA contig",
+                                         "Cells with productive TRB contig",
+                                         "Cells with productive V-J spanning (TRA, TRB) pair",
+                                         "Cells with productive V-J spanning pair",
+                                         "Median TRA UMIs per Cell",
+                                         "Median TRB UMIs per Cell",
+                                         "Number of cells with productive V-J spanning pair",
+                                         "Paired clonotype diversity"),
+                                   y = current_metrics)
 
-    column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
-    all_columns <- 1:ncol(x = raw_data_vdjt)
+      VDJ_T_Metrics2 <- raw_data %>%
+        filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ T"
+        ) %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name") %>%
+        t() %>%
+        data.frame()
 
-    column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+      raw_data_vdjt <- cbind(VDJ_T_Metrics, VDJ_T_Metrics2)
 
-    raw_data_vdjt[, c(column_numbers_numeric)] <- lapply(raw_data_vdjt[, c(column_numbers_numeric)], function(x) {
-      as.numeric(x)})
+      column_numbers <- grep(pattern = ",", x = raw_data_vdjt[1, ])
+      raw_data_vdjt[, c(column_numbers)] <- lapply(raw_data_vdjt[, c(column_numbers)], function(x) {
+        as.numeric(gsub(",", "", x))})
+
+      column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjt[1, ])
+      all_columns <- 1:ncol(x = raw_data_vdjt)
+
+      column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+      raw_data_vdjt[, c(column_numbers_numeric)] <- lapply(raw_data_vdjt[, c(column_numbers_numeric)], function(x) {
+        as.numeric(x)})
+    } else {
+      raw_data_vdjt <- NULL
+    }
+
+    # VDJ B Metrics
+    if ("VDJ B" %in% modalities) {
+      # Get VDJB metrics
+      cli_inform(message = "Reading {.field VDJ B} Metrics")
+      raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+
+      VDJ_B_Metrics <- raw_data %>%
+        filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "VDJ B") %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name")
+
+      current_metrics <- rownames(x = VDJ_T_Metrics)
+
+      VDJ_B_Metrics <- VDJ_T_Metrics %>%
+        t() %>%
+        data.frame()
+
+      remaining_metrics <- setdiff(x = c("Cells with productive IGH contig",
+                                         "Cells with productive IGK contig",
+                                         "Cells with productive IGL contig",
+                                         "Cells with productive V-J spanning (IGK, IGH) pair",
+                                         "Cells with productive V-J spanning (IGL, IGH) pair",
+                                         "Cells with productive V-J spanning pair",
+                                         "Median IGH UMIs per Cell",
+                                         "Median IGK UMIs per Cell",
+                                         "Median IGL UMIs per Cell",
+                                         "Number of cells with productive V-J spanning pair",
+                                         "Paired clonotype diversity"),
+                                   y = current_metrics)
+
+      VDJ_B_Metrics2 <- raw_data %>%
+        filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "VDJ B"
+        ) %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name") %>%
+        t() %>%
+        data.frame()
+
+      raw_data_vdjb <- cbind(VDJ_B_Metrics, VDJ_B_Metrics2)
+
+      column_numbers <- grep(pattern = ",", x = raw_data_vdjb[1, ])
+      raw_data_vdjb[, c(column_numbers)] <- lapply(raw_data_vdjb[, c(column_numbers)], function(x) {
+        as.numeric(gsub(",", "", x))})
+
+      column_numbers_pct <- grep(pattern = "%", x = raw_data_vdjb[1, ])
+      all_columns <- 1:ncol(x = raw_data_vdjb)
+
+      column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+      raw_data_vdjb[,c(column_numbers_numeric)] <- lapply(raw_data_vdjb[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    } else {
+      raw_data_vdjb <- NULL
+    }
+
+    # Antibody Capture Metrics
+    if ("Antibody Capture" %in% modalities) {
+      # Get ABC metrics
+      cli_inform(message = "Reading {.field Antibody Capture} Metrics")
+      raw_data <- read.csv(file = base_path, stringsAsFactors = FALSE)
+
+      ABC_Metrics <- raw_data %>%
+        filter(.data[["Grouped.By"]]== "Physical library ID" & .data[["Library.Type"]] == "Antibody Capture") %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name")
+
+      current_metrics <- rownames(x = ABC_Metrics)
+
+      ABC_Metrics <- ABC_Metrics %>%
+        t() %>%
+        data.frame()
+
+      remaining_metrics <- setdiff(x = c("Antibody reads in cells",
+                                          "Fraction antibody reads",
+                                          "Fraction antibody reads in aggregate barcodes",
+                                          "Mean antibody reads usable per cell",
+                                          "Median UMI counts per cell",
+                                          "Number of reads from cells associated with this sample"),
+                                    y = current_metrics)
+
+      ABC_Metrics2 <- raw_data %>%
+        filter(.data[["Metric.Name"]] %in% remaining_metrics & .data[["Grouped.By"]]== "" & .data[["Library.Type"]] == "Antibody Capture"
+        ) %>%
+        select(all_of(c("Metric.Name", "Metric.Value"))) %>%
+        column_to_rownames("Metric.Name") %>%
+        t() %>%
+        data.frame()
+
+      raw_data_abc <- cbind(ABC_Metrics, ABC_Metrics2)
+
+      column_numbers <- grep(pattern = ",", x = raw_data_abc[1, ])
+      raw_data_abc[, c(column_numbers)] <- lapply(raw_data_abc[, c(column_numbers)], function(x) {
+        as.numeric(gsub(",", "", x))})
+
+      column_numbers_pct <- grep(pattern = "%", x = raw_data_abc[1, ])
+      all_columns <- 1:ncol(x = raw_data_abc)
+
+      column_numbers_numeric <- setdiff(x = all_columns, y = column_numbers_pct)
+
+      raw_data_abc[,c(column_numbers_numeric)] <- lapply(raw_data_abc[,c(column_numbers_numeric)],function(x){as.numeric(x)})
+    } else {
+      raw_data_abc <- NULL
+    }
 
     # combine outputs into a list
-    data_list <- list(
-      multi_gex_metrics = raw_data_gex,
-      multi_vdjt_metrics = raw_data_vdjt
+    data_list <- compact(
+      list(
+        multi_gex_metrics = raw_data_gex,
+        multi_vdjt_metrics = raw_data_vdjt,
+        multi_vdjb_metrics = raw_data_vdjb,
+        multi_abc_metrics = raw_data_abc)
     )
-
     # return data list
     return(data_list)
   }
@@ -3332,8 +3724,6 @@ Metrics_Single_File_v9plus <- function(
 #' Internal function to download and cache the latest version of HGNC dataset for use with renaming genes.
 #'
 #' @param update logical, whether to manually override update parameters and download new data.
-#'
-#' @import cli
 #'
 #' @return path to data cache
 #'
@@ -3377,13 +3767,12 @@ download_hgnc_data <- function(
 }
 
 
-#' Download HGNC Dataset
+#' Download MGI Dataset
 #'
-#' Internal function to download and cache the latest version of HGNC dataset for use with renaming genes.
+#' Internal function to download and cache the latest version of MGI dataset for use with renaming genes.
 #'
 #' @param update logical, whether to manually override update parameters and download new data.
 #'
-#' @import cli
 #'
 #' @return path to data cache
 #'
@@ -3450,7 +3839,7 @@ process_hgnc_data <- function(
   to
 ) {
   # read in data
-  hgnc_full_data <- data.table::fread(file = from, data.table = FALSE)
+  hgnc_full_data <- data.table::fread(file = from, data.table = FALSE, fill = TRUE)
 
   # filter data: Approved Genes > select relevant categories
   hgnc_filtered_data <- hgnc_full_data %>%

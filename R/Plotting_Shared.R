@@ -34,7 +34,6 @@
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom cowplot theme_cowplot
 #' @importFrom dplyr arrange any_of

@@ -11,8 +11,6 @@
 #'
 #' @return name of default dimensionality reduction
 #'
-#' @import cli
-#'
 #' @noRd
 #'
 #' @concept liger_object_util
@@ -44,8 +42,6 @@ Default_DimReduc_LIGER <- function(
 #' @param liger_object LIGER object name.
 #'
 #' @return name of default clustering
-#'
-#' @import cli
 #'
 #' @noRd
 #'
@@ -138,7 +134,7 @@ Generate_Plotting_df_LIGER <- function(
   tsne_df[["Cluster"]] <- clusters[c_names]
 
   if (isTRUE(x = shuffle)) {
-    set.seed(shuffle_seed)
+    set.seed(seed = shuffle_seed)
     idx <- sample(x = 1:nrow(x = tsne_df))
     tsne_df <- tsne_df[idx, ]
   }
@@ -186,7 +182,7 @@ Generate_Plotting_df_LIGER2 <- function(
   reduc_df[["Cluster"]] <- clusters
 
   if (isTRUE(x = shuffle)) {
-    set.seed(shuffle_seed)
+    set.seed(seed = shuffle_seed)
     idx <- sample(x = 1:nrow(reduc_df))
     reduc_df <- reduc_df[idx, ]
   }
@@ -1011,7 +1007,6 @@ Plot_By_Meta_LIGER2 <- function(
 #'
 #' @return A list of ggplot/patchwork objects and/or PDF file.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom patchwork wrap_plots
@@ -1312,7 +1307,6 @@ plotFactors_liger2_scCustom <- function(
 #'
 #' @return A list of ggplot/patchwork objects and/or PDF file.
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom patchwork wrap_plots
@@ -2107,8 +2101,6 @@ LIGER2_DimPlot <- function(
 #'
 #' @return liger object
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -2225,8 +2217,6 @@ Add_MSigDB_LIGER <- function(
 #'
 #' @return liger object
 #'
-#' @import cli
-#'
 #' @keywords internal
 #'
 #' @noRd
@@ -2312,8 +2302,6 @@ Add_IEG_LIGER <- function(
 #' function will abort if columns with the name provided to `lncRNA_name` is present in meta data slot.
 #'
 #' @return liger object
-#'
-#' @import cli
 #'
 #' @keywords internal
 #'

@@ -167,6 +167,7 @@ Add_Cell_QC_Metrics <- function(object, ...) {
 #' Quick function to properly pull meta.data from objects.
 #'
 #' @param object Object of class Seurat or liger.
+#' @param columns optional, name(s) of columns to return. Default is NULL; returns all columns
 #' @param ... Arguments passed to other methods
 #'
 #' @return A data.frame containing cell-level meta data
@@ -183,7 +184,7 @@ Add_Cell_QC_Metrics <- function(object, ...) {
 #' head(meta_data, 5)
 #'
 
-Fetch_Meta <- function(object, ...) {
+Fetch_Meta <- function(object, columns = NULL, ...) {
   UseMethod(generic = "Fetch_Meta", object = object)
 }
 

@@ -8,7 +8,6 @@
 #' @param order_by_freq logical, whether the data.frame should be ordered by frequency of
 #' identity (default; TRUE), or by cluster/fector order (FALSE).
 #'
-#' @import cli
 #' @importFrom dplyr left_join rename all_of arrange desc
 #' @importFrom janitor adorn_totals
 #' @importFrom magrittr "%>%"
@@ -113,7 +112,6 @@ Cluster_Stats_All_Samples <- function(
 #' @param sample_col column name in meta.data that contains sample ID information.  Default is NULL and
 #' will use "orig.ident column
 #'
-#' @import cli
 #' @importFrom dplyr rename
 #' @importFrom magrittr "%>%"
 #' @importFrom tibble rownames_to_column
@@ -184,8 +182,6 @@ Cells_per_Sample <- function(
 #' @references Part of code is modified from Seurat package as used by \code{\link[Seurat]{DotPlot}}
 #' to generate values to use for plotting.  Source code can be found here:
 #' \url{https://github.com/satijalab/seurat/blob/4e868fcde49dc0a3df47f94f5fb54a421bfdf7bc/R/visualization.R#L3391} (License: GPL-3).
-#'
-#' @import cli
 #'
 #' @export
 #'
@@ -524,7 +520,6 @@ MAD_Stats <- function(
 #' @return A data.frame containing summed raw counts, CellBender counts, count difference, and
 #' percent difference in counts.
 #'
-#' @import cli
 #' @importFrom dplyr arrange desc left_join mutate
 #' @importFrom magrittr "%>%"
 #' @importFrom Matrix rowSums

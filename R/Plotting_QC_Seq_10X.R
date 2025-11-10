@@ -19,10 +19,8 @@
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -155,10 +153,8 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -291,10 +287,8 @@ Seq_QC_Plot_Number_Cells <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -417,10 +411,8 @@ Seq_QC_Plot_Genes <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -543,10 +535,8 @@ Seq_QC_Plot_UMIs <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -669,11 +659,9 @@ Seq_QC_Plot_Total_Genes <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -802,11 +790,9 @@ Seq_QC_Plot_Saturation <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -935,11 +921,9 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1067,11 +1051,9 @@ Seq_QC_Plot_Transcriptome <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1199,11 +1181,9 @@ Seq_QC_Plot_Genome <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1331,11 +1311,9 @@ Seq_QC_Plot_Intergenic <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1463,11 +1441,9 @@ Seq_QC_Plot_Intronic <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1595,11 +1571,9 @@ Seq_QC_Plot_Exonic <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom ggbeeswarm geom_quasirandom
 #' @importFrom scales label_percent
-#' @importFrom rlang is_installed
 #' @importFrom utils combn
 #'
 #' @export
@@ -1735,7 +1709,6 @@ Seq_QC_Plot_Antisense <- function(
 #'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout plot_annotation
-#' @importFrom rlang is_installed
 #' @importFrom stringr str_wrap
 #'
 #' @export
@@ -1828,7 +1801,6 @@ Seq_QC_Plot_Basic_Combined <- function(
 #'
 #' @import ggplot2
 #' @importFrom patchwork plot_layout plot_annotation
-#' @importFrom rlang is_installed
 #' @importFrom stringr str_wrap
 #'
 #' @export
@@ -1913,7 +1885,6 @@ Seq_QC_Plot_Alignment_Combined <- function(
 #'
 #' @return A ggplot object
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom scattermore geom_scattermore
 #' @importFrom cowplot theme_cowplot
@@ -2003,7 +1974,6 @@ Barcode_Plot <- function(
 #'
 #' @return pdf document
 #'
-#' @import cli
 #' @import ggplot2
 #' @importFrom grDevices dev.off pdf
 #' @importFrom pbapply pblapply pboptions
