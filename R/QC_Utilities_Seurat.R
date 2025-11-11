@@ -1099,7 +1099,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     # append .pdf if needed
     file_ext <- grep(x = save_plot_name, pattern = ".pdf$")
     if (length(x = file_ext) == 0) {
-      cli_abort(message = "{.code save_plot_name} must end with file extension '.pdf'.")
+      save_plot_name <- paste0(save_plot_name, ".pdf")
     }
 
     # check non-default output values
