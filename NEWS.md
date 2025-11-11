@@ -1,3 +1,23 @@
+# scCustomize 3.X.X (202X-XX-XX)  
+## Added  
+  
+
+
+## Changed  
+  
+  
+
+
+## Fixes  
+  
+  
+
+
+
+
+
+
+
 # scCustomize 3.2.1 (2025-11-07)  
 ## Added  
 - Added new function `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of variance conferred by PCs.  See manual for more details.  
