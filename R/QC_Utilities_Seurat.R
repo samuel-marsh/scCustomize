@@ -201,6 +201,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
   }
 
   # Add lncRNA
+  if (isTRUE(x = add_lncRNA)) {
     if (species %in% drosophila_options) {
       cli_warn(message = c("{.val Drosophila} do not have separate lncRNA gene biotype (only ncRNA) in Ensembl database.",
                            "i" = "No columns will be added to object meta.data"))
