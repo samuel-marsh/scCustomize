@@ -209,10 +209,8 @@ Create_CellBender_Merged_Seurat <- function(
 #' support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 #' potential PR to Seurat GitHub).
 #'
-#' @import future
 #' @import parallel
 #' @import pbapply
-#' @importFrom future.apply future_lapply
 #' @importFrom Matrix readMM
 #' @importFrom utils read.delim txtProgressBar setTxtProgressBar read.table
 #'
