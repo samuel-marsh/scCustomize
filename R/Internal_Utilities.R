@@ -1682,8 +1682,6 @@ Add_IEG_Seurat <- function(
 #' @param seurat_object object name.
 #' @param species Species of origin for given Seurat Object.
 #' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA gene counts. Default is "percent_lncRNA".
-#' @param ensembl_ids logical, whether feature names in the object are gene names or
-#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
 #' @param overwrite Logical.  Whether to overwrite existing meta.data columns.  Default is FALSE meaning that
 #' function will abort if columns with the name provided to `lncRNA_name` is present in meta.data slot.
@@ -1699,7 +1697,6 @@ Add_lncRNA_Seurat <- function(
     seurat_object,
     species,
     lncRNA_name = "percent_lncRNA",
-    ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE
 ) {
@@ -1738,11 +1735,7 @@ Add_lncRNA_Seurat <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Retrieve gene lists
-  if (isFALSE(x = ensembl_ids)) {
-    lncRNA_gene_list <- Retrieve_lncRNA(species = species)
-  } else {
-    lncRNA_gene_list <- Retrieve_Ensembl_lncRNA(species = species)
-  }
+  complete_lnc <- c(Retrieve_lncRNA(species = species), Retrieve_Ensembl_lncRNA(species = species))
 
   lncRNA_found <- Feature_PreCheck(object = seurat_object, features = lncRNA_gene_list, print_missing = FALSE)
 
@@ -1757,7 +1750,6 @@ Add_lncRNA_Seurat <- function(
   # return final object
   return(seurat_object)
 }
-
 
 
 #' Define MALAT1 QC Threshold
