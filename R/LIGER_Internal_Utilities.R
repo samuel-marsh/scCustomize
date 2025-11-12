@@ -2296,8 +2296,6 @@ Add_IEG_LIGER <- function(
 #' @param liger_object object name.
 #' @param species Species of origin for given Seurat Object.
 #' @param lncRNA_name name to use for the new meta.data column containing percent lncRNA gene counts. Default is "percent_lncRNA".
-#' @param ensembl_ids logical, whether feature names in the object are gene names or
-#' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param overwrite Logical.  Whether to overwrite existing meta data columns.  Default is FALSE meaning that
 #' function will abort if columns with the name provided to `lncRNA_name` is present in meta data slot.
 #'
@@ -2312,7 +2310,6 @@ Add_lncRNA_LIGER <- function(
     liger_object,
     species,
     lncRNA_name = "percent_lncRNA",
-    ensembl_ids = FALSE,
     overwrite = FALSE
 ) {
   # Accepted species names
@@ -2349,15 +2346,11 @@ Add_lncRNA_LIGER <- function(
   }
 
   # Retrieve gene lists
-  if (isFALSE(x = ensembl_ids)) {
-    lncRNA_gene_list <- Retrieve_lncRNA(species = species)
-  } else {
-    lncRNA_gene_list <- Retrieve_Ensembl_lncRNA(species = species)
-  }
+  complete_lnc_list <- c(Retrieve_lncRNA(species = species), Retrieve_Ensembl_lncRNA(species = species))
 
   all_features <- Features(x = liger_object, by_dataset = FALSE)
 
-  lncRNA_found <- intersect(x = lncRNA_gene_list, y = all_features)
+  lncRNA_found <- intersect(x = complete_lnc_list, y = all_features)
 
   # Add ieg column
   if (length(x = lncRNA_found) > 0) {

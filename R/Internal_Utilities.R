@@ -1735,9 +1735,9 @@ Add_lncRNA_Seurat <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Retrieve gene lists
-  complete_lnc <- c(Retrieve_lncRNA(species = species), Retrieve_Ensembl_lncRNA(species = species))
+  complete_lnc_list <- c(Retrieve_lncRNA(species = species), Retrieve_Ensembl_lncRNA(species = species))
 
-  lncRNA_found <- Feature_PreCheck(object = seurat_object, features = lncRNA_gene_list, print_missing = FALSE)
+  lncRNA_found <- Feature_PreCheck(object = seurat_object, features = complete_lnc_list, print_missing = FALSE)
 
   # Add mito and ribo columns
   if (length(x = lncRNA_found) > 0) {
