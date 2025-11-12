@@ -9,6 +9,7 @@
 
 
 ## Fixes  
+- Fixed problem with `Add_Cell_QC_Metrics` that was not correctly accounting for all lncRNA genes when calculating percentage of lncRNA counts.  
   
   
 
