@@ -4,7 +4,7 @@
 
 
 ## Changed  
-  
+- Changed behavior of file extension checking in `Add_MALAT1_Threshold`.  
   
 
 
