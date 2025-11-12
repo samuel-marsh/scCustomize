@@ -211,6 +211,8 @@ Create_CellBender_Merged_Seurat <- function(
 #'
 #' @import parallel
 #' @import pbapply
+#' @importFrom future with plan
+#' @importFrom future.apply future_lapply
 #' @importFrom Matrix readMM
 #' @importFrom utils read.delim txtProgressBar setTxtProgressBar read.table
 #'
