@@ -22,6 +22,8 @@ Imports:
     data.table,
     dplyr,
     forcats,
+    future,
+    future.apply,
     ggbeeswarm,
     ggplot2,
     ggprism,
