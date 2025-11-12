@@ -201,17 +201,12 @@ Add_Cell_QC_Metrics.Seurat <- function(
   }
 
   # Add lncRNA
-  if (isTRUE(x = add_lncRNA)) {
-    if (species %in% marmoset_options && isFALSE(x = ensembl_ids)) {
-      cli_warn(message = c("{.val Marmoset} lncRNAs do not currently have annotated symbols (only Ensembl IDs) in Ensembl database.",
-                           "i" = "No columns will be added to object meta.data"))
-    }
     if (species %in% drosophila_options) {
       cli_warn(message = c("{.val Drosophila} do not have separate lncRNA gene biotype (only ncRNA) in Ensembl database.",
                            "i" = "No columns will be added to object meta.data"))
     } else {
       cli_inform(message = c("*" = "Adding {.field lncRNA Percentages} to meta.data."))
-      object <- Add_lncRNA_Seurat(seurat_object = object, species = species, lncRNA_name = lncRNA_name, assay = assay, overwrite = overwrite, ensembl_ids = ensembl_ids)
+      object <- Add_lncRNA_Seurat(seurat_object = object, species = species, lncRNA_name = lncRNA_name, assay = assay, overwrite = overwrite)
     }
   }
 
