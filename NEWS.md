@@ -1,3 +1,24 @@
+# scCustomize 3.2.2 (2025-11-12)  
+## Added  
+  
+
+
+## Changed  
+- Changed behavior of file extension checking in `Add_MALAT1_Threshold`.  
+  
+
+
+## Fixes  
+- Fixed problem with `Add_Cell_QC_Metrics` that was not correctly accounting for all lncRNA genes when calculating percentage of lncRNA counts.  
+  
+  
+
+
+
+
+
+
+
 # scCustomize 3.2.1 (2025-11-07)  
 ## Added  
 - Added new function `ElbowPlot_scCustom` which expands `ElbowPlot` to include calculations of amount of variance conferred by PCs.  See manual for more details.  

@@ -1,5 +1,5 @@
 ## Update 
-This is minor update to version 3.2.1.  Contains bug fixes and 2 new functions.  See News.md for full changelog.  
+This is minor patch to version 3.2.2.  Contains 2 critical bug fixes.  See News.md for full changelog.  
 
 
 
