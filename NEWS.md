@@ -4,7 +4,7 @@
 
 
 ## Changed  
-  
+- Full deprecation of old `group_by` and `split_by` parameters.  
   
 
 ## Fixes  
