@@ -1,3 +1,23 @@
+# scCustomize 3.X.X (202X-XX-XX)  
+## Added  
+  
+
+
+## Changed  
+  
+  
+
+## Fixes  
+  
+  
+  
+
+
+
+
+
+
+
 # scCustomize 3.2.2 (2025-11-12)  
 ## Added  
   
