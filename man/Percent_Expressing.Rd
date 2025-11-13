@@ -8,9 +8,7 @@ Percent_Expressing(
   seurat_object,
   features,
   threshold = 0,
-  group_by = deprecated(),
   group.by = NULL,
-  split_by = deprecated(),
   split.by = NULL,
   entire_object = FALSE,
   layer = "data",
@@ -24,11 +22,7 @@ Percent_Expressing(
 
 \item{threshold}{Expression threshold to use for calculation of percent expressing (default is 0).}
 
-\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
-
 \item{group.by}{Factor to group the cells by.}
-
-\item{split_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{split.by}.}
 
 \item{split.by}{Factor to split the groups by.}
 

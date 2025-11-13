@@ -6,7 +6,6 @@
 \usage{
 Median_Stats(
   seurat_object,
-  group_by_var = deprecated(),
   group.by = "orig.ident",
   default_var = TRUE,
   median_var = NULL
@@ -14,8 +13,6 @@ Median_Stats(
 }
 \arguments{
 \item{seurat_object}{Seurat object name.}
-
-\item{group_by_var}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
 
 \item{group.by}{meta data column to classify samples (default = "orig.ident").}
 
