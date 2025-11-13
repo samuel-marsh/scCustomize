@@ -208,7 +208,7 @@ Percent_Expressing <- function(
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Check features exist in object
-  features_list <- Feature_PreCheck(object = seurat_object, features = features)
+  features_list <- Feature_Present(data = seurat_object, features = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
 
   # Check group_by is in object
   if (!is.null(x = group.by) && group.by == "ident") {
