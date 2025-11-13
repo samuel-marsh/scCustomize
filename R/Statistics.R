@@ -168,9 +168,7 @@ Cells_per_Sample <- function(
 #' @param seurat_object Seurat object name.
 #' @param features Feature(s) to plot.
 #' @param threshold Expression threshold to use for calculation of percent expressing (default is 0).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Factor to group the cells by.
-#' @param split_by `r lifecycle::badge("deprecated")` soft-deprecated. See `split.by`.
 #' @param split.by Factor to split the groups by.
 #' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
 #' across the entire object as opposed to by cluster or by `group.by` variable.
@@ -197,9 +195,7 @@ Percent_Expressing <- function(
   seurat_object,
   features,
   threshold = 0,
-  group_by = deprecated(),
   group.by = NULL,
-  split_by = deprecated(),
   split.by = NULL,
   entire_object = FALSE,
   layer = "data",
@@ -208,20 +204,11 @@ Percent_Expressing <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Percent_Expressing(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
-
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
 
   # Check features exist in object
-  features_list <- Feature_Present(data = seurat_object, features = features, print_msg = FALSE, case_check = TRUE, seurat_assay = assay)[[1]]
+  features_list <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Check group_by is in object
   if (!is.null(x = group.by) && group.by == "ident") {
