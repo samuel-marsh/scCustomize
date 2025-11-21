@@ -5,10 +5,11 @@
 
 ## Changed  
 - Full deprecation of old `group_by` and `split_by` parameters.  
+- `Random_Cells_Downsample` now returns named list of downsampled cells per identity.  
   
 
 ## Fixes  
-  
+- Fixed bug in `DimPlot_scCutom` when `split_downsample = TRUE` that caused plot titles to use the wrong identity names.  
   
   
 
