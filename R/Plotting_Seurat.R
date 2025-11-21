@@ -2159,12 +2159,10 @@ DimPlot_scCustom <- function(
 
       # Extract cell names per meta data list of values
       # Extract split.by list of values
-      if (isFALSE(x = split_downsample)) {
-        if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-          split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
-        } else {
-          split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
-        }
+      if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+        split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+      } else {
+        split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
       }
 
       if (isTRUE(x = split_downsample)) {
@@ -2181,10 +2179,6 @@ DimPlot_scCustom <- function(
         cli_inform(message = "Downsampling plot to {.field {min_cells}} cells per category, based on group with fewest cells ({.val {min_group}}).")
 
         cell_names <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = min_cells, group.by = split.by, return_list = TRUE, seed = downsample_seed)
-
-        names(x = cell_names) <- cells_split$Var1
-
-        split_by_list <- cells_split$Var1
       } else {
         cell_names <- lapply(split_by_list, function(x) {
           row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
