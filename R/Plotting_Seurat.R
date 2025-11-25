@@ -2191,6 +2191,10 @@ DimPlot_scCustom <- function(
         levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
       }
 
+      if (length(x = levels_overall) != length(x = colors_use)) {
+        cli_abort(message = "{.field {length(x = colors_use)}} colors were provided but plot contains {.field {length(x = levels_overall)}} groups.")
+      }
+
       colors_overall <- colors_use
 
       names(x = colors_overall) <- levels_overall
@@ -2908,15 +2912,15 @@ SpatialDimPlot_scCustom <- function(
 
   # name color palette so that it works
   if (is.null(x = group.by)) {
-    names(colors_use) <- levels(Idents(object = seurat_object))
+    names(x = colors_use) <- levels(x = Idents(object = seurat_object))
   } else {
     group_data <- Fetch_Meta(object = seurat_object) %>%
       pull(all_of(group.by))
 
     if (isTRUE(x = inherits(x = group_data, what = "factor"))) {
-      names(colors_use) <- levels(group_data)
+      names(x = colors_use) <- levels(x = group_data)
     } else {
-      names(colors_use) <- unique(group_data)
+      names(x = colors_use) <- unique(x = group_data)
     }
   }
 
