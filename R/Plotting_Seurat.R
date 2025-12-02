@@ -2191,7 +2191,7 @@ DimPlot_scCustom <- function(
         levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
       }
 
-      if (length(x = levels_overall) != length(x = colors_use)) {
+      if (length(x = levels_overall) > length(x = colors_use)) {
         cli_abort(message = "{.field {length(x = colors_use)}} colors were provided but plot contains {.field {length(x = levels_overall)}} groups.")
       }
 
