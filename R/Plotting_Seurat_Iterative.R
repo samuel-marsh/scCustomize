@@ -65,9 +65,9 @@ Iterate_PC_Loading_Plots <- function(
   }
 
   # Check pca present
-  reduc_present <- names(x = seurat_object@reductions)
+  reduc_present <- Reductions(object = seurat_object)
   if (!"pca" %in% reduc_present) {
-    cli_abort(message = "Cannot find reduction 'pca' in this Seurat Object.")
+    cli_abort(message = "Cannot find reduction {.val pca} in this Seurat Object.")
   }
   # Check dims present in object
   if (dims_plot > num_pc_present) {
