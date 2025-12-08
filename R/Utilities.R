@@ -384,7 +384,7 @@ Reduction_Loading_Present <- function(
     return_none = FALSE
 ) {
   # If no reductions are present
-  if (length(x = seurat_object@reductions) == 0) {
+  if (length(x = Reductions(object = seurat_object)) == 0) {
     if (isTRUE(x = return_none)) {
       # Combine into list and return
       reduction_list <- list(
@@ -398,10 +398,7 @@ Reduction_Loading_Present <- function(
   }
 
   # Get all reduction names
-  possible_reduction_names <- unlist(x = lapply(1:length(x = seurat_object@reductions), function(z) {
-    names <- names(x = seurat_object@reductions[[z]])
-  })
-  )
+  possible_reduction_names <- Reductions(object = seurat_object)
 
   # If any features not found
   if (any(!reduction_names %in% possible_reduction_names)) {
@@ -416,13 +413,13 @@ Reduction_Loading_Present <- function(
         )
         return(reduction_list)
       } else {
-        cli_abort(message ="No requested features found.")
+        cli_abort(message ="No requested reductions found.")
       }
     }
 
     # Return message of features not found
     if (length(x = bad_reductions) > 0 && isTRUE(x = omit_warn)) {
-      cli_warn(message = c("The following features were omitted as they were not found:",
+      cli_warn(message = c("The following reductions were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
     }
@@ -437,7 +434,7 @@ Reduction_Loading_Present <- function(
 
   # Print all found message if TRUE
   if (isTRUE(x = print_msg)) {
-    cli_inform(message = "All features present.")
+    cli_inform(message = "All reductions present.")
   }
 
   # Return full input gene list.
