@@ -1062,8 +1062,8 @@ plotFactors_liger2_scCustom <- function(
     }
 
     # Check if file name provided
-    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
-    if (length(x = file_ext) == 0) {
+    file_ext <- check_extension(file_name = file_name, extension = ".pdf")
+    if (isTRUE(x = file_ext)) {
       file_name <- file_name
     } else {
       file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
@@ -1364,8 +1364,8 @@ plotFactors_liger_scCustom <- function(
     }
 
     # Check if file name provided
-    file_ext <- grep(x = file_name, pattern = ".pdf$", ignore.case = TRUE)
-    if (length(x = file_ext) == 0) {
+    file_ext <- check_extension(file_name = file_name, extension = ".pdf")
+    if (isTRUE(x = file_ext)) {
       file_name <- file_name
     } else {
       file_name <- gsub(pattern = ".pdf", replacement = "", x = file_name, ignore.case = TRUE)
