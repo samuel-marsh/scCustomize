@@ -1,5 +1,6 @@
 # scCustomize 3.X.X (202X-XX-XX)  
 ## Added  
+- Add progress bar support to following functions with `parallel` parameter using mcprogress package: `Read10X_GEO`, `Read10X_h5_GEO`, `Read10X_Multi_Directory`, `Read10X_h5_Multi_Directory`, `Read_GEO_Delim`, `Read_CellBender_h5_Multi_Directory`, `Read_CellBender_h5_Multi_File`.  
   
 
 
