@@ -658,7 +658,6 @@ Get_Reference_LIGER <- function(
 
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
 #' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
 #' @param old_ident_name optional, name to use for storing current object idents in object meta data slot.
 #' @param new_ident_name optional, name to use for storing new object idents in object meta data slot.
 #' @param overwrite logical, whether to overwrite columns in object meta data slot. if they have same

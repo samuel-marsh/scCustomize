@@ -4,7 +4,6 @@
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
 #' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
@@ -39,7 +38,6 @@
 Plot_Median_Genes <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = deprecated(),
   group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
@@ -52,15 +50,6 @@ Plot_Median_Genes <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Plot_Median_Genes(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # set group.by to ident if NULL
   group.by <- group.by %||% "ident"
@@ -169,7 +158,6 @@ Plot_Median_Genes <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
 #' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
@@ -204,7 +192,6 @@ Plot_Median_Genes <- function(
 Plot_Median_UMIs <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = deprecated(),
   group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
@@ -217,15 +204,6 @@ Plot_Median_UMIs <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Plot_Median_UMIs(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # set group.by to ident if NULL
   group.by <- group.by %||% "ident"
@@ -334,7 +312,6 @@ Plot_Median_UMIs <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
 #' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
@@ -370,7 +347,6 @@ Plot_Median_UMIs <- function(
 Plot_Median_Mito <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = deprecated(),
   group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
@@ -383,15 +359,6 @@ Plot_Median_Mito <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Plot_Median_Mito(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # set group.by to ident if NULL
   group.by <- group.by %||% "ident"
@@ -501,7 +468,6 @@ Plot_Median_Mito <- function(
 #' @param seurat_object Seurat object name.
 #' @param median_var Variable in meta.data slot to calculate and plot median values for.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.  Only applicable if `group.by` is not NULL.
 #' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
@@ -542,7 +508,6 @@ Plot_Median_Other <- function(
   seurat_object,
   median_var,
   sample_col = "orig.ident",
-  group_by = deprecated(),
   group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
@@ -555,15 +520,6 @@ Plot_Median_Other <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Plot_Median_Other(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # set group.by to ident if NULL
   group.by <- group.by %||% "ident"
@@ -681,7 +637,6 @@ Plot_Median_Other <- function(
 #'
 #' @param seurat_object Seurat object name.
 #' @param sample_col Specify which column in meta.data specifies sample ID (i.e. orig.ident).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Column in meta.data slot to group results by (i.e. "Treatment").
 #' @param colors_use List of colors or color palette to use.
 #' @param dot_size size of the dots plotted if `group.by` is not NULL.  Default is 1.
@@ -713,7 +668,6 @@ Plot_Median_Other <- function(
 Plot_Cells_per_Sample <- function(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = deprecated(),
   group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
@@ -726,15 +680,6 @@ Plot_Cells_per_Sample <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Plot_Cells_per_Sample(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # Check grouping variable is present
   if (is.null(x = group.by)) {
@@ -1006,7 +951,6 @@ CellBender_Diff_Plot <- function(
 #' is `"bar"`
 #' @param plot_scale whether to plot bar chart as total cell counts or percents, value must be one of `"percent"` or
 #' `"count"`. Default is `"percent"`.
-#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by meta data column to classify samples (default = "ident" and will use `active.ident`).
 #' @param split.by meta data variable to use to split plots.  Default is NULL which will plot across entire object.
 #' @param num_columns number of columns in plot.  Only valid if `split.by` is not NULL.
@@ -1039,7 +983,6 @@ Proportion_Plot <- function(
     seurat_object,
     plot_type = "bar",
     plot_scale = "percent",
-    group_by_var = deprecated(),
     group.by = "ident",
     split.by = NULL,
     num_columns = NULL,
@@ -1050,15 +993,6 @@ Proportion_Plot <- function(
 ) {
   # Check seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by_var)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Proportion_Plot(group_by_var)",
-                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by_var
-  }
 
   # check plot type
   if (!plot_type %in% c("bar", "pie")) {

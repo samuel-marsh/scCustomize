@@ -3,11 +3,9 @@
 #' Standard and modified version of LIGER's plotByDatasetAndCluster
 #'
 #' @param liger_object \code{liger} liger_object.  Need to perform clustering before calling this function
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Variable to be plotted.  If `NULL` will plot clusters from `liger@clusters` slot.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
 #' If `combination = TRUE` will plot both clusters and meta data variable.
-#' @param split_by `r lifecycle::badge("deprecated")` soft-deprecated. See `split.by`.
 #' @param split.by Variable to split plots by.
 #' @param colors_use_cluster colors to use for plotting by clusters.  By default if number of levels plotted is
 #' less than or equal to 36 will use "polychrome" and if greater than 36 will use "varibow" with shuffle = TRUE
@@ -63,9 +61,7 @@
 
 DimPlot_LIGER <- function(
   liger_object,
-  group_by = deprecated(),
   group.by = NULL,
-  split_by = deprecated(),
   split.by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
@@ -89,15 +85,6 @@ DimPlot_LIGER <- function(
 ) {
   # Check LIGER
   Is_LIGER(liger_object = liger_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "DimPlot_LIGER(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # Set group.by defaults
   if (isFALSE(x = combination) && is.null(x = group.by)) {

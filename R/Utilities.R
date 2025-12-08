@@ -1515,7 +1515,6 @@ Pull_Cluster_Annotation <- function(
 
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
 #' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
 #' @param old_ident_name optional, name to use for storing current object idents in object meta data slot.
 #' @param new_ident_name optional, name to use for storing new object idents in object meta data slot.
 #' @param overwrite logical, whether to overwrite columns in object meta data slot. if they have same
@@ -1540,20 +1539,9 @@ Rename_Clusters.Seurat <- function(
   new_idents,
   old_ident_name = NULL,
   new_ident_name = NULL,
-  meta_col_name = deprecated(),
   overwrite = FALSE,
   ...
 ) {
-  # Deprecation warning
-  if (is_present(meta_col_name)) {
-    deprecate_stop(when = "2.2.0",
-                              what = "Rename_Clusters(meta_col_name)",
-                              with = "Rename_Clusters(old_ident_name)",
-                              details = c("i" = "To store old idents please provide name to `old_ident_name`",
-                                          "i" = "To store new idents please provide name to `new_ident_name`")
-    )
-  }
-
   # Check Seurat
   Is_Seurat(seurat_object = object)
 
