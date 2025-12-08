@@ -963,6 +963,11 @@ Read_GEO_Delim <- function(
   num_cores = NULL,
   merge = FALSE
 ) {
+  # check directory
+  if (!dir.exists(paths = data_dir)) {
+    cli_abort(message = "Directory provided does not exist")
+  }
+
   # Create list of all files in directory
   possible_file_list <- list.files(path = data_dir, pattern = file_suffix, full.names = FALSE)
 
