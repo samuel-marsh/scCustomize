@@ -5,8 +5,9 @@
 
 
 ## Changed  
-- Full deprecation of old `group_by` and `split_by` parameters.  
 - `Random_Cells_Downsample` now returns named list of downsampled cells per identity.  
+- Full deprecation of old `group_by` and `split_by` parameters.  
+- Full deprecation of `min_cells` and `min_features` parameters in `Create_CellBender_Merged_Seurat`, use `min.cells` and `min.features` instead.  
   
 
 ## Fixes  
