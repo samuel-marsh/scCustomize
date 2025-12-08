@@ -7,7 +7,6 @@
 Plot_Median_Genes(
   seurat_object,
   sample_col = "orig.ident",
-  group_by = deprecated(),
   group.by = NULL,
   colors_use = NULL,
   dot_size = 1,
@@ -23,8 +22,6 @@ Plot_Median_Genes(
 \item{seurat_object}{Seurat object name.}
 
 \item{sample_col}{Specify which column in meta.data specifies sample ID (i.e. orig.ident).}
-
-\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
 
 \item{group.by}{Column in meta.data slot to group results by (i.e. "Treatment").}
 

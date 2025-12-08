@@ -6,9 +6,7 @@
 \usage{
 DimPlot_LIGER(
   liger_object,
-  group_by = deprecated(),
   group.by = NULL,
-  split_by = deprecated(),
   split.by = NULL,
   colors_use_cluster = NULL,
   colors_use_meta = NULL,
@@ -34,13 +32,9 @@ DimPlot_LIGER(
 \arguments{
 \item{liger_object}{\code{liger} liger_object.  Need to perform clustering before calling this function}
 
-\item{group_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
-
 \item{group.by}{Variable to be plotted.  If \code{NULL} will plot clusters from \code{liger@clusters} slot.
 If \code{combination = TRUE} will plot both clusters and meta data variable.
 If \code{combination = TRUE} will plot both clusters and meta data variable.}
-
-\item{split_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{split.by}.}
 
 \item{split.by}{Variable to split plots by.}
 

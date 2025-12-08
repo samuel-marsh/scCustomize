@@ -22,7 +22,6 @@ Rename_Clusters(object, ...)
   new_idents,
   old_ident_name = NULL,
   new_ident_name = NULL,
-  meta_col_name = deprecated(),
   overwrite = FALSE,
   ...
 )
@@ -41,8 +40,6 @@ of Object.  Will accept named vector (with old idents as names) or will name the
 
 \item{overwrite}{logical, whether to overwrite columns in object meta data slot. if they have same
 names as \code{old_ident_name} and/or \code{new_ident_name}.}
-
-\item{meta_col_name}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{old_ident_name}.}
 }
 \value{
 An object of the same class as \code{object} with updated default identities.
