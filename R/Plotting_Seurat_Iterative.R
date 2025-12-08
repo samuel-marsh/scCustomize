@@ -35,7 +35,7 @@ Iterate_PC_Loading_Plots <- function(
   dims_plot = NULL,
   file_path = NULL,
   name_prefix = NULL,
-  file_name = "PC_Loading_Plots",
+  file_name = "PC_Loading_Plots.pdf",
   return_plots = FALSE
 ) {
   # Check Seurat
