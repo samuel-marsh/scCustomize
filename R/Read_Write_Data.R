@@ -269,9 +269,8 @@ Read10X_GEO <- function(
   cli_inform(message = "{.field Reading 10X files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       barcode.loc <- file.path(data_dir, paste0(sample_list[i], 'barcodes.tsv.gz'))
       gene.loc <- file.path(data_dir, paste0(sample_list[i], 'genes.tsv.gz'))
@@ -586,9 +585,8 @@ Read10X_h5_GEO <- function(
   cli_inform(message = "{.field Reading 10X H5 files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".h5"))
       data <- Read10X_h5(filename = h5_loc, ...)
@@ -713,9 +711,8 @@ Read10X_Multi_Directory <- function(
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
@@ -865,9 +862,8 @@ Read10X_h5_Multi_Directory <- function(
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
@@ -1040,9 +1036,8 @@ Read_GEO_Delim <- function(
   cli_inform(message = "{.field Reading gene expression files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
@@ -1367,9 +1362,8 @@ Read_CellBender_h5_Multi_Directory <- function(
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       # Create file path
@@ -1527,9 +1521,8 @@ Read_CellBender_h5_Multi_File <- function(
   cli_inform(message = "{.field Reading Cell Bender H5 files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
       data <- Read_CellBender_h5_Mat(file_name = h5_loc, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
