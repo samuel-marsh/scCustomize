@@ -59,7 +59,7 @@ Iterate_PC_Loading_Plots <- function(
   }
 
   # Set dims to plot if not specified
-  num_pc_present <- length(seurat_object@reductions$pca@stdev)
+  num_pc_present <- length(x = seurat_object@reductions$pca@stdev)
   if (is.null(x = dims_plot)) {
     dims_plot <- num_pc_present
   }
