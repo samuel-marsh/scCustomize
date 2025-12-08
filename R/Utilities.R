@@ -413,7 +413,8 @@ Reduction_Loading_Present <- function(
         )
         return(reduction_list)
       } else {
-        cli_abort(message ="No requested reductions found.")
+        cli_abort(message = c("None of requested reduction(s) {.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}} were found.",
+                              "i" = "Use {.code Reductions(obj)} to view reductions present."))
       }
     }
 
