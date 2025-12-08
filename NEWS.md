@@ -7,8 +7,11 @@
 
 ## Changed  
 - `Random_Cells_Downsample` now returns named list of downsampled cells per identity.  
-- Full deprecation of old `group_by` and `split_by` parameters.  
 - Full deprecation of `min_cells` and `min_features` parameters in `Create_CellBender_Merged_Seurat`, use `min.cells` and `min.features` instead.  
+- Full deprecation of `meta_col_name` in `Rename_Clusters`.  
+- Full deprecation of `group_by` parameter in `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample`, `Percent_Expressing`, `DimPlot_LIGER`, and `Extract_Top_Markers`.  Please use `group.by` instead.  
+- Full deprecation of `group_by_var` parameter in `Proportion_Plot`, `Cluster_Stats_All_Samples`, `Median_Stats`, and `MAD_Stats`.  Please use `group.by` instead.  
+- Full deprecation of `split_by` parameter in `Percent_Expressing`, `DimPlot_LIGER`, and internal functions.  Please use `split.by` instead.  
 - Default file name for `Iterate_PC_Loading_Plots` now contains ".pdf" file extension.  
 - Reorganization of R/ scripts.
   
