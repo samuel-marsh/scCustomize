@@ -1959,10 +1959,9 @@ Copy_From_GCP <- function(
 #' @param input_data Data source containing gene names.  Accepted formats are:
 #' \itemize{
 #'  \item \code{charcter vector}
-#'  \item \code{Seurat Objects}
-#'  \item \code{data.frame}: genes as rownames
-#'  \item \code{dgCMatrix/dgTMatrix}: genes as rownames
-#'  \item \code{tibble}: genes in first column
+#'  \item \code{Seurat Object}
+#'  \item \code{Expression Matrix}: genes as rownames (dgCMatrix/dgTMatrix, data.frame, or tibble)
+#'  \item \code{data.frame/tibble}: single column with genes in first column.
 #' }
 #' @param update_symbol_data logical, whether to update cached HGNC data, default is NULL.
 #' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
@@ -2015,16 +2014,18 @@ Updated_HGNC_Symbols <- function(
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix")
 
   if (inherits(x = input_data, what = "Seurat")) {
-    input_symbols <- Features(input_data)
-  }
-  if ((class(x = input_data) %in% accepted_types)) {
-    input_symbols <- rownames(x = input_data)
-  }
-  if (inherits(x = input_data, what = "tibble")) {
-    input_symbols <-   input_data[, 1]
-  }
-  if (inherits(x = input_data, what = "character")) {
-    input_symbols <- input_data
+    input_symbols <- Features(x = input_data)
+  } else {
+    if ((class(x = input_data) %in% accepted_types)) {
+      if (ncol(x = input_data) > 1) {
+        input_symbols <- rownames(x = input_data)
+      } else {
+        input_symbols <-   input_data[, 1]
+      }
+    }
+    if (inherits(x = input_data, what = "character")) {
+      input_symbols <- input_data
+    }
   }
 
   # Check for duplicates
@@ -2108,10 +2109,9 @@ Updated_HGNC_Symbols <- function(
 #' @param input_data Data source containing gene names.  Accepted formats are:
 #' \itemize{
 #'  \item \code{charcter vector}
-#'  \item \code{Seurat Objects}
-#'  \item \code{data.frame}: genes as rownames
-#'  \item \code{dgCMatrix/dgTMatrix}: genes as rownames
-#'  \item \code{tibble}: genes in first column
+#'  \item \code{Seurat Object}
+#'  \item \code{Expression Matrix}: genes as rownames (dgCMatrix/dgTMatrix, data.frame, or tibble)
+#'  \item \code{data.frame/tibble}: single column with genes in first column.
 #' }
 #' @param update_symbol_data logical, whether to update cached MGI data, default is NULL.
 #' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
@@ -2160,16 +2160,18 @@ Updated_MGI_Symbols <- function(
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix")
 
   if (inherits(x = input_data, what = "Seurat")) {
-    input_symbols <- Features(input_data)
-  }
-  if ((class(x = input_data) %in% accepted_types)) {
-    input_symbols <- rownames(x = input_data)
-  }
-  if (inherits(x = input_data, what = "tibble")) {
-    input_symbols <-   input_data[, 1]
-  }
-  if (inherits(x = input_data, what = "character")) {
-    input_symbols <- input_data
+    input_symbols <- Features(x = input_data)
+  } else {
+    if ((class(x = input_data) %in% accepted_types)) {
+      if (ncol(x = input_data) > 1) {
+        input_symbols <- rownames(x = input_data)
+      } else {
+        input_symbols <-   input_data[, 1]
+      }
+    }
+    if (inherits(x = input_data, what = "character")) {
+      input_symbols <- input_data
+    }
   }
 
   # Check for duplicates
