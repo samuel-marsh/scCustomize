@@ -7,6 +7,7 @@
 
 ## Changed  
 - `Random_Cells_Downsample` now returns named list of downsampled cells per identity.  
+- Fix internal checks of data format for `Update_HGNC_Symbols` and `Update_MGI_Symbols`.  
 - Full deprecation of `min_cells` and `min_features` parameters in `Create_CellBender_Merged_Seurat`, use `min.cells` and `min.features` instead.  
 - Full deprecation of `meta_col_name` in `Rename_Clusters`.  
 - Full deprecation of `group_by` parameter in `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample`, `Percent_Expressing`, `DimPlot_LIGER`, and `Extract_Top_Markers`.  Please use `group.by` instead.  
