@@ -1,5 +1,5 @@
 ## Update 
-This is minor patch to version 3.2.2.  Contains 2 critical bug fixes.  See News.md for full changelog.  
+This is minor patch to version 3.2.3.  Contains some bug fixes and function deprecations.  See News.md for full changelog.  
 
 
 
@@ -13,7 +13,7 @@ This is minor patch to version 3.2.2.  Contains 2 critical bug fixes.  See News.
     - macos-latest (release), windows-latest (release), ubuntu-latest (devel), ubuntu-latest (release), ubuntu-latest (oldrel-1).  
 
 ## NOTES
-1. Imports includes 28 non-default packages.
+1. Imports includes 29 non-default packages.
   Importing from so many packages makes the package vulnerable to any of
   them becoming unavailable.  Move as many as possible to Suggests and
   use conditionally.  

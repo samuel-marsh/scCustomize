@@ -3,7 +3,6 @@
 #' Calculates both overall and per sample cell number and percentages per cluster based on orig.ident.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by meta data column to classify samples (default = "orig.ident").
 #' @param order_by_freq logical, whether the data.frame should be ordered by frequency of
 #' identity (default; TRUE), or by cluster/fector order (FALSE).
@@ -28,22 +27,11 @@
 
 Cluster_Stats_All_Samples <- function(
   seurat_object,
-  group_by_var = deprecated(),
   group.by = "orig.ident",
   order_by_freq = TRUE
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by_var)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Cluster_Stats_All_Samples(group_by_var)",
-                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by_var
-  }
-
 
   # Check on meta data column
   possible_meta_col <- colnames(x = seurat_object@meta.data)
@@ -168,9 +156,7 @@ Cells_per_Sample <- function(
 #' @param seurat_object Seurat object name.
 #' @param features Feature(s) to plot.
 #' @param threshold Expression threshold to use for calculation of percent expressing (default is 0).
-#' @param group_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Factor to group the cells by.
-#' @param split_by `r lifecycle::badge("deprecated")` soft-deprecated. See `split.by`.
 #' @param split.by Factor to split the groups by.
 #' @param entire_object logical (default = FALSE).  Whether to calculate percent of expressing cells
 #' across the entire object as opposed to by cluster or by `group.by` variable.
@@ -197,9 +183,7 @@ Percent_Expressing <- function(
   seurat_object,
   features,
   threshold = 0,
-  group_by = deprecated(),
   group.by = NULL,
-  split_by = deprecated(),
   split.by = NULL,
   entire_object = FALSE,
   layer = "data",
@@ -207,15 +191,6 @@ Percent_Expressing <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Percent_Expressing(group_by)",
-                              details = c("i" = "The {.code group_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by
-  }
 
   # set assay (if null set to active assay)
   assay <- assay %||% DefaultAssay(object = seurat_object)
@@ -296,7 +271,6 @@ Percent_Expressing <- function(
 #' Get quick values for median Genes, UMIs, %mito per cell grouped by meta.data variable.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by meta data column to classify samples (default = "orig.ident").
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 #' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
@@ -322,22 +296,12 @@ Percent_Expressing <- function(
 
 Median_Stats <- function(
   seurat_object,
-  group_by_var = deprecated(),
   group.by = "orig.ident",
   default_var = TRUE,
   median_var = NULL
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by_var)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "Median_Stats(group_by_var)",
-                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by_var
-  }
 
   if (isTRUE(x = default_var)) {
     default_var <- c("nCount_RNA", "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", "log10GenesPerUMI")
@@ -398,7 +362,6 @@ Median_Stats <- function(
 #' Get quick values for X x median absolute deviation for Genes, UMIs, %mito per cell grouped by meta.data variable.
 #'
 #' @param seurat_object Seurat object name.
-#' @param group_by_var `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by meta data column to classify samples (default = "orig.ident").
 #' @param default_var logical.  Whether to include the default meta.data variables of: "nCount_RNA",
 #' "nFeature_RNA", "percent_mito", "percent_ribo", "percent_mito_ribo", and "log10GenesPerUMI"
@@ -426,7 +389,6 @@ Median_Stats <- function(
 
 MAD_Stats <- function(
     seurat_object,
-    group_by_var = deprecated(),
     group.by = "orig.ident",
     default_var = TRUE,
     mad_var = NULL,
@@ -434,15 +396,6 @@ MAD_Stats <- function(
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
-
-  # check deprecation
-  if (is_present(group_by_var)) {
-    deprecate_warn(when = "3.1.0",
-                              what = "MAD_Stats(group_by_var)",
-                              details = c("i" = "The {.code group_by_var} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
-    )
-    group.by <- group_by_var
-  }
 
   # check mad_num
   if (mad_num <= 0) {

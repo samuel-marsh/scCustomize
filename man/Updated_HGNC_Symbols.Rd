@@ -15,10 +15,9 @@ Updated_HGNC_Symbols(
 \item{input_data}{Data source containing gene names.  Accepted formats are:
 \itemize{
 \item \code{charcter vector}
-\item \code{Seurat Objects}
-\item \code{data.frame}: genes as rownames
-\item \code{dgCMatrix/dgTMatrix}: genes as rownames
-\item \code{tibble}: genes in first column
+\item \code{Seurat Object}
+\item \code{Expression Matrix}: genes as rownames (dgCMatrix/dgTMatrix, data.frame, or tibble)
+\item \code{data.frame/tibble}: single column with genes in first column.
 }}
 
 \item{update_symbol_data}{logical, whether to update cached HGNC data, default is NULL.

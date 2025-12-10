@@ -1,3 +1,30 @@
+# scCustomize 3.2.3 (2025-12-09)  
+## Added  
+- Add progress bar support to following functions with `parallel` parameter using mcprogress package: `Read10X_GEO`, `Read10X_h5_GEO`, `Read10X_Multi_Directory`, `Read10X_h5_Multi_Directory`, `Read_GEO_Delim`, `Read_CellBender_h5_Multi_Directory`, `Read_CellBender_h5_Multi_File`.  
+- Added additional error checks to read functions for informative error messaging.  
+  
+
+
+## Changed  
+- `Random_Cells_Downsample` now returns named list of downsampled cells per identity.  
+- Fix internal checks of data format for `Update_HGNC_Symbols` and `Update_MGI_Symbols`.  
+- Full deprecation of `min_cells` and `min_features` parameters in `Create_CellBender_Merged_Seurat`, use `min.cells` and `min.features` instead.  
+- Full deprecation of `meta_col_name` in `Rename_Clusters`.  
+- Full deprecation of `group_by` parameter in `Plot_Median_Genes`, `Plot_Median_UMIs`, `Plot_Median_Mito`, `Plot_Median_Other`, `Plot_Cells_per_Sample`, `Percent_Expressing`, `DimPlot_LIGER`, and `Extract_Top_Markers`.  Please use `group.by` instead.  
+- Full deprecation of `group_by_var` parameter in `Proportion_Plot`, `Cluster_Stats_All_Samples`, `Median_Stats`, and `MAD_Stats`.  Please use `group.by` instead.  
+- Full deprecation of `split_by` parameter in `Percent_Expressing`, `DimPlot_LIGER`, and internal functions.  Please use `split.by` instead.  
+- Default file name for `Iterate_PC_Loading_Plots` now contains ".pdf" file extension.  
+- Reorganization of R/ scripts.
+  
+
+## Fixes  
+- Fixed bug in `DimPlot_scCutom` when `split_downsample = TRUE` that caused plot titles to use the wrong identity names.  
+  
+  
+
+
+
+
 # scCustomize 3.2.2 (2025-11-12)  
 ## Added  
   

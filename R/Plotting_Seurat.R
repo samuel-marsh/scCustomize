@@ -2159,12 +2159,10 @@ DimPlot_scCustom <- function(
 
       # Extract cell names per meta data list of values
       # Extract split.by list of values
-      if (isFALSE(x = split_downsample)) {
-        if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
-          split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
-        } else {
-          split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
-        }
+      if (inherits(x = seurat_object@meta.data[, split.by], what = "factor")) {
+        split_by_list <- as.character(x = levels(x = seurat_object@meta.data[, split.by]))
+      } else {
+        split_by_list <- as.character(x = unique(x = seurat_object@meta.data[, split.by]))
       }
 
       if (isTRUE(x = split_downsample)) {
@@ -2181,10 +2179,6 @@ DimPlot_scCustom <- function(
         cli_inform(message = "Downsampling plot to {.field {min_cells}} cells per category, based on group with fewest cells ({.val {min_group}}).")
 
         cell_names <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = min_cells, group.by = split.by, return_list = TRUE, seed = downsample_seed)
-
-        names(x = cell_names) <- cells_split$Var1
-
-        split_by_list <- cells_split$Var1
       } else {
         cell_names <- lapply(split_by_list, function(x) {
           row.names(x = seurat_object@meta.data)[which(seurat_object@meta.data[, split.by] == x)]})
@@ -2195,6 +2189,10 @@ DimPlot_scCustom <- function(
         levels_overall <- levels(x = Idents(object = seurat_object))
       } else {
         levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+      }
+
+      if (length(x = levels_overall) > length(x = colors_use)) {
+        cli_abort(message = "{.field {length(x = colors_use)}} colors were provided but plot contains {.field {length(x = levels_overall)}} groups.")
       }
 
       colors_overall <- colors_use
@@ -2914,15 +2912,15 @@ SpatialDimPlot_scCustom <- function(
 
   # name color palette so that it works
   if (is.null(x = group.by)) {
-    names(colors_use) <- levels(Idents(object = seurat_object))
+    names(x = colors_use) <- levels(x = Idents(object = seurat_object))
   } else {
     group_data <- Fetch_Meta(object = seurat_object) %>%
       pull(all_of(group.by))
 
     if (isTRUE(x = inherits(x = group_data, what = "factor"))) {
-      names(colors_use) <- levels(group_data)
+      names(x = colors_use) <- levels(x = group_data)
     } else {
-      names(colors_use) <- unique(group_data)
+      names(x = colors_use) <- unique(x = group_data)
     }
   }
 

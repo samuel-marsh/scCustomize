@@ -384,7 +384,7 @@ Reduction_Loading_Present <- function(
     return_none = FALSE
 ) {
   # If no reductions are present
-  if (length(x = seurat_object@reductions) == 0) {
+  if (length(x = Reductions(object = seurat_object)) == 0) {
     if (isTRUE(x = return_none)) {
       # Combine into list and return
       reduction_list <- list(
@@ -398,10 +398,7 @@ Reduction_Loading_Present <- function(
   }
 
   # Get all reduction names
-  possible_reduction_names <- unlist(x = lapply(1:length(x = seurat_object@reductions), function(z) {
-    names <- names(x = seurat_object@reductions[[z]])
-  })
-  )
+  possible_reduction_names <- Reductions(object = seurat_object)
 
   # If any features not found
   if (any(!reduction_names %in% possible_reduction_names)) {
@@ -416,13 +413,14 @@ Reduction_Loading_Present <- function(
         )
         return(reduction_list)
       } else {
-        cli_abort(message ="No requested features found.")
+        cli_abort(message = c("None of requested reduction(s) {.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}} were found.",
+                              "i" = "Use {.code Reductions(obj)} to view reductions present."))
       }
     }
 
     # Return message of features not found
     if (length(x = bad_reductions) > 0 && isTRUE(x = omit_warn)) {
-      cli_warn(message = c("The following features were omitted as they were not found:",
+      cli_warn(message = c("The following reductions were omitted as they were not found:",
                            "i" = "{.field {glue_collapse_scCustom(input_string = bad_features, and = TRUE)}}")
       )
     }
@@ -437,7 +435,7 @@ Reduction_Loading_Present <- function(
 
   # Print all found message if TRUE
   if (isTRUE(x = print_msg)) {
-    cli_inform(message = "All features present.")
+    cli_inform(message = "All reductions present.")
   }
 
   # Return full input gene list.
@@ -1517,7 +1515,6 @@ Pull_Cluster_Annotation <- function(
 
 #' @param new_idents vector of new cluster names.  Must be equal to the length of current default identity
 #' of Object.  Will accept named vector (with old idents as names) or will name the new_idents vector internally.
-#' @param meta_col_name `r lifecycle::badge("soft-deprecated")`. See `old_ident_name`.
 #' @param old_ident_name optional, name to use for storing current object idents in object meta data slot.
 #' @param new_ident_name optional, name to use for storing new object idents in object meta data slot.
 #' @param overwrite logical, whether to overwrite columns in object meta data slot. if they have same
@@ -1542,20 +1539,9 @@ Rename_Clusters.Seurat <- function(
   new_idents,
   old_ident_name = NULL,
   new_ident_name = NULL,
-  meta_col_name = deprecated(),
   overwrite = FALSE,
   ...
 ) {
-  # Deprecation warning
-  if (is_present(meta_col_name)) {
-    deprecate_stop(when = "2.2.0",
-                              what = "Rename_Clusters(meta_col_name)",
-                              with = "Rename_Clusters(old_ident_name)",
-                              details = c("i" = "To store old idents please provide name to `old_ident_name`",
-                                          "i" = "To store new idents please provide name to `new_ident_name`")
-    )
-  }
-
   # Check Seurat
   Is_Seurat(seurat_object = object)
 
@@ -1973,10 +1959,9 @@ Copy_From_GCP <- function(
 #' @param input_data Data source containing gene names.  Accepted formats are:
 #' \itemize{
 #'  \item \code{charcter vector}
-#'  \item \code{Seurat Objects}
-#'  \item \code{data.frame}: genes as rownames
-#'  \item \code{dgCMatrix/dgTMatrix}: genes as rownames
-#'  \item \code{tibble}: genes in first column
+#'  \item \code{Seurat Object}
+#'  \item \code{Expression Matrix}: genes as rownames (dgCMatrix/dgTMatrix, data.frame, or tibble)
+#'  \item \code{data.frame/tibble}: single column with genes in first column.
 #' }
 #' @param update_symbol_data logical, whether to update cached HGNC data, default is NULL.
 #' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
@@ -2029,16 +2014,18 @@ Updated_HGNC_Symbols <- function(
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix")
 
   if (inherits(x = input_data, what = "Seurat")) {
-    input_symbols <- Features(input_data)
-  }
-  if ((class(x = input_data) %in% accepted_types)) {
-    input_symbols <- rownames(x = input_data)
-  }
-  if (inherits(x = input_data, what = "tibble")) {
-    input_symbols <-   input_data[, 1]
-  }
-  if (inherits(x = input_data, what = "character")) {
-    input_symbols <- input_data
+    input_symbols <- Features(x = input_data)
+  } else {
+    if ((class(x = input_data) %in% accepted_types)) {
+      if (ncol(x = input_data) > 1) {
+        input_symbols <- rownames(x = input_data)
+      } else {
+        input_symbols <-   input_data[, 1]
+      }
+    }
+    if (inherits(x = input_data, what = "character")) {
+      input_symbols <- input_data
+    }
   }
 
   # Check for duplicates
@@ -2122,10 +2109,9 @@ Updated_HGNC_Symbols <- function(
 #' @param input_data Data source containing gene names.  Accepted formats are:
 #' \itemize{
 #'  \item \code{charcter vector}
-#'  \item \code{Seurat Objects}
-#'  \item \code{data.frame}: genes as rownames
-#'  \item \code{dgCMatrix/dgTMatrix}: genes as rownames
-#'  \item \code{tibble}: genes in first column
+#'  \item \code{Seurat Object}
+#'  \item \code{Expression Matrix}: genes as rownames (dgCMatrix/dgTMatrix, data.frame, or tibble)
+#'  \item \code{data.frame/tibble}: single column with genes in first column.
 #' }
 #' @param update_symbol_data logical, whether to update cached MGI data, default is NULL.
 #' If `NULL` BiocFileCache will check and prompt for update if cache is stale.
@@ -2174,16 +2160,18 @@ Updated_MGI_Symbols <- function(
   accepted_types <- c("data.frame", "dgCMatrix", "dgTMatrix")
 
   if (inherits(x = input_data, what = "Seurat")) {
-    input_symbols <- Features(input_data)
-  }
-  if ((class(x = input_data) %in% accepted_types)) {
-    input_symbols <- rownames(x = input_data)
-  }
-  if (inherits(x = input_data, what = "tibble")) {
-    input_symbols <-   input_data[, 1]
-  }
-  if (inherits(x = input_data, what = "character")) {
-    input_symbols <- input_data
+    input_symbols <- Features(x = input_data)
+  } else {
+    if ((class(x = input_data) %in% accepted_types)) {
+      if (ncol(x = input_data) > 1) {
+        input_symbols <- rownames(x = input_data)
+      } else {
+        input_symbols <-   input_data[, 1]
+      }
+    }
+    if (inherits(x = input_data, what = "character")) {
+      input_symbols <- input_data
+    }
   }
 
   # Check for duplicates

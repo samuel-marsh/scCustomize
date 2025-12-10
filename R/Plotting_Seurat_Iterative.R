@@ -35,7 +35,7 @@ Iterate_PC_Loading_Plots <- function(
   dims_plot = NULL,
   file_path = NULL,
   name_prefix = NULL,
-  file_name = "PC_Loading_Plots",
+  file_name = "PC_Loading_Plots.pdf",
   return_plots = FALSE
 ) {
   # Check Seurat
@@ -59,15 +59,15 @@ Iterate_PC_Loading_Plots <- function(
   }
 
   # Set dims to plot if not specified
-  num_pc_present <- length(seurat_object@reductions$pca@stdev)
+  num_pc_present <- length(x = seurat_object@reductions$pca@stdev)
   if (is.null(x = dims_plot)) {
     dims_plot <- num_pc_present
   }
 
   # Check pca present
-  reduc_present <- names(x = seurat_object@reductions)
+  reduc_present <- Reductions(object = seurat_object)
   if (!"pca" %in% reduc_present) {
-    cli_abort(message = "Cannot find reduction 'pca' in this Seurat Object.")
+    cli_abort(message = "Cannot find reduction {.val pca} in this Seurat Object.")
   }
   # Check dims present in object
   if (dims_plot > num_pc_present) {

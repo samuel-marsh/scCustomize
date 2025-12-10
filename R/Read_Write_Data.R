@@ -89,8 +89,6 @@ Create_10X_H5 <- function(
 #' @param raw_cell_bender_matrix matrix file containing the cell bender correct counts.
 #' @param raw_counts_matrix matrix file contain the uncorrected Cell Ranger (or other) counts.
 #' @param raw_assay_name a key value to use specifying the name of assay.  Default is "RAW".
-#' @param min_cells `r lifecycle::badge("deprecated")` soft-deprecated. See `min.cells`.
-#' @param min_features `r lifecycle::badge("deprecated")` soft-deprecated. See `min.features`.
 #' @param min.cells value to supply to min.cells parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
 #' Default is 5.
 #' @param min.features value to supply to min.features parameter of \code{\link[SeuratObject]{CreateSeuratObject}}.
@@ -118,30 +116,10 @@ Create_CellBender_Merged_Seurat <- function(
   raw_cell_bender_matrix = NULL,
   raw_counts_matrix = NULL,
   raw_assay_name = "RAW",
-  min_cells = deprecated(),
-  min_features = deprecated(),
   min.cells = 5,
   min.features = 200,
   ...
 ) {
-  if (is_present(min_cells)) {
-    deprecate_warn(when = "3.3.0",
-                              what = "Create_CellBender_Merged_Seurat(min_cells)",
-                              details = c("i" = "The {.code min_cells} parameter is soft-deprecated.  Please update code to use `min.cells` instead.")
-    )
-    min.cells <- min_cells
-  }
-
-  if (is_present(min_features)) {
-    deprecate_warn(when = "3.3.0",
-                              what = "Create_CellBender_Merged_Seurat(min_features)",
-                              details = c("i" = "The {.code min_features} parameter is soft-deprecated.  Please update code to use `min.features` instead.")
-    )
-    min.features <- min_features
-  }
-
-
-
   # Filter Cell Bender matrix for Cell Ranger cells
   cell_intersect <- intersect(x = colnames(x = raw_counts_matrix), y = colnames(x = raw_cell_bender_matrix))
 
@@ -195,7 +173,7 @@ Create_CellBender_Merged_Seurat <- function(
 #' @param strip.suffix Remove trailing "-1" if present in all cell barcodes.
 #' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
 #' Only possible on Linux based systems.
-#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multi-core processing.
 #' @param merge logical (default FALSE) whether or not to merge samples into a single matrix or return
 #' list of matrices.  If TRUE each sample entry in list will have cell barcode prefix added.  The prefix
 #' will be taken from `sample_names`.
@@ -209,6 +187,7 @@ Create_CellBender_Merged_Seurat <- function(
 #' support file prefixes and altered loop by Samuel Marsh for scCustomize (also previously posted as
 #' potential PR to Seurat GitHub).
 #'
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
@@ -268,10 +247,9 @@ Read10X_GEO <- function(
   cli_inform(message = "{.field Reading 10X files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       barcode.loc <- file.path(data_dir, paste0(sample_list[i], 'barcodes.tsv.gz'))
       gene.loc <- file.path(data_dir, paste0(sample_list[i], 'genes.tsv.gz'))
       features.loc <- file.path(data_dir, paste0(sample_list[i], 'features.tsv.gz'))
@@ -364,7 +342,7 @@ Read10X_GEO <- function(
       }
     })
   } else {
-    raw_data_list <- pblapply(1:length(sample_list), function(i) {
+    raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
       barcode.loc <- file.path(data_dir, paste0(sample_list[i], 'barcodes.tsv.gz'))
       gene.loc <- file.path(data_dir, paste0(sample_list[i], 'genes.tsv.gz'))
       features.loc <- file.path(data_dir, paste0(sample_list[i], 'features.tsv.gz'))
@@ -488,7 +466,7 @@ Read10X_GEO <- function(
   }
 
   # Merge data
-  if (merge) {
+  if (isTRUE(x = merge)) {
     raw_data_merged <- Merge_Sparse_Data_All(matrix_list = raw_data_list, add_cell_ids = names(x = raw_data_list))
     return(raw_data_merged)
   }
@@ -521,6 +499,7 @@ Read10X_GEO <- function(
 #'   containing a sparse matrix of the data from each type will be returned.
 #'   Otherwise a sparse matrix containing the expression data will be returned.
 #'
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom Matrix readMM
@@ -584,10 +563,9 @@ Read10X_h5_GEO <- function(
   cli_inform(message = "{.field Reading 10X H5 files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".h5"))
       data <- Read10X_h5(filename = h5_loc, ...)
     })
@@ -640,6 +618,7 @@ Read10X_h5_GEO <- function(
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
 #'
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom Seurat Read10X
@@ -710,11 +689,10 @@ Read10X_Multi_Directory <- function(
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
       } else {
@@ -784,6 +762,7 @@ Read10X_Multi_Directory <- function(
 #'
 #' @return a list of sparse matrices (merge = FALSE) or a single sparse matrix (merge = TRUE).
 #'
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom Seurat Read10X_h5
@@ -861,11 +840,10 @@ Read10X_h5_Multi_Directory <- function(
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
       } else {
@@ -903,7 +881,7 @@ Read10X_h5_Multi_Directory <- function(
 
     if (length(x = new_suffix_list) != 1 & length(x = new_suffix_list) != length(x = current_suffix_list)) {
       cli_abort(message = c("`new_suffix_list` must be either single value or list of values equal to the number of samples.",
-                            "i" = "Number of samples is: {.field {length(current_suffix_list)}} and number of new_suffixes provided is: {.field {length(x = new_suffix_list)}}."))
+                            "i" = "Number of samples is: {.field {length(x = current_suffix_list)}} and number of new_suffixes provided is: {.field {length(x = new_suffix_list)}}."))
     }
 
     raw_data_list <- Replace_Suffix(data = raw_data_list, current_suffix = current_suffix_list, new_suffix = new_suffix_list)
@@ -952,6 +930,7 @@ Read10X_h5_Multi_Directory <- function(
 #' @return List of gene x cell matrices in list format named by sample name.
 #'
 #' @import Matrix
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom data.table fread
@@ -984,6 +963,11 @@ Read_GEO_Delim <- function(
   num_cores = NULL,
   merge = FALSE
 ) {
+  # check directory
+  if (!dir.exists(paths = data_dir)) {
+    cli_abort(message = "Directory provided does not exist")
+  }
+
   # Create list of all files in directory
   possible_file_list <- list.files(path = data_dir, pattern = file_suffix, full.names = FALSE)
 
@@ -1035,10 +1019,9 @@ Read_GEO_Delim <- function(
   cli_inform(message = "{.field Reading gene expression files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = file_list), function(i) {
       dge_loc <- file.path(data_dir, file_list[i])
       data <- fread(file = dge_loc, data.table = F)
       if (isTRUE(x = move_genes_rownames)) {
@@ -1285,6 +1268,7 @@ Read_CellBender_h5_Mat <- function(
 #'
 #' @return list of sparse matrices
 #'
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -1335,8 +1319,7 @@ Read_CellBender_h5_Multi_Directory <- function(
     file_suffix <- custom_name
 
     # check suffix
-    file_ext <- grep(x = file_suffix, pattern = ".h5$")
-    if (length(x = file_ext) == 0) {
+    if (isFALSE(x = check_extension(file_name = file_suffix, extension = ".h5"))) {
       cli_abort(message = "'custom_name' must end with file extension '.h5'.")
     }
   } else if (isTRUE(x = filtered_h5)) {
@@ -1361,11 +1344,10 @@ Read_CellBender_h5_Multi_Directory <- function(
   # read data
   cli_inform(message = "{.field Reading gene expression files.}")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     # *** Here is where the swap of mclapply or pbmclapply is occuring ***
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       # Create file path
       if (isFALSE(x = no_file_prefix)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], file_suffix))
@@ -1404,13 +1386,13 @@ Read_CellBender_h5_Multi_Directory <- function(
       cli_abort(message = "No values provided to {.code new_suffix_list} but {.code replace_suffix = TRUE}.")
     }
 
-    current_suffix_list <- sapply(1:length(raw_data_list), function(x) {
+    current_suffix_list <- sapply(1:length(x = raw_data_list), function(x) {
       unique(str_extract(string = colnames(x = raw_data_list[[x]]), pattern = "-.$"))
     })
 
     if (length(x = new_suffix_list) != 1 & length(x = new_suffix_list) != length(x = current_suffix_list)) {
       cli_abort(message = c("`new_suffix_list` must be either single value or list of values equal to the number of samples.",
-                            "i" = "Number of samples is: {.field {length(current_suffix_list)}} and number of new_suffixes provided is: {.field {length(x = new_suffix_list)}}."))
+                            "i" = "Number of samples is: {.field {length(x = current_suffix_list)}} and number of new_suffixes provided is: {.field {length(x = new_suffix_list)}}."))
     }
 
     raw_data_list <- Replace_Suffix(data = raw_data_list, current_suffix = current_suffix_list, new_suffix = new_suffix_list)
@@ -1451,6 +1433,7 @@ Read_CellBender_h5_Multi_Directory <- function(
 #'
 #' @return list of sparse matrices
 #'
+#' @import mcprogress
 #' @import parallel
 #' @import pbapply
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -1520,10 +1503,9 @@ Read_CellBender_h5_Multi_File <- function(
   cli_inform(message = "{.field Reading Cell Bender H5 files from directory}")
   pboptions(char = "=")
   if (isTRUE(x = parallel)) {
-    cli_inform(message = c("NOTE: Progress bars not currently supported for parallel processing.",
-                           "NOTE: Parallel processing will not report informative error messages.", "
-                           If function fails set {.code parallel = FALSE} and re-run for informative error reporting.\n"))
-    raw_data_list <- mclapply(mc.cores = num_cores, 1:length(sample_list), function(i) {
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       h5_loc <- file.path(data_dir, paste0(sample_list[i], file_suffix))
       data <- Read_CellBender_h5_Mat(file_name = h5_loc, h5_group_name = h5_group_name, feature_slot_name = feature_slot_name, ...)
     })
@@ -1772,7 +1754,7 @@ Read_Metrics_CellBender <- function(
     }
   }
 
-  cli_inform(message = "Reading {.field CellBender} Metrics for {.field {length(lib_list)} samples}.")
+  cli_inform(message = "Reading {.field CellBender} Metrics for {.field {length(x = lib_list)} samples}.")
   raw_data_list <- pblapply(1:length(x = lib_list), function(x) {
     # get directory path
     file_path <- file.path(base_path, lib_list[x])
