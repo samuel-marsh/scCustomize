@@ -1,5 +1,5 @@
 ## Update 
-This is minor patch to version 3.2.3.  Contains some bug fixes and function deprecations.  See News.md for full changelog.  
+This is minor patch to version 3.2.4.  Contains critical bug fix accidentally introduced in 3.2.3.  See News.md for full changelog.  
 
 
 

@@ -1,4 +1,4 @@
-# scCustomize 3.2.3 (2025-12-09)  
+# scCustomize 3.2.4 (2025-12-10)  
 ## Added  
 - Add progress bar support to following functions with `parallel` parameter using mcprogress package: `Read10X_GEO`, `Read10X_h5_GEO`, `Read10X_Multi_Directory`, `Read10X_h5_Multi_Directory`, `Read_GEO_Delim`, `Read_CellBender_h5_Multi_Directory`, `Read_CellBender_h5_Multi_File`.  
 - Added additional error checks to read functions for informative error messaging.  
