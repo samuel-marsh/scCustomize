@@ -111,7 +111,7 @@ DimPlot_LIGER(liger_object = marsh_liger, group.by = "Transcription_Method", col
 
 
 ```{r fig.height=8, fig.width=12, fig.align='center'}
-DimPlot_LIGER(liger_object = marsh_liger, group.by = "Cluster", split_by = "Transcription_Method", label = FALSE)
+DimPlot_LIGER(liger_object = marsh_liger, group.by = "Cluster", split.by = "Transcription_Method", label = FALSE)
 ```
 
 
