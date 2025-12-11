@@ -186,13 +186,13 @@ percent_express %>%
 ```
 
 ### Split within groups
-User can also supply a `split_by` variable to quantify expression within group split by meta data variable
+User can also supply a `split.by` variable to quantify expression within group split by meta data variable
 ```{r eval=FALSE}
-percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split_by = "group")
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split.by = "group")
 ```
 
 ```{r echo=FALSE}
-percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split_by = "group")
+percent_express <- Percent_Expressing(seurat_object = pbmc, features = c("CD4", "CD8A"), split.by = "group")
 
 percent_express %>%
   kableExtra::kbl() %>%
