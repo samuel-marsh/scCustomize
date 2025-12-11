@@ -18,7 +18,7 @@ Can return either as a list (1 entry per identity class) or vector of barcodes."
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@ Can return either as a list (1 entry per identity class) or vector of barcodes."
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Randomly downsample by identity</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Object_Utilities.R" class="external-link"><code>R/Object_Utilities.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Utilities_Objects.R" class="external-link"><code>R/Utilities_Objects.R</code></a></small>
     <div class="hidden name"><code>Random_Cells_Downsample.Rd</code></div>
     </div>
 
@@ -189,24 +189,26 @@ instead of number of cells per identity, default is FALSE.</p></dd>
 <span class="r-in"><span><span class="co"># return vector of barcodes</span></span></span>
 <span class="r-in"><span><span class="va">random_cells</span> <span class="op">&lt;-</span> <span class="fu">Random_Cells_Downsample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, num_cells <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">random_cells</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GTCATACTTCGCCT" "GCGCATCTTGCTCC" "TACTCTGAATCGAC" "GAACCTGATGAACC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "AATGTTGACAGTCA" "GGCATATGCTTATC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               01               02               03               04 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "GTCATACTTCGCCT" "GCGCATCTTGCTCC" "TACTCTGAATCGAC" "GAACCTGATGAACC" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               05               06 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "AATGTTGACAGTCA" "GGCATATGCTTATC" </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># return list</span></span></span>
 <span class="r-in"><span><span class="va">random_cells_list</span> <span class="op">&lt;-</span> <span class="fu">Random_Cells_Downsample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc_small</span>, return_list <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>num_cells <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">random_cells_list</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`0`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "GTCATACTTCGCCT" "GCGCATCTTGCTCC" "TACTCTGAATCGAC" "GAACCTGATGAACC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "AATGTTGACAGTCA" "GGCATATGCTTATC" "CTTCATGACCGAAT" "CTAAACCTCTGACA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "AGTCAGACTGCACA" "TAGGGACTGAACTC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`1`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "AAGCGACTTTGACG" "ATTGTAGATTCCCG" "ATTACCTGCCTTAT" "ATACCACTCTAAGC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "TCCACTCTGAGCTT" "GCGCACGACTTTAC" "CCATCCGATTCGCC" "AAATTCGAATCACG"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "CATCAGGATGCACA" "ACGTGATGCCATGA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`2`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "GCGTAAACACGGTT" "CATGAGACACGGGA" "TTGCATTGAGCTAC" "AGGTCATGAGTGTC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "GATAGAGAAGGGTG" "GTAAGCACTCATTC" "TACGCCACTCCGAA" "GCTCCATGAGAAGT"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "TACATCACGCTAAC" "CATATAGACTAAGC"</span>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
       </span>
     </div>
 
@@ -119,6 +119,31 @@
       <small>Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="3.2.4" id="sccustomize-324-2025-12-10">scCustomize 3.2.4 (2025-12-10)<small>2025-12-11</small><a class="anchor" aria-label="anchor" href="#sccustomize-324-2025-12-10"></a></h2>
+<div class="section level3">
+<h3 id="added-3-2-4">Added<a class="anchor" aria-label="anchor" href="#added-3-2-4"></a></h3>
+<ul><li>Add progress bar support to following functions with <code>parallel</code> parameter using mcprogress package: <code>Read10X_GEO</code>, <code>Read10X_h5_GEO</code>, <code>Read10X_Multi_Directory</code>, <code>Read10X_h5_Multi_Directory</code>, <code>Read_GEO_Delim</code>, <code>Read_CellBender_h5_Multi_Directory</code>, <code>Read_CellBender_h5_Multi_File</code>.<br></li>
+<li>Added additional error checks to read functions for informative error messaging.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-3-2-4">Changed<a class="anchor" aria-label="anchor" href="#changed-3-2-4"></a></h3>
+<ul><li>
+<code>Random_Cells_Downsample</code> now returns named list of downsampled cells per identity.<br></li>
+<li>Fix internal checks of data format for <code>Update_HGNC_Symbols</code> and <code>Update_MGI_Symbols</code>.<br></li>
+<li>Full deprecation of <code>min_cells</code> and <code>min_features</code> parameters in <code>Create_CellBender_Merged_Seurat</code>, use <code>min.cells</code> and <code>min.features</code> instead.<br></li>
+<li>Full deprecation of <code>meta_col_name</code> in <code>Rename_Clusters</code>.<br></li>
+<li>Full deprecation of <code>group_by</code> parameter in <code>Plot_Median_Genes</code>, <code>Plot_Median_UMIs</code>, <code>Plot_Median_Mito</code>, <code>Plot_Median_Other</code>, <code>Plot_Cells_per_Sample</code>, <code>Percent_Expressing</code>, <code>DimPlot_LIGER</code>, and <code>Extract_Top_Markers</code>. Please use <code>group.by</code> instead.<br></li>
+<li>Full deprecation of <code>group_by_var</code> parameter in <code>Proportion_Plot</code>, <code>Cluster_Stats_All_Samples</code>, <code>Median_Stats</code>, and <code>MAD_Stats</code>. Please use <code>group.by</code> instead.<br></li>
+<li>Full deprecation of <code>split_by</code> parameter in <code>Percent_Expressing</code>, <code>DimPlot_LIGER</code>, and internal functions. Please use <code>split.by</code> instead.<br></li>
+<li>Default file name for <code>Iterate_PC_Loading_Plots</code> now contains “.pdf” file extension.<br></li>
+<li>Reorganization of R/ scripts.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-3-2-4">Fixes<a class="anchor" aria-label="anchor" href="#fixes-3-2-4"></a></h3>
+<ul><li>Fixed bug in <code>DimPlot_scCutom</code> when <code>split_downsample = TRUE</code> that caused plot titles to use the wrong identity names.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="3.2.2" id="sccustomize-322-2025-11-12">scCustomize 3.2.2 (2025-11-12)<small>2025-11-12</small><a class="anchor" aria-label="anchor" href="#sccustomize-322-2025-11-12"></a></h2>
 <div class="section level3">

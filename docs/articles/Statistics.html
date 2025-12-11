@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
       </span>
     </div>
 
@@ -145,7 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Statistics Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: November 13,
+            <h4 data-toc-skip class="date">Compiled: December 11,
 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Statistics.Rmd" class="external-link"><code>vignettes/articles/Statistics.Rmd</code></a></small>
@@ -1086,40 +1086,67 @@ CD8A
 <div class="section level4">
 <h4 id="split-within-groups">Split within groups<a class="anchor" aria-label="anchor" href="#split-within-groups"></a>
 </h4>
-<p>User can also supply a <code>split_by</code> variable to quantify
+<p>User can also supply a <code>split.by</code> variable to quantify
 expression within group split by meta data variable</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, split_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">percent_express</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Percent_Expressing.html">Percent_Expressing</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CD4"</span>, <span class="st">"CD8A"</span><span class="op">)</span>, split.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
 </th>
 <th style="text-align:right;">
-Naive.CD4.T
+Naive.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
-Memory.CD4.T
+Naive.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
-CD14..Mono
+Memory.CD4.T_Group.1
 </th>
 <th style="text-align:right;">
-B
+Memory.CD4.T_Group.2
 </th>
 <th style="text-align:right;">
-CD8.T
+CD14..Mono_Group.1
 </th>
 <th style="text-align:right;">
-FCGR3A..Mono
+CD14..Mono_Group.2
 </th>
 <th style="text-align:right;">
-NK
+B_Group.1
 </th>
 <th style="text-align:right;">
-DC
+B_Group.2
 </th>
 <th style="text-align:right;">
-Platelet
+CD8.T_Group.1
+</th>
+<th style="text-align:right;">
+CD8.T_Group.2
+</th>
+<th style="text-align:right;">
+FCGR3A..Mono_Group.2
+</th>
+<th style="text-align:right;">
+FCGR3A..Mono_Group.1
+</th>
+<th style="text-align:right;">
+NK_Group.1
+</th>
+<th style="text-align:right;">
+NK_Group.2
+</th>
+<th style="text-align:right;">
+DC_Group.2
+</th>
+<th style="text-align:right;">
+DC_Group.1
+</th>
+<th style="text-align:right;">
+Platelet_Group.1
+</th>
+<th style="text-align:right;">
+Platelet_Group.2
 </th>
 </tr></thead>
 <tbody>
@@ -1128,28 +1155,55 @@ Platelet
 CD4
 </td>
 <td style="text-align:right;">
-6.743185
+6.371191
 </td>
 <td style="text-align:right;">
-15.942029
+7.142857
 </td>
 <td style="text-align:right;">
-24.375
+17.39130
 </td>
 <td style="text-align:right;">
-1.453488
+14.347826
 </td>
 <td style="text-align:right;">
-2.583026
+24.255319
 </td>
 <td style="text-align:right;">
-27.160494
+24.48980
 </td>
 <td style="text-align:right;">
-0.6451613
+0.000000
 </td>
 <td style="text-align:right;">
-34.375
+2.673797
+</td>
+<td style="text-align:right;">
+3.623188
+</td>
+<td style="text-align:right;">
+1.503759
+</td>
+<td style="text-align:right;">
+31.25
+</td>
+<td style="text-align:right;">
+23.170732
+</td>
+<td style="text-align:right;">
+0.000000
+</td>
+<td style="text-align:right;">
+1.408451
+</td>
+<td style="text-align:right;">
+37.5
+</td>
+<td style="text-align:right;">
+31.25
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:right;">
 0
@@ -1160,28 +1214,55 @@ CD4
 CD8A
 </td>
 <td style="text-align:right;">
-13.342898
+13.573407
 </td>
 <td style="text-align:right;">
-8.902691
+13.095238
 </td>
 <td style="text-align:right;">
-1.875
+10.67194
 </td>
 <td style="text-align:right;">
-2.616279
+6.956522
 </td>
 <td style="text-align:right;">
-50.553505
+2.553192
 </td>
 <td style="text-align:right;">
-3.703704
+1.22449
 </td>
 <td style="text-align:right;">
-8.3870968
+1.273885
 </td>
 <td style="text-align:right;">
-3.125
+3.743316
+</td>
+<td style="text-align:right;">
+55.797101
+</td>
+<td style="text-align:right;">
+45.112782
+</td>
+<td style="text-align:right;">
+3.75
+</td>
+<td style="text-align:right;">
+3.658537
+</td>
+<td style="text-align:right;">
+7.142857
+</td>
+<td style="text-align:right;">
+9.859155
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+6.25
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:right;">
 0
