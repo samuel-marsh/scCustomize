@@ -757,7 +757,7 @@ Plot_Cells_per_Sample <- function(
         ylab(y_axis_label) +
         xlab("")
     } else {
-      plot <- ggplot(data = merged, mapping = aes(x = reorder(.data[[group.by]], .data[["Number_of_Cells"]], decreasing = decreasing), y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
+      plot <- ggplot(data = merged, mapping = aes(x = reorder(.data[[group.by]], .data[["Number_of_Cells"]], decreasing = reorder_decreasing), y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
         geom_boxplot(fill = "white") +
         geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
         scale_fill_manual(values = colors_use) +
