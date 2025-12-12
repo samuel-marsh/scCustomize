@@ -770,7 +770,7 @@ Plot_Cells_per_Sample <- function(
       plot <- plot + geom_hline(yintercept = median(merged[["Number_of_Cells"]]))
     }
   } else {
-    if (isTRUE(x = reorder) || isFALSE(x = plot_median)) {
+    if (isTRUE(x = reorder)) {
       cli_warn(message = "The {.code reorder} and {.code plot_median} parameters were ignored as they are only valid if samples are not grouped by additional variable.")
     }
     # Generate base plot
