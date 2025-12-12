@@ -666,17 +666,19 @@ Plot_Median_Other <- function(
 #'
 
 Plot_Cells_per_Sample <- function(
-  seurat_object,
-  sample_col = "orig.ident",
-  group.by = NULL,
-  colors_use = NULL,
-  dot_size = 1,
-  plot_title = "Cells/Nuclei per Sample",
-  y_axis_label = "Number of Cells",
-  x_axis_label = NULL,
-  legend_title = NULL,
-  x_lab_rotate = TRUE,
-  color_seed = 123
+    seurat_object,
+    sample_col = "orig.ident",
+    group.by = NULL,
+    colors_use = NULL,
+    dot_size = 1,
+    plot_title = "Cells/Nuclei per Sample",
+    y_axis_label = "Number of Cells",
+    x_axis_label = NULL,
+    legend_title = NULL,
+    x_lab_rotate = TRUE,
+    reorder = FALSE,
+    plot_median = TRUE,
+    color_seed = 123
 ) {
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
@@ -730,15 +732,40 @@ Plot_Cells_per_Sample <- function(
     }
   }
 
-  # Generate base plot
-  plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
-    geom_boxplot(fill = "white") +
-    geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
-    scale_fill_manual(values = colors_use) +
-    theme_ggprism_mod() +
-    ggtitle(plot_title) +
-    ylab(y_axis_label) +
-    xlab("")
+  if (length(x = unique(seurat_object[[group.by]])) == length(unique(seurat_object[[sample_col]]))) {
+    if (isFALSE(x = reorder)) {
+      plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
+        geom_boxplot(fill = "white") +
+        geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
+        scale_fill_manual(values = colors_use) +
+        theme_ggprism_mod() +
+        ggtitle(plot_title) +
+        ylab(y_axis_label) +
+        xlab("")
+    } else {
+      plot <- ggplot(data = merged, mapping = aes(x = reorder(.data[[group.by]], .data[["Number_of_Cells"]]), y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
+        geom_boxplot(fill = "white") +
+        geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
+        scale_fill_manual(values = colors_use) +
+        theme_ggprism_mod() +
+        ggtitle(plot_title) +
+        ylab(y_axis_label) +
+        xlab("")
+    }
+    if (isTRUE(x = plot_median)) {
+      plot <- plot + geom_hline(yintercept = median(merged[["Number_of_Cells"]]))
+    }
+  } else {
+    # Generate base plot
+    plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
+      geom_boxplot(fill = "white") +
+      geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
+      scale_fill_manual(values = colors_use) +
+      theme_ggprism_mod() +
+      ggtitle(plot_title) +
+      ylab(y_axis_label) +
+      xlab("")
+  }
 
   # Modify base plot
   if (isTRUE(x = x_lab_rotate)) {
@@ -751,6 +778,10 @@ Plot_Cells_per_Sample <- function(
 
   if (!is.null(x = legend_title)) {
     plot <- plot + labs(fill = legend_title)
+  }
+
+  if (length(x = unique(seurat_object[[group.by]])) == length(unique(seurat_object[[sample_col]]))) {
+    plot <- plot & NoLegend()
   }
 
   # Return plot
