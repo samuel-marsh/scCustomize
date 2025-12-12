@@ -746,11 +746,13 @@ Plot_Cells_per_Sample <- function(
     }
   }
 
-  if (length(x = unique(seurat_object[[group.by]])) == length(unique(seurat_object[[sample_col]]))) {
+  if (nrow(x = unique(x = seurat_object[[group.by]])) == nrow(x = unique(x = seurat_object[[sample_col]]))) {
+    # create sample binwidth to avoid printing irrelevent warning
+    sample_binwidth <- (max(merged[["Number_of_Cells"]]) - min(merged[["Number_of_Cells"]])) * 1/30
+
     if (isFALSE(x = reorder)) {
       plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
-        geom_boxplot(fill = "white") +
-        geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
+        geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size, binwidth = sample_binwidth) +
         scale_fill_manual(values = colors_use) +
         theme_ggprism_mod() +
         ggtitle(plot_title) +
@@ -758,8 +760,7 @@ Plot_Cells_per_Sample <- function(
         xlab("")
     } else {
       plot <- ggplot(data = merged, mapping = aes(x = reorder(.data[[group.by]], .data[["Number_of_Cells"]], decreasing = reorder_decreasing), y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
-        geom_boxplot(fill = "white") +
-        geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
+        geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size, binwidth = sample_binwidth) +
         scale_fill_manual(values = colors_use) +
         theme_ggprism_mod() +
         ggtitle(plot_title) +
@@ -770,8 +771,8 @@ Plot_Cells_per_Sample <- function(
       plot <- plot + geom_hline(yintercept = median(merged[["Number_of_Cells"]]))
     }
   } else {
-    if (isTRUE(x = reorder)) {
-      cli_warn(message = "The {.code reorder} and {.code plot_median} parameters were ignored as they are only valid if samples are not grouped by additional variable.")
+    if (isTRUE(x = reorder) || isFALSE(x = plot_median) || isTRUE(x = reorder_decreasing)) {
+      cli_warn(message = "The {.code reorder}, {.code plot_median}, and {.code reorder_decreasing} parameters were ignored as they are only valid if samples are not grouped by additional variable.")
     }
     # Generate base plot
     plot <- ggplot(data = merged, mapping = aes(x = .data[[group.by]], y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
