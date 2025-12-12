@@ -15,6 +15,9 @@ Plot_Cells_per_Sample(
   x_axis_label = NULL,
   legend_title = NULL,
   x_lab_rotate = TRUE,
+  reorder = FALSE,
+  reorder_decreasing = FALSE,
+  plot_median = TRUE,
   color_seed = 123
 )
 }
@@ -39,6 +42,14 @@ Plot_Cells_per_Sample(
 
 \item{x_lab_rotate}{logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.}
 
+\item{reorder}{logical, if plotting by sample should x-axis be reordered according to number of cells,
+default is FALSE.}
+
+\item{reorder_decreasing}{logical, if \code{reorder = TRUE} should points be ordered from fewest to
+greatest number of cells (FALSE) or reverse (TRUE), default is FALSE.}
+
+\item{plot_median}{logical, if plotting by sample should line be added showing median, default is TRUE.}
+
 \item{color_seed}{random seed for the "varibow" palette shuffle if \code{colors_use = NULL} and number of
 groups plotted is greater than 36.  Default = 123.}
 }
@@ -50,7 +61,15 @@ Plot of total cell or nuclei number per sample grouped by another meta data vari
 }
 \examples{
 \dontrun{
-Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "Treatment")
+# Plot cells per sample grouped by "Diagnosis"
+Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "Diagnosis")
+
+# Plot cells per sample individually
+Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident")
+
+#' # Plot cells per sample individually and reorder x-axis by cell number
+Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident", order = TRUE)
+
 }
 
 }
