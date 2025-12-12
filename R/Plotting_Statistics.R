@@ -647,6 +647,8 @@ Plot_Median_Other <- function(
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param reorder logical, if plotting by sample should x-axis be reordered according to number of cells,
 #' default is FALSE.
+#' @param reorder_decreasing logical, if `reorder = TRUE` should points be ordered from fewest to
+#' greatest number of cells (FALSE) or reverse (TRUE), default is FALSE.
 #' @param plot_median logical, if plotting by sample should line be added showing median, default is TRUE.
 #' @param color_seed random seed for the "varibow" palette shuffle if `colors_use = NULL` and number of
 #' groups plotted is greater than 36.  Default = 123.
@@ -664,7 +666,15 @@ Plot_Median_Other <- function(
 #'
 #' @examples
 #' \dontrun{
-#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "Treatment")
+#' # Plot cells per sample grouped by "Diagnosis"
+#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "Diagnosis")
+#'
+#' # Plot cells per sample individually
+#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident")
+#'
+#' #' # Plot cells per sample individually and reorder x-axis by cell number
+#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident", order = TRUE)
+#'
 #' }
 #'
 
@@ -680,6 +690,7 @@ Plot_Cells_per_Sample <- function(
     legend_title = NULL,
     x_lab_rotate = TRUE,
     reorder = FALSE,
+    reorder_decreasing = FALSE,
     plot_median = TRUE,
     color_seed = 123
 ) {
@@ -746,7 +757,7 @@ Plot_Cells_per_Sample <- function(
         ylab(y_axis_label) +
         xlab("")
     } else {
-      plot <- ggplot(data = merged, mapping = aes(x = reorder(.data[[group.by]], .data[["Number_of_Cells"]]), y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
+      plot <- ggplot(data = merged, mapping = aes(x = reorder(.data[[group.by]], .data[["Number_of_Cells"]], decreasing = decreasing), y = .data[["Number_of_Cells"]], fill = .data[[group.by]])) +
         geom_boxplot(fill = "white") +
         geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
         scale_fill_manual(values = colors_use) +
