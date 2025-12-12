@@ -1,6 +1,6 @@
 # scCustomize 3.X.X (202X-XX-XX)  
 ## Added  
-- Added `reorder` and `plot_median` parameters to `Plot_Cells_per_Sample` when grouping by sample.  
+- Added `reorder`, `reorder_decreasing`, and `plot_median` parameters to `Plot_Cells_per_Sample` when grouping by sample.  
   
 
 
