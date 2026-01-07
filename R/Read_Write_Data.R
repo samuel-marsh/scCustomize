@@ -1534,6 +1534,87 @@ Read_CellBender_h5_Multi_File <- function(
 }
 
 
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### READ loom DATA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Read Loom Files
+#'
+#' Internalfunction to read velocyto loom files using hdf5r package.
+#'
+#' @param loom_file loom file to read
+#'
+#' @return list of sparse matrices containing spliced, unspliced, and ambiguous counts
+#' @noRd
+#' @keywords internal
+#'
+#' @references Function is updated from velocyto.R `read.loom.matrices` \url{https://github.com/velocyto-team/velocyto.R}.
+#' Function included in scCustomize to avoid installation issues related to other aspects of
+#' velocyto.R package.
+#'
+
+ReadLoomMatrices <- function(
+    loom_file
+) {
+  # Check hdf5r installed
+  hdf5r_check <- is_installed(pkg = "hdf5r")
+  if (isFALSE(x = hdf5r_check)) {
+    cli_abort(message = c(
+      "Please install the {.val hdf5r} package to use {.code Read_CellBender_h5_Mat} and read HDF5 files.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}hdf5r{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  f <- hdf5r::H5File$new(loom_file, mode='r')
+  cells <- f[["col_attrs/CellID"]][]
+  genes <- f[["row_attrs/Gene"]][]
+  dl <- c(spliced="layers/spliced",
+          unspliced="layers/unspliced",
+          ambiguous="layers/ambiguous")
+  if("layers/spanning" %in% hdf5r::list.datasets(f)) {
+    dl <- c(dl, c(spanning="layers/spanning"))
+  }
+
+  dlist <- lapply(dl, function(path) {
+    m <- as.sparse(t(f[[path]][,]))
+    rownames(m) <- genes; colnames(m) <- cells;
+    return(m)
+  })
+  f$close_all()
+  return(dlist)
+}
+
+
+#' Load RNA Velocity results
+#'
+#' Wrapper function to
+#'
+#' @param loom_file
+#'
+#' @return list of sparse matrices containing spliced, unspliced, and ambiguous counts
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom")
+#' }
+
+Read_Velocity <- function(
+    loom_file
+) {
+    invisible(x = capture.output(ldat <- ReadLoomMatrices(
+      loom_file = loom_file,
+    )))
+  return(ldat)
+}
+
+
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #################### READ OTHER DATA ####################
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
