@@ -1615,7 +1615,7 @@ Read_Velocity <- function(
     loom_file
 ) {
     invisible(x = capture.output(ldat <- ReadLoomMatrices(
-      loom_file = loom_file,
+      loom_file = loom_file
     )))
   return(ldat)
 }
