@@ -1600,6 +1600,12 @@ ReadLoomMatrices <- function(
 #'
 #' @export
 #'
+#' @references Function is updated from `SeuratWrappers::ReadVelocity`
+#' \url{https://github.com/satijalab/seurat-wrappers/blob/master/R/velocity.R} (License: GPL-3).
+#' Function included in scCustomize to avoid installation issues related to other aspects of
+#' velocyto.R package which `SeuratWrappers::ReadVelocity` requires.
+#'
+#'
 #' @examples
 #' \dontrun{
 #' velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom")
