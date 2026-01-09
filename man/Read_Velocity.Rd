@@ -4,10 +4,43 @@
 \alias{Read_Velocity}
 \title{Load RNA Velocity results}
 \usage{
-Read_Velocity(loom_file)
+Read_Velocity(
+  loom_file = NULL,
+  data_dir = NULL,
+  multi_dir = TRUE,
+  gene_symbol = TRUE,
+  sample_list = NULL,
+  sample_names = NULL,
+  shared_suffix = NULL,
+  parallel = FALSE,
+  num_cores = NULL,
+  sort_type = FALSE
+)
 }
 \arguments{
-\item{loom_file}{}
+\item{loom_file}{path and name of loom file to read}
+
+\item{data_dir}{path to data directory containing all loom files to read}
+
+\item{gene_symbol}{logical, should rownames of returned matrices have gene symbols or accession ID #s,
+default is TRUE (symbols).}
+
+\item{sample_list}{A vector of file prefixes/names if specific samples are desired.  Default is \code{NULL} and
+will load all samples in given directory.}
+
+\item{sample_names}{a set of sample names to use for each sample entry in returned list.  If \code{NULL}
+will set names to the file name of each sample.}
+
+\item{shared_suffix}{a suffix and file extension shared by all samples.}
+
+\item{parallel}{logical (default FALSE).  Whether to use multiple cores when reading in data.
+Only possible on Linux based systems.}
+
+\item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
+
+\item{sort_type}{logical, default is FALSE and will return list with 1 sample per entry.  Each
+sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
+3 matrix types (spliced, unspliced, ambiguous) with one entry per sample}
 }
 \value{
 list of sparse matrices containing spliced, unspliced, and ambiguous counts
