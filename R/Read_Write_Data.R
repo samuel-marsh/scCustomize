@@ -1597,6 +1597,8 @@ ReadLoomMatrices <- function(
   num_dup <- sum(duplicated(x = rownames(x = dlist[["spliced"]])))
 
   if (num_dup > 0) {
+    cli_inform(message = c("A total of {.field {num_dup}} duplicate row names were found.",
+                                "i" = "Making unique with {.code make.unique()}."))
     rownames(dlist[["spliced"]]) <- make.unique(names = rownames(dlist[["spliced"]]))
     rownames(dlist[["unspliced"]]) <- make.unique(names = rownames(dlist[["unspliced"]]))
     rownames(dlist[["ambiguous"]]) <- make.unique(names = rownames(dlist[["ambiguous"]]))
@@ -1628,10 +1630,12 @@ ReadLoomMatrices <- function(
 #' }
 
 Read_Velocity <- function(
-    loom_file
+    loom_file,
+    gene_symbol = TRUE
 ) {
     invisible(x = capture.output(ldat <- ReadLoomMatrices(
-      loom_file = loom_file
+      loom_file = loom_file,
+      gene_symbol = gene_symbol
     )))
   return(ldat)
 }
