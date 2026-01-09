@@ -1556,7 +1556,8 @@ Read_CellBender_h5_Multi_File <- function(
 #'
 
 ReadLoomMatrices <- function(
-    loom_file
+    loom_file,
+    gene_symbol = TRUE
 ) {
   # Check hdf5r installed
   hdf5r_check <- is_installed(pkg = "hdf5r")
@@ -1572,7 +1573,12 @@ ReadLoomMatrices <- function(
 
   f <- hdf5r::H5File$new(loom_file, mode='r')
   cells <- f[["col_attrs/CellID"]][]
-  genes <- f[["row_attrs/Gene"]][]
+  if (isTRUE(x = gene_symbol)) {
+    genes <- f[["row_attrs/Gene"]][]
+  } else {
+    genes <- f[["row_attrs/Accession"]][]
+  }
+
   dl <- c(spliced="layers/spliced",
           unspliced="layers/unspliced",
           ambiguous="layers/ambiguous")
@@ -1582,10 +1588,20 @@ ReadLoomMatrices <- function(
 
   dlist <- lapply(dl, function(path) {
     m <- as.sparse(t(f[[path]][,]))
-    rownames(m) <- genes; colnames(m) <- cells;
+    rownames(x = m) <- genes; colnames(x = m) <- cells;
     return(m)
   })
   f$close_all()
+
+  # check unique and edit gene names/ids if needed
+  num_dup <- sum(duplicated(x = rownames(x = dlist[["spliced"]])))
+
+  if (num_dup > 0) {
+    rownames(dlist[["spliced"]]) <- make.unique(names = rownames(dlist[["spliced"]]))
+    rownames(dlist[["unspliced"]]) <- make.unique(names = rownames(dlist[["unspliced"]]))
+    rownames(dlist[["ambiguous"]]) <- make.unique(names = rownames(dlist[["ambiguous"]]))
+  }
+
   return(dlist)
 }
 
