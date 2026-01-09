@@ -1632,7 +1632,7 @@ ReadLoomMatrices <- function(
 #' sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
 #' 3 matrix types (spliced, unspliced, ambiguous) with one entry per sample
 #'
-#' @returns
+#' @returns list of list of matrices
 #' @noRd
 #' @keywords internal
 #'
