@@ -9,12 +9,12 @@ Read_Velocity(
   data_dir = NULL,
   multi_dir = TRUE,
   gene_symbol = TRUE,
+  sort_type = FALSE,
   sample_list = NULL,
   sample_names = NULL,
   shared_suffix = NULL,
   parallel = FALSE,
-  num_cores = NULL,
-  sort_type = FALSE
+  num_cores = NULL
 )
 }
 \arguments{
@@ -22,8 +22,12 @@ Read_Velocity(
 
 \item{data_dir}{path to data directory containing all loom files to read}
 
-\item{gene_symbol}{logical, should rownames of returned matrices have gene symbols or accession ID #s,
+\item{gene_symbol}{logical, should row names of returned matrices have gene symbols or accession ID #s,
 default is TRUE (symbols).}
+
+\item{sort_type}{logical, default is FALSE and will return list with 1 sample per entry.  Each
+sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
+3 matrix types (spliced, unspliced, ambiguous) with one entry per sample}
 
 \item{sample_list}{A vector of file prefixes/names if specific samples are desired.  Default is \code{NULL} and
 will load all samples in given directory.}
@@ -36,11 +40,7 @@ will set names to the file name of each sample.}
 \item{parallel}{logical (default FALSE).  Whether to use multiple cores when reading in data.
 Only possible on Linux based systems.}
 
-\item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multicore processing.}
-
-\item{sort_type}{logical, default is FALSE and will return list with 1 sample per entry.  Each
-sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
-3 matrix types (spliced, unspliced, ambiguous) with one entry per sample}
+\item{num_cores}{if \code{parallel = TRUE} indicates the number of cores to use for multi-core processing.}
 }
 \value{
 list of sparse matrices containing spliced, unspliced, and ambiguous counts
@@ -50,7 +50,23 @@ Wrapper function to
 }
 \examples{
 \dontrun{
+# Read single velocity loom file
 velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom")
+
+# Read single velocity loom file with ensembl IDs
+velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom", gene_symbol = FALSE)
+
+# Read multiple files from a parent directory with many subdirectories & return 1 list entry per sample
+# Each entry will contain 3 matrices (spliced, unspliced, ambiguous)
+velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/")
+
+# Sort returned list by read type instead of by sample
+# list will contain 3 entries (spliced, unspliced, ambiguous)
+# each entry will contain 1 matrix per sample
+velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/", sort_type = TRUE)
+
+# Read multiple files from a single directory
+velo_res_list <- Read_Velocity(loom_file = "PATH/", multi_dir = FALSE)
 }
 }
 \references{
