@@ -1702,6 +1702,7 @@ ReadVelocity_Multi_File_Internal <- function(
     names(x = raw_data_list) <- sample_names
   }
 
+  # sort matrices by read type
   if (isTRUE(x = sort_type)) {
     spliced_list <- lapply(1:length(x = raw_data_list), function(x){
       data <- testing[[x]][["spliced"]]
@@ -1721,7 +1722,6 @@ ReadVelocity_Multi_File_Internal <- function(
     raw_data_list <- list("spliced" = spliced_list,
                           "unspliced" = unspliced_list,
                           "ambiguous" = ambiguous_list)
-
   }
 
   # return object
@@ -1736,6 +1736,9 @@ ReadVelocity_Multi_File_Internal <- function(
 #' @param data_dir path to data directory containing all loom files to read
 #' @param gene_symbol logical, should rownames of returned matrices have gene symbols or accession ID #s,
 #' default is TRUE (symbols).
+#' @param sort_type logical, default is FALSE and will return list with 1 sample per entry.  Each
+#' sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
+#' 3 matrix types (spliced, unspliced, ambiguous) with one entry per sample
 #' @param sample_list A vector of file prefixes/names if specific samples are desired.  Default is `NULL` and
 #' will load all samples in given directory.
 #' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL`
@@ -1744,9 +1747,6 @@ ReadVelocity_Multi_File_Internal <- function(
 #' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
 #' Only possible on Linux based systems.
 #' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
-#' @param sort_type logical, default is FALSE and will return list with 1 sample per entry.  Each
-#' sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
-#' 3 matrix types (spliced, unspliced, ambiguous) with one entry per sample
 #'
 #' @return list of sparse matrices containing spliced, unspliced, and ambiguous counts
 #'
@@ -1768,12 +1768,12 @@ Read_Velocity <- function(
     data_dir = NULL,
     multi_dir = TRUE,
     gene_symbol = TRUE,
+    sort_type = FALSE,
     sample_list = NULL,
     sample_names = NULL,
     shared_suffix = NULL,
     parallel = FALSE,
-    num_cores = NULL,
-    sort_type = FALSE
+    num_cores = NULL
 ) {
   if (!is.null(x = loom_file) && !is.null(x = data_dir)) {
     cli_abort(message = "Cannot specify values for both {.code loom_file} and {.code data_dir}.")
