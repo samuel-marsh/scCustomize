@@ -74,4 +74,6 @@ Function is updated from \code{SeuratWrappers::ReadVelocity}
 \url{https://github.com/satijalab/seurat-wrappers/blob/master/R/velocity.R} (License: GPL-3).
 Function included in scCustomize to avoid installation issues related to other aspects of
 velocyto.R package which \code{SeuratWrappers::ReadVelocity} requires.
+scCustomize version also adds multi-file and multi-directory support, ability to return Ensembl IDs,
+and multi-core parallel file reading.
 }

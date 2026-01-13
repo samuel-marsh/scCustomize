@@ -1879,6 +1879,8 @@ ReadVelocity_Multi_Directory <- function(
 #' \url{https://github.com/satijalab/seurat-wrappers/blob/master/R/velocity.R} (License: GPL-3).
 #' Function included in scCustomize to avoid installation issues related to other aspects of
 #' velocyto.R package which `SeuratWrappers::ReadVelocity` requires.
+#' scCustomize version also adds multi-file and multi-directory support, ability to return Ensembl IDs,
+#' and multi-core parallel file reading.
 #'
 #'
 #' @examples
