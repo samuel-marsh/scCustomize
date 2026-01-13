@@ -1686,14 +1686,18 @@ ReadVelocity_Multi_File_Internal <- function(
                            "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
       loom_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".loom"))
-      data <- Read_Velocity(loom_file = loom_loc, gene_symbol = gene_symbol)
+      data <- ReadLoomMatrices(loom_file = loom_loc, gene_symbol = gene_symbol, verbose = FALSE)
     })
   } else {
     raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
       loom_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".loom"))
-      data <- Read_Velocity(loom_file = loom_loc, gene_symbol = gene_symbol)
+      data <- ReadLoomMatrices(loom_file = loom_loc, gene_symbol = gene_symbol, verbose = FALSE)
     })
   }
+
+  # add call to report duplicates single time
+  reporter_file_path <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".loom"))
+  reporter_data <- scCustomize:::ReadLoomMatrices(loom_file = reporter_file_path, gene_symbol = gene_symbol, verbose = TRUE)
 
   # Name the matrices
   if (is.null(x = sample_names)) {
