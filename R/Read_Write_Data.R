@@ -689,7 +689,7 @@ Read10X_Multi_Directory <- function(
   if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
                            "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
-    # *** Here is where the swap of mclapply or pbmclapply is occuring ***
+
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
@@ -839,7 +839,7 @@ Read10X_h5_Multi_Directory <- function(
   if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
                            "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
-    # *** Here is where the swap of mclapply or pbmclapply is occuring ***
+
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
