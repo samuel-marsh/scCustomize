@@ -119,6 +119,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     overwrite = FALSE,
     ...
 ) {
+  # check dots
   chkDots(...)
 
   # Set assay
@@ -323,6 +324,9 @@ Add_Mito_Ribo.Seurat <- function(
     species_prefix = NULL,
     ...
 ) {
+  # check dots
+  chkDots(...)
+
   # Accepted species names
   accepted_names <- data.frame(
     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
@@ -561,6 +565,9 @@ Add_Hemo.Seurat <- function(
     list_species_names = FALSE,
     ...
 ) {
+  # check dots
+  chkDots(...)
+
   # Accepted species names
   accepted_names <- data.frame(
     Mouse_Options = c("Mouse", "mouse", "Ms", "ms", "Mm", "mm"),
@@ -716,8 +723,8 @@ Add_Cell_Complexity.Seurat <- function(
     overwrite = FALSE,
     ...
 ) {
-  # Check Seurat
-  Is_Seurat(seurat_object = object)
+  # check dots
+  chkDots(...)
 
   # Add assay warning message
   if (assay != "RNA") {
@@ -800,6 +807,9 @@ Add_Top_Gene_Pct.Seurat <- function(
     verbose = TRUE,
     ...
 ){
+  # check dots
+  chkDots(...)
+
   # Check for scuttle first
   scuttle_check <- is_installed(pkg = "scuttle")
   if (isFALSE(x = scuttle_check)) {
@@ -999,8 +1009,8 @@ Add_MALAT1_Threshold.Seurat <- function(
     rough_max = 2,
     ...
 ) {
-  # Check Seurat
-  Is_Seurat(seurat_object = object)
+  # check dots
+  chkDots(...)
 
   # Check for sample column
   if (is.null(x = sample_col) && isFALSE(x = whole_object)) {
