@@ -18,7 +18,6 @@ Add_Cell_QC_Metrics(object, ...)
   add_IEG = TRUE,
   add_hemo = TRUE,
   add_lncRNA = TRUE,
-  add_cell_cycle = TRUE,
   species,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
@@ -105,9 +104,6 @@ object (Default is TRUE).}
 
 \item{add_lncRNA}{logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).}
 
-\item{add_cell_cycle}{logical, whether to addcell cycle scores and phase based on
-\code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
-
 \item{species}{Species of origin for given Seurat Object.  If mouse, human, marmoset, zebrafish, rat,
 drosophila, rhesus macaque, or chicken (name or abbreviation) are provided the function will automatically
 generate patterns and features.}
@@ -179,6 +175,9 @@ chicken).  Default is FALSE.}
 function will abort if column with name provided to \code{meta_col_name} is present in meta.data slot.}
 
 \item{add_IEG_module_score}{logical, whether to add module score belonging to IEG genes to object (Default is TRUE).}
+
+\item{add_cell_cycle}{logical, whether to addcell cycle scores and phase based on
+\code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
 
 \item{ieg_module_name}{name to use for new meta data column for module score of IEGs.  Default is "ieg_score".}
 }
