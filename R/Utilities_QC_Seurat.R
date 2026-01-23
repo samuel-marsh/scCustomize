@@ -119,6 +119,8 @@ Add_Cell_QC_Metrics.Seurat <- function(
     overwrite = FALSE,
     ...
 ) {
+  Seurat:::CheckDots(...)
+
   # Set assay
   assay <- assay %||% DefaultAssay(object = object)
 
