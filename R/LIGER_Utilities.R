@@ -1096,7 +1096,6 @@ Add_Cell_QC_Metrics.liger <- function(
     add_IEG = TRUE,
     add_hemo = TRUE,
     add_lncRNA = TRUE,
-    add_cell_cycle = TRUE,
     species,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
