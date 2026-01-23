@@ -241,7 +241,10 @@ Add_Cell_QC_Metrics.Seurat <- function(
 
       # Add Cell Cycle Scoring
       cli_inform(message = "Calculating {.field Cell Cycle Scores}.")
-      object <- CellCycleScoring(object = object, s.features = Seurat::cc.genes.updated.2019$s.genes, g2m.features = Seurat::cc.genes.updated.2019$g2m.genes)
+      s.genes_found <- Feature_PreCheck(object = object, features = Seurat::cc.genes.updated.2019$s.genes)
+      g2m.genes_found <- Feature_PreCheck(object = object, features = Seurat::cc.genes.updated.2019$g2m.genes)
+
+      object <- CellCycleScoring(object = object, s.features = s.genes_found, g2m.features = g2m.genes_found)
     }
   }
 
