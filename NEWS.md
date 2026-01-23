@@ -6,7 +6,7 @@
 
 
 ## Changed  
-   
+- Add checks for appropriate `...` usage.
 
 ## Fixes  
   
