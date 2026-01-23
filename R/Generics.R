@@ -153,6 +153,7 @@ Add_MALAT1_Threshold <- function(object, ...) {
 #'
 
 Add_Cell_QC_Metrics <- function(object, ...) {
+  rlang::check_dots_used()
   UseMethod(generic = "Add_Cell_QC_Metrics", object = object)
 }
 
