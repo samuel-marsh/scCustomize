@@ -1696,7 +1696,7 @@ ReadVelocity_Multi_File_Internal <- function(
   }
 
   # add call to report duplicates single time
-  reporter_file_path <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".loom"))
+  reporter_file_path <- file.path(data_dir, paste0(sample_list[1], shared_suffix, ".loom"))
   reporter_data <- ReadLoomMatrices(loom_file = reporter_file_path, gene_symbol = gene_symbol, verbose = TRUE)
 
   # Name the matrices
