@@ -19,6 +19,8 @@
 #' @param add_lncRNA logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).
 #' @param add_cell_cycle logical, whether to addcell cycle scores and phase based on
 #' \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if `species = "human"`.  (Default is TRUE).
+#' @param assay_suffix logical, whether to add assay suffix to the QC column name added to meta.data.
+#' Default is FALSE.
 #' @param mito_name name to use for the new meta.data column containing percent mitochondrial counts.
 #' Default is "percent_mito".
 #' @param ribo_name name to use for the new meta.data column containing percent ribosomal counts.
@@ -94,6 +96,7 @@ Add_Cell_QC_Metrics.Seurat <- function(
     add_hemo = TRUE,
     add_lncRNA = TRUE,
     add_cell_cycle = TRUE,
+    assay_suffix = FALSE,
     mito_name = "percent_mito",
     ribo_name = "percent_ribo",
     mito_ribo_name = "percent_mito_ribo",
@@ -152,6 +155,11 @@ Add_Cell_QC_Metrics.Seurat <- function(
   drosophila_options <- accepted_names$Drosophila_Options
   macaque_options <- accepted_names$Macaque_Options
   chicken_options <- accepted_names$Chicken_Options
+
+  # pull column names before adding QC
+  if (isTRUE(x = assay_suffix)) {
+    old_col_names <- colnames(x = Fetch_Meta(object = object))
+  }
 
   # Add mito/ribo
   if (isTRUE(x = add_mito_ribo)) {
@@ -247,6 +255,20 @@ Add_Cell_QC_Metrics.Seurat <- function(
 
       object <- CellCycleScoring(object = object, s.features = s.genes_found, g2m.features = g2m.genes_found)
     }
+  }
+
+  # pull new column names after adding QC
+  if (isTRUE(x = assay_suffix)) {
+    new_col_names <- colnames(x = Fetch_Meta(object = object))
+
+    added_cols <- setdiff(x = new_col_names, y = old_col_names)
+
+    assay <- DefaultAssay(object = object)
+
+    added_cols_new <- paste0(added_cols, "_", assay)
+
+    # Add assay suffix to new columns
+    colnames(x = object@meta.data) <- c(old_col_names, added_cols_new)
   }
 
   # Log Command
