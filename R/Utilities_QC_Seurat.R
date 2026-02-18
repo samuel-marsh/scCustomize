@@ -929,6 +929,8 @@ Add_Top_Gene_Pct.Seurat <- function(
 #' @param sample_col column name in meta.data that contains sample ID information.
 #' @param malat1_threshold_name name to use for the new meta.data column containing percent IEG gene counts.
 #' Default is set dependent on species gene symbol.
+#' @param assay_suffix logical, whether to add assay suffix to the QC column name added to meta.data.
+#' Default is FALSE.
 #' @param ensembl_ids logical, whether feature names in the object are gene names or
 #' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
 #' @param assay Assay to use (default is the current object default assay).
@@ -1011,6 +1013,7 @@ Add_MALAT1_Threshold.Seurat <- function(
     species,
     sample_col = NULL,
     malat1_threshold_name = NULL,
+    assay_suffix = FALSE,
     ensembl_ids = FALSE,
     assay = NULL,
     overwrite = FALSE,
@@ -1084,6 +1087,11 @@ Add_MALAT1_Threshold.Seurat <- function(
     if (is.null(x = malat1_threshold_name)) {
       malat1_threshold_name <- paste0(homolog_name, "_Threshold")
     }
+  }
+
+    # pull column names before adding QC
+  if (isTRUE(x = assay_suffix)) {
+    old_col_names <- colnames(x = Fetch_Meta(object = object))
   }
 
   # Overwrite check
@@ -1247,6 +1255,20 @@ Add_MALAT1_Threshold.Seurat <- function(
     object[[malat1_threshold_name]] <- factor(object[[malat1_threshold_name]][,1], levels = c("TRUE","FALSE"))
   }
 
+  # pull new column names after adding QC
+  if (isTRUE(x = assay_suffix)) {
+    new_col_names <- colnames(x = Fetch_Meta(object = object))
+
+    added_cols <- setdiff(x = new_col_names, y = old_col_names)
+
+    assay <- DefaultAssay(object = object)
+
+    added_cols_new <- paste0(added_cols, "_", assay)
+
+    # Add assay suffix to new columns
+    colnames(x = object@meta.data) <- c(old_col_names, added_cols_new)
+  }
+
   object <- LogSeuratCommand(object = object)
 
   return(object)
@@ -1260,6 +1282,8 @@ Add_MALAT1_Threshold.Seurat <- function(
 #' @param seurat_object object name.
 #' @param species Species of origin for given Seurat Object.  Only accepted species are: mouse, human (name or abbreviation).
 #' @param exam_module_name name to use for the new meta.data column containing module scores.
+#' @param assay_suffix logical, whether to add assay suffix to the QC column name added to meta.data.
+#' Default is FALSE.
 #' @param method method to use for module scoring, currently only "Seurat" is supported but more to be added.  .
 #' @param ensembl_ids logical, whether feature names in the object are gene names or
 #' ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).
@@ -1289,6 +1313,7 @@ exAM_Scoring <- function(
     seurat_object,
     species,
     exam_module_name = NULL,
+    assay_suffix = FALSE,
     method = "Seurat",
     ensembl_ids = FALSE,
     assay = NULL,
@@ -1329,6 +1354,11 @@ exAM_Scoring <- function(
 
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
+
+  # pull column names before adding QC
+  if (isTRUE(x = assay_suffix)) {
+    old_col_names <- colnames(x = Fetch_Meta(object = seurat_object))
+  }
 
   if (method == "UCell") {
     # Check Nebulosa installed
@@ -1410,6 +1440,20 @@ exAM_Scoring <- function(
       seurat_object <- AddModuleScore(object = seurat_object, features = list(exAM_found2), name = exam_module_name[2], search = FALSE, seed = seed)
       colnames(seurat_object@meta.data) <- gsub(pattern = paste0(exam_module_name[2], "1"), replacement = exam_module_name[2], x = colnames(seurat_object@meta.data))
     }
+  }
+
+  # pull new column names after adding QC
+  if (isTRUE(x = assay_suffix)) {
+    new_col_names <- colnames(x = Fetch_Meta(object = seurat_object))
+
+    added_cols <- setdiff(x = new_col_names, y = old_col_names)
+
+    assay <- DefaultAssay(object = seurat_object)
+
+    added_cols_new <- paste0(added_cols, "_", assay)
+
+    # Add assay suffix to new columns
+    colnames(x = seurat_object@meta.data) <- c(old_col_names, added_cols_new)
   }
 
   # Log Command
