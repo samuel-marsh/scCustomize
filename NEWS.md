@@ -6,6 +6,7 @@
 
 
 ## Changed  
+- **BREAKING CHANGE** The `plot_by` parameter has been soft-deprecated in `Seq_QC_Plot_*` family of functions.  Please use `group.by` instead.  Using `plot_by` will warn user but still work until scCustomize v3.5.0.  
 - Add checks for appropriate `...` usage.
 
 ## Fixes  
