@@ -6,7 +6,8 @@
 \usage{
 Seq_QC_Plot_Saturation(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
@@ -17,7 +18,7 @@ Seq_QC_Plot_Saturation(
 \arguments{
 \item{metrics_dataframe}{data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).}
 
-\item{plot_by}{Grouping factor for the plot.  Default is to plot as single group with single point per sample.}
+\item{group.by}{Grouping factor for the plot.  Default is to plot as single group with single point per sample.}
 
 \item{colors_use}{colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 less than 8 groups and \code{DiscretePalette_scCustomize(palette = "polychrome")} if more than 8.}

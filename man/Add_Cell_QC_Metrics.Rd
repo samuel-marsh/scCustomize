@@ -56,6 +56,7 @@ Add_Cell_QC_Metrics(object, ...)
   add_hemo = TRUE,
   add_lncRNA = TRUE,
   add_cell_cycle = TRUE,
+  assay_suffix = FALSE,
   mito_name = "percent_mito",
   ribo_name = "percent_ribo",
   mito_ribo_name = "percent_mito_ribo",
@@ -178,6 +179,9 @@ function will abort if column with name provided to \code{meta_col_name} is pres
 
 \item{add_cell_cycle}{logical, whether to addcell cycle scores and phase based on
 \code{\link[Seurat]{CellCycleScoring}}.  Only applicable if \code{species = "human"}.  (Default is TRUE).}
+
+\item{assay_suffix}{logical, whether to add assay suffix to the QC column name added to meta.data.
+Default is FALSE.}
 
 \item{ieg_module_name}{name to use for new meta data column for module score of IEGs.  Default is "ieg_score".}
 }

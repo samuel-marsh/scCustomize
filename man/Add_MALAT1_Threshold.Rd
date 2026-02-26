@@ -12,6 +12,7 @@ Add_MALAT1_Threshold(object, ...)
   species,
   sample_col = NULL,
   malat1_threshold_name = NULL,
+  assay_suffix = FALSE,
   ensembl_ids = FALSE,
   assay = NULL,
   overwrite = FALSE,
@@ -44,6 +45,9 @@ Add_MALAT1_Threshold(object, ...)
 
 \item{malat1_threshold_name}{name to use for the new meta.data column containing percent IEG gene counts.
 Default is set dependent on species gene symbol.}
+
+\item{assay_suffix}{logical, whether to add assay suffix to the QC column name added to meta.data.
+Default is FALSE.}
 
 \item{ensembl_ids}{logical, whether feature names in the object are gene names or
 ensembl IDs (default is FALSE; set TRUE if feature names are ensembl IDs).}
