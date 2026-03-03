@@ -77,11 +77,19 @@ QC_Plots_Genes <- function(
   nFeature <- paste0("nFeature_", assay)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nFeature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
+
+  # cutoff linewidth adjustment
+  if (!is.null(x = cutoff_line_width)) {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
+  } else {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
+  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -172,11 +180,19 @@ QC_Plots_UMIs <- function(
   nCount <- paste0("nCount_", assay)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nCount, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
+
+  # cutoff linewidth adjustment
+  if (!is.null(x = cutoff_line_width)) {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
+  } else {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
+  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -263,11 +279,19 @@ QC_Plots_Mito <- function(
   Is_Seurat(seurat_object = seurat_object)
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
+
+  # cutoff linewidth adjustment
+  if (!is.null(x = cutoff_line_width)) {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
+  } else {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
+  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -358,11 +382,19 @@ QC_Plots_Feature <- function(
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
+
+  # cutoff linewidth adjustment
+  if (!is.null(x = cutoff_line_width)) {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
+  } else {
+    plot <- plot +
+      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
+  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -660,8 +692,16 @@ QC_Histogram <- function(
       plot <- ggplot(data = data_to_plot, aes(x = .data[[all_found_features[x]]])) +
         geom_histogram(color = "black", fill = colors_use, bins = bins) +
         theme_cowplot() +
-        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
         ggtitle(plot_titles[x])
+
+      # cutoff linewidth adjustment
+      if (!is.null(x = cutoff_line_width)) {
+        plot <- plot +
+          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
+      } else {
+        plot <- plot +
+          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
+      }
     })
 
     # wrap and return plots
@@ -699,8 +739,17 @@ QC_Histogram <- function(
       plot <- ggplot(data = sub_data, aes(x = .data[[all_found_features]])) +
         geom_histogram(color = "black", fill = colors_use[x], bins = bins) +
         theme_cowplot() +
-        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
         ggtitle(meta_sample_list[x])
+
+      # cutoff linewidth adjustment
+      if (!is.null(x = cutoff_line_width)) {
+        plot <- plot +
+          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
+      } else {
+        plot <- plot +
+          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
+      }
+
     })
 
     # wrap and return plots
