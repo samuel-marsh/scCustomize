@@ -76,20 +76,18 @@ QC_Plots_Genes <- function(
 
   nFeature <- paste0("nFeature_", assay)
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nFeature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
-
-  # cutoff linewidth adjustment
-  if (!is.null(x = cutoff_line_width)) {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
-  } else {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
-  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -179,20 +177,18 @@ QC_Plots_UMIs <- function(
 
   nCount <- paste0("nCount_", assay)
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nCount, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
-
-  # cutoff linewidth adjustment
-  if (!is.null(x = cutoff_line_width)) {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
-  } else {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
-  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -278,20 +274,18 @@ QC_Plots_Mito <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
-
-  # cutoff linewidth adjustment
-  if (!is.null(x = cutoff_line_width)) {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
-  } else {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
-  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -381,20 +375,19 @@ QC_Plots_Feature <- function(
   if (is.null(x = plot_title)) {
     plot_title <- paste0(feature, " per Cell/Nucleus")
   }
+
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
     theme(plot.subtitle = element_text(hjust = 0.5), legend.position = "none")
-
-  # cutoff linewidth adjustment
-  if (!is.null(x = cutoff_line_width)) {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
-  } else {
-    plot <- plot +
-      geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
-  }
 
   # Rotate x axis label
   if (isFALSE(x = x_lab_rotate)) {
@@ -477,7 +470,27 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
-  plot <- QC_Plots_Feature(seurat_object = seurat_object, feature = feature, group.by = group.by, x_axis_label = x_axis_label, y_axis_label = y_axis_label, plot_title = plot_title, low_cutoff = low_cutoff, high_cutoff = high_cutoff, pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
+  # plot
+  plot <- QC_Plots_Feature(seurat_object = seurat_object,
+                           feature = feature,
+                           group.by = group.by,
+                           x_axis_label = x_axis_label,
+                           y_axis_label = y_axis_label,
+                           plot_title = plot_title,
+                           low_cutoff = low_cutoff,
+                           high_cutoff = high_cutoff,
+                           pt.size = pt.size,
+                           colors_use = colors_use,
+                           x_lab_rotate = x_lab_rotate,
+                           y_axis_log = y_axis_log,
+                           raster = raster,
+                           ggplot_default_colors = ggplot_default_colors,
+                           color_seed = color_seed,
+                           plot_median = plot_median,
+                           median_size = median_size,
+                           plot_boxplot = plot_boxplot,
+                           cutoff_line_width = cutoff_line_width,
+                           ...)
 
   return(plot)
 }
@@ -568,11 +581,57 @@ QC_Plots_Combined_Vln <- function(
   }
 
   # Create Individual Plots
-  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object, group.by = group.by, low_cutoff = feature_cutoffs[1], high_cutoff = feature_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
+  feature_plot <- QC_Plots_Genes(seurat_object = seurat_object,
+                                 group.by = group.by,
+                                 low_cutoff = feature_cutoffs[1],
+                                 high_cutoff = feature_cutoffs[2],
+                                 pt.size = pt.size,
+                                 colors_use = colors_use,
+                                 x_lab_rotate = x_lab_rotate,
+                                 y_axis_log = y_axis_log,
+                                 raster = raster,
+                                 ggplot_default_colors = ggplot_default_colors,
+                                 color_seed = color_seed,
+                                 plot_median = plot_median,
+                                 median_size = median_size,
+                                 plot_boxplot = plot_boxplot,
+                                 cutoff_line_width = cutoff_line_width,
+                                 ...)
 
-  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object, group.by = group.by, low_cutoff = UMI_cutoffs[1], high_cutoff = UMI_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
+  UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object,
+                            group.by = group.by,
+                            low_cutoff = UMI_cutoffs[1],
+                            high_cutoff = UMI_cutoffs[2],
+                            pt.size = pt.size,
+                            colors_use = colors_use,
+                            x_lab_rotate = x_lab_rotate,
+                            y_axis_log = y_axis_log,
+                            raster = raster,
+                            ggplot_default_colors = ggplot_default_colors,
+                            color_seed = color_seed,
+                            plot_median = plot_median,
+                            median_size = median_size,
+                            plot_boxplot = plot_boxplot,
+                            cutoff_line_width = cutoff_line_width,
+                            ...)
 
-  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object, group.by = group.by, mito_name = mito_name, low_cutoff = mito_cutoffs[1], high_cutoff = mito_cutoffs[2], pt.size = pt.size, colors_use = colors_use, x_lab_rotate = x_lab_rotate, y_axis_log = y_axis_log, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, median_size = median_size, plot_boxplot = plot_boxplot, cutoff_line_width = cutoff_line_width, ...)
+  mito_plot <- QC_Plots_Mito(seurat_object = seurat_object,
+                             group.by = group.by,
+                             mito_name = mito_name,
+                             low_cutoff = mito_cutoffs[1],
+                             high_cutoff = mito_cutoffs[2],
+                             pt.size = pt.size,
+                             colors_use = colors_use,
+                             x_lab_rotate = x_lab_rotate,
+                             y_axis_log = y_axis_log,
+                             raster = raster,
+                             ggplot_default_colors = ggplot_default_colors,
+                             color_seed = color_seed,
+                             plot_median = plot_median,
+                             median_size = median_size,
+                             plot_boxplot = plot_boxplot,
+                             cutoff_line_width = cutoff_line_width,
+                             ...)
 
   # wrap plots
   plots <- wrap_plots(feature_plot, UMI_plot, mito_plot, ncol = 3)
@@ -685,6 +744,12 @@ QC_Histogram <- function(
     plot_titles <- all_found_features
   }
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   # Plot
   if (is.null(x = split.by)) {
     plot_list <- lapply(1:length(x = all_found_features), function(x) {
@@ -692,16 +757,8 @@ QC_Histogram <- function(
       plot <- ggplot(data = data_to_plot, aes(x = .data[[all_found_features[x]]])) +
         geom_histogram(color = "black", fill = colors_use, bins = bins) +
         theme_cowplot() +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
         ggtitle(plot_titles[x])
-
-      # cutoff linewidth adjustment
-      if (!is.null(x = cutoff_line_width)) {
-        plot <- plot +
-          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
-      } else {
-        plot <- plot +
-          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
-      }
     })
 
     # wrap and return plots
@@ -739,17 +796,8 @@ QC_Histogram <- function(
       plot <- ggplot(data = sub_data, aes(x = .data[[all_found_features]])) +
         geom_histogram(color = "black", fill = colors_use[x], bins = bins) +
         theme_cowplot() +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red") +
         ggtitle(meta_sample_list[x])
-
-      # cutoff linewidth adjustment
-      if (!is.null(x = cutoff_line_width)) {
-        plot <- plot +
-          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width)
-      } else {
-        plot <- plot +
-          geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red")
-      }
-
     })
 
     # wrap and return plots
@@ -891,6 +939,12 @@ QC_Plot_UMIvsGene <- function(
         colors_use <- DiscretePalette_scCustomize(num_colors = group_by_length, palette = "varibow", shuffle_pal = TRUE, seed = color_seed)
       }
     }
+  }
+
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
   }
 
   if (isFALSE(x = ident_legend) && isFALSE(x = combination)) {
@@ -1130,12 +1184,20 @@ QC_Plot_GenevsFeature <- function(
     }
   }
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nFeature, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nFeature, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label)
+
+  return(plot)
 }
 
 
@@ -1242,10 +1304,18 @@ QC_Plot_UMIvsFeature <- function(
     }
   }
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.635 is as close to default as I can approximate
+  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_line_width <- 0.635
+  }
+
   # Plot
-  FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nCount, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
+  plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nCount, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
     geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
     geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue", linewidth = cutoff_line_width) +
     xlab(x_axis_label) +
     ylab(y_axis_label)
+
+  return(plot)
 }
