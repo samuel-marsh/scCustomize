@@ -10,7 +10,7 @@
 - Add checks for appropriate `...` usage.
 
 ## Fixes  
-- Fixed setting of `linewidth` parameter to be conditional in `geom_hline` and `geom_vline` calls to avoid unnecessary empty aesthetic warnings in ggplot2 4.0.0+.  
+- Fixed setting default setting of `linewidth` parameter in `geom_hline` and `geom_vline` calls to avoid unnecessary empty aesthetic warnings in ggplot2 4.0.0+.  
 
   
   
