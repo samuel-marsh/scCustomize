@@ -581,7 +581,7 @@ Dataset_Size_LIGER <- function(
 
     found_meta <- Meta_Present(object = liger_object, meta_col_names = meta_data_column, print_msg = FALSE)[[1]]
 
-    sample_meta <- Extract_Sample_Meta(object = liger_object, sample_name = "dataset", variables_include = found_meta)
+    sample_meta <- Extract_Sample_Meta(object = liger_object, sample_col = "dataset", variables_include = found_meta)
 
     # join data
     dataset_cells_df <- right_join(x = dataset_cells_df, y = sample_meta, by = join_by("dataset"))
