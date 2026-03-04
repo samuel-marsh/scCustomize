@@ -11,7 +11,8 @@ ElbowPlot_scCustom(
   calc_cutoffs = TRUE,
   plot_cutoffs = TRUE,
   line_colors = c("dodgerblue", "firebrick"),
-  linewidth = 0.5
+  cutoff_linewidth = NULL,
+  linewidth = deprecated()
 )
 }
 \arguments{
@@ -23,11 +24,13 @@ ElbowPlot_scCustom(
 
 \item{calc_cutoffs}{logical, whether or not to calculate the cutoffs, default is TRUE.}
 
-\item{plot_cutoffs}{lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.}
+\item{plot_cutoffs}{logical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.}
 
 \item{line_colors}{colors for the cutoff lines, default is c("dodgerblue", "firebrick").}
 
-\item{linewidth}{widith of the cutoff lines, default is 0.5.}
+\item{cutoff_linewidth}{width of the cutoff lines, default is NULL, uses ggplot2 default.}
+
+\item{linewidth}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{cutoff_linewidth}.}
 }
 \value{
 ggplot2 object

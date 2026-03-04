@@ -13,7 +13,8 @@ QC_Plot_GenevsFeature(
   high_cutoff_gene = NULL,
   low_cutoff_feature = NULL,
   high_cutoff_feature = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   colors_use = NULL,
   pt.size = 1,
   group.by = NULL,
@@ -43,7 +44,10 @@ QC_Plot_GenevsFeature(
 
 \item{high_cutoff_feature}{Plot line a potential high threshold for filtering feature1 per cell.}
 
-\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
+\item{cutoff_line_width}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{cutoff_linewidth}.}
+
+\item{cutoff_linewidth}{numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.}
 
 \item{colors_use}{vector of colors to use for plotting by identity.}
 

@@ -13,7 +13,8 @@ QC_Plots_Complexity(
   plot_title = "Cell Complexity",
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   plot_boxplot = FALSE,
@@ -45,7 +46,10 @@ default is the current active.ident of the object.}
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
 
-\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
+\item{cutoff_line_width}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{cutoff_linewidth}.}
+
+\item{cutoff_linewidth}{numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.}
 
 \item{pt.size}{Point size for plotting}
 
