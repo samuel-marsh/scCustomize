@@ -7,7 +7,9 @@
 
 ## Changed  
 - **BREAKING CHANGE** The `plot_by` parameter has been soft-deprecated in `Seq_QC_Plot_*` family of functions.  Please use `group.by` instead.  Using `plot_by` will warn user but still work until scCustomize v3.5.0.  
-- Add checks for appropriate `...` usage.
+- **BREAKING CHANGE** The parameter `cutoff_line_width` has been soft-deprecated in `QC_Plot_*` family of functions.  Please use `cutoff_linewidth` instead.  Using `cutoff_line_width` will warn user but still work until scCustomize v3.5.0.  
+- **BREAKING CHANGE** The parameter `linewidth` has been soft-deprecated in `ElbowPlot_scCustom` function.  Please use `cutoff_linewidth` instead.  Using `linewidth` will warn user but still work until scCustomize v3.5.0.  
+- Add checks for appropriate `...` usage.  
 
 ## Fixes  
 - Fixed setting default setting of `linewidth` parameter in `geom_hline` and `geom_vline` calls to avoid unnecessary empty aesthetic warnings in ggplot2 4.0.0+.  
