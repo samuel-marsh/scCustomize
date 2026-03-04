@@ -497,7 +497,7 @@ Add_Sample_Meta <- function(
 #' @param include_all logical, whether or not to include all object meta data columns in output data.frame.
 #' Default is FALSE.
 #'
-#' @return Returns a data.frame with one row per `sample_name`.
+#' @return Returns a data.frame with one row per `sample_col`.
 #'
 #' @importFrom dplyr any_of grouped_df select slice
 #' @importFrom magrittr "%>%"
@@ -510,14 +510,14 @@ Add_Sample_Meta <- function(
 #' library(Seurat)
 #' pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 #'
-#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident")
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident")
 #'
 #' # Only return specific columns from meta data (orig.ident and batch)
-#' sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident",
 #' variables_include = "batch")
 #'
 #' # Return all columns from meta data
-#' sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident",
 #' include_all = TRUE)
 #'
 
