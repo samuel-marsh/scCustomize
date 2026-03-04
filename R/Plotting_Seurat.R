@@ -2666,9 +2666,10 @@ FeatureScatter_scCustom <- function(
 #' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
 #' @param reduction The reduction to use, default is "pca"
 #' @param calc_cutoffs logical, whether or not to calculate the cutoffs, default is TRUE.
-#' @param plot_cutoffs lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
+#' @param plot_cutoffs logical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
 #' @param line_colors colors for the cutoff lines, default is c("dodgerblue", "firebrick").
-#' @param linewidth widith of the cutoff lines, default is 0.5.
+#' @param cutoff_linewidth width of the cutoff lines, default is NULL, uses ggplot2 default.
+#' @param linewidth `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
 #'
 #' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}.
 #'
@@ -2691,8 +2692,18 @@ ElbowPlot_scCustom <- function(
     calc_cutoffs = TRUE,
     plot_cutoffs = TRUE,
     line_colors = c("dodgerblue", "firebrick"),
-    linewidth = 0.5
+    cutoff_linewidth = NULL,
+    linewidth = deprecated()
 ) {
+  # check deprecation
+  if (is_present(linewidth)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "ElbowPlot_scCustom(linewidth)",
+                   details = c("i" = "The {.code linewidth} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- linewidth
+  }
+
   # check seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -2732,6 +2743,12 @@ ElbowPlot_scCustom <- function(
   }
   if (length(x = line_colors) > 2 || length(x = line_colors) < 1) {
     cli_abort(message = "The number of values provided to {.code line_colors} must be either 1 or 2.")
+  }
+
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   # Create plot

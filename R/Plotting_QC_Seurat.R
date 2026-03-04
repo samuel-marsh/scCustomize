@@ -14,7 +14,9 @@
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -54,7 +56,8 @@ QC_Plots_Genes <- function(
   y_axis_label = "Features",
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   plot_boxplot = FALSE,
@@ -68,6 +71,15 @@ QC_Plots_Genes <- function(
   color_seed = 123,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plots_Genes(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -77,13 +89,13 @@ QC_Plots_Genes <- function(
   nFeature <- paste0("nFeature_", assay)
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nFeature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_linewidth) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -115,7 +127,9 @@ QC_Plots_Genes <- function(
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -155,7 +169,8 @@ QC_Plots_UMIs <- function(
   y_axis_label = "UMIs",
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -169,6 +184,15 @@ QC_Plots_UMIs <- function(
   color_seed = 123,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plots_UMIs(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -178,13 +202,13 @@ QC_Plots_UMIs <- function(
   nCount <- paste0("nCount_", assay)
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = nCount, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_linewidth) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -218,7 +242,9 @@ QC_Plots_UMIs <- function(
 #' @param x_axis_label Label for x axis.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -258,7 +284,8 @@ QC_Plots_Mito <- function(
   y_axis_label = "% Mitochondrial Gene Counts",
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -271,17 +298,26 @@ QC_Plots_Mito <- function(
   color_seed = 123,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plots_Mito(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = mito_name, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_linewidth) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -314,7 +350,9 @@ QC_Plots_Mito <- function(
 #' @param plot_title Plot Title.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param pt.size Point size for plotting.
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -356,7 +394,8 @@ QC_Plots_Feature <- function(
   plot_title = NULL,
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -369,6 +408,15 @@ QC_Plots_Feature <- function(
   color_seed = 123,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plots_Feature(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -377,13 +425,13 @@ QC_Plots_Feature <- function(
   }
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   plot <- VlnPlot_scCustom(seurat_object = seurat_object, features = feature, group.by = group.by, colors_use = colors_use, pt.size = pt.size, raster = raster, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, plot_median = plot_median, plot_boxplot = plot_boxplot, median_size = median_size, ...) +
-    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
+    geom_hline(yintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_linewidth) +
     xlab(x_axis_label) +
     ylab(y_axis_label) +
     ggtitle(plot_title) +
@@ -416,7 +464,9 @@ QC_Plots_Feature <- function(
 #' @param plot_title Plot Title.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -457,7 +507,8 @@ QC_Plots_Complexity <- function(
   plot_title = "Cell Complexity",
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   plot_boxplot = FALSE,
@@ -470,6 +521,15 @@ QC_Plots_Complexity <- function(
   color_seed = 123,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plots_Complexity(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # plot
   plot <- QC_Plots_Feature(seurat_object = seurat_object,
                            feature = feature,
@@ -489,7 +549,7 @@ QC_Plots_Complexity <- function(
                            plot_median = plot_median,
                            median_size = median_size,
                            plot_boxplot = plot_boxplot,
-                           cutoff_line_width = cutoff_line_width,
+                           cutoff_linewidth = cutoff_linewidth,
                            ...)
 
   return(plot)
@@ -508,7 +568,9 @@ QC_Plots_Complexity <- function(
 #' @param mito_cutoffs Numeric vector of length 1 or 2 to plot lines for  potential low/high threshold for filtering.
 #' @param mito_name The column name containing percent mitochondrial counts information.  Default value is
 #' "percent_mito" which is default value created when using `Add_Mito_Ribo()`.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param pt.size Point size for plotting
 #' @param plot_median logical, whether to plot median for each ident on the plot (Default is FALSE).
 #' @param median_size Shape size for the median is plotted.
@@ -547,7 +609,8 @@ QC_Plots_Combined_Vln <- function(
   UMI_cutoffs = NULL,
   mito_cutoffs = NULL,
   mito_name = "percent_mito",
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   pt.size = NULL,
   plot_median = FALSE,
   median_size = 15,
@@ -560,6 +623,15 @@ QC_Plots_Combined_Vln <- function(
   color_seed = 123,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plots_Combined_Vln(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -595,7 +667,7 @@ QC_Plots_Combined_Vln <- function(
                                  plot_median = plot_median,
                                  median_size = median_size,
                                  plot_boxplot = plot_boxplot,
-                                 cutoff_line_width = cutoff_line_width,
+                                 cutoff_linewidth = cutoff_linewidth,
                                  ...)
 
   UMI_plot <- QC_Plots_UMIs(seurat_object = seurat_object,
@@ -612,7 +684,7 @@ QC_Plots_Combined_Vln <- function(
                             plot_median = plot_median,
                             median_size = median_size,
                             plot_boxplot = plot_boxplot,
-                            cutoff_line_width = cutoff_line_width,
+                            cutoff_linewidth = cutoff_linewidth,
                             ...)
 
   mito_plot <- QC_Plots_Mito(seurat_object = seurat_object,
@@ -630,7 +702,7 @@ QC_Plots_Combined_Vln <- function(
                              plot_median = plot_median,
                              median_size = median_size,
                              plot_boxplot = plot_boxplot,
-                             cutoff_line_width = cutoff_line_width,
+                             cutoff_linewidth = cutoff_linewidth,
                              ...)
 
   # wrap plots
@@ -653,7 +725,9 @@ QC_Plots_Combined_Vln <- function(
 #' @param features Feature from meta.data, assay features, or feature name shortcut to plot.
 #' @param low_cutoff Plot line a potential low threshold for filtering.
 #' @param high_cutoff Plot line a potential high threshold for filtering.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param split.by Feature to split plots by (i.e. "orig.ident").
 #' @param bins number of bins to plot default is 250.
 #' @param colors_use color to fill histogram bars, default is "dodgerblue".
@@ -684,18 +758,28 @@ QC_Plots_Combined_Vln <- function(
 
 QC_Histogram <- function(
   seurat_object,
-    features,
-    low_cutoff = NULL,
-    high_cutoff = NULL,
-    cutoff_line_width = NULL,
-    split.by = NULL,
-    bins = 250,
-    colors_use = "dodgerblue",
-    num_columns = NULL,
-    plot_title = NULL,
-    assay = NULL,
-    print_defaults = FALSE
+  features,
+  low_cutoff = NULL,
+  high_cutoff = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
+  split.by = NULL,
+  bins = 250,
+  colors_use = "dodgerblue",
+  num_columns = NULL,
+  plot_title = NULL,
+  assay = NULL,
+  print_defaults = FALSE
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Histogram(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -745,9 +829,9 @@ QC_Histogram <- function(
   }
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   # Plot
@@ -757,7 +841,7 @@ QC_Histogram <- function(
       plot <- ggplot(data = data_to_plot, aes(x = .data[[all_found_features[x]]])) +
         geom_histogram(color = "black", fill = colors_use, bins = bins) +
         theme_cowplot() +
-        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
+        geom_vline(xintercept = c(low_cutoff, high_cutoff), linetype = "dashed", color = "red", linewidth = cutoff_linewidth) +
         ggtitle(plot_titles[x])
     })
 
@@ -823,7 +907,9 @@ QC_Histogram <- function(
 #' @param high_cutoff_gene Plot line a potential high threshold for filtering genes per cell.
 #' @param low_cutoff_UMI Plot line a potential low threshold for filtering UMIs per cell.
 #' @param high_cutoff_UMI Plot line a potential high threshold for filtering UMIs per cell.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param colors_use vector of colors to use for plotting by identity.
 #' @param meta_gradient_name Name of continuous meta data variable to color points in plot by.
 #' (MUST be continuous variable i.e. "percent_mito").
@@ -881,7 +967,8 @@ QC_Plot_UMIvsGene <- function(
   high_cutoff_gene = Inf,
   low_cutoff_UMI = -Inf,
   high_cutoff_UMI = Inf,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   colors_use = NULL,
   meta_gradient_name = NULL,
   meta_gradient_color = viridis_plasma_dark_high,
@@ -900,6 +987,15 @@ QC_Plot_UMIvsGene <- function(
   shuffle_seed = 1,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plot_UMIvsGene(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -942,9 +1038,9 @@ QC_Plot_UMIvsGene <- function(
   }
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   if (isFALSE(x = ident_legend) && isFALSE(x = combination)) {
@@ -1009,8 +1105,8 @@ QC_Plot_UMIvsGene <- function(
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
         theme(plot.title = element_text(hjust = 0.5)) +
-        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
         xlab(x_axis_label) +
         ylab(y_axis_label) +
         ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".  ", "\nThe low cutoff for plotting ", meta_gradient_name, " is: ", meta_cutoff_reported)))
@@ -1021,8 +1117,8 @@ QC_Plot_UMIvsGene <- function(
       scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
       theme_cowplot() +
       theme(plot.title = element_text(hjust = 0.5)) +
-      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
       xlab(x_axis_label) +
       ylab(y_axis_label) +
       ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".  ", "\nThe low cutoff for plotting ", meta_gradient_name, " is: ", meta_cutoff_reported)))
@@ -1031,8 +1127,8 @@ QC_Plot_UMIvsGene <- function(
   # Plot by identity
   if (is.null(x = meta_gradient_name) && isFALSE(x = combination)) {
     p1 <- FeatureScatter(object = seurat_object, feature1 = nCount, feature2 = nFeature, cells = cells, pt.size = pt.size, shuffle = TRUE,  raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
       xlab(x_axis_label) +
       ylab(y_axis_label) +
       ggtitle("Genes vs. UMIs per Cell/Nucleus", subtitle = c(paste0("Correlation of full dataset is: ", plot_cor_full, ".", "\nCorrelation of filtered dataset would be: ", plot_cor_filtered, ".")))
@@ -1042,8 +1138,8 @@ QC_Plot_UMIvsGene <- function(
   if (isTRUE(x = combination)) {
     # Plot by identity
     p1 <- FeatureScatter(object = seurat_object, feature1 = nCount, feature2 = nFeature, cells = cells, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+      geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+      geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
       xlab(x_axis_label) +
       ylab(y_axis_label) + ggtitle("")
 
@@ -1058,8 +1154,8 @@ QC_Plot_UMIvsGene <- function(
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
         theme(plot.title = element_text(hjust = 0.5)) +
-        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
         xlab(x_axis_label) +
         ylab(y_axis_label)
     } else {
@@ -1068,8 +1164,8 @@ QC_Plot_UMIvsGene <- function(
         scale_color_gradientn(colors = meta_gradient_color, limits = c(meta_gradient_low_cutoff, NA), na.value = meta_gradient_na_color) +
         theme_cowplot() +
         theme(plot.title = element_text(hjust = 0.5)) +
-        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+        geom_hline(yintercept = c(if(is.finite(x = low_cutoff_gene)) {low_cutoff_gene}, if(is.finite(x = high_cutoff_gene)) {high_cutoff_gene}), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+        geom_vline(xintercept = c(if(is.finite(x = low_cutoff_UMI)) {low_cutoff_UMI}, if(is.finite(x = high_cutoff_UMI)) {high_cutoff_UMI}), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
         xlab(x_axis_label) +
         ylab(y_axis_label)
     }
@@ -1093,7 +1189,9 @@ QC_Plot_UMIvsGene <- function(
 #' @param high_cutoff_gene Plot line a potential high threshold for filtering genes per cell.
 #' @param low_cutoff_feature Plot line a potential low threshold for filtering feature1 per cell.
 #' @param high_cutoff_feature Plot line a potential high threshold for filtering feature1 per cell.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param colors_use vector of colors to use for plotting by identity.
 #' @param pt.size Adjust point size for plotting.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
@@ -1134,7 +1232,8 @@ QC_Plot_GenevsFeature <- function(
   high_cutoff_gene = NULL,
   low_cutoff_feature = NULL,
   high_cutoff_feature = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   colors_use = NULL,
   pt.size = 1,
   group.by = NULL,
@@ -1146,6 +1245,15 @@ QC_Plot_GenevsFeature <- function(
   shuffle_seed = 1,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plot_GenevsFeature(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -1185,15 +1293,15 @@ QC_Plot_GenevsFeature <- function(
   }
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   # Plot
   plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nFeature, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-    geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red",  linewidth = cutoff_line_width) +
-    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue",  linewidth = cutoff_line_width) +
+    geom_hline(yintercept = c(low_cutoff_gene, high_cutoff_gene), linetype = "dashed", color = "red",  linewidth = cutoff_linewidth) +
+    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue",  linewidth = cutoff_linewidth) +
     xlab(x_axis_label) +
     ylab(y_axis_label)
 
@@ -1213,7 +1321,9 @@ QC_Plot_GenevsFeature <- function(
 #' @param high_cutoff_UMI Plot line a potential high threshold for filtering UMI per cell.
 #' @param low_cutoff_feature Plot line a potential low threshold for filtering feature1 per cell.
 #' @param high_cutoff_feature Plot line a potential high threshold for filtering feature1 per cell.
-#' @param cutoff_line_width numerical value for thickness of cutoff lines, default is NULL.
+#' @param cutoff_line_width `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
+#' @param cutoff_linewidth numerical value for thickness of cutoff lines,
+#' default is NULL, uses ggplot2 defaults.
 #' @param colors_use vector of colors to use for plotting by identity.
 #' @param pt.size Adjust point size for plotting.
 #' @param group.by Name of one or more metadata columns to group (color) cells by (for example, orig.ident).
@@ -1254,7 +1364,8 @@ QC_Plot_UMIvsFeature <- function(
   high_cutoff_UMI = NULL,
   low_cutoff_feature = NULL,
   high_cutoff_feature = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   colors_use = NULL,
   pt.size = 1,
   group.by = NULL,
@@ -1266,6 +1377,15 @@ QC_Plot_UMIvsFeature <- function(
   shuffle_seed = 1,
   ...
 ) {
+  # check deprecation
+  if (is_present(cutoff_line_width)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "QC_Plot_UMIvsFeature(cutoff_line_width)",
+                   details = c("i" = "The {.code cutoff_line_width} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- cutoff_line_width
+  }
+
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
@@ -1305,15 +1425,15 @@ QC_Plot_UMIvsFeature <- function(
   }
 
   # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
-  # 0.635 is as close to default as I can approximate
-  if (is.null(x = cutoff_line_width) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
-    cutoff_line_width <- 0.635
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
   }
 
   # Plot
   plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = nCount, pt.size = pt.size, shuffle = TRUE, raster = raster, raster.dpi = raster.dpi, cols = colors_use, group.by = group.by, seed = shuffle_seed, ...) +
-    geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red", linewidth = cutoff_line_width) +
-    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue", linewidth = cutoff_line_width) +
+    geom_hline(yintercept = c(low_cutoff_UMI, high_cutoff_UMI), linetype = "dashed", color = "red", linewidth = cutoff_linewidth) +
+    geom_vline(xintercept = c(low_cutoff_feature, high_cutoff_feature), linetype = "dashed", color = "blue", linewidth = cutoff_linewidth) +
     xlab(x_axis_label) +
     ylab(y_axis_label)
 
