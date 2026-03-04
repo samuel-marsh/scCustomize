@@ -1,4 +1,4 @@
-# scCustomize 3.X.X (202X-XX-XX)  
+# scCustomize 3.3.0 (2026-XX-XX)  
 ## Added  
 - Added `reorder`, `reorder_decreasing`, and `plot_median` parameters to `Plot_Cells_per_Sample` when grouping by sample.  
 - Added `Read_Velocity` function to enable reading of velocyto loom output files without needing to install velocyto.R (which currently suffers from significant installation issues unrelated to reading loom files).  
