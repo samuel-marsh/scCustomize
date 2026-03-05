@@ -892,7 +892,7 @@ Random_Cells_Downsample <- function(
         rownames() %>%
         sample(size = num_cells[x])
     })
-    names(random_cells) <- idents_all
+    names(x = random_cells) <- idents_all
   } else {
     # set seed and select random cells per ident
     prev_seed <- get_seed()
