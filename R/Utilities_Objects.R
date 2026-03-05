@@ -1089,7 +1089,12 @@ Store_Palette_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite, verbose = verbose)
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object,
+                                          data_to_store = palette,
+                                          data_name = palette_name,
+                                          list_as_list = list_as_list,
+                                          overwrite = overwrite,
+                                          verbose = verbose)
   return(seurat_object)
 }
 
@@ -1168,7 +1173,7 @@ Add_Alt_Feature_ID <- function(
   # if providing features_tsv
   if (!is.null(x = features_tsv_file)) {
     features_table <- data.table::fread(file = features_tsv_file, header = FALSE, data.table = FALSE)
-    colnames(features_table) <- c("Ensembl_ID", "Symbol", "Modality")
+    colnames(x = features_table) <- c("Ensembl_ID", "Symbol", "Modality")
 
     features_table$Symbol <- make.unique(features_table$Symbol)
 
