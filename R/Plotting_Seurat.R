@@ -2188,7 +2188,14 @@ DimPlot_scCustom <- function(
       if (is.null(x = group.by)) {
         levels_overall <- levels(x = Idents(object = seurat_object))
       } else {
-        levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+        if (inherits(x = seurat_object@meta.data[[group.by]], what = "factor")) {
+          levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+        } else {
+          cli_inform(message = c("The variable {.field {group.by}} is not a factor. Converting for plot.",
+                                 "i" = "To avoid this warning set meta.data column to factor before plotting."))
+          seurat_object@meta.data[[group.by]] <- factor(seurat_object@meta.data[[group.by]])
+          levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+        }
       }
 
       if (length(x = levels_overall) > length(x = colors_use)) {
@@ -2197,7 +2204,9 @@ DimPlot_scCustom <- function(
 
       colors_overall <- colors_use
 
-      names(x = colors_overall) <- levels_overall
+      if (is.null(x = names(x = colors_overall))) {
+        names(x = colors_overall) <- levels_overall
+      }
 
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
