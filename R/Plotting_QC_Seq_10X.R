@@ -153,10 +153,11 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #' Plot the number of cells per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #'  less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -297,10 +298,11 @@ Seq_QC_Plot_Number_Cells <- function(
 #' Plot the median genes per cell per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -431,10 +433,11 @@ Seq_QC_Plot_Genes <- function(
 #' Plot the median UMIs per cell per sample
 #'
 #' @param metrics_dataframe data.frame contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -565,6 +568,7 @@ Seq_QC_Plot_UMIs <- function(
 #' Plot the total genes detected per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -699,6 +703,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #' Plot the sequencing saturation percentage per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -840,6 +845,7 @@ Seq_QC_Plot_Saturation <- function(
 #' Plot the fraction of reads in cells per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -981,6 +987,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' Plot the fraction of reads confidently mapped to transcriptome
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1121,6 +1128,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #' Plot the fraction of reads confidently mapped to genome
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1261,6 +1269,7 @@ Seq_QC_Plot_Genome <- function(
 #' Plot the fraction of reads confidently mapped to intergenic regions
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1401,6 +1410,7 @@ Seq_QC_Plot_Intergenic <- function(
 #' Plot the fraction of reads confidently mapped to intronic regions
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1541,6 +1551,7 @@ Seq_QC_Plot_Intronic <- function(
 #' Plot the fraction of reads confidently mapped to Exonic regions
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1681,6 +1692,7 @@ Seq_QC_Plot_Exonic <- function(
 #' Plot the fraction of reads mapped Antisense to Gene
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1826,6 +1838,7 @@ Seq_QC_Plot_Antisense <- function(
 #' Plot a combined plot of the basic QC metrics from sequencing output.
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
@@ -1928,6 +1941,7 @@ Seq_QC_Plot_Basic_Combined <- function(
 #' Plot a combined plot of the Alignment QC metrics from sequencing output.
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.

@@ -2782,7 +2782,7 @@ ElbowPlot_scCustom <- function(
 
     if (isFALSE(x = co1_missing)) {
       plot <- plot +
-        geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = linewidth) +
+        geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = cutoff_linewidth) +
         annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
     } else {
       plot <- plot +
@@ -2791,7 +2791,7 @@ ElbowPlot_scCustom <- function(
 
     if (isFALSE(x = co2_missing)) {
       plot <- plot +
-        geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
+        geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = cutoff_linewidth) +
         annotate("text", x = co2, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
     } else {
       plot <- plot +

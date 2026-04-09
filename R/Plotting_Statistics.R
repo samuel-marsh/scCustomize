@@ -673,7 +673,8 @@ Plot_Median_Other <- function(
 #' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident")
 #'
 #' #' # Plot cells per sample individually and reorder x-axis by cell number
-#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident", order = TRUE)
+#' Plot_Cells_per_Sample(seurat_object = obj, sample_col = "orig.ident", group.by = "orig.ident",
+#' order = TRUE)
 #'
 #' }
 #'

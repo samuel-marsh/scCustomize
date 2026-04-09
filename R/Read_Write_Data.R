@@ -1709,17 +1709,17 @@ ReadVelocity_Multi_File_Internal <- function(
   # sort matrices by read type
   if (isTRUE(x = sort_type)) {
     spliced_list <- lapply(1:length(x = raw_data_list), function(x){
-      data <- testing[[x]][["spliced"]]
+      data <- raw_data_list[[x]][["spliced"]]
     })
     names(x = spliced_list) <- names(x = raw_data_list)
 
     unspliced_list <- lapply(1:length(x = raw_data_list), function(x){
-      data <- testing[[x]][["unspliced"]]
+      data <- raw_data_list[[x]][["unspliced"]]
     })
     names(x = unspliced_list) <- names(x = raw_data_list)
 
     ambiguous_list <- lapply(1:length(x = raw_data_list), function(x){
-      data <- testing[[x]][["ambiguous"]]
+      data <- raw_data_list[[x]][["ambiguous"]]
     })
     names(x = ambiguous_list) <- names(x = raw_data_list)
 
@@ -1829,17 +1829,17 @@ ReadVelocity_Multi_Directory <- function(
   # sort matrices by read type
   if (isTRUE(x = sort_type)) {
     spliced_list <- lapply(1:length(x = raw_data_list), function(x){
-      data <- testing[[x]][["spliced"]]
+      data <- raw_data_list[[x]][["spliced"]]
     })
     names(x = spliced_list) <- names(x = raw_data_list)
 
     unspliced_list <- lapply(1:length(x = raw_data_list), function(x){
-      data <- testing[[x]][["unspliced"]]
+      data <- raw_data_list[[x]][["unspliced"]]
     })
     names(x = unspliced_list) <- names(x = raw_data_list)
 
     ambiguous_list <- lapply(1:length(x = raw_data_list), function(x){
-      data <- testing[[x]][["ambiguous"]]
+      data <- raw_data_list[[x]][["ambiguous"]]
     })
     names(x = ambiguous_list) <- names(x = raw_data_list)
 
@@ -1875,6 +1875,8 @@ ReadVelocity_Multi_Directory <- function(
 #'
 #' @export
 #'
+#' @importFrom utils capture.output
+#'
 #' @references Function is updated from `SeuratWrappers::ReadVelocity`
 #' \url{https://github.com/satijalab/seurat-wrappers/blob/master/R/velocity.R} (License: GPL-3).
 #' Function included in scCustomize to avoid installation issues related to other aspects of
@@ -1891,14 +1893,16 @@ ReadVelocity_Multi_Directory <- function(
 #' # Read single velocity loom file with ensembl IDs
 #' velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom", gene_symbol = FALSE)
 #'
-#' # Read multiple files from a parent directory with many subdirectories & return 1 list entry per sample
+#' # Read multiple files from a parent directory with many subdirectories & return 1 list entry per
+#' sample
 #' # Each entry will contain 3 matrices (spliced, unspliced, ambiguous)
 #' velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/")
 #'
 #' # Sort returned list by read type instead of by sample
 #' # list will contain 3 entries (spliced, unspliced, ambiguous)
 #' # each entry will contain 1 matrix per sample
-#' velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/", sort_type = TRUE)
+#' velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/",
+#' sort_type = TRUE)
 #'
 #' # Read multiple files from a single directory
 #' velo_res_list <- Read_Velocity(loom_file = "PATH/", multi_dir = FALSE)
@@ -1936,7 +1940,7 @@ Read_Velocity <- function(
 
   # multi directory
   if (isTRUE(x = multi_dir)) {
-    data_list <- ReadVelocity_Multi_Dir_Internal(data_dir = data_dir, gene_symbol = gene_symbol, sample_list = sample_list, sample_names = sample_names, shared_suffix = shared_suffix, parallel = parallel, num_cores = num_cores, sort_type = sort_type)
+    data_list <- ReadVelocity_Multi_Directory(data_dir = data_dir, gene_symbol = gene_symbol, sample_list = sample_list, sample_names = sample_names, shared_suffix = shared_suffix, parallel = parallel, num_cores = num_cores, sort_type = sort_type)
     return(data_list)
   }
 }
