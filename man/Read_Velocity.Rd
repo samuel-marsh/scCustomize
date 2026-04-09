@@ -56,14 +56,16 @@ velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom")
 # Read single velocity loom file with ensembl IDs
 velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom", gene_symbol = FALSE)
 
-# Read multiple files from a parent directory with many subdirectories & return 1 list entry per sample
+# Read multiple files from a parent directory with many subdirectories & return 1 list entry per
+sample
 # Each entry will contain 3 matrices (spliced, unspliced, ambiguous)
 velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/")
 
 # Sort returned list by read type instead of by sample
 # list will contain 3 entries (spliced, unspliced, ambiguous)
 # each entry will contain 1 matrix per sample
-velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/", sort_type = TRUE)
+velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/",
+sort_type = TRUE)
 
 # Read multiple files from a single directory
 velo_res_list <- Read_Velocity(loom_file = "PATH/", multi_dir = FALSE)

@@ -20,6 +20,8 @@ Seq_QC_Plot_Transcriptome(
 
 \item{group.by}{Grouping factor for the plot.  Default is to plot as single group with single point per sample.}
 
+\item{plot_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
+
 \item{colors_use}{colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 less than 8 groups and \code{DiscretePalette_scCustomize(palette = "polychrome")} if more than 8.}
 
