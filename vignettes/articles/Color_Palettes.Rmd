@@ -172,7 +172,7 @@ To visualize these or any other palette you can use the `PalettePlot()` function
 ```{r eval=FALSE}
 PalettePlot(pal = DiscretePalette_scCustomize(num_colors = 26, palette = "alphabet"))
 
-PalettePlot(pal = c("color1", "color2", ...)
+PalettePlot(pal = c("color1", "color2", ...))
 
 ```
 

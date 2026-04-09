@@ -53,7 +53,6 @@ library(patchwork)
 library(viridis)
 library(Seurat)
 library(scCustomize)
-library(qs)
 
 # Load stxBrain Visium dataset and Slide-seq V2 ssHippo dataset
 mouse_ctx <- SeuratData::LoadData("stxBrain", type = "anterior1")

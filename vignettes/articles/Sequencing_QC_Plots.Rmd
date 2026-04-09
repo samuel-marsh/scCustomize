@@ -145,20 +145,20 @@ However, to simplify plotting there are also two wrapper functions which will re
 ### Basic Metrics Summary
 A set of basic metrics can be plotted using `Seq_QC_Plot_Basic_Combined`
 ```{r, fig.height=9, fig.width=13}
-Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch")
+Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, group.by = "Full_Batch")
 ```
 
 ### Alignment Metrics Summary
 A set of alignment-based metrics can be plotted using `Seq_QC_Plot_Alignment_Combined`
 ```{r, fig.height=9, fig.width=13}
-Seq_QC_Plot_Alignment_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch")
+Seq_QC_Plot_Alignment_Combined(metrics_dataframe = metrics_final, group.by = "Full_Batch")
 ```
 
 ### Basic Statistics
 All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means()`.  
 ***NOTE: See function help pages and ggpubr for more info to make sure the right test is being used for your data.***
 ```{r, fig.height=9, fig.width=13}
-Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, plot_by = "Full_Batch", significance = T)
+Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, group.by = "Full_Batch", significance = T)
 ```
 
 ### Barcode Rank Plots
