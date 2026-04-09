@@ -12,7 +12,7 @@
 #' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #'  less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -572,7 +572,7 @@ Seq_QC_Plot_UMIs <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -707,7 +707,7 @@ Seq_QC_Plot_Total_Genes <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -849,7 +849,7 @@ Seq_QC_Plot_Saturation <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -991,7 +991,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1132,7 +1132,7 @@ Seq_QC_Plot_Transcriptome <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1273,7 +1273,7 @@ Seq_QC_Plot_Genome <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1414,7 +1414,7 @@ Seq_QC_Plot_Intergenic <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1555,7 +1555,7 @@ Seq_QC_Plot_Intronic <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1696,7 +1696,7 @@ Seq_QC_Plot_Exonic <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1842,7 +1842,7 @@ Seq_QC_Plot_Antisense <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param patchwork_title Title to use for the patchworked plot output.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
@@ -1945,7 +1945,7 @@ Seq_QC_Plot_Basic_Combined <- function(
 #' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param patchwork_title Title to use for the patchworked plot output.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
