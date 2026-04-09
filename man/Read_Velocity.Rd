@@ -22,6 +22,9 @@ Read_Velocity(
 
 \item{data_dir}{path to data directory containing all loom files to read}
 
+\item{multi_dir}{logical, whether or not files are contained in sub-directories or in single folder,
+default is NULL}
+
 \item{gene_symbol}{logical, should row names of returned matrices have gene symbols or accession ID #s,
 default is TRUE (symbols).}
 

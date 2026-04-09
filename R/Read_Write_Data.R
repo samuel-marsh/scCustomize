@@ -1857,6 +1857,8 @@ ReadVelocity_Multi_Directory <- function(
 #'
 #' @param loom_file path and name of loom file to read
 #' @param data_dir path to data directory containing all loom files to read
+#' @param multi_dir logical, whether or not files are contained in sub-directories or in single folder,
+#' default is NULL
 #' @param gene_symbol logical, should row names of returned matrices have gene symbols or accession ID #s,
 #' default is TRUE (symbols).
 #' @param sort_type logical, default is FALSE and will return list with 1 sample per entry.  Each
@@ -1940,7 +1942,7 @@ Read_Velocity <- function(
 
   # multi directory
   if (isTRUE(x = multi_dir)) {
-    data_list <- ReadVelocity_Multi_Directory(data_dir = data_dir, gene_symbol = gene_symbol, sample_list = sample_list, sample_names = sample_names, shared_suffix = shared_suffix, parallel = parallel, num_cores = num_cores, sort_type = sort_type)
+    data_list <- ReadVelocity_Multi_Directory(base_path = data_dir, gene_symbol = gene_symbol, sample_list = sample_list, sample_names = sample_names, parallel = parallel, num_cores = num_cores, sort_type = sort_type)
     return(data_list)
   }
 }
