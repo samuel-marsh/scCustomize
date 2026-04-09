@@ -54,13 +54,13 @@ library(patchwork)
 library(Seurat)
 library(rliger)
 library(scCustomize)
-library(qs)
+library(qs2)
 ```
 
 
 ```{r eval=FALSE}
 # read object
-marsh_micro <- qread("assets/marsh_2020_micro.qs")
+marsh_micro <- qs_read("assets/marsh_2020_micro.qs2")
 
 # Convert to liger
 marsh_liger <- as.liger(object = marsh_micro, datasetVar = "orig.ident")
@@ -68,7 +68,7 @@ marsh_liger <- as.liger(object = marsh_micro, datasetVar = "orig.ident")
 
 
 ```{r include=FALSE}
-marsh_liger <- qread("assets/marsh_liger.qs")
+marsh_liger <- qs_read("assets/marsh_liger.qs2")
 ```
 
 
@@ -169,7 +169,7 @@ DimPlot_LIGER(liger_object = marsh_liger, ggplot_default_colors = TRUE)
 ## Customized plotFactors Functionality
 *NOTE: For this example as "marsh_liger" was not originally a LIGER analyzed object it has no factors.  So I ran a basic LIGER pipeline (with no specific parameters to demonstrate functionality of `Top_Genes_Factor`)*
 ```{r include=FALSE}
-marsh_liger <- qread("assets/marsh_liger_factor.qs")
+marsh_liger <- qs_read("assets/marsh_liger_factor.qs2")
 ```
 
 scCustomize contains function `plotFactors_scCustom()` which expands the functionality and customizes the visualizes of LIGER's `plotFactors()` function.

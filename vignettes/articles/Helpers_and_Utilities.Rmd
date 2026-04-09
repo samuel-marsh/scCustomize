@@ -276,7 +276,7 @@ GEO_10X <- Read10X_GEO(data_dir = "assets/GSE152183_RAW_Marsh/")
 GEO_10X_merged <- Merge_Sparse_Data_All(matrix_list = GEO_10X, add_cell_ids = names(GEO_10X))
 
 # Create Seurat Object and specify orig.ident location
-GEO_10X_Seurat <- Seurat::CreateSeuratObject(counts = GEO_10X_merged, names.field = 1, names.delim = "_", min.features = 200, min.cells = 5)
+GEO_10X_Seurat <- CreateSeuratObject(counts = GEO_10X_merged, names.field = 1, names.delim = "_", min.features = 200, min.cells = 5)
 ```
 
 ### Merging List of Seurat Objects

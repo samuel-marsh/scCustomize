@@ -54,11 +54,11 @@ library(patchwork)
 library(viridis)
 library(Seurat)
 library(scCustomize)
-library(qs)
+library(qs2)
 
 # Load Marsh et al., 2022 datasets
-marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
-marsh_human_pm <- qread(file = "assets/marsh_human_pm.qs")
+marsh_mouse_micro <- qs_read(file = "assets/marsh_2020_micro.qs2")
+marsh_human_pm <- qs_read(file = "assets/marsh_human_pm.qs2")
 
 # Load pbmc dataset
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
@@ -315,7 +315,7 @@ Plot_Density_Joint_Only(seurat_object = marsh_mouse_micro, features = c("Fos", "
 In certain situations returning a plot from two different assays within the same object may be advantageous.  For instance when object contains but raw and Cell Bender corrected counts you may want to plot the same gene from both assays to view the difference.  See Cell Bender Functionality vignette for more info.
 
 ```{r}
-cell_bender_example <- qread("assets/astro_nuc_seq.qs")
+cell_bender_example <- qs_read("assets/astro_nuc_seq.qs2")
 ```
 
 ```{r include=FALSE}

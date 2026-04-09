@@ -50,12 +50,12 @@ library(dplyr)
 library(magrittr)
 library(Seurat)
 library(scCustomize)
-library(qs)
+library(qs2)
 ```
 
 ```{r include=FALSE}
-raw_metrics <- qread("assets/seq_metrics_dataframe_RAW.qs")
-meta_metrics <- qread("assets/seq_metrics_dataframe_meta.qs")
+raw_metrics <- qs_read("assets/seq_metrics_dataframe_RAW.qs2")
+meta_metrics <- qs_read("assets/seq_metrics_dataframe_meta.qs2")
 ```
 
 

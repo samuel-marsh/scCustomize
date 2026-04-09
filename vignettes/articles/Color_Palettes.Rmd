@@ -52,10 +52,10 @@ library(dplyr)
 library(magrittr)
 library(patchwork)
 library(scCustomize)
-library(qs)
+library(qs2)
 
 # Load Marsh et al., 2022 datasets
-marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
+marsh_mouse_micro <- qs_read(file = "assets/marsh_2020_micro.qs2")
 
 # Load PBMC example dataset
 pbmc <- pbmc3k.SeuratData::pbmc3k.final

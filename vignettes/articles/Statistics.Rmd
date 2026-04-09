@@ -52,7 +52,6 @@ library(dplyr)
 library(magrittr)
 library(Seurat)
 library(scCustomize)
-library(qs)
 
 # Load example dataset for tutorial
 pbmc <- pbmc3k.SeuratData::pbmc3k.final
@@ -289,7 +288,7 @@ p2 <- Plot_Median_Genes(seurat_object = pbmc, group.by = "group")
 
 p3 <- Plot_Median_Other(seurat_object = pbmc, median_var = "module_score1", group.by = "group")
 
-patchwork::wrap_plots(p1, p2, p3, ncol = 3)
+wrap_plots(p1, p2, p3, ncol = 3)
 ```
 
 

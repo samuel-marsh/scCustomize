@@ -53,7 +53,7 @@ library(magrittr)
 library(patchwork)
 library(Seurat)
 library(scCustomize)
-library(qs)
+library(qs2)
 
 # Load Example Dataset
 hca_bm <- hcabm40k.SeuratData::hcabm40k
@@ -274,7 +274,7 @@ scCustomize also contains plotting function to plot the number of cells or nucle
 Since the HCA Bone Marrow dataset has exactly the same number of cells per sample we will use the microglia object from the Analysis Plots vignette.
 
 ```{r include=FALSE}
-marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
+marsh_mouse_micro <- qs_read(file = "assets/marsh_2020_micro.qs2")
 ```
 
 

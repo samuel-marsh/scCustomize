@@ -51,6 +51,7 @@ library(magrittr)
 library(patchwork)
 library(Seurat)
 library(scCustomize)
+library(qs2)
 
 pbmc <- pbmc3k.SeuratData::pbmc3k
 hcabm <- hcabm40k.SeuratData::hcabm40k
@@ -161,7 +162,7 @@ pbmc <- Add_Mito_Ribo(object = pbmc, species = "human")
 Some analyses are performed with cells aligned to a genome that contains multiple species (see Cell Ranger/10X documentation for more info).  scCustomize now supports adding mitochondrial and ribosomal percentages for these datasets using optional parameters.  Here we will use example data provided by 10X Genomics [here](https://www.10xgenomics.com/datasets/10k-hgmm-3p-gemx).  
 
 ```{r include=FALSE}
-pbmc_dual_species <- qs::qread("assets/pbmc_dual_species.qs")
+pbmc_dual_species <- qs_read("assets/pbmc_dual_species.qs2")
 ```
 
 
@@ -323,8 +324,8 @@ In Marsh et al., 2022 ([*Nature Neuroscience*](https://doi.org/10.1038/s41593-02
 To demonstrate this function we will use data objects from Marsh et al., 2022.
 ```{r}
 # Load Marsh et al., 2022 datasets
-marsh_mouse_micro <- qs::qread(file = "assets/marsh_2020_micro.qs")
-marsh_human_pm <- qs::qread(file = "assets/marsh_human_pm.qs")
+marsh_mouse_micro <- qs_read(file = "assets/marsh_2020_micro.qs2")
+marsh_human_pm <- qs_read(file = "assets/marsh_human_pm.qs2")
 ```
 
 
