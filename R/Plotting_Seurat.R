@@ -215,22 +215,78 @@ FeaturePlot_scCustom <- function(
   if (is.null(x = split.by) && isTRUE(x = combine)) {
     # Keep until Seurat version required is > 5
     if (seurat_version >= "5") {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           ncol = num_columns,
+                                           combine = combine,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           alpha = alpha_exp,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                                 scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
     } else {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           ncol = num_columns,
+                                           combine = combine,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                                 scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
     }
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && isFALSE(x = combine)) {
     if (seurat_version >= "5") {
-      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...))
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object,
+                                                features = all_found_features,
+                                                order = order,
+                                                pt.size = pt.size,
+                                                reduction = reduction,
+                                                raster = raster,
+                                                split.by = split.by,
+                                                ncol = num_columns,
+                                                combine = combine,
+                                                raster.dpi = raster.dpi,
+                                                label = label,
+                                                alpha = alpha_exp,
+                                                min.cutoff = min.cutoff,
+                                                max.cutoff = max.cutoff,
+                                                ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
         plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
       })
     } else {
-      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...))
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object,
+                                                features = all_found_features,
+                                                order = order,
+                                                pt.size = pt.size,
+                                                reduction = reduction,
+                                                raster = raster,
+                                                split.by = split.by,
+                                                ncol = num_columns,
+                                                combine = combine,
+                                                raster.dpi = raster.dpi,
+                                                label = label,
+                                                min.cutoff = min.cutoff,
+                                                max.cutoff = max.cutoff,
+                                                ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
         plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
@@ -286,9 +342,38 @@ FeaturePlot_scCustom <- function(
     min_exp_value <- min.cutoff
 
     if (seurat_version >= "5") {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp,, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           alpha = alpha_exp,,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                              scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) &
+                              RestoreLegend() &
+                              theme(axis.title.y.right = element_blank())
     } else {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label,, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                              scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) &
+                              RestoreLegend() &
+                              theme(axis.title.y.right = element_blank())
     }
 
     if (isTRUE(x = label_feature_yaxis)) {
