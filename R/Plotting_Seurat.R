@@ -658,15 +658,54 @@ FeaturePlot_DualAssay <- function(
   # Change assay and plot raw
   DefaultAssay(object = seurat_object) <- assay1
 
-  plot_assay1 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
+  plot_assay1 <- FeaturePlot_scCustom(seurat_object = seurat_object,
+                                      features = features,
+                                      layer = layer,
+                                      colors_use = colors_use,
+                                      na_color = na_color,
+                                      na_cutoff = na_cutoff,
+                                      order = order,
+                                      pt.size = pt.size,
+                                      reduction = reduction,
+                                      raster = raster,
+                                      alpha_exp = alpha_exp,
+                                      alpha_na_exp = alpha_na_exp,
+                                      raster.dpi = raster.dpi,
+                                      ...) & labs(color = assay1)
 
   # Change to cell bender and plot
   DefaultAssay(object = seurat_object) <- assay2
 
   if (is.null(x = colors_use_assay2)) {
-    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object,
+                                        features = features,
+                                        layer = layer,
+                                        colors_use = colors_use,
+                                        na_color = na_color,
+                                        na_cutoff = na_cutoff,
+                                        order = order,
+                                        pt.size = pt.size,
+                                        reduction = reduction,
+                                        raster = raster,
+                                        alpha_exp = alpha_exp,
+                                        alpha_na_exp = alpha_na_exp,
+                                        raster.dpi = raster.dpi,
+                                        ...) & labs(color = assay2)
   } else {
-    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use_assay2, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object,
+                                        features = features,
+                                        layer = layer,
+                                        colors_use = colors_use_assay2,
+                                        na_color = na_color,
+                                        na_cutoff = na_cutoff,
+                                        order = order,
+                                        pt.size = pt.size,
+                                        reduction = reduction,
+                                        raster = raster,
+                                        alpha_exp = alpha_exp,
+                                        alpha_na_exp = alpha_na_exp,
+                                        raster.dpi = raster.dpi,
+                                        ...) & labs(color = assay2)
   }
 
 
@@ -833,7 +872,17 @@ VlnPlot_scCustom <- function(
   }
 
   # Plot
-  plot <- VlnPlot(object = seurat_object, features = all_found_features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster, add.noise = add.noise, ...)
+  plot <- VlnPlot(object = seurat_object,
+                  features = all_found_features,
+                  cols = colors_use,
+                  pt.size = pt.size,
+                  idents = idents,
+                  group.by = group.by,
+                  split.by = split.by,
+                  ncol = num_columns,
+                  raster = raster,
+                  add.noise = add.noise,
+                  ...)
 
   # Add add median plot
   if (isTRUE(x = plot_median) && is.null(x = split.by)) {
@@ -1088,9 +1137,13 @@ DotPlot_scCustom <- function(
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Plot
-  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, group.by = group.by, ...) +
-                             scale_color_gradientn(colors = colors_use)
+  plot <- suppressMessages(DotPlot(object = seurat_object,
+                                   features = all_found_features,
+                                   group.by = group.by,
+                                   ...) +
+                           scale_color_gradientn(colors = colors_use)
   )
+
   # Modify plot
   if (isTRUE(x = remove_axis_titles)) {
     plot <- plot +
@@ -2128,7 +2181,25 @@ DimPlot_scCustom <- function(
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+    plot <- DimPlot(object = seurat_object,
+                    cols = colors_use,
+                    pt.size = pt.size,
+                    reduction = reduction,
+                    group.by = group.by,
+                    split.by = split.by,
+                    shuffle = shuffle,
+                    seed = seed,
+                    label = label,
+                    label.size = label.size,
+                    label.color = label.color,
+                    repel = repel,
+                    raster = raster,
+                    raster.dpi = raster.dpi,
+                    ncol = num_columns,
+                    dims = dims,
+                    label.box = label.box,
+                    ...)
+
     if (isTRUE(x = figure_plot)) {
 
       # pull axis labels
@@ -2168,7 +2239,13 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object,
+                                                       group.by = group.by,
+                                                       percent = prop_plot_percent,
+                                                       colors_use = prop_colors_use,
+                                                       x_axis_log = prop_plot_x_log,
+                                                       prop_label = prop_plot_label) +
+                                     plot_layout(widths = c(1, 0.5))
       }
 
       return(plot_figure)
@@ -2182,7 +2259,13 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object,
+                                         group.by = group.by,
+                                         percent = prop_plot_percent,
+                                         colors_use = prop_colors_use,
+                                         x_axis_log = prop_plot_x_log,
+                                         prop_label = prop_plot_label) +
+                       plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -2194,7 +2277,24 @@ DimPlot_scCustom <- function(
       if (isTRUE(x = split_downsample)) {
         cli_abort(message = "{.code split_downsample} requires {.split_seurat = FALSE}.")
       } else {
-        plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+        plot <- DimPlot(object = seurat_object,
+                        cols = colors_use,
+                        pt.size = pt.size,
+                        reduction = reduction,
+                        group.by = group.by,
+                        split.by = split.by,
+                        shuffle = shuffle,
+                        seed = seed,
+                        label = label,
+                        label.size = label.size,
+                        label.color = label.color,
+                        repel = repel,
+                        raster = raster,
+                        raster.dpi = raster.dpi,
+                        ncol = num_columns,
+                        dims = dims,
+                        label.box = label.box,
+                        ...)
       }
 
       if (isTRUE(x = figure_plot)) {
@@ -2236,7 +2336,13 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object,
+                                                         group.by = group.by,
+                                                         percent = prop_plot_percent,
+                                                         colors_use = prop_colors_use,
+                                                         x_axis_log = prop_plot_x_log,
+                                                         prop_label = prop_plot_label) +
+                                       plot_layout(widths = c(1, 0.5))
         }
 
         return(plot_figure)
@@ -2250,7 +2356,13 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object,
+                                           group.by = group.by,
+                                           percent = prop_plot_percent,
+                                           colors_use = prop_colors_use,
+                                           x_axis_log = prop_plot_x_log,
+                                           prop_label = prop_plot_label) +
+                         plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
@@ -2324,7 +2436,23 @@ DimPlot_scCustom <- function(
 
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
-        plot <- DimPlot(object = seurat_object, cells = cell_names[[x]], group.by = group.by, cols = colors_use, reduction = reduction, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, dims = dims, label.box = label.box, ...) +
+        plot <- DimPlot(object = seurat_object,
+                        cells = cell_names[[x]],
+                        group.by = group.by,
+                        cols = colors_use,
+                        reduction = reduction,
+                        pt.size = pt.size,
+                        raster = raster,
+                        raster.dpi = raster.dpi,
+                        shuffle = shuffle,
+                        seed = seed,
+                        label = label,
+                        label.size = label.size,
+                        label.color = label.color,
+                        repel = repel,
+                        dims = dims,
+                        label.box = label.box,
+                        ...) +
           ggtitle(paste(split_by_list[[x]])) +
           theme(plot.title = element_text(hjust = 0.5),
                 legend.position = "right") +
@@ -2362,7 +2490,13 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object,
+                                           group.by = group.by,
+                                           percent = prop_plot_percent,
+                                           colors_use = prop_colors_use,
+                                           x_axis_log = prop_plot_x_log,
+                                           prop_label = prop_plot_label) +
+                         plot_layout(widths = c(1, 0.5))
       }
 
       return(plots)
@@ -2481,7 +2615,15 @@ DimPlot_All_Samples <- function(
 
   # Plots
   plots <- lapply(1:length(x = meta_sample_list), function(x) {
-    plot <- DimPlot(seurat_object, cells = cell_names[[x]], group.by = meta_data_column, cols = colors_use[[x]], reduction = reduction, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, ...) +
+    plot <- DimPlot(object = seurat_object,
+                    cells = cell_names[[x]],
+                    group.by = meta_data_column,
+                    cols = colors_use[[x]],
+                    reduction = reduction,
+                    pt.size = pt.size,
+                    raster = raster,
+                    raster.dpi = raster.dpi,
+                    ...) +
       ggtitle(paste(meta_sample_list[[x]])) +
       theme(plot.title = element_text(hjust = 0.5, size = title_size),
             legend.position = "none") +
@@ -2736,7 +2878,20 @@ FeatureScatter_scCustom <- function(
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cells = cells, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+    plot <- FeatureScatter(object = seurat_object,
+                           feature1 = feature1,
+                           feature2 = feature2,
+                           cells = cells,
+                           cols = colors_use,
+                           pt.size = pt.size,
+                           group.by = group.by,
+                           split.by = split.by,
+                           shuffle = shuffle,
+                           plot.cor = plot.cor,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           ncol = num_columns,
+                           ...)
 
     # Change title
     plot <- plot +
@@ -2757,7 +2912,19 @@ FeatureScatter_scCustom <- function(
   } else {
     # Plot with Seurat splitting
     if (isTRUE(x = split_seurat)) {
-      plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+      plot <- FeatureScatter(object = seurat_object,
+                             feature1 = feature1,
+                             feature2 = feature2,
+                             cols = colors_use,
+                             pt.size = pt.size,
+                             group.by = group.by,
+                             split.by = split.by,
+                             shuffle = shuffle,
+                             plot.cor = plot.cor,
+                             raster = raster,
+                             raster.dpi = raster.dpi,
+                             ncol = num_columns,
+                             ...)
 
       # Aspect ratio changes
       if (!is.null(x = aspect_ratio)) {
@@ -2770,7 +2937,21 @@ FeatureScatter_scCustom <- function(
       # return plot
       return(plot)
     } else {
-      plot <- scCustomze_Split_FeatureScatter(seurat_object = seurat_object, feature1 = feature1, feature2 = feature2, split.by = split.by, group.by = group.by, colors_use = colors_use, pt.size = pt.size, aspect_ratio = aspect_ratio, title_size = title_size, num_columns = num_columns, raster = raster, raster.dpi = raster.dpi, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+      plot <- scCustomze_Split_FeatureScatter(seurat_object = seurat_object,
+                                              feature1 = feature1,
+                                              feature2 = feature2,
+                                              split.by = split.by,
+                                              group.by = group.by,
+                                              colors_use = colors_use,
+                                              pt.size = pt.size,
+                                              aspect_ratio = aspect_ratio,
+                                              title_size = title_size,
+                                              num_columns = num_columns,
+                                              raster = raster,
+                                              raster.dpi = raster.dpi,
+                                              ggplot_default_colors = ggplot_default_colors,
+                                              color_seed = color_seed,
+                                              ...)
 
       return(plot)
     }
@@ -3065,15 +3246,30 @@ SpatialDimPlot_scCustom <- function(
   }
 
   if (isFALSE(x = interactive)) {
-    plot <- SpatialDimPlot(object = seurat_object, group.by = group.by, images = images, cols = colors_use, crop = crop, label = label, label.size = label.size, label.color = label.color, label.box = label.box, repel = repel, ncol = ncol, combine = combine, alpha = alpha, pt.size.factor = pt.size.factor, image.alpha = image.alpha, stroke = stroke, interactive = interactive, ...)
+    plot <- SpatialDimPlot(object = seurat_object,
+                           group.by = group.by,
+                           images = images,
+                           cols = colors_use,
+                           crop = crop,
+                           label = label,
+                           label.size = label.size,
+                           label.color = label.color,
+                           label.box = label.box,
+                           repel = repel,
+                           ncol = ncol,
+                           combine = combine,
+                           alpha = alpha,
+                           pt.size.factor = pt.size.factor,
+                           image.alpha = image.alpha,
+                           stroke = stroke,
+                           interactive = interactive,
+                           ...)
 
     return(plot)
   } else {
-    return(ISpatialDimPlot(
-      object = seurat_object,
-      image = images[1],
-      group.by = group.by,
-      alpha = alpha
-    ))
+    return(ISpatialDimPlot(object = seurat_object,
+                           image = images[1],
+                           group.by = group.by,
+                           alpha = alpha))
   }
 }
