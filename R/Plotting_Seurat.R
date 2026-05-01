@@ -2969,6 +2969,9 @@ FeatureScatter_scCustom <- function(
 #' @param seurat_object name of Seurat object
 #' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
 #' @param reduction The reduction to use, default is "pca"
+#' @param plot_type One of \code{"stdev"} (default), \code{"variance"} (per-PC \% variance), or
+#'   \code{"cumulative_variance"} (running sum of those percentages; equals 100\% at the last
+#'   stored PC when \code{ndims} spans all of them)
 #' @param calc_cutoffs logical, whether or not to calculate the cutoffs, default is TRUE.
 #' @param plot_cutoffs logical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
 #' @param line_colors colors for the cutoff lines, default is c("dodgerblue", "firebrick").
@@ -2993,6 +2996,7 @@ ElbowPlot_scCustom <- function(
     seurat_object,
     ndims = NULL,
     reduction = "pca",
+    plot_type = "stdev",
     calc_cutoffs = TRUE,
     plot_cutoffs = TRUE,
     line_colors = c("dodgerblue", "firebrick"),
@@ -3006,6 +3010,11 @@ ElbowPlot_scCustom <- function(
                    details = c("i" = "The {.code linewidth} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
     )
     cutoff_linewidth <- linewidth
+  }
+
+  # check plot type match
+  if (!plot_type %in% c("stdev", "variance", "cumulative_variance")) {
+    cli_abort(message = "The {.code plot_type} parameter must be one of following: {.field {glue_collapse_scCustom(input_string = c('stdev', 'variance', 'cumulative_variance'), and = FALSE)}}")
   }
 
   # check seurat
@@ -3055,8 +3064,19 @@ ElbowPlot_scCustom <- function(
     cutoff_linewidth <- 0.6365
   }
 
+  # get seurat version
+  seurat_version <- packageVersion("Seurat")
+
   # Create plot
-  plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+  if (seurat_version >= "5.5.0") {
+    plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+  }
+
+  if (seurat_version < "5.5.0" && plot_type == "stdev") {
+    plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+  } else {
+    plot <- Elbow_Internal(seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+  }
 
   # Add cutoffs to plot
   if (isTRUE(x = plot_cutoffs)) {
