@@ -2,6 +2,8 @@
 ## Added  
 - Added `reorder`, `reorder_decreasing`, and `plot_median` parameters to `Plot_Cells_per_Sample` when grouping by sample.  
 - Added `Read_Velocity` function to enable reading of velocyto loom output files without needing to install velocyto.R package (which currently suffers from significant installation issues unrelated to reading loom files).  
+- Added ability to pass `plot_type` in `ElbowPlot_scCustom` for users with Seurat version 5.5.0+.  
+- Added ability to create "variance" or "cumulative variance" plot types in `ElbowPlot_scCustom` for users with Seurat version below 5.5.0.  
   
 
 
