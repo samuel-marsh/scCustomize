@@ -103,7 +103,7 @@ Elbow_Internal <- function(
   #plot
   plot <- ggplot(data = data.frame(dims = 1:ndims, y_data = y_data)) +
     geom_point(mapping = aes(x = .data[["dims"]], y = .data[["y_data"]])) +
-    labs(x = gsub(pattern = '_$', replacement = '', x = Key(object = object[[reduction]])), y = y_label) +
+    labs(x = gsub(pattern = '_$', replacement = '', x = Key(object = seurat_object[[reduction]])), y = y_label) +
     theme_cowplot()
   return(plot)
 }

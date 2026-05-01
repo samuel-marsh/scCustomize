@@ -3072,11 +3072,14 @@ ElbowPlot_scCustom <- function(
     plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
   }
 
-  if (seurat_version < "5.5.0" && plot_type == "stdev") {
-    plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
-  } else {
-    plot <- Elbow_Internal(seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+  if (seurat_version < "5.5.0") {
+    if (plot_type == "stdev") {
+      plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+    } else {
+      plot <- Elbow_Internal(seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+    }
   }
+
 
   # Add cutoffs to plot
   if (isTRUE(x = plot_cutoffs)) {
