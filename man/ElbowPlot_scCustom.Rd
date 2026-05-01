@@ -8,6 +8,7 @@ ElbowPlot_scCustom(
   seurat_object,
   ndims = NULL,
   reduction = "pca",
+  plot_type = "stdev",
   calc_cutoffs = TRUE,
   plot_cutoffs = TRUE,
   line_colors = c("dodgerblue", "firebrick"),
@@ -21,6 +22,10 @@ ElbowPlot_scCustom(
 \item{ndims}{The number of dims to plot.  Default is NULL and will plot all dims}
 
 \item{reduction}{The reduction to use, default is "pca"}
+
+\item{plot_type}{One of \code{"stdev"} (default), \code{"variance"} (per-PC \\% variance), or
+\code{"cumulative_variance"} (running sum of those percentages; equals 100\\% at the last
+stored PC when \code{ndims} spans all of them)}
 
 \item{calc_cutoffs}{logical, whether or not to calculate the cutoffs, default is TRUE.}
 
