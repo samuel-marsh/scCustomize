@@ -3046,7 +3046,7 @@ ElbowPlot_scCustom <- function(
 
     # Get cut-offs
     co1 <- which(cumPct > 90 & pctVar < 5)[1]
-    co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = T)[1] + 1
+    co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = TRUE)[1] + 1
 
   }
 
