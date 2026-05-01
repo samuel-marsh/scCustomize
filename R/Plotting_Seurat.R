@@ -3080,7 +3080,6 @@ ElbowPlot_scCustom <- function(
     }
   }
 
-
   # Add cutoffs to plot
   if (isTRUE(x = plot_cutoffs)) {
     y_max <- get_plot_limits(plot)[["ymax"]]
@@ -3104,7 +3103,7 @@ ElbowPlot_scCustom <- function(
         annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
     } else {
       plot <- plot +
-        annotate("text", x = 1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
+        annotate("text", x = 1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = -1)
     }
 
     if (isFALSE(x = co2_missing)) {
