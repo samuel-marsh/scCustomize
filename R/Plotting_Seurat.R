@@ -3076,7 +3076,7 @@ ElbowPlot_scCustom <- function(
     if (plot_type == "stdev") {
       plot <- ElbowPlot(object = seurat_object, ndims = ndims, reduction = reduction)
     } else {
-      plot <- Elbow_Internal(seurat_object = seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+      plot <- Elbow_Internal(seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
     }
   }
 
