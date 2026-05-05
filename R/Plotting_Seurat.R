@@ -3022,9 +3022,9 @@ ElbowPlot_scCustom <- function(
 
   # set dims if NULL
   if (is.null(x = ndims)) {
-    ndims <- ncol(x = Embeddings(seurat_object, reduction = reduction))
+    ndims <- ncol(x = Embeddings(object = seurat_object, reduction = reduction))
   } else {
-    if (ndims > ncol(x = Embeddings(seurat_object, reduction = reduction))) {
+    if (ndims > ncol(x = Embeddings(object = seurat_object, reduction = reduction))) {
       cli_warn(message = c("Number of dimensions supplied ({.field {ndims}}) is greater than total dims for reduction {.val {reduction}} ({.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}).",
                            "i" = "Setting {.code {ndims}} to max value of {.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}."))
     }
@@ -3069,20 +3069,20 @@ ElbowPlot_scCustom <- function(
 
   # Create plot
   if (seurat_version >= "5.5.0") {
-    plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+    plot <- ElbowPlot(object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
   }
 
   if (seurat_version < "5.5.0") {
     if (plot_type == "stdev") {
-      plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+      plot <- ElbowPlot(object = seurat_object, ndims = ndims, reduction = reduction)
     } else {
-      plot <- Elbow_Internal(seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+      plot <- Elbow_Internal(seurat_object = seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
     }
   }
 
   # Add cutoffs to plot
   if (isTRUE(x = plot_cutoffs)) {
-    y_max <- get_plot_limits(plot)[["ymax"]]
+    y_max <- get_plot_limits(plot = plot)[["ymax"]]
 
     # Adjust plot if ndims is less than cutoff values
     if (co1 > ndims) {
