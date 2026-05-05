@@ -3042,11 +3042,11 @@ ElbowPlot_scCustom <- function(
     pctVar <- seurat_object[[reduction]]@stdev / sum(seurat_object[[reduction]]@stdev) * 100
 
     # calculate cumulative percents
-    cumPct <- cumsum(pctVar)
+    cumPct <- cumsum(x = pctVar)
 
     # Get cut-offs
     co1 <- which(cumPct > 90 & pctVar < 5)[1]
-    co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = TRUE)[1] + 1
+    co2 <- sort(which((pctVar[1:length(x = pctVar) - 1] - pctVar[2:length(x = pctVar)]) > 0.1), decreasing = TRUE)[1] + 1
 
   }
 
