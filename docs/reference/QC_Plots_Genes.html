@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -133,7 +133,8 @@
 <span>  y_axis_label <span class="op">=</span> <span class="st">"Features"</span>,</span>
 <span>  low_cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  high_cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cutoff_line_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cutoff_line_width <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cutoff_linewidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot_median <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plot_boxplot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -181,7 +182,12 @@ default is the current active.ident of the object.</p></dd>
 
 
 <dt>cutoff_line_width</dt>
-<dd><p>numerical value for thickness of cutoff lines, default is NULL.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated" class="external-link"><img src="figures/lifecycle-soft-deprecated.svg" alt="[Soft-deprecated]"></a>. See <code>cutoff_linewidth</code>.</p></dd>
+
+
+<dt>cutoff_linewidth</dt>
+<dd><p>numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.</p></dd>
 
 
 <dt>pt.size</dt>

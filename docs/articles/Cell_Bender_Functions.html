@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Cell Bender Functionality &amp; Plotting</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Cell_Bender_Functions.Rmd" class="external-link"><code>vignettes/articles/Cell_Bender_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Cell_Bender_Functions.Rmd</code></div>
@@ -180,7 +179,7 @@ Seurat.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sjmgarnier.github.io/viridis/" class="external-link">viridis</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs2" class="external-link">qs2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="importing-cell-bender-h5-outputs">Importing Cell Bender H5 Outputs<a class="anchor" aria-label="anchor" href="#importing-cell-bender-h5-outputs"></a>
 </h3>
@@ -727,7 +726,7 @@ Rps21
 examine the changes/trends after running CellBender. The function
 <code>CellBender_Diff_Plot</code> takes the data.frame from
 <code>CellBender_Feature_Diff</code> as input and plots the results.</p>
-<p><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-17-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-17-1.png" alt="" width="768" style="display: block; margin: auto;"></p>
 <p><strong>Optional Parameters</strong></p>
 <ul>
 <li>
@@ -757,7 +756,7 @@ label.</li>
 <span><span class="va">p6</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CellBender_Diff_Plot.html">CellBender_Diff_Plot</a></span><span class="op">(</span>feature_diff_df <span class="op">=</span> <span class="va">feature_diff</span>, custom_labels <span class="op">=</span> <span class="st">"Gm48099"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span>, <span class="va">p5</span>, <span class="va">p6</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-19-1.png" width="1440" style="display: block; margin: auto;"></p>
+<p><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-19-1.png" alt="" width="1440" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -783,7 +782,7 @@ from mouse cortex and have subsetted the astrocytes.</p>
 in expression to neurons (synaptic gene). If Cell Bender has worked well
 we expect that expression of this gene will be very different between
 the two assays.
-<img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-20-1.png" width="960" style="display: block; margin: auto;"></p>
+<img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-20-1.png" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level5">
 <h5 id="non-ambient-rna-gene">Non-Ambient RNA gene<a class="anchor" aria-label="anchor" href="#non-ambient-rna-gene"></a>
@@ -791,7 +790,7 @@ the two assays.
 <p>Now let’s plot normally astrocyte restricted gene. If Cell Bender has
 worked well we expect that expression of this gene shouldn’t be very
 different between the two assays.
-<img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-21-1.png" width="960" style="display: block; margin: auto;"></p>
+<img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-21-1.png" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level4">
@@ -799,7 +798,7 @@ different between the two assays.
 </h4>
 <p><code>FeaturePlot_DualAssay</code> also contains optional parameter
 (<code>colors_use_assay2</code>) that allows for returning plots with
-different color palettes for each assay.<br><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-22-1.png" width="960" style="display: block; margin: auto;"></p>
+different color palettes for each assay.<br><img src="Cell_Bender_Functions_files/figure-html/unnamed-chunk-22-1.png" alt="" width="960" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

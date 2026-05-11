@@ -18,7 +18,7 @@ function call to Seurat or liger objects."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@ function call to Seurat or liger objects."><!-- mathjax --><script src="https://
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add Multiple Cell Quality Control Values with Single Function</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Generics.R" class="external-link"><code>R/Generics.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/LIGER_Utilities.R" class="external-link"><code>R/LIGER_Utilities.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/QC_Utilities_Seurat.R" class="external-link"><code>R/QC_Utilities_Seurat.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Generics.R" class="external-link"><code>R/Generics.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/LIGER_Utilities.R" class="external-link"><code>R/LIGER_Utilities.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Utilities_QC_Seurat.R" class="external-link"><code>R/Utilities_QC_Seurat.R</code></a></small>
     <div class="hidden name"><code>Add_Cell_QC_Metrics.Rd</code></div>
     </div>
 
@@ -139,7 +139,6 @@ function call to Seurat or liger objects.</p>
 <span>  add_IEG <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_hemo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_lncRNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  add_cell_cycle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">species</span>,</span>
 <span>  mito_name <span class="op">=</span> <span class="st">"percent_mito"</span>,</span>
 <span>  ribo_name <span class="op">=</span> <span class="st">"percent_ribo"</span>,</span>
@@ -179,6 +178,7 @@ function call to Seurat or liger objects.</p>
 <span>  add_hemo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_lncRNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  add_cell_cycle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  assay_suffix <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  mito_name <span class="op">=</span> <span class="st">"percent_mito"</span>,</span>
 <span>  ribo_name <span class="op">=</span> <span class="st">"percent_ribo"</span>,</span>
 <span>  mito_ribo_name <span class="op">=</span> <span class="st">"percent_mito_ribo"</span>,</span>
@@ -245,11 +245,6 @@ object (Default is TRUE).</p></dd>
 
 <dt>add_lncRNA</dt>
 <dd><p>logical, whether to add percentage of counts belonging to lncRNA genes to object (Default is TRUE).</p></dd>
-
-
-<dt>add_cell_cycle</dt>
-<dd><p>logical, whether to addcell cycle scores and phase based on
-<code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">CellCycleScoring</a></code>.  Only applicable if <code>species = "human"</code>.  (Default is TRUE).</p></dd>
 
 
 <dt>species</dt>
@@ -370,6 +365,16 @@ function will abort if column with name provided to <code>meta_col_name</code> i
 
 <dt>add_IEG_module_score</dt>
 <dd><p>logical, whether to add module score belonging to IEG genes to object (Default is TRUE).</p></dd>
+
+
+<dt>add_cell_cycle</dt>
+<dd><p>logical, whether to addcell cycle scores and phase based on
+<code><a href="https://satijalab.org/seurat/reference/CellCycleScoring.html" class="external-link">CellCycleScoring</a></code>.  Only applicable if <code>species = "human"</code>.  (Default is TRUE).</p></dd>
+
+
+<dt>assay_suffix</dt>
+<dd><p>logical, whether to add assay suffix to the QC column name added to meta.data.
+Default is FALSE.</p></dd>
 
 
 <dt>ieg_module_name</dt>

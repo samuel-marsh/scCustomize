@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -146,8 +146,7 @@
       <h1 data-toc-skip>Marker Identification &amp; Cluster Annotation
 Helpers</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Markers_and_Cluster_Annotation.Rmd" class="external-link"><code>vignettes/articles/Markers_and_Cluster_Annotation.Rmd</code></a></small>
       <div class="hidden name"><code>Markers_and_Cluster_Annotation.Rmd</code></div>
@@ -175,7 +174,7 @@ identification of marker genes and annotation of clusters. Load packages
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs2" class="external-link">qs2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load example dataset for tutorial</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></span></code></pre></div>
@@ -917,7 +916,7 @@ on the output from <a href="https://github.com/immunogenomics/presto" class="ext
 order the results by auc instead of log2FC.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read in pre-computed data.frame results</span></span>
-<span><span class="va">presto_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span><span class="st">"assets/presto_markers.qs"</span><span class="op">)</span></span>
+<span><span class="va">presto_markers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs2/man/qs_read.html" class="external-link">qs_read</a></span><span class="op">(</span><span class="st">"assets/presto_markers.qs2"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract top markers</span></span>
 <span><span class="va">top_5_presto</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Extract_Top_Markers.html">Extract_Top_Markers</a></span><span class="op">(</span>marker_dataframe <span class="op">=</span> <span class="va">presto_markers</span>, num_features <span class="op">=</span> <span class="fl">5</span>, group.by <span class="op">=</span> <span class="st">"cluster"</span>,</span>

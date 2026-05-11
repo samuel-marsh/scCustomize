@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Object QC Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Object_QC_Functions.Rmd" class="external-link"><code>vignettes/articles/Object_QC_Functions.Rmd</code></a></small>
       <div class="hidden name"><code>Object_QC_Functions.Rmd</code></div>
@@ -176,6 +175,7 @@ analysis: performing quality control and filtering.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs2" class="external-link">qs2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.html" class="external-link">pbmc3k</a></span></span>
 <span><span class="va">hcabm</span> <span class="op">&lt;-</span> <span class="fu">hcabm40k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/hcabm40k.SeuratData/man/hcabm40k.html" class="external-link">hcabm40k</a></span></span></code></pre></div>
@@ -709,11 +709,11 @@ designating cells above or below the threshold. This can then be
 visualized as any meta.data column.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hammond_subset</span>, features <span class="op">=</span> <span class="st">"nFeature_RNA"</span>, split.by <span class="op">=</span> <span class="st">"Malat1_Threshold"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-23-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-23-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/FeatureScatter_scCustom.html">FeatureScatter_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hammond_subset</span>, feature1 <span class="op">=</span> <span class="st">"nCount_RNA"</span>, feature2 <span class="op">=</span> <span class="st">"nFeature_RNA"</span>,</span>
 <span>    split.by <span class="op">=</span> <span class="st">"Malat1_Threshold"</span>, pt.size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-23-2.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-23-2.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="visualizing-saving-threshold-calculation-plots">Visualizing &amp; Saving Threshold Calculation Plots<a class="anchor" aria-label="anchor" href="#visualizing-saving-threshold-calculation-plots"></a>
@@ -766,8 +766,8 @@ to Seurat object using function <code>exAM_Scoring</code>.</p>
 al., 2022.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load Marsh et al., 2022 datasets</span></span>
-<span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span></span>
-<span><span class="va">marsh_human_pm</span> <span class="op">&lt;-</span> <span class="fu">qs</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_human_pm.qs"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs2/man/qs_read.html" class="external-link">qs_read</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs2"</span><span class="op">)</span></span>
+<span><span class="va">marsh_human_pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs2/man/qs_read.html" class="external-link">qs_read</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_human_pm.qs2"</span><span class="op">)</span></span></code></pre></div>
 <p>If adding score to human data both the union score and “microglia”
 (post-mortem) score will be added to be meta.data slot. When species is
 mouse only the union score will be added. When the function is run the
@@ -814,7 +814,7 @@ cluster.</em>
 </div>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/VlnPlot_scCustom.html">VlnPlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">marsh_mouse_micro</span>, features <span class="op">=</span> <span class="st">"exAM_Union_Score"</span>, colors_use <span class="op">=</span> <span class="va">marsh_mouse_micro</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">exp17_micro_colors</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-30-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Object_QC_Functions_files/figure-html/unnamed-chunk-30-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

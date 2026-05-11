@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -133,7 +133,8 @@
 <span>  high_cutoff_gene <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  low_cutoff_UMI <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>,</span>
 <span>  high_cutoff_UMI <span class="op">=</span> <span class="cn">Inf</span>,</span>
-<span>  cutoff_line_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cutoff_line_width <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cutoff_linewidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  meta_gradient_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  meta_gradient_color <span class="op">=</span> <span class="va">viridis_plasma_dark_high</span>,</span>
@@ -185,7 +186,12 @@
 
 
 <dt>cutoff_line_width</dt>
-<dd><p>numerical value for thickness of cutoff lines, default is NULL.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated" class="external-link"><img src="figures/lifecycle-soft-deprecated.svg" alt="[Soft-deprecated]"></a>. See <code>cutoff_linewidth</code>.</p></dd>
+
+
+<dt>cutoff_linewidth</dt>
+<dd><p>numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.</p></dd>
 
 
 <dt>colors_use</dt>

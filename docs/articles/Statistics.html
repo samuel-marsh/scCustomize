@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Statistics Functions</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Statistics.Rmd" class="external-link"><code>vignettes/articles/Statistics.Rmd</code></a></small>
       <div class="hidden name"><code>Statistics.Rmd</code></div>
@@ -176,7 +175,6 @@ SeuratData package.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load example dataset for tutorial</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">pbmc3k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/pbmc3k.SeuratData/man/pbmc3k.final.html" class="external-link">pbmc3k.final</a></span></span></code></pre></div>
@@ -885,7 +883,7 @@ graph depending on parameter value for</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Proportion_Plot.html">Proportion_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, plot_type <span class="op">=</span> <span class="st">"bar"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Proportion_Plot.html">Proportion_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, plot_type <span class="op">=</span> <span class="st">"pie"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Statistics_files/figure-html/unnamed-chunk-8-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Statistics_files/figure-html/unnamed-chunk-8-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="plot-across-groups">Plot across groups<a class="anchor" aria-label="anchor" href="#plot-across-groups"></a>
@@ -894,10 +892,10 @@ graph depending on parameter value for</p>
 split plot across any categorical meta.data variable.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Proportion_Plot.html">Proportion_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, plot_type <span class="op">=</span> <span class="st">"bar"</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Statistics_files/figure-html/unnamed-chunk-9-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Statistics_files/figure-html/unnamed-chunk-9-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Proportion_Plot.html">Proportion_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, plot_type <span class="op">=</span> <span class="st">"pie"</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Statistics_files/figure-html/unnamed-chunk-10-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Statistics_files/figure-html/unnamed-chunk-10-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="plot-raw-cell-numbers">Plot raw cell numbers<a class="anchor" aria-label="anchor" href="#plot-raw-cell-numbers"></a>
@@ -909,7 +907,7 @@ users can change the <code>plot_scale</code> parameter to plot raw
 numbers of cells instead of proportions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Proportion_Plot.html">Proportion_Plot</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, plot_type <span class="op">=</span> <span class="st">"bar"</span>, split.by <span class="op">=</span> <span class="st">"treatment"</span>, plot_scale <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Statistics_files/figure-html/unnamed-chunk-11-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Statistics_files/figure-html/unnamed-chunk-11-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -1825,7 +1823,7 @@ results of these median calculations:</p>
 <span><span class="fu"><a href="../reference/Plot_Median_Genes.html">Plot_Median_Genes</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, median_var <span class="op">=</span> <span class="st">"module_score1"</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Statistics_files/figure-html/unnamed-chunk-27-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="Statistics_files/figure-html/unnamed-chunk-27-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 </div>
   </div>

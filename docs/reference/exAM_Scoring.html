@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add exAM Gene List Module Scores</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/QC_Utilities_Seurat.R" class="external-link"><code>R/QC_Utilities_Seurat.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Utilities_QC_Seurat.R" class="external-link"><code>R/Utilities_QC_Seurat.R</code></a></small>
     <div class="hidden name"><code>exAM_Scoring.Rd</code></div>
     </div>
 
@@ -129,6 +129,7 @@
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  <span class="va">species</span>,</span>
 <span>  exam_module_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay_suffix <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"Seurat"</span>,</span>
 <span>  ensembl_ids <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -150,6 +151,11 @@
 
 <dt>exam_module_name</dt>
 <dd><p>name to use for the new meta.data column containing module scores.</p></dd>
+
+
+<dt>assay_suffix</dt>
+<dd><p>logical, whether to add assay suffix to the QC column name added to meta.data.
+Default is FALSE.</p></dd>
 
 
 <dt>method</dt>

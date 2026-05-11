@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -136,6 +136,9 @@
 <span>  x_axis_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  x_lab_rotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  reorder <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reorder_decreasing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  plot_median <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  color_seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -182,6 +185,20 @@
 <dd><p>logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.</p></dd>
 
 
+<dt>reorder</dt>
+<dd><p>logical, if plotting by sample should x-axis be reordered according to number of cells,
+default is FALSE.</p></dd>
+
+
+<dt>reorder_decreasing</dt>
+<dd><p>logical, if <code>reorder = TRUE</code> should points be ordered from fewest to
+greatest number of cells (FALSE) or reverse (TRUE), default is FALSE.</p></dd>
+
+
+<dt>plot_median</dt>
+<dd><p>logical, if plotting by sample should line be added showing median, default is TRUE.</p></dd>
+
+
 <dt>color_seed</dt>
 <dd><p>random seed for the "varibow" palette shuffle if <code>colors_use = NULL</code> and number of
 groups plotted is greater than 36.  Default = 123.</p></dd>
@@ -197,7 +214,16 @@ groups plotted is greater than 36.  Default = 123.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>, group.by <span class="op">=</span> <span class="st">"Treatment"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Plot cells per sample grouped by "Diagnosis"</span></span></span>
+<span class="r-in"><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>, group.by <span class="op">=</span> <span class="st">"Diagnosis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plot cells per sample individually</span></span></span>
+<span class="r-in"><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' # Plot cells per sample individually and reorder x-axis by cell number</span></span></span>
+<span class="r-in"><span><span class="fu">Plot_Cells_per_Sample</span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">obj</span>, sample_col <span class="op">=</span> <span class="st">"orig.ident"</span>, group.by <span class="op">=</span> <span class="st">"orig.ident"</span>,</span></span>
+<span class="r-in"><span>order <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

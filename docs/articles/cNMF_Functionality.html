@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>cNMF_Functionality &amp; Plotting</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/cNMF_Functionality.Rmd" class="external-link"><code>vignettes/articles/cNMF_Functionality.Rmd</code></a></small>
       <div class="hidden name"><code>cNMF_Functionality.Rmd</code></div>
@@ -207,7 +206,7 @@ R vignette</a>.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">new.cluster.ids</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span></span>
 <span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Idents.html" class="external-link">RenameIdents</a></span><span class="op">(</span><span class="va">pbmc</span>, <span class="va">new.cluster.ids</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/DimPlot_scCustom.html">DimPlot_scCustom</a></span><span class="op">(</span><span class="va">pbmc</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, pt.size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/SeuratTheme.html" class="external-link">NoLegend</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-3-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-3-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="loading-the-results-of-cnmf">Loading the results of cNMF<a class="anchor" aria-label="anchor" href="#loading-the-results-of-cnmf"></a>
@@ -257,7 +256,7 @@ using <code>FeaturePlot_scCustom</code>. Just supply the name of the
 factor like any other reduction.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/FeaturePlot_scCustom.html">FeaturePlot_scCustom</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">pbmc</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cNMF_1"</span>, <span class="st">"cNMF_2"</span>, <span class="st">"cNMF_3"</span>, <span class="st">"cNMF_4"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-6-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-6-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="plot-factor-correlation">Plot factor correlation<a class="anchor" aria-label="anchor" href="#plot-factor-correlation"></a>
@@ -267,13 +266,13 @@ to examine relationships between factors by plotting the correlation of
 feature loadings for cNMF factors.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Factor_Cor_Plot.html">Factor_Cor_Plot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"cnmf"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-7-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-7-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 <p>By default (above) <code>Factor_Cor_Plot</code> runs hierarchical
 clustering on the correlations and orders the factors on the plot. But
 users can also adjust this to plot the factors in numerical order.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Factor_Cor_Plot.html">Factor_Cor_Plot</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">pbmc</span>, reduction <span class="op">=</span> <span class="st">"cnmf"</span>, cluster <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-8-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="cNMF_Functionality_files/figure-html/unnamed-chunk-8-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 <p><code>Factor_Cor_Plot</code> also contains a number of other optional
 parameters to change the output plot.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">

@@ -20,7 +20,7 @@ Cutoff 2 is point where the percent change in variation between the consecutive 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -135,10 +135,12 @@ Cutoff 2 is point where the percent change in variation between the consecutive 
 <span>  <span class="va">seurat_object</span>,</span>
 <span>  ndims <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reduction <span class="op">=</span> <span class="st">"pca"</span>,</span>
+<span>  plot_type <span class="op">=</span> <span class="st">"stdev"</span>,</span>
 <span>  calc_cutoffs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  plot_cutoffs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  line_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dodgerblue"</span>, <span class="st">"firebrick"</span><span class="op">)</span>,</span>
-<span>  linewidth <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  cutoff_linewidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  linewidth <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -156,20 +158,30 @@ Cutoff 2 is point where the percent change in variation between the consecutive 
 <dd><p>The reduction to use, default is "pca"</p></dd>
 
 
+<dt>plot_type</dt>
+<dd><p>One of <code>"stdev"</code> (default), <code>"variance"</code> (per-PC \<!-- % variance), or -->
+<code>"cumulative_variance"</code> (running sum of those percentages; equals 100\<!-- % at the last -->
+stored PC when <code>ndims</code> spans all of them)</p></dd>
+
+
 <dt>calc_cutoffs</dt>
 <dd><p>logical, whether or not to calculate the cutoffs, default is TRUE.</p></dd>
 
 
 <dt>plot_cutoffs</dt>
-<dd><p>lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.</p></dd>
+<dd><p>logical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.</p></dd>
 
 
 <dt>line_colors</dt>
 <dd><p>colors for the cutoff lines, default is c("dodgerblue", "firebrick").</p></dd>
 
 
+<dt>cutoff_linewidth</dt>
+<dd><p>width of the cutoff lines, default is NULL, uses ggplot2 default.</p></dd>
+
+
 <dt>linewidth</dt>
-<dd><p>widith of the cutoff lines, default is 0.5.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated" class="external-link"><img src="figures/lifecycle-soft-deprecated.svg" alt="[Soft-deprecated]"></a>. See <code>cutoff_linewidth</code>.</p></dd>
 
 </dl></div>
     <div id="value">

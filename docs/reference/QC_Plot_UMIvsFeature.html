@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -134,7 +134,8 @@
 <span>  high_cutoff_UMI <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  low_cutoff_feature <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  high_cutoff_feature <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  cutoff_line_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cutoff_line_width <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cutoff_linewidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  colors_use <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pt.size <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  group.by <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -183,7 +184,12 @@
 
 
 <dt>cutoff_line_width</dt>
-<dd><p>numerical value for thickness of cutoff lines, default is NULL.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated" class="external-link"><img src="figures/lifecycle-soft-deprecated.svg" alt="[Soft-deprecated]"></a>. See <code>cutoff_linewidth</code>.</p></dd>
+
+
+<dt>cutoff_linewidth</dt>
+<dd><p>numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.</p></dd>
 
 
 <dt>colors_use</dt>

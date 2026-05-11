@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Updating Gene Symbols</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/Update_Gene_Symbols.Rmd" class="external-link"><code>vignettes/articles/Update_Gene_Symbols.Rmd</code></a></small>
       <div class="hidden name"><code>Update_Gene_Symbols.Rmd</code></div>
@@ -177,7 +176,7 @@ improperly renaming symbols.</p>
 <code class="sourceCode R"><span><span class="co"># Load Packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs2" class="external-link">qs2</a></span><span class="op">)</span></span></code></pre></div>
 <p>Load Seurat Object &amp; Add QC Data</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># read object</span></span>
@@ -261,6 +260,8 @@ It then checks the remaining symbols for any symbol updates.</p>
 <p>Let’s run our test symbol set:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Updated_HGNC_Symbols.html">Updated_HGNC_Symbols</a></span><span class="op">(</span>input_data <span class="op">=</span> <span class="va">test_symbols</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Downloading HGNC data from:</span></span>
+<span><span class="co">## <span style="color: #00BB00;">https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt</span></span></span></code></pre>
 <pre><code><span><span class="co">## Input features contained <span style="color: #00BB00;">3</span> gene symbols</span></span>
 <span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">3</span> were already approved symbols.</span></span>
 <span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">0</span> were updated to approved symbol.</span></span>
@@ -339,7 +340,7 @@ CCNL1
 </table>
 <p>As mentioned before the function is also very quick. Returning
 updated symbols for 36,000 genes in ~1 second.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read in full 10X reference genome feature list</span></span>
 <span><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/Read10X_h5.html" class="external-link">Read10X_h5</a></span><span class="op">(</span><span class="st">"assets/Barcode_Rank_Example/sample1/outs/raw_feature_bc_matrix.h5"</span><span class="op">)</span></span>
 <span></span>
@@ -352,12 +353,12 @@ updated symbols for 36,000 genes in ~1 second.</p>
 <span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Updated_HGNC_Symbols.html">Updated_HGNC_Symbols</a></span><span class="op">(</span>input_data <span class="op">=</span> <span class="va">features</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Input features contained <span style="color: #00BB00;">36,601</span> gene symbols</span></span>
-<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">23,193</span> were already approved symbols.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">816</span> were updated to approved symbol.</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">23,156</span> were already approved symbols.</span></span>
+<span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">852</span> were updated to approved symbol.</span></span>
 <span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #00BB00;">12,594</span> were not found in HGNC dataset and remain unchanged.</span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## 0.325 sec elapsed</span></span></code></pre>
+<pre><code><span><span class="co">## 0.383 sec elapsed</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="examining-the-results">Examining the Results<a class="anchor" aria-label="anchor" href="#examining-the-results"></a>
@@ -367,7 +368,7 @@ updated symbols for 36,000 genes in ~1 second.</p>
 vs other methods.</p>
 <p>For this example I have picked section of the results that contains
 all 3 potential results.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span><span class="op">[</span><span class="fl">168</span><span class="op">:</span><span class="fl">177</span>, <span class="op">]</span></span></code></pre></div>
 <table class="table table table-bordered table-condensed table-responsive table-striped" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -607,17 +608,17 @@ therefore the symbol was left unchanged.</p>
 <p>scCustomize also contains helper function to update mouse gene
 symbols using the <a href="https://www.informatics.jax.org/" class="external-link">Mouse
 Genome Informatics (MGI)</a> database.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load mouse dataset</span></span>
-<span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs/man/qread.html" class="external-link">qread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs"</span><span class="op">)</span></span>
+<span><span class="va">marsh_mouse_micro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/qs2/man/qs_read.html" class="external-link">qs_read</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"assets/marsh_2020_micro.qs2"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get updated symbols</span></span>
 <span><span class="va">updated_symbols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Updated_MGI_Symbols.html">Updated_MGI_Symbols</a></span><span class="op">(</span>input_data <span class="op">=</span> <span class="fu"><a href="https://satijalab.github.io/seurat-object/reference/Cells.html" class="external-link">Features</a></span><span class="op">(</span><span class="va">marsh_mouse_micro</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Downloading MGI data from:</span></span>
-<span><span class="co">## <span style="color: #00BB00;">https://www.informatics.jax.org/downloads/reports/MGI_EntrezGene.rpt</span></span></span>
-<span><span class="co">## Input features contained <span style="color: #00BB00;">12,674</span> gene symbols</span></span>
-<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">11,980</span> were already approved symbols.</span></span>
-<span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">543</span> were updated to approved symbol.</span></span>
+<span><span class="co">## <span style="color: #00BB00;">https://www.informatics.jax.org/downloads/reports/MGI_EntrezGene.rpt</span></span></span></code></pre>
+<pre><code><span><span class="co">## Input features contained <span style="color: #00BB00;">12,674</span> gene symbols</span></span>
+<span><span class="co">## <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">11,947</span> were already approved symbols.</span></span>
+<span><span class="co">## <span style="color: #0000BB;">→</span> <span style="color: #00BB00;">576</span> were updated to approved symbol.</span></span>
 <span><span class="co">## <span style="color: #BB0000;">✖</span> <span style="color: #00BB00;">153</span> were not found in MGI dataset and remain unchanged.</span></span></code></pre>
 </div>
   </div>

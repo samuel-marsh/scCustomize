@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -119,6 +119,33 @@
       <small>Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="3.3.0" id="sccustomize-330-2026-xx-xx">scCustomize 3.3.0 (2026-XX-XX)<small>2026-05-08</small><a class="anchor" aria-label="anchor" href="#sccustomize-330-2026-xx-xx"></a></h2>
+<div class="section level3">
+<h3 id="added-3-3-0">Added<a class="anchor" aria-label="anchor" href="#added-3-3-0"></a></h3>
+<ul><li>Added <code>reorder</code>, <code>reorder_decreasing</code>, and <code>plot_median</code> parameters to <code>Plot_Cells_per_Sample</code> when grouping by sample.<br></li>
+<li>Added <code>Read_Velocity</code> function to enable reading of velocyto loom output files without needing to install velocyto.R package (which currently suffers from significant installation issues unrelated to reading loom files).<br></li>
+<li>Added ability to pass <code>plot_type</code> in <code>ElbowPlot_scCustom</code> for users with Seurat version 5.5.0+.<br></li>
+<li>Added ability to create “variance” or “cumulative variance” plot types in <code>ElbowPlot_scCustom</code> for users with Seurat version below 5.5.0.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changed-3-3-0">Changed<a class="anchor" aria-label="anchor" href="#changed-3-3-0"></a></h3>
+<ul><li>
+<strong>BREAKING CHANGE</strong> The <code>plot_by</code> parameter has been soft-deprecated in <code>Seq_QC_Plot_*</code> family of functions. Please use <code>group.by</code> instead. Using <code>plot_by</code> will warn user but still work until scCustomize v3.5.0.<br></li>
+<li>
+<strong>BREAKING CHANGE</strong> The parameter <code>cutoff_line_width</code> has been soft-deprecated in <code>QC_Plot_*</code> family of functions. Please use <code>cutoff_linewidth</code> instead. Using <code>cutoff_line_width</code> will warn user but still work until scCustomize v3.5.0.<br></li>
+<li>
+<strong>BREAKING CHANGE</strong> The parameter <code>linewidth</code> has been soft-deprecated in <code>ElbowPlot_scCustom</code> function. Please use <code>cutoff_linewidth</code> instead. Using <code>linewidth</code> will warn user but still work until scCustomize v3.5.0.<br></li>
+<li>Add some checks for appropriate <code>...</code> usage.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-3-3-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-3-3-0"></a></h3>
+<ul><li>Fixed default setting of <code>linewidth</code> parameter in <code>geom_hline</code> and <code>geom_vline</code> calls to avoid unnecessary empty aesthetic warnings in ggplot2 4.0.0+.<br></li>
+<li>Fixed warning in <code>Dataset_Size_LIGER</code> due to deprecation in <code>Extract_Sample_Meta</code>.<br></li>
+<li>Fixed issue with group colors in in <code>DimPlot_scCustom</code> when split only contains one group Thanks <a href="https://github.com/zrlewis" class="external-link">@zrlewis</a>, (<a href="https://github.com/samuel-marsh/scCustomize/issues/262" class="external-link">#262</a>).<br></li>
+<li>All vignettes updated to use qs2 package as qs package is now fully deprecated.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="3.2.4" id="sccustomize-324-2025-12-10">scCustomize 3.2.4 (2025-12-10)<small>2025-12-11</small><a class="anchor" aria-label="anchor" href="#sccustomize-324-2025-12-10"></a></h2>
 <div class="section level3">

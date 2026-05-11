@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -145,8 +145,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Plotting #2: QC Plots &amp; Analysis</h1>
             
-            <h4 data-toc-skip class="date">Compiled: December 11,
-2025</h4>
+            <h4 data-toc-skip class="date">Compiled: May 11, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/vignettes/articles/QC_Plots.Rmd" class="external-link"><code>vignettes/articles/QC_Plots.Rmd</code></a></small>
       <div class="hidden name"><code>QC_Plots.Rmd</code></div>
@@ -180,7 +179,7 @@ the SeuratData package.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/samuel-marsh/scCustomize" class="external-link">scCustomize</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs" class="external-link">qs</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qsbase/qs2" class="external-link">qs2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load Example Dataset</span></span>
 <span><span class="va">hca_bm</span> <span class="op">&lt;-</span> <span class="fu">hcabm40k.SeuratData</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/hcabm40k.SeuratData/man/hcabm40k.html" class="external-link">hcabm40k</a></span></span>
@@ -245,7 +244,7 @@ potential cutoff thresholds.</li>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/QC_Plots_Complexity.html">QC_Plots_Complexity</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, high_cutoff <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-5-1.png" width="1248"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-5-1.png" alt="" width="1248"></p>
 <div class="section level4">
 <h4 id="additional-parameters">Additional parameters<a class="anchor" aria-label="anchor" href="#additional-parameters"></a>
 </h4>
@@ -322,7 +321,7 @@ Plots (Genes, UMIs, %Mito) by using single function,
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Plots_Combined_Vln.html">QC_Plots_Combined_Vln</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, feature_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">600</span>, <span class="fl">5500</span><span class="op">)</span>, UMI_cutoffs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1200</span>,</span>
 <span>    <span class="fl">45000</span><span class="op">)</span>, mito_cutoffs <span class="op">=</span> <span class="fl">20</span>, pt.size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-9-1.png" width="1248"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-9-1.png" alt="" width="1248"></p>
 </div>
 </div>
 <div class="section level3">
@@ -366,7 +365,7 @@ values provided to high and low cutoff parameters)</li>
 <span>    high_cutoff_UMI <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/QC_Plot_GenevsFeature.html">QC_Plot_GenevsFeature</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, feature1 <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff_gene <span class="op">=</span> <span class="fl">600</span>,</span>
 <span>    high_cutoff_gene <span class="op">=</span> <span class="fl">5500</span>, high_cutoff_feature <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-11-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-11-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="color-data-by-continuous-meta-data-variable">Color data by continuous meta data variable<a class="anchor" aria-label="anchor" href="#color-data-by-continuous-meta-data-variable"></a>
@@ -417,7 +416,7 @@ histogram instead of violin for visualization of the distribution of
 feature.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Histogram.html">QC_Histogram</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, features <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-15-1.png" alt="" width="672" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/QC_Histogram.html">QC_Histogram</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, features <span class="op">=</span> <span class="st">"percent_mito"</span>, low_cutoff <span class="op">=</span> <span class="fl">15</span>, split.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
@@ -710,7 +709,7 @@ meta.data slot.</em></li>
 <span><span class="fu"><a href="../reference/Plot_Median_UMIs.html">Plot_Median_UMIs</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Mito.html">Plot_Median_Mito</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/Plot_Median_Other.html">Plot_Median_Other</a></span><span class="op">(</span>seurat_object <span class="op">=</span> <span class="va">hca_bm</span>, median_var <span class="op">=</span> <span class="st">"percent_ribo"</span>, group.by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-21-1.png" width="1248" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-21-1.png" alt="" width="1248" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="plot-number-of-cellsnuclei-per-sample">Plot Number of Cells/Nuclei per Sample<a class="anchor" aria-label="anchor" href="#plot-number-of-cellsnuclei-per-sample"></a>
@@ -720,7 +719,7 @@ cells or nuclei per sample.</p>
 <p>Since the HCA Bone Marrow dataset has exactly the same number of
 cells per sample we will use the microglia object from the Analysis
 Plots vignette.</p>
-<p><img src="QC_Plots_files/figure-html/unnamed-chunk-23-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="QC_Plots_files/figure-html/unnamed-chunk-23-1.png" alt="" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

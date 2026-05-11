@@ -158,7 +158,7 @@ Seq_QC_Plot_Alignment_Combined(metrics_dataframe = metrics_final, group.by = "Fu
 All of the `Seq_QC_Plot_...` functions also contain parameter to calculate significance between all groups using `ggpubr::stat_compare_means()`.  
 ***NOTE: See function help pages and ggpubr for more info to make sure the right test is being used for your data.***
 ```{r, fig.height=9, fig.width=13}
-Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, group.by = "Full_Batch", significance = T)
+Seq_QC_Plot_Basic_Combined(metrics_dataframe = metrics_final, group.by = "Full_Batch", significance = F)
 ```
 
 ### Barcode Rank Plots

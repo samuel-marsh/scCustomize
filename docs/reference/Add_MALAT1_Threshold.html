@@ -21,7 +21,7 @@ whenever using this function."><!-- mathjax --><script src="https://cdnjs.cloudf
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scCustomize</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.2.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">3.3.0</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@ whenever using this function."><!-- mathjax --><script src="https://cdnjs.cloudf
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add MALAT1 QC Threshold</h1>
-    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Generics.R" class="external-link"><code>R/Generics.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/QC_Utilities_Seurat.R" class="external-link"><code>R/QC_Utilities_Seurat.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Generics.R" class="external-link"><code>R/Generics.R</code></a>, <a href="https://github.com/samuel-marsh/scCustomize/blob/HEAD/R/Utilities_QC_Seurat.R" class="external-link"><code>R/Utilities_QC_Seurat.R</code></a></small>
     <div class="hidden name"><code>Add_MALAT1_Threshold.Rd</code></div>
     </div>
 
@@ -141,6 +141,7 @@ whenever using this function.</p>
 <span>  <span class="va">species</span>,</span>
 <span>  sample_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  malat1_threshold_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay_suffix <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ensembl_ids <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  assay <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -184,6 +185,11 @@ whenever using this function.</p>
 <dt>malat1_threshold_name</dt>
 <dd><p>name to use for the new meta.data column containing percent IEG gene counts.
 Default is set dependent on species gene symbol.</p></dd>
+
+
+<dt>assay_suffix</dt>
+<dd><p>logical, whether to add assay suffix to the QC column name added to meta.data.
+Default is FALSE.</p></dd>
 
 
 <dt>ensembl_ids</dt>
