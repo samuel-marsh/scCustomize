@@ -1886,6 +1886,7 @@ ReadVelocity_Multi_Directory <- function(
 #' scCustomize version also adds multi-file and multi-directory support, ability to return Ensembl IDs,
 #' and multi-core parallel file reading.
 #'
+#' @concept read_&_write
 #'
 #' @examples
 #' \dontrun{
