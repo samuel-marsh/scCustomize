@@ -50,7 +50,6 @@ While many packages are have some object converters they are not always as featu
 library(Seurat)
 library(rliger)
 library(scCustomize)
-library(qs)
 ```
 
 Load Seurat Object & Add QC Data

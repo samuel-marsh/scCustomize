@@ -1,3 +1,31 @@
+# scCustomize 3.3.0 (2026-XX-XX)  
+## Added  
+- Added `reorder`, `reorder_decreasing`, and `plot_median` parameters to `Plot_Cells_per_Sample` when grouping by sample.  
+- Added `Read_Velocity` function to enable reading of velocyto loom output files without needing to install velocyto.R package (which currently suffers from significant installation issues unrelated to reading loom files).  
+- Added ability to pass `plot_type` in `ElbowPlot_scCustom` for users with Seurat version 5.5.0+.  
+- Added ability to create "variance" or "cumulative variance" plot types in `ElbowPlot_scCustom` for users with Seurat version below 5.5.0.  
+  
+
+
+## Changed  
+- **BREAKING CHANGE** The `plot_by` parameter has been soft-deprecated in `Seq_QC_Plot_*` family of functions.  Please use `group.by` instead.  Using `plot_by` will warn user but still work until scCustomize v3.5.0.  
+- **BREAKING CHANGE** The parameter `cutoff_line_width` has been soft-deprecated in `QC_Plot_*` family of functions.  Please use `cutoff_linewidth` instead.  Using `cutoff_line_width` will warn user but still work until scCustomize v3.5.0.  
+- **BREAKING CHANGE** The parameter `linewidth` has been soft-deprecated in `ElbowPlot_scCustom` function.  Please use `cutoff_linewidth` instead.  Using `linewidth` will warn user but still work until scCustomize v3.5.0.  
+- Add some checks for appropriate `...` usage.  
+
+
+## Fixes  
+- Fixed default setting of `linewidth` parameter in `geom_hline` and `geom_vline` calls to avoid unnecessary empty aesthetic warnings in ggplot2 4.0.0+.  
+- Fixed warning in `Dataset_Size_LIGER` due to deprecation in `Extract_Sample_Meta`.  
+- Fixed issue with group colors in in `DimPlot_scCustom` when split only contains one group Thanks @zrlewis, ([#262](https://github.com/samuel-marsh/scCustomize/issues/262)).  
+- All vignettes updated to use qs2 package as qs package is now fully deprecated.  
+
+  
+  
+
+
+
+
 # scCustomize 3.2.4 (2025-12-10)  
 ## Added  
 - Add progress bar support to following functions with `parallel` parameter using mcprogress package: `Read10X_GEO`, `Read10X_h5_GEO`, `Read10X_Multi_Directory`, `Read10X_h5_Multi_Directory`, `Read_GEO_Delim`, `Read_CellBender_h5_Multi_Directory`, `Read_CellBender_h5_Multi_File`.  

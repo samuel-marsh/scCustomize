@@ -497,7 +497,7 @@ Add_Sample_Meta <- function(
 #' @param include_all logical, whether or not to include all object meta data columns in output data.frame.
 #' Default is FALSE.
 #'
-#' @return Returns a data.frame with one row per `sample_name`.
+#' @return Returns a data.frame with one row per `sample_col`.
 #'
 #' @importFrom dplyr any_of grouped_df select slice
 #' @importFrom magrittr "%>%"
@@ -510,14 +510,14 @@ Add_Sample_Meta <- function(
 #' library(Seurat)
 #' pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 #'
-#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident")
+#' sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident")
 #'
 #' # Only return specific columns from meta data (orig.ident and batch)
-#' sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident",
 #' variables_include = "batch")
 #'
 #' # Return all columns from meta data
-#' sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+#' sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident",
 #' include_all = TRUE)
 #'
 
@@ -892,7 +892,7 @@ Random_Cells_Downsample <- function(
         rownames() %>%
         sample(size = num_cells[x])
     })
-    names(random_cells) <- idents_all
+    names(x = random_cells) <- idents_all
   } else {
     # set seed and select random cells per ident
     prev_seed <- get_seed()
@@ -1089,7 +1089,12 @@ Store_Palette_Seurat <- function(
   # Check Seurat
   Is_Seurat(seurat_object = seurat_object)
 
-  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object, data_to_store = palette, data_name = palette_name, list_as_list = list_as_list, overwrite = overwrite, verbose = verbose)
+  seurat_object <- Store_Misc_Info_Seurat(seurat_object = seurat_object,
+                                          data_to_store = palette,
+                                          data_name = palette_name,
+                                          list_as_list = list_as_list,
+                                          overwrite = overwrite,
+                                          verbose = verbose)
   return(seurat_object)
 }
 
@@ -1168,7 +1173,7 @@ Add_Alt_Feature_ID <- function(
   # if providing features_tsv
   if (!is.null(x = features_tsv_file)) {
     features_table <- data.table::fread(file = features_tsv_file, header = FALSE, data.table = FALSE)
-    colnames(features_table) <- c("Ensembl_ID", "Symbol", "Modality")
+    colnames(x = features_table) <- c("Ensembl_ID", "Symbol", "Modality")
 
     features_table$Symbol <- make.unique(features_table$Symbol)
 

@@ -38,7 +38,7 @@ function can be joined with output of \code{\link[scCustomize]{Median_Stats}}.
 Default is FALSE.}
 }
 \value{
-Returns a data.frame with one row per \code{sample_name}.
+Returns a data.frame with one row per \code{sample_col}.
 }
 \description{
 Returns a by identity meta.data data.frame with one row per sample.  Useful for downstream
@@ -48,14 +48,14 @@ quick view of sample breakdown, meta data table creation, and/or use in pseudobu
 library(Seurat)
 pbmc_small[["batch"]] <- sample(c("batch1", "batch2"), size = ncol(pbmc_small), replace = TRUE)
 
-sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident")
+sample_meta <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident")
 
 # Only return specific columns from meta data (orig.ident and batch)
-sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+sample_meta2 <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident",
 variables_include = "batch")
 
 # Return all columns from meta data
-sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_name = "orig.ident",
+sample_meta3 <- Extract_Sample_Meta(object = pbmc_small, sample_col = "orig.ident",
 include_all = TRUE)
 
 }

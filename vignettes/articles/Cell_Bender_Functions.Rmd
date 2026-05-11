@@ -52,13 +52,13 @@ library(patchwork)
 library(viridis)
 library(Seurat)
 library(scCustomize)
-library(qs)
+library(qs2)
 ```
   
 
 ```{r include=FALSE}
 # Read in example Cell Bender Dual Assay Object.
-astrocytes_cortex <- qread("assets/astro_nuc_seq.qs")
+astrocytes_cortex <- qs_read("assets/astro_nuc_seq.qs2")
 ```
 
 

@@ -1,5 +1,5 @@
 ## Update 
-This is minor patch to version 3.2.4.  Contains critical bug fix accidentally introduced in 3.2.3.  See News.md for full changelog.  
+This is minor update to version 3.3.0.  Contains a couple new features and bug fixes.  See News.md for full changelog.  
 
 
 
@@ -27,4 +27,10 @@ This is minor patch to version 3.2.4.  Contains critical bug fix accidentally in
     NO errors are found when checking locally on macos platform using R 4.4.0 and none are found in GitHub Actions check on linux
     or windows platforms.  I believe to be error in GitHub Actions workflow and I have therefore refrained from adding `dontrun`
     to examples that run fine on other platforms.  This was also the case with v2.0.0, v2.0.1, 2.1.0, 2.1.2 which passed macos checks on CRAN,
-    furthering it is likely a GitHub Actions issue.
+    furthering it is likely a GitHub Actions issue.  
+  
+2. Users may receive following warning if installing with Seurat package version less than 5.5.0: `ElbowPlot_scCustom: possible error in ElbowPlot(seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type): unused argument (plot_type = plot_type)`.  
+    - This is accounted for in the function's internal code with conditional statement to use internal package functions to avoid any error
+    messages.  
+    
+

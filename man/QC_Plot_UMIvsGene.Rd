@@ -12,7 +12,8 @@ QC_Plot_UMIvsGene(
   high_cutoff_gene = Inf,
   low_cutoff_UMI = -Inf,
   high_cutoff_UMI = Inf,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   colors_use = NULL,
   meta_gradient_name = NULL,
   meta_gradient_color = viridis_plasma_dark_high,
@@ -47,7 +48,10 @@ QC_Plot_UMIvsGene(
 
 \item{high_cutoff_UMI}{Plot line a potential high threshold for filtering UMIs per cell.}
 
-\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
+\item{cutoff_line_width}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{cutoff_linewidth}.}
+
+\item{cutoff_linewidth}{numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.}
 
 \item{colors_use}{vector of colors to use for plotting by identity.}
 

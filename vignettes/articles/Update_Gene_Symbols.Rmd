@@ -49,7 +49,7 @@ In the absence of more static identifier (Ensembl ID or Entrez ID Numbers) the o
 # Load Packages
 library(Seurat)
 library(scCustomize)
-library(qs)
+library(qs2)
 ```
 
 Load Seurat Object & Add QC Data
@@ -159,7 +159,7 @@ scCustomize also contains helper function to update mouse gene symbols using the
 
 ```{r message=TRUE}
 # Load mouse dataset
-marsh_mouse_micro <- qread(file = "assets/marsh_2020_micro.qs")
+marsh_mouse_micro <- qs_read(file = "assets/marsh_2020_micro.qs2")
 
 # Get updated symbols
 updated_symbols <- Updated_MGI_Symbols(input_data = Features(marsh_mouse_micro))

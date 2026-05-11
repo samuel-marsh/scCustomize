@@ -502,8 +502,6 @@ Read10X_GEO <- function(
 #' @import mcprogress
 #' @import parallel
 #' @import pbapply
-#' @importFrom Matrix readMM
-#' @importFrom utils read.delim txtProgressBar setTxtProgressBar
 #'
 #' @export
 #'
@@ -691,7 +689,7 @@ Read10X_Multi_Directory <- function(
   if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
                            "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
-    # *** Here is where the swap of mclapply or pbmclapply is occuring ***
+
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path)
@@ -767,7 +765,6 @@ Read10X_Multi_Directory <- function(
 #' @import pbapply
 #' @importFrom Seurat Read10X_h5
 #' @importFrom stringr str_extract
-#' @importFrom utils txtProgressBar setTxtProgressBar
 #'
 #' @export
 #'
@@ -842,7 +839,7 @@ Read10X_h5_Multi_Directory <- function(
   if (isTRUE(x = parallel)) {
     cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
                            "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
-    # *** Here is where the swap of mclapply or pbmclapply is occuring ***
+
     raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
       if (isTRUE(x = cellranger_multi)) {
         file_path <- file.path(base_path, sample_list[x], secondary_path, sample_list[x], multi_extra_path, h5_filename)
@@ -1531,6 +1528,423 @@ Read_CellBender_h5_Multi_File <- function(
 
   # return object
   return(raw_data_list)
+}
+
+
+
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#################### READ loom DATA ####################
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+#' Read Loom Files
+#'
+#' Internalfunction to read velocyto loom files using hdf5r package.
+#'
+#' @param loom_file loom file to read
+#'
+#' @return list of sparse matrices containing spliced, unspliced, and ambiguous counts
+#' @noRd
+#' @keywords internal
+#'
+#' @references Function is updated from velocyto.R `read.loom.matrices` \url{https://github.com/velocyto-team/velocyto.R}.
+#' Function included in scCustomize to avoid installation issues related to other aspects of
+#' velocyto.R package.
+#'
+
+ReadLoomMatrices <- function(
+    loom_file,
+    gene_symbol = TRUE,
+    verbose = TRUE
+) {
+  # Check hdf5r installed
+  hdf5r_check <- is_installed(pkg = "hdf5r")
+  if (isFALSE(x = hdf5r_check)) {
+    cli_abort(message = c(
+      "Please install the {.val hdf5r} package to use {.code Read_CellBender_h5_Mat} and read HDF5 files.",
+      "i" = "This can be accomplished with the following commands: ",
+      "----------------------------------------",
+      "{.field `install.packages({symbol$dquote_left}hdf5r{symbol$dquote_right})`}",
+      "----------------------------------------"
+    ))
+  }
+
+  f <- hdf5r::H5File$new(loom_file, mode='r')
+  cells <- f[["col_attrs/CellID"]][]
+  if (isTRUE(x = gene_symbol)) {
+    genes <- f[["row_attrs/Gene"]][]
+  } else {
+    genes <- f[["row_attrs/Accession"]][]
+  }
+
+  dl <- c(spliced="layers/spliced",
+          unspliced="layers/unspliced",
+          ambiguous="layers/ambiguous")
+  if("layers/spanning" %in% hdf5r::list.datasets(f)) {
+    dl <- c(dl, c(spanning="layers/spanning"))
+  }
+
+  dlist <- lapply(dl, function(path) {
+    m <- as.sparse(t(f[[path]][,]))
+    rownames(x = m) <- genes; colnames(x = m) <- cells;
+    return(m)
+  })
+  f$close_all()
+
+  # check unique and edit gene names/ids if needed
+  num_dup <- sum(duplicated(x = rownames(x = dlist[["spliced"]])))
+
+  if (num_dup > 0) {
+    if (isTRUE(x = verbose)) {
+      cli_inform(message = c("A total of {.field {num_dup}} duplicate row names were found.",
+                             "i" = "Making unique with {.code make.unique()}."))
+    }
+
+    rownames(dlist[["spliced"]]) <- make.unique(names = rownames(dlist[["spliced"]]))
+    rownames(dlist[["unspliced"]]) <- make.unique(names = rownames(dlist[["unspliced"]]))
+    rownames(dlist[["ambiguous"]]) <- make.unique(names = rownames(dlist[["ambiguous"]]))
+  }
+
+  return(dlist)
+}
+
+
+#' Read multiple loom files from same directory
+#'
+#' Internal wrapper to be used be `Read_Velocity` if data directory is provided.
+#'
+#' @param data_dir Directory containing the loom files provided by velocyto.
+#' @param gene_symbol logical, should rownames of returned matrices have gene symbols or accession ID #s,
+#' default is TRUE (symbols).
+#' @param sort_type logical, default is FALSE and will return list with 1 sample per entry.  Each
+#' sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
+#' 3 matrix types (spliced, unspliced, ambiguous) with one entry per sample
+#' @param sample_list A vector of file prefixes/names if specific samples are desired.  Default is `NULL` and
+#' will load all samples in given directory.
+#' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL`
+#' will set names to the file name of each sample.
+#' @param shared_suffix a suffix and file extension shared by all samples.
+#' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
+#' Only possible on Linux based systems.
+#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#'
+#' @returns list of list of matrices
+#' @noRd
+#' @keywords internal
+#'
+#' @import mcprogress
+#' @import parallel
+#' @import pbapply
+#'
+
+ReadVelocity_Multi_File_Internal <- function(
+    data_dir = NULL,
+    gene_symbol = TRUE,
+    sort_type = FALSE,
+    sample_list = NULL,
+    sample_names = NULL,
+    shared_suffix = NULL,
+    parallel = FALSE,
+    num_cores = NULL
+) {
+  if (!dir.exists(paths = data_dir)) {
+    cli_abort(message = "Directory provided does not exist")
+  }
+  if (length(x = data_dir) > 1) {
+    cli_abort(message = "{.code Read_Velocity} only supports reading from single data directory at a time.")
+  }
+
+  # Confirm num_cores specified
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
+    cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
+  }
+
+  file.list <- list.files(path = data_dir, pattern = ".loom", full.names = FALSE)
+
+  # Remove file suffix if provided
+  if (!is.null(x = shared_suffix)) {
+    shared_suffix <- gsub(pattern = ".loom", replacement = "", x = shared_suffix)
+  }
+
+  if (is.null(x = sample_list)) {
+    if (is.null(x = shared_suffix)) {
+      sample_list <- gsub(pattern = ".loom", x = file.list, replacement = "")
+    } else {
+      sample_list <- gsub(pattern = paste0(shared_suffix, ".loom"), x = file.list, replacement = "")
+    }
+  }
+
+  # Check sample_names length is ok
+  if (!is.null(x = sample_names) && length(x = sample_names) != length(x = sample_list)) {
+    cli_abort(message = "Length of {.code sample_names} {.field {length(x = sample_names)}} must be equal to number of samples {.field {length(x = sample_list)}}.")
+  }
+
+  cli_inform(message = "{.field Reading Loom files from directory}")
+  pboptions(char = "=")
+  if (isTRUE(x = parallel)) {
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(i) {
+      loom_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".loom"))
+      data <- ReadLoomMatrices(loom_file = loom_loc, gene_symbol = gene_symbol, verbose = FALSE)
+    })
+  } else {
+    raw_data_list <- pblapply(1:length(x = sample_list), function(i) {
+      loom_loc <- file.path(data_dir, paste0(sample_list[i], shared_suffix, ".loom"))
+      data <- ReadLoomMatrices(loom_file = loom_loc, gene_symbol = gene_symbol, verbose = FALSE)
+    })
+  }
+
+  # add call to report duplicates single time
+  reporter_file_path <- file.path(data_dir, paste0(sample_list[1], shared_suffix, ".loom"))
+  reporter_data <- ReadLoomMatrices(loom_file = reporter_file_path, gene_symbol = gene_symbol, verbose = TRUE)
+
+  # Name the matrices
+  if (is.null(x = sample_names)) {
+    names(x = raw_data_list) <- sample_list
+  } else {
+    names(x = raw_data_list) <- sample_names
+  }
+
+  # sort matrices by read type
+  if (isTRUE(x = sort_type)) {
+    spliced_list <- lapply(1:length(x = raw_data_list), function(x){
+      data <- raw_data_list[[x]][["spliced"]]
+    })
+    names(x = spliced_list) <- names(x = raw_data_list)
+
+    unspliced_list <- lapply(1:length(x = raw_data_list), function(x){
+      data <- raw_data_list[[x]][["unspliced"]]
+    })
+    names(x = unspliced_list) <- names(x = raw_data_list)
+
+    ambiguous_list <- lapply(1:length(x = raw_data_list), function(x){
+      data <- raw_data_list[[x]][["ambiguous"]]
+    })
+    names(x = ambiguous_list) <- names(x = raw_data_list)
+
+    raw_data_list <- list("spliced" = spliced_list,
+                          "unspliced" = unspliced_list,
+                          "ambiguous" = ambiguous_list)
+  }
+
+  # return object
+  return(raw_data_list)
+}
+
+
+#' Read loom files from multiple directories
+#'
+#' Wrapper to read loom files from multiple directory and return a list
+#'
+#' @param base_path path to the parent directory which contains all of the subdirectories of interest.
+#' @param secondary_path path from the parent directory to loom files for each sample.
+#' @param gene_symbol logical, should rownames of returned matrices have gene symbols or accession ID #s,
+#' default is TRUE (symbols).
+#' @param sort_type logical, default is FALSE and will return list with 1 sample per entry.  Each
+#' sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
+#' 3 matrix types (spliced, unspliced, ambiguous) with one entry per sample
+#' @param sample_list A vector of file prefixes/names if specific samples are desired.  Default is `NULL` and
+#' will load all samples in given directory.
+#' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL`
+#' will set names to the file name of each sample.
+#' @param shared_suffix a suffix and file extension shared by all samples.
+#' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
+#' Only possible on Linux based systems.
+#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multicore processing.
+#'
+#' @returns list of list of matrices
+#' @noRd
+#' @keywords internal
+#'
+#' @import mcprogress
+#' @import parallel
+#' @import pbapply
+#'
+
+ReadVelocity_Multi_Directory <- function(
+    base_path,
+    secondary_path = NULL,
+    gene_symbol = TRUE,
+    sort_type = FALSE,
+    sample_list = NULL,
+    sample_names = NULL,
+    parallel = FALSE,
+    num_cores = NULL
+) {
+  # Confirm num_cores specified
+  if (isTRUE(x = parallel) && is.null(x = num_cores)) {
+    cli_abort("If {.code parallel = TRUE} then {.code num_cores} must be specified.")
+  }
+  # Confirm directory exists
+  if (dir.exists(paths = base_path) == FALSE) {
+    cli_abort(message = "Directory: {.val {base_path}} specified by {.code base_path} does not exist.")
+  }
+  # Detect libraries if sample_list is NULL
+  if (is.null(x = sample_list)) {
+    sample_list <- Pull_Directory_List(base_path = base_path)
+  }
+
+  # set "" if no secondary path
+  if (is.null(x = secondary_path)) {
+    secondary_path <- ""
+  }
+  # Check if full directory path exists
+  for (i in 1:length(x = sample_list)) {
+    full_directory_path <- file.path(base_path, sample_list[i], secondary_path)
+    if (dir.exists(paths = full_directory_path) == FALSE) {
+      cli_abort(message = "Full Directory does not exist {.val {full_directory_path}} was not found.")
+    }
+  }
+
+  # read data
+  cli_inform(message = "{.field Reading Loom files.}")
+  if (isTRUE(x = parallel)) {
+    cli_inform(message = c("NOTE: Parallel processing may not report informative error messages.",
+                           "i" = "If function fails set {.code parallel = FALSE} and re-run for informative error reporting."))
+    # if parallel
+    raw_data_list <- pmclapply(mc.cores = num_cores, 1:length(x = sample_list), function(x) {
+      file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], ".loom"))
+      raw_data <- ReadLoomMatrices(loom_file = file_path, gene_symbol = gene_symbol, verbose = FALSE)
+      return(raw_data)
+    })
+  } else {
+    raw_data_list <- pblapply(1:length(x = sample_list), function(x) {
+      file_path <- file.path(base_path, sample_list[x], secondary_path, paste0(sample_list[x], ".loom"))
+      raw_data <- ReadLoomMatrices(loom_file = file_path, gene_symbol = gene_symbol, verbose = FALSE)
+    })
+  }
+
+  # add call to report duplicates single time
+  reporter_file_path <- file.path(base_path, sample_list[1], secondary_path, paste0(sample_list[1], ".loom"))
+  reporter_data <- ReadLoomMatrices(loom_file = reporter_file_path, gene_symbol = gene_symbol, verbose = TRUE)
+
+  # Name the list items
+  if (is.null(x = sample_names)) {
+    names(x = raw_data_list) <- sample_list
+  } else {
+    names(x = raw_data_list) <- sample_names
+  }
+
+  # sort matrices by read type
+  if (isTRUE(x = sort_type)) {
+    spliced_list <- lapply(1:length(x = raw_data_list), function(x){
+      data <- raw_data_list[[x]][["spliced"]]
+    })
+    names(x = spliced_list) <- names(x = raw_data_list)
+
+    unspliced_list <- lapply(1:length(x = raw_data_list), function(x){
+      data <- raw_data_list[[x]][["unspliced"]]
+    })
+    names(x = unspliced_list) <- names(x = raw_data_list)
+
+    ambiguous_list <- lapply(1:length(x = raw_data_list), function(x){
+      data <- raw_data_list[[x]][["ambiguous"]]
+    })
+    names(x = ambiguous_list) <- names(x = raw_data_list)
+
+    raw_data_list <- list("spliced" = spliced_list,
+                          "unspliced" = unspliced_list,
+                          "ambiguous" = ambiguous_list)
+  }
+  return(raw_data_list)
+}
+
+
+#' Load RNA Velocity results
+#'
+#' Wrapper function to
+#'
+#' @param loom_file path and name of loom file to read
+#' @param data_dir path to data directory containing all loom files to read
+#' @param multi_dir logical, whether or not files are contained in sub-directories or in single folder,
+#' default is NULL
+#' @param gene_symbol logical, should row names of returned matrices have gene symbols or accession ID #s,
+#' default is TRUE (symbols).
+#' @param sort_type logical, default is FALSE and will return list with 1 sample per entry.  Each
+#' sample entry will contain 3 matrices (spliced, unspliced, ambiguous).  If TRUE will return list of
+#' 3 matrix types (spliced, unspliced, ambiguous) with one entry per sample
+#' @param sample_list A vector of file prefixes/names if specific samples are desired.  Default is `NULL` and
+#' will load all samples in given directory.
+#' @param sample_names a set of sample names to use for each sample entry in returned list.  If `NULL`
+#' will set names to the file name of each sample.
+#' @param shared_suffix a suffix and file extension shared by all samples.
+#' @param parallel logical (default FALSE).  Whether to use multiple cores when reading in data.
+#' Only possible on Linux based systems.
+#' @param num_cores if `parallel = TRUE` indicates the number of cores to use for multi-core processing.
+#'
+#' @return list of sparse matrices containing spliced, unspliced, and ambiguous counts
+#'
+#' @export
+#'
+#' @importFrom utils capture.output
+#'
+#' @references Function is updated from `SeuratWrappers::ReadVelocity`
+#' \url{https://github.com/satijalab/seurat-wrappers/blob/master/R/velocity.R} (License: GPL-3).
+#' Function included in scCustomize to avoid installation issues related to other aspects of
+#' velocyto.R package which `SeuratWrappers::ReadVelocity` requires.
+#' scCustomize version also adds multi-file and multi-directory support, ability to return Ensembl IDs,
+#' and multi-core parallel file reading.
+#'
+#'
+#' @examples
+#' \dontrun{
+#' # Read single velocity loom file
+#' velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom")
+#'
+#' # Read single velocity loom file with ensembl IDs
+#' velo_res <- Read_Velocity(loom_file = "PATH/sample01.loom", gene_symbol = FALSE)
+#'
+#' # Read multiple files from a parent directory with many subdirectories & return 1 list entry per
+#' sample
+#' # Each entry will contain 3 matrices (spliced, unspliced, ambiguous)
+#' velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/")
+#'
+#' # Sort returned list by read type instead of by sample
+#' # list will contain 3 entries (spliced, unspliced, ambiguous)
+#' # each entry will contain 1 matrix per sample
+#' velo_res_list <- Read_Velocity(loom_file = "PATH/", secondary_path = "SEC_PATH/",
+#' sort_type = TRUE)
+#'
+#' # Read multiple files from a single directory
+#' velo_res_list <- Read_Velocity(loom_file = "PATH/", multi_dir = FALSE)
+#' }
+
+Read_Velocity <- function(
+    loom_file = NULL,
+    data_dir = NULL,
+    multi_dir = TRUE,
+    gene_symbol = TRUE,
+    sort_type = FALSE,
+    sample_list = NULL,
+    sample_names = NULL,
+    shared_suffix = NULL,
+    parallel = FALSE,
+    num_cores = NULL
+) {
+  if (!is.null(x = loom_file) && !is.null(x = data_dir)) {
+    cli_abort(message = "Cannot specify values for both {.code loom_file} and {.code data_dir}.")
+  }
+
+  if (!is.null(x = loom_file)) {
+    invisible(x = capture.output(data <- ReadLoomMatrices(
+      loom_file = loom_file,
+      gene_symbol = gene_symbol,
+      verbose = TRUE
+    )))
+    return(data)
+  }
+  # single data directory
+  if (isFALSE(x = multi_dir)) {
+    data_list <- ReadVelocity_Multi_File_Internal(data_dir = data_dir, gene_symbol = gene_symbol, sample_list = sample_list, sample_names = sample_names, shared_suffix = shared_suffix, parallel = parallel, num_cores = num_cores, sort_type = sort_type)
+    return(data_list)
+  }
+
+  # multi directory
+  if (isTRUE(x = multi_dir)) {
+    data_list <- ReadVelocity_Multi_Directory(base_path = data_dir, gene_symbol = gene_symbol, sample_list = sample_list, sample_names = sample_names, parallel = parallel, num_cores = num_cores, sort_type = sort_type)
+    return(data_list)
+  }
 }
 
 

@@ -49,6 +49,66 @@ PC_Plotting <- function(
 }
 
 
+
+#' ElbowPlot alt types for Seurat Version < 5.5.0
+#'
+#' Allows for creation of "variance" or "cumulative variance" plots for Seurat version's less
+#' than 5.5.0
+#'
+#' @param seurat_object name of Seurat object
+#' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
+#' @param reduction The reduction to use, default is "pca"
+#' @param plot_type One of \code{"stdev"} (default), \code{"variance"} (per-PC \% variance), or
+#'   \code{"cumulative_variance"} (running sum of those percentages; equals 100\% at the last
+#'   stored PC when \code{ndims} spans all of them)
+#'
+#' @import ggplot2
+#' @importFrom cowplot theme_cowplot
+#'
+#' @return a ggplot2 plot
+#' @noRd
+#'
+
+Elbow_Internal <- function(
+    seurat_object,
+    ndims = NULL,
+    reduction = "pca",
+    plot_type = NULL
+) {
+  data.use <- Stdev(object = seurat_object, reduction = reduction)
+  if (length(x = data.use) == 0) {
+    stop(paste("No standard deviation info stored for", reduction))
+  }
+  if (anyNA(x = data.use)) {
+    stop("Standard deviations contain NA for reduction ", reduction, call. = FALSE)
+  }
+  if (ndims > length(x = data.use)) {
+    warning("The object only has information for ", length(x = data.use), " dimensions")
+    ndims <- length(x = data.use)
+  }
+
+  den <- sum(data.use^2)
+  if (!is.finite(x = den) || den == 0) {
+    stop("Cannot compute variance explained: sum of squared standard deviations is not positive for reduction ", reduction, call. = FALSE)
+  }
+  pct <- data.use^2 / den * 100
+  if (plot_type == "variance") {
+    y_label <- "Percentage of Variance Explained"
+    y_data <- pct[1:ndims]
+  } else {
+    y_label <- "Cumulative % Variance Explained"
+    y_data <- cumsum(pct)[1:ndims]
+  }
+
+  #plot
+  plot <- ggplot(data = data.frame(dims = 1:ndims, y_data = y_data)) +
+    geom_point(mapping = aes(x = .data[["dims"]], y = .data[["y_data"]])) +
+    labs(x = gsub(pattern = '_$', replacement = '', x = Key(object = seurat_object[[reduction]])), y = y_label) +
+    theme_cowplot()
+  return(plot)
+}
+
+
 #' Modified Violin Plot
 #'
 #' Custom Violin Plot for stacked violin function.

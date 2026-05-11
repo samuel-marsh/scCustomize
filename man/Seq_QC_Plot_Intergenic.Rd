@@ -6,7 +6,8 @@
 \usage{
 Seq_QC_Plot_Intergenic(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
@@ -17,12 +18,14 @@ Seq_QC_Plot_Intergenic(
 \arguments{
 \item{metrics_dataframe}{data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).}
 
-\item{plot_by}{Grouping factor for the plot.  Default is to plot as single group with single point per sample.}
+\item{group.by}{Grouping factor for the plot.  Default is to plot as single group with single point per sample.}
+
+\item{plot_by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} soft-deprecated. See \code{group.by}.}
 
 \item{colors_use}{colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 less than 8 groups and \code{DiscretePalette_scCustomize(palette = "polychrome")} if more than 8.}
 
-\item{dot_size}{size of the dots plotted if \code{plot_by} is not \code{sample_id}  Default is 1.}
+\item{dot_size}{size of the dots plotted if \code{group.by} is not \code{sample_id}  Default is 1.}
 
 \item{x_lab_rotate}{logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.}
 

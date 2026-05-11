@@ -1132,7 +1132,7 @@ Add_Pct_Diff <- function(
   overwrite = FALSE
 ) {
   # Check if percent difference exists already
-  if ("pct_diff" %in% colnames(marker_dataframe)) {
+  if ("pct_diff" %in% colnames(x = marker_dataframe)) {
     df_name <- deparse(expr = substitute(expr = marker_dataframe))
     if (isFALSE(x = overwrite)) {
       cli_abort(message = c("{.val pct_diff} column already present in {.code marker_dataframe}: {.val {df_name}}.",

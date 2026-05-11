@@ -9,7 +9,8 @@ QC_Histogram(
   features,
   low_cutoff = NULL,
   high_cutoff = NULL,
-  cutoff_line_width = NULL,
+  cutoff_line_width = deprecated(),
+  cutoff_linewidth = NULL,
   split.by = NULL,
   bins = 250,
   colors_use = "dodgerblue",
@@ -28,7 +29,10 @@ QC_Histogram(
 
 \item{high_cutoff}{Plot line a potential high threshold for filtering.}
 
-\item{cutoff_line_width}{numerical value for thickness of cutoff lines, default is NULL.}
+\item{cutoff_line_width}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}. See \code{cutoff_linewidth}.}
+
+\item{cutoff_linewidth}{numerical value for thickness of cutoff lines,
+default is NULL, uses ggplot2 defaults.}
 
 \item{split.by}{Feature to split plots by (i.e. "orig.ident").}
 

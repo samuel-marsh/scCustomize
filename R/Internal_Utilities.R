@@ -590,7 +590,7 @@ Percent_Expressing_Meta <- function(
   row_dim_names <- features_list
   col_dim_names <- names(x = percent_expressing)
   mat_dims <- list(row_dim_names, col_dim_names)
-  final_df <- data.frame(matrix(unlist(percent_expressing), nrow = length(features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
+  final_df <- data.frame(matrix(unlist(x = percent_expressing), nrow = length(features_list), byrow = FALSE, dimnames = mat_dims), stringsAsFactors = FALSE)
   return(final_df)
 }
 
@@ -645,7 +645,7 @@ Middle_Number <- function(
   max
 ) {
   min_max <- c(min, max)
-  middle <- min_max[-length(min_max)] + diff(min_max) / 2
+  middle <- min_max[-length(x = min_max)] + diff(x = min_max) / 2
   return(middle)
 }
 

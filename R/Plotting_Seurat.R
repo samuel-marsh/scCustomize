@@ -215,22 +215,78 @@ FeaturePlot_scCustom <- function(
   if (is.null(x = split.by) && isTRUE(x = combine)) {
     # Keep until Seurat version required is > 5
     if (seurat_version >= "5") {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           ncol = num_columns,
+                                           combine = combine,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           alpha = alpha_exp,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                                 scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
     } else {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           ncol = num_columns,
+                                           combine = combine,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                                 scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
     }
   }
 
   # plot no split & combined
   if (is.null(x = split.by) && isFALSE(x = combine)) {
     if (seurat_version >= "5") {
-      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...))
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object,
+                                                features = all_found_features,
+                                                order = order,
+                                                pt.size = pt.size,
+                                                reduction = reduction,
+                                                raster = raster,
+                                                split.by = split.by,
+                                                ncol = num_columns,
+                                                combine = combine,
+                                                raster.dpi = raster.dpi,
+                                                label = label,
+                                                alpha = alpha_exp,
+                                                min.cutoff = min.cutoff,
+                                                max.cutoff = max.cutoff,
+                                                ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
         plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
       })
     } else {
-      plot_list <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, ncol = num_columns, combine = combine, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...))
+      plot_list <- suppressMessages(FeaturePlot(object = seurat_object,
+                                                features = all_found_features,
+                                                order = order,
+                                                pt.size = pt.size,
+                                                reduction = reduction,
+                                                raster = raster,
+                                                split.by = split.by,
+                                                ncol = num_columns,
+                                                combine = combine,
+                                                raster.dpi = raster.dpi,
+                                                label = label,
+                                                min.cutoff = min.cutoff,
+                                                max.cutoff = max.cutoff,
+                                                ...))
 
       plot <- lapply(1:length(x = plot_list), function(i) {
         plot_list[[i]] <- suppressMessages(plot_list[[i]] + scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, NA), na.value = na_color))
@@ -286,9 +342,38 @@ FeaturePlot_scCustom <- function(
     min_exp_value <- min.cutoff
 
     if (seurat_version >= "5") {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp,, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           alpha = alpha_exp,,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                              scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) &
+                              RestoreLegend() &
+                              theme(axis.title.y.right = element_blank())
     } else {
-      plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features, order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label,, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+      plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                           features = all_found_features,
+                                           order = order,
+                                           pt.size = pt.size,
+                                           reduction = reduction,
+                                           raster = raster,
+                                           split.by = split.by,
+                                           raster.dpi = raster.dpi,
+                                           label = label,
+                                           min.cutoff = min.cutoff,
+                                           max.cutoff = max.cutoff,
+                                           ...) &
+                              scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features)) &
+                              RestoreLegend() &
+                              theme(axis.title.y.right = element_blank())
     }
 
     if (isTRUE(x = label_feature_yaxis)) {
@@ -364,9 +449,38 @@ FeaturePlot_scCustom <- function(
       min_exp_value <- min.cutoff
 
       if (seurat_version >= "5") {
-        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, alpha = alpha_exp, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+        single_plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                                    features = all_found_features[i],
+                                                    order = order,
+                                                    pt.size = pt.size,
+                                                    reduction = reduction,
+                                                    raster = raster,
+                                                    split.by = split.by,
+                                                    raster.dpi = raster.dpi,
+                                                    label = label,
+                                                    alpha = alpha_exp,
+                                                    min.cutoff = min.cutoff,
+                                                    max.cutoff = max.cutoff,
+                                                    ...) &
+                                        scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = all_found_features[i])) &
+                                        RestoreLegend() &
+                                        theme(axis.title.y.right = element_blank())
       } else {
-        single_plot <- suppressMessages(FeaturePlot(object = seurat_object, features = all_found_features[i], order = order, pt.size = pt.size, reduction = reduction, raster = raster, split.by = split.by, raster.dpi = raster.dpi, label = label, min.cutoff = min.cutoff, max.cutoff = max.cutoff, ...) & scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) & RestoreLegend() & theme(axis.title.y.right = element_blank())
+        single_plot <- suppressMessages(FeaturePlot(object = seurat_object,
+                                                    features = all_found_features[i],
+                                                    order = order,
+                                                    pt.size = pt.size,
+                                                    reduction = reduction,
+                                                    raster = raster,
+                                                    split.by = split.by,
+                                                    raster.dpi = raster.dpi,
+                                                    label = label,
+                                                    min.cutoff = min.cutoff,
+                                                    max.cutoff = max.cutoff,
+                                                    ...) &
+                                        scale_color_gradientn(colors = colors_use, limits = c(na_cutoff, max_exp_value), na.value = na_color, name = features[i])) &
+                                        RestoreLegend() &
+                                        theme(axis.title.y.right = element_blank())
       }
 
       if (isTRUE(x = label_feature_yaxis)) {
@@ -544,15 +658,54 @@ FeaturePlot_DualAssay <- function(
   # Change assay and plot raw
   DefaultAssay(object = seurat_object) <- assay1
 
-  plot_assay1 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay1)
+  plot_assay1 <- FeaturePlot_scCustom(seurat_object = seurat_object,
+                                      features = features,
+                                      layer = layer,
+                                      colors_use = colors_use,
+                                      na_color = na_color,
+                                      na_cutoff = na_cutoff,
+                                      order = order,
+                                      pt.size = pt.size,
+                                      reduction = reduction,
+                                      raster = raster,
+                                      alpha_exp = alpha_exp,
+                                      alpha_na_exp = alpha_na_exp,
+                                      raster.dpi = raster.dpi,
+                                      ...) & labs(color = assay1)
 
   # Change to cell bender and plot
   DefaultAssay(object = seurat_object) <- assay2
 
   if (is.null(x = colors_use_assay2)) {
-    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object,
+                                        features = features,
+                                        layer = layer,
+                                        colors_use = colors_use,
+                                        na_color = na_color,
+                                        na_cutoff = na_cutoff,
+                                        order = order,
+                                        pt.size = pt.size,
+                                        reduction = reduction,
+                                        raster = raster,
+                                        alpha_exp = alpha_exp,
+                                        alpha_na_exp = alpha_na_exp,
+                                        raster.dpi = raster.dpi,
+                                        ...) & labs(color = assay2)
   } else {
-    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object, features = features, layer = layer, colors_use = colors_use_assay2, na_color = na_color, na_cutoff = na_cutoff, order = order, pt.size = pt.size, reduction = reduction, raster = raster, alpha_exp = alpha_exp, alpha_na_exp = alpha_na_exp, raster.dpi = raster.dpi, ...) & labs(color = assay2)
+    plot_assay2 <- FeaturePlot_scCustom(seurat_object = seurat_object,
+                                        features = features,
+                                        layer = layer,
+                                        colors_use = colors_use_assay2,
+                                        na_color = na_color,
+                                        na_cutoff = na_cutoff,
+                                        order = order,
+                                        pt.size = pt.size,
+                                        reduction = reduction,
+                                        raster = raster,
+                                        alpha_exp = alpha_exp,
+                                        alpha_na_exp = alpha_na_exp,
+                                        raster.dpi = raster.dpi,
+                                        ...) & labs(color = assay2)
   }
 
 
@@ -719,7 +872,17 @@ VlnPlot_scCustom <- function(
   }
 
   # Plot
-  plot <- VlnPlot(object = seurat_object, features = all_found_features, cols = colors_use, pt.size = pt.size, idents = idents, group.by = group.by, split.by = split.by, ncol = num_columns, raster = raster, add.noise = add.noise, ...)
+  plot <- VlnPlot(object = seurat_object,
+                  features = all_found_features,
+                  cols = colors_use,
+                  pt.size = pt.size,
+                  idents = idents,
+                  group.by = group.by,
+                  split.by = split.by,
+                  ncol = num_columns,
+                  raster = raster,
+                  add.noise = add.noise,
+                  ...)
 
   # Add add median plot
   if (isTRUE(x = plot_median) && is.null(x = split.by)) {
@@ -974,9 +1137,13 @@ DotPlot_scCustom <- function(
   all_found_features <- Feature_PreCheck(object = seurat_object, features = features)
 
   # Plot
-  plot <- suppressMessages(DotPlot(object = seurat_object, features = all_found_features, group.by = group.by, ...) +
-                             scale_color_gradientn(colors = colors_use)
+  plot <- suppressMessages(DotPlot(object = seurat_object,
+                                   features = all_found_features,
+                                   group.by = group.by,
+                                   ...) +
+                           scale_color_gradientn(colors = colors_use)
   )
+
   # Modify plot
   if (isTRUE(x = remove_axis_titles)) {
     plot <- plot +
@@ -2014,7 +2181,25 @@ DimPlot_scCustom <- function(
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+    plot <- DimPlot(object = seurat_object,
+                    cols = colors_use,
+                    pt.size = pt.size,
+                    reduction = reduction,
+                    group.by = group.by,
+                    split.by = split.by,
+                    shuffle = shuffle,
+                    seed = seed,
+                    label = label,
+                    label.size = label.size,
+                    label.color = label.color,
+                    repel = repel,
+                    raster = raster,
+                    raster.dpi = raster.dpi,
+                    ncol = num_columns,
+                    dims = dims,
+                    label.box = label.box,
+                    ...)
+
     if (isTRUE(x = figure_plot)) {
 
       # pull axis labels
@@ -2054,7 +2239,13 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object,
+                                                       group.by = group.by,
+                                                       percent = prop_plot_percent,
+                                                       colors_use = prop_colors_use,
+                                                       x_axis_log = prop_plot_x_log,
+                                                       prop_label = prop_plot_label) +
+                                     plot_layout(widths = c(1, 0.5))
       }
 
       return(plot_figure)
@@ -2068,7 +2259,13 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object,
+                                         group.by = group.by,
+                                         percent = prop_plot_percent,
+                                         colors_use = prop_colors_use,
+                                         x_axis_log = prop_plot_x_log,
+                                         prop_label = prop_plot_label) +
+                       plot_layout(widths = c(1, 0.5))
       }
 
       return(plot)
@@ -2080,7 +2277,24 @@ DimPlot_scCustom <- function(
       if (isTRUE(x = split_downsample)) {
         cli_abort(message = "{.code split_downsample} requires {.split_seurat = FALSE}.")
       } else {
-        plot <- DimPlot(object = seurat_object, cols = colors_use, pt.size = pt.size, reduction = reduction, group.by = group.by, split.by = split.by, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, dims = dims, label.box = label.box, ...)
+        plot <- DimPlot(object = seurat_object,
+                        cols = colors_use,
+                        pt.size = pt.size,
+                        reduction = reduction,
+                        group.by = group.by,
+                        split.by = split.by,
+                        shuffle = shuffle,
+                        seed = seed,
+                        label = label,
+                        label.size = label.size,
+                        label.color = label.color,
+                        repel = repel,
+                        raster = raster,
+                        raster.dpi = raster.dpi,
+                        ncol = num_columns,
+                        dims = dims,
+                        label.box = label.box,
+                        ...)
       }
 
       if (isTRUE(x = figure_plot)) {
@@ -2122,7 +2336,13 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+          plot_figure <- plot_figure | Overall_Prop_Plot(seurat_object = seurat_object,
+                                                         group.by = group.by,
+                                                         percent = prop_plot_percent,
+                                                         colors_use = prop_colors_use,
+                                                         x_axis_log = prop_plot_x_log,
+                                                         prop_label = prop_plot_label) +
+                                       plot_layout(widths = c(1, 0.5))
         }
 
         return(plot_figure)
@@ -2136,7 +2356,13 @@ DimPlot_scCustom <- function(
         }
 
         if (isTRUE(x = add_prop_plot)) {
-          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+          plot <- plot | Overall_Prop_Plot(seurat_object = seurat_object,
+                                           group.by = group.by,
+                                           percent = prop_plot_percent,
+                                           colors_use = prop_colors_use,
+                                           x_axis_log = prop_plot_x_log,
+                                           prop_label = prop_plot_label) +
+                         plot_layout(widths = c(1, 0.5))
         }
 
         return(plot)
@@ -2188,7 +2414,14 @@ DimPlot_scCustom <- function(
       if (is.null(x = group.by)) {
         levels_overall <- levels(x = Idents(object = seurat_object))
       } else {
-        levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+        if (inherits(x = seurat_object@meta.data[[group.by]], what = "factor")) {
+          levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+        } else {
+          cli_inform(message = c("The variable {.field {group.by}} is not a factor. Converting for plot.",
+                                 "i" = "To avoid this warning set meta.data column to factor before plotting."))
+          seurat_object@meta.data[[group.by]] <- factor(seurat_object@meta.data[[group.by]])
+          levels_overall <- levels(x = seurat_object@meta.data[[group.by]])
+        }
       }
 
       if (length(x = levels_overall) > length(x = colors_use)) {
@@ -2197,11 +2430,29 @@ DimPlot_scCustom <- function(
 
       colors_overall <- colors_use
 
-      names(x = colors_overall) <- levels_overall
+      if (is.null(x = names(x = colors_overall))) {
+        names(x = colors_overall) <- levels_overall
+      }
 
       # plot
       plots <- lapply(1:length(x = split_by_list), function(x) {
-        plot <- DimPlot(object = seurat_object, cells = cell_names[[x]], group.by = group.by, cols = colors_use, reduction = reduction, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, shuffle = shuffle, seed = seed, label = label, label.size = label.size, label.color = label.color, repel = repel, dims = dims, label.box = label.box, ...) +
+        plot <- DimPlot(object = seurat_object,
+                        cells = cell_names[[x]],
+                        group.by = group.by,
+                        cols = colors_use,
+                        reduction = reduction,
+                        pt.size = pt.size,
+                        raster = raster,
+                        raster.dpi = raster.dpi,
+                        shuffle = shuffle,
+                        seed = seed,
+                        label = label,
+                        label.size = label.size,
+                        label.color = label.color,
+                        repel = repel,
+                        dims = dims,
+                        label.box = label.box,
+                        ...) +
           ggtitle(paste(split_by_list[[x]])) +
           theme(plot.title = element_text(hjust = 0.5),
                 legend.position = "right") +
@@ -2239,7 +2490,13 @@ DimPlot_scCustom <- function(
       }
 
       if (isTRUE(x = add_prop_plot)) {
-        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object, group.by = group.by, percent = prop_plot_percent, colors_use = prop_colors_use, x_axis_log = prop_plot_x_log, prop_label = prop_plot_label) + plot_layout(widths = c(1, 0.5))
+        plots <- plots | Overall_Prop_Plot(seurat_object = seurat_object,
+                                           group.by = group.by,
+                                           percent = prop_plot_percent,
+                                           colors_use = prop_colors_use,
+                                           x_axis_log = prop_plot_x_log,
+                                           prop_label = prop_plot_label) +
+                         plot_layout(widths = c(1, 0.5))
       }
 
       return(plots)
@@ -2358,7 +2615,15 @@ DimPlot_All_Samples <- function(
 
   # Plots
   plots <- lapply(1:length(x = meta_sample_list), function(x) {
-    plot <- DimPlot(seurat_object, cells = cell_names[[x]], group.by = meta_data_column, cols = colors_use[[x]], reduction = reduction, pt.size = pt.size, raster = raster, raster.dpi = raster.dpi, ...) +
+    plot <- DimPlot(object = seurat_object,
+                    cells = cell_names[[x]],
+                    group.by = meta_data_column,
+                    cols = colors_use[[x]],
+                    reduction = reduction,
+                    pt.size = pt.size,
+                    raster = raster,
+                    raster.dpi = raster.dpi,
+                    ...) +
       ggtitle(paste(meta_sample_list[[x]])) +
       theme(plot.title = element_text(hjust = 0.5, size = title_size),
             legend.position = "none") +
@@ -2613,7 +2878,20 @@ FeatureScatter_scCustom <- function(
 
   # Plot
   if (is.null(x = split.by)) {
-    plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cells = cells, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+    plot <- FeatureScatter(object = seurat_object,
+                           feature1 = feature1,
+                           feature2 = feature2,
+                           cells = cells,
+                           cols = colors_use,
+                           pt.size = pt.size,
+                           group.by = group.by,
+                           split.by = split.by,
+                           shuffle = shuffle,
+                           plot.cor = plot.cor,
+                           raster = raster,
+                           raster.dpi = raster.dpi,
+                           ncol = num_columns,
+                           ...)
 
     # Change title
     plot <- plot +
@@ -2634,7 +2912,19 @@ FeatureScatter_scCustom <- function(
   } else {
     # Plot with Seurat splitting
     if (isTRUE(x = split_seurat)) {
-      plot <- FeatureScatter(object = seurat_object, feature1 = feature1, feature2 = feature2, cols = colors_use, pt.size = pt.size, group.by = group.by, split.by = split.by, shuffle = shuffle, plot.cor = plot.cor, raster = raster, raster.dpi = raster.dpi, ncol = num_columns, ...)
+      plot <- FeatureScatter(object = seurat_object,
+                             feature1 = feature1,
+                             feature2 = feature2,
+                             cols = colors_use,
+                             pt.size = pt.size,
+                             group.by = group.by,
+                             split.by = split.by,
+                             shuffle = shuffle,
+                             plot.cor = plot.cor,
+                             raster = raster,
+                             raster.dpi = raster.dpi,
+                             ncol = num_columns,
+                             ...)
 
       # Aspect ratio changes
       if (!is.null(x = aspect_ratio)) {
@@ -2647,7 +2937,21 @@ FeatureScatter_scCustom <- function(
       # return plot
       return(plot)
     } else {
-      plot <- scCustomze_Split_FeatureScatter(seurat_object = seurat_object, feature1 = feature1, feature2 = feature2, split.by = split.by, group.by = group.by, colors_use = colors_use, pt.size = pt.size, aspect_ratio = aspect_ratio, title_size = title_size, num_columns = num_columns, raster = raster, raster.dpi = raster.dpi, ggplot_default_colors = ggplot_default_colors, color_seed = color_seed, ...)
+      plot <- scCustomze_Split_FeatureScatter(seurat_object = seurat_object,
+                                              feature1 = feature1,
+                                              feature2 = feature2,
+                                              split.by = split.by,
+                                              group.by = group.by,
+                                              colors_use = colors_use,
+                                              pt.size = pt.size,
+                                              aspect_ratio = aspect_ratio,
+                                              title_size = title_size,
+                                              num_columns = num_columns,
+                                              raster = raster,
+                                              raster.dpi = raster.dpi,
+                                              ggplot_default_colors = ggplot_default_colors,
+                                              color_seed = color_seed,
+                                              ...)
 
       return(plot)
     }
@@ -2665,10 +2969,14 @@ FeatureScatter_scCustom <- function(
 #' @param seurat_object name of Seurat object
 #' @param ndims The number of dims to plot.  Default is NULL and will plot all dims
 #' @param reduction The reduction to use, default is "pca"
+#' @param plot_type One of \code{"stdev"} (default), \code{"variance"} (per-PC \% variance), or
+#'   \code{"cumulative_variance"} (running sum of those percentages; equals 100\% at the last
+#'   stored PC when \code{ndims} spans all of them)
 #' @param calc_cutoffs logical, whether or not to calculate the cutoffs, default is TRUE.
-#' @param plot_cutoffs lgoical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
+#' @param plot_cutoffs logical, whether to plot the cutoffs as vertical lines on plot, default is TRUE.
 #' @param line_colors colors for the cutoff lines, default is c("dodgerblue", "firebrick").
-#' @param linewidth widith of the cutoff lines, default is 0.5.
+#' @param cutoff_linewidth width of the cutoff lines, default is NULL, uses ggplot2 default.
+#' @param linewidth `r lifecycle::badge("soft-deprecated")`. See `cutoff_linewidth`.
 #'
 #' @references Modified from following: \url{https://hbctraining.github.io/scRNA-seq/lessons/elbow_plot_metric.html}.
 #'
@@ -2688,19 +2996,35 @@ ElbowPlot_scCustom <- function(
     seurat_object,
     ndims = NULL,
     reduction = "pca",
+    plot_type = "stdev",
     calc_cutoffs = TRUE,
     plot_cutoffs = TRUE,
     line_colors = c("dodgerblue", "firebrick"),
-    linewidth = 0.5
+    cutoff_linewidth = NULL,
+    linewidth = deprecated()
 ) {
+  # check deprecation
+  if (is_present(linewidth)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "ElbowPlot_scCustom(linewidth)",
+                   details = c("i" = "The {.code linewidth} parameter is soft-deprecated.  Please update code to use `cutoff_linewidth` instead.")
+    )
+    cutoff_linewidth <- linewidth
+  }
+
+  # check plot type match
+  if (!plot_type %in% c("stdev", "variance", "cumulative_variance")) {
+    cli_abort(message = "The {.code plot_type} parameter must be one of following: {.field {glue_collapse_scCustom(input_string = c('stdev', 'variance', 'cumulative_variance'), and = FALSE)}}")
+  }
+
   # check seurat
   Is_Seurat(seurat_object = seurat_object)
 
   # set dims if NULL
   if (is.null(x = ndims)) {
-    ndims <- ncol(x = Embeddings(seurat_object, reduction = reduction))
+    ndims <- ncol(x = Embeddings(object = seurat_object, reduction = reduction))
   } else {
-    if (ndims > ncol(x = Embeddings(seurat_object, reduction = reduction))) {
+    if (ndims > ncol(x = Embeddings(object = seurat_object, reduction = reduction))) {
       cli_warn(message = c("Number of dimensions supplied ({.field {ndims}}) is greater than total dims for reduction {.val {reduction}} ({.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}).",
                            "i" = "Setting {.code {ndims}} to max value of {.field {ncol(x = Embeddings(seurat_object, reduction = reduction))}}."))
     }
@@ -2718,11 +3042,11 @@ ElbowPlot_scCustom <- function(
     pctVar <- seurat_object[[reduction]]@stdev / sum(seurat_object[[reduction]]@stdev) * 100
 
     # calculate cumulative percents
-    cumPct <- cumsum(pctVar)
+    cumPct <- cumsum(x = pctVar)
 
     # Get cut-offs
     co1 <- which(cumPct > 90 & pctVar < 5)[1]
-    co2 <- sort(which((pctVar[1:length(pctVar) - 1] - pctVar[2:length(pctVar)]) > 0.1), decreasing = T)[1] + 1
+    co2 <- sort(which((pctVar[1:length(x = pctVar) - 1] - pctVar[2:length(x = pctVar)]) > 0.1), decreasing = TRUE)[1] + 1
 
   }
 
@@ -2734,12 +3058,31 @@ ElbowPlot_scCustom <- function(
     cli_abort(message = "The number of values provided to {.code line_colors} must be either 1 or 2.")
   }
 
+  # set default `linewidth` when ggplot2 >= 4.0.0 to avoid empty aesthetic warnings
+  # 0.6365 is as close to default as I can approximate
+  if (is.null(x = cutoff_linewidth) && packageVersion(pkg = "ggplot2") >= "4.0.0") {
+    cutoff_linewidth <- 0.6365
+  }
+
+  # get seurat version
+  seurat_version <- packageVersion("Seurat")
+
   # Create plot
-  plot <- ElbowPlot(seurat_object, ndims = ndims, reduction = reduction)
+  if (seurat_version >= "5.5.0") {
+    plot <- ElbowPlot(object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+  }
+
+  if (seurat_version < "5.5.0") {
+    if (plot_type == "stdev") {
+      plot <- ElbowPlot(object = seurat_object, ndims = ndims, reduction = reduction)
+    } else {
+      plot <- Elbow_Internal(seurat_object = seurat_object, ndims = ndims, reduction = reduction, plot_type = plot_type)
+    }
+  }
 
   # Add cutoffs to plot
   if (isTRUE(x = plot_cutoffs)) {
-    y_max <- get_plot_limits(plot)[["ymax"]]
+    y_max <- get_plot_limits(plot = plot)[["ymax"]]
 
     # Adjust plot if ndims is less than cutoff values
     if (co1 > ndims) {
@@ -2756,8 +3099,8 @@ ElbowPlot_scCustom <- function(
 
     if (isFALSE(x = co1_missing)) {
       plot <- plot +
-        geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = linewidth) +
-        annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
+        geom_vline(xintercept = co1, linetype = "dashed", colour = line_colors[1], linewidth = cutoff_linewidth) +
+        annotate("text", x = co1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 1.01)
     } else {
       plot <- plot +
         annotate("text", x = 1, y = y_max, label = paste0("The first cutoff is: PC", co1), vjust = -0.5, hjust = 0)
@@ -2765,8 +3108,8 @@ ElbowPlot_scCustom <- function(
 
     if (isFALSE(x = co2_missing)) {
       plot <- plot +
-        geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = linewidth) +
-        annotate("text", x = co2, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1)
+        geom_vline(xintercept = co2, linetype = "dashed", colour = line_colors[2], linewidth = cutoff_linewidth) +
+        annotate("text", x = co2, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 1.01)
     } else {
       plot <- plot +
         annotate("text", x = 1, y = (y_max-0.2), label = paste0("The second cutoff is: PC", co2), vjust = -0.5, hjust = 0)
@@ -2925,15 +3268,30 @@ SpatialDimPlot_scCustom <- function(
   }
 
   if (isFALSE(x = interactive)) {
-    plot <- SpatialDimPlot(object = seurat_object, group.by = group.by, images = images, cols = colors_use, crop = crop, label = label, label.size = label.size, label.color = label.color, label.box = label.box, repel = repel, ncol = ncol, combine = combine, alpha = alpha, pt.size.factor = pt.size.factor, image.alpha = image.alpha, stroke = stroke, interactive = interactive, ...)
+    plot <- SpatialDimPlot(object = seurat_object,
+                           group.by = group.by,
+                           images = images,
+                           cols = colors_use,
+                           crop = crop,
+                           label = label,
+                           label.size = label.size,
+                           label.color = label.color,
+                           label.box = label.box,
+                           repel = repel,
+                           ncol = ncol,
+                           combine = combine,
+                           alpha = alpha,
+                           pt.size.factor = pt.size.factor,
+                           image.alpha = image.alpha,
+                           stroke = stroke,
+                           interactive = interactive,
+                           ...)
 
     return(plot)
   } else {
-    return(ISpatialDimPlot(
-      object = seurat_object,
-      image = images[1],
-      group.by = group.by,
-      alpha = alpha
-    ))
+    return(ISpatialDimPlot(object = seurat_object,
+                           image = images[1],
+                           group.by = group.by,
+                           alpha = alpha))
   }
 }

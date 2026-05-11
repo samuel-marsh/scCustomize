@@ -8,10 +8,11 @@
 #' Plot the mean number of reads per cell
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #'  less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -35,45 +36,55 @@
 
 Seq_QC_Plot_Reads_per_Cell <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Reads_per_Cell(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
     }
   }
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Mean_Reads_per_Cell"]])) +
@@ -89,7 +100,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Mean_Reads_per_Cell"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Mean_Reads_per_Cell"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       theme(legend.position = "none",
@@ -100,7 +111,7 @@ Seq_QC_Plot_Reads_per_Cell <- function(
       scale_fill_manual(values = colors_use) +
       ggtitle("Mean Reads per Cell per Sample") +
       ylab('Mean Reads per Cell') +
-      xlab(plot_by) +
+      xlab(group.by) +
       theme_ggprism_mod()
   }
 
@@ -120,10 +131,10 @@ Seq_QC_Plot_Reads_per_Cell <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by ,colors_use = NULL,]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -142,10 +153,11 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 #' Plot the number of cells per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #'  less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -169,45 +181,55 @@ Seq_QC_Plot_Reads_per_Cell <- function(
 
 Seq_QC_Plot_Number_Cells <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Number_Cells(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
     }
   }
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Estimated_Number_of_Cells"]])) +
@@ -223,7 +245,7 @@ Seq_QC_Plot_Number_Cells <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Estimated_Number_of_Cells"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Estimated_Number_of_Cells"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       theme(legend.position = "none",
@@ -234,7 +256,7 @@ Seq_QC_Plot_Number_Cells <- function(
       scale_fill_manual(values = colors_use) +
       ggtitle("Cells per Sample") +
       ylab('Cells') +
-      xlab(plot_by) +
+      xlab(group.by) +
       theme_ggprism_mod()
   }
 
@@ -254,10 +276,10 @@ Seq_QC_Plot_Number_Cells <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -276,10 +298,11 @@ Seq_QC_Plot_Number_Cells <- function(
 #' Plot the median genes per cell per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -303,45 +326,55 @@ Seq_QC_Plot_Number_Cells <- function(
 
 Seq_QC_Plot_Genes <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Genes(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
+  }
+
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
     cli_abort(message = " is not a column in the provided `metrics_dataframe`.")
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
     }
   }
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Median_Genes_per_Cell"]])) +
@@ -352,13 +385,13 @@ Seq_QC_Plot_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Median_Genes_per_Cell"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Median_Genes_per_Cell"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Median Genes per Cell") +
       ylab('Median Genes') +
-      xlab(plot_by) +
+      xlab(group.by) +
       theme_ggprism_mod()
   }
 
@@ -378,10 +411,10 @@ Seq_QC_Plot_Genes <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -400,10 +433,11 @@ Seq_QC_Plot_Genes <- function(
 #' Plot the median UMIs per cell per sample
 #'
 #' @param metrics_dataframe data.frame contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -427,45 +461,55 @@ Seq_QC_Plot_Genes <- function(
 
 Seq_QC_Plot_UMIs <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_UMIs(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
     }
   }
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Median_UMI_Counts_per_Cell"]])) +
@@ -476,13 +520,13 @@ Seq_QC_Plot_UMIs <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Median_UMI_Counts_per_Cell"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Median_UMI_Counts_per_Cell"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Median UMIs per Cell") +
       ylab('Median UMIs') +
-      xlab(plot_by) +
+      xlab(group.by) +
       theme_ggprism_mod()
   }
 
@@ -502,10 +546,10 @@ Seq_QC_Plot_UMIs <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -524,10 +568,11 @@ Seq_QC_Plot_UMIs <- function(
 #' Plot the total genes detected per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -551,45 +596,55 @@ Seq_QC_Plot_UMIs <- function(
 
 Seq_QC_Plot_Total_Genes <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Total_Genes(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
     }
   }
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Total_Genes_Detected"]])) +
@@ -600,13 +655,13 @@ Seq_QC_Plot_Total_Genes <- function(
       xlab("") +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Total_Genes_Detected"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Total_Genes_Detected"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Total Genes Detected per Sample") +
       ylab('Total Genes') +
-      xlab(plot_by) +
+      xlab(group.by) +
       theme_ggprism_mod()
   }
 
@@ -626,10 +681,10 @@ Seq_QC_Plot_Total_Genes <- function(
         ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -648,10 +703,11 @@ Seq_QC_Plot_Total_Genes <- function(
 #' Plot the sequencing saturation percentage per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -676,38 +732,48 @@ Seq_QC_Plot_Total_Genes <- function(
 
 Seq_QC_Plot_Saturation <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Saturation(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -718,7 +784,7 @@ Seq_QC_Plot_Saturation <- function(
   metrics_dataframe[,"Sequencing_Saturation"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Sequencing_Saturation"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Sequencing_Saturation"]]), color = .data[["samples_plotting"]]) +
@@ -730,13 +796,13 @@ Seq_QC_Plot_Saturation <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Sequencing_Saturation"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Sequencing_Saturation"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Sequencing Saturation") +
       ylab('Sequencing Saturation Percent') +
-      xlab(plot_by)+
+      xlab(group.by)+
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -757,10 +823,10 @@ Seq_QC_Plot_Saturation <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -779,10 +845,11 @@ Seq_QC_Plot_Saturation <- function(
 #' Plot the fraction of reads in cells per sample
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -807,38 +874,48 @@ Seq_QC_Plot_Saturation <- function(
 
 Seq_QC_Plot_Reads_in_Cells <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Reads_in_Cells(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -849,7 +926,7 @@ Seq_QC_Plot_Reads_in_Cells <- function(
   metrics_dataframe[,"Fraction_Reads_in_Cells"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Fraction_Reads_in_Cells"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Fraction_Reads_in_Cells"]]), color = .data[["samples_plotting"]]) +
@@ -861,13 +938,13 @@ Seq_QC_Plot_Reads_in_Cells <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Fraction_Reads_in_Cells"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Fraction_Reads_in_Cells"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Fraction of Reads in Cells per Sample") +
       ylab('Fraction of Reads in Cells') +
-      xlab(plot_by)+
+      xlab(group.by)+
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -888,10 +965,10 @@ Seq_QC_Plot_Reads_in_Cells <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -910,10 +987,11 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 #' Plot the fraction of reads confidently mapped to transcriptome
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -938,38 +1016,48 @@ Seq_QC_Plot_Reads_in_Cells <- function(
 
 Seq_QC_Plot_Transcriptome <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Transcriptome(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -980,7 +1068,7 @@ Seq_QC_Plot_Transcriptome <- function(
   metrics_dataframe[,"Reads_Mapped_Confidently_to_Transcriptome"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Reads_Mapped_Confidently_to_Transcriptome"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Transcriptome"]]), color = .data[["samples_plotting"]]) +
@@ -992,13 +1080,13 @@ Seq_QC_Plot_Transcriptome <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Transcriptome"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Reads_Mapped_Confidently_to_Transcriptome"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Transcriptome") +
       ylab('Percent of Reads') +
-      xlab(plot_by) +
+      xlab(group.by) +
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -1018,10 +1106,10 @@ Seq_QC_Plot_Transcriptome <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1040,10 +1128,11 @@ Seq_QC_Plot_Transcriptome <- function(
 #' Plot the fraction of reads confidently mapped to genome
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1068,38 +1157,48 @@ Seq_QC_Plot_Transcriptome <- function(
 
 Seq_QC_Plot_Genome <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Genome(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1110,7 +1209,7 @@ Seq_QC_Plot_Genome <- function(
   metrics_dataframe[,"Reads_Mapped_Confidently_to_Genome"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Reads_Mapped_Confidently_to_Genome"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Genome"]]), color = .data[["samples_plotting"]]) +
@@ -1122,13 +1221,13 @@ Seq_QC_Plot_Genome <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Genome"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Reads_Mapped_Confidently_to_Genome"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Genome") +
       ylab('Percent of Reads') +
-      xlab(plot_by) +
+      xlab(group.by) +
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -1148,10 +1247,10 @@ Seq_QC_Plot_Genome <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1170,10 +1269,11 @@ Seq_QC_Plot_Genome <- function(
 #' Plot the fraction of reads confidently mapped to intergenic regions
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1198,38 +1298,48 @@ Seq_QC_Plot_Genome <- function(
 
 Seq_QC_Plot_Intergenic <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Intergenic(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1240,7 +1350,7 @@ Seq_QC_Plot_Intergenic <- function(
   metrics_dataframe[,"Reads_Mapped_Confidently_to_Intergenic_Regions"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Reads_Mapped_Confidently_to_Intergenic_Regions"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Intergenic_Regions"]]), color = .data[["samples_plotting"]]) +
@@ -1252,13 +1362,13 @@ Seq_QC_Plot_Intergenic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Intergenic_Regions"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Reads_Mapped_Confidently_to_Intergenic_Regions"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Intergenic Regions") +
       ylab('Percent of Reads') +
-      xlab(plot_by) +
+      xlab(group.by) +
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -1278,10 +1388,10 @@ Seq_QC_Plot_Intergenic <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1300,10 +1410,11 @@ Seq_QC_Plot_Intergenic <- function(
 #' Plot the fraction of reads confidently mapped to intronic regions
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1328,38 +1439,48 @@ Seq_QC_Plot_Intergenic <- function(
 
 Seq_QC_Plot_Intronic <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Intronic(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1370,7 +1491,7 @@ Seq_QC_Plot_Intronic <- function(
   metrics_dataframe[,"Reads_Mapped_Confidently_to_Intronic_Regions"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Reads_Mapped_Confidently_to_Intronic_Regions"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Intronic_Regions"]]), color = .data[["samples_plotting"]]) +
@@ -1382,13 +1503,13 @@ Seq_QC_Plot_Intronic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Intronic_Regions"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Reads_Mapped_Confidently_to_Intronic_Regions"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Intronic Regions") +
       ylab('Percent of Reads') +
-      xlab(plot_by) +
+      xlab(group.by) +
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -1408,10 +1529,10 @@ Seq_QC_Plot_Intronic <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1430,10 +1551,11 @@ Seq_QC_Plot_Intronic <- function(
 #' Plot the fraction of reads confidently mapped to Exonic regions
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1458,38 +1580,48 @@ Seq_QC_Plot_Intronic <- function(
 
 Seq_QC_Plot_Exonic <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Exonic(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1500,7 +1632,7 @@ Seq_QC_Plot_Exonic <- function(
   metrics_dataframe[,"Reads_Mapped_Confidently_to_Exonic_Regions"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Reads_Mapped_Confidently_to_Exonic_Regions"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Confidently_to_Exonic_Regions"]]), color = .data[["samples_plotting"]]) +
@@ -1512,13 +1644,13 @@ Seq_QC_Plot_Exonic <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Confidently_to_Exonic_Regions"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Reads_Mapped_Confidently_to_Exonic_Regions"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Exonic Regions") +
       ylab('Percent of Reads') +
-      xlab(plot_by) +
+      xlab(group.by) +
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -1538,10 +1670,10 @@ Seq_QC_Plot_Exonic <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1560,10 +1692,11 @@ Seq_QC_Plot_Exonic <- function(
 #' Plot the fraction of reads mapped Antisense to Gene
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
 #' grouping factor.  Default is FALSE.
@@ -1588,38 +1721,48 @@ Seq_QC_Plot_Exonic <- function(
 
 Seq_QC_Plot_Antisense <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
   significance = FALSE,
   ...
 ) {
-  if (!plot_by %in% colnames(x = metrics_dataframe)) {
-    cli_abort(message = "{.val {plot_by}} is not a column in the provided {.code metrics_dataframe}.")
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Antisense(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
   }
 
-  # Change plot_by to character vector to make significance functions show all comparisons
-  if (inherits(x = metrics_dataframe[[plot_by]], what = "factor")) {
+  if (!group.by %in% colnames(x = metrics_dataframe)) {
+    cli_abort(message = "{.val {group.by}} is not a column in the provided {.code metrics_dataframe}.")
+  }
+
+  # Change group.by to character vector to make significance functions show all comparisons
+  if (inherits(x = metrics_dataframe[[group.by]], what = "factor")) {
     stats_dataframe <- metrics_dataframe
-    stats_dataframe[[plot_by]] <- as.character(stats_dataframe[[plot_by]])
+    stats_dataframe[[group.by]] <- as.character(stats_dataframe[[group.by]])
   } else {
     stats_dataframe <- metrics_dataframe
   }
 
   # Create color palette if null and check valid if provided
-  length_plotby <- length(x = unique(x = metrics_dataframe[[plot_by]]))
+  length_plotby <- length(x = unique(x = metrics_dataframe[[group.by]]))
 
-  if (is.null(x = colors_use) && !plot_by == "sample_id") {
+  if (is.null(x = colors_use) && !group.by == "sample_id") {
     if (length_plotby <= 8) {
       colors_use <- Dark2_Pal()
     } else {
       colors_use <- DiscretePalette_scCustomize(num_colors = length_plotby, palette = "polychrome")
     }
   } else {
-    if (length(x = colors_use) < length_plotby && !plot_by == "sample_id") {
+    if (length(x = colors_use) < length_plotby && !group.by == "sample_id") {
       cli_abort(message = c("Not enough colors provided.",
-                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {plot_by}} column: {.field {length_plotby}}.")
+                            "i" = "The number of colors supplied: {.field {length(x = colors_use)}}, is less than the number of groups in {.val {group.by}} column: {.field {length_plotby}}.")
       )
     } else {
       colors_use <- colors_use
@@ -1630,7 +1773,7 @@ Seq_QC_Plot_Antisense <- function(
   metrics_dataframe[,"Reads_Mapped_Antisense_to_Gene"] <- as.numeric(gsub("%", "", metrics_dataframe[,"Reads_Mapped_Antisense_to_Gene"]))
 
 
-  if (plot_by == "sample_id") {
+  if (group.by == "sample_id") {
     metrics_dataframe$samples_plotting <- "Samples"
 
     plot <- ggplot(metrics_dataframe, aes(x = .data[["samples_plotting"]], y = .data[["Reads_Mapped_Antisense_to_Gene"]]), color = .data[["samples_plotting"]]) +
@@ -1642,13 +1785,13 @@ Seq_QC_Plot_Antisense <- function(
       scale_y_continuous(labels = label_percent(accuracy = 0.01, scale = 1)) +
       theme_ggprism_mod()
   } else {
-    plot <- ggplot(metrics_dataframe, aes(x=.data[[plot_by]], y = .data[["Reads_Mapped_Antisense_to_Gene"]], fill = .data[[plot_by]])) +
+    plot <- ggplot(metrics_dataframe, aes(x=.data[[group.by]], y = .data[["Reads_Mapped_Antisense_to_Gene"]], fill = .data[[group.by]])) +
       geom_boxplot(fill = "white") +
       geom_dotplot(binaxis ='y', stackdir = 'center', dotsize = dot_size) +
       scale_fill_manual(values = colors_use) +
       ggtitle("Percent of Reads Confidently Mapped to Antisense to Gene") +
       ylab('Percent of Reads') +
-      xlab(plot_by) +
+      xlab(group.by) +
       scale_y_continuous(labels = label_percent(accuracy = 1, scale = 1)) +
       theme_ggprism_mod()
   }
@@ -1668,10 +1811,10 @@ Seq_QC_Plot_Antisense <- function(
       ))
     }
 
-    if (length(x = unique(x = stats_dataframe[[plot_by]])) < 2) {
-      cli_abort(message = "Cannot calculate statistics when {.val {plot_by}} column contains less than 2 groups.")
+    if (length(x = unique(x = stats_dataframe[[group.by]])) < 2) {
+      cli_abort(message = "Cannot calculate statistics when {.val {group.by}} column contains less than 2 groups.")
     }
-    groups <- unique(x = stats_dataframe[[plot_by]])
+    groups <- unique(x = stats_dataframe[[group.by]])
 
     comparisons <- combn(groups, 2)
     comparisons <- data.frame(comparisons, stringsAsFactors = FALSE)
@@ -1695,10 +1838,11 @@ Seq_QC_Plot_Antisense <- function(
 #' Plot a combined plot of the basic QC metrics from sequencing output.
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param patchwork_title Title to use for the patchworked plot output.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
@@ -1723,7 +1867,8 @@ Seq_QC_Plot_Antisense <- function(
 
 Seq_QC_Plot_Basic_Combined <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
@@ -1731,6 +1876,15 @@ Seq_QC_Plot_Basic_Combined <- function(
   significance = FALSE,
   ...
 ) {
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Basic_Combined(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
+  }
+
   # Create rotated axis value
   if (isTRUE(x = x_lab_rotate)) {
     axis_angle <- 45
@@ -1739,36 +1893,36 @@ Seq_QC_Plot_Basic_Combined <- function(
   }
 
   # Create Plots & modify for plotting together
-  p1 <- Seq_QC_Plot_Number_Cells(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p1 <- Seq_QC_Plot_Number_Cells(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p1 <- p1 +
     labs(title = str_wrap(p1$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p2 <- Seq_QC_Plot_Reads_per_Cell(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p2 <- Seq_QC_Plot_Reads_per_Cell(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p2 <- p2 + labs(title = str_wrap(p2$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p3 <- Seq_QC_Plot_Genes(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p3 <- Seq_QC_Plot_Genes(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p3 <- p3 + labs(title = str_wrap(p3$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p4 <- Seq_QC_Plot_UMIs(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p4 <- Seq_QC_Plot_UMIs(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p4 <- p4 + labs(title = str_wrap(p4$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p5 <- Seq_QC_Plot_Total_Genes(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p5 <- Seq_QC_Plot_Total_Genes(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p5 <- p5 + labs(title = str_wrap(p5$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p6 <- Seq_QC_Plot_Saturation(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p6 <- Seq_QC_Plot_Saturation(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p6 <- p6 + labs(title = str_wrap(p6$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p7 <- Seq_QC_Plot_Reads_in_Cells(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p7 <- Seq_QC_Plot_Reads_in_Cells(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p7 <- p7 + labs(title = str_wrap(p7$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p8 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p8 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p8 <- p8 + labs(title = str_wrap(p8$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
@@ -1787,10 +1941,11 @@ Seq_QC_Plot_Basic_Combined <- function(
 #' Plot a combined plot of the Alignment QC metrics from sequencing output.
 #'
 #' @param metrics_dataframe data.frame  contain Cell Ranger QC Metrics (see \code{\link{Read_Metrics_10X}}).
-#' @param plot_by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
+#' @param plot_by `r lifecycle::badge("deprecated")` soft-deprecated. See `group.by`.
+#' @param group.by Grouping factor for the plot.  Default is to plot as single group with single point per sample.
 #' @param colors_use colors to use for plot if plotting by group.  Defaults to RColorBrewer Dark2 palette if
 #' less than 8 groups and `DiscretePalette_scCustomize(palette = "polychrome")` if more than 8.
-#' @param dot_size size of the dots plotted if `plot_by` is not `sample_id`  Default is 1.
+#' @param dot_size size of the dots plotted if `group.by` is not `sample_id`  Default is 1.
 #' @param x_lab_rotate logical.  Whether to rotate the axes labels on the x-axis.  Default is FALSE.
 #' @param patchwork_title Title to use for the patchworked plot output.
 #' @param significance logical.  Whether to calculate and plot p-value comparisons when plotting by
@@ -1815,7 +1970,8 @@ Seq_QC_Plot_Basic_Combined <- function(
 
 Seq_QC_Plot_Alignment_Combined <- function(
   metrics_dataframe,
-  plot_by = "sample_id",
+  group.by = "sample_id",
+  plot_by = deprecated(),
   colors_use = NULL,
   dot_size = 1,
   x_lab_rotate = FALSE,
@@ -1823,6 +1979,15 @@ Seq_QC_Plot_Alignment_Combined <- function(
   significance = FALSE,
   ...
 ) {
+  # check deprecation
+  if (is_present(plot_by)) {
+    deprecate_warn(when = "3.5.0",
+                   what = "Seq_QC_Plot_Alignment_Combined(plot_by)",
+                   details = c("i" = "The {.code plot_by} parameter is soft-deprecated.  Please update code to use `group.by` instead.")
+    )
+    group.by <- plot_by
+  }
+
   # Create rotated axis value
   if (isTRUE(x = x_lab_rotate)) {
     axis_angle <- 45
@@ -1831,28 +1996,28 @@ Seq_QC_Plot_Alignment_Combined <- function(
   }
 
   # Create Plots & modify for plotting together
-  p1 <- Seq_QC_Plot_Genome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size, ...)
+  p1 <- Seq_QC_Plot_Genome(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size, ...)
   p1 <- p1 +
     labs(title = str_wrap(p1$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p2 <- Seq_QC_Plot_Intergenic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p2 <- Seq_QC_Plot_Intergenic(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p2 <- p2 + labs(title = str_wrap(p2$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p3 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p3 <- Seq_QC_Plot_Transcriptome(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p3 <- p3 + labs(title = str_wrap(p3$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p4 <- Seq_QC_Plot_Exonic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p4 <- Seq_QC_Plot_Exonic(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p4 <- p4 + labs(title = str_wrap(p4$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p5 <- Seq_QC_Plot_Intronic(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p5 <- Seq_QC_Plot_Intronic(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p5 <- p5 + labs(title = str_wrap(p5$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 
-  p6 <- Seq_QC_Plot_Antisense(metrics_dataframe = metrics_dataframe, plot_by = plot_by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
+  p6 <- Seq_QC_Plot_Antisense(metrics_dataframe = metrics_dataframe, group.by = group.by, colors_use = colors_use, significance = significance, dot_size = dot_size,)
   p6 <- p6 + labs(title = str_wrap(p6$labels$title, 18)) +
     theme_ggprism_mod(base_size = 10, axis_text_angle = axis_angle)
 

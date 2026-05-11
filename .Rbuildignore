@@ -16,3 +16,5 @@ vignettes/*.orig$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^data-raw$
+^\.positai$
+^\.claude$
