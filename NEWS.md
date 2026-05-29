@@ -16,6 +16,7 @@
 - Fixed default setting of `linewidth` parameter in `geom_hline` and `geom_vline` calls to avoid unnecessary empty aesthetic warnings in ggplot2 4.0.0+.  
 - Fixed warning in `Dataset_Size_LIGER` due to deprecation in `Extract_Sample_Meta`.  
 - Fixed issue with group colors in in `DimPlot_scCustom` when split only contains one group Thanks @zrlewis, ([#262](https://github.com/samuel-marsh/scCustomize/issues/262)).  
+- Fixed `figure_plot = TRUE` dropping split panels in `FeaturePlot_scCustom` when the input plot is already a patchwork. Thanks @wendelljpereira, ([#265](https://github.com/samuel-marsh/scCustomize/issues/265)).
 
   
   

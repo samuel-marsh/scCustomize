@@ -450,11 +450,22 @@ Overall_Prop_Plot <- function(
 Figure_Plot <- function(
     plot
 ){
-  # pull axis labels
-  x_lab_reduc <- plot$labels$x
-  y_lab_reduc <- plot$labels$y
+  # Pull axis labels from the first panel when figure_plot receives a patchwork.
+  is_composite <- inherits(x = plot, what = "patchwork") && length(x = plot$patches$plots) > 0
+  if (isTRUE(x = is_composite)) {
+    first_panel <- plot$patches$plots[[1]]
+    x_lab_reduc <- first_panel$labels$x %||% plot$labels$x
+    y_lab_reduc <- first_panel$labels$y %||% plot$labels$y
+  } else {
+    x_lab_reduc <- plot$labels$x
+    y_lab_reduc <- plot$labels$y
+  }
 
   plot <- plot & NoAxes()
+
+  if (isTRUE(x = is_composite)) {
+    plot <- wrap_elements(plot)
+  }
 
   axis_plot <- ggplot(data.frame(x= 100, y = 100), aes(x = .data[["x"]], y = .data[["y"]])) +
     geom_point() +
