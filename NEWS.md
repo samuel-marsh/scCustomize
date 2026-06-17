@@ -1,3 +1,21 @@
+# scCustomize 3.X.X (2026-XX-XX)  
+## Added  
+  
+  
+
+
+## Changed  
+  
+
+
+## Fixes  
+  
+
+  
+
+
+
+
 # scCustomize 3.3.0 (2026-XX-XX)  
 ## Added  
 - Added `reorder`, `reorder_decreasing`, and `plot_median` parameters to `Plot_Cells_per_Sample` when grouping by sample.  
