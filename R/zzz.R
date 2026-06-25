@@ -27,8 +27,7 @@
 #' }
 #'
 #' @import cli
-#' @importFrom lifecycle deprecated deprecate_soft deprecate_stop
-#' deprecate_warn is_present
+#' @importFrom lifecycle deprecated deprecate_soft deprecate_stop deprecate_warn is_present
 #' @importFrom rlang check_installed is_installed sym "!!" ":="
 #'
 #' @keywords internal

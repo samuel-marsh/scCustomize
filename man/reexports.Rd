@@ -32,6 +32,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{SeuratObject}{\code{\link[SeuratObject]{as.Seurat}}, \code{\link[SeuratObject]{Cells}}, \code{\link[SeuratObject]{Embeddings}}, \code{\link[SeuratObject:Cells]{Features}}, \code{\link[SeuratObject]{Idents}}, \code{\link[SeuratObject:Idents]{Idents<-}}, \code{\link[SeuratObject]{WhichCells}}}
+  \item{SeuratObject}{\code{\link[SeuratObject:as.Seurat]{as.Seurat()}}, \code{\link[SeuratObject:Cells]{Cells()}}, \code{\link[SeuratObject:Embeddings]{Embeddings()}}, \code{\link[SeuratObject:Features]{Features()}}, \code{\link[SeuratObject:Idents]{Idents()}}, \code{\link[SeuratObject:Idents<-]{Idents<-()}}, \code{\link[SeuratObject:WhichCells]{WhichCells()}}}
 }}
 
