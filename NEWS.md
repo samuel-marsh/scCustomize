@@ -1,6 +1,6 @@
 # scCustomize 3.X.X (2026-XX-XX)  
 ## Added  
-  
+- Added `downsample` and `downsample_seed` parameters to `DimPlot_All_Samples`.  
   
 
 
