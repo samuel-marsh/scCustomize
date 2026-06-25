@@ -2519,6 +2519,10 @@ DimPlot_scCustom <- function(
 #' @param num_columns number of columns in final layout plot.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
 #' @param dims Which dimensions to plot.  Defaults to c(1,2) if not specified.
+#' @param downsample logical, whether to downsample the plots by number of cells in the smallest group.
+#' Default is FALSE.
+#' @param downsample_seed random seed to use when selecting random cells to downsample in plot.
+#' Default = 123.
 #' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
 #' greater than 200,000 cells.
 #' @param raster.dpi Pixel resolution for rasterized plots, passed to geom_scattermore().
@@ -2554,6 +2558,8 @@ DimPlot_All_Samples <- function(
   num_columns = NULL,
   reduction = NULL,
   dims = c(1, 2),
+  downsample = FALSE,
+  downsample_seed = 123,
   raster = NULL,
   raster.dpi = c(512, 512),
   ...
@@ -2580,6 +2586,25 @@ DimPlot_All_Samples <- function(
               max(reduc_coordinates[, 1]))
   y_axis <- c(min(reduc_coordinates[, 2]),
               max(reduc_coordinates[, 2]))
+
+  # downsample cells
+  if (isTRUE(x = downsample)) {
+    cells_downsample <- data.frame(table(seurat_object@meta.data[, meta_data_column]))
+
+    # Identity with greatest number of cells
+    min_cells <- min(cells_downsample$Freq)
+
+    min_group <- cells_downsample %>%
+      filter(.data[["Freq"]] == min_cells) %>%
+      pull(.data[["Var1"]]) %>%
+      as.character()
+
+    cli_inform(message = "Downsampling plot to {.field {min_cells}} cells per category, based on group with fewest cells ({.val {min_group}}).")
+
+    cell_names <- Random_Cells_Downsample(seurat_object = seurat_object, num_cells = min_cells, group.by = meta_data_column, return_list = TRUE, seed = downsample_seed)
+
+    seurat_object <- subset(x = seurat_object, cells = unlist(x = cell_names), droplevels.meta.data = TRUE)
+  }
 
   # Extract meta_data_column list of values
   if (inherits(x = seurat_object@meta.data[, meta_data_column], what = "factor")) {
