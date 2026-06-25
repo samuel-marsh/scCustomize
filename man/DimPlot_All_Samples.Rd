@@ -14,6 +14,8 @@ DimPlot_All_Samples(
   num_columns = NULL,
   reduction = NULL,
   dims = c(1, 2),
+  downsample = FALSE,
+  downsample_seed = 123,
   raster = NULL,
   raster.dpi = c(512, 512),
   ...
@@ -38,6 +40,12 @@ Default is NULL.}
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
 
 \item{dims}{Which dimensions to plot.  Defaults to c(1,2) if not specified.}
+
+\item{downsample}{logical, whether to downsample the plots by number of cells in the smallest group.
+Default is FALSE.}
+
+\item{downsample_seed}{random seed to use when selecting random cells to downsample in plot.
+Default = 123.}
 
 \item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
 greater than 200,000 cells.}
