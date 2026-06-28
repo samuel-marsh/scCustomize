@@ -1,6 +1,7 @@
 # scCustomize 3.X.X (2026-XX-XX)  
 ## Added  
 - Added `downsample` and `downsample_seed` parameters to `DimPlot_All_Samples`.  
+- Added `raster` parameter explicitly to `Plot_Density_Custom` and `Plot_Density_Joint_Only` instead of allowing users to pass via `...`.  
   
 
 
@@ -9,7 +10,7 @@
 
 
 ## Fixes  
-  
+- Fixed `VlnPlot_scCustom` value for rasterization to match warning message and package conventions.  
 
   
 
