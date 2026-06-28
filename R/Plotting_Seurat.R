@@ -838,7 +838,7 @@ VlnPlot_scCustom <- function(
     if (pt.size == 0) {
       raster <- FALSE
     } else {
-      if (num_cells * length(x = all_found_features) > 100000 && pt.size != 0) {
+      if (num_cells * length(x = all_found_features) > 200000 && pt.size != 0) {
         raster <- TRUE
         cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
                                "i" = "To plot in vector form set {.code raster=FALSE}")
