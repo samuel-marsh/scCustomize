@@ -12,6 +12,7 @@ Plot_Density_Joint_Only(
   pt.size = 1,
   aspect_ratio = NULL,
   reduction = NULL,
+  raster = NULL,
   ...
 )
 }
@@ -31,6 +32,9 @@ Plot_Density_Joint_Only(
 Default is NULL.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 200,000 cells.}
 
 \item{...}{Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.}
 }

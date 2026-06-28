@@ -13,6 +13,7 @@ Plot_Density_Custom(
   pt.size = 1,
   aspect_ratio = NULL,
   reduction = NULL,
+  raster = NULL,
   combine = TRUE,
   ...
 )
@@ -35,6 +36,9 @@ Plot_Density_Custom(
 Default is NULL.}
 
 \item{reduction}{Dimensionality Reduction to use (if NULL then defaults to Object default).}
+
+\item{raster}{Convert points to raster format.  Default is NULL which will rasterize by default if
+greater than 200,000 cells.}
 
 \item{combine}{Create a single plot? If FALSE, a list with ggplot objects is returned.}
 
