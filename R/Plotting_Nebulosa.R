@@ -16,6 +16,8 @@
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
 #' @param combine Create a single plot? If FALSE, a list with ggplot objects is returned.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
@@ -45,6 +47,7 @@ Plot_Density_Custom <- function(
   pt.size = 1,
   aspect_ratio = NULL,
   reduction = NULL,
+  raster = NULL,
   combine = TRUE,
   ...
 ) {
@@ -82,6 +85,15 @@ Plot_Density_Custom <- function(
     )
   }
 
+  # Add raster check for scCustomize
+  if (is.null(x = raster) && length(x = Cells(x = seurat_object)) > 2e5) {
+    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
+                           "i" = "To plot in vector form set {.code raster=FALSE}")
+    )
+  }
+
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
   # Extract default reduction
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
@@ -93,6 +105,7 @@ Plot_Density_Custom <- function(
                                       combine = combine,
                                       pal = viridis_palette,
                                       joint = joint,
+                                      raster = raster,
                                       ...)
 
   if (!is.null(x = custom_palette)) {
@@ -134,6 +147,8 @@ Plot_Density_Custom <- function(
 #' @param aspect_ratio Control the aspect ratio (y:x axes ratio length).  Must be numeric value;
 #' Default is NULL.
 #' @param reduction Dimensionality Reduction to use (if NULL then defaults to Object default).
+#' @param raster Convert points to raster format.  Default is NULL which will rasterize by default if
+#' greater than 200,000 cells.
 #' @param ... Extra parameters passed to \code{\link[Nebulosa]{plot_density}}.
 #'
 #' @return A ggplot object
@@ -161,6 +176,7 @@ Plot_Density_Joint_Only <- function(
   pt.size = 1,
   aspect_ratio = NULL,
   reduction = NULL,
+  raster = NULL,
   ...
 ) {
   # Check Nebulosa installed
@@ -204,6 +220,15 @@ Plot_Density_Joint_Only <- function(
     )
   }
 
+  # Add raster check for scCustomize
+  if (is.null(x = raster) && length(x = Cells(x = seurat_object)) > 2e5) {
+    cli_inform(message = c("NOTE: Rasterizing points since total number of points across all plots exceeds 200,000.",
+                           "i" = "To plot in vector form set {.code raster=FALSE}")
+    )
+  }
+
+  raster <- raster %||% (length(x = Cells(x = seurat_object)) > 2e5)
+
   # Extract default reduction
   reduction <- reduction %||% DefaultDimReduc(object = seurat_object)
 
@@ -215,6 +240,7 @@ Plot_Density_Joint_Only <- function(
                                       joint = TRUE,
                                       combine = FALSE,
                                       pal = viridis_palette,
+                                      raster = raster,
                                       ...)
 
   # return the joint plot only
