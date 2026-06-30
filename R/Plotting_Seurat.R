@@ -894,7 +894,7 @@ VlnPlot_scCustom <- function(
   }
 
   if (isTRUE(x = plot_boxplot) && is.null(x = split.by)) {
-    plot <- plot + geom_boxplot(fill='#A4A4A4', color="black", width = 0.1)
+    plot <- plot & geom_boxplot(fill='#A4A4A4', color="black", width = 0.1)
   }
   if (isTRUE(x = plot_boxplot) && !is.null(x = split.by)) {
     cli_abort(message = "Cannot add median ({.field plot_boxplot = TRUE}) when {.code split.by} is not NULL.")
