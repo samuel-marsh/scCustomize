@@ -11,6 +11,7 @@
 
 ## Fixes  
 - Fixed `VlnPlot_scCustom` value for rasterization to match warning message and package conventions.  
+- Fixed `VlnPlot_scCustom` when using `plot_boxplot` and plotting multiple features.  
 
   
 
